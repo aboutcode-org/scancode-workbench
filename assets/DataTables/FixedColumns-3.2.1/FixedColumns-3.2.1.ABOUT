@@ -1,0 +1,12 @@
+about_resource: FixedColumns-3.2.1
+download_url: https://github.com/DataTables/FixedColumns/releases/tag/3.2.1
+
+version: 3.2.1
+name: FixedColumns
+home_url: https://github.com/DataTables/FixedColumns/tree/3.2.1
+owner: SpryMedia Limited
+copyright: Copyright (c) 2010-2015 SpryMedia Limited
+
+license_url: https://raw.githubusercontent.com/DataTables/FixedColumns/3.2.1/License.txt
+dje_license: mit
+license_text_file: FixedColumns-3.2.1.LICENSE

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="assets/DataTables/Bootstrap-3.3.6/css/bootstrap.css"/>
+    <link rel="stylesheet" href="assets/css/main.css"/>
+  </head>
+  <body>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="version" style="text-align: center;">
+                <h2 class="logo"><strong>About</strong>Code Manager</h2>
+                <h4 id="version"></h4>
+            </div>
+        </div>
+    </div>
+  </body>
+    <script type="text/javascript">
+        currentVersion = require('./package.json');
+        const appVersion = `Version: ${currentVersion.version}`
+        document.getElementById('version').innerHTML = appVersion
+    </script>
+</html>

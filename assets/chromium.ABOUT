@@ -1,0 +1,11 @@
+about_resource: chromium
+name: Chromium
+version: 47.0.2526.110
+license: bsd-new
+owner: Chromium Project
+copyright: Copyright 2015 The Chromium Authors.
+
+license_text_file: chromium.LICENSE
+notes: Electron is built with Chromium. Chromium contains other open source
+  projects under their own licenses. See LICENSES.chromium.html. Chromium is
+  unmodified and used as is from Electron.

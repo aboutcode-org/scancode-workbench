@@ -1,0 +1,38 @@
+*.py[cod]
+
+# virtualenv and other misc bits
+*.egg-info
+/dist
+/build
+thirdparty/
+/bin
+/lib
+/scripts
+/Scripts
+/Lib
+/tmp
+.Python
+/include
+/Include
+/local
+node_modules/
+bower_components/
+
+# Installer logs
+debug.log
+npm-debug.log
+
+# IDEs
+.project
+.pydevproject
+.idea
+
+.DS_Store
+*~
+.*.sw[po]
+.build
+.ve
+*.bak
+/.cache/
+
+

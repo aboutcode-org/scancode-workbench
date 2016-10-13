@@ -1,0 +1,11 @@
+about_resource: Raleway-Regular.ttf
+download_url: https://fonts.google.com/specimen/Raleway
+
+version: 2.001
+name: Raleway
+home_url: https://fonts.google.com/specimen/Raleway
+owner: Matt McInerney, Pablo Impallari, Rodrigo Fuenzalida, and Igino Marin
+copyright: Copyright (c) 2010 - 2012, Matt McInerney (matt@pixelspread.com), Pablo Impallari(impallari@gmail.com), Rodrigo Fuenzalida (hello@rfuenzalida.com) with Reserved Font Name "Raleway"
+license_url: https://raw.githubusercontent.com/impallari/Raleway/master/OFL.txt
+dje_license: ofl-1.1
+license_text_file: raleway.LICENSE

@@ -1,0 +1,13 @@
+{
+  "files": [
+    {
+      "path": "root"
+    },
+    {
+      "path": "root/dir1/file1"
+    },
+    {
+      "path": "root/dir1/file2"
+    }
+  ]
+}

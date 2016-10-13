@@ -1,0 +1,39 @@
+{
+  "name": "aboutcode-manager",
+  "version": "1.0.0-beta.1",
+  "description": "An application for viewing ScanCode results and concluding component origin and license",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron main.js",
+    "build": "./build.sh",
+    "test": "./node_modules/.bin/mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "keywords": [
+    "ScanCode",
+    "scan codebase",
+    "open source scanning",
+    "open source scanner"
+  ],
+  "author": "nexB",
+  "license": "apache-2.0",
+  "bugs": {
+    "url": ""
+  },
+  "homepage": "",
+  "devDependencies": {
+    "asar": "^0.11.0",
+    "chai": "^3.5.0",
+    "electron-packager": "^7.0.3",
+    "electron-prebuilt": "^0.36.0",
+    "grunt": "^1.0.0",
+    "jquery": "^3.1.0",
+    "jsdom": "^9.4.1",
+    "mocha": "^2.5.3",
+    "nodemon": "^1.9.2",
+    "sinon": "^1.17.4"
+  }
+}

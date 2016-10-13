@@ -1,0 +1,185 @@
+@import "../fonts/Raleway-Regular.ttf";
+@import "../fonts/Raleway-Medium.ttf";
+@import "../fonts/Raleway-SemiBold.ttf";
+@import "../fonts/Lato-Regular.ttf";
+@import "../fonts/Lato-Bold.ttf";
+@import "../fonts/Lato-Italic.ttf";
+@import "../fonts/Lato-Light.ttf";
+
+body {
+  font-family: 'Lato', Helvetica, sans-serif;
+}
+
+.logo {
+  font-family: 'Raleway', Helvetica, san-serif;
+  color: #0064cd;
+}
+
+.node {
+  cursor: pointer;
+}
+
+.node circle {
+  fill: #3498db;
+  stroke: #3498db;
+  stroke-width: 1px;
+  r: 5;
+}
+
+.node circle.analyzed {
+  fill: #98db34;
+  stroke: #98db34;
+}
+
+.node circle.attention {
+  fill: #db3445;
+  stroke: #db3445;
+}
+
+.node circle.original {
+  fill: #a73b8f;
+  stroke: #a73b8f;
+}
+
+.node.file text {
+  font: 13px sans-serif;
+  fill: white;
+}
+
+.node.dir text {
+  fill: black;
+}
+
+.clues rect {
+  x: 0;
+  y: -10;
+  height: 20px;
+  rx: 4;
+  ry:4;
+  stroke-width:3
+}
+
+.clue-filename rect {
+  fill: gray;
+  stroke: gray;
+}
+
+.clue-license rect {
+  fill: #3984b6;
+  stroke: #3984b6;
+}
+
+.clue-copyright rect {
+  fill: #1d2e81;
+  stroke: #1d2e81;
+}
+
+#nodeview{
+  border: 1px solid #ddd;
+}
+
+div.node-content {
+  border: 1px solid #ddd;
+  width: 200px;
+}
+
+.link {
+  fill: none;
+  stroke: #ccc;
+  stroke-width: 2px;
+}
+
+.node-hide {
+  display: none;
+}
+
+/* select2 custom css */
+.select2-container {
+  width: 100% !important;
+  padding: 0;
+}
+
+.modal-header {
+  word-wrap: break-word;
+}
+
+#jstree {
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  min-width: 150px;
+  min-height: 100px;
+  overflow-x: scroll;
+  overflow-y: scroll;
+  height: 600px;
+  margin: 0 0 0 10px;
+  padding-top: 40px;
+  background-color: #f9f9f9;
+}
+
+.jstree-default .jstree-clicked {
+    background: #dce1e5;
+}
+
+.node-btn-group {
+  padding: 0 0 0 10px;
+}
+
+#tabbar {
+  padding-top: 10px;
+}
+
+#leftCol{
+  padding-top: 10px;
+margin-left: -50px;                               /* For sidebar space */
+}
+
+/*////// Sidebar //////*/
+.btn-sidebar {
+    color: grey;
+    background-color: #000;
+    /*border-color: #ccc;*/
+  padding: 0;
+  width: 50px;
+}
+
+.sidebar-nav li .btn-sidebar {
+    /*text-indent: 10px;*/
+    line-height: 40px;
+}
+
+.sidebar-nav li .btn-sidebar {
+    display: block;
+    text-decoration: none;
+    color: #999999;
+}
+
+.sidebar-nav li .btn-sidebar:hover {
+    text-decoration: none;
+    color: #fff;
+    background: rgba(255,255,255,0.2);
+}
+
+.sidebar-nav li .btn-sidebar:active,
+.sidebar-nav li .btn-sidebar:focus {
+    text-decoration: none;
+    outline: none;
+}
+
+
+/*////// DataTables custom //////*/
+
+div.dataTables_scrollHead table {               /*For rounded table border*/
+  border-top-left-radius: 4px;
+}
+
+div.dataTables_scrollHead th:first-child {      /*For rounded table border*/
+  border-top-left-radius: 4px;
+}
+
+/*////// Help page //////*/
+
+.help-image {
+  width: 75%;
+  height: 75%;
+  padding: 10px 0;
+}
