@@ -277,9 +277,6 @@ $(document).ready(function () {
     var scanData = null;
 
     // Define Datatable buttons
-    var remote = require('remote');
-    var dialog = remote.require('dialog');
-
     var LICENSE_COLUMNS = ScanData.LOCATION_COLUMN.concat(ScanData.LICENSE_COLUMNS);
     var COPYRIGHT_COLUMNS = ScanData.LOCATION_COLUMN.concat(ScanData.COPYRIGHT_COLUMNS);
     var ORIGIN_COLUMNS = ScanData.LOCATION_COLUMN.concat(ScanData.ORIGIN_COLUMNS);
@@ -391,6 +388,7 @@ $(document).ready(function () {
     });
 
     // Open a json file
+    var dialog = require('electron').remote.dialog;
     $( "#open-file" ).click(function() {
         dialog.showOpenDialog(function (fileNames) {
             if (fileNames === undefined) return;
