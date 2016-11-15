@@ -1,6 +1,6 @@
 about_resource: electron
 name: Electron
-version: 1.0.0
+version: 1.2.0
 license: mit
 owner: GitHub Inc
 copyright: Copyright (c) 2014 GitHub Inc.
