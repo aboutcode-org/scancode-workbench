@@ -48,6 +48,11 @@ $(document).ready(function () {
         }));
         parties = $.unique(parties.concat(component.party.name));
 
+        var programming_language = $.unique($.map(subNodes, function(node, i) {
+            return node.programming_language;
+        }));
+        programming_language = $.unique(programming_language.concat(component.programming_language));
+
         // update select2 selectors for node view component
         $("#select-license").html('').select2({
             data: licenses,
@@ -71,12 +76,22 @@ $(document).ready(function () {
             tags: true
         }, true);
 
+        $("#select-language").html('').select2({
+            data: programming_language,
+            multiple: true,
+            maximumSelectionLength: 1,
+            placeholder: "Enter language",
+            tags: true
+        }, true);
+
         $("#select-status").val(component.review_status);
         $('#component-name').val(component.name);
         $('#component-version').val(component.version);
         $('#select-license').val(component.licenses);
         $('#select-copyright').val(component.copyrights);
         $('#select-owner').val(component.party.name);
+        $('#select-language').val(component.programming_language);
+        $('#component-homepage-url').val(component.homepage_url);
         $('#component-notes').val(component.notes);
 
         // Notify only select2 of changes
@@ -228,6 +243,10 @@ $(document).ready(function () {
         if ($('#select-owner').val()) {
             party = {name: $('#select-owner').val()[0], role: 'owner'}
         }
+        var programming_language = "";
+        if ($('#select-language').val()) {
+            programming_language = $('#select-language').val()[0];
+        }
         var component = {
             review_status: $("#select-status").val(),
             name: $('#component-name').val(),
@@ -235,6 +254,8 @@ $(document).ready(function () {
             licenses: $('#select-license').val(),
             copyrights: $('#select-copyright').val(),
             party: party,
+            programming_language: programming_language,
+            homepage_url: $('#component-homepage-url').val(),
             notes: $('#component-notes').val()
         };
         scanData.setComponent(id, component);

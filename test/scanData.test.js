@@ -198,6 +198,7 @@ describe("testSavingAndLoading", function () {
             licenses: [ 'nexB Proprietary', 'ZLIB License' ],
             copyrights: [ 'Copyright (c) 2016 nexB, Inc.' ],
             party: [ 'nexB' ],
+            programming_language: '',
             notes: ''
         }
     }
@@ -220,6 +221,7 @@ describe("testSavingAndLoading", function () {
         ],
         copyrights: [ 'Copyright (c) 2016 nexB, Inc.' ],
         party: [ 'nexB' ],
+        programming_language: '',
         notes: '',
         license_expression: "nexb proprietary and zlib license"
     }]
