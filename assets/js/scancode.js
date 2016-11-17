@@ -243,10 +243,6 @@ $(document).ready(function () {
         if ($('#select-owner').val()) {
             party = {name: $('#select-owner').val()[0], role: 'owner'}
         }
-        var programming_language = "";
-        if ($('#select-language').val()) {
-            programming_language = $('#select-language').val()[0];
-        }
         var component = {
             review_status: $("#select-status").val(),
             name: $('#component-name').val(),
@@ -254,10 +250,12 @@ $(document).ready(function () {
             licenses: $('#select-license').val(),
             copyrights: $('#select-copyright').val(),
             party: party,
-            programming_language: programming_language,
             homepage_url: $('#component-homepage-url').val(),
             notes: $('#component-notes').val()
         };
+        if ($('#select-language').val()) {
+            component.programming_language = $('#select-language').val()[0];
+        }
         scanData.setComponent(id, component);
         $('#nodeModal').modal('hide');
         nodeview.redraw()
