@@ -356,9 +356,14 @@ ScanData.EMAIL_COLUMNS = [
 
 ScanData.URL_COLUMNS = [
     {
-        "data": "urls[<hr/>].url",
+        "data": "urls[].url",
         "title": "URL",
-        "name": "url"
+        "name": "url",
+        "render": function ( data, type, full, meta ) {
+            return $.map(data, function (href, i) {
+                return '<a href="'+href+'" target="_blank">'+href+'</a>';
+            }).join('<hr/>');
+        }
     },
     {
         "data": "urls[<hr/>].start_line",
