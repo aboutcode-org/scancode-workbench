@@ -340,7 +340,7 @@ $(document).ready(function () {
             "scrollX": true,
             "scrollY": 700,
             "stateSave": true,
-            deferRender: true,
+            "deferRender": true,
             "buttons": [
                 {   // Do not allow the first column to be hidden
                     extend: 'colvis',
@@ -390,20 +390,81 @@ $(document).ready(function () {
                     "<'row'<'col-sm-5'i><'col-sm-7'p>>"
         });
 
-    // Show DataTable and hide node view
+    // Create a table with analyzed Components from node view
+    var componentsTable = $('#components-table')
+        .DataTable( {
+            columns: [
+                {
+                    data: 'name',
+                    title: 'Name',
+                    name: 'name'
+                },
+                {
+                    data: 'version',
+                    title: 'Version',
+                    name: 'version'
+                },
+                {
+                    data: 'party.name',
+                    title: 'Owner',
+                    name: 'party name',
+                    defaultContent: ""
+                },
+                {
+                    data: 'license_expression',
+                    title: 'License',
+                    name: 'license_expression',
+                    defaultContent: ""
+                },
+                {
+                    data: 'programming_language',
+                    title: 'Programming Language',
+                    name: 'programming_language',
+                    defaultContent: ""
+                },
+                {
+                    data: 'homepage_url',
+                    title: 'Homepage URL',
+                    name: 'homepage_url',
+                    defaultContent: ""
+                },
+                {
+                    data: 'notes',
+                    title: 'Notes',
+                    name: 'notes',
+                    defaultContent: ""
+                }
+            ],
+        "scrollX": true
+        });
+
+    // Show DataTable. Hide node view and component summary table
     $( "#show-datatable" ).click(function() {
-        $("table").show();
+        $("#clues-table").show();
         $("#node-container").hide();
         $("#clues-table_wrapper").show();
+        $("#component-container").hide();
         table.draw();
     });
 
-    // Show node view and hide DataTable
+    // Show node view. Hide DataTable and component summary table
     $("#show-tree").click(function() {
         $("#node-container").show();
-        $( "table" ).hide();
+        $("#clues-table").hide();
         $("#clues-table_wrapper").hide();
+        $("#component-container").hide();
         nodeview.redraw();
+    });
+
+    // Show component summary table. Hide DataTable and node view
+    $("#table-test").click(function() {
+        $("#component-container").show();
+        $("#clues-table").hide();
+        $("#node-container").hide();
+        $("#clues-table_wrapper").hide();
+        componentsTable.clear();
+        componentsTable.rows.add(scanData.toSaveFormat().components);
+        componentsTable.draw();
     });
 
     // Open a json file
@@ -430,6 +491,18 @@ $(document).ready(function () {
                     fs.writeFile(fileName, tableData, function (err) {
                 });
             });
+    });
+
+    // Submit components to a DejaCode Product via ProductComponent API
+    $('#componentSubmit').on('click', function () {
+        var createdComponents = scanData.toSaveFormat().components;
+        // Get product name and version
+        var productNameVersion = $('#product-name').val()
+            .concat(":", $('#product-version').val());
+        var apiUrl = $('#api-url').val();
+        var apiKey = $('#export-input').val();
+        uploadComponents( apiUrl, createdComponents, apiKey, productNameVersion );
+        $('#componentExportModal').modal('hide');
     });
 
     // Make node view modal box draggable

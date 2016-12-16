@@ -49,6 +49,7 @@
     <script src="assets/DataTables/Scroller-1.4.1/js/dataTables.scroller.js"></script>
     <script src="assets/DataTables/Select-1.1.2/js/dataTables.select.js"></script>
     <script src="assets/js/jquery.jeditable.js"></script>
+    <script src="assets/js/export-to-dejacode.js"></script>
     <script src="assets/js/nodeview.js"></script>
     <script src="assets/js/select2.js"></script>
 </head>
@@ -68,7 +69,13 @@
                     <button class="btn btn-sidebar" id="show-datatable" data-toggle="tooltip" title="Table view"><i class="fa fa-table" aria-hidden="true"></i></button>
                 </li>
                 <li>
-                    <button class="btn btn-sidebar" id="show-tree" data-toggle="tooltip" title="Conclusions view"><i class="fa fa-check" aria-hidden="true"></i></button>
+                    <button class="btn btn-sidebar" id="show-tree" data-toggle="tooltip" title="Conclusions view"><i class="fa fa-code-fork" aria-hidden="true"></i></button>
+                </li>
+                <li>
+                    <button class="btn btn-sidebar" id="table-test" data-toggle="modal" data-placement="right" title="Import Components to DejaCode"><i class="fa fa-list-ol" aria-hidden="true"></i></button>
+                </li>
+                <li>
+                    <button class="btn btn-sidebar" id="show-components" data-toggle="modal" data-placement="right" title="Components Summary" data-target="#componentExportModal"><i class="fa fa-cloud-upload" aria-hidden="true"></i></button>
                 </li>
                 <li>
                     <button class="btn btn-sidebar" id="show-help" data-toggle="modal" data-placement="right" title="Help with Application" data-target="#helpModal"><i class="fa fa-question" aria-hidden="true"></i></button>
@@ -83,6 +90,10 @@
     <div id="tabbar" class="col-md-9">
         <table id="clues-table" class="display table table-striped table-bordered dataTable no-footer"  cellspacing="0" width="100%" >
         </table>
+        <div id="component-container">
+            <table id="components-table" class="display table table-striped table-bordered dataTable no-footer"  cellspacing="0" width="100%" >
+            </table>
+        </div>
         <div class="node-hide" id="node-container">
             <select id="node-drop-down" style="border-color: #eee; border-radius: 5px; padding: 5px;" multiple>
                 <option value="filename" selected>File Name</option>
@@ -151,6 +162,40 @@
                 </div>
             </div>
         </div>
+
+        <!--Component Modal -->
+        <div class="modal fade" id="componentExportModal" tabindex="-1" role="dialog" aria-labelledby="componentExportModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title" id="myModalLabel">Upload Components to DejaCode</h4>
+                    </div>
+                    <div class="modal-body">
+                        <form class="form-inline">
+                            <div class="form-group">
+                                <h4>Product Information</h4>
+                                <p> Enter the Product Name and Version you want the components to be added to</p>
+                                <input type="text" class="form-control" id="product-name" placeholder="Product Name" required>
+                                <input type="text" class="form-control" id="product-version" placeholder="Product Version" required>
+
+                                <h4>DejaCode API URL</h4>
+                                <p> Enter the URL (For example, https://enterprise.dejacode.com)</p>
+                                <input type="text" class="form-control" id="api-url" placeholder="DejaCode API URL" required>
+
+                                <h4>Please provide your API key</h4>
+                                <p> Your API key can be found in your DejaCode Profile Settings</p>
+                                <input type="password" class="form-control" id="export-input" placeholder="DejaCode API Key" required>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary" id="componentSubmit">Submit</button>
+                    </div>
+                </div>
+             </div>
+        </div>
+
         <!-- Help Modal -->
         <div class="modal fade" id="helpModal" tabindex="-1" role="dialog" aria-labelledby="helpModalLabel">
             <div class="modal-dialog modal-lg" role="document">

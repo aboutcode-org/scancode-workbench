@@ -183,3 +183,7 @@ div.dataTables_scrollHead th:first-child {      /*For rounded table border*/
   height: 75%;
   padding: 10px 0;
 }
+
+/*////// Component Export  //////*/
+
+#export-input { width: 550px;}
