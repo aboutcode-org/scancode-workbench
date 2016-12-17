@@ -435,8 +435,32 @@ $(document).ready(function () {
                     defaultContent: ""
                 }
             ],
-        "scrollX": true
+            dom:
+            // Needed to keep datatables buttons and search inline
+                "<'row'<'col-sm-9'B><'col-sm-3'f>>" +
+                    "<'row'<'col-sm-12'tr>>" +
+                    "<'row'<'col-sm-5'i><'col-sm-7'p>>",
+            buttons: [
+                {
+                    name: 'uploadDeja',
+                    text: '<i class=" fa fa-cloud-upload"></i> Upload Components'
+
+                }
+            ],
+            "language": {
+              "emptyTable": "No Components created."
+            }
+
         });
+
+        componentsTable.buttons().container().attr({
+            'id': 'show-components',
+            'data-toggle': 'modal',
+            'data-placement': 'right',
+            'title': 'Upload Components to DejaCode',
+            'data-target':'#componentExportModal'
+        });
+
 
     // Show DataTable. Hide node view and component summary table
     $( "#show-datatable" ).click(function() {
@@ -498,7 +522,7 @@ $(document).ready(function () {
         var createdComponents = scanData.toSaveFormat().components;
         // Get product name and version
         var productNameVersion = $('#product-name').val()
-            .concat(":", $('#product-version').val());
+            .concat(':', $('#product-version').val());
         var apiUrl = $('#api-url').val();
         var apiKey = $('#export-input').val();
         uploadComponents( apiUrl, createdComponents, apiKey, productNameVersion );
