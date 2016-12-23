@@ -52,8 +52,6 @@
     <script src="assets/js/export-to-dejacode.js"></script>
     <script src="assets/js/nodeview.js"></script>
     <script src="assets/js/select2.js"></script>
-    <script src="http://1000hz.github.io/bootstrap-validator/dist/validator.min.js"></script>
-
 </head>
 <body>
 <div class="row">
@@ -171,26 +169,24 @@
                         <h4 class="modal-title" id="myModalLabel">Upload Components to DejaCode</h4>
                     </div>
                     <div class="modal-body">
-                        <form class="form-inline">
-                            <div class="form-group">
-                                <h4>Product Information</h4>
-                                <p> Enter the Product Name and Version you want the components to be added to</p>
-                                <input type="text" class="form-control" id="product-name" placeholder="Product Name" required size="26">
-                                <input type="text" class="form-control" id="product-version" placeholder="Product Version" required size="26">
-
-                                <h4>DejaCode API URL</h4>
-                                <p> Enter the URL (For example, https://enterprise.dejacode.com/api/v2/product_components/)</p>
-                                <input type="text" class="form-control" id="api-url" placeholder="DejaCode API URL" required size="76">
-
-                                <h4>Please provide your API key</h4>
-                                <p> Your API key can be found in your DejaCode Profile Settings</p>
-                                <input type="password" class="form-control" id="export-input" placeholder="DejaCode API Key" required size="76">
+                        <form class="horizontal">
+                            <div class="form-group" id="prod">
+                                <label for="product-name">Product Name </label>
+                                <input type="text" class="form-control" id="product-name" name="product" placeholder="Ex: Starship Widget Framework" required="Product Name is required">
                             </div>
+                            <div class="form-group" id="prodVersion">
+                                <label for="product-version">Product Version</label>
+                                <input type="text" class="form-control" id="product-version" name="version" placeholder="Product Version" required>
+                            </div>
+
+                            <div class="form-group" id="api">
+                                <label for="apiKey">API Key</label>
+                                <input type="password" class="form-control" id="apiKey" name="api" placeholder="DejaCode API Key" required>
+                                <small><em>Your API key can be found in your DejaCode Profile Settings</em></small>
+                            </div>
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary" id="componentSubmit">Submit</button>
                         </form>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary" id="componentSubmit">Submit</button>
                     </div>
                 </div>
              </div>

@@ -96,6 +96,7 @@ function uploadComponents(host, components, apiKey, productNameVersion) {
             })
             .fail(function(error) {
                 console.log(error);
+                alert(error.responseText);
             });
     });
 }
