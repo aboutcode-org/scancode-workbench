@@ -93,10 +93,11 @@ function uploadComponents(host, components, apiKey, productNameVersion) {
         createComponent(host, component, apiKey)
             .done(function (data) {
                 console.log('Successfully exported: ' + JSON.stringify(data));
+                alert("Components submitted to DejaCode");
             })
             .fail(function(error) {
                 console.log(error);
-                alert(error.responseText);
+                alert("An error occurred. DejaCode response: \n\n " + error.responseText);
             });
     });
 }
