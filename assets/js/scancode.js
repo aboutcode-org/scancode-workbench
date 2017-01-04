@@ -535,7 +535,7 @@ $(document).ready(function () {
         // Get product name and version
         var productNameVersion = $('#product-name').val()
             .concat(':', $('#product-version').val());
-        var apiUrl = "https://enterprise.dejacode.com/api/v2/product_components/";
+        var apiUrl = $('#apiURLDejaCode').val();
         var apiKey = $('#apiKey').val();
         uploadComponents( apiUrl, createdComponents, apiKey, productNameVersion );
         $('#componentExportModal').modal('hide');
