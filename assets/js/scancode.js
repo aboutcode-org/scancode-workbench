@@ -468,6 +468,10 @@ $(document).ready(function () {
         $("#node-container").hide();
         $("#clues-table_wrapper").show();
         $("#component-container").hide();
+        $('#leftCol').addClass('col-md-2');
+        $('#tabbar').removeClass('col-md-11');
+        $('#tabbar').addClass('col-md-9');
+        $('#leftCol').show();
         table.draw();
     });
 
@@ -477,11 +481,19 @@ $(document).ready(function () {
         $("#clues-table").hide();
         $("#clues-table_wrapper").hide();
         $("#component-container").hide();
+        $('#leftCol').addClass('col-md-2');
+        $('#tabbar').removeClass('col-md-11');
+        $('#tabbar').addClass('col-md-9');
+        $('#leftCol').show();
         nodeview.redraw();
     });
 
     // Show component summary table. Hide DataTable and node view
     $("#table-test").click(function() {
+        $('#leftCol').removeClass('col-md-2');
+        $('#tabbar').removeClass('col-md-9');
+        $('#tabbar').addClass('col-md-11');
+        $('#leftCol').hide();
         $("#component-container").show();
         $("#clues-table").hide();
         $("#node-container").hide();
@@ -523,8 +535,8 @@ $(document).ready(function () {
         // Get product name and version
         var productNameVersion = $('#product-name').val()
             .concat(':', $('#product-version').val());
-        var apiUrl = $('#api-url').val();
-        var apiKey = $('#export-input').val();
+        var apiUrl = "https://enterprise.dejacode.com/api/v2/product_components/";
+        var apiKey = $('#apiKey').val();
         uploadComponents( apiUrl, createdComponents, apiKey, productNameVersion );
         $('#componentExportModal').modal('hide');
     });

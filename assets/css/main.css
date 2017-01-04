@@ -76,6 +76,8 @@ body {
 
 #nodeview{
   border: 1px solid #ddd;
+  border-radius: 4px;
+  margin-top: 5px;
 }
 
 div.node-content {
@@ -183,3 +185,7 @@ div.dataTables_scrollHead th:first-child {      /*For rounded table border*/
   height: 75%;
   padding: 10px 0;
 }
+
+/*////// Components view //////*/
+
+#tabbar.col-md-11 {margin-left: -15px;}
