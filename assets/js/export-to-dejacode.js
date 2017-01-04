@@ -62,7 +62,9 @@ toDejaCodeFormat = function(components) {
     })
 }
 
-module.exports = toDejaCodeFormat;
+module.exports = {
+  toDejaCodeFormat: toDejaCodeFormat
+}
 
 
 // Uses DejaCode API to create a component
