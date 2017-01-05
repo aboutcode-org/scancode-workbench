@@ -3,6 +3,7 @@ var window = jsdom.jsdom().defaultView;
 var $ = require("jquery")(window);
 global.$ = $;
 var ScanData = require("../assets/js/scandata");
+var exportToDejaCode = require("../assets/js/export-to-dejacode");
 
 var assert = require("chai").assert;
 var fs = require("fs");
@@ -102,7 +103,7 @@ describe("checkNodeViewDataFormat", function () {
         var scandata = new ScanData(json);
         assert.deepEqual(scandata.nodeViewData[0], expectedNodeViewData);
     })
-})
+});
 
 describe("getComponentDataFormat", function () {
     var expectedComponent = [
@@ -187,7 +188,7 @@ describe("setComponent", function () {
         assert.deepEqual(scandata.components(), components);
     })
 
-})
+});
 
 describe("testSavingAndLoading", function () {
     var loadComponentFormat = {
@@ -252,4 +253,80 @@ describe("testSavingAndLoading", function () {
             assert.deepEqual(scandata.toLoadFormat(savedComponentFormat), loadComponentFormat);
         })
     })
-})
+});
+
+describe("checkToDejaCodeFormat", function () {
+    var savedComponentFormat = [
+        {
+            files: [{path: 'samples/nexB'}],
+            review_status: 'original',
+            name: 'scancode',
+            version: '1.0',
+            licenses: [
+                {
+                    "key": "nexb proprietary",
+                    "short_name": "nexB Proprietary"
+                },
+                {
+                    "short_name": "ZLIB License",
+                    "key": "zlib license"
+                }
+            ],
+            copyrights: [ 'Copyright (c) 2016 nexB, Inc.' ],
+            party: { name: 'nexB' },
+            programming_language: 'Python',
+            homepage_url: 'www.dejacode.com',
+            notes: '',
+            license_expression: "nexb proprietary and zlib license"
+        },
+        {
+            files: [{path: 'samples/jquery-1.7.2.js'}],
+            review_status: 'analyzed',
+            name: 'jQuery',
+            version: '1.7.2',
+            licenses: [
+                {
+                    "key": "mit",
+                    "short_name": "MIT License"
+                },
+                {
+                    "short_name": "GPL 2.0",
+                    "key": "gpl-2.0"
+                }
+            ],
+            copyrights: [ 'Copyright 2011, John Resig' ],
+            party: { name: 'jQuery Project' },
+            programming_language: 'JavaScript',
+            homepage_url: 'http://jquery.com/',
+            license_expression: "mit or gpl-2.0",
+            notes: 'Dual licensed under the MIT or GPL Version 2 licenses.'
+        }
+    ];
+
+    var expectedDejaCodeFormat = [
+        {
+            name: 'scancode',
+            version: '1.0',
+            license_expression: 'nexb proprietary and zlib license',
+            owner: 'nexB',
+            copyright: 'Copyright (c) 2016 nexB, Inc.',
+            primary_language: 'Python',
+            homepage_url: 'www.dejacode.com',
+            reference_notes: ''
+        },
+        {
+            name: 'jQuery',
+            version: '1.7.2',
+            license_expression: 'mit or gpl-2.0',
+            owner: 'jQuery Project',
+            copyright: 'Copyright 2011, John Resig',
+            primary_language: 'JavaScript',
+            homepage_url: 'http://jquery.com/',
+            reference_notes: 'Dual licensed under the MIT or GPL Version 2 licenses.'
+        }
+    ];
+
+    it("should return the JSON format DejaCode expects", function () {
+        assert.deepEqual(exportToDejaCode.toDejaCodeFormat(savedComponentFormat), expectedDejaCodeFormat);
+    })
+});

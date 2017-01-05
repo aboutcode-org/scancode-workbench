@@ -18,7 +18,8 @@
 // and handles the formatting for the jstree and the node view formats.
 
 
-function ScanData(json) {   // Load json file and other options
+function ScanData(json) {
+    // Load json file and other options
     // Save the scan data so it can be used elsewhere in the class
     this.json = json;
     this.jsTreeData = this.toJSTreeFormat(this.files());
