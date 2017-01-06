@@ -306,19 +306,34 @@ ScanData.LICENSE_COLUMNS = [
         "name": "license_owner"
     },
     {
-        "data": "licenses[<hr/>].homepage_url",
+        "data": "licenses[].homepage_url",
         "title": "License Homepage URL",
-        "name": "license_homepage_url"
+        "name": "license_homepage_url",
+        "render": function ( data, type, full, meta ) {
+            return $.map(data, function (href, i) {
+                return '<a href="'+href+'" target="_blank">'+href+'</a>';
+            }).join('<hr/>');
+        }
     },
     {
-        "data": "licenses[<hr/>].text_url",
+        "data": "licenses[].text_url",
         "title": "License Text URL",
-        "name": "license_text_url"
+        "name": "license_text_url",
+        "render": function ( data, type, full, meta ) {
+            return $.map(data, function (href, i) {
+                return '<a href="'+href+'" target="_blank">'+href+'</a>';
+            }).join('<hr/>');
+        }
     },
     {
-        "data": "licenses[<hr/>].dejacode_url",
+        "data": "licenses[].dejacode_url",
         "title": "DejaCode License URL",
-        "name": "license_djc_url"
+        "name": "license_djc_url",
+        "render": function ( data, type, full, meta ) {
+            return $.map(data, function (href, i) {
+                return '<a href="'+href+'" target="_blank">'+href+'</a>';
+            }).join('<hr/>');
+        }
     },
     {
         "data": "licenses[<hr/>].spdx_license_key",
