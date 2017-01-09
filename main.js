@@ -155,7 +155,7 @@ app.once('ready', function() {
           label: 'Documentation',
           click: function() {
             shell.openExternal(
-              `https://github.com/nexB/aboutcode-manager/blob/v${process.versions.electron}/README.md`
+              `https://github.com/nexB/aboutcode-manager/blob/v${pjson.version}/README.md`
             );
           }
         },
