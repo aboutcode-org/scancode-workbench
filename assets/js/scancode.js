@@ -317,6 +317,7 @@ $(document).ready(function () {
             "paging": false,
             "info": false,
             "colReorder": true,
+            "mark": true,
             "ajax": {
                 url: './samples/sample-data.json', // loading json data
                 dataType: 'json',

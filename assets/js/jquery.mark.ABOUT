@@ -1,0 +1,12 @@
+about_resource: jquery.mark.js
+download_url: https://github.com/julmot/datatables.mark.js/releases/tag/v7.0.0
+
+version: 7.0.0
+name: mark.js
+home_url: https://github.com/julmot/mark.js/tree/7.0.0
+owner: Julian Motz
+copyright: Copyright (c) 2014–2016 Julian Motz
+
+license_url: https://raw.githubusercontent.com/julmot/mark.js/7.0.0/LICENSE
+dje_license: mit
+license_text_file: jquery.mark.LICENSE
