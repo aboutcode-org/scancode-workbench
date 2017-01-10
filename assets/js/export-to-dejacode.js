@@ -91,15 +91,34 @@ function uploadComponents(host, components, apiKey, productNameVersion) {
        component['product'] = productNameVersion;
     })
 
-    $.each(dejaCodeComponents, function( index, component ) {
+    var errorMessages = {};
+    var requests = []
+    $.each(dejaCodeComponents, function( index, component) {
+        var request = $.Deferred();
+        requests.push(request);
         createComponent(host, component, apiKey)
             .done(function (data) {
                 console.log('Successfully exported: ' + JSON.stringify(data));
-                alert("Components submitted to DejaCode");
             })
             .fail(function(error) {
                 console.log(error);
-                alert("An error occurred. DejaCode response: \n\n " + error.responseText);
+                errorMessages[component.name] = error.responseText;
+            })
+            .complete(function () {
+                request.resolve();
             });
     });
+
+    // This will be called when all requests finish.
+    $.when.apply($, requests)
+        .done(function () {
+            if (Object.keys(errorMessages).length > 0) {
+                var msg = $.map(errorMessages, function(errorMessage, component) {
+                    return component + ": " + errorMessage;
+                });
+                alert("The following errors occurred:\n" + msg.join("\n\n"));
+            } else {
+                alert("Components submitted to DejaCode");
+            }
+        });
 }
