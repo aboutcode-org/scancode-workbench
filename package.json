@@ -35,5 +35,8 @@
     "mocha": "^2.5.3",
     "nodemon": "^1.9.2",
     "sinon": "^1.17.4"
+  },
+  "dependencies": {
+    "nedb": "^1.8.0"
   }
 }

@@ -253,27 +253,27 @@ ScanData.LOCATION_COLUMN = [
 
 ScanData.COPYRIGHT_COLUMNS = [
     {
-        "data": "copyrights[<hr/>].statements[]",
+        "data": "copyright_statements",
         "title": "Copyright Statements",
         "name": "copyright_statements"
     },
     {
-        "data": "copyrights[<hr/>].holders[]",
+        "data": "copyright_holders",
         "title": "Copyright Holders",
         "name": "copyright_holders"
     },
     {
-        "data": "copyrights[<hr/>].authors[]",
+        "data": "copyright_authors",
         "title": "Copyright Authors",
         "name": "copyright_authors"
     },
     {
-        "data": "copyrights[<hr/>].start_line",
+        "data": "copyright_start_line",
         "title": "Copyright Start Line",
         "name": "copyright_start_line"
     },
     {
-        "data": "copyrights[<hr/>].end_line",
+        "data": "copyright_end_line",
         "title": "Copyright End Line",
         "name": "copyright_end_line"
     }
@@ -281,72 +281,57 @@ ScanData.COPYRIGHT_COLUMNS = [
 
 ScanData.LICENSE_COLUMNS = [
     {
-        "data": "licenses[<hr/>].key",
+        "data": "license_key",
         "title": "License Key",
         "name": "license_key"
     },
     {
-        "data": "licenses[<hr/>].score",
+        "data": "license_score",
         "title": "License Score",
         "name": "license_score"
     },
     {
-        "data": "licenses[<hr/>].short_name",
+        "data": "license_shortname",
         "title": "License Short Name",
         "name": "license_shortname"
     },
     {
-        "data": "licenses[<hr/>].category",
+        "data": "license_category",
         "title": "License Category",
         "name": "license_category"
     },
     {
-        "data": "licenses[<hr/>].party",
+        "data": "license_owner",
         "title": "License Owner",
         "name": "license_owner"
     },
     {
-        "data": "licenses[].homepage_url",
+        "data": "license_homepage_url",
         "title": "License Homepage URL",
-        "name": "license_homepage_url",
-        "render": function ( data, type, full, meta ) {
-            return $.map(data, function (href, i) {
-                return '<a href="'+href+'" target="_blank">'+href+'</a>';
-            }).join('<hr/>');
-        }
+        "name": "license_homepage_url"
     },
     {
-        "data": "licenses[].text_url",
+        "data": "license_text_url",
         "title": "License Text URL",
-        "name": "license_text_url",
-        "render": function ( data, type, full, meta ) {
-            return $.map(data, function (href, i) {
-                return '<a href="'+href+'" target="_blank">'+href+'</a>';
-            }).join('<hr/>');
-        }
+        "name": "license_text_url"
     },
     {
-        "data": "licenses[].dejacode_url",
+        "data": "license_djc_url",
         "title": "DejaCode License URL",
-        "name": "license_djc_url",
-        "render": function ( data, type, full, meta ) {
-            return $.map(data, function (href, i) {
-                return '<a href="'+href+'" target="_blank">'+href+'</a>';
-            }).join('<hr/>');
-        }
+        "name": "license_djc_url"
     },
     {
-        "data": "licenses[<hr/>].spdx_license_key",
+        "data": "license_spdx_key",
         "title": "SPDX License Key",
         "name": "license_spdx_key"
     },
     {
-        "data": "licenses[<hr/>].start_line",
+        "data": "license_start_line",
         "title": "License Start Line",
         "name": "license_start_line"
     },
     {
-        "data": "licenses[<hr/>].end_line",
+        "data": "license_end_line",
         "title": "License End Line",
         "name": "license_end_line"
     }
@@ -354,17 +339,17 @@ ScanData.LICENSE_COLUMNS = [
 
 ScanData.EMAIL_COLUMNS = [
     {
-        "data": "emails[<hr/>].email",
+        "data": "email",
         "title": "Email",
         "name": "email"
     },
     {
-        "data": "emails[<hr/>].start_line",
+        "data": "email_start_line",
         "title": "Email Start Line",
         "name": "email_start_line"
     },
     {
-        "data": "emails[<hr/>].end_line",
+        "data": "email_start_line",
         "title": "End Start Line",
         "name": "email_start_line"
     }
@@ -372,22 +357,17 @@ ScanData.EMAIL_COLUMNS = [
 
 ScanData.URL_COLUMNS = [
     {
-        "data": "urls[].url",
+        "data": "url",
         "title": "URL",
-        "name": "url",
-        "render": function ( data, type, full, meta ) {
-            return $.map(data, function (href, i) {
-                return '<a href="'+href+'" target="_blank">'+href+'</a>';
-            }).join('<hr/>');
-        }
+        "name": "url"
     },
     {
-        "data": "urls[<hr/>].start_line",
+        "data": "url_start_line",
         "title": "URL Start Line",
         "name": "url_start_line"
     },
     {
-        "data": "urls[<hr/>].end_line",
+        "data": "url_end_line",
         "title": "URL End Line",
         "name": "url_end_line"
     }
@@ -395,87 +375,87 @@ ScanData.URL_COLUMNS = [
 
 ScanData.FILE_COLUMNS = [
     {
-        "data": "type",
+        "data": "infos_type",
         "title": "Type",
         "name": "infos_type"
     },
     {
-        "data": "name",
+        "data": "infos_file_name",
         "title": "File Name",
         "name": "infos_file_name"
     },
     {
-        "data": "extension",
+        "data": "infos_file_extension",
         "title": "File Extension",
         "name": "infos_file_extension"
     },
     {
-        "data": "date",
+        "data": "infos_file_data",
         "title": "File Date",
         "name": "infos_file_data"
     },
     {
-        "data": "size",
+        "data": "infos_file_size",
         "title": "File Size",
         "name": "infos_file_size"
     },
     {
-        "data": "sha1",
+        "data": "infos_file_sha1",
         "title": "SHA1",
         "name": "infos_file_sha1"
     },
     {
-        "data": "md5",
+        "data": "infos_md5",
         "title": "MD5",
         "name": "infos_md5"
     },
     {
-        "data": "files_count",
+        "data": "infos_file_count",
         "title": "File Count",
         "name": "infos_file_count"
     },
     {
-        "data": "mime_type",
+        "data": "infos_mime_type",
         "title": "MIME Type",
         "name": "infos_mime_type"
     },
     {
-        "data": "file_type",
+        "data": "infos_file_type",
         "title": "File Type",
         "name": "infos_file_type"
     },
     {
-        "data": "programming_language",
+        "data": "infos_programming_language",
         "title": "Language",
         "name": "infos_programming_language"
     },
     {
-        "data": "is_binary",
+        "data": "infos_is_binary",
         "title": "Binary",
         "name": "infos_is_binary"
     },
     {
-        "data": "is_text",
+        "data": "infos_is_text",
         "title": "Text File",
         "name": "infos_is_text"
     },
     {
-        "data": "is_archive",
+        "data": "infos_is_archive",
         "title": "Archive File",
         "name": "infos_is_archive"
     },
     {
-        "data": "is_media",
+        "data": "infos_is_media",
         "title": "Media File",
         "name": "infos_is_media"
     },
     {
-        "data": "is_source",
+        "data": "infos_is_source",
         "title": "Source File",
         "name": "infos_is_source"
     },
     {
-        "data": "is_script",
+        "data": "infos_is_script",
         "title": "Script File",
         "name": "infos_is_script"
     }
@@ -483,17 +463,17 @@ ScanData.FILE_COLUMNS = [
 
 ScanData.PACKAGE_COLUMNS = [
     {
-        "data": "packages[].type",
+        "data": "packages_type",
         "title": "Package Type",
         "name": "packages_type"
     },
     {
-        "data": "packages[].packaging",
+        "data": "packages_packaging",
         "title": "Packaging",
         "name": "packages_packaging"
     },
     {
-        "data": "packages[].primary_language",
+        "data": "packages_primary_language",
         "title": "Package Primary Language",
         "name": "packages_primary_language"
     }

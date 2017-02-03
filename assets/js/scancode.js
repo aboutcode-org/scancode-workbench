@@ -28,21 +28,21 @@ $(document).ready(function () {
             }
         });
         var licenses = $.map(subNodes, function(node, i) {
-            return $.map(node.licenses, function(license, j) {
+            return $.map(node.licenses ? node.licenses : [], function(license, j) {
                 return license.short_name;
             });
         });
         licenses = $.unique(licenses.concat(component.licenses));
 
         var copyrights = $.unique($.map(subNodes, function(node, i) {
-            return $.map(node.copyrights, function(copyright, j) {
+            return $.map(node.copyrights ? node.copyrights : [], function(copyright, j) {
                 return copyright.statements.join(' ');
             });
         }));
         copyrights = $.unique(copyrights.concat(component.copyrights));
 
         var parties = $.unique($.map(subNodes, function(node, i) {
-            return $.map(node.copyrights, function(copyright, j) {
+            return $.map(node.copyrights ? node.copyrights : [], function(copyright, j) {
                 return copyright.holders;
             });
         }));
@@ -110,10 +110,11 @@ $(document).ready(function () {
         nodeWidth: 25,
         nodeHeight: 160,
         margin: {
-            top: 30, bottom: 30,
+            top: 80, bottom: 30,
             left: 100, right: 200
         },
         duration: 1000,
+
         // Update the nodes when data changes
         addNode: function (nodes) {
             var circle = nodes.append("circle")
@@ -300,45 +301,27 @@ $(document).ready(function () {
     var COPYRIGHT_COLUMNS = ScanData.LOCATION_COLUMN.concat(ScanData.COPYRIGHT_COLUMNS);
     var ORIGIN_COLUMNS = ScanData.LOCATION_COLUMN.concat(ScanData.ORIGIN_COLUMNS);
 
+    // Load nedb and create an in-memory databse
+    var Datastore = require('nedb');
+    var db = new Datastore();
+
     // Create a DataTable
     var table = $('#clues-table')
-        // The xhr.dt event occurs whenever new json data is loaded
-        .on('xhr.dt', function (event, settings, json, xhr) {
-            scanData = new ScanData(json);
-
-            // loading data into jstree
-            jstree.jstree(true).settings.core.data = scanData.jsTreeData;
-            jstree.jstree(true).refresh(true);
-
-            // loading data into the node view
-            nodeview.setData(scanData.nodeViewData);
-        })
         .DataTable({
-            "paging": false,
             "info": false,
             "colReorder": true,
-            "ajax": {
-                url: './samples/sample-data.json', // loading json data
-                dataType: 'json',
-                dataSrc: function (json) { // tells where data is located in json
-                    if (json.files != undefined && json.files.length > 0 &&
-                        json.files[0].type === undefined) {
-                        alert("Missing file 'type' information in the " +
-                            "scanned data. This probably means you ran" +
-                            " the scan without the -i option in ScanCode. " +
-                            "The app requires file information from a " +
-                            "ScanCode scan. Rerun the scan using ./scancode" +
-                            " -clip options.");
-                    }
-                    return json.files;
-                }
-            },
+            "serverSide": true,
+            "processing": true,
+            "ajax": ajaxDataTableCall,
             "columns": ScanData.TABLE_COLUMNS,
             "fixedColumns": {
                 leftColumns: 1
             },
+            // TODO: We want to use scroller but the current version of the
+            // plugin doesn't work with fixedColumns. Try updating
+            // "scroller": true,
             "scrollX": true,
-            "scrollY": 700,
+            "scrollY": '75vh',
             "stateSave": true,
             "deferRender": true,
             "buttons": [
@@ -505,13 +488,239 @@ $(document).ready(function () {
 
     // Open a json file
     var dialog = require('electron').remote.dialog;
-    $( "#open-file" ).click(function() {
+    $('#open-file').click(function() {
         dialog.showOpenDialog(function (fileNames) {
             if (fileNames === undefined) return;
+
             var fileName = fileNames[0];
-            table.ajax.url(fileName).load();
+
+            // create a database
+            db = new Datastore();
+            $.getJSON(fileName, function(json) {
+
+                // Show error for scans missing file type information
+                if (json.files != undefined && json.files.length > 0 &&
+                     json.files[0].type === undefined) {
+                         dialog.showErrorBox(
+                             "Missing File Type Information",
+                             "Missing file 'type' information in the " +
+                             "scanned data. \n\nThis probably means you ran" +
+                             " the scan without the -i option in ScanCode. " +
+                             "The app requires file information from a " +
+                             "ScanCode scan. Rerun the scan using ./scancode" +
+                             " -clip options."
+                         );
+                     }
+
+                // Flatten the json data to allow sorting and searching
+                var flattenedData = $.map(json.files, function(file, i) {
+                    return flattenData(file);
+                });
+
+                // Store in the database
+                db.insert(flattenedData, function (err, newDoc) {
+                    // reload the DataTable after all insertions are done.
+                    table.ajax.reload();
+                });
+
+                scanData = new ScanData(json);
+
+                // loading data into jstree
+                jstree.jstree(true).settings.core.data = scanData.jsTreeData;
+                jstree.jstree(true).refresh(true);
+
+                // loading data into the node view
+                nodeview.setData(scanData.nodeViewData);
+            });
         });
     });
+
+    // This function is called every time DataTables needs to be redrawn.
+    // For details on the parameters https://datatables.net/manual/server-side#Legacy
+    function ajaxDataTableCall(input, callback, settings) {
+        dFind = $.Deferred();
+
+        // Build the database query for both global searches and searches on
+        // particular columns
+        var query = {
+            $where : function() {
+                var globalSearch = input.search.value;
+
+                for (var i = 0; i < input.columns.length; i++) {
+                    // get all values
+                    var value = this[input.columns[i].name]
+                    var valueStr = String(value);
+
+                    // If column search exists, match on column
+                    var columnSearch = input.columns[i].search.value;
+                    if (columnSearch && (!value || valueStr.indexOf(columnSearch) != 0)) {
+                        return false;
+                    }
+
+                    // If global search exists, match on any column
+                    if (value && valueStr.indexOf(globalSearch) >= 0) {
+                        return true;
+                    }
+                }
+                return false;
+            }
+        }
+
+        var dbFind = db.find(query);
+
+        // Sort by column if needed
+        if (input.order.length > 0) {
+            var columnIndex = input.order[0].column;
+            var columnName = input.columns[columnIndex].name;
+            var direction = input.order[0].dir == 'asc' ? 1 : -1;
+            var sortObj = {};
+            sortObj[columnName] = direction;
+            dbFind = dbFind.sort(sortObj);
+        }
+
+        // Only take the chunk of data DataTables needs
+        dbFind = dbFind.skip(input.start);
+        if (input.length >= 0) {
+            dbFind = dbFind.limit(input.length);
+        }
+
+        // Check input.order to handle sorting
+        dbFind.exec(function (err, docs) {
+                if (err) {
+                    throw err;
+                }
+                dFind.resolve(docs);
+        });
+
+        // Count all documents in the datastore
+        dCountTotal = $.Deferred();
+        db.count({})
+            .exec(function (err, count) {
+                if (err) {
+                    throw err;
+                }
+                dCountTotal.resolve(count);
+        });
+
+        // Count only filtered documents in the datastore
+        dCountFiltered = $.Deferred();
+        db.count(query)
+            .exec(function (err, count) {
+                if (err) {
+                    throw err;
+                }
+                dCountFiltered.resolve(count);
+        });
+
+        // Wait for all three of the Deferred objects to finish
+        $.when(dFind, dCountTotal, dCountFiltered)
+            .then(function (docs, countTotal, countFiltered) {
+               if (docs) {
+                   callback({
+                       draw: input.draw,
+                       data: docs,
+                       recordsFiltered: countFiltered,
+                       recordsTotal: countTotal
+                   })
+            }
+        });
+    }
+
+    // Flatten ScanCode results data to load into database
+    function flattenData(data) {
+        return {
+            path: data.path,
+            copyright_statements: flattenArrayOfArray(data.copyrights, 'statements'),
+            copyright_holders: flattenArrayOfArray(data.copyrights, 'holders'),
+            copyright_authors: flattenArrayOfArray(data.copyrights, 'authors'),
+            copyright_start_line: flattenArray(data.copyrights, 'start_line'),
+            copyright_end_line: flattenArray(data.copyrights, 'end_line'),
+            license_key: flattenArray(data.licenses, 'key'),
+            license_score: flattenArray(data.licenses, 'score'),
+            license_shortname: flattenArray(data.licenses, 'short_name'),
+            license_category: flattenArray(data.licenses, 'category'),
+            license_owner: flattenArray(data.licenses, 'party'),
+            license_homepage_url: flattenArrayOfUrl(data.licenses, 'homepage_url'),
+            license_text_url: flattenArrayOfUrl(data.licenses, 'text_url'),
+            license_djc_url: flattenArrayOfUrl(data.licenses, 'dejacode_url'),
+            license_spdx_key: flattenArray(data.licenses, 'spdx_license_key'),
+            license_start_line: flattenArray(data.licenses, 'start_line'),
+            license_end_line: flattenArray(data.licenses, 'end_line'),
+            email: flattenArray(data.emails, 'email'),
+            email_start_line: flattenArray(data.emails, 'start_line'),
+            email_end_line: flattenArray(data.emails, 'end_line'),
+            url: flattenArrayOfUrl(data.urls, 'url'),
+            url_start_line: flattenArrayOfUrlLine(data.urls, 'start_line'),
+            url_end_line: flattenArrayOfUrlLine(data.urls, 'end_line'),
+            infos_type: data.type,
+            infos_file_name: data.name,
+            infos_file_extension: data.extension,
+            infos_file_data: data.date,
+            infos_file_size: data.size,
+            infos_file_sha1: data.sha1,
+            infos_md5: data.md5,
+            infos_file_count: data.files_count,
+            infos_mime_type: data.mime_type,
+            infos_file_type: data.file_type,
+            infos_programming_language: data.programming_language,
+            infos_is_binary: data.is_binary,
+            infos_is_text: data.is_text,
+            infos_is_archive: data.is_archive,
+            infos_is_media: data.is_media,
+            infos_is_source: data.is_source,
+            infos_is_script: data.is_script,
+            packages_type: flattenArray(data.packages, 'type'),
+            packages_packaging: flattenArray(data.packages, 'packaging'),
+            packages_primary_language: flattenArray(data.packages, 'primary_language')
+        }
+    }
+
+    // array: [
+    //     {key: [val0, val1]},
+    //     {key: [val2, val3]},
+    // ]
+    // => 'val0</br>val1<hr/>val2</br>val3'
+    function flattenArrayOfArray(array, key) {
+        return $.map(array ? array : [], function(elem, i) {
+            return elem[key] ? elem[key].join("</br>") : [];
+        }).join("<hr/>");
+    }
+
+    // array: [
+    //     {key: val0},
+    //     {key: val1},
+    // ]
+    // => 'val0<hr/>val1'
+    function flattenArray(array, key) {
+        return $.map(array ? array : [], function(elem, i) {
+            return elem[key] ? elem[key] : [];
+        }).join("<hr/>");
+    }
+
+    // array: [
+    //     {key: val0},
+    //     {key: val1},
+    // ]
+    // => 'val0</br>val1'
+    function flattenArrayOfUrlLine(array, key) {
+        return $.map(array ? array : [], function(elem, i) {
+            return elem[key] ? elem[key] : [];
+        }).join("</br>");
+    }
+
+    // array: [
+    //     {key: url0},
+    //     {key: url1},
+    // ]
+    // => '<a href=url0 target="_blank">url0</a><br/>
+    //     <a href=url1 target="_blank">url1</a>'
+    function flattenArrayOfUrl(array, key) {
+        return $.map(array ? array : [], function(elem, i) {
+            var href = elem[key];
+
+            return '<a href="'+href+'" target="_blank">'+href+'</a>';
+        }).join("</br>");
+    }
 
     // Save component file
     $( "#save-file" ).click(function() {
