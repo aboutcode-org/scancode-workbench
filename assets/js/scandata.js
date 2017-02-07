@@ -291,9 +291,9 @@ ScanData.LICENSE_COLUMNS = [
         "name": "license_score"
     },
     {
-        "data": "license_shortname",
+        "data": "license_short_name",
         "title": "License Short Name",
-        "name": "license_shortname"
+        "name": "license_short_name"
     },
     {
         "data": "license_category",
