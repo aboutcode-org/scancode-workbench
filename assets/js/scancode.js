@@ -309,7 +309,9 @@ $(document).ready(function () {
             "colReorder": true,
             "serverSide": true,
             "processing": true,
-            "ajax": ajaxDataTableCall,
+            "ajax": function (input, callback, settings) {
+                        aboutCodeDB.query(input, callback);
+                    },
             "columns": ScanData.TABLE_COLUMNS,
             "fixedColumns": {
                 leftColumns: 1
@@ -507,12 +509,10 @@ $(document).ready(function () {
                     );
                 }
 
-                aboutCodeDB = new AboutCodeDB();
-                aboutCodeDB.insert(json)
-                    .done(function() {
-                        // reload the DataTable after all insertions are done.
-+                       table.ajax.reload();
-                    });
+                aboutCodeDB = new AboutCodeDB(json, function () {
+                    // reload the DataTable after all insertions are done.
+                    table.ajax.reload();
+                });
                 scanData = new ScanData(json);
 
                 // loading data into jstree
@@ -524,12 +524,6 @@ $(document).ready(function () {
             });
         });
     });
-
-    // This function is called every time DataTables needs to be redrawn.
-    // For details on the parameters https://datatables.net/manual/server-side
-    function ajaxDataTableCall(input, callback, settings) {
-        aboutCodeDB.query(input, callback);
-    }
 
     // Save component file
     $( "#save-file" ).click(function() {

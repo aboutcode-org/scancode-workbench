@@ -19,9 +19,17 @@
 var Datastore = require('nedb');
 
 // Creates a new database on the flattened json data
-function AboutCodeDB() {
+function AboutCodeDB(json, callback) {
     // create a database
     this.db = new Datastore();
+    if (json) {
+        // Flatten the json data to allow sorting and searching
+        var flattenedData = $.map(json.files, function (file, i) {
+            return AboutCodeDB.flattenData(file);
+        });
+
+        this.db.insert(flattenedData, callback);
+    }
 }
 
 module.exports = AboutCodeDB;
@@ -34,22 +42,6 @@ module.exports = AboutCodeDB;
  */
 
 AboutCodeDB.prototype = {
-    // Insert scan data into the database and returns a promise
-    insert: function (json) {
-        // Flatten the json data to allow sorting and searching
-        var flattenedData = $.map(json.files, function (file, i) {
-            return AboutCodeDB.flattenData(file);
-        });
-
-        // Store in the database
-        var promise = $.Deferred();
-
-        this.db.insert(flattenedData, function (err, newDoc) {
-            promise.resolve(newDoc);
-        });
-        return promise;
-    },
-
     // This function is called every time DataTables needs to be redrawn.
     // For details on the parameters https://datatables.net/manual/server-side
     query: function (dataTablesInput, dataTablesCallback) {
@@ -81,7 +73,8 @@ AboutCodeDB.prototype = {
 
         var dbFind = this.db.find(query);
 
-        // Sort by column if needed
+        // Sort by column if needed. Currently only supporting sorting for
+        // one column
         if (dataTablesInput.order.length > 0) {
             var columnIndex = dataTablesInput.order[0].column;
             var columnName = dataTablesInput.columns[columnIndex].name;
@@ -97,33 +90,31 @@ AboutCodeDB.prototype = {
             dbFind = dbFind.limit(dataTablesInput.length);
         }
 
-        // Check input.order to handle sorting
+        // Execute the database find to get the rows of data
         var dFind = $.Deferred();
         dbFind.exec(function (err, docs) {
-                if (err) {
-                    throw err;
-                }
-                dFind.resolve(docs);
+            if (err) {
+                throw err;
+            }
+            dFind.resolve(docs);
         });
 
         // Count all documents in the datastore
         var dCountTotal = $.Deferred();
-        this.db.count({})
-            .exec(function (err, count) {
-                if (err) {
-                    throw err;
-                }
-                dCountTotal.resolve(count);
+        this.db.count({}).exec(function (err, count) {
+            if (err) {
+                throw err;
+            }
+            dCountTotal.resolve(count);
         });
 
         // Count only filtered documents in the datastore
         var dCountFiltered = $.Deferred();
-        this.db.count(query)
-            .exec(function (err, count) {
-                if (err) {
-                    throw err;
-                }
-                dCountFiltered.resolve(count);
+        this.db.count(query).exec(function (err, count) {
+            if (err) {
+                throw err;
+            }
+            dCountFiltered.resolve(count);
         });
 
         // Wait for all three of the Deferred objects to finish
