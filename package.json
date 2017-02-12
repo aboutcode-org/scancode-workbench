@@ -19,7 +19,7 @@
     "open source scanner"
   ],
   "author": "nexB",
-  "license": "apache-2.0",
+  "license": "Apache-2.0",
   "bugs": {
     "url": ""
   },
@@ -29,6 +29,7 @@
     "chai": "^3.5.0",
     "electron-packager": "^7.0.3",
     "electron-prebuilt": "1.4.0",
+    "electron-rebuild": "^1.5.7",
     "grunt": "^1.0.0",
     "jquery": "^3.1.0",
     "jsdom": "^9.4.1",
@@ -37,6 +38,8 @@
     "sinon": "^1.17.4"
   },
   "dependencies": {
-    "nedb": "^1.8.0"
+    "sequelize": "^3.30.2",
+    "sequelize-cli": "^2.5.1",
+    "sqlite3": "^3.1.8"
   }
 }

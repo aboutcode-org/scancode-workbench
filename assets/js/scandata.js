@@ -390,9 +390,9 @@ ScanData.FILE_COLUMNS = [
         "name": "infos_file_extension"
     },
     {
-        "data": "infos_file_data",
+        "data": "infos_file_date",
         "title": "File Date",
-        "name": "infos_file_data"
+        "name": "infos_file_date"
     },
     {
         "data": "infos_file_size",
