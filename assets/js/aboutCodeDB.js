@@ -16,19 +16,39 @@
 
 
 // Load nedb and create an in-memory database
-var Datastore = require('nedb');
+var Sequelize = require("sequelize");
 
 // Creates a new database on the flattened json data
 function AboutCodeDB(json, callback) {
-    // create a database
-    this.db = new Datastore();
+
+    // Constructor returns an object which effectively represents a connection
+    // to the db arguments (name of db, username for db, pw for that user)
+    var connection = new Sequelize("demo_schema", "root", "password", {
+        dialect: "sqlite"
+    });
+
+    // Defines columns in the scanned file table
+    this.ScannedFile = AboutCodeDB.defineScannedFile(connection);
+
+    // A promise that will return when the db and tables have been created
+    this.dbPromise = connection.sync();
+
     if (json) {
+
         // Flatten the json data to allow sorting and searching
         var flattenedData = $.map(json.files, function (file, i) {
             return AboutCodeDB.flattenData(file);
         });
 
-        this.db.insert(flattenedData, callback);
+        // Add all rows to the DB, then call the callback
+        var that = this;
+
+        this.dbPromise.then(function() {
+            $.each(flattenedData, function(i, file) {
+                that.ScannedFile.create(file);
+            });
+        })
+        .then(callback);
     }
 }
 
@@ -42,93 +62,29 @@ module.exports = AboutCodeDB;
  */
 
 AboutCodeDB.prototype = {
+
     // This function is called every time DataTables needs to be redrawn.
     // For details on the parameters https://datatables.net/manual/server-side
     query: function (dataTablesInput, dataTablesCallback) {
-        // Build the database query for both global searches and searches on
-        // particular columns
-        var query = {
-            $where : function() {
-                var globalSearch = dataTablesInput.search.value;
 
-                for (var i = 0; i < dataTablesInput.columns.length; i++) {
-                    // get all values
-                    var value = this[dataTablesInput.columns[i].name]
-                    var valueStr = String(value);
+        var that = this;
 
-                    // If column search exists, match on column
-                    var columnSearch = dataTablesInput.columns[i].search.value;
-                    if (columnSearch && (!value || valueStr.indexOf(columnSearch) != 0)) {
-                        return false;
+        // TODO: Add back in searching and sorting of DataTable
+        this.dbPromise.then(function() {
+
+            // Execute the database find to get the rows of data
+            that.ScannedFile.findAndCountAll({})
+                .then(function(result) {
+                    if (result && result.rows) {
+                       dataTablesCallback({
+                           draw: dataTablesInput.draw,
+                           data: result.rows,
+                           recordsFiltered: result.count,
+                           recordsTotal: result.count
+                       });
                     }
-
-                    // If global search exists, match on any column
-                    if (value && valueStr.indexOf(globalSearch) >= 0) {
-                        return true;
-                    }
-                }
-                return false;
-            }
-        }
-
-        var dbFind = this.db.find(query);
-
-        // Sort by column if needed. Currently only supporting sorting for
-        // one column
-        if (dataTablesInput.order.length > 0) {
-            var columnIndex = dataTablesInput.order[0].column;
-            var columnName = dataTablesInput.columns[columnIndex].name;
-            var direction = dataTablesInput.order[0].dir == 'asc' ? 1 : -1;
-            var sortObj = {};
-            sortObj[columnName] = direction;
-            dbFind = dbFind.sort(sortObj);
-        }
-
-        // Only take the chunk of data DataTables needs
-        dbFind = dbFind.skip(dataTablesInput.start);
-        if (dataTablesInput.length >= 0) {
-            dbFind = dbFind.limit(dataTablesInput.length);
-        }
-
-        // Execute the database find to get the rows of data
-        var dFind = $.Deferred();
-        dbFind.exec(function (err, docs) {
-            if (err) {
-                throw err;
-            }
-            dFind.resolve(docs);
-        });
-
-        // Count all documents in the datastore
-        var dCountTotal = $.Deferred();
-        this.db.count({}).exec(function (err, count) {
-            if (err) {
-                throw err;
-            }
-            dCountTotal.resolve(count);
-        });
-
-        // Count only filtered documents in the datastore
-        var dCountFiltered = $.Deferred();
-        this.db.count(query).exec(function (err, count) {
-            if (err) {
-                throw err;
-            }
-            dCountFiltered.resolve(count);
-        });
-
-        // Wait for all three of the Deferred objects to finish
-        $.when(dFind, dCountTotal, dCountFiltered)
-            .then(function (docs, countTotal, countFiltered) {
-               if (docs) {
-                   dataTablesCallback({
-                       draw: dataTablesInput.draw,
-                       data: docs,
-                       recordsFiltered: countFiltered,
-                       recordsTotal: countTotal
-                   })
-            }
-        });
+                });
+            });
     }
 }
 
@@ -137,6 +93,62 @@ AboutCodeDB.prototype = {
  *
  * These functions do not have 'this' variables.
  */
+
+// Defines a table for a flattened scanned file
+AboutCodeDB.defineScannedFile = function(connection) {
+
+    // DB COLUMN TYPE: A string with empty string default value
+    var DEFAULT_STRING_TYPE = {
+        type: Sequelize.STRING,
+        defaultValue: ""
+    };
+
+    return connection.define("file", {
+        path: Sequelize.STRING,
+        copyright_statements: DEFAULT_STRING_TYPE,
+        copyright_holders: DEFAULT_STRING_TYPE,
+        copyright_authors: DEFAULT_STRING_TYPE,
+        copyright_start_line: DEFAULT_STRING_TYPE,
+        copyright_end_line:  DEFAULT_STRING_TYPE,
+        license_key: DEFAULT_STRING_TYPE,
+        license_score:  DEFAULT_STRING_TYPE,
+        license_short_name: DEFAULT_STRING_TYPE,
+        license_category: DEFAULT_STRING_TYPE,
+        license_owner: DEFAULT_STRING_TYPE,
+        license_homepage_url: DEFAULT_STRING_TYPE,
+        license_text_url: DEFAULT_STRING_TYPE,
+        license_djc_url: DEFAULT_STRING_TYPE,
+        license_spdx_key: DEFAULT_STRING_TYPE,
+        license_start_line:  DEFAULT_STRING_TYPE,
+        license_end_line:  DEFAULT_STRING_TYPE,
+        email: DEFAULT_STRING_TYPE,
+        email_start_line:  DEFAULT_STRING_TYPE,
+        email_end_line:  DEFAULT_STRING_TYPE,
+        url: DEFAULT_STRING_TYPE,
+        url_start_line: DEFAULT_STRING_TYPE,
+        url_end_line: DEFAULT_STRING_TYPE,
+        infos_type: DEFAULT_STRING_TYPE,
+        infos_file_name: DEFAULT_STRING_TYPE,
+        infos_file_extension: DEFAULT_STRING_TYPE,
+        infos_file_date: DEFAULT_STRING_TYPE,
+        infos_file_size: DEFAULT_STRING_TYPE,
+        infos_file_sha1: DEFAULT_STRING_TYPE,
+        infos_md5: DEFAULT_STRING_TYPE,
+        infos_file_count: DEFAULT_STRING_TYPE,
+        infos_mime_type: DEFAULT_STRING_TYPE,
+        infos_file_type: DEFAULT_STRING_TYPE,
+        infos_programming_language: DEFAULT_STRING_TYPE,
+        infos_is_binary:  DEFAULT_STRING_TYPE,
+        infos_is_text: DEFAULT_STRING_TYPE,
+        infos_is_archive:  DEFAULT_STRING_TYPE,
+        infos_is_media: DEFAULT_STRING_TYPE,
+        infos_is_source: DEFAULT_STRING_TYPE,
+        infos_is_script: DEFAULT_STRING_TYPE,
+        packages_type: DEFAULT_STRING_TYPE,
+        packages_packaging: DEFAULT_STRING_TYPE,
+        packages_primary_language: DEFAULT_STRING_TYPE
+    });
+}
 
 // Flatten ScanCode results data to load into database
 AboutCodeDB.flattenData = function (file) {
@@ -167,7 +179,7 @@ AboutCodeDB.flattenData = function (file) {
         infos_type: file.type,
         infos_file_name: file.name,
         infos_file_extension: file.extension,
-        infos_file_data: file.date,
+        infos_file_date: file.date,
         infos_file_size: file.size,
         infos_file_sha1: file.sha1,
         infos_md5: file.md5,
