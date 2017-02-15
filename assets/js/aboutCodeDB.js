@@ -35,17 +35,12 @@ function AboutCodeDB(json, callback) {
 
     if (json) {
 
-        // Flatten the json data to allow sorting and searching
-        var flattenedData = $.map(json.files, function (file, i) {
-            return AboutCodeDB.flattenData(file);
-        });
-
-        // Add all rows to the DB, then call the callback
         var that = this;
 
+        // Add all rows to the DB, then call the callback
         this.dbPromise.then(function() {
-            $.each(flattenedData, function(i, file) {
-                that.ScannedFile.create(file);
+            $.each(json.files, function(i, file) {
+                that.ScannedFile.create(AboutCodeDB.flattenData(file));
             });
         })
         .then(callback);
@@ -66,16 +61,58 @@ AboutCodeDB.prototype = {
     // This function is called every time DataTables needs to be redrawn.
     // For details on the parameters https://datatables.net/manual/server-side
     query: function (dataTablesInput, dataTablesCallback) {
-
+        console.log("Querying DB");
         var that = this;
 
-        // TODO: Add back in searching and sorting of DataTable
+        // TODO: Sorting of DataTable
         this.dbPromise.then(function() {
 
+            // query = {
+            //   where: {
+            //     $and: {
+            //       path: { $like: 'columnSearch%' },
+            //       $or: [
+            //         { path: { $like: 'globalSearch%' } },
+            //         { copyright_statements: { $like: 'globalSearch%' } },
+            //         ...,
+            //       ]
+            //     }
+            //   }
+            // }
+            var query = {
+                where: {
+                    $and: {}
+                }
+            };
+
+            // If a column search exists, add search for that column
+            for (var i = 0; i < dataTablesInput.columns.length; i++) {
+                var columnSearch = dataTablesInput.columns[i].search.value;
+                if (columnSearch) {
+                    query.where.$and[dataTablesInput.columns[i].name] = {
+                        $like: columnSearch + '%'
+                    }
+                }
+            }
+
+            // If a global search exists, add an $or search for each column
+            var globalSearch = dataTablesInput.search.value;
+            if (globalSearch) {
+                query.where.$and.$or = [];
+                for (var i = 0; i < dataTablesInput.columns.length; i++) {
+                    var orSearch = {};
+                    orSearch[dataTablesInput.columns[i].name] = {
+                        $like: globalSearch + '%'
+                    };
+                    query.where.$and.$or.push(orSearch);
+                }
+            }
+
             // Execute the database find to get the rows of data
-            that.ScannedFile.findAndCountAll({})
+            that.ScannedFile.findAndCountAll(query)
                 .then(function(result) {
                     if (result && result.rows) {
+//                       console.log(result.rows)
                        dataTablesCallback({
                            draw: dataTablesInput.draw,
                            data: result.rows,
@@ -83,8 +120,9 @@ AboutCodeDB.prototype = {
                            recordsTotal: result.count
                        });
                     }
-                });
+                console.log("Query Finished");
             });
+        });
     }
 }
 
@@ -98,55 +136,57 @@ AboutCodeDB.prototype = {
 AboutCodeDB.defineScannedFile = function(connection) {
 
     // DB COLUMN TYPE: A string with empty string default value
-    var DEFAULT_STRING_TYPE = {
-        type: Sequelize.STRING,
-        defaultValue: ""
-    };
+    function getDefaultStringType() {
+        return {
+            type: Sequelize.STRING,
+            defaultValue: ""
+        };
+    }
 
     return connection.define("file", {
         path: Sequelize.STRING,
-        copyright_statements: DEFAULT_STRING_TYPE,
-        copyright_holders: DEFAULT_STRING_TYPE,
-        copyright_authors: DEFAULT_STRING_TYPE,
-        copyright_start_line: DEFAULT_STRING_TYPE,
-        copyright_end_line:  DEFAULT_STRING_TYPE,
-        license_key: DEFAULT_STRING_TYPE,
-        license_score:  DEFAULT_STRING_TYPE,
-        license_short_name: DEFAULT_STRING_TYPE,
-        license_category: DEFAULT_STRING_TYPE,
-        license_owner: DEFAULT_STRING_TYPE,
-        license_homepage_url: DEFAULT_STRING_TYPE,
-        license_text_url: DEFAULT_STRING_TYPE,
-        license_djc_url: DEFAULT_STRING_TYPE,
-        license_spdx_key: DEFAULT_STRING_TYPE,
-        license_start_line:  DEFAULT_STRING_TYPE,
-        license_end_line:  DEFAULT_STRING_TYPE,
-        email: DEFAULT_STRING_TYPE,
-        email_start_line:  DEFAULT_STRING_TYPE,
-        email_end_line:  DEFAULT_STRING_TYPE,
-        url: DEFAULT_STRING_TYPE,
-        url_start_line: DEFAULT_STRING_TYPE,
-        url_end_line: DEFAULT_STRING_TYPE,
-        infos_type: DEFAULT_STRING_TYPE,
-        infos_file_name: DEFAULT_STRING_TYPE,
-        infos_file_extension: DEFAULT_STRING_TYPE,
-        infos_file_date: DEFAULT_STRING_TYPE,
-        infos_file_size: DEFAULT_STRING_TYPE,
-        infos_file_sha1: DEFAULT_STRING_TYPE,
-        infos_md5: DEFAULT_STRING_TYPE,
-        infos_file_count: DEFAULT_STRING_TYPE,
-        infos_mime_type: DEFAULT_STRING_TYPE,
-        infos_file_type: DEFAULT_STRING_TYPE,
-        infos_programming_language: DEFAULT_STRING_TYPE,
-        infos_is_binary:  DEFAULT_STRING_TYPE,
-        infos_is_text: DEFAULT_STRING_TYPE,
-        infos_is_archive:  DEFAULT_STRING_TYPE,
-        infos_is_media: DEFAULT_STRING_TYPE,
-        infos_is_source: DEFAULT_STRING_TYPE,
-        infos_is_script: DEFAULT_STRING_TYPE,
-        packages_type: DEFAULT_STRING_TYPE,
-        packages_packaging: DEFAULT_STRING_TYPE,
-        packages_primary_language: DEFAULT_STRING_TYPE
+        copyright_statements: getDefaultStringType(),
+        copyright_holders: getDefaultStringType(),
+        copyright_authors: getDefaultStringType(),
+        copyright_start_line: getDefaultStringType(),
+        copyright_end_line:  getDefaultStringType(),
+        license_key: getDefaultStringType(),
+        license_score:  getDefaultStringType(),
+        license_short_name: getDefaultStringType(),
+        license_category: getDefaultStringType(),
+        license_owner: getDefaultStringType(),
+        license_homepage_url: getDefaultStringType(),
+        license_text_url: getDefaultStringType(),
+        license_djc_url: getDefaultStringType(),
+        license_spdx_key: getDefaultStringType(),
+        license_start_line:  getDefaultStringType(),
+        license_end_line:  getDefaultStringType(),
+        email: getDefaultStringType(),
+        email_start_line:  getDefaultStringType(),
+        email_end_line:  getDefaultStringType(),
+        url: getDefaultStringType(),
+        url_start_line: getDefaultStringType(),
+        url_end_line: getDefaultStringType(),
+        infos_type: getDefaultStringType(),
+        infos_file_name: getDefaultStringType(),
+        infos_file_extension: getDefaultStringType(),
+        infos_file_date: getDefaultStringType(),
+        infos_file_size: getDefaultStringType(),
+        infos_file_sha1: getDefaultStringType(),
+        infos_md5: getDefaultStringType(),
+        infos_file_count: getDefaultStringType(),
+        infos_mime_type: getDefaultStringType(),
+        infos_file_type: getDefaultStringType(),
+        infos_programming_language: getDefaultStringType(),
+        infos_is_binary:  getDefaultStringType(),
+        infos_is_text: getDefaultStringType(),
+        infos_is_archive:  getDefaultStringType(),
+        infos_is_media: getDefaultStringType(),
+        infos_is_source: getDefaultStringType(),
+        infos_is_script: getDefaultStringType(),
+        packages_type: getDefaultStringType(),
+        packages_packaging: getDefaultStringType(),
+        packages_primary_language: getDefaultStringType()
     });
 }
 
