@@ -39,11 +39,11 @@ function AboutCodeDB(json, callback) {
 
         // Add all rows to the DB, then call the callback
         this.dbPromise.then(function() {
-            $.each(json.files, function(i, file) {
-                that.ScannedFile.create(AboutCodeDB.flattenData(file));
+            var flattenedFiles = $.map(json.files, function(file, index) {
+                return AboutCodeDB.flattenData(file);
             });
-        })
-        .then(callback);
+            return that.ScannedFile.bulkCreate(flattenedFiles);
+        }).then(callback);
     }
 }
 
@@ -61,11 +61,13 @@ AboutCodeDB.prototype = {
     // This function is called every time DataTables needs to be redrawn.
     // For details on the parameters https://datatables.net/manual/server-side
     query: function (dataTablesInput, dataTablesCallback) {
-        console.log("Querying DB");
         var that = this;
 
-        // TODO: Sorting of DataTable
+        // Sorting and Querying of data for DataTables
         this.dbPromise.then(function() {
+            var columnIndex = dataTablesInput.order[0].column;
+            var columnName = dataTablesInput.columns[columnIndex].name;
+            var direction = dataTablesInput.order[0].dir === 'desc' ? "DESC" : "ASC";
 
             // query = {
             //   where: {
@@ -82,7 +84,11 @@ AboutCodeDB.prototype = {
             var query = {
                 where: {
                     $and: {}
-                }
+                },
+                // Only take the chunk of data DataTables needs
+                limit: dataTablesInput.length,
+                offset: dataTablesInput.start,
+                order: [[columnName, direction]]
             };
 
             // If a column search exists, add search for that column
@@ -109,19 +115,36 @@ AboutCodeDB.prototype = {
             }
 
             // Execute the database find to get the rows of data
-            that.ScannedFile.findAndCountAll(query)
+            var dFind = $.Deferred();
+            that.ScannedFile.findAll(query)
                 .then(function(result) {
-                    if (result && result.rows) {
-//                       console.log(result.rows)
-                       dataTablesCallback({
-                           draw: dataTablesInput.draw,
-                           data: result.rows,
-                           recordsFiltered: result.count,
-                           recordsTotal: result.count
-                       });
-                    }
-                console.log("Query Finished");
-            });
+                    dFind.resolve(result);
+                });
+
+            // Execute the database count of all rows
+            var dCount = $.Deferred();
+            that.ScannedFile.count({})
+                .then(function(count) {
+                    dCount.resolve(count);
+                });
+
+            // Execute the database count of filtered query rows
+            var dFilteredCount = $.Deferred();
+            that.ScannedFile.count(query)
+                .then(function(count) {
+                    dFilteredCount.resolve(count);
+                })
+
+            // Wait for all three of the Deferred objects to finish
+            $.when(dFind, dCount, dFilteredCount)
+                .then(function (rows, count, filteredCount) {
+                    dataTablesCallback({
+                       draw: dataTablesInput.draw,
+                       data: rows ? rows : [],
+                       recordsFiltered: filteredCount,
+                       recordsTotal: count
+                    });
+                });
         });
     }
 }
@@ -144,7 +167,11 @@ AboutCodeDB.defineScannedFile = function(connection) {
     }
 
     return connection.define("file", {
-        path: Sequelize.STRING,
+        path: {
+            type: Sequelize.STRING,
+            unique: true,
+            allowNull: false
+        },
         copyright_statements: getDefaultStringType(),
         copyright_holders: getDefaultStringType(),
         copyright_authors: getDefaultStringType(),
@@ -187,6 +214,14 @@ AboutCodeDB.defineScannedFile = function(connection) {
         packages_type: getDefaultStringType(),
         packages_packaging: getDefaultStringType(),
         packages_primary_language: getDefaultStringType()
+    }, {
+        indexes: [
+            // Create a unique index on path
+            {
+                unique: true,
+                fields: ['path']
+            }
+        ]
     });
 }
 
