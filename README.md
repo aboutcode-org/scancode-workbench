@@ -19,14 +19,21 @@ creating your component can then be exported to a JSON file.
 
 * You can [download the latest release](https://github.com/nexB/aboutcode-manager/releases) for your operating system or build it yourself (see below).
 Once downloaded, you can find `AboutCode-Manager` under `dist/AboutCode-Manager-<os>-x64-<version>`.
-* AboutCode Manager is only compatible with scans from [ScanCode Toolkit v2.0.0-RC1] (https://github.com/nexB/scancode-toolkit/releases) and above.
-* Scans imported into the app need to contain the file information data. Therefore, the `-i` option needs to be used in your ScanCode command. For example:
+* AboutCode Manager v1 is only compatible with scans from [ScanCode Toolkit v2.0.0-RC1] (https://github.com/nexB/scancode-toolkit/releases) and above which are run with the ScanCode -i option.  You need to run ScanCode with the -c (copyright detection) and -l (license detection) options in order to get copyright and license data.  The -p option will detect and report package level metadata if available.
 
 ```bash
-./scancode -clip
+./scancode -clip <input> <output_file>
 ```
 
-See the [wiki] (https://github.com/nexB/aboutcode-manager/wiki) for more documentation on how to use the app.
+* We have provided a set of sample scans that you can quickly review in AboutCode Manager in order to get a sense of its functionality and the types of information captured by a scan.  The samples are located at [https://github.com/nexB/aboutcode-manager/tree/master/samples] (https://github.com/nexB/aboutcode-manager/tree/master/samples).  They currently include the following JSON files:
+  * fuse-2.9.1-scan.json
+  * protobuf-3.0.0-scan.json
+  * rapidjson-1.1.0-scan.json
+  * zlib-1.2.11-scan.json
+
+  Download one or more of the samples and open the samples from the File open button in AboutCode Manager.
+
+See the [wiki] (https://github.com/nexB/aboutcode-manager/wiki) for more documentation on how to use AboutCode Manager.
 
 ## Building
 
