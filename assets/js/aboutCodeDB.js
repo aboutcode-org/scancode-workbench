@@ -15,7 +15,7 @@
  */
 
 
-// Load nedb and create an in-memory database
+// Load Sequelize and create an in-memory database
 var Sequelize = require("sequelize");
 
 // Creates a new database on the flattened json data
@@ -23,15 +23,15 @@ function AboutCodeDB(json, callback) {
 
     // Constructor returns an object which effectively represents a connection
     // to the db arguments (name of db, username for db, pw for that user)
-    var connection = new Sequelize("demo_schema", "root", "password", {
+    var sequelize = new Sequelize("demo_schema", "root", "password", {
         dialect: "sqlite"
     });
 
     // Defines columns in the scanned file table
-    this.ScannedFile = AboutCodeDB.defineScannedFile(connection);
+    this.ScannedFile = AboutCodeDB.defineScannedFile(sequelize);
 
     // A promise that will return when the db and tables have been created
-    this.dbPromise = connection.sync();
+    this.dbPromise = sequelize.sync();
 
     if (json) {
 
@@ -53,7 +53,7 @@ module.exports = AboutCodeDB;
 /**
  * AboutCodeDB data instance functions.
  *
- * Each new AboutCodeDB() has its own 'this' variable.
+ * Each new AboutCodeDB() has its own "this" variable.
  */
 
 AboutCodeDB.prototype = {
@@ -67,15 +67,15 @@ AboutCodeDB.prototype = {
         this.dbPromise.then(function() {
             var columnIndex = dataTablesInput.order[0].column;
             var columnName = dataTablesInput.columns[columnIndex].name;
-            var direction = dataTablesInput.order[0].dir === 'desc' ? "DESC" : "ASC";
+            var direction = dataTablesInput.order[0].dir === "desc" ? "DESC" : "ASC";
 
             // query = {
             //   where: {
             //     $and: {
-            //       path: { $like: 'columnSearch%' },
+            //       path: { $like: "columnSearch%" },
             //       $or: [
-            //         { path: { $like: 'globalSearch%' } },
-            //         { copyright_statements: { $like: 'globalSearch%' } },
+            //         { path: { $like: "globalSearch%" } },
+            //         { copyright_statements: { $like: "globalSearch%" } },
             //         ...,
             //       ]
             //     }
@@ -96,7 +96,7 @@ AboutCodeDB.prototype = {
                 var columnSearch = dataTablesInput.columns[i].search.value;
                 if (columnSearch) {
                     query.where.$and[dataTablesInput.columns[i].name] = {
-                        $like: columnSearch + '%'
+                        $like: columnSearch + "%"
                     }
                 }
             }
@@ -108,7 +108,7 @@ AboutCodeDB.prototype = {
                 for (var i = 0; i < dataTablesInput.columns.length; i++) {
                     var orSearch = {};
                     orSearch[dataTablesInput.columns[i].name] = {
-                        $like: globalSearch + '%'
+                        $like: globalSearch + "%"
                     };
                     query.where.$and.$or.push(orSearch);
                 }
@@ -152,11 +152,11 @@ AboutCodeDB.prototype = {
 /**
  * AboutCodeDB data class functions.
  *
- * These functions do not have 'this' variables.
+ * These functions do not have "this" variables.
  */
 
 // Defines a table for a flattened scanned file
-AboutCodeDB.defineScannedFile = function(connection) {
+AboutCodeDB.defineScannedFile = function(sequelize) {
 
     // DB COLUMN TYPE: A string with empty string default value
     function getDefaultStringType() {
@@ -166,7 +166,7 @@ AboutCodeDB.defineScannedFile = function(connection) {
         };
     }
 
-    return connection.define("file", {
+    return sequelize.define("file", {
         path: {
             type: Sequelize.STRING,
             unique: true,
@@ -219,7 +219,7 @@ AboutCodeDB.defineScannedFile = function(connection) {
             // Create a unique index on path
             {
                 unique: true,
-                fields: ['path']
+                fields: ["path"]
             }
         ]
     });
@@ -229,28 +229,28 @@ AboutCodeDB.defineScannedFile = function(connection) {
 AboutCodeDB.flattenData = function (file) {
     return {
         path: file.path,
-        copyright_statements: AboutCodeDB.flattenArrayOfArray(file.copyrights, 'statements'),
-        copyright_holders: AboutCodeDB.flattenArrayOfArray(file.copyrights, 'holders'),
-        copyright_authors: AboutCodeDB.flattenArrayOfArray(file.copyrights, 'authors'),
-        copyright_start_line: AboutCodeDB.flattenArray(file.copyrights, 'start_line'),
-        copyright_end_line: AboutCodeDB.flattenArray(file.copyrights, 'end_line'),
-        license_key: AboutCodeDB.flattenArray(file.licenses, 'key'),
-        license_score: AboutCodeDB.flattenArray(file.licenses, 'score'),
-        license_short_name: AboutCodeDB.flattenArray(file.licenses, 'short_name'),
-        license_category: AboutCodeDB.flattenArray(file.licenses, 'category'),
-        license_owner: AboutCodeDB.flattenArray(file.licenses, 'party'),
-        license_homepage_url: AboutCodeDB.flattenArrayOfUrl(file.licenses, 'homepage_url'),
-        license_text_url: AboutCodeDB.flattenArrayOfUrl(file.licenses, 'text_url'),
-        license_djc_url: AboutCodeDB.flattenArrayOfUrl(file.licenses, 'dejacode_url'),
-        license_spdx_key: AboutCodeDB.flattenArray(file.licenses, 'spdx_license_key'),
-        license_start_line: AboutCodeDB.flattenArray(file.licenses, 'start_line'),
-        license_end_line: AboutCodeDB.flattenArray(file.licenses, 'end_line'),
-        email: AboutCodeDB.flattenArray(file.emails, 'email'),
-        email_start_line: AboutCodeDB.flattenArray(file.emails, 'start_line'),
-        email_end_line: AboutCodeDB.flattenArray(file.emails, 'end_line'),
-        url: AboutCodeDB.flattenArrayOfUrl(file.urls, 'url'),
-        url_start_line: AboutCodeDB.flattenArrayOfUrlLine(file.urls, 'start_line'),
-        url_end_line: AboutCodeDB.flattenArrayOfUrlLine(file.urls, 'end_line'),
+        copyright_statements: AboutCodeDB.flattenArrayOfArray(file.copyrights, "statements"),
+        copyright_holders: AboutCodeDB.flattenArrayOfArray(file.copyrights, "holders"),
+        copyright_authors: AboutCodeDB.flattenArrayOfArray(file.copyrights, "authors"),
+        copyright_start_line: AboutCodeDB.flattenArray(file.copyrights, "start_line"),
+        copyright_end_line: AboutCodeDB.flattenArray(file.copyrights, "end_line"),
+        license_key: AboutCodeDB.flattenArray(file.licenses, "key"),
+        license_score: AboutCodeDB.flattenArray(file.licenses, "score"),
+        license_short_name: AboutCodeDB.flattenArray(file.licenses, "short_name"),
+        license_category: AboutCodeDB.flattenArray(file.licenses, "category"),
+        license_owner: AboutCodeDB.flattenArray(file.licenses, "party"),
+        license_homepage_url: AboutCodeDB.flattenArrayOfUrl(file.licenses, "homepage_url"),
+        license_text_url: AboutCodeDB.flattenArrayOfUrl(file.licenses, "text_url"),
+        license_djc_url: AboutCodeDB.flattenArrayOfUrl(file.licenses, "dejacode_url"),
+        license_spdx_key: AboutCodeDB.flattenArray(file.licenses, "spdx_license_key"),
+        license_start_line: AboutCodeDB.flattenArray(file.licenses, "start_line"),
+        license_end_line: AboutCodeDB.flattenArray(file.licenses, "end_line"),
+        email: AboutCodeDB.flattenArray(file.emails, "email"),
+        email_start_line: AboutCodeDB.flattenArray(file.emails, "start_line"),
+        email_end_line: AboutCodeDB.flattenArray(file.emails, "end_line"),
+        url: AboutCodeDB.flattenArrayOfUrl(file.urls, "url"),
+        url_start_line: AboutCodeDB.flattenArrayOfUrlLine(file.urls, "start_line"),
+        url_end_line: AboutCodeDB.flattenArrayOfUrlLine(file.urls, "end_line"),
         infos_type: file.type,
         infos_file_name: file.name,
         infos_file_extension: file.extension,
@@ -268,9 +268,9 @@ AboutCodeDB.flattenData = function (file) {
         infos_is_media: file.is_media,
         infos_is_source: file.is_source,
         infos_is_script: file.is_script,
-        packages_type: AboutCodeDB.flattenArray(file.packages, 'type'),
-        packages_packaging: AboutCodeDB.flattenArray(file.packages, 'packaging'),
-        packages_primary_language: AboutCodeDB.flattenArray(file.packages, 'primary_language')
+        packages_type: AboutCodeDB.flattenArray(file.packages, "type"),
+        packages_packaging: AboutCodeDB.flattenArray(file.packages, "packaging"),
+        packages_primary_language: AboutCodeDB.flattenArray(file.packages, "primary_language")
     }
 }
 

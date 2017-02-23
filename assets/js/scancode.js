@@ -509,10 +509,17 @@ $(document).ready(function () {
                     );
                 }
 
-                aboutCodeDB = new AboutCodeDB(json, function () {
+                aboutCodeDB = new AboutCodeDB(json, function() {
                     // reload the DataTable after all insertions are done.
                     table.ajax.reload();
                 });
+
+                var nodeViewDB = new NodeViewDB(json);
+                nodeViewDB.getFile("LICENSE")
+                    .then(function(files) {
+                        console.log(files);
+                    });
+
                 scanData = new ScanData(json);
 
                 // loading data into jstree
