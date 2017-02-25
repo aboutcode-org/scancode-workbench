@@ -111,17 +111,17 @@ function NodeViewDB(json, callback) {
             return sequelize.transaction(function(transaction) {
                 $.each(json.files, function(index, file) {
                     dbSync = dbSync.then(function() {
-                        return that.ScannedFile.create(file,
-                            {
-                                transaction: transaction,
-                                include: [
-                                    that.License,
-                                    that.Copyright,
-                                    that.Package,
-                                    that.Email,
-                                    that.Url
-                                ]
-                            });
+                        return that.ScannedFile.create(file, {
+                            logging: false,
+                            transaction: transaction,
+                            include: [
+                                that.License,
+                                that.Copyright,
+                                that.Package,
+                                that.Email,
+                                that.Url
+                            ]
+                        });
                     });
                 });
                 return dbSync;

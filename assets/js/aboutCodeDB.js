@@ -42,7 +42,7 @@ function AboutCodeDB(json, callback) {
             var flattenedFiles = $.map(json.files, function(file, index) {
                 return AboutCodeDB.flattenData(file);
             });
-            return that.ScannedFile.bulkCreate(flattenedFiles);
+            return that.ScannedFile.bulkCreate(flattenedFiles, {logging: false});
         }).then(callback);
     }
 }
