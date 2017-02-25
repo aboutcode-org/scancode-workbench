@@ -28,15 +28,6 @@ function ScanData(json) {
     this.nodeViewData = this.toNodeViewFormat(this.jsTreeData);
     // Convert components to a dictionary for easy access of key:value
     this.componentsMap = this.toLoadFormat(this.json.components);
-
-    // Convert nodeViewData to a dictionary for easy access of keyvalue
-    var map = {};
-    if (this.nodeViewData.length > 0) {
-        ScanData.forEachNode(this.nodeViewData[0], "children", function (node) {
-            map[node.id] = node;
-        })
-    }
-    this.nodeViewDataMap = map;
 }
 
 module.exports = ScanData;
@@ -208,25 +199,28 @@ ScanData.prototype = {
     },
 
     toNodeViewFormat: function (data) {
-        tmp = $.map(data, function(d, i) {
-            return {
+        var fileMap = {};
+        $.each(data, function(i, d) {
+            fileMap[d.id] = {
                 id: d.id,
                 name: d.text,
                 parent: d.parent,
-                children: null,
+                _children: [],
+                children: [],
                 scanData: d.scanData
-            };
+            }
         });
 
-        $.each(tmp, function(i, d) {
-            d.children = $.map(tmp, function(x, j) {
-                if (x.parent == d.id) {
-                    return x;
-                }
-            });
+        $.each(data, function(i, d) {
+            if (d.parent in fileMap) {
+                fileMap[d.parent]._children.push(fileMap[d.id]);
+            }
         });
 
-        return tmp;
+        return {
+            root: fileMap[data[0].id],
+            data: fileMap
+        };
     }
 };
 

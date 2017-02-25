@@ -107,14 +107,9 @@ NodeView.prototype = {
     setData: function (data) {
         if (data == undefined) return;
 
-        this.nodeData = data.reduce(function(file, item) {
-            file[item.id] = item;
-            item._children = item.children;
-            item.children = [];
-            return file;
-        }, {})
-        this.currentId = data[0].id;
-        data[0].children = data[0]._children;
+        this.nodeData = data.data;
+        this.currentId = data.root.id;
+        data.root.children = data.root._children;
     },
     reset: function () {
         $.each(this.nodeData, function (id, node) {
