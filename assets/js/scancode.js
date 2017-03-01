@@ -164,7 +164,12 @@ $(document).ready(function () {
                 .append("g")
                 .attr("class", function (d) { return "clue-" + d; })
                 .style("opacity", 0);
-
+            var packageNodes = fileNodes.filter(function(d) {
+              return d.scanData.packages.length > 0
+            })
+            packageNodes
+                .selectAll(".clue-filename")
+                .attr("class","clue-filename package")
             // Append clue rect
             var newRectNode = newClueNodes.append("rect");
 
@@ -174,11 +179,7 @@ $(document).ready(function () {
                 .text(function (d,i,j) {
                     var data = newClueNodes[j].parentNode.__data__;
                     if (d === 'filename') {
-                      var isPackage = ""
-                      if(data.scanData.packages.length > 0){
-                        isPackage = " (P)"
-                      }
-                      return data.name + isPackage
+                      return data.name
                     } else if (d === 'license') {
                         return $.map(data.scanData.licenses, function(license, i) {
                             return license.short_name;
