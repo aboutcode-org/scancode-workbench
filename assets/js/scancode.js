@@ -174,7 +174,11 @@ $(document).ready(function () {
                 .text(function (d,i,j) {
                     var data = newClueNodes[j].parentNode.__data__;
                     if (d === 'filename') {
-                        return data.name
+                      var isPackage = ""
+                      if(data.scanData.packages.length > 0){
+                        isPackage = " (P)"
+                      }
+                      return data.name + isPackage
                     } else if (d === 'license') {
                         return $.map(data.scanData.licenses, function(license, i) {
                             return license.short_name;
