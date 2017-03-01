@@ -249,14 +249,33 @@ $(document).ready(function () {
 
     var jstree = $('#jstree').jstree({
         "types": {
-            "folder": {
+            "directory": {
                 "icon": "glyphicon glyphicon-folder-close"
             },
             "file": {
                 "icon": "glyphicon glyphicon-file"
             }
         },
-        "plugins": [ "types"]
+        "plugins": [ "types" , "sort"],
+        //A sort function to sort the tree so that folders come first
+        "sort": function(a,b){
+                  x = this.get_node(a)
+                  y = this.get_node(b)
+                  if(x.type == "directory"){
+                    if(y.type == "directory"){
+                      //if both the nodes are directory, alphabetic wise priority is given
+                      return (x.text>y.text) ? 1 : -1
+                    }else{
+                      return -1
+                    }
+                  }else{
+                    if(y.type == "directory"){
+                      return 1
+                    }else{
+                      return (x.text>y.text) ? 1 : -1
+                    }
+                  }
+                }
     })
         .on('open_node.jstree', function (evt, data) {
             data.instance.set_icon(
@@ -289,6 +308,11 @@ $(document).ready(function () {
         // The xhr.dt event occurs whenever new json data is loaded
         .on('xhr.dt', function (event, settings, json, xhr) {
             scanData = new ScanData(json);
+            //Fixing jsTreeData
+            for(var i=0;i<scanData.jsTreeData.length;i++){
+              scanData.jsTreeData[i].type = scanData.jsTreeData[i].scanData.type
+            }
+            //Sorting the nodes so files come on top
 
             // loading data into jstree
             jstree.jstree(true).settings.core.data = scanData.jsTreeData;
