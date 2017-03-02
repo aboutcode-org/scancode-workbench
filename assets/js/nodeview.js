@@ -143,7 +143,7 @@ NodeView.prototype = {
     _addNodes: function (node, pos) {
         var that = this;
         // create Node group
-        nodeGroup = node.append("g").attr("class", "node")
+        var nodeGroup = node.append("g").attr("class", "node")
             // Starting position
             .attr("transform", function (d) {
                 return that.translate(pos);
@@ -151,7 +151,7 @@ NodeView.prototype = {
             .style("opacity", 0);
 
         // Add custom elements
-        this.config.addNode(nodeGroup)
+        this.config.addNode(nodeGroup, this);
         this._updateNodes(nodeGroup);
     },
     _updateNodes: function (nodes) {
