@@ -64,6 +64,10 @@ body {
   stroke: gray;
 }
 
+.package rect {
+  fill:green;
+  stroke:green;
+}
 .clue-license rect {
   fill: #3984b6;
   stroke: #3984b6;
