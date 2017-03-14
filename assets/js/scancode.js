@@ -159,124 +159,50 @@ $(document).ready(function () {
 
     var scanData = null;
     var aboutCodeDB = new AboutCodeDB();
-
-    // Define Datatable buttons
-    var LICENSE_COLUMNS = ScanData.LOCATION_COLUMN.concat(ScanData.LICENSE_COLUMNS);
-    var COPYRIGHT_COLUMNS = ScanData.LOCATION_COLUMN.concat(ScanData.COPYRIGHT_COLUMNS);
-    var ORIGIN_COLUMNS = ScanData.LOCATION_COLUMN.concat(ScanData.ORIGIN_COLUMNS);
-
-    // Create a DataTable
-    var table = $('#clues-table')
-        .DataTable({
-            "info": false,
-            "colReorder": true,
-            "serverSide": true,
-            "processing": true,
-            "ajax": function (input, callback, settings) {
-                        aboutCodeDB.query(input, callback);
-                    },
-            "columns": ScanData.TABLE_COLUMNS,
-            "fixedColumns": {
-                leftColumns: 1
-            },
-            // TODO: We want to use scroller but the current version of the
-            // plugin doesn't work with fixedColumns. Try updating
-            // "scroller": true,
-            "scrollX": true,
-            "scrollY": '75vh',
-            "stateSave": true,
-            "deferRender": true,
-            "buttons": [
-                {   // Do not allow the first column to be hidden
-                    extend: 'colvis',
-                    columns: ':not(:first-child)',
-                    collectionLayout: 'fixed two-column'
-                },
-                {
-                    // Show only copyright columns
-                    extend: 'colvisGroup',
-                    text: 'Copyright info',
-                    show: $.map(COPYRIGHT_COLUMNS, function(column, i) {
-                        return column.name + ":name";
-                    }),
-                    hide: $.map($(ScanData.TABLE_COLUMNS).not(COPYRIGHT_COLUMNS),
-                        function(column, i) { return column.name + ":name"; })
-                },
-                {
-                    // Show only license columns
-                    extend: 'colvisGroup',
-                    text: 'License info',
-                    show: $.map(LICENSE_COLUMNS, function(column, i) {
-                        return column.name + ":name";
-                    }),
-                    hide: $.map($(ScanData.TABLE_COLUMNS).not(LICENSE_COLUMNS),
-                        function(column, i) { return column.name + ":name"; })
-                },
-                {
-                    // Show only origin columns
-                    extend: 'colvisGroup',
-                    text: 'Origin info',
-                    show: $.map(ORIGIN_COLUMNS, function(column, i) {
-                        return column.name + ":name";
-                    }),
-                    hide: $.map($(ScanData.TABLE_COLUMNS).not(ORIGIN_COLUMNS),
-                        function(column, i) { return column.name + ":name"; })
-                },
-                {
-                    extend: 'colvisGroup',
-                    text: 'Show all columns',
-                    show: ':hidden'
-                }
-            ],
-            dom:
-            // Needed to keep datatables buttons and search inline
-                "<'row'<'col-sm-9'B><'col-sm-3'f>>" +
-                    "<'row'<'col-sm-12'tr>>" +
-                    "<'row'<'col-sm-5'i><'col-sm-7'p>>"
-        });
+    var table = new AboutCodeDataTable("#clues-table", aboutCodeDB);
 
     // Create a table with analyzed Components from node view
-    var componentsTable = $('#components-table')
+    var componentsTable = $("#components-table")
         .DataTable( {
             columns: [
                 {
-                    data: 'name',
-                    title: 'Name',
-                    name: 'name'
+                    data: "name",
+                    title: "Name",
+                    name: "name"
                 },
                 {
-                    data: 'version',
-                    title: 'Version',
-                    name: 'version'
+                    data: "version",
+                    title: "Version",
+                    name: "version"
                 },
                 {
-                    data: 'party.name',
-                    title: 'Owner',
-                    name: 'party name',
+                    data: "party.name",
+                    title: "Owner",
+                    name: "party name",
                     defaultContent: ""
                 },
                 {
-                    data: 'license_expression',
-                    title: 'License',
-                    name: 'license_expression',
+                    data: "license_expression",
+                    title: "License",
+                    name: "license_expression",
                     defaultContent: ""
                 },
                 {
-                    data: 'programming_language',
-                    title: 'Programming Language',
-                    name: 'programming_language',
+                    data: "programming_language",
+                    title: "Programming Language",
+                    name: "programming_language",
                     defaultContent: ""
                 },
                 {
-                    data: 'homepage_url',
-                    title: 'Homepage URL',
-                    name: 'homepage_url',
+                    data: "homepage_url",
+                    title: "Homepage URL",
+                    name: "homepage_url",
                     defaultContent: ""
                 },
                 {
-                    data: 'notes',
-                    title: 'Notes',
-                    name: 'notes',
+                    data: "notes",
+                    title: "Notes",
+                    name: "notes",
                     defaultContent: ""
                 }
             ],
@@ -287,9 +213,8 @@ $(document).ready(function () {
                     "<'row'<'col-sm-5'i><'col-sm-7'p>>",
             buttons: [
                 {
-                    name: 'uploadDeja',
+                    name: "uploadDeja",
                     text: '<i class=" fa fa-cloud-upload"></i> Upload Components'
-
                 }
             ],
             "language": {
@@ -299,11 +224,11 @@ $(document).ready(function () {
         });
 
         componentsTable.buttons().container().attr({
-            'id': 'show-components',
-            'data-toggle': 'modal',
-            'data-placement': 'right',
-            'title': 'Upload Components to DejaCode',
-            'data-target':'#componentExportModal'
+            "id": "show-components",
+            "data-toggle": "modal",
+            "data-placement": "right",
+            "title": "Upload Components to DejaCode",
+            "data-target":"#componentExportModal"
         });
 
 
@@ -375,7 +300,8 @@ $(document).ready(function () {
 
                 aboutCodeDB = new AboutCodeDB(json, function() {
                     // reload the DataTable after all insertions are done.
-                    table.ajax.reload();
+                    table.aboutCodeDB = aboutCodeDB;
+                    table.ajax().reload();
                 });
 
                 scanData = new ScanData(json);
