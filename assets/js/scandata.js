@@ -142,43 +142,35 @@ ScanData.prototype = {
         }
         return components;
     },
+    // Format for jstree
+    // [
+    //  {id: root, text: root, parent: #, type: directory}
+    //  {id: root/file1, text: file1, parent: root, type: file},
+    //  {id: root/file2, text: file2, parent: root, type: file}
+    // ]
     toJSTreeFormat: function (data) {
-        var that = this;
-        // start with a dictionary so we can check for duplicates easily
-        var nodeMap = {};
-        // loop through all paths
-        $.each(data, function (index, x) {
-            path = x.path;
-            // loop through all parts of the path to create tree nodes
-            var parts = null;
-            if (path[0] === '/') {
-                // slice off the first element because it's an empty string.
-                // Example: '/root/dir' => ['', 'root', 'dir']
-                parts = path.split('/').slice(1);
-                // Add the forward slash back in to the first element
-                parts[0] = "/" + parts[0];
-            } else {
-                parts = path.split('/');
-            }
+        // Add root directory into data
+        // See https://github.com/nexB/scancode-toolkit/issues/543
+        var rootPath = data[0].path.split("/")[0];
 
-            for (var i = 0; i < parts.length; i++) {
-                var id = that.subPath(parts, i + 1);
-                if (!(id in nodeMap)) {
-                    // insert node for this id
-                    nodeMap[id] = {
-                        id: id,
-                        text: parts[i],
-                        parent: that.subPath(parts, i),
-                        type: (i + 1 === parts.length) ? 'file' : 'folder',
-                        scanData: x
-                    };
-                }
-            }
+        data.push({
+            path: rootPath,
+            name: rootPath,
+            type: "directory"
         });
-        // return only the values of the map
-        return $.map(nodeMap, function (val, key) {
-            return val;
+
+        var jsTreeFormat = $.map(data, function(scanData, index) {
+             var splits = scanData.path.split('/');
+             var parent = splits.length === 1 ? "#" : splits.slice(0, -1).join("/");
+             return {
+                 id: scanData.path,
+                 text: scanData.name,
+                 parent: parent,
+                 type: scanData.type,
+                 scanData: scanData
+             };
         });
+        return jsTreeFormat;
     },
 
     /*

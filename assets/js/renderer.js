@@ -132,7 +132,7 @@ $(document).ready(function () {
 
     var jstree = $('#jstree').jstree({
         "types": {
-            "folder": {
+            "directory": {
                 "icon": "glyphicon glyphicon-folder-close"
             },
             "file": {
