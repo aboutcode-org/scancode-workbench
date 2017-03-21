@@ -32,9 +32,9 @@ function AboutCodeDB(json, callback) {
 
     // A promise that will return when the db and tables have been created
     this.dbPromise = sequelize.sync();
+    this.json = json;
 
     if (json) {
-
         var that = this;
 
         // Add all rows to the DB, then call the callback
@@ -43,7 +43,11 @@ function AboutCodeDB(json, callback) {
                 return AboutCodeDB.flattenData(file);
             });
             return that.ScannedFile.bulkCreate(flattenedFiles, {logging: false});
-        }).then(callback);
+        })
+        .then(callback)
+        .catch(function(err) {
+            console.log(err);
+        });
     }
 }
 
@@ -145,6 +149,39 @@ AboutCodeDB.prototype = {
                        recordsTotal: count
                     });
                 });
+        });
+    },
+
+    // Return original scan files
+    files: function () {
+        return this.json.files;
+    },
+
+    // Format for jstree
+    // [
+    //  {id: root, text: root, parent: #, type: directory}
+    //  {id: root/file1, text: file1, parent: root, type: file},
+    //  {id: root/file2, text: file2, parent: root, type: file}
+    // ]
+    toJSTreeFormat: function () {
+        var that = this;
+
+        return this.dbPromise.then(function() {
+            return that.ScannedFile.findAll({
+                attributes: ["path", "infos_file_name", "infos_type"]
+            });
+        })
+        .then(function(result) {
+            return $.map(result, function(scanData, index) {
+                 var splits = scanData.path.split('/');
+                 var parent = splits.length === 1 ? "#" : splits.slice(0, -1).join("/");
+                 return {
+                     id: scanData.path,
+                     text: scanData.infos_file_name,
+                     parent: parent,
+                     type: scanData.infos_type
+                 };
+            });
         });
     }
 }
