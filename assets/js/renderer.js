@@ -298,6 +298,17 @@ $(document).ready(function () {
                     );
                 }
 
+                // Add root directory into data
+                // See https://github.com/nexB/scancode-toolkit/issues/543
+                var rootPath = json.files[0].path.split("/")[0];
+
+                json.files.push({
+                    path: rootPath,
+                    name: rootPath,
+                    type: "directory",
+                    files_count: json.files_count
+                });
+
                 aboutCodeDB = new AboutCodeDB(json, function() {
                     // reload the DataTable after all insertions are done.
                     table.aboutCodeDB = aboutCodeDB;
@@ -308,8 +319,11 @@ $(document).ready(function () {
                 nodeView = new AboutCodeNodeView(scanData, onNodeClick);
 
                 // loading data into jstree
-                jstree.jstree(true).settings.core.data = scanData.jsTreeData;
-                jstree.jstree(true).refresh(true);
+                aboutCodeDB.toJSTreeFormat()
+                    .then(function(data) {
+                        jstree.jstree(true).settings.core.data = data;
+                        jstree.jstree(true).refresh(true);
+                    })
             });
         });
     });

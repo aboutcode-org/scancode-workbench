@@ -19,13 +19,11 @@
 
 
 function ScanData(json) {
+
     // Load json file and other options
     // Save the scan data so it can be used elsewhere in the class
     this.json = json;
-    this.jsTreeData = this.toJSTreeFormat(this.files());
-    // the node view data takes the jstree data as input because the format is
-    // very similar
-    this.nodeViewData = this.toNodeViewFormat(this.jsTreeData);
+    this.nodeViewData = this.toNodeViewFormat(this.json.files);
     // Convert components to a dictionary for easy access of key:value
     this.componentsMap = this.toLoadFormat(this.json.components);
 }
@@ -86,7 +84,6 @@ ScanData.prototype = {
         if (!('notes' in component) || component.notes === null) {
             component.notes = defaultComponent.notes;
         }
-        // console.log('saving', this.components());
         this.componentsMap[path] = component;
     },
     // Returns a complete set of components with default values
@@ -142,36 +139,6 @@ ScanData.prototype = {
         }
         return components;
     },
-    // Format for jstree
-    // [
-    //  {id: root, text: root, parent: #, type: directory}
-    //  {id: root/file1, text: file1, parent: root, type: file},
-    //  {id: root/file2, text: file2, parent: root, type: file}
-    // ]
-    toJSTreeFormat: function (data) {
-        // Add root directory into data
-        // See https://github.com/nexB/scancode-toolkit/issues/543
-        var rootPath = data[0].path.split("/")[0];
-
-        data.push({
-            path: rootPath,
-            name: rootPath,
-            type: "directory"
-        });
-
-        var jsTreeFormat = $.map(data, function(scanData, index) {
-             var splits = scanData.path.split('/');
-             var parent = splits.length === 1 ? "#" : splits.slice(0, -1).join("/");
-             return {
-                 id: scanData.path,
-                 text: scanData.name,
-                 parent: parent,
-                 type: scanData.type,
-                 scanData: scanData
-             };
-        });
-        return jsTreeFormat;
-    },
 
     /*
      Returns the subpath given an array of directories, e.g.,
@@ -192,25 +159,29 @@ ScanData.prototype = {
 
     toNodeViewFormat: function (data) {
         var fileMap = {};
-        $.each(data, function(i, d) {
-            fileMap[d.id] = {
-                id: d.id,
-                name: d.text,
-                parent: d.parent,
+        $.each(data, function(i, scanData) {
+            var splits = scanData.path.split('/');
+            var parent = splits.length === 1 ? "#" : splits.slice(0, -1).join("/");
+            fileMap[scanData.path] = {
+                id: scanData.path,
+                name: scanData.name,
+                parent: parent,
                 _children: [],
                 children: [],
-                scanData: d.scanData
+                scanData: scanData
             }
         });
 
-        $.each(data, function(i, d) {
-            if (d.parent in fileMap) {
-                fileMap[d.parent]._children.push(fileMap[d.id]);
+        $.each(data, function(i, scanData) {
+            var splits = scanData.path.split('/');
+            var parent = splits.length === 1 ? "#" : splits.slice(0, -1).join("/");
+            if (parent in fileMap) {
+                fileMap[parent]._children.push(fileMap[scanData.path]);
             }
         });
 
         return {
-            root: fileMap[data[0].id],
+            root: fileMap[data[0].path],
             data: fileMap
         };
     }
