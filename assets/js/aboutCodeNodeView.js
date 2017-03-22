@@ -16,11 +16,8 @@
 
 function AboutCodeNodeView(scanData, onNodeClicked){
     this.scanData = scanData;
-    console.log(this.scanData);
     this.nodeView = createNodeView(scanData, onNodeClicked);
     this.nodeView.setData(scanData.nodeViewData);
-    // Node view width
-//    $("svg").attr("width", "100%")
 }
 
 module.exports = AboutCodeNodeView;
