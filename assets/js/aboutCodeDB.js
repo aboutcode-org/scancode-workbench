@@ -19,36 +19,21 @@
 var Sequelize = require("sequelize");
 
 // Creates a new database on the flattened json data
-function AboutCodeDB(json, callback) {
+function AboutCodeDB(config) {
 
     // Constructor returns an object which effectively represents a connection
     // to the db arguments (name of db, username for db, pw for that user)
-    var sequelize = new Sequelize("demo_schema", "root", "password", {
-        dialect: "sqlite"
-    });
+    var sequelize = new Sequelize(
+        config && config.dbName ? config.dbName : "tmp",
+        config && config.dbUser ? config.dbUser : null,
+        config && config.dbPassword ? config.dbPassword : null,
+        { dialect: "sqlite" });
 
     // Defines columns in the scanned file table
-    this.ScannedFile = AboutCodeDB.defineScannedFile(sequelize);
+    this.FlattenedFile = AboutCodeDB.defineFlattenedFile(sequelize);
 
     // A promise that will return when the db and tables have been created
-    this.dbPromise = sequelize.sync();
-    this.json = json;
-
-    if (json) {
-        var that = this;
-
-        // Add all rows to the DB, then call the callback
-        this.dbPromise.then(function() {
-            var flattenedFiles = $.map(json.files, function(file, index) {
-                return AboutCodeDB.flattenData(file);
-            });
-            return that.ScannedFile.bulkCreate(flattenedFiles, {logging: false});
-        })
-        .then(callback)
-        .catch(function(err) {
-            console.log(err);
-        });
-    }
+    this.db = sequelize.sync();
 }
 
 module.exports = AboutCodeDB;
@@ -61,100 +46,23 @@ module.exports = AboutCodeDB;
  */
 
 AboutCodeDB.prototype = {
+    create: function (json) {
+        if (!json) {
+            return this.db;
+        }
 
-    // This function is called every time DataTables needs to be redrawn.
-    // For details on the parameters https://datatables.net/manual/server-side
-    query: function (dataTablesInput, dataTablesCallback) {
         var that = this;
 
-        // Sorting and Querying of data for DataTables
-        this.dbPromise.then(function() {
-            var columnIndex = dataTablesInput.order[0].column;
-            var columnName = dataTablesInput.columns[columnIndex].name;
-            var direction = dataTablesInput.order[0].dir === "desc" ? "DESC" : "ASC";
-
-            // query = {
-            //   where: {
-            //     $and: {
-            //       path: { $like: "columnSearch%" },
-            //       $or: [
-            //         { path: { $like: "globalSearch%" } },
-            //         { copyright_statements: { $like: "globalSearch%" } },
-            //         ...,
-            //       ]
-            //     }
-            //   }
-            // }
-            var query = {
-                where: {
-                    $and: {}
-                },
-                // Only take the chunk of data DataTables needs
-                limit: dataTablesInput.length,
-                offset: dataTablesInput.start,
-                order: [[columnName, direction]]
-            };
-
-            // If a column search exists, add search for that column
-            for (var i = 0; i < dataTablesInput.columns.length; i++) {
-                var columnSearch = dataTablesInput.columns[i].search.value;
-                if (columnSearch) {
-                    query.where.$and[dataTablesInput.columns[i].name] = {
-                        $like: columnSearch + "%"
-                    }
-                }
-            }
-
-            // If a global search exists, add an $or search for each column
-            var globalSearch = dataTablesInput.search.value;
-            if (globalSearch) {
-                query.where.$and.$or = [];
-                for (var i = 0; i < dataTablesInput.columns.length; i++) {
-                    var orSearch = {};
-                    orSearch[dataTablesInput.columns[i].name] = {
-                        $like: globalSearch + "%"
-                    };
-                    query.where.$and.$or.push(orSearch);
-                }
-            }
-
-            // Execute the database find to get the rows of data
-            var dFind = $.Deferred();
-            that.ScannedFile.findAll(query)
-                .then(function(result) {
-                    dFind.resolve(result);
-                });
-
-            // Execute the database count of all rows
-            var dCount = $.Deferred();
-            that.ScannedFile.count({})
-                .then(function(count) {
-                    dCount.resolve(count);
-                });
-
-            // Execute the database count of filtered query rows
-            var dFilteredCount = $.Deferred();
-            that.ScannedFile.count(query)
-                .then(function(count) {
-                    dFilteredCount.resolve(count);
-                })
-
-            // Wait for all three of the Deferred objects to finish
-            $.when(dFind, dCount, dFilteredCount)
-                .then(function (rows, count, filteredCount) {
-                    dataTablesCallback({
-                       draw: dataTablesInput.draw,
-                       data: rows ? rows : [],
-                       recordsFiltered: filteredCount,
-                       recordsTotal: count
-                    });
-                });
+        // Add all rows to the DB, then call the callback
+        return this.db.then(function() {
+            return $.map(json.files, function(file, index) {
+                return AboutCodeDB.flattenData(file);
+            });
+        }).then(function(flattenedFiles) {
+            return that.FlattenedFile.bulkCreate(flattenedFiles, {
+                logging: false
+            });
         });
-    },
-
-    // Return original scan files
-    files: function () {
-        return this.json.files;
     },
 
     // Format for jstree
@@ -166,8 +74,8 @@ AboutCodeDB.prototype = {
     toJSTreeFormat: function () {
         var that = this;
 
-        return this.dbPromise.then(function() {
-            return that.ScannedFile.findAll({
+        return this.db.then(function() {
+            return that.FlattenedFile.findAll({
                 attributes: ["path", "infos_file_name", "infos_type"]
             });
         })
@@ -193,7 +101,7 @@ AboutCodeDB.prototype = {
  */
 
 // Defines a table for a flattened scanned file
-AboutCodeDB.defineScannedFile = function(sequelize) {
+AboutCodeDB.defineFlattenedFile = function(sequelize) {
 
     // DB COLUMN TYPE: A string with empty string default value
     function getDefaultStringType() {
@@ -203,7 +111,7 @@ AboutCodeDB.defineScannedFile = function(sequelize) {
         };
     }
 
-    return sequelize.define("file", {
+    return sequelize.define("flattened_file", {
         path: {
             type: Sequelize.STRING,
             unique: true,

@@ -15,16 +15,16 @@
  */
 
 function AboutCodeDataTable(tableID, aboutCodeDB) {
-    var that = this;
     this.aboutCodeDB = aboutCodeDB;
-    this.dataTable = createDataTable(tableID, function(input, callback) {
-        that.aboutCodeDB.query(input, callback);
-    });
+    this.dataTable = this._createDataTable(tableID);
 }
 
 module.exports = AboutCodeDataTable;
 
 AboutCodeDataTable.prototype = {
+    database: function(aboutCodeDB) {
+        this.aboutCodeDB = aboutCodeDB;
+    },
     draw: function() {
         return this.dataTable.draw();
     },
@@ -36,18 +36,106 @@ AboutCodeDataTable.prototype = {
     },
     ajax: function() {
         return this.dataTable.ajax;
-    }
-}
+    },
+    // This function is called every time DataTables needs to be redrawn.
+    // For details on the parameters https://datatables.net/manual/server-side
+    _query: function (dataTablesInput, dataTablesCallback) {
+        var aboutCodeDB = this.aboutCodeDB;
 
-const createDataTable = function(tableID, query){
-    // Create main DataTable with scan results
-    return $(tableID)
-        .DataTable({
+        // Sorting and Querying of data for DataTables
+        aboutCodeDB.db.then(function() {
+            var columnIndex = dataTablesInput.order[0].column;
+            var columnName = dataTablesInput.columns[columnIndex].name;
+            var direction = dataTablesInput.order[0].dir === "desc" ? "DESC" : "ASC";
+
+            // query = {
+            //   where: {
+            //     $and: {
+            //       path: { $like: "columnSearch%" },
+            //       $or: [
+            //         { path: { $like: "globalSearch%" } },
+            //         { copyright_statements: { $like: "globalSearch%" } },
+            //         ...,
+            //       ]
+            //     }
+            //   }
+            // }
+            var query = {
+                where: {
+                    $and: {}
+                },
+                // Only take the chunk of data DataTables needs
+                limit: dataTablesInput.length,
+                offset: dataTablesInput.start,
+                order: [[columnName, direction]]
+            };
+
+            // If a column search exists, add search for that column
+            for (var i = 0; i < dataTablesInput.columns.length; i++) {
+                var columnSearch = dataTablesInput.columns[i].search.value;
+                if (columnSearch) {
+                    query.where.$and[dataTablesInput.columns[i].name] = {
+                        $like: columnSearch + "%"
+                    }
+                }
+            }
+
+            // If a global search exists, add an $or search for each column
+            var globalSearch = dataTablesInput.search.value;
+            if (globalSearch) {
+                query.where.$and.$or = [];
+                for (var i = 0; i < dataTablesInput.columns.length; i++) {
+                    var orSearch = {};
+                    orSearch[dataTablesInput.columns[i].name] = {
+                        $like: globalSearch + "%"
+                    };
+                    query.where.$and.$or.push(orSearch);
+                }
+            }
+
+            // Execute the database find to get the rows of data
+            var dFind = $.Deferred();
+            aboutCodeDB.FlattenedFile.findAll(query)
+                .then(function(result) {
+                    dFind.resolve(result);
+                });
+
+            // Execute the database count of all rows
+            var dCount = $.Deferred();
+            aboutCodeDB.FlattenedFile.count({})
+                .then(function(count) {
+                    dCount.resolve(count);
+                });
+
+            // Execute the database count of filtered query rows
+            var dFilteredCount = $.Deferred();
+            aboutCodeDB.FlattenedFile.count(query)
+                .then(function(count) {
+                    dFilteredCount.resolve(count);
+                })
+
+            // Wait for all three of the Deferred objects to finish
+            $.when(dFind, dCount, dFilteredCount)
+                .then(function (rows, count, filteredCount) {
+                    dataTablesCallback({
+                       draw: dataTablesInput.draw,
+                       data: rows ? rows : [],
+                       recordsFiltered: filteredCount,
+                       recordsTotal: count
+                    });
+                });
+        });
+    },
+    _createDataTable: function(tableID){
+        var that = this;
+        return $(tableID).DataTable({
             "info": false,
             "colReorder": true,
             "serverSide": true,
             "processing": true,
-            "ajax": query,
+            "ajax": function (dataTablesInput, dataTablesCallback) {
+                that._query(dataTablesInput, dataTablesCallback)
+            },
             "columns": TABLE_COLUMNS,
             "fixedColumns": {
                 leftColumns: 1
@@ -107,6 +195,7 @@ const createDataTable = function(tableID, query){
                     "<'row'<'col-sm-12'tr>>" +
                     "<'row'<'col-sm-5'i><'col-sm-7'p>>"
         });
+    }
 }
 
 const LOCATION_COLUMN = [

@@ -309,21 +309,29 @@ $(document).ready(function () {
                     files_count: json.files_count
                 });
 
-                aboutCodeDB = new AboutCodeDB(json, function() {
-                    // reload the DataTable after all insertions are done.
-                    table.aboutCodeDB = aboutCodeDB;
-                    table.ajax().reload();
+                aboutCodeDB = new AboutCodeDB({
+                    dbName: "demo_schema"
                 });
+
+                aboutCodeDB.create(json)
+                    .then(function() {
+                        // reload the DataTable after all insertions are done.
+                        table.database(aboutCodeDB);
+                        table.ajax().reload();
+
+                        // loading data into jstree
+                        aboutCodeDB.toJSTreeFormat()
+                            .then(function(data) {
+                                jstree.jstree(true).settings.core.data = data;
+                                jstree.jstree(true).refresh(true);
+                            });
+                    })
+                    .catch(function(reason) {
+                       console.log(reason);
+                    });
 
                 scanData = new ScanData(json);
                 nodeView = new AboutCodeNodeView(scanData, onNodeClick);
-
-                // loading data into jstree
-                aboutCodeDB.toJSTreeFormat()
-                    .then(function(data) {
-                        jstree.jstree(true).settings.core.data = data;
-                        jstree.jstree(true).refresh(true);
-                    })
             });
         });
     });
