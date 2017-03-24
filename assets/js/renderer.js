@@ -313,7 +313,7 @@ $(document).ready(function () {
                     dbName: "demo_schema"
                 });
 
-                aboutCodeDB.create(json)
+                aboutCodeDB.addFlattenedRows(json)
                     .then(function() {
                         // reload the DataTable after all insertions are done.
                         table.database(aboutCodeDB);
@@ -327,7 +327,19 @@ $(document).ready(function () {
                             });
                     })
                     .catch(function(reason) {
-                       console.log(reason);
+                       throw reason;
+                    });
+
+                aboutCodeDB.addRows(json)
+                    .then(function() {
+                        // TODO: Setup the NodeView in here
+                        return aboutCodeDB.File.count({})
+                    })
+                    .then(function(count) {
+                        console.log(count);
+                    })
+                    .catch(function(reason) {
+                       throw reason;
                     });
 
                 scanData = new ScanData(json);

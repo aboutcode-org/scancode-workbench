@@ -23,17 +23,32 @@ function AboutCodeDB(config) {
 
     // Constructor returns an object which effectively represents a connection
     // to the db arguments (name of db, username for db, pw for that user)
-    var sequelize = new Sequelize(
+    this.sequelize = new Sequelize(
         config && config.dbName ? config.dbName : "tmp",
         config && config.dbUser ? config.dbUser : null,
         config && config.dbPassword ? config.dbPassword : null,
         { dialect: "sqlite" });
 
-    // Defines columns in the scanned file table
-    this.FlattenedFile = AboutCodeDB.defineFlattenedFile(sequelize);
+    // Flattened table is for the DataTable
+    this.FlattenedFile = AboutCodeDB.flattenedFileModel(this.sequelize);
+
+    // Non-flattened tables are for the NodeView
+    this.File = AboutCodeDB.fileModel(this.sequelize);
+    this.License = AboutCodeDB.licenseModel(this.sequelize);
+    this.Copyright = AboutCodeDB.copyrightModel(this.sequelize);
+    this.Package = AboutCodeDB.packageModel(this.sequelize);
+    this.Email = AboutCodeDB.emailModel(this.sequelize);
+    this.Url = AboutCodeDB.urlModel(this.sequelize);
+
+    // Relations
+    this.File.hasMany(this.License);
+    this.File.hasMany(this.Copyright);
+    this.File.hasMany(this.Package);
+    this.File.hasMany(this.Email);
+    this.File.hasMany(this.Url);
 
     // A promise that will return when the db and tables have been created
-    this.db = sequelize.sync();
+    this.db = this.sequelize.sync();
 }
 
 module.exports = AboutCodeDB;
@@ -46,14 +61,14 @@ module.exports = AboutCodeDB;
  */
 
 AboutCodeDB.prototype = {
-    create: function (json) {
+    addFlattenedRows: function (json) {
         if (!json) {
             return this.db;
         }
 
         var that = this;
 
-        // Add all rows to the DB, then call the callback
+        // Add all rows to the flattened DB
         return this.db.then(function() {
             return $.map(json.files, function(file, index) {
                 return AboutCodeDB.flattenData(file);
@@ -61,6 +76,36 @@ AboutCodeDB.prototype = {
         }).then(function(flattenedFiles) {
             return that.FlattenedFile.bulkCreate(flattenedFiles, {
                 logging: false
+            });
+        });
+    },
+    addRows: function (json) {
+        if (!json) {
+            return this.db;
+        }
+
+        var that = this;
+
+        // Add all rows to the non-flattened DB
+        var dbSync = this.db;
+        return this.db.then(function() {
+            return that.sequelize.transaction(function(transaction) {
+                $.each(json.files, function(index, file) {
+                    dbSync = dbSync.then(function() {
+                        return that.File.create(file, {
+                            logging: false,
+                            transaction: transaction,
+                            include: [
+                                that.License,
+                                that.Copyright,
+                                that.Package,
+                                that.Email,
+                                that.Url
+                            ]
+                        });
+                    });
+                });
+                return dbSync;
             });
         });
     },
@@ -100,65 +145,133 @@ AboutCodeDB.prototype = {
  * These functions do not have "this" variables.
  */
 
+// File Model definitions
+AboutCodeDB.fileModel = function(sequelize) {
+    return sequelize.define("files", {
+        path: Sequelize.STRING,
+        type: Sequelize.STRING,
+        name: Sequelize.STRING,
+        extension: Sequelize.STRING,
+        date: Sequelize.STRING,
+        size: Sequelize.STRING,
+        sha1: Sequelize.STRING,
+        md5: Sequelize.STRING,
+        files_count: Sequelize.STRING,
+        mime_type: Sequelize.STRING,
+        file_type: Sequelize.STRING,
+        programming_language: Sequelize.STRING,
+        is_binary: Sequelize.STRING,
+        is_text: Sequelize.STRING,
+        is_archive: Sequelize.STRING,
+        is_media: Sequelize.STRING,
+        is_source: Sequelize.STRING,
+        is_script: Sequelize.STRING
+    });
+}
+
+    // License Model definitions
+AboutCodeDB.licenseModel = function(sequelize) {
+    return sequelize.define("licenses", {
+        key: Sequelize.STRING,
+        score: Sequelize.STRING,
+        short_name: Sequelize.STRING,
+        category: Sequelize.STRING,
+        owner: Sequelize.STRING,
+        homepage_url:Sequelize.STRING,
+        text_url: Sequelize.STRING,
+        dejacode_url: Sequelize.STRING,
+        spdx_license_key: Sequelize.STRING,
+        spdx_url: Sequelize.STRING,
+        start_line: Sequelize.STRING,
+        end_line: Sequelize.STRING
+    });
+}
+
+    // Copyright Model definitions
+AboutCodeDB.copyrightModel = function(sequelize) {
+    return sequelize.define("copyrights", {
+        start_line: Sequelize.STRING,
+        end_line: Sequelize.STRING
+    });
+}
+
+    // Package Model definitions
+AboutCodeDB.packageModel = function(sequelize) {
+    return sequelize.define("packages", {
+        type: Sequelize.STRING,
+        packaging: Sequelize.STRING,
+        primary_language: Sequelize.STRING
+    });
+}
+
+    // Email Model definitions
+AboutCodeDB.emailModel = function(sequelize) {
+    return sequelize.define("emails", {
+        email: Sequelize.STRING,
+        start_line: Sequelize.STRING,
+        end_line: Sequelize.STRING
+    });
+}
+
+    // URL Model definitions
+AboutCodeDB.urlModel = function(sequelize) {
+    return sequelize.define("urls", {
+        url: Sequelize.STRING,
+        start_line: Sequelize.STRING,
+        end_line: Sequelize.STRING
+    });
+}
+
 // Defines a table for a flattened scanned file
-AboutCodeDB.defineFlattenedFile = function(sequelize) {
-
-    // DB COLUMN TYPE: A string with empty string default value
-    function getDefaultStringType() {
-        return {
-            type: Sequelize.STRING,
-            defaultValue: ""
-        };
-    }
-
+AboutCodeDB.flattenedFileModel = function(sequelize) {
     return sequelize.define("flattened_file", {
         path: {
             type: Sequelize.STRING,
             unique: true,
             allowNull: false
         },
-        copyright_statements: getDefaultStringType(),
-        copyright_holders: getDefaultStringType(),
-        copyright_authors: getDefaultStringType(),
-        copyright_start_line: getDefaultStringType(),
-        copyright_end_line:  getDefaultStringType(),
-        license_key: getDefaultStringType(),
-        license_score:  getDefaultStringType(),
-        license_short_name: getDefaultStringType(),
-        license_category: getDefaultStringType(),
-        license_owner: getDefaultStringType(),
-        license_homepage_url: getDefaultStringType(),
-        license_text_url: getDefaultStringType(),
-        license_djc_url: getDefaultStringType(),
-        license_spdx_key: getDefaultStringType(),
-        license_start_line:  getDefaultStringType(),
-        license_end_line:  getDefaultStringType(),
-        email: getDefaultStringType(),
-        email_start_line:  getDefaultStringType(),
-        email_end_line:  getDefaultStringType(),
-        url: getDefaultStringType(),
-        url_start_line: getDefaultStringType(),
-        url_end_line: getDefaultStringType(),
-        infos_type: getDefaultStringType(),
-        infos_file_name: getDefaultStringType(),
-        infos_file_extension: getDefaultStringType(),
-        infos_file_date: getDefaultStringType(),
-        infos_file_size: getDefaultStringType(),
-        infos_file_sha1: getDefaultStringType(),
-        infos_md5: getDefaultStringType(),
-        infos_file_count: getDefaultStringType(),
-        infos_mime_type: getDefaultStringType(),
-        infos_file_type: getDefaultStringType(),
-        infos_programming_language: getDefaultStringType(),
-        infos_is_binary:  getDefaultStringType(),
-        infos_is_text: getDefaultStringType(),
-        infos_is_archive:  getDefaultStringType(),
-        infos_is_media: getDefaultStringType(),
-        infos_is_source: getDefaultStringType(),
-        infos_is_script: getDefaultStringType(),
-        packages_type: getDefaultStringType(),
-        packages_packaging: getDefaultStringType(),
-        packages_primary_language: getDefaultStringType()
+        copyright_statements: { type: Sequelize.STRING, defaultValue: "" },
+        copyright_holders:    { type: Sequelize.STRING, defaultValue: "" },
+        copyright_authors:    { type: Sequelize.STRING, defaultValue: "" },
+        copyright_start_line: { type: Sequelize.STRING, defaultValue: "" },
+        copyright_end_line:   { type: Sequelize.STRING, defaultValue: "" },
+        license_key:          { type: Sequelize.STRING, defaultValue: "" },
+        license_score:        { type: Sequelize.STRING, defaultValue: "" },
+        license_short_name:   { type: Sequelize.STRING, defaultValue: "" },
+        license_category:     { type: Sequelize.STRING, defaultValue: "" },
+        license_owner:        { type: Sequelize.STRING, defaultValue: "" },
+        license_homepage_url: { type: Sequelize.STRING, defaultValue: "" },
+        license_text_url:     { type: Sequelize.STRING, defaultValue: "" },
+        license_djc_url:      { type: Sequelize.STRING, defaultValue: "" },
+        license_spdx_key:     { type: Sequelize.STRING, defaultValue: "" },
+        license_start_line:   { type: Sequelize.STRING, defaultValue: "" },
+        license_end_line:     { type: Sequelize.STRING, defaultValue: "" },
+        email:                { type: Sequelize.STRING, defaultValue: "" },
+        email_start_line:     { type: Sequelize.STRING, defaultValue: "" },
+        email_end_line:       { type: Sequelize.STRING, defaultValue: "" },
+        url:                  { type: Sequelize.STRING, defaultValue: "" },
+        url_start_line:       { type: Sequelize.STRING, defaultValue: "" },
+        url_end_line:         { type: Sequelize.STRING, defaultValue: "" },
+        infos_type:           { type: Sequelize.STRING, defaultValue: "" },
+        infos_file_name:      { type: Sequelize.STRING, defaultValue: "" },
+        infos_file_extension: { type: Sequelize.STRING, defaultValue: "" },
+        infos_file_date:      { type: Sequelize.STRING, defaultValue: "" },
+        infos_file_size:      { type: Sequelize.STRING, defaultValue: "" },
+        infos_file_sha1:      { type: Sequelize.STRING, defaultValue: "" },
+        infos_md5:            { type: Sequelize.STRING, defaultValue: "" },
+        infos_file_count:     { type: Sequelize.STRING, defaultValue: "" },
+        infos_mime_type:      { type: Sequelize.STRING, defaultValue: "" },
+        infos_file_type:      { type: Sequelize.STRING, defaultValue: "" },
+        infos_programming_language: { type: Sequelize.STRING, defaultValue: "" },
+        infos_is_binary:      { type: Sequelize.STRING, defaultValue: "" },
+        infos_is_text:        { type: Sequelize.STRING, defaultValue: "" },
+        infos_is_archive:     { type: Sequelize.STRING, defaultValue: "" },
+        infos_is_media:       { type: Sequelize.STRING, defaultValue: "" },
+        infos_is_source:      { type: Sequelize.STRING, defaultValue: "" },
+        infos_is_script:      { type: Sequelize.STRING, defaultValue: "" },
+        packages_type:        { type: Sequelize.STRING, defaultValue: "" },
+        packages_packaging:   { type: Sequelize.STRING, defaultValue: "" },
+        packages_primary_language: { type: Sequelize.STRING, defaultValue: "" }
     }, {
         indexes: [
             // Create a unique index on path
