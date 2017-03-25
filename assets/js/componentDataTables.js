@@ -29,14 +29,17 @@ function ComponentDataTable(tableID, aboutCodeDB) {
 module.exports = ComponentDataTable;
 
 ComponentDataTable.prototype = {
-    clear: function() {
-        this.dataTable.clear();
+    database: function(aboutCodeDB) {
+        this.aboutCodeDB = aboutCodeDB;
     },
-    addRows: function(rows) {
-        this.dataTable.rows.add(rows);
-    },
-    draw: function() {
-        return this.dataTable.draw();
+    reload: function() {
+        var that = this;
+        this.aboutCodeDB.findAllComponents({})
+            .then(function(components) {
+                that.dataTable.clear();
+                that.dataTable.rows.add(components);
+                that.dataTable.draw();
+            });
     },
     _createDataTable: function(tableID){
         return $(tableID).DataTable( {
@@ -61,6 +64,16 @@ ComponentDataTable.prototype = {
 
 ComponentDataTable.COLUMNS = [
     {
+        data: "review_status",
+        title: "Status",
+        name: "status"
+    },
+    {
+        data: "path",
+        title: "Path",
+        name: "path"
+    },
+    {
         data: "name",
         title: "Name",
         name: "name"
@@ -71,16 +84,21 @@ ComponentDataTable.COLUMNS = [
         name: "version"
     },
     {
-        data: "party.name",
+        data: "owner",
         title: "Owner",
-        name: "party name",
+        name: "owner",
         defaultContent: ""
     },
     {
-        data: "license_expression",
+        data: "licenses[<hr/>].short_name",
         title: "License",
         name: "license_expression",
         defaultContent: ""
+    },
+    {
+        "data": "copyrights[<hr/>].statements[]",
+        "title": "Copyright Statements",
+        "name": "copyright_statements"
     },
     {
         data: "programming_language",
@@ -89,10 +107,13 @@ ComponentDataTable.COLUMNS = [
         defaultContent: ""
     },
     {
-        data: "homepage_url",
-        title: "Homepage URL",
-        name: "homepage_url",
-        defaultContent: ""
+        "data": "homepage_url",
+        "title": "Homepage URL",
+        "name": "homepage_url",
+        "defaultContent": "",
+        "render": function ( data, type, full, meta ) {
+            return '<a href="'+data+'" target="_blank">'+data+'</a>';
+        }
     },
     {
         data: "notes",
