@@ -58,6 +58,7 @@ function fileToNode(file) {
         type: file.type,
         licenses: file.licenses,
         copyrights: file.copyrights,
+        files_count: file.files_count,
         children: []
     };
 }
@@ -169,9 +170,7 @@ function createNodeView(aboutCodeDB, onNodeClick) {
                             return license.short_name;
                         }).join(", ");
                     } else if (d === "copyright") {
-
-                        // TODO: Add copyright statements
-                        return $.map([], function(copyright, i) {
+                        return $.map(data.copyrights, function(copyright, i) {
                             return copyright.statements.join(" ");
                         }).join(", ");
                     }
