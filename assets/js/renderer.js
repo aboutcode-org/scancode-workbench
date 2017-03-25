@@ -20,42 +20,33 @@ $(document).ready(function () {
         nodeView.resize(numClueSelected * 30, 180);
     });
 
-    function onNodeClick (d) {
-        var component = scanData.getComponent(d.id);
-        var subNodes = $.map(table.rows().data(), function(x, i) {
-            if (x.path.startsWith(d.id)) {
-                return x;
-            }
-        });
-        var licenses = $.map(subNodes, function(node, i) {
-            return $.map(node.licenses ? node.licenses : [], function(license, j) {
-                return license.short_name;
+    function onNodeClick (node) {
+        aboutCodeDB.findComponent({ where: { path: node.id } })
+            .then(function(component) {
+                showDialog(node, component ? component : {});
             });
-        });
-        licenses = $.unique(licenses.concat(component.licenses));
+    }
 
-        var copyrights = $.unique($.map(subNodes, function(node, i) {
-            return $.map(node.copyrights ? node.copyrights : [], function(copyright, j) {
-                return copyright.statements.join(' ');
-            });
-        }));
-        copyrights = $.unique(copyrights.concat(component.copyrights));
+    function showDialog(node, component) {
+        // TODO: Use DB to add suggestion data for all sub-nodes.
+        // Add sub-node data to the select menu options
+        var licenses = [];
+        var copyrights = [];
+        var parties = [];
+        var programming_language = [];
 
-        var parties = $.unique($.map(subNodes, function(node, i) {
-            return $.map(node.copyrights ? node.copyrights : [], function(copyright, j) {
-                return copyright.holders;
-            });
-        }));
-        parties = $.unique(parties.concat(component.party.name));
-
-        var programming_language = $.unique($.map(subNodes, function(node, i) {
-            return node.programming_language;
-        }));
-        programming_language = $.unique(programming_language.concat(component.programming_language));
+        // Add saved data to the select menu options
+        licenses = $.unique(licenses.concat(component.licenses || []));
+        copyrights = $.unique(copyrights.concat(component.copyrights || []));
+        parties = $.unique(parties.concat(component.owner));
+        programming_language = $.unique(programming_language.concat(
+            component.programming_language));
 
         // update select2 selectors for node view component
         $("#select-license").html('').select2({
-            data: licenses,
+            data: $.map(licenses, function(license) {
+                return license.short_name;
+            }),
             multiple: true,
             placeholder: "Enter license",
             tags: true
@@ -70,7 +61,9 @@ $(document).ready(function () {
         }, true);
 
         $("#select-copyright").html('').select2({
-            data: copyrights,
+            data: $.map(copyrights, function(copyright) {
+                return copyright.statements.join("\n");
+            }),
             multiple: true,
             placeholder: "Enter copyright",
             tags: true
@@ -84,43 +77,46 @@ $(document).ready(function () {
             tags: true
         }, true);
 
-        $("#select-status").val(component.review_status);
-        $('#component-name').val(component.name);
-        $('#component-version').val(component.version);
-        $('#select-license').val(component.licenses);
-        $('#select-copyright').val(component.copyrights);
-        $('#select-owner').val(component.party.name);
-        $('#select-language').val(component.programming_language);
-        $('#component-homepage-url').val(component.homepage_url);
-        $('#component-notes').val(component.notes);
+        $("#select-status").val(component.review_status || "");
+        $('#component-name').val(component.name || "");
+        $('#component-version').val(component.version || "");
+        $('#select-license').val($.map(component.licenses || [], function(license) {
+            return license.short_name;
+        }));
+        $('#select-copyright').val($.map(component.copyrights || [], function(copyright) {
+            return copyright.statements.join("\n");
+        }));
+        $('#select-owner').val(component.owner || "");
+        $('#select-language').val(component.programming_language || "");
+        $('#component-homepage-url').val(component.homepage_url || "");
+        $('#component-notes').val(component.notes || "");
 
         // Notify only select2 of changes
         $('select').trigger('change.select2');
 
-        $('#nodeModalLabel').text(d.id);
+        $('#nodeModalLabel').text(node.id);
         $('#nodeModal').modal('show');
     }
 
     $('#save-component').on('click', function () {
         var id = $('#nodeModalLabel').text();
-        var party = {};
-        if ($('#select-owner').val()) {
-            party = {name: $('#select-owner').val()[0], role: 'owner'}
-        }
         var component = {
+            path: id,
             review_status: $("#select-status").val(),
             name: $('#component-name').val(),
+            licenses: $.map($('#select-license').val() || [], function(license) {
+                return { short_name: license };
+            }),
+            copyrights: $.map($('#select-copyright').val() || [], function(copyright) {
+                return { statements: copyright.split("\n") };
+            }),
             version: $('#component-version').val(),
-            licenses: $('#select-license').val(),
-            copyrights: $('#select-copyright').val(),
-            party: party,
+            owner: ($('#select-owner').val() || [""])[0],
             homepage_url: $('#component-homepage-url').val(),
+            programming_language: ($('#select-language').val() || [""])[0],
             notes: $('#component-notes').val()
         };
-        if ($('#select-language').val()) {
-            component.programming_language = $('#select-language').val()[0];
-        }
-        scanData.setComponent(id, component);
+        aboutCodeDB.setComponent(component, { where: { path: id } });
         $('#nodeModal').modal('hide');
         nodeView.redraw()
     });
@@ -223,13 +219,13 @@ $(document).ready(function () {
 
         });
 
-        componentsTable.buttons().container().attr({
-            "id": "show-components",
-            "data-toggle": "modal",
-            "data-placement": "right",
-            "title": "Upload Components to DejaCode",
-            "data-target":"#componentExportModal"
-        });
+    componentsTable.buttons().container().attr({
+        "id": "show-components",
+        "data-toggle": "modal",
+        "data-placement": "right",
+        "title": "Upload Components to DejaCode",
+        "data-target":"#componentExportModal"
+    });
 
 
     // Show DataTable. Hide node view and component summary table
