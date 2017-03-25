@@ -177,7 +177,7 @@ AboutCodeDB.fileModel = function(sequelize) {
         size: Sequelize.STRING,
         sha1: Sequelize.STRING,
         md5: Sequelize.STRING,
-        files_count: Sequelize.STRING,
+        files_count: Sequelize.INTEGER,
         mime_type: Sequelize.STRING,
         file_type: Sequelize.STRING,
         programming_language: Sequelize.STRING,
@@ -190,7 +190,7 @@ AboutCodeDB.fileModel = function(sequelize) {
     });
 }
 
-    // License Model definitions
+// License Model definitions
 AboutCodeDB.licenseModel = function(sequelize) {
     return sequelize.define("licenses", {
         key: Sequelize.STRING,
@@ -208,15 +208,24 @@ AboutCodeDB.licenseModel = function(sequelize) {
     });
 }
 
-    // Copyright Model definitions
+// Copyright Model definitions
 AboutCodeDB.copyrightModel = function(sequelize) {
     return sequelize.define("copyrights", {
         start_line: Sequelize.STRING,
-        end_line: Sequelize.STRING
+        end_line: Sequelize.STRING,
+        statements: {
+            type: Sequelize.STRING,
+            get: function() {
+                return JSON.parse(this.getDataValue('statements'));
+            },
+            set: function(val) {
+                return this.setDataValue('statements', JSON.stringify(val));
+            }
+        }
     });
 }
 
-    // Package Model definitions
+// Package Model definitions
 AboutCodeDB.packageModel = function(sequelize) {
     return sequelize.define("packages", {
         type: Sequelize.STRING,
@@ -225,7 +234,7 @@ AboutCodeDB.packageModel = function(sequelize) {
     });
 }
 
-    // Email Model definitions
+// Email Model definitions
 AboutCodeDB.emailModel = function(sequelize) {
     return sequelize.define("emails", {
         email: Sequelize.STRING,
@@ -234,12 +243,19 @@ AboutCodeDB.emailModel = function(sequelize) {
     });
 }
 
-    // URL Model definitions
+// URL Model definitions
 AboutCodeDB.urlModel = function(sequelize) {
     return sequelize.define("urls", {
         url: Sequelize.STRING,
         start_line: Sequelize.STRING,
         end_line: Sequelize.STRING
+    });
+}
+
+// Copyright Statement Model definitions
+AboutCodeDB.statementModel = function(sequelize) {
+    return sequelize.define("statements", {
+        statement: Sequelize.STRING
     });
 }
 
