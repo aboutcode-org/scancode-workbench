@@ -34,8 +34,8 @@ AboutCodeDataTable.prototype = {
     columns: function(columnId) {
         return this.dataTable.columns(columnId);
     },
-    ajax: function() {
-        return this.dataTable.ajax;
+    reload: function() {
+        return this.dataTable.ajax.reload();
     },
     // This function is called every time DataTables needs to be redrawn.
     // For details on the parameters https://datatables.net/manual/server-side

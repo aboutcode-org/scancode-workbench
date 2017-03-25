@@ -59,12 +59,6 @@ function AboutCodeDB(config) {
     // Component table is for creating custom components.
     this.Component = AboutCodeDB.componentModel(this.sequelize);
 
-    this.Component.hasMany(this.License);
-    this.Component.hasMany(this.Copyright);
-    this.Component.hasMany(this.Package);
-    this.Component.hasMany(this.Email);
-    this.Component.hasMany(this.Url);
-
     // A promise that will return when the db and tables have been created
     this.db = this.sequelize.sync();
 }
@@ -81,13 +75,18 @@ module.exports = AboutCodeDB;
 AboutCodeDB.prototype = {
 
     // Uses the components table to do a findOne query
+    findAllComponents: function(query) {
+        var that = this;
+        return this.db.then(function() {
+            return that.Component.findAll(query);
+        });
+    },
+
+    // Uses the components table to do a findOne query
     findComponent: function(query) {
         var that = this;
         return this.db.then(function() {
-            return that.Component.findOne(
-                $.extend(query, {
-                    include: that.include
-                }));
+            return that.Component.findOne(query);
         });
     },
 
@@ -97,16 +96,12 @@ AboutCodeDB.prototype = {
         this.findComponent(query)
             .then(function(dbComponent) {
                 if(dbComponent) {
-                    return dbComponent.update(component, {
-                        include: that.include
-                    });
+                    return dbComponent.update(component);
                 }
                 else {
-                    return that.Component.create(component, {
-                        include: that.include
-                    });
+                    return that.Component.create(component);
                 }
-            });
+            })
     },
 
     // Uses the files table to do a findOne query
@@ -214,7 +209,11 @@ AboutCodeDB.prototype = {
 // File Model definitions
 AboutCodeDB.fileModel = function(sequelize) {
     return sequelize.define("files", {
-        path: Sequelize.STRING,
+        path: {
+            type: Sequelize.STRING,
+            unique: true,
+            allowNull: false
+        },
         parent: Sequelize.STRING,
         type: Sequelize.STRING,
         name: Sequelize.STRING,
@@ -259,15 +258,7 @@ AboutCodeDB.copyrightModel = function(sequelize) {
     return sequelize.define("copyrights", {
         start_line: Sequelize.STRING,
         end_line: Sequelize.STRING,
-        statements: {
-            type: Sequelize.STRING,
-            get: function() {
-                return JSON.parse(this.getDataValue('statements'));
-            },
-            set: function(val) {
-                return this.setDataValue('statements', JSON.stringify(val));
-            }
-        }
+        statements: AboutCodeDB.jsonDataType('statements')
     });
 }
 
@@ -308,15 +299,30 @@ AboutCodeDB.statementModel = function(sequelize) {
 // Component Model definitions
 AboutCodeDB.componentModel = function(sequelize) {
     return sequelize.define("components", {
-        path:                 { type: Sequelize.STRING, defaultValue: "" },
-        review_status:        { type: Sequelize.STRING, defaultValue: "" },
-        name:                 { type: Sequelize.STRING, defaultValue: "" },
-        version:              { type: Sequelize.STRING, defaultValue: "" },
-        owner:                { type: Sequelize.STRING, defaultValue: "" },
-        homepage_url:         { type: Sequelize.STRING, defaultValue: "" },
-        programming_language: { type: Sequelize.STRING, defaultValue: "" },
-        notes:                { type: Sequelize.STRING, defaultValue: "" }
+        path:                 Sequelize.STRING,
+        review_status:        Sequelize.STRING,
+        name:                 Sequelize.STRING,
+        version:              Sequelize.STRING,
+        licenses:             AboutCodeDB.jsonDataType('licenses'),
+        copyrights:           AboutCodeDB.jsonDataType('copyrights'),
+        owner:                Sequelize.STRING,
+        homepage_url:         Sequelize.STRING,
+        programming_language: Sequelize.STRING,
+        notes:                Sequelize.STRING
     });
+}
+
+// Stores an object as a json string internally, but as an object externally
+AboutCodeDB.jsonDataType = function(attributeName) {
+    return {
+        type: Sequelize.STRING,
+        get: function() {
+            return JSON.parse(this.getDataValue(attributeName));
+        },
+        set: function(val) {
+            return this.setDataValue(attributeName, JSON.stringify(val));
+        }
+    }
 }
 
 // Defines a table for a flattened scanned file

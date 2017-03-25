@@ -38,9 +38,9 @@ $(document).ready(function () {
         // Add saved data to the select menu options
         licenses = $.unique(licenses.concat(component.licenses || []));
         copyrights = $.unique(copyrights.concat(component.copyrights || []));
-        parties = $.unique(parties.concat(component.owner));
+        parties = $.unique(parties.concat(component.owner || []));
         programming_language = $.unique(programming_language.concat(
-            component.programming_language));
+            component.programming_language || []));
 
         // update select2 selectors for node view component
         $("#select-license").html('').select2({
@@ -86,8 +86,8 @@ $(document).ready(function () {
         $('#select-copyright').val($.map(component.copyrights || [], function(copyright) {
             return copyright.statements.join("\n");
         }));
-        $('#select-owner').val(component.owner || "");
-        $('#select-language').val(component.programming_language || "");
+        $('#select-owner').val(component.owner || []);
+        $('#select-language').val(component.programming_language || []);
         $('#component-homepage-url').val(component.homepage_url || "");
         $('#component-notes').val(component.notes || "");
 
@@ -111,9 +111,9 @@ $(document).ready(function () {
                 return { statements: copyright.split("\n") };
             }),
             version: $('#component-version').val(),
-            owner: ($('#select-owner').val() || [""])[0],
+            owner: ($('#select-owner').val() || [null])[0],
             homepage_url: $('#component-homepage-url').val(),
-            programming_language: ($('#select-language').val() || [""])[0],
+            programming_language: ($('#select-language').val() || [null])[0],
             notes: $('#component-notes').val()
         };
         aboutCodeDB.setComponent(component, { where: { path: id } });
@@ -160,7 +160,7 @@ $(document).ready(function () {
 
 
     // Show DataTable. Hide node view and component summary table
-    $( "#show-datatable" ).click(function() {
+    $( "#show-clue-table" ).click(function() {
         $("#clues-table").show();
         $("#node-container").hide();
         $("#clues-table_wrapper").show();
@@ -186,7 +186,7 @@ $(document).ready(function () {
     });
 
     // Show component summary table. Hide DataTable and node view
-    $("#table-test").click(function() {
+    $("#show-component-table").click(function() {
         $('#leftCol').removeClass('col-md-2');
         $('#tabbar').removeClass('col-md-9');
         $('#tabbar').addClass('col-md-11');
@@ -195,9 +195,7 @@ $(document).ready(function () {
         $("#clues-table").hide();
         $("#node-container").hide();
         $("#clues-table_wrapper").hide();
-        componentsTable.clear();
-        componentsTable.addRows(scanData.toSaveFormat().components);
-        componentsTable.draw();
+        componentsTable.reload();
     });
 
     // Open a json file
@@ -244,7 +242,10 @@ $(document).ready(function () {
                     .then(function() {
                         // reload the DataTable after all insertions are done.
                         cluesTable.database(aboutCodeDB);
-                        cluesTable.ajax().reload();
+                        cluesTable.reload();
+
+                        componentsTable.database(aboutCodeDB);
+                        componentsTable.reload();
 
                         // loading data into jstree
                         aboutCodeDB.toJSTreeFormat()
