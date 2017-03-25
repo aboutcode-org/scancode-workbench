@@ -56,6 +56,15 @@ function AboutCodeDB(config) {
         this.Url
     ]
 
+    // Component table is for creating custom components.
+    this.Component = AboutCodeDB.componentModel(this.sequelize);
+
+    this.Component.hasMany(this.License);
+    this.Component.hasMany(this.Copyright);
+    this.Component.hasMany(this.Package);
+    this.Component.hasMany(this.Email);
+    this.Component.hasMany(this.Url);
+
     // A promise that will return when the db and tables have been created
     this.db = this.sequelize.sync();
 }
@@ -70,6 +79,37 @@ module.exports = AboutCodeDB;
  */
 
 AboutCodeDB.prototype = {
+
+    // Uses the components table to do a findOne query
+    findComponent: function(query) {
+        var that = this;
+        return this.db.then(function() {
+            return that.Component.findOne(
+                $.extend(query, {
+                    include: that.include
+                }));
+        });
+    },
+
+    // Uses the components table to create or set a component
+    setComponent: function(component, query) {
+        var that = this;
+        this.findComponent(query)
+            .then(function(dbComponent) {
+                if(dbComponent) {
+                    return dbComponent.update(component, {
+                        include: that.include
+                    });
+                }
+                else {
+                    return that.Component.create(component, {
+                        include: that.include
+                    });
+                }
+            });
+    },
+
+    // Uses the files table to do a findOne query
     findOne: function(query) {
         var that = this;
         return this.db.then(function() {
@@ -79,6 +119,8 @@ AboutCodeDB.prototype = {
                 }));
         });
     },
+
+    // Uses the files table to do a findAll query
     findAll: function(query) {
         var that = this;
         return this.db.then(function() {
@@ -88,6 +130,8 @@ AboutCodeDB.prototype = {
                 }));
         });
     },
+
+    // Add rows to the flattened files table from a ScanCode json object
     addFlattenedRows: function (json) {
         if (!json) {
             return this.db;
@@ -106,6 +150,8 @@ AboutCodeDB.prototype = {
             });
         });
     },
+
+    // Adds row to the files table
     addRows: function (json) {
         if (!json) {
             return this.db;
@@ -256,6 +302,20 @@ AboutCodeDB.urlModel = function(sequelize) {
 AboutCodeDB.statementModel = function(sequelize) {
     return sequelize.define("statements", {
         statement: Sequelize.STRING
+    });
+}
+
+// Component Model definitions
+AboutCodeDB.componentModel = function(sequelize) {
+    return sequelize.define("components", {
+        path:                 { type: Sequelize.STRING, defaultValue: "" },
+        review_status:        { type: Sequelize.STRING, defaultValue: "" },
+        name:                 { type: Sequelize.STRING, defaultValue: "" },
+        version:              { type: Sequelize.STRING, defaultValue: "" },
+        owner:                { type: Sequelize.STRING, defaultValue: "" },
+        homepage_url:         { type: Sequelize.STRING, defaultValue: "" },
+        programming_language: { type: Sequelize.STRING, defaultValue: "" },
+        notes:                { type: Sequelize.STRING, defaultValue: "" }
     });
 }
 
