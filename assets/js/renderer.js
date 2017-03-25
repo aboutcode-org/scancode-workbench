@@ -149,83 +149,14 @@ $(document).ready(function () {
         })
         // Get the node id when selected
         .on('select_node.jstree', function (evt, data) {
-            table.columns(0).search(data.node.id).draw();
+            cluesTable.columns(0).search(data.node.id).draw();
             nodeView.setRoot(data.node.id);
         });
 
     var scanData = null;
     var aboutCodeDB = new AboutCodeDB();
-    var table = new AboutCodeDataTable("#clues-table", aboutCodeDB);
-
-    // Create a table with analyzed Components from node view
-    var componentsTable = $("#components-table")
-        .DataTable( {
-            columns: [
-                {
-                    data: "name",
-                    title: "Name",
-                    name: "name"
-                },
-                {
-                    data: "version",
-                    title: "Version",
-                    name: "version"
-                },
-                {
-                    data: "party.name",
-                    title: "Owner",
-                    name: "party name",
-                    defaultContent: ""
-                },
-                {
-                    data: "license_expression",
-                    title: "License",
-                    name: "license_expression",
-                    defaultContent: ""
-                },
-                {
-                    data: "programming_language",
-                    title: "Programming Language",
-                    name: "programming_language",
-                    defaultContent: ""
-                },
-                {
-                    data: "homepage_url",
-                    title: "Homepage URL",
-                    name: "homepage_url",
-                    defaultContent: ""
-                },
-                {
-                    data: "notes",
-                    title: "Notes",
-                    name: "notes",
-                    defaultContent: ""
-                }
-            ],
-            dom:
-            // Needed to keep datatables buttons and search inline
-                "<'row'<'col-sm-9'B><'col-sm-3'f>>" +
-                    "<'row'<'col-sm-12'tr>>" +
-                    "<'row'<'col-sm-5'i><'col-sm-7'p>>",
-            buttons: [
-                {
-                    name: "uploadDeja",
-                    text: '<i class=" fa fa-cloud-upload"></i> Upload Components'
-                }
-            ],
-            "language": {
-              "emptyTable": "No Components created."
-            }
-
-        });
-
-    componentsTable.buttons().container().attr({
-        "id": "show-components",
-        "data-toggle": "modal",
-        "data-placement": "right",
-        "title": "Upload Components to DejaCode",
-        "data-target":"#componentExportModal"
-    });
+    var cluesTable = new AboutCodeDataTable("#clues-table", aboutCodeDB);
+    var componentsTable = new ComponentDataTable("#components-table", aboutCodeDB);
 
 
     // Show DataTable. Hide node view and component summary table
@@ -238,7 +169,7 @@ $(document).ready(function () {
         $('#tabbar').removeClass('col-md-11');
         $('#tabbar').addClass('col-md-9');
         $('#leftCol').show();
-        table.draw();
+        cluesTable.draw();
     });
 
     // Show node view. Hide DataTable and component summary table
@@ -265,7 +196,7 @@ $(document).ready(function () {
         $("#node-container").hide();
         $("#clues-table_wrapper").hide();
         componentsTable.clear();
-        componentsTable.rows.add(scanData.toSaveFormat().components);
+        componentsTable.addRows(scanData.toSaveFormat().components);
         componentsTable.draw();
     });
 
@@ -312,8 +243,8 @@ $(document).ready(function () {
                 aboutCodeDB.addFlattenedRows(json)
                     .then(function() {
                         // reload the DataTable after all insertions are done.
-                        table.database(aboutCodeDB);
-                        table.ajax().reload();
+                        cluesTable.database(aboutCodeDB);
+                        cluesTable.ajax().reload();
 
                         // loading data into jstree
                         aboutCodeDB.toJSTreeFormat()
