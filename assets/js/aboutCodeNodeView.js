@@ -14,10 +14,12 @@
  #
  */
 
-function AboutCodeNodeView(scanData, onNodeClicked){
-    this.scanData = scanData;
-    this.nodeView = createNodeView(scanData, onNodeClicked);
-    this.nodeView.setData(scanData.nodeViewData);
+function AboutCodeNodeView(aboutCodeDB, onNodeClicked){
+    this.aboutCodeDB = aboutCodeDB;
+
+    // Clear the nodeview DOM element if one already exists.
+    $("#nodeview").empty();
+    this.nodeView = createNodeView(aboutCodeDB, onNodeClicked);
 }
 
 module.exports = AboutCodeNodeView;
@@ -29,13 +31,39 @@ AboutCodeNodeView.prototype = {
     redraw: function() {
         return this.nodeView.redraw();
     },
+
+    // Set the root of the node view to the given rootId. This will call
+    // the database if the root's data is not found in the node view.
+    setRoot: function(rootId) {
+        if (rootId in this.nodeView.nodeData) {
+            this.nodeView.setRoot(this.nodeView.nodeData[rootId]);
+        } else {
+            var that = this;
+            this.aboutCodeDB.findOne({ where: {path: rootId } })
+                .then(function(file) {
+                    that.nodeView.setRoot(fileToNode(file));
+                });
+        }
+    },
     update: function(id) {
         return this.nodeView.update(id);
     }
 }
 
+// Map a scanned file to a node view data object.
+function fileToNode(file) {
+    return {
+        id: file.path,
+        name: file.name,
+        type: file.type,
+        licenses: file.licenses,
+        copyrights: file.copyrights,
+        children: []
+    };
+}
+
 // Create a node view
-function createNodeView(scanData, onNodeClick) {
+function createNodeView(aboutCodeDB, onNodeClick) {
     return new NodeView({
         selector: "#nodeview",
         orientation: "left-to-right",
@@ -48,6 +76,16 @@ function createNodeView(scanData, onNodeClick) {
             left: 100, right: 200
         },
         duration: 1000,
+        // Gets the children for a particular node. This should only be
+        // called the first time a node is expanded.
+        getChildren: function(id) {
+            return aboutCodeDB.findAll({ where: { parent : id } })
+                .then(function(files) {
+                    return $.map(files, function(file, i) {
+                        return fileToNode(file);
+                    });
+                });
+        },
 
         // Update the nodes when data changes
         addNode: function (nodes, nodeView) {
@@ -58,19 +96,16 @@ function createNodeView(scanData, onNodeClick) {
 
             // Setup directory nodes
             nodes.filter(function (d) {
-                return d.scanData.type === "directory";
+                return d.type === "directory";
             })
                 .attr("class", "node dir")
                 .append("text")
                 .attr("x", 10)
                 .attr("alignment-baseline", "central")
                 .text(function (d) {
-                    var file_count = d.scanData.files_count;
-                    var clue_count = 0;
-                    ScanData.forEachNode(d, "_children", function(node) {
-                        clue_count += (node.scanData.licenses || []).length;
-                        clue_count += (node.scanData.copyrights || []).length;
-                    })
+                    var file_count = d.files_count;
+                    var clue_count = "?";
+                    // TODO: Calculate clue count.
                     return d.name +
                         " (" + file_count +
                         ", " + clue_count + ")";
@@ -79,7 +114,7 @@ function createNodeView(scanData, onNodeClick) {
 
             // Setup file nodes
             nodes.filter(function (d) {
-                return d.scanData.type !== "directory";
+                return d.type !== "directory";
             })
                 .attr("class", "node file")
                 .append("g")
@@ -92,14 +127,15 @@ function createNodeView(scanData, onNodeClick) {
             // Update circles
             nodes.select("circle").attr("class", function (d) {
                 while (d != undefined) {
-                    var review_status = scanData.getComponent(d.id).review_status;
+                    // TODO: Read review_status from db
+                    var review_status = "";
                     if (review_status !== "") return review_status;
                     d = d.parent;
                 }
             })
 
             var fileNodes = nodes.filter(function (d) {
-                return d.scanData.type !== "directory";
+                return d.type !== "directory";
             });
 
             // Get the selected values
@@ -129,11 +165,13 @@ function createNodeView(scanData, onNodeClick) {
                     if (d === "filename") {
                         return data.name
                     } else if (d === "license") {
-                        return $.map(data.scanData.licenses, function(license, i) {
+                        return $.map(data.licenses, function(license, i) {
                             return license.short_name;
                         }).join(", ");
                     } else if (d === "copyright") {
-                        return $.map(data.scanData.copyrights, function(copyright, i) {
+
+                        // TODO: Add copyright statements
+                        return $.map([], function(copyright, i) {
                             return copyright.statements.join(" ");
                         }).join(", ");
                     }

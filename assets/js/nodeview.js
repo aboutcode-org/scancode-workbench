@@ -17,7 +17,6 @@
 function NodeView(config) {
     var that = this;
     this.config = config;
-    this.nodeData = config.data;
     this.w = config.width - config.margin.right - config.margin.left
     this.h = config.height - config.margin.top - config.margin.bottom;
     this.nextId = 0;
@@ -53,7 +52,7 @@ function NodeView(config) {
         return [that.o.x(d), that.o.y(d)];
     });
 
-    this.setData(config.data);
+    this.nodeData = {};
 }
 
 NodeView.orientation = function(orientKey, width, height) {
@@ -74,13 +73,13 @@ NodeView.orientation = function(orientKey, width, height) {
 
 NodeView.prototype = {
     update: function (rootId, toggleId) {
-        var prevPos = this._pos(this.findNode(toggleId || this.currentId));
-        var newRoot = this.findNode(rootId);
+        var prevPos = this._pos(this.nodeData[toggleId || this.currentId]);
+        var newRoot = this.nodeData[rootId];
 
         this.currentId = rootId;
         var nodeData = this.tree.nodes(newRoot);
 
-        var currPos = this._pos(this.findNode(toggleId || this.currentId));
+        var currPos = this._pos(this.nodeData[toggleId || this.currentId]);
 
         // Handle nodes
         var nodes = this.container.selectAll("g.node")
@@ -101,38 +100,53 @@ NodeView.prototype = {
         this._addLinks(links.enter(), prevPos);
         this._removeLinks(links.exit(), currPos);
     },
-    findNode: function (id) {
-        return this.nodeData[id]
-    },
-    setData: function (data) {
-        if (data == undefined) return;
 
-        this.nodeData = data.data;
-        this.currentId = data.root.id;
-        data.root.children = data.root._children;
+    // Set the root of the node view to the given root
+    setRoot: function (root) {
+        if (!root) return;
+
+        this.nodeData[root.id] = root;
+
+        this.currentId = root.id;
+        this.update(root.id);
     },
     reset: function () {
         $.each(this.nodeData, function (id, node) {
             node.children = [];
         });
     },
+
+    // Toggle the nodes children to _children
     expand: function (id) {
         this.nodeData[id].children = this.nodeData[id]._children;
         this.update(this.currentId, id);
     },
+
+    // Toggle the nodes children to an empty array
     collapse: function (id) {
         this.nodeData[id].children = [];
         this.update(this.currentId, id);
     },
     toggle: function (id) {
-        if (this.nodeData[id].children !== this.nodeData[id]._children) {
+
+        // _children will be undefined the first time the node is toggled
+        if (this.nodeData[id]._children === undefined) {
+            var that = this;
+            this.config.getChildren(id)
+                .then(function(children) {
+                    that.nodeData[id]._children = children;
+                    $.each(children, function(i, child) {
+                        that.nodeData[child.id] = child;
+                    });
+                    if (that.nodeData[id]._children !== undefined) {
+                        that.toggle(id);
+                    }
+                });
+        } else if (this.nodeData[id].children !== this.nodeData[id]._children) {
             this.expand(id);
         } else {
             this.collapse(id);
         }
-    },
-    data: function () {
-        return this.nodeData;
     },
     translate: function (d) {
         return "translate(" + this.o.x(d) + "," + this.o.y(d) + ")";
@@ -202,8 +216,9 @@ NodeView.prototype = {
             .remove()
     },
     redraw: function () {
+
         // Update position data
-        var root = this.findNode(this.currentId);
+        var root = this.nodeData[this.currentId];
         this.tree.nodes(root);
 
         // Update nodes
@@ -214,9 +229,10 @@ NodeView.prototype = {
         var links = this.container.selectAll("path.link");
         this._updateLinks(links);
     },
+
     // Resize the spacing between nodes
     resize: function (nodeWidth, nodeHeight) {
         this.tree.nodeSize([nodeWidth, nodeHeight]);
-        this.redraw();
+        this.update(this.currentId)
     }
 }
