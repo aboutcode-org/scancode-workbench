@@ -154,7 +154,7 @@ $(document).ready(function () {
         // Get the node id when selected
         .on('select_node.jstree', function (evt, data) {
             table.columns(0).search(data.node.id).draw();
-            nodeView.update(data.node.id);
+            nodeView.setRoot(data.node.id);
         });
 
     var scanData = null;
@@ -332,18 +332,13 @@ $(document).ready(function () {
 
                 aboutCodeDB.addRows(json)
                     .then(function() {
-                        // TODO: Setup the NodeView in here
-                        return aboutCodeDB.File.count({})
-                    })
-                    .then(function(count) {
-                        console.log(count);
+                        nodeView = new AboutCodeNodeView(aboutCodeDB, onNodeClick);
                     })
                     .catch(function(reason) {
                        throw reason;
                     });
 
                 scanData = new ScanData(json);
-                nodeView = new AboutCodeNodeView(scanData, onNodeClick);
             });
         });
     });

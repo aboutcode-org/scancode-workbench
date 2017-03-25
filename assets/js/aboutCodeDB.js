@@ -47,6 +47,15 @@ function AboutCodeDB(config) {
     this.File.hasMany(this.Email);
     this.File.hasMany(this.Url);
 
+    // Include Array for queries
+    this.include = [
+        this.License,
+        this.Copyright,
+        this.Package,
+        this.Email,
+        this.Url
+    ]
+
     // A promise that will return when the db and tables have been created
     this.db = this.sequelize.sync();
 }
@@ -61,6 +70,24 @@ module.exports = AboutCodeDB;
  */
 
 AboutCodeDB.prototype = {
+    findOne: function(query) {
+        var that = this;
+        return this.db.then(function() {
+            return that.File.findOne(
+                $.extend(query, {
+                    include: that.include
+                }));
+        });
+    },
+    findAll: function(query) {
+        var that = this;
+        return this.db.then(function() {
+            return that.File.findAll(
+                $.extend(query, {
+                    include: that.include
+                }));
+        });
+    },
     addFlattenedRows: function (json) {
         if (!json) {
             return this.db;
@@ -92,16 +119,11 @@ AboutCodeDB.prototype = {
             return that.sequelize.transaction(function(transaction) {
                 $.each(json.files, function(index, file) {
                     dbSync = dbSync.then(function() {
-                        return that.File.create(file, {
+                        return that.File.create(
+                            $.extend(file, { parent: AboutCodeDB.parent(file.path) }), {
                             logging: false,
                             transaction: transaction,
-                            include: [
-                                that.License,
-                                that.Copyright,
-                                that.Package,
-                                that.Email,
-                                that.Url
-                            ]
+                            include: that.include
                         });
                     });
                 });
@@ -121,18 +143,16 @@ AboutCodeDB.prototype = {
 
         return this.db.then(function() {
             return that.FlattenedFile.findAll({
-                attributes: ["path", "infos_file_name", "infos_type"]
+                attributes: ["path", "parent", "infos_file_name", "infos_type"]
             });
         })
-        .then(function(result) {
-            return $.map(result, function(scanData, index) {
-                 var splits = scanData.path.split('/');
-                 var parent = splits.length === 1 ? "#" : splits.slice(0, -1).join("/");
+        .then(function(files) {
+            return $.map(files, function(file, index) {
                  return {
-                     id: scanData.path,
-                     text: scanData.infos_file_name,
-                     parent: parent,
-                     type: scanData.infos_type
+                     id: file.path,
+                     text: file.infos_file_name,
+                     parent: file.parent,
+                     type: file.infos_type
                  };
             });
         });
@@ -149,6 +169,7 @@ AboutCodeDB.prototype = {
 AboutCodeDB.fileModel = function(sequelize) {
     return sequelize.define("files", {
         path: Sequelize.STRING,
+        parent: Sequelize.STRING,
         type: Sequelize.STRING,
         name: Sequelize.STRING,
         extension: Sequelize.STRING,
@@ -230,6 +251,7 @@ AboutCodeDB.flattenedFileModel = function(sequelize) {
             unique: true,
             allowNull: false
         },
+        parent:               { type: Sequelize.STRING, defaultValue: "" },
         copyright_statements: { type: Sequelize.STRING, defaultValue: "" },
         copyright_holders:    { type: Sequelize.STRING, defaultValue: "" },
         copyright_authors:    { type: Sequelize.STRING, defaultValue: "" },
@@ -287,6 +309,7 @@ AboutCodeDB.flattenedFileModel = function(sequelize) {
 AboutCodeDB.flattenData = function (file) {
     return {
         path: file.path,
+        parent: AboutCodeDB.parent(file.path),
         copyright_statements: AboutCodeDB.flattenArrayOfArray(file.copyrights, "statements"),
         copyright_holders: AboutCodeDB.flattenArrayOfArray(file.copyrights, "holders"),
         copyright_authors: AboutCodeDB.flattenArrayOfArray(file.copyrights, "authors"),
@@ -330,6 +353,11 @@ AboutCodeDB.flattenData = function (file) {
         packages_packaging: AboutCodeDB.flattenArray(file.packages, "packaging"),
         packages_primary_language: AboutCodeDB.flattenArray(file.packages, "primary_language")
     }
+}
+
+AboutCodeDB.parent = function(path) {
+    var splits = path.split("/");
+    return splits.length === 1 ? "#" : splits.slice(0, -1).join("/");
 }
 
 // array: [
