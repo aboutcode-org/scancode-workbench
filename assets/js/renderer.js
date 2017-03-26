@@ -157,7 +157,7 @@ $(document).ready(function () {
     var aboutCodeDB = new AboutCodeDB();
     var cluesTable = new AboutCodeDataTable("#clues-table", aboutCodeDB);
     var componentsTable = new ComponentDataTable("#components-table", aboutCodeDB);
-
+    var nodeView = new AboutCodeNodeView("#node-view", aboutCodeDB);
 
     // Show DataTable. Hide node view and component summary table
     $( "#show-clue-table" ).click(function() {
@@ -200,7 +200,6 @@ $(document).ready(function () {
 
     // Open a json file
     var dialog = require('electron').remote.dialog;
-    var nodeView;
     $('#open-file').click(function() {
         dialog.showOpenDialog(function (fileNames) {
             if (fileNames === undefined) return;
