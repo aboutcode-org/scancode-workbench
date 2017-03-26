@@ -14,197 +14,171 @@
  #
  */
 
-function AboutCodeNodeView(aboutCodeDB, onNodeClicked){
-    this.aboutCodeDB = aboutCodeDB;
+class AboutCodeNodeView extends NodeView {
+    constructor(aboutCodeDB, onNodeClicked) {
+        // Call the NodeView's constructor
+        super({
+            selector: "#nodeview",
+            orientation: "left-to-right",
+            width: 800,
+            height: 800,
+            nodeWidth: 25,
+            nodeHeight: 160,
+            margin: {
+                top: 80, bottom: 30,
+                left: 100, right: 200
+            },
+            duration: 1000
+        });
 
-    // Clear the nodeview DOM element if one already exists.
-    $("#nodeview").empty();
-    this.nodeView = createNodeView(aboutCodeDB, onNodeClicked);
-}
+        this.aboutCodeDB = aboutCodeDB;
+        this.onNodeClicked = onNodeClicked;
+    }
 
-module.exports = AboutCodeNodeView;
-
-AboutCodeNodeView.prototype = {
-    resize: function(dx, dy) {
-        return this.nodeView.resize(dx, dy);
-    },
-    redraw: function() {
-        return this.nodeView.redraw();
-    },
+    // Map a scanned file to a node view data object.
+    static fileToNode(file) {
+        return {
+            id: file.path,
+            name: file.name,
+            type: file.type,
+            licenses: file.licenses,
+            copyrights: file.copyrights,
+            files_count: file.files_count,
+            children: []
+        };
+    }
 
     // Set the root of the node view to the given rootId. This will call
     // the database if the root's data is not found in the node view.
-    setRoot: function(rootId) {
-        if (rootId in this.nodeView.nodeData) {
-            this.nodeView.setRoot(this.nodeView.nodeData[rootId]);
+    setRoot(rootId) {
+        if (rootId in this.nodeData) {
+            super.setRoot(this.nodeData[rootId]);
         } else {
-            var that = this;
-            this.aboutCodeDB.findOne({ where: {path: rootId } })
-                .then(function(file) {
-                    that.nodeView.setRoot(fileToNode(file));
+            this.aboutCodeDB.findOne({where: {path: rootId}})
+                .then((file) => {
+                    super.setRoot(AboutCodeNodeView.fileToNode(file));
                 });
         }
-    },
-    update: function(id) {
-        return this.nodeView.update(id);
+    }
+
+    // Gets the children for a particular node from the DB.
+    // This method is called by NodeView
+    getChildren(id) {
+        return this.aboutCodeDB.findAll({where: {parent: id}})
+            .then((files) => {
+                return files.map((file) => AboutCodeNodeView.fileToNode(file));
+            });
+    }
+
+    // Define the visuals of a node when it's added
+    // This method is called by NodeView
+    addNode(nodes) {
+        const circle = nodes.append("circle")
+            .on("click", (d) => this.toggle(d.id));
+
+        // Setup directory nodes
+        nodes.filter((d) => d.type === "directory")
+            .attr("class", "node dir")
+            .append("text")
+            .attr("x", 10)
+            .attr("alignment-baseline", "central")
+            .text(function (d) {
+                // TODO: Calculate clue count from DB when loading node data.
+                return `${d.name} (${d.files_count}, ${d.clues_count})`;
+            })
+            .on("click", this.onNodeClicked);
+
+        // Setup file nodes
+        nodes.filter((d) => d.type !== "directory")
+            .attr("class", "node file")
+            .append("g")
+            .attr("class", "clues")
+            .attr("x", 10)
+            .on("click", this.onNodeClicked);
+    }
+
+    // Update the nodes when data changes
+    // This method is called by NodeView
+    updateNode(nodes) {
+        // Update circles
+        nodes.select("circle").attr("class", (d) =>  d.review_status);
+
+        const fileNodes = nodes.filter((d) => d.type !== "directory");
+
+        // Get the selected values
+        const selected = $("#node-drop-down").val();
+
+        // Select all clue nodes
+        const clueGroup = fileNodes.selectAll("g.clues");
+        const clueNodes = clueGroup.selectAll("g").data(selected, (d) => d);
+
+        AboutCodeNodeView._updateClueNodes(clueNodes);
+        AboutCodeNodeView._addClueNodes(clueNodes.enter());
+        AboutCodeNodeView._removeClueNodes(clueNodes.exit());
+
+        nodes.select("g.dir-node").transition().duration(1000)
+            .attr("transform", "translate(10,0)");
+    }
+
+    // Create new visual for any new clues
+    static _addClueNodes(node) {
+        const newClueNodes = node.append("g")
+            .attr("class", (name) => `clue-${name}`)
+            .style("opacity", 0);
+
+        // Append clue rect
+        newClueNodes.append("rect");
+
+        // Append clue text
+        newClueNodes.append("text")
+            .attr("alignment-baseline", "central")
+            .text((d, i, j) => {
+                const data = newClueNodes[j].parentNode.__data__;
+
+                if (d === "filename") {
+                    return data.name
+                } else if (d === "license") {
+                    return data.licenses
+                        .map((license) => license.short_name)
+                        .join(", ");
+                } else if (d === "copyright") {
+                    return data.copyrights
+                        .map((copyright) => copyright.statements.join(" "))
+                        .join(", ");
+                }
+            });
+
+        this._updateClueNodes(newClueNodes);
+    }
+
+    // Update rect size (has to be done after text is added)
+    static _updateClueNodes(nodes) {
+        nodes.select("rect")
+            .attr("y", function() {
+                return -this.parentNode.getBBox().height/2;
+            })
+            .attr("width", function() {
+                return this.parentNode.getBBox().width;
+            })
+            .attr("height", function() {
+                return this.parentNode.getBBox().height;
+            });
+
+        // Update each clue's translation and set opacity to 1
+        nodes.transition().duration(1000)
+            .style("opacity", 1)
+            .each("end", function () {
+                d3.select(this).style("opacity", "inherit")
+            })
+            .attr("transform", (d, i) => `translate(10, ${25*i})`);
+    }
+
+    // Update removed clues
+    static _removeClueNodes(nodes) {
+        nodes.transition().duration(1000)
+            .style("opacity", 0)
+            .remove();
     }
 }
 
-// Map a scanned file to a node view data object.
-function fileToNode(file) {
-    return {
-        id: file.path,
-        name: file.name,
-        type: file.type,
-        licenses: file.licenses,
-        copyrights: file.copyrights,
-        files_count: file.files_count,
-        children: []
-    };
-}
-
-// Create a node view
-function createNodeView(aboutCodeDB, onNodeClick) {
-    return new NodeView({
-        selector: "#nodeview",
-        orientation: "left-to-right",
-        width: 800,
-        height: 800,
-        nodeWidth: 25,
-        nodeHeight: 160,
-        margin: {
-            top: 80, bottom: 30,
-            left: 100, right: 200
-        },
-        duration: 1000,
-        // Gets the children for a particular node. This should only be
-        // called the first time a node is expanded.
-        getChildren: function(id) {
-            return aboutCodeDB.findAll({ where: { parent : id } })
-                .then(function(files) {
-                    return $.map(files, function(file, i) {
-                        return fileToNode(file);
-                    });
-                });
-        },
-
-        // Update the nodes when data changes
-        addNode: function (nodes, nodeView) {
-            var circle = nodes.append("circle")
-                .on("click", function (d) {
-                    nodeView.toggle(d.id)
-                });
-
-            // Setup directory nodes
-            nodes.filter(function (d) {
-                return d.type === "directory";
-            })
-                .attr("class", "node dir")
-                .append("text")
-                .attr("x", 10)
-                .attr("alignment-baseline", "central")
-                .text(function (d) {
-                    var file_count = d.files_count;
-                    var clue_count = "?";
-                    // TODO: Calculate clue count.
-                    return d.name +
-                        " (" + file_count +
-                        ", " + clue_count + ")";
-                })
-                .on("click", onNodeClick);
-
-            // Setup file nodes
-            nodes.filter(function (d) {
-                return d.type !== "directory";
-            })
-                .attr("class", "node file")
-                .append("g")
-                .attr("class", "clues")
-                .attr("x", 10)
-                .on("click", onNodeClick);
-        },
-        updateNode: function(nodes) {
-
-            // Update circles
-            nodes.select("circle").attr("class", function (d) {
-                while (d != undefined) {
-                    // TODO: Read review_status from db
-                    var review_status = "";
-                    if (review_status !== "") return review_status;
-                    d = d.parent;
-                }
-            })
-
-            var fileNodes = nodes.filter(function (d) {
-                return d.type !== "directory";
-            });
-
-            // Get the selected values
-            var selected = $("#node-drop-down").val();
-
-            // Select old clues
-            var clueGroup = fileNodes.selectAll("g.clues");
-            var clueNodes = clueGroup.selectAll("g")
-                .data(selected, function (d) { return d; });
-
-            // Create new clues
-            var newClueNodes = clueNodes.enter()
-                .append("g")
-                .attr("class", function (d) { return "clue-" + d; })
-                .style("opacity", 0);
-
-            // Append clue rect
-            var newRectNode = newClueNodes.append("rect");
-
-            // Append clue text
-            newClueNodes.append("text")
-                .attr("alignment-baseline", "central")
-                .text(function (d,i,j) {
-
-                    var data = newClueNodes[j].parentNode.__data__;
-
-                    if (d === "filename") {
-                        return data.name
-                    } else if (d === "license") {
-                        return $.map(data.licenses, function(license, i) {
-                            return license.short_name;
-                        }).join(", ");
-                    } else if (d === "copyright") {
-                        return $.map(data.copyrights, function(copyright, i) {
-                            return copyright.statements.join(" ");
-                        }).join(", ");
-                    }
-                });
-
-            // Update rect size (has to be done after text is added)
-            clueNodes.select("rect")
-                .attr("y", function(d) {
-                    return -this.parentNode.getBBox().height/2;
-                })
-                .attr("width", function(d) {
-                    return this.parentNode.getBBox().width;
-                })
-                .attr("height", function(d) {
-                    return this.parentNode.getBBox().height;
-                });
-
-            // Update each clue's translation and set opacity to 1
-            clueNodes.transition().duration(1000)
-                .style("opacity", 1)
-                .each("end", function (d) {
-                    d3.select(this).style("opacity", "inherit")
-                })
-                .attr("transform", function (d, i) {
-                    return "translate("+10+","+(25*i)+")"
-                })
-
-            // Update removed clues
-            clueNodes.exit().transition().duration(1000)
-                .style("opacity", 0)
-                .remove();
-
-            nodes.select("g.dir-node").transition().duration(1000)
-                .attr("transform", "translate(10,0)");
-        }
-    });
-}
+module.exports = AboutCodeNodeView;
