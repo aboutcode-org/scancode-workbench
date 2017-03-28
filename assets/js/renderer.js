@@ -15,128 +15,29 @@
  */
 
 $(document).ready(function () {
-    $("#node-drop-down").change(function () {
-        var numClueSelected = $("#node-drop-down").val().length;
-        nodeView.resize(numClueSelected * 30, 180);
-    });
+    // Create default values for all of the data and ui classes
+    let scanData = null;
+    let aboutCodeDB = new AboutCodeDB();
+    let nodeView = new AboutCodeNodeView("#node-view", aboutCodeDB);
 
-    function onNodeClick (node) {
-        aboutCodeDB.findComponent({ where: { path: node.id } })
-            .then(function(component) {
-                showDialog(node, component ? component : {});
-            });
-    }
+    // These classes are only created once, otherwise DataTables will complain
+    const cluesTable = new AboutCodeDataTable("#clues-table", aboutCodeDB);
+    const componentsTable = new ComponentDataTable("#components-table", aboutCodeDB);
 
-    function showDialog(node, component) {
-        // TODO: Use DB to add suggestion data for all sub-nodes.
-        // Add sub-node data to the select menu options
-        var licenses = [];
-        var copyrights = [];
-        var parties = [];
-        var programming_language = [];
-
-        // Add saved data to the select menu options
-        licenses = $.unique(licenses.concat(component.licenses || []));
-        copyrights = $.unique(copyrights.concat(component.copyrights || []));
-        parties = $.unique(parties.concat(component.owner || []));
-        programming_language = $.unique(programming_language.concat(
-            component.programming_language || []));
-
-        // update select2 selectors for node view component
-        $("#select-license").html('').select2({
-            data: $.map(licenses, function(license) {
-                return license.short_name;
-            }),
-            multiple: true,
-            placeholder: "Enter license",
-            tags: true
-        }, true);
-
-        $("#select-owner").html('').select2({
-            data: parties,
-            multiple: true,
-            maximumSelectionLength: 1,
-            placeholder: "Enter owner",
-            tags: true
-        }, true);
-
-        $("#select-copyright").html('').select2({
-            data: $.map(copyrights, function(copyright) {
-                return copyright.statements.join("\n");
-            }),
-            multiple: true,
-            placeholder: "Enter copyright",
-            tags: true
-        }, true);
-
-        $("#select-language").html('').select2({
-            data: programming_language,
-            multiple: true,
-            maximumSelectionLength: 1,
-            placeholder: "Enter language",
-            tags: true
-        }, true);
-
-        $("#select-status").val(component.review_status || "");
-        $('#component-name').val(component.name || "");
-        $('#component-version').val(component.version || "");
-        $('#select-license').val($.map(component.licenses || [], function(license) {
-            return license.short_name;
-        }));
-        $('#select-copyright').val($.map(component.copyrights || [], function(copyright) {
-            return copyright.statements.join("\n");
-        }));
-        $('#select-owner').val(component.owner || []);
-        $('#select-language').val(component.programming_language || []);
-        $('#component-homepage-url').val(component.homepage_url || "");
-        $('#component-notes').val(component.notes || "");
-
-        // Notify only select2 of changes
-        $('select').trigger('change.select2');
-
-        $('#nodeModalLabel').text(node.id);
-        $('#nodeModal').modal('show');
-    }
-
-    $('#save-component').on('click', function () {
-        var id = $('#nodeModalLabel').text();
-        var component = {
-            path: id,
-            review_status: $("#select-status").val(),
-            name: $('#component-name').val(),
-            licenses: $.map($('#select-license').val() || [], function(license) {
-                return { short_name: license };
-            }),
-            copyrights: $.map($('#select-copyright').val() || [], function(copyright) {
-                return { statements: copyright.split("\n") };
-            }),
-            version: $('#component-version').val(),
-            owner: ($('#select-owner').val() || [null])[0],
-            homepage_url: $('#component-homepage-url').val(),
-            programming_language: ($('#select-language').val() || [null])[0],
-            notes: $('#component-notes').val()
-        };
-        aboutCodeDB.setComponent(component, { where: { path: id } });
-        $('#nodeModal').modal('hide');
-        nodeView.redraw()
-    });
-
-    $('#node-drop-down').select2({
-        closeOnSelect: false,
-        placeholder: "select me"
-    });
-
-    var jstree = $('#jstree').jstree({
-        "types": {
-            "directory": {
-                "icon": "glyphicon glyphicon-folder-close"
+    // TODO: Move this into its own file
+    // Create and setup the jstree, and the click-event logic
+    const jstree = $("#jstree").jstree(
+        {
+            "types": {
+                "directory": {
+                    "icon": "glyphicon glyphicon-folder-close"
+                },
+                "file": {
+                    "icon": "glyphicon glyphicon-file"
+                }
             },
-            "file": {
-                "icon": "glyphicon glyphicon-file"
-            }
-        },
-        "plugins": [ "types"]
-    })
+            "plugins": [ "types"]
+        })
         .on('open_node.jstree', function (evt, data) {
             data.instance.set_icon(
                 data.node,
@@ -153,58 +54,187 @@ $(document).ready(function () {
             nodeView.setRoot(data.node.id);
         });
 
-    var scanData = null;
-    var aboutCodeDB = new AboutCodeDB();
-    var cluesTable = new AboutCodeDataTable("#clues-table", aboutCodeDB);
-    var componentsTable = new ComponentDataTable("#components-table", aboutCodeDB);
-    var nodeView = new AboutCodeNodeView("#node-view", aboutCodeDB);
+    // The electron library for opening a dialog
+    const dialog = require('electron').remote.dialog;
 
-    // Show DataTable. Hide node view and component summary table
-    $( "#show-clue-table" ).click(function() {
-        $("#clues-table").show();
-        $("#node-container").hide();
-        $("#clues-table_wrapper").show();
-        $("#component-container").hide();
-        $('#leftCol').addClass('col-md-2');
-        $('#tabbar').removeClass('col-md-11');
-        $('#tabbar').addClass('col-md-9');
-        $('#leftCol').show();
+    // Define DOM element constants for the modal dialog.
+    const componentModal = {
+        container: $("#nodeModal"),
+        label: $("#nodeModalLabel"),
+        status: $("#select-status"),
+        component_name: $("#component-name"),
+        license: $("#select-license"),
+        owner: $("#select-owner"),
+        copyright: $("#select-copyright"),
+        language: $("#select-language"),
+        version: $("#component-version"),
+        homepage: $("#component-homepage-url"),
+        notes: $("#component-notes")
+    };
+
+    // Make node view modal box draggable
+    componentModal.container.draggable({ handle: ".modal-header" });
+
+    // Defines DOM element constants for buttons.
+    const showClueButton = $( "#show-clue-table" );
+    const showNodeViewButton = $("#show-tree");
+    const showComponentButton = $("#show-component-table");
+    const saveComponentButton = $("#save-component");
+    const openFileButton = $("#open-file");
+    const saveFileButton = $("#save-file");
+    const submitComponentButton = $("#componentSubmit");
+    const leftCol = $("#leftCol");
+    const tabBar = $("#tabbar");
+
+    // Defines DOM element constants for the main view containers.
+    const nodeContainer = $("#node-container");
+    const cluesContainer = $("#clues-table_wrapper");
+    const componentContainer = $("#component-container");
+
+    // Resize the nodes based on how many clues are selected
+    const nodeDropdown = $("#node-drop-down");
+    nodeDropdown.change(() => {
+        let numClueSelected = nodeDropdown.val().length;
+        nodeView.resize(numClueSelected * 30, 180);
+    });
+
+    function onNodeClick (node) {
+        aboutCodeDB.findComponent({ where: { path: node.id } })
+            .then((component) => showDialog(node, component ? component : {}));
+    }
+
+    function showDialog(node, component) {
+        // TODO: Use DB to add suggestion data for all sub-nodes.
+        // Add sub-node data to the select menu options
+        let licenses = [];
+        let copyrights = [];
+        let parties = [];
+        let programming_language = [];
+
+        // Add saved data to the select menu options
+        licenses = $.unique(licenses.concat(component.licenses || []));
+        copyrights = $.unique(copyrights.concat(component.copyrights || []));
+        parties = $.unique(parties.concat(component.owner || []));
+        programming_language = $.unique(programming_language.concat(
+            component.programming_language || []));
+
+        // update select2 selectors for node view component
+        componentModal.license.html('').select2({
+            data: $.map(licenses, (license, i) => {
+                return license.short_name;
+            }),
+            multiple: true,
+            placeholder: "Enter license",
+            tags: true
+        }, true);
+
+        componentModal.owner.html('').select2({
+            data: parties,
+            multiple: true,
+            maximumSelectionLength: 1,
+            placeholder: "Enter owner",
+            tags: true
+        }, true);
+
+        componentModal.copyright.html('').select2({
+            data: $.map(copyrights, (copyright, i) => {
+                return copyright.statements.join("\n");
+            }),
+            multiple: true,
+            placeholder: "Enter copyright",
+            tags: true
+        }, true);
+
+        componentModal.language.html('').select2({
+            data: programming_language,
+            multiple: true,
+            maximumSelectionLength: 1,
+            placeholder: "Enter language",
+            tags: true
+        }, true);
+
+        componentModal.status.val(component.review_status || "");
+        componentModal.component_name.val(component.name || "");
+        componentModal.version.val(component.version || "");
+        componentModal.license.val((component.licenses || [])
+            .map((license) => license.short_name));
+        componentModal.copyright.val((component.copyrights || [])
+            .map((copyright) => copyright.statements.join("\n")));
+        componentModal.owner.val(component.owner || []);
+        componentModal.language.val(component.programming_language || []);
+        componentModal.homepage.val(component.homepage_url || "");
+        componentModal.notes.val(component.notes || "");
+
+        // Notify only select2 of changes
+        $('select').trigger('change.select2');
+
+        componentModal.label.text(node.id);
+        componentModal.container.modal('show');
+    }
+
+    saveComponentButton.on('click', function () {
+        let id = componentModal.label.text();
+        let component = {
+            path: id,
+            review_status: componentModal.status.val(),
+            name: componentModal.component_name.val(),
+            licenses: $.map(componentModal.license.val() || [], function(license) {
+                return { short_name: license };
+            }),
+            copyrights: $.map(componentModal.copyright.val() || [], function(copyright) {
+                return { statements: copyright.split("\n") };
+            }),
+            version: componentModal.version.val(),
+            owner: (componentModal.owner.val() || [null])[0],
+            homepage_url: componentModal.homepage.val(),
+            programming_language: (componentModal.language.val() || [null])[0],
+            notes: componentModal.notes.val()
+        };
+        aboutCodeDB.setComponent(component, { where: { path: id } });
+        componentModal.container.modal('hide');
+        nodeView.redraw()
+    });
+
+    nodeDropdown.select2({
+        closeOnSelect: false,
+        placeholder: "select me"
+    });
+
+    // Show clue DataTable. Hide node view and component summary table
+    showClueButton.click(function() {
+        cluesContainer.show();
+        nodeContainer.hide();
+        componentContainer.hide();
+        leftCol.addClass('col-md-2').show();
+        tabBar.removeClass('col-md-11').addClass('col-md-9');
         cluesTable.draw();
     });
 
-    // Show node view. Hide DataTable and component summary table
-    $("#show-tree").click(function() {
-        $("#node-container").show();
-        $("#clues-table").hide();
-        $("#clues-table_wrapper").hide();
-        $("#component-container").hide();
-        $('#leftCol').addClass('col-md-2');
-        $('#tabbar').removeClass('col-md-11');
-        $('#tabbar').addClass('col-md-9');
-        $('#leftCol').show();
+    // Show node view. Hide clue and component table
+    showNodeViewButton.click(function() {
+        nodeContainer.show();
+        cluesContainer.hide();
+        componentContainer.hide();
+        leftCol.addClass('col-md-2').show();
+        tabBar.removeClass('col-md-11').addClass('col-md-9');
         nodeView.redraw();
     });
 
     // Show component summary table. Hide DataTable and node view
-    $("#show-component-table").click(function() {
-        $('#leftCol').removeClass('col-md-2');
-        $('#tabbar').removeClass('col-md-9');
-        $('#tabbar').addClass('col-md-11');
-        $('#leftCol').hide();
-        $("#component-container").show();
-        $("#clues-table").hide();
-        $("#node-container").hide();
-        $("#clues-table_wrapper").hide();
+    showComponentButton.click(function() {
+        componentContainer.show();
+        nodeContainer.hide();
+        cluesContainer.hide();
+        leftCol.removeClass('col-md-2').hide();
+        tabBar.removeClass('col-md-9').addClass('col-md-11');
         componentsTable.reload();
     });
 
-    // Open a json file
-    var dialog = require('electron').remote.dialog;
-    $('#open-file').click(function() {
+    openFileButton.click(function() {
         dialog.showOpenDialog(function (fileNames) {
             if (fileNames === undefined) return;
 
-            var fileName = fileNames[0];
+            const fileName = fileNames[0];
 
             $.getJSON(fileName, function(json) {
 
@@ -217,15 +247,14 @@ $(document).ready(function () {
                         "scanned data. \n\nThis probably means you ran " +
                         "the scan without the -i option in ScanCode. " +
                         "The app requires file information from a " +
-                        "ScanCode scan. Rerun the scan using ./scancode " +
-                        "-clip options."
+                        "ScanCode scan. Rerun the scan using \n./scancode " +
+                        "-clipeu options."
                     );
                 }
 
                 // Add root directory into data
                 // See https://github.com/nexB/scancode-toolkit/issues/543
-                var rootPath = json.files[0].path.split("/")[0];
-
+                const rootPath = json.files[0].path.split("/")[0];
                 json.files.push({
                     path: rootPath,
                     name: rootPath,
@@ -233,16 +262,18 @@ $(document).ready(function () {
                     files_count: json.files_count
                 });
 
-                aboutCodeDB = new AboutCodeDB({
-                    dbName: "demo_schema"
-                });
+                // Create a new database when importing a json file
+                aboutCodeDB = new AboutCodeDB({ dbName: "demo_schema" });
 
+                // The flattened data is used by the clue table and jstree
                 aboutCodeDB.addFlattenedRows(json)
                     .then(function() {
                         // reload the DataTable after all insertions are done.
                         cluesTable.database(aboutCodeDB);
                         cluesTable.reload();
 
+                        // TODO: This can probably be moved outside this method
+                        // because it doesn't rely on the json data.
                         componentsTable.database(aboutCodeDB);
                         componentsTable.reload();
 
@@ -257,6 +288,7 @@ $(document).ready(function () {
                        throw reason;
                     });
 
+                // The non-flattened data is used by the node view.
                 aboutCodeDB.addRows(json)
                     .then(function() {
                         nodeView = new AboutCodeNodeView(aboutCodeDB, onNodeClick);
@@ -271,10 +303,10 @@ $(document).ready(function () {
     });
 
     // Save component file
-    $( "#save-file" ).click(function() {
+    saveFileButton.click(function() {
         // Get data from table to JSON
-        var fs = require('fs');
-        var tableData = JSON.stringify(scanData.toSaveFormat());
+        const fs = require('fs');
+        let tableData = JSON.stringify(scanData.toSaveFormat());
         dialog.showSaveDialog({properties: ['openFile'],
             title: "Save as JSON file",
             filters: [{name: 'JSON File Type',
@@ -287,18 +319,14 @@ $(document).ready(function () {
     });
 
     // Submit components to a DejaCode Product via ProductComponent API
-    $('#componentSubmit').on('click', function () {
-        var createdComponents = scanData.toSaveFormat().components;
+    submitComponentButton.on('click', function () {
+        let createdComponents = scanData.toSaveFormat().components;
         // Get product name and version
-        var productNameVersion = $('#product-name').val()
-            .concat(':', $('#product-version').val());
-        var apiUrl = $('#apiURLDejaCode').val();
-        var apiKey = $('#apiKey').val();
+        let productNameVersion = $("#product-name").val()
+            .concat(":", $("#product-version").val());
+        let apiUrl = $("#apiURLDejaCode").val();
+        let apiKey = $("#apiKey").val();
         uploadComponents( apiUrl, createdComponents, apiKey, productNameVersion );
-        $('#componentExportModal').modal('hide');
+        $("#componentExportModal").modal("hide");
     });
-
-    // Make node view modal box draggable
-    $("#nodeModal").draggable({ handle: ".modal-header" });
-
 });
