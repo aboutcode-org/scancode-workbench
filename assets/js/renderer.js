@@ -14,9 +14,12 @@
  #
  */
 
+
+const fs = require('fs');
+
+
 $(document).ready(function () {
     // Create default values for all of the data and ui classes
-    let scanData = null;
     let aboutCodeDB = new AboutCodeDB();
     let nodeView = new AboutCodeNodeView("#node-view", aboutCodeDB);
 
@@ -80,8 +83,10 @@ $(document).ready(function () {
     const showNodeViewButton = $("#show-tree");
     const showComponentButton = $("#show-component-table");
     const saveComponentButton = $("#save-component");
-    const openFileButton = $("#open-file");
-    const saveFileButton = $("#save-file");
+    const openDBFileButton = $("#open-file");
+    const saveDBFileButton = $("#save-file");
+    const openJSONFileButton = $("#import-json-file");
+    const saveJSONFileButton = $("#export-json-file");
     const submitComponentButton = $("#componentSubmit");
     const leftCol = $("#leftCol");
     const tabBar = $("#tabbar");
@@ -230,7 +235,79 @@ $(document).ready(function () {
         componentsTable.reload();
     });
 
-    openFileButton.click(function() {
+    // Creates the database and all View objects from a SQLite file
+    function loadDatabaseFromFile(fileName) {
+        // Create a new database when importing a json file
+        aboutCodeDB = new AboutCodeDB({
+            dbName: "demo_schema",
+            dbStorage: fileName
+        });
+
+        // The flattened data is used by the clue table and jstree
+        aboutCodeDB.db
+            .then(function() {
+                // reload the DataTable after all insertions are done.
+                cluesTable.database(aboutCodeDB);
+                cluesTable.reload();
+
+                componentsTable.database(aboutCodeDB);
+                componentsTable.reload();
+
+                nodeView = new AboutCodeNodeView(aboutCodeDB, onNodeClick);
+
+                // loading data into jstree
+                aboutCodeDB.toJSTreeFormat()
+                    .then(function(data) {
+                        jstree.jstree(true).settings.core.data = data;
+                        jstree.jstree(true).refresh(true);
+                    });
+            })
+            .catch(function(reason) {
+               throw reason;
+            });
+    }
+
+    // Open a SQLite Database File
+    openDBFileButton.click(function() {
+        dialog.showOpenDialog({
+            properties: ['openFile'],
+            title: "Open a SQLite file",
+            filters: [{
+                name: 'SQLite File',
+                extensions: ['sqlite']
+            }]
+        }, function(fileNames) {
+            if (fileNames === undefined) return;
+            loadDatabaseFromFile(fileNames[0]);
+        });
+    });
+
+    // Save a SQLite Database file
+    saveDBFileButton.click(function() {
+        dialog.showSaveDialog(
+            {
+                title: 'Save as a Database File',
+                filters: [
+                  { name: 'SQLite File', extensions: ['sqlite'] }
+                ]
+            },
+            function (newFileName) {
+                if (newFileName === undefined) return;
+
+                let oldFileName = aboutCodeDB.sequelize.options.storage;
+                let reader = fs.createReadStream(oldFileName);
+                let writer = fs.createWriteStream(newFileName);
+                reader.pipe(writer);
+                reader.on("end", function () {
+                    loadDatabaseFromFile(newFileName);
+                })
+            }
+        );
+    });
+
+    // TODO: Move to application File Menu
+    // Open a ScanCode results JSON file
+    openJSONFileButton.click(function() {
         dialog.showOpenDialog(function (fileNames) {
             if (fileNames === undefined) return;
 
@@ -250,6 +327,7 @@ $(document).ready(function () {
                         "ScanCode scan. Rerun the scan using \n./scancode " +
                         "-clipeu options."
                     );
+                    return;
                 }
 
                 // Add root directory into data
@@ -262,59 +340,93 @@ $(document).ready(function () {
                     files_count: json.files_count
                 });
 
-                // Create a new database when importing a json file
-                aboutCodeDB = new AboutCodeDB({ dbName: "demo_schema" });
+                // Immediately ask for a SQLite to save and create the database
+                dialog.showSaveDialog(
+                    {
+                        title: 'Save a SQLite Database File',
+                        filters: [
+                          { name: 'SQLite File', extensions: ['sqlite'] }
+                        ]
+                    },
+                    function (fileName) {
+                        if (fileName === undefined) return;
 
-                // The flattened data is used by the clue table and jstree
-                aboutCodeDB.addFlattenedRows(json)
-                    .then(function() {
-                        // reload the DataTable after all insertions are done.
-                        cluesTable.database(aboutCodeDB);
-                        cluesTable.reload();
+                        // Create a new database when importing a json file
+                        aboutCodeDB = new AboutCodeDB({
+                            dbName: "demo_schema",
+                            dbStorage: fileName,
+                        });
 
-                        // TODO: This can probably be moved outside this method
-                        // because it doesn't rely on the json data.
+                        // Load component table database
                         componentsTable.database(aboutCodeDB);
                         componentsTable.reload();
 
-                        // loading data into jstree
-                        aboutCodeDB.toJSTreeFormat()
-                            .then(function(data) {
-                                jstree.jstree(true).settings.core.data = data;
-                                jstree.jstree(true).refresh(true);
+                        // The flattened data is used by the clue table and jstree
+                        aboutCodeDB.addFlattenedRows(json)
+                            .then(function () {
+                                // reload the DataTable after all insertions are done.
+                                cluesTable.database(aboutCodeDB);
+                                cluesTable.reload();
+
+                                // loading data into jstree
+                                aboutCodeDB.toJSTreeFormat()
+                                    .then(function (data) {
+                                        jstree.jstree(true).settings.core.data = data;
+                                        jstree.jstree(true).refresh(true);
+                                    });
+                            })
+                            .catch(function (reason) {
+                                throw reason;
                             });
-                    })
-                    .catch(function(reason) {
-                       throw reason;
-                    });
 
-                // The non-flattened data is used by the node view.
-                aboutCodeDB.addRows(json)
-                    .then(function() {
-                        nodeView = new AboutCodeNodeView(aboutCodeDB, onNodeClick);
-                    })
-                    .catch(function(reason) {
-                       throw reason;
-                    });
+                        // The non-flattened data is used by the node view.
+                        aboutCodeDB.addRows(json)
+                            .then(function () {
+                                nodeView = new AboutCodeNodeView(aboutCodeDB, onNodeClick);
+                            })
+                            .catch(function (reason) {
+                                throw reason;
+                            });
 
-                scanData = new ScanData(json);
+                    });
             });
         });
     });
 
-    // Save component file
-    saveFileButton.click(function() {
-        // Get data from table to JSON
-        const fs = require('fs');
-        let tableData = JSON.stringify(scanData.toSaveFormat());
-        dialog.showSaveDialog({properties: ['openFile'],
-            title: "Save as JSON file",
-            filters: [{name: 'JSON File Type',
-            extensions: ['json']}]},
+    // TODO: Move to application File Menu
+    // Export JSON file with components that have been created
+    saveJSONFileButton.click(function() {
+        dialog.showSaveDialog({
+                properties: ['openFile'],
+                title: "Save as JSON file",
+                filters: [{name: 'JSON File Type',
+                extensions: ['json']}]
+            },
             function (fileName) {
                 if (fileName === undefined) return;
-                    fs.writeFile(fileName, tableData, function (err) {
+
+                let clueFiles = aboutCodeDB.findAll({
+                    attributes: {
+                        exclude: ["id", "createdAt", "updatedAt"]
+                    }
                 });
+
+                let components = aboutCodeDB.findAllComponents({
+                    attributes: {
+                        exclude: ["id", "createdAt", "updatedAt"]
+                    }
+                });
+
+                Promise.all([clueFiles, components])
+                    .then((arguments) => {
+                        let json = {
+                            files: arguments[0],
+                            components: arguments[1]
+                        };
+
+                        fs.writeFile(fileName, JSON.stringify(json));
+                    });
+
             });
     });
 

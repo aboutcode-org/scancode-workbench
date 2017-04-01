@@ -23,11 +23,17 @@ class AboutCodeDB {
     constructor(config) {
         // Constructor returns an object which effectively represents a connection
         // to the db arguments (name of db, username for db, pw for that user)
-        this.sequelize = new Sequelize(
-            config && config.dbName ? config.dbName : "tmp",
-            config && config.dbUser ? config.dbUser : null,
-            config && config.dbPassword ? config.dbPassword : null,
-            {dialect: "sqlite"});
+        let name = (config && config.dbName) ? config.dbName : "tmp";
+        let user = (config && config.dbUser) ? config.dbUser : null;
+        let password = (config && config.dbPassword) ? config.dbPassword : null;
+        let storage = (config && config.dbStorage)
+            ? config.dbStorage
+            : ":memory:";
+
+        this.sequelize = new Sequelize(name, user, password, {
+            dialect: "sqlite",
+            storage: storage
+        });
 
         // Flattened table is for the DataTable
         // This table is used by the Clues DataTable
@@ -106,7 +112,8 @@ class AboutCodeDB {
         }
 
         // Add all rows to the flattened DB
-        return this.db.then(() => {
+        return this.db
+            .then(() => {
                 return json.files.map((file) => AboutCodeDB.flattenData(file));
             })
             .then((flattenedFiles) => {
@@ -148,21 +155,22 @@ class AboutCodeDB {
     //  {id: root/file2, text: file2, parent: root, type: file}
     // ]
     toJSTreeFormat() {
-        return this.db.then(() => {
-            return this.FlattenedFile.findAll({
-                attributes: ["path", "parent", "infos_file_name", "infos_type"]
+        return this.db
+            .then(() => {
+                return this.FlattenedFile.findAll({
+                    attributes: ["path", "parent", "infos_file_name", "infos_type"]
+                });
+            })
+            .then((files) => {
+                return files.map((file) => {
+                    return {
+                        id: file.path,
+                        text: file.infos_file_name,
+                        parent: file.parent,
+                        type: file.infos_type
+                    };
+                });
             });
-        })
-        .then((files) => {
-            return files.map((file) => {
-                return {
-                    id: file.path,
-                    text: file.infos_file_name,
-                    parent: file.parent,
-                    type: file.infos_type
-                };
-            });
-        });
     }
 
     // File Model definitions

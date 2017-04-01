@@ -139,7 +139,6 @@ class AboutCodeDataTable {
             // "scroller": true,
             "scrollX": true,
             "scrollY": "75vh",
-            "stateSave": true,
             "deferRender": true,
             "buttons": [
                 {   // Do not allow the first column to be hidden
