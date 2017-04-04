@@ -268,14 +268,25 @@ $(document).ready(function () {
 
     var jstree = $('#jstree').jstree({
         "types": {
-            "folder": {
+            "directory": {
                 "icon": "glyphicon glyphicon-folder-close"
             },
             "file": {
                 "icon": "glyphicon glyphicon-file"
             }
         },
-        "plugins": [ "types"]
+        "plugins": [ "types","sort"],
+        'sort': function (a, b) {
+            a1 = this.get_node(a);
+            b1 = this.get_node(b);
+            if (a1.type == b1.type) {
+                return a1.text.localeCompare(b1.text, 'en-US-u-kf-upper');
+            }
+            else {
+                return (a1.type === 'directory') ? -1 : 1;
+            }
+        }
+
     })
         .on('open_node.jstree', function (evt, data) {
             data.instance.set_icon(

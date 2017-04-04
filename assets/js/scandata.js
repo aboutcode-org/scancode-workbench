@@ -178,7 +178,7 @@ ScanData.prototype = {
                         id: id,
                         text: parts[i],
                         parent: that.subPath(parts, i),
-                        type: (i + 1 === parts.length) ? 'file' : 'folder',
+                        type: (i === 0) ? 'directory' : x.type,
                         scanData: x
                     };
                 }
