@@ -4,10 +4,16 @@
       "path": "root"
     },
     {
-      "path": "root/dir1/file1"
+      "path": "root/dir1",
+      "type": "directory"
     },
     {
-      "path": "root/dir1/file2"
+      "path": "root/dir1/file1",
+      "type": "file"
+    },
+    {
+      "path": "root/dir1/file2",
+      "type": "file"
     }
   ]
 }

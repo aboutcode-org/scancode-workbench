@@ -12,7 +12,7 @@ describe("getScanData", function () {
     it("should return an array", function () {
         var json = JSON.parse(fs.readFileSync(__dirname + "/data/scandata.json", "utf8"));
         assert.isArray(json.files, "did not return an array");
-        assert.lengthOf(json.files, 3, "did not return 3 items");
+        assert.lengthOf(json.files, 4, "did not return 4 items");
         var scandata = new ScanData(json);
         assert.isArray(scandata.json.files, "did not return an array");
     })
@@ -24,29 +24,38 @@ describe("checkJSTreeDataFormat", function () {
             id: 'root',
             text: 'root',
             parent: '#',
-            type: 'file',         // TODO: This is a bug that needs to be fixed
+            type: 'directory',
             scanData: { path: 'root' }
         },
         {
             id: 'root/dir1',
             text: 'dir1',
             parent: 'root',
-            type: 'folder',
-            scanData: { path: 'root/dir1/file1' }
+            type: 'directory',
+            scanData: {
+                 path: 'root/dir1',
+                 type: 'directory'
+            }
         },
         {
             id: 'root/dir1/file1',
             text: 'file1',
             parent: 'root/dir1',
             type: 'file',
-            scanData: { path: 'root/dir1/file1' }
+            scanData: {
+                path: 'root/dir1/file1',
+                type: 'file'
+            }
         },
         {
             id: 'root/dir1/file2',
             text: 'file2',
             parent: 'root/dir1',
             type: 'file',
-            scanData: { path: 'root/dir1/file2' }
+            scanData: {
+                path: 'root/dir1/file2',
+                type: 'file'
+            }
         }
     ];
 
@@ -75,7 +84,8 @@ describe("checkNodeViewDataFormat", function () {
                             "parent": "root/dir1",
                             "children": [],
                             "scanData": {
-                                "path": "root/dir1/file1"
+                                "path": "root/dir1/file1",
+                                "type": "file"
                             }
                         },
                         {
@@ -84,12 +94,14 @@ describe("checkNodeViewDataFormat", function () {
                             "parent": "root/dir1",
                             "children": [],
                             "scanData": {
-                                "path": "root/dir1/file2"
+                                "path": "root/dir1/file2",
+                                "type": "file"
                             }
                         }
                     ],
                     "scanData": {
-                        "path": "root/dir1/file1"
+                        "path": "root/dir1",
+                        "type": "directory"
                     }
                 }
             ],

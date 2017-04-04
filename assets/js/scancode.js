@@ -280,10 +280,10 @@ $(document).ready(function () {
             a1 = this.get_node(a);
             b1 = this.get_node(b);
             if (a1.type == b1.type) {
-                return (a1.text.toLowerCase() < b1.text.toLowerCase()) ? -1 : 1; // ternary operator: places same-type nodes in alphabetical order
+                return a1.text.localeCompare(b1.text, 'en-US-u-kf-upper');
             }
             else {
-                return (a1.type === 'directory') ? -1 : 1; // ternary operator: places directory nodes above file nodes
+                return (a1.type === 'directory') ? -1 : 1;
             }
         }
 
