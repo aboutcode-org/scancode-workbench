@@ -107,8 +107,8 @@ class ComponentDataTable {
                 "title": "Homepage URL",
                 "name": "homepage_url",
                 "defaultContent": "",
-                "render": (href) => {
-                    `<a href='${href}' target="_blank"> ${href}</a>`
+                "render": function(href) {
+                    return `<a href='${href}' target="_blank"> ${href}</a>`
                 }
             },
             {

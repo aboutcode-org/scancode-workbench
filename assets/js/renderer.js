@@ -103,38 +103,117 @@ $(document).ready(function () {
         nodeView.resize(numClueSelected * 30, 180);
     });
 
+    // Populate modal input fields with suggestions from ScanCode results
     function onNodeClick (node) {
-        aboutCodeDB.findComponent({ where: { path: node.id } })
-            .then((component) => showDialog(node, component ? component : {}));
+        let componentPromise = aboutCodeDB.findComponent({
+            where: { path: node.id }
+        })
+        .then((component) => component ? component : {});
+
+        let licensesPromise = aboutCodeDB.File.findAll({
+            attributes: [],
+            group: ['licenses.short_name'],
+            where: { path: {$like: `${node.id}%`}},
+            include: [{
+                model: aboutCodeDB.License,
+                attributes: ['short_name'],
+                where: {short_name: {$ne: null}}
+            }]
+        })
+        .then((rows) => $.map(rows, (row) => row.licenses));
+
+        let copyrightsPromise = aboutCodeDB.File.findAll({
+            attributes: [],
+            group: ['copyrights.statements'],
+            where: { path: {$like: `${node.id}%`}},
+            include: [{
+                model: aboutCodeDB.Copyright,
+                attributes: ['statements'],
+                where: {statements: {$ne: null}}
+            }]
+        })
+        .then((rows) => $.map(rows, (row) => row.copyrights));
+
+        let ownersPromise = aboutCodeDB.File.findAll({
+            attributes: [],
+            group: ['copyrights.holders'],
+            where: { path: {$like: `${node.id}%`}},
+            include: [{
+                model: aboutCodeDB.Copyright,
+                attributes: ['holders'],
+                where: {holders: {$ne: null}}
+            }]
+        })
+        .then((rows) => $.map(rows, (row) => row.copyrights));
+
+        let languagePromise = aboutCodeDB.File.findAll({
+            attributes: ["programming_language"],
+            group: ['programming_language'],
+            where: {
+                path: {$like: `${node.id}%`},
+                programming_language: {$ne: null}
+            }
+        })
+        .then((rows) => $.map(rows, (row) => row.programming_language));
+
+        let homepageUrlPromise = aboutCodeDB.File.findAll({
+            attributes: [],
+            group: ['urls.url'],
+            where: { path: {$like: `${node.id}%`}},
+            include: [{
+                model: aboutCodeDB.Url,
+                attributes: ['url'],
+                where: {url: {$ne: null}}
+            }]
+        })
+        .then((rows) => $.map(rows, (row) => $.map(row.urls, (url) => url.url)));
+
+        Promise.all([componentPromise, licensesPromise, copyrightsPromise,
+            ownersPromise, languagePromise, homepageUrlPromise
+        ])
+            .then(([component, licenses, copyrights, owners,
+                       programming_languages, urls]) => {
+                showDialog(node, component, {
+                    licenses: licenses,
+                    copyrights: copyrights,
+                    owners: owners,
+                    programming_languages: programming_languages,
+                    urls: urls
+                });
+            });
     }
 
-    function showDialog(node, component) {
-        // TODO: Use DB to add suggestion data for all sub-nodes.
-        // Add sub-node data to the select menu options
-        let licenses = [];
-        let copyrights = [];
-        let parties = [];
-        let programming_language = [];
+    function showDialog(node, component, subNodeData) {
+        // Add sub-node clue data to the select menu options
+        let licenses = subNodeData.licenses;
+        let copyrights = subNodeData.copyrights;
+        let owners = subNodeData.owners;
+        let programming_languages = subNodeData.programming_languages;
+        let urls = subNodeData.urls;
 
         // Add saved data to the select menu options
-        licenses = $.unique(licenses.concat(component.licenses || []));
-        copyrights = $.unique(copyrights.concat(component.copyrights || []));
-        parties = $.unique(parties.concat(component.owner || []));
-        programming_language = $.unique(programming_language.concat(
+        licenses = licenses.concat(component.licenses || []);
+        copyrights = copyrights.concat(component.copyrights || []);
+        owners = owners.concat(component.owner || []);
+        programming_languages = $.unique(programming_languages.concat(
             component.programming_language || []));
+        urls =  $.unique(urls.concat(
+            component.homepage_url || []));
 
         // update select2 selectors for node view component
         componentModal.license.html('').select2({
-            data: $.map(licenses, (license, i) => {
+            data: $.unique($.map(licenses, (license, i) => {
                 return license.short_name;
-            }),
+            })),
             multiple: true,
             placeholder: "Enter license",
             tags: true
         }, true);
 
         componentModal.owner.html('').select2({
-            data: parties,
+            data: $.unique($.map(owners, (owner, i) => {
+                return owner.holders;
+            })),
             multiple: true,
             maximumSelectionLength: 1,
             placeholder: "Enter owner",
@@ -142,19 +221,27 @@ $(document).ready(function () {
         }, true);
 
         componentModal.copyright.html('').select2({
-            data: $.map(copyrights, (copyright, i) => {
-                return copyright.statements.join("\n");
-            }),
+            data: $.unique($.map(copyrights, (copyright, i) => {
+                return copyright.statements;
+            })),
             multiple: true,
             placeholder: "Enter copyright",
             tags: true
         }, true);
 
         componentModal.language.html('').select2({
-            data: programming_language,
+            data: programming_languages,
             multiple: true,
             maximumSelectionLength: 1,
             placeholder: "Enter language",
+            tags: true
+        }, true);
+
+        componentModal.homepage.html('').select2({
+            data: urls,
+            multiple: true,
+            maximumSelectionLength: 1,
+            placeholder: "Enter Homepage URL",
             tags: true
         }, true);
 
@@ -165,7 +252,8 @@ $(document).ready(function () {
             .map((license) => license.short_name));
         componentModal.copyright.val((component.copyrights || [])
             .map((copyright) => copyright.statements.join("\n")));
-        componentModal.owner.val(component.owner || []);
+        componentModal.owner.val(component.owner || [])
+            .map((owner) => owner.holders);
         componentModal.language.val(component.programming_language || []);
         componentModal.homepage.val(component.homepage_url || "");
         componentModal.notes.val(component.notes || "");
@@ -191,7 +279,7 @@ $(document).ready(function () {
             }),
             version: componentModal.version.val(),
             owner: (componentModal.owner.val() || [null])[0],
-            homepage_url: componentModal.homepage.val(),
+            homepage_url: (componentModal.homepage.val() || [null])[0],
             programming_language: (componentModal.language.val() || [null])[0],
             notes: componentModal.notes.val()
         };
@@ -387,7 +475,6 @@ $(document).ready(function () {
                             .catch(function (reason) {
                                 throw reason;
                             });
-
                     });
             });
         });

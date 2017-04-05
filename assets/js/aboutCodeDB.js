@@ -130,12 +130,12 @@ class AboutCodeDB {
         }
 
         // Add all rows to the non-flattened DB
-        let dbSync = this.db;
         return this.db.then(() => {
             return this.sequelize.transaction((transaction) => {
+                let promiseChain = Promise.resolve();
                 $.each(json.files, (index, file) => {
                     file = $.extend(file, {parent: AboutCodeDB.parent(file.path)});
-                    dbSync = dbSync.then(() => {
+                    promiseChain = promiseChain.then(() => {
                         return this.File.create(file, {
                             logging: false,
                             transaction: transaction,
@@ -143,7 +143,7 @@ class AboutCodeDB {
                         });
                     });
                 });
-                return dbSync;
+                return promiseChain;
             });
         });
     }
@@ -225,6 +225,7 @@ class AboutCodeDB {
         return sequelize.define("copyrights", {
             start_line: Sequelize.STRING,
             end_line: Sequelize.STRING,
+            holders: AboutCodeDB.jsonDataType('holders'),
             statements: AboutCodeDB.jsonDataType('statements')
         });
     }
@@ -253,13 +254,6 @@ class AboutCodeDB {
             url: Sequelize.STRING,
             start_line: Sequelize.STRING,
             end_line: Sequelize.STRING
-        });
-    }
-
-    // Copyright Statement Model definitions
-    static statementModel(sequelize) {
-        return sequelize.define("statements", {
-            statement: Sequelize.STRING
         });
     }
 
