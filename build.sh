@@ -19,8 +19,7 @@ do
     # parses $params into $1 and $2
     set -- $params
     $(npm bin)/electron-packager . $APP_NAME \
-        --ignore=node_modules/* \
-        --ignore=bower_components/* \
+        --prune \
         --ignore=thirdparty/* \
         --ignore=dist/* \
         --ignore=/\\.idea \

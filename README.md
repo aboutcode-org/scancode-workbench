@@ -46,7 +46,11 @@ git clone https://github.com/nexB/aboutcode-manager.git
 # Go into the repository
 cd aboutcode-manager
 # Install dependencies and run the app
-npm install && npm start
+npm install
+# Rebuilds native Node.js modules against the version of Node.js that the app is using
+./node_modules/.bin/electron-rebuild
+# Run the app
+npm start
 ```
 
 ## Release instructions
