@@ -60,22 +60,28 @@
         <div id="sidebar-wrapper">
             <ul class="sidebar-nav">
                 <li>
-                    <button class="btn btn-sidebar" id="open-file" data-toggle="tooltip" title="Import file"><i class="fa fa-folder-open-o" aria-hidden="true"></i></button>
+                    <button class="btn btn-sidebar" id="open-file" data-toggle="tooltip" title="Open file"><i class="fa fa-folder-open-o" aria-hidden="true"></i></button>
                 </li>
                 <li>
-                    <button class="btn btn-sidebar" id="save-file" data-toggle="tooltip" title="Export file"><i class="fa fa-floppy-o" aria-hidden="true"></i></button>
+                    <button class="btn btn-sidebar" id="save-file" data-toggle="tooltip" title="Save file"><i class="fa fa-floppy-o" aria-hidden="true"></i></button>
                 </li>
                 <li>
-                    <button class="btn btn-sidebar" id="show-datatable" data-toggle="tooltip" title="Table view"><i class="fa fa-table" aria-hidden="true"></i></button>
+                    <button class="btn btn-sidebar" id="show-clue-table" data-toggle="tooltip" title="Table view"><i class="fa fa-table" aria-hidden="true"></i></button>
                 </li>
                 <li>
                     <button class="btn btn-sidebar" id="show-tree" data-toggle="tooltip" title="Conclusions view"><i class="fa fa-code-fork" aria-hidden="true"></i></button>
                 </li>
                 <li>
-                    <button class="btn btn-sidebar" id="table-test" data-toggle="modal" data-placement="right" title="Import Components to DejaCode"><i class="fa fa-list-ol" aria-hidden="true"></i></button>
+                    <button class="btn btn-sidebar" id="show-component-table" data-toggle="modal" data-placement="right" title="Import Components to DejaCode"><i class="fa fa-list-ol" aria-hidden="true"></i></button>
                 </li>
                 <li>
                     <button class="btn btn-sidebar" id="show-help" data-toggle="modal" data-placement="right" title="Help with Application" data-target="#helpModal"><i class="fa fa-question" aria-hidden="true"></i></button>
+                </li>
+                <li>
+                    <button class="btn btn-sidebar" id="import-json-file" data-toggle="tooltip" title="Import JSON file"><i class="fa fa-download" aria-hidden="true"></i></button>
+                </li>
+                <li>
+                    <button class="btn btn-sidebar" id="export-json-file" data-toggle="tooltip" title="Export JSON File"><i class="fa fa-upload" aria-hidden="true"></i></button>
                 </li>
             </ul>
         </div>
@@ -144,7 +150,7 @@
                                 </fieldset>
                                  <fieldset class="form-group">
                                     <label>Homepage URL</label>
-                                    <input type="text" class="form-control" id="component-homepage-url" placeholder="Enter Homepage URL">
+                                    <select data-hide-on-select="true" class="form-control" id="component-homepage-url" type="text"></select>
                                 </fieldset>
                                 <fieldset class="form-group">
                                     <label for="component-notes">Notes</label>
@@ -304,10 +310,15 @@
         </div>
     </div>
 </div>
+<script>
+    require('./assets/js/renderer.js');
+</script>
 <script src="assets/js/jstree.min.js"></script>
 <script src="assets/js/scandata.js"></script>
-<script src="assets/js/scancode.js"></script>
 <script src="assets/js/aboutCodeDB.js"></script>
-<script src="assets/js/nodeViewDB.js"></script>
+<script src="assets/js/aboutCodeNodeView.js"></script>
+<script src="assets/js/aboutCodeDataTables.js"></script>
+<script src="assets/js/componentDataTables.js"></script>
+
 </body>
 </html>
