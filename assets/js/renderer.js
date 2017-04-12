@@ -445,16 +445,19 @@ $(document).ready(function () {
                             dbStorage: fileName,
                         });
 
-                        // Load component table database
-                        componentsTable.database(aboutCodeDB);
-                        componentsTable.reload();
-
                         // The flattened data is used by the clue table and jstree
                         aboutCodeDB.addFlattenedRows(json)
-                            .then(function () {
+                            .then(() => aboutCodeDB.addRows(json))
+                            .then(() => {
                                 // reload the DataTable after all insertions are done.
                                 cluesTable.database(aboutCodeDB);
                                 cluesTable.reload();
+
+                                // Load component table database
+                                componentsTable.database(aboutCodeDB);
+                                componentsTable.reload();
+
+                                nodeView = new AboutCodeNodeView(aboutCodeDB, onNodeClick);
 
                                 // loading data into jstree
                                 aboutCodeDB.toJSTreeFormat()
@@ -462,15 +465,6 @@ $(document).ready(function () {
                                         jstree.jstree(true).settings.core.data = data;
                                         jstree.jstree(true).refresh(true);
                                     });
-                            })
-                            .catch(function (reason) {
-                                throw reason;
-                            });
-
-                        // The non-flattened data is used by the node view.
-                        aboutCodeDB.addRows(json)
-                            .then(function () {
-                                nodeView = new AboutCodeNodeView(aboutCodeDB, onNodeClick);
                             })
                             .catch(function (reason) {
                                 throw reason;

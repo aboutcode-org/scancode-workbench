@@ -88,7 +88,7 @@ class AboutCodeDataTable {
                 for (let i = 0; i < dataTablesInput.columns.length; i++) {
                     let orSearch = {};
                     orSearch[dataTablesInput.columns[i].name] = {
-                        $like: `${globalSearch}%`
+                        $like: `%${globalSearch}%`
                     };
                     query.where.$and.$or.push(orSearch);
                 }
