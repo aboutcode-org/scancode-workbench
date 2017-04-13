@@ -70,7 +70,7 @@ class AboutCodeDB {
         this.db = this.sequelize.sync();
     }
 
-    // Uses the components table to do a findOne query
+    // Uses the components table to do a findAll query
     findAllComponents(query) {
         return this.db.then(() => this.Component.findAll(query));
     }
