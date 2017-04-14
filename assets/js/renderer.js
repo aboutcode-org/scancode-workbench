@@ -512,14 +512,35 @@ $(document).ready(function () {
     });
 
     // Submit components to a DejaCode Product via ProductComponent API
-    submitComponentButton.on('click', function () {
-        let createdComponents = scanData.toSaveFormat().components;
-        // Get product name and version
-        let productNameVersion = $("#product-name").val()
-            .concat(":", $("#product-version").val());
-        let apiUrl = $("#apiURLDejaCode").val();
-        let apiKey = $("#apiKey").val();
-        uploadComponents( apiUrl, createdComponents, apiKey, productNameVersion );
+    // TODO (@jdaguil): DejaCode doesn't require any field, but we probably
+    // want to require name, version, and owner
+    submitComponentButton.on("click", function () {
+        aboutCodeDB.findAllComponents({})
+            .then((components) => {
+                // Get product name and version
+                let productNameVersion = $("#product-name").val()
+                    .concat(":", $("#product-version").val());
+                let apiUrl = $("#apiURLDejaCode").val();
+                let apiKey = $("#apiKey").val();
+
+                // Converts array of components from AboutCode Manager to
+                // DejaCode component format
+                dejaCodeComponents = $.map(components, (component, index) => {
+                    return {
+                        name: component.name,
+                        version: component.version,
+                        owner: component.owner,
+                        license_expression: component.license_expression,
+                        copyright: component.copyright,
+                        homepage_url: component.homepage_url,
+                        primary_language: component.programming_language,
+                        reference_notes: component.notes,
+                        product: productNameVersion
+                    }
+                });
+
+                uploadComponents( apiUrl, dejaCodeComponents, apiKey);
+            });
         $("#componentExportModal").modal("hide");
     });
 });

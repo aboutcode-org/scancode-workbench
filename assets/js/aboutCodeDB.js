@@ -270,6 +270,19 @@ class AboutCodeDB {
             homepage_url: Sequelize.STRING,
             programming_language: Sequelize.STRING,
             notes: Sequelize.STRING
+        }, {
+            getterMethods: {
+                license_expression: function()  {
+                    return $.map(this.licenses, (license, index) => {
+                       return license.short_name;
+                    }).join(" AND ");
+                },
+                copyright: function() {
+                    return $.map(this.copyrights, (copyright, index) => {
+                        return copyright.statements.join(" ");
+                    }).join("\n");
+                }
+            }
         });
     }
 

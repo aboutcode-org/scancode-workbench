@@ -15,61 +15,9 @@
  */
 
 
-// Converts array of components from AboutCode Manager to DejaCode component
-// format
-toDejaCodeFormat = function(components) {
-    return $.map(components, function(component, index) {
-        var name = component['name'];
-
-        if (!name) {
-            throw new Error('Name required for component.');
-        }
-
-        var owner = component['party']['name'];
-
-        if (!owner) {
-            throw new Error('Owner required for component: ' + name);
-        }
-
-        var license_expression = component['license_expression'];
-
-        if (!license_expression) {
-            throw new Error('License expression required for component: '
-                + name);
-        }
-
-        var newComponent = {
-            name: name,
-            version: component['version'],
-            license_expression: license_expression,
-            owner: owner,
-            // DejaCode API expects a single copyright
-            copyright: component['copyrights'].join('\n')
-        };
-
-        if ('homepage_url' in component) {
-            newComponent.homepage_url = component['homepage_url'];
-        }
-
-        if ('programming_language' in component) {
-            newComponent.primary_language = component['programming_language'];
-        }
-
-        if ('notes' in component) {
-            newComponent.reference_notes = component['notes'];
-        }
-        return newComponent;
-    })
-}
-
-module.exports = {
-  toDejaCodeFormat: toDejaCodeFormat
-}
-
-
 // Uses DejaCode API to create a component
 function createComponent (productComponentUrl, component, apiKey) {
-    var headers = {
+    let headers = {
         'Authorization': 'Token ' + apiKey,
         'Accept': 'application/json; indent=4'
     };
@@ -84,17 +32,13 @@ function createComponent (productComponentUrl, component, apiKey) {
 
 
 // Upload created Components to a Product in DejaCode using the API
-function uploadComponents(host, components, apiKey, productNameVersion) {
-    var dejaCodeComponents = toDejaCodeFormat(components);
+function uploadComponents(host, components, apiKey) {
+    let errorMessages = {};
+    let requests = [];
 
-    $.each(dejaCodeComponents, function (index, component) {
-       component['product'] = productNameVersion;
-    })
-
-    var errorMessages = {};
-    var requests = []
-    $.each(dejaCodeComponents, function( index, component) {
-        var request = $.Deferred();
+    // Make individual requests to DejaCode to create each component
+    $.each(components, function( index, component) {
+        let request = $.Deferred();
         requests.push(request);
         createComponent(host, component, apiKey)
             .done(function (data) {
@@ -113,7 +57,7 @@ function uploadComponents(host, components, apiKey, productNameVersion) {
     $.when.apply($, requests)
         .done(function () {
             if (Object.keys(errorMessages).length > 0) {
-                var msg = $.map(errorMessages, function(errorMessage, component) {
+                let msg = $.map(errorMessages, function(errorMessage, component) {
                     return component + ": " + errorMessage;
                 });
                 alert("The following errors occurred:\n" + msg.join("\n\n"));
@@ -122,3 +66,7 @@ function uploadComponents(host, components, apiKey, productNameVersion) {
             }
         });
 }
+
+module.exports = {
+  uploadComponents: uploadComponents
+};
