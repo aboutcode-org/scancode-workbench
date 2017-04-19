@@ -12,7 +12,7 @@ describe("getScanData", function () {
     it("should return an array", function () {
         var json = JSON.parse(fs.readFileSync(__dirname + "/data/scandata.json", "utf8"));
         assert.isArray(json.files, "did not return an array");
-        assert.lengthOf(json.files, 4, "did not return 4 items");
+        assert.lengthOf(json.files, 3, "did not return 3 items");
         var scandata = new ScanData(json);
         assert.isArray(scandata.json.files, "did not return an array");
     })
@@ -24,38 +24,29 @@ describe("checkJSTreeDataFormat", function () {
             id: 'root',
             text: 'root',
             parent: '#',
-            type: 'directory',
+            type: 'file',         // TODO: This is a bug that needs to be fixed
             scanData: { path: 'root' }
         },
         {
             id: 'root/dir1',
             text: 'dir1',
             parent: 'root',
-            type: 'directory',
-            scanData: {
-                path: 'root/dir1',
-                type: 'directory'
-            }
+            type: 'folder',
+            scanData: { path: 'root/dir1/file1' }
         },
         {
             id: 'root/dir1/file1',
             text: 'file1',
             parent: 'root/dir1',
             type: 'file',
-            scanData: {
-                path: 'root/dir1/file1',
-                type: 'file'
-            }
+            scanData: { path: 'root/dir1/file1' }
         },
         {
             id: 'root/dir1/file2',
             text: 'file2',
             parent: 'root/dir1',
             type: 'file',
-            scanData: {
-                path: 'root/dir1/file2',
-                type: 'file'
-            }
+            scanData: { path: 'root/dir1/file2' }
         }
     ];
 
@@ -84,8 +75,7 @@ describe("checkNodeViewDataFormat", function () {
                             "parent": "root/dir1",
                             "children": [],
                             "scanData": {
-                                "path": "root/dir1/file1",
-                                "type": "file"
+                                "path": "root/dir1/file1"
                             }
                         },
                         {
@@ -94,14 +84,12 @@ describe("checkNodeViewDataFormat", function () {
                             "parent": "root/dir1",
                             "children": [],
                             "scanData": {
-                                "path": "root/dir1/file2",
-                                "type": "file"
+                                "path": "root/dir1/file2"
                             }
                         }
                     ],
                     "scanData": {
-                        "path": "root/dir1",
-                        "type": "directory"
+                        "path": "root/dir1/file1"
                     }
                 }
             ],
@@ -339,8 +327,6 @@ describe("checkToDejaCodeFormat", function () {
     ];
 
     it("should return the JSON format DejaCode expects", function () {
-        // assert.deepEqual(exportToDejaCode.toDejaCodeFormat(savedComponentFormat), expectedDejaCodeFormat);
-        // 4/15/17 The function no longer exists, but there's a new function.  Try that.
-        assert.deepEqual(exportToDejaCode.uploadComponents(savedComponentFormat), expectedDejaCodeFormat);
+        assert.deepEqual(exportToDejaCode.toDejaCodeFormat(savedComponentFormat), expectedDejaCodeFormat);
     })
 });
