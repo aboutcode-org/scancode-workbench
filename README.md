@@ -1,7 +1,7 @@
 # <img src="assets/images/aboutcode-logo.png" align="center" alt="AboutCode Manager">
 
 AboutCode Manager provides an advanced visual UI to help you quickly evaluate
-license and other notices identified by [ScanCode] (https://github.com/nexB/scancode-toolkit/) and record your conclusion
+license and other notices identified by [ScanCode](https://github.com/nexB/scancode-toolkit/) and record your conclusion
 about the effective license(s) for a component. AboutCode Manager is based on
 Electron and will be the primary desktop/GUI tool for using nexB’s AboutCode
 tools. This app works on Windows, OS X and Linux operating systems.
