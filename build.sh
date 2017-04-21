@@ -3,7 +3,7 @@
 
 # Run this script to build the AboutCode Manager
 
-VERSION=v1.1.0-beta.3
+VERSION=v2.0.0-rc1
 APP_NAME="AboutCode-Manager"
 ARCH=x64
 ELECTRON_VERSION=1.4.0
