@@ -43,10 +43,10 @@ describe("checkAboutCodeDB", function() {
 
             return aboutCodeDB.db
                 .then(() => aboutCodeDB.addRows(scanCodeJSONResults))
-                .then(() => aboutCodeDB.findAll({ plain: true }))
+                .then(() => aboutCodeDB.findAll({}))
                 .then((rows) => {
-                    rows = JSON.parse(JSON.stringify(rows));
-                    assert.containSubset(rows, scanCodeJSONResults.files[0])
+                    rows = rows.map(row => row.toJSON());
+                    assert.containSubset(rows, scanCodeJSONResults.files);
                 })
         });
     });
@@ -58,12 +58,11 @@ describe("checkAboutCodeDB", function() {
             return aboutCodeDB.db
                 .then(() => aboutCodeDB.addRows(scanCodeJSONResults))
                 .then(() => aboutCodeDB.findOne({
-                    where: { path: "samples/JGroups/src"},
-                    plain: true
+                    where: { path: "samples/JGroups/src"}
                 }))
-                .then((rows) => {
-                    rows = JSON.parse(JSON.stringify(rows));
-                    assert.containSubset(rows, scanCodeJSONResults.files[1])
+                .then((row) => {
+                    row = row.toJSON();
+                    assert.containSubset(row, scanCodeJSONResults.files[1]);
                 })
         });
     });
