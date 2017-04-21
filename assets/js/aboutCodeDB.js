@@ -186,27 +186,27 @@ class AboutCodeDB {
             name: Sequelize.STRING,
             extension: Sequelize.STRING,
             date: Sequelize.STRING,
-            size: Sequelize.STRING,
+            size: Sequelize.INTEGER,
             sha1: Sequelize.STRING,
             md5: Sequelize.STRING,
             files_count: Sequelize.INTEGER,
             mime_type: Sequelize.STRING,
             file_type: Sequelize.STRING,
             programming_language: Sequelize.STRING,
-            is_binary: Sequelize.STRING,
-            is_text: Sequelize.STRING,
-            is_archive: Sequelize.STRING,
-            is_media: Sequelize.STRING,
-            is_source: Sequelize.STRING,
-            is_script: Sequelize.STRING
+            is_binary: Sequelize.BOOLEAN,
+            is_text: Sequelize.BOOLEAN,
+            is_archive: Sequelize.BOOLEAN,
+            is_media: Sequelize.BOOLEAN,
+            is_source: Sequelize.BOOLEAN,
+            is_script: Sequelize.BOOLEAN
         });
     }
-
+    // TODO (@jdaguil): Add matched_rule to license model
     // License Model definitions
     static licenseModel(sequelize) {
         return sequelize.define("licenses", {
             key: Sequelize.STRING,
-            score: Sequelize.STRING,
+            score: Sequelize.INTEGER,
             short_name: Sequelize.STRING,
             category: Sequelize.STRING,
             owner: Sequelize.STRING,
@@ -215,21 +215,23 @@ class AboutCodeDB {
             dejacode_url: Sequelize.STRING,
             spdx_license_key: Sequelize.STRING,
             spdx_url: Sequelize.STRING,
-            start_line: Sequelize.STRING,
-            end_line: Sequelize.STRING
+            start_line: Sequelize.INTEGER,
+            end_line: Sequelize.INTEGER
         });
     }
 
+    // TODO (@jdaguil): Add author to copyright model
     // Copyright Model definitions
     static copyrightModel(sequelize) {
         return sequelize.define("copyrights", {
-            start_line: Sequelize.STRING,
-            end_line: Sequelize.STRING,
+            start_line: Sequelize.INTEGER,
+            end_line: Sequelize.INTEGER,
             holders: AboutCodeDB.jsonDataType('holders'),
             statements: AboutCodeDB.jsonDataType('statements')
         });
     }
 
+    // TODO (@jdaguil): Add other package attributes to package model
     // Package Model definitions
     static packageModel(sequelize) {
         return sequelize.define("packages", {
@@ -243,8 +245,8 @@ class AboutCodeDB {
     static emailModel(sequelize) {
         return sequelize.define("emails", {
             email: Sequelize.STRING,
-            start_line: Sequelize.STRING,
-            end_line: Sequelize.STRING
+            start_line: Sequelize.INTEGER,
+            end_line: Sequelize.INTEGER
         });
     }
 
@@ -252,8 +254,8 @@ class AboutCodeDB {
     static urlModel(sequelize) {
         return sequelize.define("urls", {
             url: Sequelize.STRING,
-            start_line: Sequelize.STRING,
-            end_line: Sequelize.STRING
+            start_line: Sequelize.INTEGER,
+            end_line: Sequelize.INTEGER
         });
     }
 
