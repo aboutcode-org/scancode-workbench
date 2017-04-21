@@ -66,4 +66,31 @@ describe("checkAboutCodeDB", function() {
                 })
         });
     });
+
+    describe("toJSTreeFormat", function() {
+        it("should format ScanCode results to jsTree Format", function() {
+            let aboutCodeDB = new AboutCodeDB();
+            let expectedJSTreeFormat= [
+                {
+                    id: 'samples/README',
+                    text: 'README',
+                    parent: 'samples',
+                    type: 'file'
+                },
+                {
+                    id: 'samples/JGroups/src',
+                    text: 'src',
+                    parent: 'samples/JGroups',
+                    type: 'directory'
+                }
+            ];
+
+            return aboutCodeDB.db
+                .then(() => aboutCodeDB.addRows(scanCodeJSONResults))
+                .then(() => aboutCodeDB.toJSTreeFormat())
+                .then((scanCodeJSONResults) => {
+                    assert.deepEqual(expectedJSTreeFormat, scanCodeJSONResults)
+                })
+        });
+    });
 });

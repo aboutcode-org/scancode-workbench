@@ -157,17 +157,17 @@ class AboutCodeDB {
     toJSTreeFormat() {
         return this.db
             .then(() => {
-                return this.FlattenedFile.findAll({
-                    attributes: ["path", "parent", "infos_file_name", "infos_type"]
+                return this.File.findAll({
+                    attributes: ["path", "parent", "name", "type"]
                 });
             })
             .then((files) => {
                 return files.map((file) => {
                     return {
                         id: file.path,
-                        text: file.infos_file_name,
+                        text: file.name,
                         parent: file.parent,
-                        type: file.infos_type
+                        type: file.type
                     };
                 });
             });
