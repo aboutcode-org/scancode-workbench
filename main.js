@@ -19,6 +19,9 @@ function createWindow () {
   mainWindow.on('closed', function() {
     mainWindow = null;
   });
+
+  var menu = Menu.buildFromTemplate(template);
+  Menu.setApplicationMenu(menu);
 }
 
 app.on('ready', createWindow);
@@ -237,5 +240,5 @@ var pjson = require('./package.json');
     );
   }
 
-  var menu = Menu.buildFromTemplate(template);
-  Menu.setApplicationMenu(menu);
+  // var menu = Menu.buildFromTemplate(template);
+  // Menu.setApplicationMenu(menu);
