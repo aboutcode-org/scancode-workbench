@@ -33,7 +33,7 @@ app.on('activate', function () {
   }
 });
 
-// app.once('ready', function() {
+
   if (Menu.getApplicationMenu())
     return;
 
@@ -239,4 +239,3 @@ var pjson = require('./package.json');
 
   var menu = Menu.buildFromTemplate(template);
   Menu.setApplicationMenu(menu);
-// });
