@@ -110,4 +110,74 @@ describe("checkAboutCodeDB", function() {
                 })
         });
     });
+
+    describe("setComponent", function() {
+        it("should create a component in Component Table", function() {
+            let aboutCodeDB = new AboutCodeDB();
+            let component = {
+                "license_expression": "Apache 1.1",
+                "copyright": "(c) 2004 by Henrik Ravn",
+                "licenses": [
+                    {
+                      "short_name": "Apache 1.1"
+                    }
+                ],
+                "copyrights": [
+                    {
+                      "statements": [
+                        "(c) 2004 by Henrik Ravn"
+                      ]
+                    }
+                ],
+                "path": "samples",
+                "review_status": "attention",
+                "name": "samples",
+                "version": "1.0",
+                "owner": "Jean-loup Gailly, Brian Raiter",
+                "homepage_url": "http://www.jboss.org/",
+                "programming_language": "C",
+                "notes": ""
+            };
+
+            let component2 = {
+                "license_expression": "ZLIB License",
+                "copyright": "Copyright (c) 1995-2013 Jean-loup Gailly and Mark Adler",
+                "licenses": [
+                {
+                  "short_name": "ZLIB License"
+                }
+                ],
+                "copyrights": [
+                {
+                  "statements": [
+                    "Copyright (c) 1995-2013 Jean-loup Gailly and Mark Adler"
+                  ]
+                }
+                ],
+                "path": "samples/zlib",
+                "review_status": "analyzed",
+                "name": "zlib",
+                "version": "1.0",
+                "owner": "Jean-loup Gailly and Mark Adler",
+                "homepage_url": "http://www.zlib.net/",
+                "programming_language": "C#",
+                "notes": ""
+                };
+
+            return aboutCodeDB.db
+                .then(() => aboutCodeDB.setComponent(component))
+                .then(() => aboutCodeDB.Component.count())
+                .then((rowCount) => assert.strictEqual(rowCount, 1))
+                .then(() => aboutCodeDB.findComponent({
+                        where: { path: "samples"}
+                }))
+                .then((row) => {
+                    row = row.toJSON();
+                    assert.containSubset(row, component);
+                })
+                .then(() => aboutCodeDB.setComponent(component2))
+                .then(() => aboutCodeDB.Component.count())
+                .then((rowCount) => assert.strictEqual(rowCount, 2))
+        });
+    });
 });

@@ -81,8 +81,10 @@ class AboutCodeDB {
     }
 
     // Uses the components table to create or set a component
-    setComponent(component, query) {
-        this.findComponent(query)
+    setComponent(component) {
+        return this.findComponent({
+            where: { path: component.path }
+        })
             .then((dbComponent) => {
                 if (dbComponent) {
                     return dbComponent.update(component);

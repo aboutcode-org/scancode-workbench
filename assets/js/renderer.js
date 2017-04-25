@@ -293,7 +293,7 @@ $(document).ready(function () {
             programming_language: (componentModal.language.val() || [null])[0],
             notes: componentModal.notes.val()
         };
-        aboutCodeDB.setComponent(component, { where: { path: id } });
+        aboutCodeDB.setComponent(component);
         componentModal.container.modal('hide');
         nodeView.redraw()
     });
