@@ -19,12 +19,13 @@ function createWindow () {
   mainWindow.on('closed', function() {
     mainWindow = null;
   });
-
-  var menu = Menu.buildFromTemplate(template);
-  Menu.setApplicationMenu(menu);
 }
 
-app.on('ready', createWindow);
+app.on('ready', () => {
+  createWindow();
+  var menu = Menu.buildFromTemplate(template);
+  Menu.setApplicationMenu(menu);
+});
 app.on('window-all-closed', function () {
   if (process.platform !== 'darwin') {
     app.quit();
@@ -239,6 +240,3 @@ var pjson = require('./package.json');
       }
     );
   }
-
-  // var menu = Menu.buildFromTemplate(template);
-  // Menu.setApplicationMenu(menu);
