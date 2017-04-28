@@ -200,27 +200,39 @@ class AboutCodeDataTable {
     static get COPYRIGHT_COLUMNS() {
         return [
             {
-                "data": "copyright_statements",
+                "data": function (row, type, val, meta) {
+                    return row.copyright_statements.map(statements => {
+                        return statements.join("<br/>")
+                    }).join("<hr/>");
+                },
                 "title": "Copyright Statements",
-                "name": "copyright_statements"
+                "name": "copyright_statements",
             },
             {
-                "data": "copyright_holders",
+                "data": function (row, type, val, meta) {
+                    return row.copyright_holders.map(holders => {
+                        return holders.join("<br/>")
+                    }).join("<hr/>");
+                },
                 "title": "Copyright Holders",
                 "name": "copyright_holders"
             },
             {
-                "data": "copyright_authors",
+                "data": function (row, type, val, meta) {
+                    return row.copyright_authors.map(authors => {
+                        return authors.join("<br/>")
+                    }).join("<hr/>");
+                },
                 "title": "Copyright Authors",
                 "name": "copyright_authors"
             },
             {
-                "data": "copyright_start_line",
+                "data": "copyright_start_line[<hr/>]",
                 "title": "Copyright Start Line",
                 "name": "copyright_start_line"
             },
             {
-                "data": "copyright_end_line",
+                "data": "copyright_end_line[<hr/>]",
                 "title": "Copyright End Line",
                 "name": "copyright_end_line"
             }
@@ -230,17 +242,17 @@ class AboutCodeDataTable {
     static get LICENSE_COLUMNS() {
         return [
             {
-                "data": "license_key",
+                "data": "license_key[<hr/>]",
                 "title": "License Key",
                 "name": "license_key"
             },
             {
-                "data": "license_score",
+                "data": "license_score[<hr/>]",
                 "title": "License Score",
                 "name": "license_score"
             },
             {
-                "data": "license_short_name",
+                "data": "license_short_name[<hr/>]",
                 "title": "License Short Name",
                 "name": "license_short_name"
             },
@@ -250,37 +262,52 @@ class AboutCodeDataTable {
                 "name": "license_category"
             },
             {
-                "data": "license_owner",
+                "data": "license_owner[<hr/>]",
                 "title": "License Owner",
                 "name": "license_owner"
             },
             {
                 "data": "license_homepage_url",
                 "title": "License Homepage URL",
-                "name": "license_homepage_url"
+                "name": "license_homepage_url",
+                "render": function ( data, type, full, meta ) {
+                    return $.map(data, function (href, i) {
+                        return '<a href="'+href+'" target="_blank">'+href+'</a>';
+                    }).join("<br>");
+                }
             },
             {
                 "data": "license_text_url",
                 "title": "License Text URL",
-                "name": "license_text_url"
+                "name": "license_text_url",
+                "render": function ( data, type, full, meta ) {
+                    return $.map(data, function (href, i) {
+                        return '<a href="'+href+'" target="_blank">'+href+'</a>';
+                    }).join("<br>");
+                }
             },
             {
                 "data": "license_djc_url",
                 "title": "DejaCode License URL",
-                "name": "license_djc_url"
+                "name": "license_djc_url",
+                "render": function ( data, type, full, meta ) {
+                    return $.map(data, function (href, i) {
+                        return '<a href="'+href+'" target="_blank">'+href+'</a>';
+                    }).join("<br>");
+                }
             },
             {
-                "data": "license_spdx_key",
+                "data": "license_spdx_key[<hr/>]",
                 "title": "SPDX License Key",
                 "name": "license_spdx_key"
             },
             {
-                "data": "license_start_line",
+                "data": "license_start_line[<hr/>]",
                 "title": "License Start Line",
                 "name": "license_start_line"
             },
             {
-                "data": "license_end_line",
+                "data": "license_end_line[<hr/>]",
                 "title": "License End Line",
                 "name": "license_end_line"
             }
@@ -290,17 +317,17 @@ class AboutCodeDataTable {
     static get EMAIL_COLUMNS() {
         return [
             {
-                "data": "email",
+                "data": "email[<hr/>]",
                 "title": "Email",
                 "name": "email"
             },
             {
-                "data": "email_start_line",
+                "data": "email_start_line[<hr/>]",
                 "title": "Email Start Line",
                 "name": "email_start_line"
             },
             {
-                "data": "email_start_line",
+                "data": "email_start_line[<hr/>]",
                 "title": "End Start Line",
                 "name": "email_start_line"
             }
@@ -312,15 +339,20 @@ class AboutCodeDataTable {
             {
                 "data": "url",
                 "title": "URL",
-                "name": "url"
+                "name": "url",
+                "render": function ( data, type, full, meta ) {
+                    return $.map(data, function (href, i) {
+                        return '<a href="'+href+'" target="_blank">'+href+'</a>';
+                    }).join("<br>");
+                }
             },
             {
-                "data": "url_start_line",
+                "data": "url_start_line[<br>]",
                 "title": "URL Start Line",
                 "name": "url_start_line"
             },
             {
-                "data": "url_end_line",
+                "data": "url_end_line[<br>]",
                 "title": "URL End Line",
                 "name": "url_end_line"
             }
@@ -330,89 +362,89 @@ class AboutCodeDataTable {
     static get FILE_COLUMNS() {
         return [
             {
-                "data": "infos_type",
+                "data": "type",
                 "title": "Type",
-                "name": "infos_type"
+                "name": "type"
             },
             {
-                "data": "infos_file_name",
+                "data": "name",
                 "title": "File Name",
-                "name": "infos_file_name"
+                "name": "name"
             },
             {
-                "data": "infos_file_extension",
+                "data": "extension",
                 "title": "File Extension",
-                "name": "infos_file_extension"
+                "name": "extension"
             },
             {
-                "data": "infos_file_date",
+                "data": "date",
                 "title": "File Date",
-                "name": "infos_file_date"
+                "name": "date"
             },
             {
-                "data": "infos_file_size",
+                "data": "size",
                 "title": "File Size",
-                "name": "infos_file_size"
+                "name": "size"
             },
             {
-                "data": "infos_file_sha1",
+                "data": "sha1",
                 "title": "SHA1",
-                "name": "infos_file_sha1"
+                "name": "sha1"
             },
             {
-                "data": "infos_md5",
+                "data": "md5",
                 "title": "MD5",
-                "name": "infos_md5"
+                "name": "md5"
             },
             {
-                "data": "infos_file_count",
+                "data": "file_count",
                 "title": "File Count",
-                "name": "infos_file_count"
+                "name": "file_count"
             },
             {
-                "data": "infos_mime_type",
+                "data": "mime_type",
                 "title": "MIME Type",
-                "name": "infos_mime_type"
+                "name": "mime_type"
             },
             {
-                "data": "infos_file_type",
+                "data": "file_type",
                 "title": "File Type",
-                "name": "infos_file_type"
+                "name": "file_type"
             },
             {
-                "data": "infos_programming_language",
+                "data": "programming_language",
                 "title": "Language",
-                "name": "infos_programming_language"
+                "name": "programming_language"
             },
             {
-                "data": "infos_is_binary",
+                "data": "is_binary",
                 "title": "Binary",
-                "name": "infos_is_binary"
+                "name": "is_binary"
             },
             {
-                "data": "infos_is_text",
+                "data": "is_text",
                 "title": "Text File",
-                "name": "infos_is_text"
+                "name": "is_text"
             },
             {
-                "data": "infos_is_archive",
+                "data": "is_archive",
                 "title": "Archive File",
-                "name": "infos_is_archive"
+                "name": "is_archive"
             },
             {
-                "data": "infos_is_media",
+                "data": "is_media",
                 "title": "Media File",
-                "name": "infos_is_media"
+                "name": "is_media"
             },
             {
-                "data": "infos_is_source",
+                "data": "is_source",
                 "title": "Source File",
-                "name": "infos_is_source"
+                "name": "is_source"
             },
             {
-                "data": "infos_is_script",
+                "data": "is_script",
                 "title": "Script File",
-                "name": "infos_is_script"
+                "name": "is_script"
             }
         ];
     }

@@ -28,6 +28,7 @@ chai.use(chaiSubset);
 
 const AboutCodeDB = require("../assets/js/aboutCodeDB");
 const scanCodeJSONResults = JSON.parse(fs.readFileSync(__dirname + "/data/scancode-results.json", "utf8"));
+const flattenedFilesResults = JSON.parse(fs.readFileSync(__dirname + "/data/flattened-scancode-results.json", "utf8"));
 
 describe("checkAboutCodeDB", function() {
 
@@ -178,6 +179,24 @@ describe("checkAboutCodeDB", function() {
                 .then(() => aboutCodeDB.setComponent(component2))
                 .then(() => aboutCodeDB.Component.count())
                 .then((rowCount) => assert.strictEqual(rowCount, 2))
+        });
+    });
+
+    describe("addFlattenedRows", function() {
+        it("should ", function() {
+            let aboutCodeDB = new AboutCodeDB();
+
+            return aboutCodeDB.db
+                .then(() => aboutCodeDB.FlattenedFile.count())
+                .then((rowCount) => assert.strictEqual(rowCount, 0))
+                .then(() => aboutCodeDB.addFlattenedRows(scanCodeJSONResults))
+                .then(() => aboutCodeDB.FlattenedFile.count())
+                .then((rowCount) => assert.strictEqual(rowCount, 2))
+                .then(() => aboutCodeDB.FlattenedFile.findAll())
+                .then((rows) => {
+                    rows = rows.map((row) => row.toJSON());
+                    assert.containSubset(rows, flattenedFilesResults);
+                })
         });
     });
 });

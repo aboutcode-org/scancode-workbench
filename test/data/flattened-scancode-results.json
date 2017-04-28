@@ -1,0 +1,158 @@
+[
+  {
+    "path": "samples/README",
+    "type": "file",
+    "name": "README",
+    "extension": "",
+    "date": "2017-04-08",
+    "size": 236,
+    "sha1": "2e07e32c52d607204fad196052d70e3d18fb8636",
+    "md5": "effc6856ef85a9250fb1a470792b3f38",
+    "file_count": 1,
+    "mime_type": "text/plain",
+    "file_type": "ASCII text",
+    "programming_language": "text",
+    "is_binary": false,
+    "is_text": true,
+    "is_archive": false,
+    "is_media": false,
+    "is_source": false,
+    "is_script": false,
+    "license_key": [
+      "jboss-eula"
+    ],
+    "license_score": [
+      100
+    ],
+    "license_short_name": [
+      "JBoss EULA"
+    ],
+    "license_category": [
+      "Proprietary Free"
+    ],
+    "license_owner": [
+      "JBoss Community"
+    ],
+    "license_homepage_url": [
+      []
+    ],
+    "license_text_url": [
+      "http://repository.jboss.org/licenses/jbossorg-eula.txt"
+    ],
+    "license_djc_url": [
+      "https://enterprise.dejacode.com/urn/urn:dje:license:jboss-eula"
+    ],
+    "license_spdx_key": [
+      []
+    ],
+    "license_start_line": [
+      3
+    ],
+    "license_end_line": [
+      108
+    ],
+    "copyright_statements": [
+      [
+        "Copyright (c) 1991, 1999 Free Software Foundation, Inc."
+      ],
+      [
+        "copyrighted by the Free Software Foundation"
+      ]
+    ],
+    "copyright_holders": [
+      [
+        "Free Software Foundation, Inc."
+      ],
+      [
+        "Free Software Foundation"
+      ]
+    ],
+    "copyright_authors": [
+      [],
+      []
+    ],
+    "copyright_start_line": [
+      4,
+      426
+    ],
+    "copyright_end_line": [
+      7,
+      433
+    ],
+    "email": [
+      "apache@apache.org"
+    ],
+    "email_start_line": [
+      29
+    ],
+    "email_end_line": [
+      29
+    ],
+    "url": [
+      "http://zlib.net/zlib-1.2.8.tar.gz",
+      "http://master.dl.sourceforge.net/project/javagroups/JGroups/2.10.0.GA/JGroups-2.10.0.GA.src.zip"
+    ],
+    "url_start_line": [
+      3,
+      4
+    ],
+    "url_end_line": [
+      3,
+      4
+    ],
+    "packages_type": [
+      "plain tarball"
+    ],
+    "packages_packaging": [
+      "archive"
+    ],
+    "packages_primary_language": [
+      []
+    ]
+  },
+  {
+    "path": "samples/JGroups/src",
+    "type": "directory",
+    "name": "src",
+    "extension": "",
+    "date": null,
+    "size": 152090,
+    "sha1": null,
+    "md5": null,
+    "file_count": 7,
+    "mime_type": null,
+    "file_type": null,
+    "programming_language": null,
+    "is_binary": false,
+    "is_text": false,
+    "is_archive": false,
+    "is_media": false,
+    "is_source": false,
+    "is_script": false,
+    "license_key": [],
+    "license_score": [],
+    "license_short_name": [],
+    "license_category": [],
+    "license_owner": [],
+    "license_homepage_url": [],
+    "license_text_url": [],
+    "license_djc_url": [],
+    "license_spdx_key": [],
+    "license_start_line": [],
+    "license_end_line": [],
+    "copyright_statements": [],
+    "copyright_holders": [],
+    "copyright_authors": [],
+    "copyright_start_line": [],
+    "copyright_end_line": [],
+    "packages_type": [],
+    "packages_packaging": [],
+    "packages_primary_language": [],
+    "email": [],
+    "email_start_line": [],
+    "email_end_line": [],
+    "url": [],
+    "url_start_line": [],
+    "url_end_line": []
+  }
+]
