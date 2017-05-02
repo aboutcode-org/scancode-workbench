@@ -139,15 +139,17 @@ class AboutCodeNodeView extends NodeView {
     }
 
     _getReviewStatus(nodeData) {
-        if (nodeData && nodeData.component) {
-            return nodeData.component.review_status;
-        } else if(nodeData && nodeData.parent) {
-            return nodeData.parent.circleClass;
-        } else if (nodeData && nodeData.parentId) {
-            return this._getReviewStatus(this.nodeData[nodeData.parentId]);
-        } else {
-            return "";
+        if (nodeData) {
+            if (nodeData.component) {
+                return nodeData.component.review_status;
+            } else if (nodeData.parent) {
+                return nodeData.parent.circleClass;
+            } else if (nodeData.parentId) {
+                return this._getReviewStatus(this.nodeData[nodeData.parentId]);
+            }
         }
+
+        return "";
     }
 
     // Create new visual for any new clues
