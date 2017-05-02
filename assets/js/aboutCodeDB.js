@@ -47,12 +47,16 @@ class AboutCodeDB {
         this.Email = AboutCodeDB.emailModel(this.sequelize);
         this.Url = AboutCodeDB.urlModel(this.sequelize);
 
+        // Component table is for creating custom components.
+        this.Component = AboutCodeDB.componentModel(this.sequelize);
+
         // Relations
         this.File.hasMany(this.License);
         this.File.hasMany(this.Copyright);
         this.File.hasMany(this.Package);
         this.File.hasMany(this.Email);
         this.File.hasMany(this.Url);
+        this.File.hasOne(this.Component);
 
         // Include Array for queries
         this.include = [
@@ -60,11 +64,9 @@ class AboutCodeDB {
             this.Copyright,
             this.Package,
             this.Email,
-            this.Url
+            this.Url,
+            this.Component
         ];
-
-        // Component table is for creating custom components.
-        this.Component = AboutCodeDB.componentModel(this.sequelize);
 
         // A promise that will return when the db and tables have been created
         this.db = this.sequelize.sync();
@@ -81,8 +83,10 @@ class AboutCodeDB {
     }
 
     // Uses the components table to create or set a component
-    setComponent(component, query) {
-        this.findComponent(query)
+    setComponent(component) {
+        return this.findComponent({
+            where: { path: component.path }
+        })
             .then((dbComponent) => {
                 if (dbComponent) {
                     return dbComponent.update(component);
@@ -157,17 +161,17 @@ class AboutCodeDB {
     toJSTreeFormat() {
         return this.db
             .then(() => {
-                return this.FlattenedFile.findAll({
-                    attributes: ["path", "parent", "infos_file_name", "infos_type"]
+                return this.File.findAll({
+                    attributes: ["path", "parent", "name", "type"]
                 });
             })
             .then((files) => {
                 return files.map((file) => {
                     return {
                         id: file.path,
-                        text: file.infos_file_name,
+                        text: file.name,
                         parent: file.parent,
-                        type: file.infos_type
+                        type: file.type
                     };
                 });
             });
@@ -186,27 +190,27 @@ class AboutCodeDB {
             name: Sequelize.STRING,
             extension: Sequelize.STRING,
             date: Sequelize.STRING,
-            size: Sequelize.STRING,
+            size: Sequelize.INTEGER,
             sha1: Sequelize.STRING,
             md5: Sequelize.STRING,
             files_count: Sequelize.INTEGER,
             mime_type: Sequelize.STRING,
             file_type: Sequelize.STRING,
             programming_language: Sequelize.STRING,
-            is_binary: Sequelize.STRING,
-            is_text: Sequelize.STRING,
-            is_archive: Sequelize.STRING,
-            is_media: Sequelize.STRING,
-            is_source: Sequelize.STRING,
-            is_script: Sequelize.STRING
+            is_binary: Sequelize.BOOLEAN,
+            is_text: Sequelize.BOOLEAN,
+            is_archive: Sequelize.BOOLEAN,
+            is_media: Sequelize.BOOLEAN,
+            is_source: Sequelize.BOOLEAN,
+            is_script: Sequelize.BOOLEAN
         });
     }
-
+    // TODO (@jdaguil): Add matched_rule to license model
     // License Model definitions
     static licenseModel(sequelize) {
         return sequelize.define("licenses", {
             key: Sequelize.STRING,
-            score: Sequelize.STRING,
+            score: Sequelize.INTEGER,
             short_name: Sequelize.STRING,
             category: Sequelize.STRING,
             owner: Sequelize.STRING,
@@ -215,21 +219,23 @@ class AboutCodeDB {
             dejacode_url: Sequelize.STRING,
             spdx_license_key: Sequelize.STRING,
             spdx_url: Sequelize.STRING,
-            start_line: Sequelize.STRING,
-            end_line: Sequelize.STRING
+            start_line: Sequelize.INTEGER,
+            end_line: Sequelize.INTEGER
         });
     }
 
+    // TODO (@jdaguil): Add author to copyright model
     // Copyright Model definitions
     static copyrightModel(sequelize) {
         return sequelize.define("copyrights", {
-            start_line: Sequelize.STRING,
-            end_line: Sequelize.STRING,
+            start_line: Sequelize.INTEGER,
+            end_line: Sequelize.INTEGER,
             holders: AboutCodeDB.jsonDataType('holders'),
             statements: AboutCodeDB.jsonDataType('statements')
         });
     }
 
+    // TODO (@jdaguil): Add other package attributes to package model
     // Package Model definitions
     static packageModel(sequelize) {
         return sequelize.define("packages", {
@@ -243,8 +249,8 @@ class AboutCodeDB {
     static emailModel(sequelize) {
         return sequelize.define("emails", {
             email: Sequelize.STRING,
-            start_line: Sequelize.STRING,
-            end_line: Sequelize.STRING
+            start_line: Sequelize.INTEGER,
+            end_line: Sequelize.INTEGER
         });
     }
 
@@ -252,8 +258,8 @@ class AboutCodeDB {
     static urlModel(sequelize) {
         return sequelize.define("urls", {
             url: Sequelize.STRING,
-            start_line: Sequelize.STRING,
-            end_line: Sequelize.STRING
+            start_line: Sequelize.INTEGER,
+            end_line: Sequelize.INTEGER
         });
     }
 
@@ -308,54 +314,51 @@ class AboutCodeDB {
                 allowNull: false
             },
             parent: {type: Sequelize.STRING, defaultValue: ""},
-            copyright_statements: {type: Sequelize.STRING, defaultValue: ""},
-            copyright_holders: {type: Sequelize.STRING, defaultValue: ""},
-            copyright_authors: {type: Sequelize.STRING, defaultValue: ""},
-            copyright_start_line: {type: Sequelize.STRING, defaultValue: ""},
-            copyright_end_line: {type: Sequelize.STRING, defaultValue: ""},
-            license_key: {type: Sequelize.STRING, defaultValue: ""},
-            license_score: {type: Sequelize.STRING, defaultValue: ""},
-            license_short_name: {type: Sequelize.STRING, defaultValue: ""},
-            license_category: {type: Sequelize.STRING, defaultValue: ""},
-            license_owner: {type: Sequelize.STRING, defaultValue: ""},
-            license_homepage_url: {type: Sequelize.STRING, defaultValue: ""},
-            license_text_url: {type: Sequelize.STRING, defaultValue: ""},
-            license_djc_url: {type: Sequelize.STRING, defaultValue: ""},
-            license_spdx_key: {type: Sequelize.STRING, defaultValue: ""},
-            license_start_line: {type: Sequelize.STRING, defaultValue: ""},
-            license_end_line: {type: Sequelize.STRING, defaultValue: ""},
-            email: {type: Sequelize.STRING, defaultValue: ""},
-            email_start_line: {type: Sequelize.STRING, defaultValue: ""},
-            email_end_line: {type: Sequelize.STRING, defaultValue: ""},
-            url: {type: Sequelize.STRING, defaultValue: ""},
-            url_start_line: {type: Sequelize.STRING, defaultValue: ""},
-            url_end_line: {type: Sequelize.STRING, defaultValue: ""},
-            infos_type: {type: Sequelize.STRING, defaultValue: ""},
-            infos_file_name: {type: Sequelize.STRING, defaultValue: ""},
-            infos_file_extension: {type: Sequelize.STRING, defaultValue: ""},
-            infos_file_date: {type: Sequelize.STRING, defaultValue: ""},
-            infos_file_size: {type: Sequelize.STRING, defaultValue: ""},
-            infos_file_sha1: {type: Sequelize.STRING, defaultValue: ""},
-            infos_md5: {type: Sequelize.STRING, defaultValue: ""},
-            infos_file_count: {type: Sequelize.STRING, defaultValue: ""},
-            infos_mime_type: {type: Sequelize.STRING, defaultValue: ""},
-            infos_file_type: {type: Sequelize.STRING, defaultValue: ""},
-            infos_programming_language: {
+            copyright_statements: AboutCodeDB.jsonDataType("copyright_statements"),
+            copyright_holders: AboutCodeDB.jsonDataType("copyright_holders"),
+            copyright_authors: AboutCodeDB.jsonDataType("copyright_authors"),
+            copyright_start_line: AboutCodeDB.jsonDataType("copyright_start_line"),
+            copyright_end_line: AboutCodeDB.jsonDataType("copyright_end_line"),
+            license_key: AboutCodeDB.jsonDataType("license_key"),
+            license_score: AboutCodeDB.jsonDataType("license_score"),
+            license_short_name: AboutCodeDB.jsonDataType("license_short_name"),
+            license_category: AboutCodeDB.jsonDataType("license_category"),
+            license_owner: AboutCodeDB.jsonDataType("license_owner"),
+            license_homepage_url: AboutCodeDB.jsonDataType("license_homepage_url"),
+            license_text_url: AboutCodeDB.jsonDataType("license_text_url"),
+            license_djc_url: AboutCodeDB.jsonDataType("license_djc_url"),
+            license_spdx_key: AboutCodeDB.jsonDataType("license_spdx_key"),
+            license_start_line: AboutCodeDB.jsonDataType("license_start_line"),
+            license_end_line: AboutCodeDB.jsonDataType("license_end_line"),
+            email: AboutCodeDB.jsonDataType("email"),
+            email_start_line: AboutCodeDB.jsonDataType("email_start_line"),
+            email_end_line: AboutCodeDB.jsonDataType("email_end_line"),
+            url: AboutCodeDB.jsonDataType("url"),
+            url_start_line: AboutCodeDB.jsonDataType("url_start_line"),
+            url_end_line: AboutCodeDB.jsonDataType("url_end_line"),
+            type: {type: Sequelize.STRING, defaultValue: ""},
+            name: {type: Sequelize.STRING, defaultValue: ""},
+            extension: {type: Sequelize.STRING, defaultValue: ""},
+            date: {type: Sequelize.STRING, defaultValue: ""},
+            size: {type: Sequelize.INTEGER, defaultValue: ""},
+            sha1: {type: Sequelize.STRING, defaultValue: ""},
+            md5: {type: Sequelize.STRING, defaultValue: ""},
+            file_count: {type: Sequelize.INTEGER, defaultValue: ""},
+            mime_type: {type: Sequelize.STRING, defaultValue: ""},
+            file_type: {type: Sequelize.STRING, defaultValue: ""},
+            programming_language: {
                 type: Sequelize.STRING,
                 defaultValue: ""
             },
-            infos_is_binary: {type: Sequelize.STRING, defaultValue: ""},
-            infos_is_text: {type: Sequelize.STRING, defaultValue: ""},
-            infos_is_archive: {type: Sequelize.STRING, defaultValue: ""},
-            infos_is_media: {type: Sequelize.STRING, defaultValue: ""},
-            infos_is_source: {type: Sequelize.STRING, defaultValue: ""},
-            infos_is_script: {type: Sequelize.STRING, defaultValue: ""},
-            packages_type: {type: Sequelize.STRING, defaultValue: ""},
-            packages_packaging: {type: Sequelize.STRING, defaultValue: ""},
-            packages_primary_language: {
-                type: Sequelize.STRING,
-                defaultValue: ""
-            }
+            is_binary: Sequelize.BOOLEAN,
+            is_text: Sequelize.BOOLEAN,
+            is_archive: Sequelize.BOOLEAN,
+            is_media: Sequelize.BOOLEAN,
+            is_source: Sequelize.BOOLEAN,
+            is_script: Sequelize.BOOLEAN,
+            packages_type: AboutCodeDB.jsonDataType("packages_type"),
+            packages_packaging: AboutCodeDB.jsonDataType("packages_packaging"),
+            packages_primary_language: AboutCodeDB.jsonDataType("packages_primary_language")
         }, {
             indexes: [
                 // Create a unique index on path
@@ -372,48 +375,49 @@ class AboutCodeDB {
         return {
             path: file.path,
             parent: AboutCodeDB.parent(file.path),
-            copyright_statements: AboutCodeDB.flattenArrayOfArray(file.copyrights, "statements"),
-            copyright_holders: AboutCodeDB.flattenArrayOfArray(file.copyrights, "holders"),
-            copyright_authors: AboutCodeDB.flattenArrayOfArray(file.copyrights, "authors"),
-            copyright_start_line: AboutCodeDB.flattenArray(file.copyrights, "start_line"),
-            copyright_end_line: AboutCodeDB.flattenArray(file.copyrights, "end_line"),
-            license_key: AboutCodeDB.flattenArray(file.licenses, "key"),
-            license_score: AboutCodeDB.flattenArray(file.licenses, "score"),
-            license_short_name: AboutCodeDB.flattenArray(file.licenses, "short_name"),
-            license_category: AboutCodeDB.flattenArray(file.licenses, "category"),
-            license_owner: AboutCodeDB.flattenArray(file.licenses, "party"),
-            license_homepage_url: AboutCodeDB.flattenArrayOfUrl(file.licenses, "homepage_url"),
-            license_text_url: AboutCodeDB.flattenArrayOfUrl(file.licenses, "text_url"),
-            license_djc_url: AboutCodeDB.flattenArrayOfUrl(file.licenses, "dejacode_url"),
-            license_spdx_key: AboutCodeDB.flattenArray(file.licenses, "spdx_license_key"),
-            license_start_line: AboutCodeDB.flattenArray(file.licenses, "start_line"),
-            license_end_line: AboutCodeDB.flattenArray(file.licenses, "end_line"),
-            email: AboutCodeDB.flattenArray(file.emails, "email"),
-            email_start_line: AboutCodeDB.flattenArray(file.emails, "start_line"),
-            email_end_line: AboutCodeDB.flattenArray(file.emails, "end_line"),
-            url: AboutCodeDB.flattenArrayOfUrl(file.urls, "url"),
-            url_start_line: AboutCodeDB.flattenArrayOfUrlLine(file.urls, "start_line"),
-            url_end_line: AboutCodeDB.flattenArrayOfUrlLine(file.urls, "end_line"),
-            infos_type: file.type,
-            infos_file_name: file.name,
-            infos_file_extension: file.extension,
-            infos_file_date: file.date,
-            infos_file_size: file.size,
-            infos_file_sha1: file.sha1,
-            infos_md5: file.md5,
-            infos_file_count: file.files_count,
-            infos_mime_type: file.mime_type,
-            infos_file_type: file.file_type,
-            infos_programming_language: file.programming_language,
-            infos_is_binary: file.is_binary,
-            infos_is_text: file.is_text,
-            infos_is_archive: file.is_archive,
-            infos_is_media: file.is_media,
-            infos_is_source: file.is_source,
-            infos_is_script: file.is_script,
-            packages_type: AboutCodeDB.flattenArray(file.packages, "type"),
-            packages_packaging: AboutCodeDB.flattenArray(file.packages, "packaging"),
-            packages_primary_language: AboutCodeDB.flattenArray(file.packages, "primary_language")
+            copyright_statements: AboutCodeDB.getValues(file.copyrights, "statements"),
+            copyright_holders: AboutCodeDB.getValues(file.copyrights, "holders"),
+            copyright_authors: AboutCodeDB.getValues(file.copyrights, "authors"),
+            copyright_start_line: AboutCodeDB.getValues(file.copyrights, "start_line"),
+            copyright_end_line: AboutCodeDB.getValues(file.copyrights, "end_line"),
+            license_key: AboutCodeDB.getValues(file.licenses, "key"),
+            license_score: AboutCodeDB.getValues(file.licenses, "score"),
+            license_short_name: AboutCodeDB.getValues(file.licenses, "short_name"),
+            license_category: AboutCodeDB.getValues(file.licenses, "category"),
+            license_owner: AboutCodeDB.getValues(file.licenses, "owner"),
+            license_homepage_url: AboutCodeDB.getValues(file.licenses, "homepage_url"),
+            license_text_url: AboutCodeDB.getValues(file.licenses, "text_url"),
+            license_djc_url: AboutCodeDB.getValues(file.licenses, "dejacode_url"),
+            license_spdx_key: AboutCodeDB.getValues(file.licenses, "spdx_license_key"),
+            license_start_line: AboutCodeDB.getValues(file.licenses, "start_line"),
+            license_end_line: AboutCodeDB.getValues(file.licenses, "end_line"),
+            email: AboutCodeDB.getValues(file.emails, "email"),
+            email_start_line: AboutCodeDB.getValues(file.emails, "start_line"),
+            email_end_line: AboutCodeDB.getValues(file.emails, "end_line"),
+            url: AboutCodeDB.getValues(file.urls, "url"),
+            url_start_line: AboutCodeDB.getValues(file.urls, "start_line"),
+            url_end_line: AboutCodeDB.getValues(file.urls, "end_line"),
+            type: file.type,
+            name: file.name,
+            extension: file.extension,
+            date: file.date,
+            size: file.size,
+            sha1: file.sha1,
+            md5: file.md5,
+            file_count: file.files_count,
+            mime_type: file.mime_type,
+            file_type: file.file_type,
+            programming_language: file.programming_language,
+            is_binary: file.is_binary,
+            is_text: file.is_text,
+            is_archive: file.is_archive,
+            is_media: file.is_media,
+            is_source: file.is_source,
+            is_script: file.is_script,
+            packages_type: AboutCodeDB.getValues(file.packages, "type"),
+            packages_packaging: AboutCodeDB.getValues(file.packages, "packaging"),
+            packages_primary_language: AboutCodeDB.getValues(file.packages,
+                "primary_language")
         }
     }
 
@@ -422,50 +426,11 @@ class AboutCodeDB {
         return splits.length === 1 ? "#" : splits.slice(0, -1).join("/");
     }
 
-    // array: [
-    //     {key: [val0, val1]},
-    //     {key: [val2, val3]},
-    // ]
-    // => 'val0</br>val1<hr/>val2</br>val3'
-    static flattenArrayOfArray(array, key) {
+    // [{key: val0}, {key: val1}] => [val0, val1]
+    static getValues(array, key) {
         return $.map(array ? array : [], (elem, i) => {
-            return elem[key] ? elem[key].join("</br>") : [];
-        }).join("<hr/>");
-    }
-
-    // array: [
-    //     {key: val0},
-    //     {key: val1},
-    // ]
-    // => 'val0<hr/>val1'
-    static flattenArray(array, key) {
-        return $.map(array ? array : [], (elem, i) => {
-            return elem[key] ? elem[key] : [];
-        }).join("<hr/>");
-    }
-
-    // array: [
-    //     {key: val0},
-    //     {key: val1},
-    // ]
-    // => 'val0</br>val1'
-    static flattenArrayOfUrlLine(array, key) {
-        return $.map(array ? array : [], (elem, i) => {
-            return elem[key] ? elem[key] : [];
-        }).join("</br>");
-    }
-
-    // array: [
-    //     {key: url0},
-    //     {key: url1},
-    // ]
-    // => '<a href=url0 target="_blank">url0</a><br/>
-    //     <a href=url1 target="_blank">url1</a>'
-    static flattenArrayOfUrl(array, key) {
-        return $.map(array ? array : [], (elem, i) => {
-            let href = elem[key];
-            return `<a href="${href}" target="_blank"> ${href}</a>`;
-        }).join("</br>");
+            return [elem[key] ? elem[key] : []];
+        });
     }
 }
 

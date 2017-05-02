@@ -1,6 +1,6 @@
 {
   "name": "aboutcode-manager",
-  "version": "1.1.0-beta.3",
+  "version": "2.0.0-rc1",
   "description": "An application for viewing ScanCode results and concluding component origin and license",
   "main": "main.js",
   "scripts": {
@@ -27,6 +27,7 @@
   "devDependencies": {
     "asar": "^0.11.0",
     "chai": "^3.5.0",
+    "chai-subset": "^1.5.0",
     "electron-packager": "^7.0.3",
     "electron-prebuilt": "1.4.0",
     "electron-rebuild": "^1.5.7",
