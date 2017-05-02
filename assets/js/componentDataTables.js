@@ -108,7 +108,10 @@ class ComponentDataTable {
                 "name": "homepage_url",
                 "defaultContent": "",
                 "render": function(href) {
-                    return `<a href='${href}' target="_blank"> ${href}</a>`
+                    if (href) {
+                        return `<a href='${href}' target="_blank"> ${href}</a>`
+                    }
+                    return ""
                 }
             },
             {
