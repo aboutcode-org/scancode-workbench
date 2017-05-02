@@ -39,11 +39,14 @@ class AboutCodeNodeView extends NodeView {
     static fileToNode(file) {
         return {
             id: file.path,
+            fileId: file.id,
+            parentId: file.parent,
             name: file.name,
             type: file.type,
             licenses: file.licenses,
             copyrights: file.copyrights,
             files_count: file.files_count,
+            component: file.component,
             children: []
         };
     }
@@ -54,9 +57,20 @@ class AboutCodeNodeView extends NodeView {
         if (rootId in this.nodeData) {
             super.setRoot(this.nodeData[rootId]);
         } else {
-            this.aboutCodeDB.findOne({where: {path: rootId}})
-                .then((file) => {
-                    super.setRoot(AboutCodeNodeView.fileToNode(file));
+            let splits = rootId.split("/");
+            let rootIds = $.map(splits, (split, index) => {
+                return { path: splits.slice(0, index + 1).join("/") };
+            });
+
+            this.aboutCodeDB.findAll({where: { $or: rootIds } })
+                .then((files) => {
+                    $.each(files, (index, file) => {
+                        this.nodeData[file.path] =
+                            AboutCodeNodeView.fileToNode(file);
+                    });
+                })
+                .then(() => {
+                    super.setRoot(this.nodeData[rootId])
                 });
         }
     }
@@ -102,7 +116,10 @@ class AboutCodeNodeView extends NodeView {
     // This method is called by NodeView
     updateNode(nodes) {
         // Update circles
-        nodes.select("circle").attr("class", (d) =>  d.review_status);
+        nodes.select("circle").attr("class", (d) =>  {
+            d.circleClass = this._getReviewStatus(d);
+            return d.circleClass;
+        });
 
         const fileNodes = nodes.filter((d) => d.type !== "directory");
 
@@ -119,6 +136,18 @@ class AboutCodeNodeView extends NodeView {
 
         nodes.select("g.dir-node").transition().duration(1000)
             .attr("transform", "translate(10,0)");
+    }
+
+    _getReviewStatus(nodeData) {
+        if (nodeData && nodeData.component) {
+            return nodeData.component.review_status;
+        } else if(nodeData && nodeData.parent) {
+            return nodeData.parent.circleClass;
+        } else if (nodeData && nodeData.parentId) {
+            return this._getReviewStatus(this.nodeData[nodeData.parentId]);
+        } else {
+            return "";
+        }
     }
 
     // Create new visual for any new clues

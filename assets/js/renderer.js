@@ -279,6 +279,7 @@ $(document).ready(function () {
         let id = componentModal.label.text();
         let component = {
             path: id,
+            fileId: nodeView.nodeData[id].fileId,
             review_status: componentModal.status.val(),
             name: componentModal.component_name.val(),
             licenses: $.map(componentModal.license.val() || [], function(license) {
@@ -293,9 +294,12 @@ $(document).ready(function () {
             programming_language: (componentModal.language.val() || [null])[0],
             notes: componentModal.notes.val()
         };
-        aboutCodeDB.setComponent(component);
+        aboutCodeDB.setComponent(component)
+            .then(() => {
+                nodeView.nodeData[id].component = component;
+                nodeView.redraw();
+            });
         componentModal.container.modal('hide');
-        nodeView.redraw()
     });
 
     nodeDropdown.select2({

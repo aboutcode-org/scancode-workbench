@@ -47,12 +47,16 @@ class AboutCodeDB {
         this.Email = AboutCodeDB.emailModel(this.sequelize);
         this.Url = AboutCodeDB.urlModel(this.sequelize);
 
+        // Component table is for creating custom components.
+        this.Component = AboutCodeDB.componentModel(this.sequelize);
+
         // Relations
         this.File.hasMany(this.License);
         this.File.hasMany(this.Copyright);
         this.File.hasMany(this.Package);
         this.File.hasMany(this.Email);
         this.File.hasMany(this.Url);
+        this.File.hasOne(this.Component);
 
         // Include Array for queries
         this.include = [
@@ -60,11 +64,9 @@ class AboutCodeDB {
             this.Copyright,
             this.Package,
             this.Email,
-            this.Url
+            this.Url,
+            this.Component
         ];
-
-        // Component table is for creating custom components.
-        this.Component = AboutCodeDB.componentModel(this.sequelize);
 
         // A promise that will return when the db and tables have been created
         this.db = this.sequelize.sync();
