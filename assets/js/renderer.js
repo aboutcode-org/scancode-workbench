@@ -435,12 +435,23 @@ $(document).ready(function () {
                 // Add root directory into data
                 // See https://github.com/nexB/scancode-toolkit/issues/543
                 const rootPath = json.files[0].path.split("/")[0];
-                json.files.push({
-                    path: rootPath,
-                    name: rootPath,
-                    type: "directory",
-                    files_count: json.files_count
-                });
+                let hasRootPath = false;
+
+                for (let i = 0, n = json.files.length; i < n; i++) {
+                    if (rootPath === json.files[i].path) {
+                        hasRootPath = true;
+                        break;
+                    }
+                }
+
+                if (!hasRootPath) {
+                    json.files.push({
+                        path: rootPath,
+                        name: rootPath,
+                        type: "directory",
+                        files_count: json.files_count
+                    });
+                }
 
                 // Immediately ask for a SQLite to save and create the database
                 dialog.showSaveDialog(
