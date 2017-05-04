@@ -21,7 +21,11 @@ function createWindow () {
   });
 }
 
-app.on('ready', createWindow);
+app.on('ready', () => {
+  createWindow();
+  const menu = Menu.buildFromTemplate(getTemplate());
+  Menu.setApplicationMenu(menu);
+});
 app.on('window-all-closed', function () {
   if (process.platform !== 'darwin') {
     app.quit();
@@ -33,11 +37,8 @@ app.on('activate', function () {
   }
 });
 
-app.once('ready', function() {
-  if (Menu.getApplicationMenu())
-    return;
-
-  var template = [
+function getTemplate() {
+  const template = [
     {
       label: 'Edit',
       submenu: [
@@ -168,7 +169,7 @@ app.once('ready', function() {
       ]
     },
   ];
-var pjson = require('./package.json');
+const pjson = require('./package.json');
 
   if (process.platform == 'darwin') {
     template.unshift({
@@ -236,7 +237,5 @@ var pjson = require('./package.json');
       }
     );
   }
-
-  var menu = Menu.buildFromTemplate(template);
-  Menu.setApplicationMenu(menu);
-});
+  return template;
+}
