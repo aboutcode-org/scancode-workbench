@@ -20,14 +20,8 @@ class AboutCodeNodeView extends NodeView {
         super({
             selector: "#nodeview",
             orientation: "left-to-right",
-            width: 800,
-            height: 800,
             nodeWidth: 25,
             nodeHeight: 160,
-            margin: {
-                top: 80, bottom: 30,
-                left: 100, right: 200
-            },
             duration: 1000
         });
 

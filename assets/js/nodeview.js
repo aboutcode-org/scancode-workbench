@@ -37,13 +37,12 @@ class NodeView {
         // Clear the selector DOM element in case something already exists.
         $(config.selector).empty();
         const svg = d3.select(config.selector).append("svg")
-            .attr("width", config.width)
-            .attr("height", config.height)
+            .attr("preserveAspectRatio", "xMinYMin meet")
+            .attr("viewBox", "-150 -150 1000 1000")
+            .classed("nodeview-content", true)
             .call(zoom);
 
-        this.container = svg.append("g")
-            .attr("transform",
-                `translate(${config.margin.left}, ${config.margin.top})`);
+        this.container = svg.append("g");
 
         this.tree = d3.layout.tree()
             .nodeSize([config.nodeWidth, config.nodeHeight]);

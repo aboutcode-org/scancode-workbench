@@ -78,6 +78,19 @@ body {
   border: 1px solid #ddd;
   border-radius: 4px;
   margin-top: 5px;
+  display: inline-block;
+  position: relative;
+  width: 100%;
+  padding-bottom: 100%;
+  vertical-align: top;
+  overflow: hidden;
+}
+
+.nodeview-content {
+  display: inline-block;
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 
 div.node-content {
