@@ -40,6 +40,9 @@ app.on('activate', function () {
 function getTemplate() {
   const template = [
     {
+      label: 'File'
+    },
+    {
       label: 'Edit',
       submenu: [
         {
