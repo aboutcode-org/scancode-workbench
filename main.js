@@ -40,7 +40,22 @@ app.on('activate', function () {
 function getTemplate() {
   const template = [
     {
-      label: 'File'
+      label: 'File',
+      
+      submenu: [
+        {
+          label: "Import JSON File",
+          click: function (menuItem, currentWindow) {
+            currentWindow.webContents.send('import-JSON')
+          }
+        },
+        {
+          label: "Export JSON File",
+          click: function (menuItem, currentWindow) {
+            currentWindow.webContents.send('export-JSON')
+          }
+        }
+      ]
     },
     {
       label: 'Edit',

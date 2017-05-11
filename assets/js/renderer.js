@@ -70,6 +70,9 @@ $(document).ready(function () {
     // The electron library for opening a dialog
     const dialog = require('electron').remote.dialog;
 
+    // The Electron module used to communicate asynchronously from a renderer process to the main process.
+    const ipcRenderer = require('electron').ipcRenderer;
+
     // Define DOM element constants for the modal dialog.
     const componentModal = {
         container: $("#nodeModal"),
@@ -95,8 +98,6 @@ $(document).ready(function () {
     const saveComponentButton = $("#save-component");
     const openDBFileButton = $("#open-file");
     const saveDBFileButton = $("#save-file");
-    const openJSONFileButton = $("#import-json-file");
-    const saveJSONFileButton = $("#export-json-file");
     const submitComponentButton = $("#componentSubmit");
     const leftCol = $("#leftCol");
     const tabBar = $("#tabbar");
@@ -407,15 +408,14 @@ $(document).ready(function () {
         );
     });
 
-    // TODO: Move to application File Menu
     // Open a ScanCode results JSON file
-    openJSONFileButton.click(function() {
+    ipcRenderer.on('import-JSON', function () {
         dialog.showOpenDialog(function (fileNames) {
             if (fileNames === undefined) return;
 
             const fileName = fileNames[0];
 
-            $.getJSON(fileName, function(json) {
+            $.getJSON(fileName, function (json) {
 
                 // Show error for scans missing file type information
                 if (json.files != undefined && json.files.length > 0
@@ -458,7 +458,7 @@ $(document).ready(function () {
                     {
                         title: 'Save a SQLite Database File',
                         filters: [
-                          { name: 'SQLite File', extensions: ['sqlite'] }
+                            { name: 'SQLite File', extensions: ['sqlite'] }
                         ]
                     },
                     function (fileName) {
@@ -499,15 +499,16 @@ $(document).ready(function () {
         });
     });
 
-    // TODO: Move to application File Menu
     // Export JSON file with components that have been created
-    saveJSONFileButton.click(function() {
+    ipcRenderer.on('export-JSON', function () {
         dialog.showSaveDialog({
-                properties: ['openFile'],
-                title: "Save as JSON file",
-                filters: [{name: 'JSON File Type',
-                extensions: ['json']}]
-            },
+            properties: ['openFile'],
+            title: "Save as JSON file",
+            filters: [{
+                name: 'JSON File Type',
+                extensions: ['json']
+            }]
+        },
             function (fileName) {
                 if (fileName === undefined) return;
 
