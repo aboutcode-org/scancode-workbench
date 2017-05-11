@@ -255,5 +255,15 @@ const pjson = require('./package.json');
       }
     );
   }
+  const quitSubmenu =
+    {
+      label: "Quit",
+      click: () => {
+        app.quit();
+      }
+    };
+  if (process.platform != 'darwin') {
+    template[0].submenu.push(quitSubmenu);
+  }
   return template;
 }
