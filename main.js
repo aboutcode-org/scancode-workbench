@@ -261,9 +261,8 @@ const pjson = require('./package.json');
       click: () => {
         app.quit();
       }
-    }
-  if (process.platform != 'darwin')
-  {
+    };
+  if (process.platform != 'darwin') {
     template[0].submenu.push(quitSubmenu);
   }
   return template;
