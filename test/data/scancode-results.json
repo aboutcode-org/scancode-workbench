@@ -58,11 +58,48 @@
             }
           ],
           "packages": [
-              {
-                  "type": "plain tarball",
-                  "primary_language": null,
-                  "packaging": "archive"
-              }
+            {
+              "type": "plain tarball",
+              "name": null,
+              "version": null,
+              "primary_language": null,
+              "packaging": "archive",
+              "summary": null,
+              "description": null,
+              "payload_type": null,
+              "authors": [],
+              "maintainers": [],
+              "contributors": [],
+              "owners": [],
+              "packagers": [],
+              "distributors": [],
+              "vendors": [],
+              "keywords": [],
+              "keywords_doc_url": null,
+              "metafile_locations": [],
+              "metafile_urls": [],
+              "homepage_url": null,
+              "notes": null,
+              "download_urls": [],
+              "download_sha1": null,
+              "download_sha256": null,
+              "download_md5": null,
+              "bug_tracking_url": null,
+              "support_contacts": [],
+              "code_view_url": null,
+              "vcs_tool": null,
+              "vcs_repository": null,
+              "vcs_revision": null,
+              "copyright_top_level": null,
+              "copyrights": [],
+              "asserted_licenses": [],
+              "legal_file_locations": [],
+              "license_expression": null,
+              "license_texts": [],
+              "notice_texts": [],
+              "dependencies": {},
+              "related_packages": []
+            }
           ],
           "emails": [
               {
