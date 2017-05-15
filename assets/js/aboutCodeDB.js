@@ -224,18 +224,17 @@ class AboutCodeDB {
         });
     }
 
-    // TODO (@jdaguil): Add author to copyright model
     // Copyright Model definitions
     static copyrightModel(sequelize) {
         return sequelize.define("copyrights", {
             start_line: Sequelize.INTEGER,
             end_line: Sequelize.INTEGER,
-            holders: AboutCodeDB.jsonDataType('holders'),
-            statements: AboutCodeDB.jsonDataType('statements')
+            holders: AboutCodeDB.jsonDataType("holders"),
+            authors: AboutCodeDB.jsonDataType("authors"),
+            statements: AboutCodeDB.jsonDataType("statements")
         });
     }
 
-    // TODO (@jdaguil): Add other package attributes to package model
     // Package Model definitions
     static packageModel(sequelize) {
         return sequelize.define("packages", {
