@@ -40,7 +40,7 @@ app.on('activate', function () {
 function getTemplate() {
   const template = [
     {
-      label: 'File',      
+      label: 'File',
       submenu: [
         {
           label: "Import JSON File",
