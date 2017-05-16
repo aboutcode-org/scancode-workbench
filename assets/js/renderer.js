@@ -408,6 +408,21 @@ $(document).ready(function () {
         );
     });
 
+    // Open a SQLite Database File -- custom menu
+    ipcRenderer.on('open-SQLite', function () {
+        dialog.showOpenDialog({
+            properties: ['openFile'],
+            title: "Open a SQLite file",
+            filters: [{
+                name: 'SQLite File',
+                extensions: ['sqlite']
+            }]
+        }, function(fileNames) {
+            if (fileNames === undefined) return;
+            loadDatabaseFromFile(fileNames[0]);
+        });
+    });
+
     // Open a ScanCode results JSON file
     ipcRenderer.on('import-JSON', function () {
         dialog.showOpenDialog(function (fileNames) {
