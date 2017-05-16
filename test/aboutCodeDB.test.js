@@ -32,14 +32,14 @@ const flattenedFilesResults = JSON.parse(fs.readFileSync(__dirname + "/data/flat
 
 describe("checkAboutCodeDB", function() {
 
-    describe("addRows", function() {
+    describe("addScanData", function() {
         it("should add rows to database", function () {
             let aboutCodeDB = new AboutCodeDB();
 
             return aboutCodeDB.db
                 .then(() => aboutCodeDB.File.count())
                 .then((rowCount) => assert.strictEqual(rowCount, 0))
-                .then(() => aboutCodeDB.addRows(scanCodeJSONResults))
+                .then(() => aboutCodeDB.addScanData(scanCodeJSONResults))
                 .then(() => aboutCodeDB.File.count())
                 .then((rowCount) => assert.strictEqual(rowCount, 2))
                 .then(() => aboutCodeDB.License.count())
@@ -60,7 +60,7 @@ describe("checkAboutCodeDB", function() {
             let aboutCodeDB = new AboutCodeDB();
 
             return aboutCodeDB.db
-                .then(() => aboutCodeDB.addRows(scanCodeJSONResults))
+                .then(() => aboutCodeDB.addScanData(scanCodeJSONResults))
                 .then(() => aboutCodeDB.findAll({}))
                 .then((rows) => {
                     rows = rows.map(row => row.toJSON());
@@ -74,7 +74,7 @@ describe("checkAboutCodeDB", function() {
             let aboutCodeDB = new AboutCodeDB();
 
             return aboutCodeDB.db
-                .then(() => aboutCodeDB.addRows(scanCodeJSONResults))
+                .then(() => aboutCodeDB.addScanData(scanCodeJSONResults))
                 .then(() => aboutCodeDB.findOne({
                     where: { path: "samples/JGroups/src"}
                 }))
@@ -104,7 +104,7 @@ describe("checkAboutCodeDB", function() {
             ];
 
             return aboutCodeDB.db
-                .then(() => aboutCodeDB.addRows(scanCodeJSONResults))
+                .then(() => aboutCodeDB.addScanData(scanCodeJSONResults))
                 .then(() => aboutCodeDB.toJSTreeFormat())
                 .then((scanCodeJSONResults) => {
                     assert.deepEqual(expectedJSTreeFormat, scanCodeJSONResults)

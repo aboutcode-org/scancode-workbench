@@ -40,6 +40,7 @@ class AboutCodeDB {
         this.FlattenedFile = AboutCodeDB.flattenedFileModel(this.sequelize);
 
         // Non-flattened tables are for the NodeView
+        this.ScanCode = AboutCodeDB.scanCodeModel(this.sequelize);
         this.File = AboutCodeDB.fileModel(this.sequelize);
         this.License = AboutCodeDB.licenseModel(this.sequelize);
         this.Copyright = AboutCodeDB.copyrightModel(this.sequelize);
@@ -51,6 +52,7 @@ class AboutCodeDB {
         this.Component = AboutCodeDB.componentModel(this.sequelize);
 
         // Relations
+        this.ScanCode.hasMany(this.File);
         this.File.hasMany(this.License);
         this.File.hasMany(this.Copyright);
         this.File.hasMany(this.Package);
@@ -59,7 +61,7 @@ class AboutCodeDB {
         this.File.hasOne(this.Component);
 
         // Include Array for queries
-        this.include = [
+        this.fileIncludes = [
             this.License,
             this.Copyright,
             this.Package,
@@ -99,13 +101,13 @@ class AboutCodeDB {
 
     // Uses the files table to do a findOne query
     findOne(query) {
-        query = $.extend(query, { include: this.include });
+        query = $.extend(query, { include: this.fileIncludes });
         return this.db.then(() => this.File.findOne(query));
     }
 
     // Uses the files table to do a findAll query
     findAll(query) {
-        query = $.extend(query, { include: this.include });
+        query = $.extend(query, { include: this.fileIncludes });
         return this.db.then(() => this.File.findAll(query));
     }
 
@@ -127,29 +129,27 @@ class AboutCodeDB {
             });
     }
 
-    // Adds row to the files table
-    addRows(json) {
+    //  Adds rows to the ScanCode and File table
+    addScanData(json) {
         if (!json) {
             return this.db;
         }
 
         // Add all rows to the non-flattened DB
-        return this.db.then(() => {
-            return this.sequelize.transaction((transaction) => {
-                let promiseChain = Promise.resolve();
+        return this.db
+            .then(() => {
                 $.each(json.files, (index, file) => {
-                    file = $.extend(file, {parent: AboutCodeDB.parent(file.path)});
-                    promiseChain = promiseChain.then(() => {
-                        return this.File.create(file, {
-                            logging: false,
-                            transaction: transaction,
-                            include: this.include
-                        });
-                    });
+                    file.parent = AboutCodeDB.parent(file.path);
                 });
-                return promiseChain;
-            });
-        });
+            })
+            .then(() => this.ScanCode.create(json, {
+                include: [
+                    {
+                        model: this.File,
+                        include: this.fileIncludes
+                    }
+                ]
+            }));
     }
 
     // Format for jstree
@@ -175,6 +175,16 @@ class AboutCodeDB {
                     };
                 });
             });
+    }
+
+    // ScanCode Scan Details Model definitions
+    static scanCodeModel(sequelize) {
+        return sequelize.define("scancode", {
+            scancode_notice: Sequelize.STRING,
+            scancode_version: Sequelize.STRING,
+            scancode_options: AboutCodeDB.jsonDataType('scancode_options'),
+            scancode_files_count: Sequelize.INTEGER
+        });
     }
 
     // File Model definitions
