@@ -423,6 +423,29 @@ $(document).ready(function () {
         });
     });
 
+    // Save a SQLite Database File -- custom menu
+    ipcRenderer.on('save-SQLite', function () {
+        dialog.showSaveDialog(
+            {
+                title: 'Save as a Database File',
+                filters: [
+                  { name: 'SQLite File', extensions: ['sqlite'] }
+                ]
+            },
+            function (newFileName) {
+                if (newFileName === undefined) return;
+
+                let oldFileName = aboutCodeDB.sequelize.options.storage;
+                let reader = fs.createReadStream(oldFileName);
+                let writer = fs.createWriteStream(newFileName);
+                reader.pipe(writer);
+                reader.on("end", function () {
+                    loadDatabaseFromFile(newFileName);
+                })
+            }
+        );
+    });
+
     // Open a ScanCode results JSON file
     ipcRenderer.on('import-JSON', function () {
         dialog.showOpenDialog(function (fileNames) {
