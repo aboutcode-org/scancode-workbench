@@ -96,7 +96,7 @@ $(document).ready(function () {
     const showNodeViewButton = $("#show-tree");
     const showComponentButton = $("#show-component-table");
     const saveComponentButton = $("#save-component");
-    const openDBFileButton = $("#open-file");
+    const openSQLiteFileButton = $("#open-file");
     const saveDBFileButton = $("#save-file");
     const submitComponentButton = $("#componentSubmit");
     const leftCol = $("#leftCol");
@@ -370,11 +370,11 @@ $(document).ready(function () {
             });
     }
 
-    // Open a SQLite Database File
-    openDBFileButton.click(function() {
+    // Open a SQLite Database File -- refactored to work with both button click and custom menu
+    const openSQLite = () => {
         dialog.showOpenDialog({
             properties: ['openFile'],
-            title: "Open a SQLite file",
+            title: "Open a SQLite File",
             filters: [{
                 name: 'SQLite File',
                 extensions: ['sqlite']
@@ -383,6 +383,11 @@ $(document).ready(function () {
             if (fileNames === undefined) return;
             loadDatabaseFromFile(fileNames[0]);
         });
+    }
+
+    // Open a SQLite Database File
+    openSQLiteFileButton.click(function() {
+        openSQLite();
     });
 
     // Save a SQLite Database file
@@ -410,17 +415,7 @@ $(document).ready(function () {
 
     // Open a SQLite Database File -- custom menu
     ipcRenderer.on('open-SQLite', function () {
-        dialog.showOpenDialog({
-            properties: ['openFile'],
-            title: "Open a SQLite file",
-            filters: [{
-                name: 'SQLite File',
-                extensions: ['sqlite']
-            }]
-        }, function(fileNames) {
-            if (fileNames === undefined) return;
-            loadDatabaseFromFile(fileNames[0]);
-        });
+        openSQLite();
     });
 
     // Open a ScanCode results JSON file
