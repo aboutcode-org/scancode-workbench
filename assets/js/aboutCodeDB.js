@@ -215,7 +215,7 @@ class AboutCodeDB {
             is_script: Sequelize.BOOLEAN
         });
     }
-    // TODO (@jdaguil): Add matched_rule to license model
+
     // License Model definitions
     static licenseModel(sequelize) {
         return sequelize.define("licenses", {
@@ -230,7 +230,8 @@ class AboutCodeDB {
             spdx_license_key: Sequelize.STRING,
             spdx_url: Sequelize.STRING,
             start_line: Sequelize.INTEGER,
-            end_line: Sequelize.INTEGER
+            end_line: Sequelize.INTEGER,
+            matched_rule: AboutCodeDB.jsonDataType("matched_rule")
         });
     }
 
@@ -376,6 +377,7 @@ class AboutCodeDB {
             license_spdx_key: AboutCodeDB.jsonDataType("license_spdx_key"),
             license_start_line: AboutCodeDB.jsonDataType("license_start_line"),
             license_end_line: AboutCodeDB.jsonDataType("license_end_line"),
+            license_matched_rule: AboutCodeDB.jsonDataType("license_matched_rule"),
             email: AboutCodeDB.jsonDataType("email"),
             email_start_line: AboutCodeDB.jsonDataType("email_start_line"),
             email_end_line: AboutCodeDB.jsonDataType("email_end_line"),
@@ -471,6 +473,7 @@ class AboutCodeDB {
             license_spdx_key: AboutCodeDB.getValues(file.licenses, "spdx_license_key"),
             license_start_line: AboutCodeDB.getValues(file.licenses, "start_line"),
             license_end_line: AboutCodeDB.getValues(file.licenses, "end_line"),
+            license_matched_rule: AboutCodeDB.getValues(file.licenses, "matched_rule"),
             email: AboutCodeDB.getValues(file.emails, "email"),
             email_start_line: AboutCodeDB.getValues(file.emails, "start_line"),
             email_end_line: AboutCodeDB.getValues(file.emails, "end_line"),

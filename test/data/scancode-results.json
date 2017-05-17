@@ -45,7 +45,14 @@
               "spdx_license_key": "",
               "spdx_url": "",
               "start_line": 3,
-              "end_line": 108
+              "end_line": 108,
+              "matched_rule": {
+                "identifier": "jboss-eula.LICENSE",
+                "license_choice": false,
+                "licenses": [
+                  "jboss-eula"
+                ]
+              }
             }
           ],
           "copyrights": [
