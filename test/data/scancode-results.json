@@ -1,4 +1,17 @@
 {
+    "scancode_notice": "Generated with ScanCode and provided on an \"AS IS\" BASIS, WITHOUT WARRANTIES\nOR CONDITIONS OF ANY KIND, either express or implied. No content created from\nScanCode should be considered or used as legal advice. Consult an Attorney\nfor any legal advice.\nScanCode is a free software code scanning tool from nexB Inc. and others.\nVisit https://github.com/nexB/scancode-toolkit/ for support and download.",
+    "scancode_version": "2.0.0.rc2.post233.0b6a589",
+    "scancode_options": {
+      "--copyright": true,
+      "--license": true,
+      "--package": true,
+      "--email": true,
+      "--url": true,
+      "--info": true,
+      "--license-score": 0,
+      "--format": "json"
+    },
+    "files_count": 43,
     "files": [
         {
           "path": "samples/README",
@@ -32,7 +45,14 @@
               "spdx_license_key": "",
               "spdx_url": "",
               "start_line": 3,
-              "end_line": 108
+              "end_line": 108,
+              "matched_rule": {
+                "identifier": "jboss-eula.LICENSE",
+                "license_choice": false,
+                "licenses": [
+                  "jboss-eula"
+                ]
+              }
             }
           ],
           "copyrights": [
@@ -43,6 +63,7 @@
               "holders": [
                 "Free Software Foundation, Inc."
               ],
+              "authors": [],
               "start_line": 4,
               "end_line": 7
             },
@@ -58,11 +79,48 @@
             }
           ],
           "packages": [
-              {
-                  "type": "plain tarball",
-                  "primary_language": null,
-                  "packaging": "archive"
-              }
+            {
+              "type": "plain tarball",
+              "name": null,
+              "version": null,
+              "primary_language": null,
+              "packaging": "archive",
+              "summary": null,
+              "description": null,
+              "payload_type": null,
+              "authors": [],
+              "maintainers": [],
+              "contributors": [],
+              "owners": [],
+              "packagers": [],
+              "distributors": [],
+              "vendors": [],
+              "keywords": [],
+              "keywords_doc_url": null,
+              "metafile_locations": [],
+              "metafile_urls": [],
+              "homepage_url": null,
+              "notes": null,
+              "download_urls": [],
+              "download_sha1": null,
+              "download_sha256": null,
+              "download_md5": null,
+              "bug_tracking_url": null,
+              "support_contacts": [],
+              "code_view_url": null,
+              "vcs_tool": null,
+              "vcs_repository": null,
+              "vcs_revision": null,
+              "copyright_top_level": null,
+              "copyrights": [],
+              "asserted_licenses": [],
+              "legal_file_locations": [],
+              "license_expression": null,
+              "license_texts": [],
+              "notice_texts": [],
+              "dependencies": {},
+              "related_packages": []
+            }
           ],
           "emails": [
               {
