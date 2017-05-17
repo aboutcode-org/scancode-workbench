@@ -510,7 +510,7 @@ $(document).ready(function () {
 
                         // The flattened data is used by the clue table and jstree
                         aboutCodeDB.addFlattenedRows(json)
-                            .then(() => aboutCodeDB.addRows(json))
+                            .then(() => aboutCodeDB.addScanData(json))
                             .then(() => {
                                 // reload the DataTable after all insertions are done.
                                 cluesTable.database(aboutCodeDB);

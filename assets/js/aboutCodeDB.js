@@ -40,6 +40,7 @@ class AboutCodeDB {
         this.FlattenedFile = AboutCodeDB.flattenedFileModel(this.sequelize);
 
         // Non-flattened tables are for the NodeView
+        this.ScanCode = AboutCodeDB.scanCodeModel(this.sequelize);
         this.File = AboutCodeDB.fileModel(this.sequelize);
         this.License = AboutCodeDB.licenseModel(this.sequelize);
         this.Copyright = AboutCodeDB.copyrightModel(this.sequelize);
@@ -51,6 +52,7 @@ class AboutCodeDB {
         this.Component = AboutCodeDB.componentModel(this.sequelize);
 
         // Relations
+        this.ScanCode.hasMany(this.File);
         this.File.hasMany(this.License);
         this.File.hasMany(this.Copyright);
         this.File.hasMany(this.Package);
@@ -59,7 +61,7 @@ class AboutCodeDB {
         this.File.hasOne(this.Component);
 
         // Include Array for queries
-        this.include = [
+        this.fileIncludes = [
             this.License,
             this.Copyright,
             this.Package,
@@ -99,13 +101,13 @@ class AboutCodeDB {
 
     // Uses the files table to do a findOne query
     findOne(query) {
-        query = $.extend(query, { include: this.include });
+        query = $.extend(query, { include: this.fileIncludes });
         return this.db.then(() => this.File.findOne(query));
     }
 
     // Uses the files table to do a findAll query
     findAll(query) {
-        query = $.extend(query, { include: this.include });
+        query = $.extend(query, { include: this.fileIncludes });
         return this.db.then(() => this.File.findAll(query));
     }
 
@@ -127,29 +129,27 @@ class AboutCodeDB {
             });
     }
 
-    // Adds row to the files table
-    addRows(json) {
+    //  Adds rows to the ScanCode and File table
+    addScanData(json) {
         if (!json) {
             return this.db;
         }
 
         // Add all rows to the non-flattened DB
-        return this.db.then(() => {
-            return this.sequelize.transaction((transaction) => {
-                let promiseChain = Promise.resolve();
+        return this.db
+            .then(() => {
                 $.each(json.files, (index, file) => {
-                    file = $.extend(file, {parent: AboutCodeDB.parent(file.path)});
-                    promiseChain = promiseChain.then(() => {
-                        return this.File.create(file, {
-                            logging: false,
-                            transaction: transaction,
-                            include: this.include
-                        });
-                    });
+                    file.parent = AboutCodeDB.parent(file.path);
                 });
-                return promiseChain;
-            });
-        });
+            })
+            .then(() => this.ScanCode.create(json, {
+                include: [
+                    {
+                        model: this.File,
+                        include: this.fileIncludes
+                    }
+                ]
+            }));
     }
 
     // Format for jstree
@@ -175,6 +175,16 @@ class AboutCodeDB {
                     };
                 });
             });
+    }
+
+    // ScanCode Scan Details Model definitions
+    static scanCodeModel(sequelize) {
+        return sequelize.define("scancode", {
+            scancode_notice: Sequelize.STRING,
+            scancode_version: Sequelize.STRING,
+            scancode_options: AboutCodeDB.jsonDataType('scancode_options'),
+            scancode_files_count: Sequelize.INTEGER
+        });
     }
 
     // File Model definitions
@@ -205,7 +215,7 @@ class AboutCodeDB {
             is_script: Sequelize.BOOLEAN
         });
     }
-    // TODO (@jdaguil): Add matched_rule to license model
+
     // License Model definitions
     static licenseModel(sequelize) {
         return sequelize.define("licenses", {
@@ -220,28 +230,65 @@ class AboutCodeDB {
             spdx_license_key: Sequelize.STRING,
             spdx_url: Sequelize.STRING,
             start_line: Sequelize.INTEGER,
-            end_line: Sequelize.INTEGER
+            end_line: Sequelize.INTEGER,
+            matched_rule: AboutCodeDB.jsonDataType("matched_rule")
         });
     }
 
-    // TODO (@jdaguil): Add author to copyright model
     // Copyright Model definitions
     static copyrightModel(sequelize) {
         return sequelize.define("copyrights", {
             start_line: Sequelize.INTEGER,
             end_line: Sequelize.INTEGER,
-            holders: AboutCodeDB.jsonDataType('holders'),
-            statements: AboutCodeDB.jsonDataType('statements')
+            holders: AboutCodeDB.jsonDataType("holders"),
+            authors: AboutCodeDB.jsonDataType("authors"),
+            statements: AboutCodeDB.jsonDataType("statements")
         });
     }
 
-    // TODO (@jdaguil): Add other package attributes to package model
     // Package Model definitions
     static packageModel(sequelize) {
         return sequelize.define("packages", {
             type: Sequelize.STRING,
+            name: Sequelize.STRING,
+            version: Sequelize.STRING,
+            primary_language: Sequelize.STRING,
             packaging: Sequelize.STRING,
-            primary_language: Sequelize.STRING
+            summary: Sequelize.STRING,
+            description: Sequelize.STRING,
+            payload_type: Sequelize.STRING,
+            authors: AboutCodeDB.jsonDataType("authors"),
+            maintainers: AboutCodeDB.jsonDataType("maintainers"),
+            contributors: AboutCodeDB.jsonDataType("contributors"),
+            owners: AboutCodeDB.jsonDataType("owners"),
+            packagers: AboutCodeDB.jsonDataType("packagers"),
+            distributors: AboutCodeDB.jsonDataType("distributors"),
+            vendors: AboutCodeDB.jsonDataType("vendors"),
+            keywords: AboutCodeDB.jsonDataType("keywords"),
+            keywords_doc_url: Sequelize.STRING,
+            metafile_locations: AboutCodeDB.jsonDataType("metafile_locations"),
+            metafile_urls: AboutCodeDB.jsonDataType("metafile_urls"),
+            homepage_url: Sequelize.STRING,
+            notes: Sequelize.STRING,
+            download_urls: AboutCodeDB.jsonDataType("download_urls"),
+            download_sha1: Sequelize.STRING,
+            download_sha256: Sequelize.STRING,
+            download_md5: Sequelize.STRING,
+            bug_tracking_url: Sequelize.STRING,
+            support_contacts: AboutCodeDB.jsonDataType("support_contacts"),
+            code_view_url: Sequelize.STRING,
+            vcs_tool: Sequelize.STRING,
+            vcs_repository: Sequelize.STRING,
+            vcs_revision: Sequelize.STRING,
+            copyright_top_level: Sequelize.STRING,
+            copyrights: AboutCodeDB.jsonDataType("copyrights"),
+            asserted_licenses: AboutCodeDB.jsonDataType("asserted_licenses"),
+            legal_file_locations: AboutCodeDB.jsonDataType("legal_file_locations"),
+            license_expression: Sequelize.STRING,
+            license_texts: AboutCodeDB.jsonDataType("license_texts"),
+            notice_texts: AboutCodeDB.jsonDataType("notice_texts"),
+            dependencies: AboutCodeDB.jsonDataType("dependencies"),
+            related_packages: AboutCodeDB.jsonDataType("related_packages")
         });
     }
 
@@ -330,6 +377,7 @@ class AboutCodeDB {
             license_spdx_key: AboutCodeDB.jsonDataType("license_spdx_key"),
             license_start_line: AboutCodeDB.jsonDataType("license_start_line"),
             license_end_line: AboutCodeDB.jsonDataType("license_end_line"),
+            license_matched_rule: AboutCodeDB.jsonDataType("license_matched_rule"),
             email: AboutCodeDB.jsonDataType("email"),
             email_start_line: AboutCodeDB.jsonDataType("email_start_line"),
             email_end_line: AboutCodeDB.jsonDataType("email_end_line"),
@@ -346,10 +394,7 @@ class AboutCodeDB {
             file_count: {type: Sequelize.INTEGER, defaultValue: ""},
             mime_type: {type: Sequelize.STRING, defaultValue: ""},
             file_type: {type: Sequelize.STRING, defaultValue: ""},
-            programming_language: {
-                type: Sequelize.STRING,
-                defaultValue: ""
-            },
+            programming_language: {type: Sequelize.STRING, defaultValue: ""},
             is_binary: Sequelize.BOOLEAN,
             is_text: Sequelize.BOOLEAN,
             is_archive: Sequelize.BOOLEAN,
@@ -357,8 +402,45 @@ class AboutCodeDB {
             is_source: Sequelize.BOOLEAN,
             is_script: Sequelize.BOOLEAN,
             packages_type: AboutCodeDB.jsonDataType("packages_type"),
+            packages_name: AboutCodeDB.jsonDataType("packages_name"),
+            packages_version: AboutCodeDB.jsonDataType("packages_version"),
+            packages_primary_language: AboutCodeDB.jsonDataType("packages_primary_language"),
             packages_packaging: AboutCodeDB.jsonDataType("packages_packaging"),
-            packages_primary_language: AboutCodeDB.jsonDataType("packages_primary_language")
+            packages_summary: AboutCodeDB.jsonDataType( "packages_summary"),
+            packages_description: AboutCodeDB.jsonDataType( "packages_description"),
+            packages_payload_type: AboutCodeDB.jsonDataType( "packages_payload_type"),
+            packages_authors: AboutCodeDB.jsonDataType( "packages_authors"),
+            packages_maintainers: AboutCodeDB.jsonDataType( "packages_maintainers"),
+            packages_contributors: AboutCodeDB.jsonDataType( "packages_contributors"),
+            packages_owners: AboutCodeDB.jsonDataType( "packages_owners"),
+            packages_packagers: AboutCodeDB.jsonDataType( "packages_packagers"),
+            packages_distributors: AboutCodeDB.jsonDataType( "packages_distributors"),
+            packages_vendors: AboutCodeDB.jsonDataType( "packages_vendors"),
+            packages_keywords: AboutCodeDB.jsonDataType( "packages_keywords"),
+            packages_keywords_doc_url: AboutCodeDB.jsonDataType( "packages_keywords_doc_url"),
+            packages_metafile_locations: AboutCodeDB.jsonDataType( "packages_metafile_locations"),
+            packages_metafile_urls: AboutCodeDB.jsonDataType( "packages_metafile_urls"),
+            packages_homepage_url: AboutCodeDB.jsonDataType( "packages_homepage_url"),
+            packages_notes: AboutCodeDB.jsonDataType( "packages_notes"),
+            packages_download_urls: AboutCodeDB.jsonDataType( "packages_download_urls"),
+            packages_download_sha1: AboutCodeDB.jsonDataType( "packages_download_sha1"),
+            packages_download_sha256: AboutCodeDB.jsonDataType( "packages_download_sha256"),
+            packages_download_md5: AboutCodeDB.jsonDataType( "packages_download_md5"),
+            packages_bug_tracking_url: AboutCodeDB.jsonDataType( "packages_bug_tracking_url"),
+            packages_support_contacts: AboutCodeDB.jsonDataType( "packages_support_contacts"),
+            packages_code_view_url: AboutCodeDB.jsonDataType( "packages_code_view_url"),
+            packages_vcs_tool: AboutCodeDB.jsonDataType( "packages_vcs_tool"),
+            packages_vcs_repository: AboutCodeDB.jsonDataType( "packages_vcs_repository"),
+            packages_vcs_revision: AboutCodeDB.jsonDataType( "packages_vcs_revision"),
+            packages_copyright_top_level: AboutCodeDB.jsonDataType( "packages_copyright_top_level"),
+            packages_copyrights: AboutCodeDB.jsonDataType( "packages_copyrights"),
+            packages_asserted_licenses: AboutCodeDB.jsonDataType( "packages_asserted_licenses"),
+            packages_legal_file_locations: AboutCodeDB.jsonDataType( "packages_legal_file_locations"),
+            packages_license_expression: AboutCodeDB.jsonDataType( "packages_license_expression"),
+            packages_license_texts: AboutCodeDB.jsonDataType( "packages_license_texts"),
+            packages_notice_texts: AboutCodeDB.jsonDataType( "packages_notice_texts"),
+            packages_dependencies: AboutCodeDB.jsonDataType( "packages_dependencies"),
+            packages_related_packages: AboutCodeDB.jsonDataType( "packages_related_packages")
         }, {
             indexes: [
                 // Create a unique index on path
@@ -391,6 +473,7 @@ class AboutCodeDB {
             license_spdx_key: AboutCodeDB.getValues(file.licenses, "spdx_license_key"),
             license_start_line: AboutCodeDB.getValues(file.licenses, "start_line"),
             license_end_line: AboutCodeDB.getValues(file.licenses, "end_line"),
+            license_matched_rule: AboutCodeDB.getValues(file.licenses, "matched_rule"),
             email: AboutCodeDB.getValues(file.emails, "email"),
             email_start_line: AboutCodeDB.getValues(file.emails, "start_line"),
             email_end_line: AboutCodeDB.getValues(file.emails, "end_line"),
@@ -415,9 +498,45 @@ class AboutCodeDB {
             is_source: file.is_source,
             is_script: file.is_script,
             packages_type: AboutCodeDB.getValues(file.packages, "type"),
+            packages_name: AboutCodeDB.getValues(file.packages, "name"),
+            packages_version: AboutCodeDB.getValues(file.packages, "version"),
+            packages_primary_language: AboutCodeDB.getValues(file.packages, "primary_language"),
             packages_packaging: AboutCodeDB.getValues(file.packages, "packaging"),
-            packages_primary_language: AboutCodeDB.getValues(file.packages,
-                "primary_language")
+            packages_summary: AboutCodeDB.getValues(file.packages, "summary"),
+            packages_description: AboutCodeDB.getValues(file.packages, "description"),
+            packages_payload_type: AboutCodeDB.getValues(file.packages, "payload_type"),
+            packages_authors: AboutCodeDB.getValues(file.packages, "authors"),
+            packages_maintainers: AboutCodeDB.getValues(file.packages, "maintainers"),
+            packages_contributors: AboutCodeDB.getValues(file.packages, "contributors"),
+            packages_owners: AboutCodeDB.getValues(file.packages, "owners"),
+            packages_packagers: AboutCodeDB.getValues(file.packages, "packagers"),
+            packages_distributors: AboutCodeDB.getValues(file.packages, "distributors"),
+            packages_vendors: AboutCodeDB.getValues(file.packages, "vendors"),
+            packages_keywords: AboutCodeDB.getValues(file.packages, "keywords"),
+            packages_keywords_doc_url: AboutCodeDB.getValues(file.packages, "keywords_doc_url"),
+            packages_metafile_locations: AboutCodeDB.getValues(file.packages, "metafile_locations"),
+            packages_metafile_urls: AboutCodeDB.getValues(file.packages, "metafile_urls"),
+            packages_homepage_url: AboutCodeDB.getValues(file.packages, "homepage_url"),
+            packages_notes: AboutCodeDB.getValues(file.packages, "notes"),
+            packages_download_urls: AboutCodeDB.getValues(file.packages, "download_urls"),
+            packages_download_sha1: AboutCodeDB.getValues(file.packages, "download_sha1"),
+            packages_download_sha256: AboutCodeDB.getValues(file.packages, "download_sha256"),
+            packages_download_md5: AboutCodeDB.getValues(file.packages, "download_md5"),
+            packages_bug_tracking_url: AboutCodeDB.getValues(file.packages, "bug_tracking_url"),
+            packages_support_contacts: AboutCodeDB.getValues(file.packages, "support_contacts"),
+            packages_code_view_url: AboutCodeDB.getValues(file.packages, "code_view_url"),
+            packages_vcs_tool: AboutCodeDB.getValues(file.packages, "vcs_tool"),
+            packages_vcs_repository: AboutCodeDB.getValues(file.packages, "vcs_repository"),
+            packages_vcs_revision: AboutCodeDB.getValues(file.packages, "vcs_revision"),
+            packages_copyright_top_level: AboutCodeDB.getValues(file.packages, "copyright_top_level"),
+            packages_copyrights: AboutCodeDB.getValues(file.packages, "copyrights"),
+            packages_asserted_licenses: AboutCodeDB.getValues(file.packages, "asserted_licenses"),
+            packages_legal_file_locations: AboutCodeDB.getValues(file.packages, "legal_file_locations"),
+            packages_license_expression: AboutCodeDB.getValues(file.packages, "license_expression"),
+            packages_license_texts: AboutCodeDB.getValues(file.packages, "license_texts"),
+            packages_notice_texts: AboutCodeDB.getValues(file.packages, "notice_texts"),
+            packages_dependencies: AboutCodeDB.getValues(file.packages, "dependencies"),
+            packages_related_packages: AboutCodeDB.getValues(file.packages, "related_packages")
         }
     }
 
