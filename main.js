@@ -41,16 +41,17 @@ function getTemplate() {
   const template = [
     {
       label: 'File',
-      
       submenu: [
         {
           label: "Import JSON File",
+          accelerator: 'CmdOrCtrl+I',
           click: function (menuItem, currentWindow) {
             currentWindow.webContents.send('import-JSON')
           }
         },
         {
           label: "Export JSON File",
+          accelerator: 'CmdOrCtrl+E',
           click: function (menuItem, currentWindow) {
             currentWindow.webContents.send('export-JSON')
           }
@@ -258,6 +259,7 @@ const pjson = require('./package.json');
   const quitSubmenu =
     {
       label: "Quit",
+      accelerator: 'CmdOrCtrl+Q',
       click: () => {
         app.quit();
       }
