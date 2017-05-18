@@ -97,7 +97,7 @@ $(document).ready(function () {
     const showComponentButton = $("#show-component-table");
     const saveComponentButton = $("#save-component");
     const openDBFileButton = $("#open-file");
-    const saveDBFileButton = $("#save-file");
+    const saveSQLiteFileButton = $("#save-file");
     const submitComponentButton = $("#componentSubmit");
     const leftCol = $("#leftCol");
     const tabBar = $("#tabbar");
@@ -370,23 +370,8 @@ $(document).ready(function () {
             });
     }
 
-    // Open a SQLite Database File
-    openDBFileButton.click(function() {
-        dialog.showOpenDialog({
-            properties: ['openFile'],
-            title: "Open a SQLite file",
-            filters: [{
-                name: 'SQLite File',
-                extensions: ['sqlite']
-            }]
-        }, function(fileNames) {
-            if (fileNames === undefined) return;
-            loadDatabaseFromFile(fileNames[0]);
-        });
-    });
-
-    // Save a SQLite Database file
-    saveDBFileButton.click(function() {
+    // Save a SQLite Database File -- refactored to work with both button click and custom menu
+    const saveSQLite = () => {
         dialog.showSaveDialog(
             {
                 title: 'Save as a Database File',
@@ -406,6 +391,26 @@ $(document).ready(function () {
                 })
             }
         );
+    }
+
+    // Open a SQLite Database File
+    openDBFileButton.click(function() {
+        dialog.showOpenDialog({
+            properties: ['openFile'],
+            title: "Open a SQLite file",
+            filters: [{
+                name: 'SQLite File',
+                extensions: ['sqlite']
+            }]
+        }, function(fileNames) {
+            if (fileNames === undefined) return;
+            loadDatabaseFromFile(fileNames[0]);
+        });
+    });
+
+    // Save a SQLite Database file
+    saveSQLiteFileButton.click(function() {
+        saveSQLite();
     });
 
     // Open a SQLite Database File -- custom menu
@@ -425,25 +430,7 @@ $(document).ready(function () {
 
     // Save a SQLite Database File -- custom menu
     ipcRenderer.on('save-SQLite', function () {
-        dialog.showSaveDialog(
-            {
-                title: 'Save as a Database File',
-                filters: [
-                  { name: 'SQLite File', extensions: ['sqlite'] }
-                ]
-            },
-            function (newFileName) {
-                if (newFileName === undefined) return;
-
-                let oldFileName = aboutCodeDB.sequelize.options.storage;
-                let reader = fs.createReadStream(oldFileName);
-                let writer = fs.createWriteStream(newFileName);
-                reader.pipe(writer);
-                reader.on("end", function () {
-                    loadDatabaseFromFile(newFileName);
-                })
-            }
-        );
+        saveSQLite();
     });
 
     // Open a ScanCode results JSON file
