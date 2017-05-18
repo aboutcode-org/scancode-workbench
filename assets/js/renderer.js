@@ -370,8 +370,8 @@ $(document).ready(function () {
             });
     }
 
-    // Open a SQLite Database File -- refactored to work with both button click and custom menu
-    const openSQLite = () => {
+    // Open a SQLite Database File
+    function openSQLite() {
         dialog.showOpenDialog({
             properties: ['openFile'],
             title: "Open a SQLite File",
@@ -386,9 +386,10 @@ $(document).ready(function () {
     }
 
     // Open a SQLite Database File
-    openSQLiteFileButton.click(function() {
-        openSQLite();
-    });
+    openSQLiteFileButton.click(openSQLite);
+
+    // Open a SQLite Database File -- custom menu
+    ipcRenderer.on('open-SQLite', openSQLite);
 
     // Save a SQLite Database file
     saveDBFileButton.click(function() {
@@ -411,11 +412,6 @@ $(document).ready(function () {
                 })
             }
         );
-    });
-
-    // Open a SQLite Database File -- custom menu
-    ipcRenderer.on('open-SQLite', function () {
-        openSQLite();
     });
 
     // Open a ScanCode results JSON file
