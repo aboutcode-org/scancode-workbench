@@ -96,6 +96,7 @@ $(document).ready(function () {
     const showNodeViewButton = $("#show-tree");
     const showComponentButton = $("#show-component-table");
     const saveComponentButton = $("#save-component");
+    const deleteComponentButton = $("#delete-component");
     const openDBFileButton = $("#open-file");
     const saveDBFileButton = $("#save-file");
     const submitComponentButton = $("#componentSubmit");
@@ -301,6 +302,22 @@ $(document).ready(function () {
                 nodeView.redraw();
             });
         componentModal.container.modal('hide');
+    });
+
+    // Delete a created Component inside the Component Modal
+    deleteComponentButton.click(function () {
+        let id = componentModal.label.text();
+
+        aboutCodeDB.findComponent({ where: { path: id }})
+            .then((component) => {
+                if (component !== null) {
+                    return component.destroy();
+                }
+            })
+            .then(() => {
+                nodeView.nodeData[id].component = null;
+                nodeView.redraw();
+            });
     });
 
     nodeDropdown.select2({
