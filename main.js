@@ -49,6 +49,12 @@ function getTemplate() {
           }
         },
         {
+          label: "Save SQLite File",
+          click: function (menuItem, currentWindow) {
+            currentWindow.webContents.send('save-SQLite')
+          }
+        },
+        {
           label: "Import JSON File",
           accelerator: 'CmdOrCtrl+I',
           click: function (menuItem, currentWindow) {
