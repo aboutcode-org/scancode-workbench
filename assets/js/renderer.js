@@ -370,8 +370,8 @@ $(document).ready(function () {
             });
     }
 
-    // Save a SQLite Database File -- refactored to work with both button click and custom menu
-    const saveSQLite = () => {
+    // Save a SQLite Database File
+    function saveSQLite() {
         dialog.showSaveDialog(
             {
                 title: 'Save as a Database File',
@@ -409,9 +409,10 @@ $(document).ready(function () {
     });
 
     // Save a SQLite Database file
-    saveSQLiteFileButton.click(function() {
-        saveSQLite();
-    });
+    saveSQLiteFileButton.click(saveSQLite);
+
+    // Save a SQLite Database File -- custom menu
+    ipcRenderer.on('save-SQLite', saveSQLite);
 
     // Open a SQLite Database File -- custom menu
     ipcRenderer.on('open-SQLite', function () {
@@ -426,11 +427,6 @@ $(document).ready(function () {
             if (fileNames === undefined) return;
             loadDatabaseFromFile(fileNames[0]);
         });
-    });
-
-    // Save a SQLite Database File -- custom menu
-    ipcRenderer.on('save-SQLite', function () {
-        saveSQLite();
     });
 
     // Open a ScanCode results JSON file
