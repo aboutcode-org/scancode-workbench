@@ -44,12 +44,14 @@ function getTemplate() {
       submenu: [
         {
           label: "Open SQLite File",
+          accelerator: 'CmdOrCtrl+O',
           click: function (menuItem, currentWindow) {
             currentWindow.webContents.send('open-SQLite')
           }
         },
         {
           label: "Save SQLite File",
+          accelerator: 'CmdOrCtrl+S',
           click: function (menuItem, currentWindow) {
             currentWindow.webContents.send('save-SQLite')
           }
