@@ -43,6 +43,18 @@ function getTemplate() {
       label: 'File',
       submenu: [
         {
+          label: "Open SQLite File",
+          click: function (menuItem, currentWindow) {
+            currentWindow.webContents.send('open-SQLite')
+          }
+        },
+        {
+          label: "Save SQLite File",
+          click: function (menuItem, currentWindow) {
+            currentWindow.webContents.send('save-SQLite')
+          }
+        },
+        {
           label: "Import JSON File",
           accelerator: 'CmdOrCtrl+I',
           click: function (menuItem, currentWindow) {

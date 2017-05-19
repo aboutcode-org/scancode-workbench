@@ -97,8 +97,8 @@ $(document).ready(function () {
     const showComponentButton = $("#show-component-table");
     const saveComponentButton = $("#save-component");
     const deleteComponentButton = $("#delete-component");
-    const openDBFileButton = $("#open-file");
-    const saveDBFileButton = $("#save-file");
+    const saveSQLiteFileButton = $("#save-file");
+    const openSQLiteFileButton = $("#open-file");
     const submitComponentButton = $("#componentSubmit");
     const leftCol = $("#leftCol");
     const tabBar = $("#tabbar");
@@ -388,10 +388,10 @@ $(document).ready(function () {
     }
 
     // Open a SQLite Database File
-    openDBFileButton.click(function() {
+    function openSQLite() {
         dialog.showOpenDialog({
             properties: ['openFile'],
-            title: "Open a SQLite file",
+            title: "Open a SQLite File",
             filters: [{
                 name: 'SQLite File',
                 extensions: ['sqlite']
@@ -400,10 +400,16 @@ $(document).ready(function () {
             if (fileNames === undefined) return;
             loadDatabaseFromFile(fileNames[0]);
         });
-    });
+    }
 
-    // Save a SQLite Database file
-    saveDBFileButton.click(function() {
+    // Open a SQLite Database File
+    openSQLiteFileButton.click(openSQLite);
+
+    // Open a SQLite Database File -- custom menu
+    ipcRenderer.on('open-SQLite', openSQLite);
+
+    // Save a SQLite Database File
+    function saveSQLite() {
         dialog.showSaveDialog(
             {
                 title: 'Save as a Database File',
@@ -423,7 +429,13 @@ $(document).ready(function () {
                 })
             }
         );
-    });
+    }
+
+    // Save a SQLite Database file
+    saveSQLiteFileButton.click(saveSQLite);
+
+    // Save a SQLite Database File -- custom menu
+    ipcRenderer.on('save-SQLite', saveSQLite);
 
     // Open a ScanCode results JSON file
     ipcRenderer.on('import-JSON', function () {
