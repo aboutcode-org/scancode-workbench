@@ -40,7 +40,7 @@ app.on('activate', function () {
 function getTemplate() {
   const template = [
     {
-      label: 'File',
+      label: '&File',
       submenu: [
         {
           label: "Open SQLite File",
@@ -73,7 +73,7 @@ function getTemplate() {
       ]
     },
     {
-      label: 'Edit',
+      label: '&Edit',
       submenu: [
         {
           label: 'Undo',
@@ -111,7 +111,7 @@ function getTemplate() {
       ]
     },
     {
-      label: 'View',
+      label: '&View',
       submenu: [
         {
           label: 'Reload',
@@ -150,7 +150,7 @@ function getTemplate() {
       ]
     },
     {
-      label: 'Window',
+      label: '&Window',
       role: 'window',
       submenu: [
         {
@@ -166,7 +166,7 @@ function getTemplate() {
       ]
     },
     {
-      label: 'Help',
+      label: '&Help',
       role: 'help',
       submenu: [
         {
