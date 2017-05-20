@@ -457,14 +457,39 @@ class AboutCodeDataTable {
                 "name": "packages_type"
             },
             {
-                "data": "packages_packaging",
-                "title": "Packaging",
-                "name": "packages_packaging"
+                "data": "packages_name",
+                "title": "Package Name",
+                "name": "packages_name"
+            },
+            {
+                "data": "packages_version",
+                "title": "Package Version",
+                "name": "packages_version"
             },
             {
                 "data": "packages_primary_language",
                 "title": "Package Primary Language",
                 "name": "packages_primary_language"
+            },
+            {
+                "data": "packages_packaging",
+                "title": "Packaging",
+                "name": "packages_packaging"
+            },
+            {
+                "data": "packages_authors_name[<hr/>]",
+                "title": "Package Authors Name",
+                "name": "packages_authors_name"
+            },
+            {
+                "data": "packages_homepage_url",
+                "title": "Package Homepage URL",
+                "name": "packages_homepage_url"
+            },
+            {
+                "data": "packages_asserted_licenses[<hr/>]",
+                "title": "Package Asserted License",
+                "name": "packages_asserted_licenses"
             }
         ];
     }
