@@ -489,10 +489,12 @@ class AboutCodeDataTable {
             {
                 "data": function (row, type, val, meta) {
                     return row.packages_download_urls.map(urls => {
-                        return urls.join("<br/>")
+                        return urls.map(url => {
+                             return '<a href="'+url+'" target="_blank">'+url+'</a>';
+                        }).join("<br/>")
                     }).join("<hr/>");
                 },
-                "title": "Package Download URL",
+                "title": "Package Download URLs",
                 "name": "packages_download_urls"
             },
         ];
