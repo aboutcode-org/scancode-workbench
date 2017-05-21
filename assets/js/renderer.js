@@ -325,25 +325,37 @@ $(document).ready(function () {
         placeholder: "select me"
     });
 
-    // Show clue DataTable. Hide node view and component summary table
-    showClueButton.click(function() {
+    // Show Table View (aka "clue DataTable").  Hide node view and component summary table.
+    function showTableView() {
         cluesContainer.show();
         nodeContainer.hide();
         componentContainer.hide();
         leftCol.addClass('col-md-2').show();
         tabBar.removeClass('col-md-11').addClass('col-md-9');
         cluesTable.draw();
-    });
+    }
+
+    // Show clue DataTable. Hide node view and component summary table
+    showClueButton.click(showTableView);
+
+    // Show clue DataTable. Hide node view and component summary table -- custom menu
+    ipcRenderer.on('table-view', showTableView);
 
     // Show node view. Hide clue and component table
-    showNodeViewButton.click(function() {
+    function showNodeView() {
         nodeContainer.show();
         cluesContainer.hide();
         componentContainer.hide();
         leftCol.addClass('col-md-2').show();
         tabBar.removeClass('col-md-11').addClass('col-md-9');
         nodeView.redraw();
-    });
+    }
+
+    // Show node view. Hide clue and component table
+    showNodeViewButton.click(showNodeView);
+
+    // Show node view. Hide clue and component table -- custom menu
+    ipcRenderer.on('node-view', showNodeView);
 
     // Show component summary table. Hide DataTable and node view
     showComponentButton.click(function() {
