@@ -467,14 +467,14 @@ class AboutCodeDataTable {
                 "name": "packages_version"
             },
             {
+                "data": "packages_asserted_licenses_license[<hr/>]",
+                "title": "Package Asserted License",
+                "name": "packages_asserted_licenses_license"
+            },
+            {
                 "data": "packages_primary_language",
                 "title": "Package Primary Language",
                 "name": "packages_primary_language"
-            },
-            {
-                "data": "packages_packaging",
-                "title": "Packaging",
-                "name": "packages_packaging"
             },
             {
                 "data": "packages_authors_name[<hr/>]",
@@ -487,10 +487,14 @@ class AboutCodeDataTable {
                 "name": "packages_homepage_url"
             },
             {
-                "data": "packages_asserted_licenses[<hr/>]",
-                "title": "Package Asserted License",
-                "name": "packages_asserted_licenses"
-            }
+                "data": function (row, type, val, meta) {
+                    return row.packages_download_urls.map(urls => {
+                        return urls.join("<br/>")
+                    }).join("<hr/>");
+                },
+                "title": "Package Download URL",
+                "name": "packages_download_urls"
+            },
         ];
     }
 
