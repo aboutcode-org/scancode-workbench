@@ -128,6 +128,13 @@ function getTemplate() {
           }
         },
         {
+          label: "Component Summary View",
+          accelerator: 'Shift+CmdOrCtrl+C',
+          click: function (menuItem, currentWindow) {
+            currentWindow.webContents.send('component-summary-view')
+          }
+        },
+        {
           type: 'separator'
         },
         {
