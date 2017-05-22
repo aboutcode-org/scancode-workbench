@@ -409,7 +409,10 @@ class AboutCodeDB {
             packages_summary: AboutCodeDB.jsonDataType( "packages_summary"),
             packages_description: AboutCodeDB.jsonDataType( "packages_description"),
             packages_payload_type: AboutCodeDB.jsonDataType( "packages_payload_type"),
-            packages_authors: AboutCodeDB.jsonDataType( "packages_authors"),
+            packages_authors_type: AboutCodeDB.jsonDataType( "packages_authors_type"),
+            packages_authors_name: AboutCodeDB.jsonDataType( "packages_authors_name"),
+            packages_authors_email: AboutCodeDB.jsonDataType( "packages_authors_email"),
+            packages_authors_url: AboutCodeDB.jsonDataType( "packages_authors_url"),
             packages_maintainers: AboutCodeDB.jsonDataType( "packages_maintainers"),
             packages_contributors: AboutCodeDB.jsonDataType( "packages_contributors"),
             packages_owners: AboutCodeDB.jsonDataType( "packages_owners"),
@@ -434,7 +437,10 @@ class AboutCodeDB {
             packages_vcs_revision: AboutCodeDB.jsonDataType( "packages_vcs_revision"),
             packages_copyright_top_level: AboutCodeDB.jsonDataType( "packages_copyright_top_level"),
             packages_copyrights: AboutCodeDB.jsonDataType( "packages_copyrights"),
-            packages_asserted_licenses: AboutCodeDB.jsonDataType( "packages_asserted_licenses"),
+            packages_asserted_licenses_license: AboutCodeDB.jsonDataType( "packages_asserted_licenses_license"),
+            packages_asserted_licenses_url: AboutCodeDB.jsonDataType( "packages_asserted_licenses_url"),
+            packages_asserted_licenses_text: AboutCodeDB.jsonDataType( "packages_asserted_licenses_text"),
+            packages_asserted_licenses_notice: AboutCodeDB.jsonDataType( "packages_asserted_licenses_notice"),
             packages_legal_file_locations: AboutCodeDB.jsonDataType( "packages_legal_file_locations"),
             packages_license_expression: AboutCodeDB.jsonDataType( "packages_license_expression"),
             packages_license_texts: AboutCodeDB.jsonDataType( "packages_license_texts"),
@@ -505,7 +511,10 @@ class AboutCodeDB {
             packages_summary: AboutCodeDB.getValues(file.packages, "summary"),
             packages_description: AboutCodeDB.getValues(file.packages, "description"),
             packages_payload_type: AboutCodeDB.getValues(file.packages, "payload_type"),
-            packages_authors: AboutCodeDB.getValues(file.packages, "authors"),
+            packages_authors_type: AboutCodeDB.getNestedValues(file.packages, "authors", "type"),
+            packages_authors_name: AboutCodeDB.getNestedValues(file.packages, "authors", "name"),
+            packages_authors_email: AboutCodeDB.getNestedValues(file.packages, "authors", "email"),
+            packages_authors_url: AboutCodeDB.getNestedValues(file.packages, "authors", "url"),
             packages_maintainers: AboutCodeDB.getValues(file.packages, "maintainers"),
             packages_contributors: AboutCodeDB.getValues(file.packages, "contributors"),
             packages_owners: AboutCodeDB.getValues(file.packages, "owners"),
@@ -530,7 +539,10 @@ class AboutCodeDB {
             packages_vcs_revision: AboutCodeDB.getValues(file.packages, "vcs_revision"),
             packages_copyright_top_level: AboutCodeDB.getValues(file.packages, "copyright_top_level"),
             packages_copyrights: AboutCodeDB.getValues(file.packages, "copyrights"),
-            packages_asserted_licenses: AboutCodeDB.getValues(file.packages, "asserted_licenses"),
+            packages_asserted_licenses_license: AboutCodeDB.getNestedValues(file.packages, "asserted_licenses", "license"),
+            packages_asserted_licenses_url: AboutCodeDB.getNestedValues(file.packages, "asserted_licenses", "url"),
+            packages_asserted_licenses_text: AboutCodeDB.getNestedValues(file.packages, "asserted_licenses", "text"),
+            packages_asserted_licenses_notice: AboutCodeDB.getNestedValues(file.packages, "asserted_licenses", "notice"),
             packages_legal_file_locations: AboutCodeDB.getValues(file.packages, "legal_file_locations"),
             packages_license_expression: AboutCodeDB.getValues(file.packages, "license_expression"),
             packages_license_texts: AboutCodeDB.getValues(file.packages, "license_texts"),
@@ -549,6 +561,15 @@ class AboutCodeDB {
     static getValues(array, key) {
         return $.map(array ? array : [], (elem, i) => {
             return [elem[key] ? elem[key] : []];
+        });
+    }
+
+    // [{key: [{ nestedKey: val0}], {key: [ nestedKey: val1]}] => [val0, val1]
+    static getNestedValues(array, key, nestedKey) {
+        return $.map(array ? array : [], (elem, i) => {
+            return $.map(elem[key] ? elem[key] : [], (nestedElem, i) => {
+                return [nestedElem[nestedKey] ? nestedElem[nestedKey] : []]
+            });
         });
     }
 }

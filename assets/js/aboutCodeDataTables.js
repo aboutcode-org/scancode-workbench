@@ -457,15 +457,46 @@ class AboutCodeDataTable {
                 "name": "packages_type"
             },
             {
-                "data": "packages_packaging",
-                "title": "Packaging",
-                "name": "packages_packaging"
+                "data": "packages_name",
+                "title": "Package Name",
+                "name": "packages_name"
+            },
+            {
+                "data": "packages_version",
+                "title": "Package Version",
+                "name": "packages_version"
+            },
+            {
+                "data": "packages_asserted_licenses_license[<hr/>]",
+                "title": "Package Asserted License",
+                "name": "packages_asserted_licenses_license"
             },
             {
                 "data": "packages_primary_language",
                 "title": "Package Primary Language",
                 "name": "packages_primary_language"
-            }
+            },
+            {
+                "data": "packages_authors_name[<hr/>]",
+                "title": "Package Authors Name",
+                "name": "packages_authors_name"
+            },
+            {
+                "data": "packages_homepage_url",
+                "title": "Package Homepage URL",
+                "name": "packages_homepage_url"
+            },
+            {
+                "data": function (row, type, val, meta) {
+                    return row.packages_download_urls.map(urls => {
+                        return urls.map(url => {
+                             return '<a href="'+url+'" target="_blank">'+url+'</a>';
+                        }).join("<br/>")
+                    }).join("<hr/>");
+                },
+                "title": "Package Download URLs",
+                "name": "packages_download_urls"
+            },
         ];
     }
 
