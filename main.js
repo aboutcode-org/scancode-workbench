@@ -114,6 +114,30 @@ function getTemplate() {
       label: '&View',
       submenu: [
         {
+          label: "Table View",
+          accelerator: 'CmdOrCtrl+T',
+          click: function (menuItem, currentWindow) {
+            currentWindow.webContents.send('table-view')
+          }
+        },
+        {
+          label: "Node View",
+          accelerator: 'CmdOrCtrl+N',
+          click: function (menuItem, currentWindow) {
+            currentWindow.webContents.send('node-view')
+          }
+        },
+        {
+          label: "Component Summary View",
+          accelerator: 'Shift+CmdOrCtrl+C',
+          click: function (menuItem, currentWindow) {
+            currentWindow.webContents.send('component-summary-view')
+          }
+        },
+        {
+          type: 'separator'
+        },
+        {
           label: 'Reload',
           accelerator: 'CmdOrCtrl+R',
           click: function(item, focusedWindow) {

@@ -338,35 +338,53 @@ $(document).ready(function () {
         placeholder: "select me"
     });
 
-    // Show clue DataTable. Hide node view and component summary table
-    showClueButton.click(function() {
+    // Show Table View (aka "clue DataTable").  Hide node view and component summary table.
+    function showTableView() {
         cluesContainer.show();
         nodeContainer.hide();
         componentContainer.hide();
         leftCol.addClass('col-md-2').show();
         tabBar.removeClass('col-md-11').addClass('col-md-9');
         cluesTable.draw();
-    });
+    }
+
+    // Show clue DataTable. Hide node view and component summary table
+    showClueButton.click(showTableView);
+
+    // Show clue DataTable. Hide node view and component summary table -- custom menu
+    ipcRenderer.on('table-view', showTableView);
 
     // Show node view. Hide clue and component table
-    showNodeViewButton.click(function() {
+    function showNodeView() {
         nodeContainer.show();
         cluesContainer.hide();
         componentContainer.hide();
         leftCol.addClass('col-md-2').show();
         tabBar.removeClass('col-md-11').addClass('col-md-9');
         nodeView.redraw();
-    });
+    }
+
+    // Show node view. Hide clue and component table
+    showNodeViewButton.click(showNodeView);
+
+    // Show node view. Hide clue and component table -- custom menu
+    ipcRenderer.on('node-view', showNodeView);
 
     // Show component summary table. Hide DataTable and node view
-    showComponentButton.click(function() {
+    function showComponentSummaryView() {
         componentContainer.show();
         nodeContainer.hide();
         cluesContainer.hide();
         leftCol.removeClass('col-md-2').hide();
         tabBar.removeClass('col-md-9').addClass('col-md-11');
         componentsTable.reload();
-    });
+    }
+
+    // Show component summary table. Hide DataTable and node view
+    showComponentButton.click(showComponentSummaryView);
+
+    // Show component summary table. Hide DataTable and node view -- custom menu
+    ipcRenderer.on('component-summary-view', showComponentSummaryView);
 
     // Creates the database and all View objects from a SQLite file
     function loadDatabaseFromFile(fileName) {
