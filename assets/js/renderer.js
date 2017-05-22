@@ -31,6 +31,19 @@ $(document).ready(function () {
     // Create and setup the jstree, and the click-event logic
     const jstree = $("#jstree").jstree(
         {
+            "core": {
+                "data": function (currentDirectory, callback) {
+                    aboutCodeDB
+                        .findAllJSTree({
+                            where: {
+                                parent: currentDirectory.id
+                            }
+                        })
+                        .then((children) => {
+                            callback.call(this, children)
+                        });
+                }
+            },
             "types": {
                 "directory": {
                     "icon": "glyphicon glyphicon-folder-close"
@@ -376,11 +389,7 @@ $(document).ready(function () {
                 nodeView = new AboutCodeNodeView(aboutCodeDB, onNodeClick);
 
                 // loading data into jstree
-                aboutCodeDB.toJSTreeFormat()
-                    .then(function(data) {
-                        jstree.jstree(true).settings.core.data = data;
-                        jstree.jstree(true).refresh(true);
-                    });
+                jstree.jstree(true).refresh(true);
             })
             .catch(function(reason) {
                throw reason;
@@ -514,11 +523,7 @@ $(document).ready(function () {
                                 nodeView = new AboutCodeNodeView(aboutCodeDB, onNodeClick);
 
                                 // loading data into jstree
-                                aboutCodeDB.toJSTreeFormat()
-                                    .then(function (data) {
-                                        jstree.jstree(true).settings.core.data = data;
-                                        jstree.jstree(true).refresh(true);
-                                    });
+                                jstree.jstree(true).refresh(true);
                             })
                             .catch(function (reason) {
                                 throw reason;

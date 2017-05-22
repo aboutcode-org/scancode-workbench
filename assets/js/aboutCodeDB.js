@@ -84,6 +84,27 @@ class AboutCodeDB {
         return this.db.then(() => this.Component.findOne(query));
     }
 
+    // Uses findAll to return JSTree format from the File Table
+    findAllJSTree(query) {
+        return this.db
+            .then(() => {
+                return this.File.findAll($.extend(query, {
+                    attributes: ["path", "parent", "name", "type"]
+                }));
+            })
+            .then((files) => {
+                return files.map((file) => {
+                    return {
+                        id: file.path,
+                        text: file.name,
+                        parent: file.parent,
+                        type: file.type,
+                        children: file.type === "directory"
+                    };
+                });
+            });
+    }
+
     // Uses the components table to create or set a component
     setComponent(component) {
         return this.findComponent({
@@ -150,31 +171,6 @@ class AboutCodeDB {
                     }
                 ]
             }));
-    }
-
-    // Format for jstree
-    // [
-    //  {id: root, text: root, parent: #, type: directory}
-    //  {id: root/file1, text: file1, parent: root, type: file},
-    //  {id: root/file2, text: file2, parent: root, type: file}
-    // ]
-    toJSTreeFormat() {
-        return this.db
-            .then(() => {
-                return this.File.findAll({
-                    attributes: ["path", "parent", "name", "type"]
-                });
-            })
-            .then((files) => {
-                return files.map((file) => {
-                    return {
-                        id: file.path,
-                        text: file.name,
-                        parent: file.parent,
-                        type: file.type
-                    };
-                });
-            });
     }
 
     // ScanCode Scan Details Model definitions

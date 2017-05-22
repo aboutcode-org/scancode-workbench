@@ -85,27 +85,29 @@ describe("checkAboutCodeDB", function() {
         });
     });
 
-    describe("toJSTreeFormat", function() {
+    describe("findAllJSTree", function() {
         it("should format ScanCode results to jsTree Format", function() {
             let aboutCodeDB = new AboutCodeDB();
             let expectedJSTreeFormat= [
                 {
-                    id: 'samples/README',
-                    text: 'README',
-                    parent: 'samples',
-                    type: 'file'
+                    id: "samples/README",
+                    text: "README",
+                    parent: "samples",
+                    type: "file",
+                    children: false
                 },
                 {
-                    id: 'samples/JGroups/src',
-                    text: 'src',
-                    parent: 'samples/JGroups',
-                    type: 'directory'
+                    id: "samples/JGroups/src",
+                    text: "src",
+                    parent: "samples/JGroups",
+                    type: "directory",
+                    children: true
                 }
             ];
 
             return aboutCodeDB.db
                 .then(() => aboutCodeDB.addScanData(scanCodeJSONResults))
-                .then(() => aboutCodeDB.toJSTreeFormat())
+                .then(() => aboutCodeDB.findAllJSTree())
                 .then((scanCodeJSONResults) => {
                     assert.deepEqual(expectedJSTreeFormat, scanCodeJSONResults)
                 })
