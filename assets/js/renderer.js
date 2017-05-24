@@ -525,7 +525,7 @@ $(document).ready(function () {
                             dbName: "demo_schema",
                             dbStorage: fileName,
                         });
-
+                        showProgressIndicator();
                         // The flattened data is used by the clue table and jstree
                         aboutCodeDB.addFlattenedRows(json)
                             .then(() => aboutCodeDB.addScanData(json))
@@ -543,6 +543,7 @@ $(document).ready(function () {
                                 // loading data into jstree
                                 jstree.jstree(true).refresh(true);
                             })
+                            .then(() => hideProgressIndicator())
                             .catch(function (reason) {
                                 throw reason;
                             });
@@ -550,6 +551,22 @@ $(document).ready(function () {
             });
         });
     });
+
+    // Show database creation indicator and hide table view
+    function showProgressIndicator() {
+        $("#db-indicator").show();
+        $("#indicator-text").show();
+        $("#tabbar").hide();
+        $("#leftCol").hide();
+    }
+
+    // Hide database creation indicator and show table view
+    function hideProgressIndicator() {
+        $("#tabbar").show();
+        $("#leftCol").show();
+        $("#db-indicator").hide();
+        $("#indicator-text").hide();
+    }
 
     // Export JSON file with components that have been created
     ipcRenderer.on('export-JSON', function () {

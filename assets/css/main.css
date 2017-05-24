@@ -145,13 +145,14 @@ div.node-content {
 
 #leftCol{
   padding-top: 10px;
-margin-left: -50px;                               /* For sidebar space */
+  /* For sidebar space */
+  margin-left: -50px;
 }
 
 /*////// Sidebar //////*/
 .btn-sidebar {
-    color: grey;
-    background-color: #000;
+  color: grey;
+  background-color: #000;
     /*border-color: #ccc;*/
   padding: 0;
   width: 50px;
@@ -183,11 +184,13 @@ margin-left: -50px;                               /* For sidebar space */
 
 /*////// DataTables custom //////*/
 
-div.dataTables_scrollHead table {               /*For rounded table border*/
+/*For rounded table border*/
+div.dataTables_scrollHead table {
   border-top-left-radius: 4px;
 }
 
-div.dataTables_scrollHead th:first-child {      /*For rounded table border*/
+/*For rounded table border*/
+div.dataTables_scrollHead th:first-child {
   border-top-left-radius: 4px;
 }
 
@@ -202,3 +205,37 @@ div.dataTables_scrollHead th:first-child {      /*For rounded table border*/
 /*////// Components view //////*/
 
 #tabbar.col-md-11 {margin-left: -15px;}
+
+/*////// Progress Indicator //////*/
+
+/* Center the progress indicator */
+#db-indicator{
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: 1;
+  width: 150px;
+  height: 150px;
+  margin: -75px 0 0 -75px;
+  border: 6px solid #B4DDF8;
+  border-radius: 50%;
+  border-top: 6px solid #3498db;
+  width: 50px;
+  height: 50px;
+  animation: spin 1s linear infinite;
+  display: none;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+#indicator-text {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: 1;
+  margin: -120px 0 0 -125px;
+  display: none;
+}
