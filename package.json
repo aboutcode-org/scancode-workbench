@@ -1,6 +1,6 @@
 {
   "name": "aboutcode-manager",
-  "version": "2.0.0-rc2",
+  "version": "2.0.0-rc3",
   "description": "An application for viewing ScanCode results and concluding component origin and license",
   "main": "main.js",
   "scripts": {
