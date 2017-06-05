@@ -143,10 +143,33 @@ class AboutCodeDB {
             .then(() => {
                 return json.files.map((file) => AboutCodeDB.flattenData(file));
             })
-            .then((flattenedFiles) => {
-                return this.FlattenedFile.bulkCreate(flattenedFiles, {
-                    logging: false
-                });
+            .then((files) => {
+                let chain = Promise.resolve();
+                const fileCount = json.files.length;
+                const chunkCount = 1000;
+
+                // Loop over each chunk and bulkCreate the rows. We separate
+                // into chunks to reduce memory allocations and allow GC.
+                for (let i = 0; i < fileCount; i += chunkCount) {
+                    // Ending index of chunk
+                    const j = Math.min(fileCount, i + chunkCount);
+                    chain = chain.then(() => {
+                        // Technically, this Promise isn't needed for
+                        // correctness but solves a memory leak (Issue #100)
+                        return new Promise((resolve, reject) => {
+                            this.FlattenedFile.bulkCreate(files.slice(i, j), {
+                                logging: false
+                            })
+                            .then(() => {
+                                resolve();
+                                console.log("Add FlattenedRows Progress: "
+                                    + Math.round(j/fileCount*100) + "%");
+                            })
+                            .catch((e) => reject(e));
+                        });
+                    });
+                }
+                return chain;
             });
     }
 
@@ -159,18 +182,41 @@ class AboutCodeDB {
         // Add all rows to the non-flattened DB
         return this.db
             .then(() => {
-                $.each(json.files, (index, file) => {
+                return this.ScanCode.create(json);
+            })
+            .then((scancode) => {
+                return json.files.map((file) => {
                     file.parent = AboutCodeDB.parent(file.path);
+                    file.scancodeId = scancode.id;
+                    return file;
                 });
             })
-            .then(() => this.ScanCode.create(json, {
-                include: [
-                    {
-                        model: this.File,
-                        include: this.fileIncludes
-                    }
-                ]
-            }));
+            .then((files) => {
+                let chain = Promise.resolve();
+                const fileCount = files.length;
+                for (let i = 0; i < fileCount; i++) {
+                    chain = chain.then(() => {
+                        // Technically, this Promise isn't needed for
+                        // correctness but solves a memory leak (Issue #100)
+                        return new Promise((resolve, reject) => {
+                            this.File.create(files[i],
+                                {
+                                    logging: false,
+                                    include: this.fileIncludes
+                                })
+                                .then(() => {
+                                    resolve();
+                                    if (i % 1000 === 0) {
+                                        console.log("Add Rows Progress: "
+                                            + Math.round(i/fileCount*100) + "%");
+                                    }
+                                })
+                                .catch((e) => reject(e));
+                        });
+                    });
+                }
+                return chain;
+            });
     }
 
     // ScanCode Scan Details Model definitions
