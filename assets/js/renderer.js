@@ -466,7 +466,14 @@ $(document).ready(function () {
 
     // Open a ScanCode results JSON file
     ipcRenderer.on('import-JSON', function () {
-        dialog.showOpenDialog(function (fileNames) {
+        dialog.showOpenDialog({ 
+            title: "Open a JSON File",
+            filters: [{
+                name: 'JSON File',
+                extensions: ['json']
+            }]
+        },
+        function (fileNames) {
             if (fileNames === undefined) return;
 
             const fileName = fileNames[0];
