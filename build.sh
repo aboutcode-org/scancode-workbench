@@ -38,3 +38,4 @@ do
     zip -rq $RELEASE_VERSION.zip $RELEASE_VERSION
     cd ..
 done
+ls -al $BUILD_DIR
