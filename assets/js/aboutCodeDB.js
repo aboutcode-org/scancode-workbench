@@ -170,6 +170,12 @@ class AboutCodeDB {
                     });
                 }
                 return chain;
+            })
+            .catch((err) => {
+                if (err.name === "SequelizeUniqueConstraintError") {
+                    err.message = AboutCodeDB.getDuplicatePathsErrorMessage(json.files);
+                }
+                throw err;
             });
     }
 
@@ -216,6 +222,12 @@ class AboutCodeDB {
                     });
                 }
                 return chain;
+            })
+            .catch((err) => {
+                if (err.name === "SequelizeUniqueConstraintError") {
+                    err.message = AboutCodeDB.getDuplicatePathsErrorMessage(json.files);
+                }
+                throw err;
             });
     }
 
@@ -613,6 +625,28 @@ class AboutCodeDB {
                 return [nestedElem[nestedKey] ? nestedElem[nestedKey] : []]
             });
         });
+    }
+
+    static getDuplicatePathsErrorMessage(files) {
+        return "The files in the ScanCode output "
+            + "should have unique path values. The following path "
+            + "values were not unique:\n"
+            + AboutCodeDB.getDuplicatePaths(files);
+    }
+
+    // Gets the duplicate paths in a set of files
+    static getDuplicatePaths(files) {
+        let paths = new Set();
+        let duplicatePaths = new Set();
+        files.forEach((file) => {
+            if (!paths.has(file.path)) {
+                paths.add(file.path);
+            } else {
+                duplicatePaths.add(file.path);
+            }
+        });
+
+        return Array.from(duplicatePaths).slice(0, 15).join(", \n");
     }
 }
 

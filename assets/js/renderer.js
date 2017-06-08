@@ -551,8 +551,10 @@ $(document).ready(function () {
                                 jstree.jstree(true).refresh(true);
                             })
                             .then(() => hideProgressIndicator())
-                            .catch(function (reason) {
-                                throw reason;
+                            .catch((err) => {
+                                hideProgressIndicator();
+                                console.log(err);
+                                alert(`Error: ${err.message ? err.message : err}`);
                             });
                     });
             });
