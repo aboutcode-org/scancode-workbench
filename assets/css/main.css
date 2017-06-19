@@ -132,7 +132,7 @@ div.node-content {
 }
 
 .jstree-default .jstree-clicked {
-    background: #dce1e5;
+    background: rgba(158,158,158, 0.50);
 }
 
 .node-btn-group {
