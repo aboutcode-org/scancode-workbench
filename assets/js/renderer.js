@@ -52,8 +52,8 @@ $(document).ready(function () {
                     "icon": "glyphicon glyphicon-file"
                 }
             },
-            "plugins": [ "types","sort" ],
-            'sort': function (a, b) {
+            "plugins": [ "types", "sort", "contextmenu"],
+            "sort": function (a, b) {
                 a1 = this.get_node(a);
                 b1 = this.get_node(b);
                 if (a1.type == b1.type) {
@@ -61,6 +61,18 @@ $(document).ready(function () {
                 }
                 else {
                     return (a1.type === 'directory') ? -1 : 1;
+                }
+            },
+            "contextmenu" : {
+                "items": function (node) {
+                    return {
+                        "edit_component": {
+                            "label": "Edit Component",
+                            "action": function () {
+                                onNodeClick(node)
+                            }
+                        }
+                    };
                 }
             }
         })
