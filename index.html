@@ -100,7 +100,15 @@
                 <option value="license">License</option>
                 <option value="copyright">Copyright</option>
             </select>
-            <div id="nodeview"></div>
+            <div id="nodeview-container">
+                <div id="zoom-controls">
+                    <button class="btn btn-zoom" id="reset-zoom" type="button">
+                        <a id="recenter" href="#" title="Center Node Tree"><i class="fa fa-refresh fa-refresh-scale" aria-hidden="true"></i></a>
+                    </button>
+                </div>
+                <div class="svg-container" id="nodeview">
+                </div>
+            </div>
         </div>
         <div>
             <div class="modal fade action-create" id="nodeModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">

@@ -125,6 +125,7 @@ $(document).ready(function () {
     const saveSQLiteFileButton = $("#save-file");
     const openSQLiteFileButton = $("#open-file");
     const submitComponentButton = $("#componentSubmit");
+    const resetZoomButton = $("#reset-zoom");
     const leftCol = $("#leftCol");
     const tabBar = $("#tabbar");
 
@@ -349,6 +350,9 @@ $(document).ready(function () {
         closeOnSelect: false,
         placeholder: "select me"
     });
+
+    // Center and reset node view
+    resetZoomButton.click(() => nodeView.centerNode());
 
     // Show Table View (aka "clue DataTable").  Hide node view and component summary table.
     function showTableView() {
