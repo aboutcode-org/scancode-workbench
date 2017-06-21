@@ -17,6 +17,9 @@ fi
 if [ "$PLATFORM" == "darwin" ]; then
     ICON="mac/aboutcode.icns"
 fi
+if [ "$PLATFORM" == "win32" ]; then
+    ICON="win/aboutcode_256x256.ico"
+fi
 
 echo '=> BUILDING AboutCode App release'
 
