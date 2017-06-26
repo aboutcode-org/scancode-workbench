@@ -182,7 +182,11 @@ $(document).ready(function () {
                 where: {holders: {$ne: null}}
             }]
         })
-        .then((rows) => $.map(rows, (row) => row.copyrights));
+        .then((rows) => $.map(rows, (row) => {
+            return $.map(row.copyrights, (copyright) => {
+                return copyright.holders;
+            });
+        }));
 
         let languagePromise = aboutCodeDB.File.findAll({
             attributes: ["programming_language"],
@@ -249,9 +253,7 @@ $(document).ready(function () {
         }, true);
 
         componentModal.owner.html('').select2({
-            data: $.unique($.map(owners, (owner, i) => {
-                return owner.holders;
-            })),
+            data: $.unique(owners),
             multiple: true,
             maximumSelectionLength: 1,
             placeholder: "Enter owner",
@@ -290,8 +292,7 @@ $(document).ready(function () {
             .map((license) => license.short_name));
         componentModal.copyright.val((component.copyrights || [])
             .map((copyright) => copyright.statements.join("\n")));
-        componentModal.owner.val(component.owner || [])
-            .map((owner) => owner.holders);
+        componentModal.owner.val(component.owner || []);
         componentModal.language.val(component.programming_language || []);
         componentModal.homepage.val(component.homepage_url || "");
         componentModal.notes.val(component.notes || "");
