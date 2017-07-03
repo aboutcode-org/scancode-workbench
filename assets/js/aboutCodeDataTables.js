@@ -75,8 +75,10 @@ class AboutCodeDataTable {
             for (let i = 0; i < dataTablesInput.columns.length; i++) {
                 let columnSearch = dataTablesInput.columns[i].search.value;
                 if (columnSearch) {
+                    // Column 0 is the "path", which should only match wildcards
+                    // at the end of the path.
                     query.where.$and[dataTablesInput.columns[i].name] = {
-                        $like: `${columnSearch}%`
+                        $like: i === 0 ? `${columnSearch}%` : `%${columnSearch}%`
                     }
                 }
             }
@@ -123,6 +125,12 @@ class AboutCodeDataTable {
     }
 
     _createDataTable(tableID) {
+        // Adds a footer for each column. This needs to be done before creating
+        // the DataTable
+        let cells = $.map(AboutCodeDataTable.TABLE_COLUMNS, () => "<td></td>")
+            .join("");
+        $(tableID).append("<tfoot><tr>" + cells + "</tr></tfoot>");
+
         return $(tableID).DataTable({
             "info": false,
             "colReorder": true,
@@ -140,6 +148,32 @@ class AboutCodeDataTable {
             "scrollX": true,
             "scrollY": "75vh",
             "deferRender": true,
+            initComplete: function () {
+                // Add a select element to each column's footer
+                this.api().columns().every(function (columnIndex) {
+                    const columnInfo = AboutCodeDataTable.TABLE_COLUMNS[columnIndex];
+
+                    if ("skipFilter" in columnInfo && columnInfo.skipFilter) {
+                        return;
+                    }
+
+                    const column = this;
+                    const footer = $(column.footer());
+                    const columnName = columnInfo.name;
+
+                    let select = $(`<select id="clue-${columnName}">
+                        <option value=""></option></select>`)
+                        .appendTo(footer)
+                        .on( "change", function () {
+                            // Get dropdown element selected value
+                            let val = $(this).val();
+                            console.log(val);
+                            column
+                                .search(val, false, false)
+                                .draw();
+                        } );
+                } );
+             },
             "buttons": [
                 {   // Do not allow the first column to be hidden
                     extend: "colvis",
@@ -193,7 +227,8 @@ class AboutCodeDataTable {
         return [{
             "data": "path",
             "title": "Path",
-            "name": "path"
+            "name": "path",
+            "skipFilter": true
         }];
     }
 
