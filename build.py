@@ -194,8 +194,8 @@ def build(clean=True):
 
     # rename the build dir to a proper directory that always includes a
     # version and a "nice" platform name as opposed to a code
-    old_release_dir = "{APP_NAME}-{PLATFORM}-{ARCH}".format(**globals())
-    archive_base_name = "{APP_NAME}-{PLATFORM_NAME}-{ARCH}-{BUILD_VERSION}".format(**globals())
+    old_release_dir = "{APP_NAME}-{PLATFORM}-{ARCH}".format(**locals())
+    archive_base_name = "{APP_NAME}-{PLATFORM_NAME}-{ARCH}-{BUILD_VERSION}".format(**locals())
     os.rename(os.path.join(BUILD_DIR, old_release_dir),
               os.path.join(BUILD_DIR, archive_base_name))
 
