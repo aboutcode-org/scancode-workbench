@@ -10,11 +10,4 @@ before_install:
   - sudo apt-get update
   - sudo apt-get install build-essential -y
 
-script: ./build.sh linux
-
-deploy:
-  provider: bintray
-  file: .travis_bintray.json
-  user: pombreda
-  key:
-    secure: l8uNfriu2L+rHRRBsR8R6pGHFt+r1Rymfk+1pOKdJTR8NjgBAYEAxPU6IPr+drH1WheXGVFoWttWTcplvo8Xmc+skUMXKUnjNCgrRE0rYKqjdHmEBMKUAjAfZ3hq48ayjRm3FvAjPwcWbTD0siBjK1qm4SD7TBEEC28XuJhT1oE=
+script: python build.py

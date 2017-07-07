@@ -127,7 +127,7 @@ def create_zip(base_dir, archive_base_name,):
     """
     len_base_dir = len(base_dir) + 1
 
-    with zipfile.ZipFile(archive_base_name + '.zip', 'w', zipfile.ZIP_DEFLATED) as zipf:
+    with zipfile.ZipFile(os.path.join(base_dir, archive_base_name + '.zip'), 'w', zipfile.ZIP_DEFLATED) as zipf:
         for dirname, _, files in os.walk(os.path.join(base_dir, archive_base_name)):
             relative_dir = dirname[len_base_dir:]
             for name in files:
@@ -142,7 +142,7 @@ def create_tar(base_dir, archive_base_name):
     """
     len_base_dir = len(base_dir) + 1
 
-    with closing(tarfile.open(archive_base_name + '.tar.gz', mode='w:gz')) as tarf:
+    with closing(tarfile.open(os.path.join(base_dir, archive_base_name + '.tar.gz'), mode='w:gz')) as tarf:
         for dirname, _, files in os.walk(os.path.join(base_dir, archive_base_name)):
             relative_dir = dirname[len_base_dir:]
             for name in files:
@@ -193,6 +193,7 @@ def build(clean=True, app_name=APP_NAME,
     # run the build with electron_packager
     electron_packager = os.path.join(npm_bin, 'electron-packager')
     cmd = [electron_packager] + electron_args
+    print('Electron Packager command:', ' '.join(cmd))
     call(cmd)
 
     # rename the build dir to a proper directory that always includes a
