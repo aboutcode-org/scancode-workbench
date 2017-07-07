@@ -64,7 +64,7 @@ def call(cmd):
     cmd = ' '.join(cmd)
     if  subprocess.Popen(cmd, shell=True, env=dict(os.environ)).wait() != 0:
         print()
-        print('Failed to execute command:\n%(cmd)s. Aborting...' % locals())
+        print('Failed to execute command:\n%(cmd)r\nAborting...' % locals())
         sys.exit(1)
 
 
@@ -151,23 +151,26 @@ def create_tar(base_dir, archive_base_name):
                 tarf.add(member_location, member_path)
 
 
-def build(clean=True):
+def build(clean=True, app_name=APP_NAME,
+          platform=PLATFORM, platform_name=PLATFORM_NAME,
+          arch=ARCH, build_dir=BUILD_DIR, icon=ICON,
+          electron_version=ELECTRON_VERSION, asar=ASAR):
     """
     Run a build.
     """
-    BUILD_VERSION = get_version()
+    build_version = get_version()
 
-    print('=> BUILDING AboutCode App release:', BUILD_VERSION)
+    print('=> BUILDING AboutCode App release:', build_version)
 
     if clean:
         # cleanup of previous build
-        shutil.rmtree(BUILD_DIR)
-        if not os.path.exists(BUILD_DIR):
-            os.makedirs(BUILD_DIR)
+        shutil.rmtree(build_dir)
+        if not os.path.exists(build_dir):
+            os.makedirs(build_dir)
 
     electron_args = [
         '.',
-        APP_NAME,
+        app_name,
         '--prune',
         '--ignore=thirdparty/*',
         '--ignore=dist/*',
@@ -175,40 +178,40 @@ def build(clean=True):
         '--ignore=.gitignore' ,
         '--ignore=test',
         '--ignore=bower.json',
-        '--platform=' + PLATFORM,
-        '--arch=' + ARCH,
-        '--icon=assets/app-icon/' + ICON,
-        '--version=' + ELECTRON_VERSION,
-        '--out=' + BUILD_DIR,
-         '--asar=' + ASAR,
+        '--platform=' + platform,
+        '--arch=' + arch,
+        '--icon=assets/app-icon/' + icon,
+        '--version=' + electron_version,
+        '--out=' + build_dir,
+         '--asar=' + asar,
         '--overwrite=true'
     ]
 
     # find the path to the NPM bin directory
     npm_bin = subprocess.check_output(['npm', 'bin'], stderr=subprocess.STDOUT).strip()
 
-    # run the build with electron_packager    
+    # run the build with electron_packager
     electron_packager = os.path.join(npm_bin, 'electron-packager')
     cmd = [electron_packager] + electron_args
     call(cmd)
 
     # rename the build dir to a proper directory that always includes a
     # version and a "nice" platform name as opposed to a code
-    old_release_dir = "{APP_NAME}-{PLATFORM}-{ARCH}".format(**locals())
-    archive_base_name = "{APP_NAME}-{PLATFORM_NAME}-{ARCH}-{BUILD_VERSION}".format(**locals())
-    os.rename(os.path.join(BUILD_DIR, old_release_dir),
-              os.path.join(BUILD_DIR, archive_base_name))
+    old_release_dir = "{app_name}-{platform}-{arch}".format(**locals())
+    archive_base_name = "{app_name}-{platform_name}-{arch}-{build_version}".format(**locals())
+    os.rename(os.path.join(build_dir, old_release_dir),
+              os.path.join(build_dir, archive_base_name))
 
     # create final archives: zip on Windows and tar.gz elsewhere
     if PLATFORM == 'win32':
-        create_zip(BUILD_DIR, archive_base_name)
+        create_zip(build_dir, archive_base_name)
     else:
-        create_tar(BUILD_DIR, archive_base_name)
+        create_tar(build_dir, archive_base_name)
 
     print('=> AboutCode App BUILD completed with these archives:')
-    for archive in os.listdir(BUILD_DIR):
+    for archive in os.listdir(build_dir):
         if archive.endswith(('zip', 'tar.gz')):
-            print(archive, 'size:', os.path.getsize(os.path.join(BUILD_DIR, archive)))
+            print(archive, 'size:', os.path.getsize(os.path.join(build_dir, archive)))
 
     # TODO: Upload the archive somewhere we can fetch these
 
