@@ -6,6 +6,7 @@
 """
 Run this script to build AboutCode Manager. The script detects which OS
 it is running on and produces a build archive only for this platform.
+It is meant to run primarily on a CI such as Travis and Appveyor.
 """
 
 from __future__ import absolute_import
@@ -37,20 +38,26 @@ ASAR = 'true'
 # platform-specific constants including OS-specific ICONS
 sys_platform = str(sys.platform).lower()
 
+on_linux = on_windows = on_mac = False
+
+
 if 'linux' in sys_platform :
     PLATFORM_NAME = 'linux'
     PLATFORM = 'linux'
     ICON = 'png/aboutcode_512x512.png'
+    on_linux = True
 
 elif'win32' in sys_platform :
     PLATFORM_NAME = 'windows'
     PLATFORM = 'win32'
     ICON = 'win/aboutcode_256x256.ico'
+    on_windows = True
 
 elif 'darwin' in sys_platform :
     PLATFORM_NAME = 'macos'
     PLATFORM = 'darwin'
     ICON = 'mac/aboutcode.icns'
+    on_mac = True
 
 else:
     raise Exception('Unsupported OS/platform %r' % sys_platform)
@@ -189,7 +196,11 @@ def build(clean=True, app_name=APP_NAME,
     ]
 
     # find the path to the NPM bin directory
-    npm_bin = subprocess.check_output(['npm', 'bin'], shell=True, stderr=subprocess.STDOUT).strip()
+    if on_windows:
+        npm_bin = subprocess.check_output(['npm', 'bin'], stderr=subprocess.STDOUT, shell=True)
+    else:
+        npm_bin = subprocess.check_output(['npm', 'bin'], stderr=subprocess.STDOUT,)
+    npm_bin = npm_bin.strip()
 
     # run the build with electron_packager
     electron_packager = os.path.join(npm_bin, 'electron-packager')
@@ -205,7 +216,7 @@ def build(clean=True, app_name=APP_NAME,
               os.path.join(build_dir, archive_base_name))
 
     # create final archives: zip on Windows and tar.gz elsewhere
-    if PLATFORM == 'win32':
+    if on_windows:
         create_zip(build_dir, archive_base_name)
     else:
         create_tar(build_dir, archive_base_name)
@@ -218,6 +229,13 @@ def build(clean=True, app_name=APP_NAME,
     print()
 
     # TODO: Upload the archive somewhere we can fetch these
+    # check scp
+    print('Checking SCP...')
+
+    if on_windows:
+        print(subprocess.check_output(['C:\\MinGW\\msys\\1.0\\bin\\scp.exe'], stderr=subprocess.STDOUT, shell=True).strip())
+    else:
+        print(subprocess.check_output(['scp'], stderr=subprocess.STDOUT,).strip())
 
 
 if __name__ == '__main__':
