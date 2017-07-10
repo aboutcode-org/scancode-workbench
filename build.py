@@ -160,6 +160,7 @@ def build(clean=True, app_name=APP_NAME,
     """
     build_version = get_version()
 
+    print()
     print('=> BUILDING AboutCode App release:', build_version)
 
     if clean:
@@ -188,12 +189,12 @@ def build(clean=True, app_name=APP_NAME,
     ]
 
     # find the path to the NPM bin directory
-    npm_bin = subprocess.check_output(['npm', 'bin'], stderr=subprocess.STDOUT).strip()
+    npm_bin = subprocess.check_output(['npm', 'bin'], shell=True, stderr=subprocess.STDOUT).strip()
 
     # run the build with electron_packager
     electron_packager = os.path.join(npm_bin, 'electron-packager')
     cmd = [electron_packager] + electron_args
-    print('Electron Packager command:', ' '.join(cmd))
+    print('  Electron Packager command:', ' '.join(cmd))
     call(cmd)
 
     # rename the build dir to a proper directory that always includes a
@@ -209,6 +210,7 @@ def build(clean=True, app_name=APP_NAME,
     else:
         create_tar(build_dir, archive_base_name)
 
+    print()
     print('=> AboutCode App BUILD completed with these archives:')
     for archive in os.listdir(build_dir):
         if archive.endswith(('zip', 'tar.gz')):
