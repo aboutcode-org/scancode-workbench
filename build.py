@@ -15,6 +15,7 @@ from __future__ import unicode_literals
 
 from contextlib import closing
 import os
+import platform
 import shutil
 import subprocess
 import sys
@@ -169,6 +170,7 @@ def build(clean=True, app_name=APP_NAME,
 
     print()
     print('=> BUILDING AboutCode App release:', build_version)
+    print('    platform:', platform.platform(), 'sys.platform:', sys_platform )
 
     if clean:
         # cleanup of previous build
@@ -236,7 +238,6 @@ def build(clean=True, app_name=APP_NAME,
 #         print(subprocess.check_output(['C:\\MinGW\\msys\\1.0\\bin\\scp.exe'], stderr=subprocess.STDOUT, shell=True).strip())
 #     else:
 #         print(subprocess.check_output(['scp'], stderr=subprocess.STDOUT,).strip())
-
 
 if __name__ == '__main__':
     build()
