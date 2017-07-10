@@ -60,16 +60,16 @@ npm start
 
 ## Release instructions
 
-Build `dist` target:
+You can build a `dist` directory containing executables for any one of three target platforms by running `./build.sh <target>` and replacing `<target>` with `linux`, `darwin` or `win32` (for Linux, Darwin/MacOS and Windows, respectively).  A build targeting Windows, for example, would look like this:
 
 ```bash
-$ ./build.sh
+$ ./build.sh win32
 ```
 
 After building is done, you can find `AboutCode-Manager` under `dist/AboutCode-Manager-<os>-x64-<version>`.
 Archives (tar.gz and .zip) are also built.
 
-Note: A build for any of the three target platforms (Darwin/MacOS, Linux and Windows) must be executed on the targeted platform.
+Note: A build for any of the three target platforms must be executed on the targeted platform.  
 
 ## Testing
 

@@ -23,10 +23,9 @@ class NodeView {
         this.x = (d) => this.orientation.x(d);
         this.y = (d) => this.orientation.y(d);
 
-        const zoom = d3.behavior.zoom()
+        this.zoom = d3.behavior.zoom()
             .x(d3.scale.linear())
             .y(d3.scale.linear())
-            .scaleExtent([0.5, 10]) // scale between 0.5x and 10x of original
             .on("zoom", () => {
                 this.container.attr("transform",
                     `translate(${d3.event.translate})` +
@@ -40,9 +39,10 @@ class NodeView {
             .attr("preserveAspectRatio", "xMinYMin meet")
             .attr("viewBox", "-150 -150 1000 1000")
             .classed("nodeview-content", true)
-            .call(zoom);
+            .call(this.zoom);
 
-        this.container = svg.append("g");
+        this.container = svg.append("g")
+            .attr("id", "node-group");
 
         this.tree = d3.layout.tree()
             .nodeSize([config.nodeWidth, config.nodeHeight]);
@@ -70,6 +70,14 @@ class NodeView {
 
     static _pos(node) {
         return {x: node.x || 0, y: node.y || 0};
+    }
+
+    // Center node and reset scaling
+    centerNode() {
+        d3.select("g#node-group")
+            .transition()
+            .duration(750)
+            .call(this.zoom.translate([0,0]).scale(1).event);
     }
 
     // Set the root of the node view to the given root

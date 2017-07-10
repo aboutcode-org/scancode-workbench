@@ -74,16 +74,18 @@ body {
   stroke: #1d2e81;
 }
 
-#nodeview{
+.svg-container{
   border: 1px solid #ddd;
   border-radius: 4px;
   margin-top: 5px;
   display: inline-block;
-  position: relative;
+  position: absolute;
   width: 100%;
   padding-bottom: 100%;
   vertical-align: top;
   overflow: hidden;
+  top: 0;
+  left: 0;
 }
 
 .nodeview-content {
@@ -96,6 +98,35 @@ body {
 div.node-content {
   border: 1px solid #ddd;
   width: 200px;
+}
+
+#zoom-controls {
+  top: 15px;
+  left: 10px;
+  z-index: 10;
+  width: auto;
+  position: absolute;
+}
+
+#nodeview-container {
+  position: relative;
+}
+
+#recenter { color: #fff; }
+
+.btn-zoom {
+  color: #fff;
+  background-color: #3498db;
+}
+
+.btn-zoom:hover {
+  color: #fff;
+  background-color: rgba(52,152,219, 0.9);
+  border-color: #269abc;
+}
+
+.fa-refresh-scale {
+  font-size: 18px;
 }
 
 .link {
@@ -132,7 +163,7 @@ div.node-content {
 }
 
 .jstree-default .jstree-clicked {
-    background: #dce1e5;
+    background: rgba(158,158,158, 0.50);
 }
 
 .node-btn-group {

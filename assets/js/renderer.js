@@ -52,8 +52,8 @@ $(document).ready(function () {
                     "icon": "glyphicon glyphicon-file"
                 }
             },
-            "plugins": [ "types","sort" ],
-            'sort': function (a, b) {
+            "plugins": [ "types", "sort", "contextmenu"],
+            "sort": function (a, b) {
                 a1 = this.get_node(a);
                 b1 = this.get_node(b);
                 if (a1.type == b1.type) {
@@ -61,6 +61,18 @@ $(document).ready(function () {
                 }
                 else {
                     return (a1.type === 'directory') ? -1 : 1;
+                }
+            },
+            "contextmenu" : {
+                "items": function (node) {
+                    return {
+                        "edit_component": {
+                            "label": "Edit Component",
+                            "action": function () {
+                                onNodeClick(node)
+                            }
+                        }
+                    };
                 }
             }
         })
@@ -113,6 +125,7 @@ $(document).ready(function () {
     const saveSQLiteFileButton = $("#save-file");
     const openSQLiteFileButton = $("#open-file");
     const submitComponentButton = $("#componentSubmit");
+    const resetZoomButton = $("#reset-zoom");
     const leftCol = $("#leftCol");
     const tabBar = $("#tabbar");
 
@@ -169,7 +182,11 @@ $(document).ready(function () {
                 where: {holders: {$ne: null}}
             }]
         })
-        .then((rows) => $.map(rows, (row) => row.copyrights));
+        .then((rows) => $.map(rows, (row) => {
+            return $.map(row.copyrights, (copyright) => {
+                return copyright.holders;
+            });
+        }));
 
         let languagePromise = aboutCodeDB.File.findAll({
             attributes: ["programming_language"],
@@ -236,9 +253,7 @@ $(document).ready(function () {
         }, true);
 
         componentModal.owner.html('').select2({
-            data: $.unique($.map(owners, (owner, i) => {
-                return owner.holders;
-            })),
+            data: $.unique(owners),
             multiple: true,
             maximumSelectionLength: 1,
             placeholder: "Enter owner",
@@ -277,8 +292,7 @@ $(document).ready(function () {
             .map((license) => license.short_name));
         componentModal.copyright.val((component.copyrights || [])
             .map((copyright) => copyright.statements.join("\n")));
-        componentModal.owner.val(component.owner || [])
-            .map((owner) => owner.holders);
+        componentModal.owner.val(component.owner || []);
         componentModal.language.val(component.programming_language || []);
         componentModal.homepage.val(component.homepage_url || "");
         componentModal.notes.val(component.notes || "");
@@ -337,6 +351,9 @@ $(document).ready(function () {
         closeOnSelect: false,
         placeholder: "select me"
     });
+
+    // Center and reset node view
+    resetZoomButton.click(() => nodeView.centerNode());
 
     // Show Table View (aka "clue DataTable").  Hide node view and component summary table.
     function showTableView() {
@@ -466,7 +483,14 @@ $(document).ready(function () {
 
     // Open a ScanCode results JSON file
     ipcRenderer.on('import-JSON', function () {
-        dialog.showOpenDialog(function (fileNames) {
+        dialog.showOpenDialog({ 
+            title: "Open a JSON File",
+            filters: [{
+                name: 'JSON File',
+                extensions: ['json']
+            }]
+        },
+        function (fileNames) {
             if (fileNames === undefined) return;
 
             const fileName = fileNames[0];
@@ -544,8 +568,10 @@ $(document).ready(function () {
                                 jstree.jstree(true).refresh(true);
                             })
                             .then(() => hideProgressIndicator())
-                            .catch(function (reason) {
-                                throw reason;
+                            .catch((err) => {
+                                hideProgressIndicator();
+                                console.log(err);
+                                alert(`Error: ${err.message ? err.message : err}`);
                             });
                     });
             });

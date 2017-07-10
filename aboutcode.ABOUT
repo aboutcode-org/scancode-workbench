@@ -1,6 +1,6 @@
 about_resource: aboutcode-manager
 name: AboutCode Manager
-version: 2.0.0-rc2
+version: 2.0.0-rc3
 license: apache-2.0
 owner: nexB Inc.
 copyright: Copyright (c) 2016 nexB Inc.

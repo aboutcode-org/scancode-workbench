@@ -29,6 +29,7 @@ chai.use(chaiSubset);
 const AboutCodeDB = require("../assets/js/aboutCodeDB");
 const scanCodeJSONResults = JSON.parse(fs.readFileSync(__dirname + "/data/scancode-results.json", "utf8"));
 const flattenedFilesResults = JSON.parse(fs.readFileSync(__dirname + "/data/flattened-scancode-results.json", "utf8"));
+const duplicatePathsResults = JSON.parse(fs.readFileSync(__dirname + "/data/scancode-duplicate-path-values.json", "utf8"));
 
 describe("checkAboutCodeDB", function() {
 
@@ -52,6 +53,20 @@ describe("checkAboutCodeDB", function() {
                 .then((emailCount) => assert.strictEqual(emailCount, 1))
                 .then(() => aboutCodeDB.Url.count())
                 .then((urlCount) => assert.strictEqual(urlCount, 2))
+        });
+    });
+
+    describe("getDuplicatePaths", function() {
+        it("should throw SequelizeUniqueConstraintError error for duplicate path", function() {
+            let aboutCodeDB = new AboutCodeDB();
+
+            return aboutCodeDB.db
+                .then(() => aboutCodeDB.addScanData(duplicatePathsResults))
+                .then(() => assert.fail(true, true, "This code should not be called!"))
+                .catch((err) => {
+                    assert.equal(err.message, AboutCodeDB.getDuplicatePathsErrorMessage(duplicatePathsResults.files));
+                    assert.equal(err.name, "SequelizeUniqueConstraintError");
+                });
         });
     });
 
