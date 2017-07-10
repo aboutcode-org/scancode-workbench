@@ -2,30 +2,16 @@ version: '{build}'
 
 image: Visual Studio 2017
 
-# Test against the latest version of this Node.js version
-# environment:
-#   nodejs_version: "6"
-
 platform:
   - x64
 
-cache:
-  - node_modules
-  - '%APPDATA%\npm-cache'
-
-init:
-  - git config --global core.autocrlf input
-
-# Install scripts (runs after repo cloning)
 install:
   - ps: Install-Product node 6 x64
-  # - git reset --hard HEAD
-  - npm install
-  - npm prune
-
-build_script:
   - node --version
   - npm --version
+
+build_script:
+  - npm install
   - python build.py
 
 test: off
