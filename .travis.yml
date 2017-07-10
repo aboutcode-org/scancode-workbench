@@ -13,4 +13,6 @@ os:
 before_install:
   - if [ $TRAVIS_OS_NAME = linux ]; then sudo apt-get update; sudo apt-get install build-essential -y; fi
 
-script: python build.py
+script:
+    - python build.py
+    - scp

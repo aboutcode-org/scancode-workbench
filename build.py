@@ -230,12 +230,12 @@ def build(clean=True, app_name=APP_NAME,
 
     # TODO: Upload the archive somewhere we can fetch these
     # check scp
-    print('Checking SCP...')
-
-    if on_windows:
-        print(subprocess.check_output(['C:\\MinGW\\msys\\1.0\\bin\\scp.exe'], stderr=subprocess.STDOUT, shell=True).strip())
-    else:
-        print(subprocess.check_output(['scp'], stderr=subprocess.STDOUT,).strip())
+#     print('Checking SCP...')
+# 
+#     if on_windows:
+#         print(subprocess.check_output(['C:\\MinGW\\msys\\1.0\\bin\\scp.exe'], stderr=subprocess.STDOUT, shell=True).strip())
+#     else:
+#         print(subprocess.check_output(['scp'], stderr=subprocess.STDOUT,).strip())
 
 
 if __name__ == '__main__':
