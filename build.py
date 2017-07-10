@@ -214,7 +214,8 @@ def build(clean=True, app_name=APP_NAME,
     print('=> AboutCode App BUILD completed with these archives:')
     for archive in os.listdir(build_dir):
         if archive.endswith(('zip', 'tar.gz')):
-            print(archive, 'size:', os.path.getsize(os.path.join(build_dir, archive)))
+            print('   ', archive, 'size:', os.path.getsize(os.path.join(build_dir, archive)))
+    print()
 
     # TODO: Upload the archive somewhere we can fetch these
 
