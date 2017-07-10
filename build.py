@@ -164,8 +164,8 @@ def build(clean=True, app_name=APP_NAME,
 
     if clean:
         # cleanup of previous build
-        shutil.rmtree(build_dir)
-        if not os.path.exists(build_dir):
+        if os.path.exists(build_dir):
+            shutil.rmtree(build_dir)
             os.makedirs(build_dir)
 
     electron_args = [
