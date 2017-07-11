@@ -15,4 +15,4 @@ before_install:
 
 script:
     - python build.py
-    - scp
+    - openssl version
