@@ -130,6 +130,7 @@ class AboutCodeDataTable {
         let cells = $.map(AboutCodeDataTable.TABLE_COLUMNS, () => "<td></td>")
             .join("");
         $(tableID).append("<tfoot><tr>" + cells + "</tr></tfoot>");
+        let that = this;
 
         return $(tableID).DataTable({
             "info": false,
@@ -161,18 +162,51 @@ class AboutCodeDataTable {
                     const footer = $(column.footer());
                     const columnName = columnInfo.name;
 
-                    let select = $(`<select id="clue-${columnName}">
+                    let select = $(`<select id="clue-${columnName}" class="form-control">
                         <option value=""></option></select>`)
                         .appendTo(footer)
+                        .on("click", () => {
+                                let where = {};
+                                where[columnName] = {$ne: null};
+
+                                that.aboutCodeDB.FlattenedFile.findAll({
+                                    attributes: [Sequelize.fn("TRIM",
+                                        Sequelize.col(columnName)), columnName],
+                                    group: [columnName],
+                                    where: where,
+                                    order: [columnName]
+                                })
+                                .then((rows) => {
+                                    let filterValues = $.map(rows, (row) => {
+                                        return row[columnName];
+                                    })
+                                        .map(filterValue => (filterValue).toString())
+                                        .filter((filterValue) => filterValue.length > 0);
+
+                                    filterValues = $.map(filterValues, (filterValue) => filterValue);
+                                    filterValues.forEach((filterValue) => {
+                                        filterValue.trim();
+                                    });
+                                    filterValues = $.unique(filterValues).sort();
+
+                                    const select = $(`select#clue-${columnName}`);
+                                    let val = select.find("option:selected");
+
+                                    select.empty().append(`<option value=""></option>`);
+                                    $.each(filterValues, function ( i, filterValue ) {
+                                        select.append(`<option value="${filterValue}">${filterValue}</option>`)
+                                    });
+                                    select.val(val);
+                                });
+                        })
                         .on( "change", function () {
                             // Get dropdown element selected value
                             let val = $(this).val();
-                            console.log(val);
                             column
                                 .search(val, false, false)
                                 .draw();
-                        } );
-                } );
+                        });
+                });
              },
             "buttons": [
                 {   // Do not allow the first column to be hidden

@@ -423,44 +423,6 @@ $(document).ready(function () {
 
                 nodeView = new AboutCodeNodeView(aboutCodeDB, onNodeClick);
 
-                // Add dropdown filter values to each column
-                $.each(AboutCodeDataTable.TABLE_COLUMNS, function (i, column) {
-
-                    // Don't include a dropdown filter if the column has
-                    // skipFilter = true (e.g. path)
-                    if("skipFilter" in column && column.skipFilter) {
-                        return;
-                    }
-
-                    const columnName = column.name;
-                    let where = {};
-                    where[columnName] = {$ne: null};
-
-                    aboutCodeDB.FlattenedFile.findAll({
-                        attributes: [Sequelize.fn("TRIM",
-                            Sequelize.col(columnName)), columnName],
-                        group: [columnName],
-                        where: where,
-                        order: [columnName]
-                    })
-                    .then((rows) => {
-                        let filterValues = $.map(rows, (row) => {
-                            return row[columnName];
-                        })
-                            .filter((filterValue) => filterValue.length > 0);
-                        filterValues = $.map(filterValues, (filterValue) => filterValue);
-                        filterValues.forEach((filterValue) => {
-                            filterValue.trim();
-                        });
-                        filterValues = $.unique(filterValues).sort();
-
-                        const select = $(`select#clue-${columnName}`);
-                        $.each(filterValues, function ( i, filterValue ) {
-                            select.append(`<option value="${filterValue}">${filterValue}</option>`)
-                        });
-                    });
-                });
-
                 // loading data into jstree
                 jstree.jstree(true).refresh(true);
             })
