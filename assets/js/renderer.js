@@ -46,10 +46,10 @@ $(document).ready(function () {
             },
             "types": {
                 "directory": {
-                    "icon": "glyphicon glyphicon-folder-close"
+                    "icon": "fa fa-folder fa_custom"
                 },
                 "file": {
-                    "icon": "glyphicon glyphicon-file"
+                    "icon": "fa fa-file-text-o"
                 }
             },
             "plugins": [ "types", "sort", "contextmenu"],
@@ -79,12 +79,12 @@ $(document).ready(function () {
         .on('open_node.jstree', function (evt, data) {
             data.instance.set_icon(
                 data.node,
-                'glyphicon glyphicon-folder-open');
+                'fa fa-folder-open fa_custom');
         })
         .on('close_node.jstree', function (evt, data) {
             data.instance.set_icon(
                 data.node,
-                'glyphicon glyphicon-folder-close');
+                'fa fa-folder fa_custom');
         })
         // Get the node id when selected
         .on('select_node.jstree', function (evt, data) {

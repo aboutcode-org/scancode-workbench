@@ -270,3 +270,8 @@ div.dataTables_scrollHead th:first-child {
   margin: -120px 0 0 -125px;
   display: none;
 }
+
+/* Change the default color of the FontAwesome folder  */
+.fa_custom {
+  color: #3498db;
+}
