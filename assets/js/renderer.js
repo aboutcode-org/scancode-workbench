@@ -483,7 +483,7 @@ $(document).ready(function () {
 
     // Open a ScanCode results JSON file
     ipcRenderer.on('import-JSON', function () {
-        dialog.showOpenDialog({ 
+        dialog.showOpenDialog({
             title: "Open a JSON File",
             filters: [{
                 name: 'JSON File',
@@ -574,6 +574,16 @@ $(document).ready(function () {
                                 alert(`Error: ${err.message ? err.message : err}`);
                             });
                     });
+            }).fail(function (jqxhr, textStatus, error) {
+                // Show error for problem with the JSON file
+                dialog.showErrorBox(
+                    "JSON Error",
+                    "There is a problem with your JSON file.  It may be malformed " +
+                    "(e.g., the addition of a trailing comma), " +
+                    "or there could be some other problem with the file. " +
+                    "\n\nPlease check your file and try again. " +
+                    "\n\nThe error thrown by the system is: \n\n" + error
+                );
             });
         });
     });
