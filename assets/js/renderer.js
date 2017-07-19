@@ -46,10 +46,10 @@ $(document).ready(function () {
             },
             "types": {
                 "directory": {
-                    "icon": "glyphicon glyphicon-folder-close"
+                    "icon": "fa fa-folder fa_custom"
                 },
                 "file": {
-                    "icon": "glyphicon glyphicon-file"
+                    "icon": "fa fa-file-text-o"
                 }
             },
             "plugins": [ "types", "sort", "contextmenu"],
@@ -79,12 +79,12 @@ $(document).ready(function () {
         .on('open_node.jstree', function (evt, data) {
             data.instance.set_icon(
                 data.node,
-                'glyphicon glyphicon-folder-open');
+                'fa fa-folder-open fa_custom');
         })
         .on('close_node.jstree', function (evt, data) {
             data.instance.set_icon(
                 data.node,
-                'glyphicon glyphicon-folder-close');
+                'fa fa-folder fa_custom');
         })
         // Get the node id when selected
         .on('select_node.jstree', function (evt, data) {
@@ -483,7 +483,7 @@ $(document).ready(function () {
 
     // Open a ScanCode results JSON file
     ipcRenderer.on('import-JSON', function () {
-        dialog.showOpenDialog({ 
+        dialog.showOpenDialog({
             title: "Open a JSON File",
             filters: [{
                 name: 'JSON File',
@@ -574,6 +574,16 @@ $(document).ready(function () {
                                 alert(`Error: ${err.message ? err.message : err}`);
                             });
                     });
+            }).fail(function (jqxhr, textStatus, error) {
+                // Show error for problem with the JSON file
+                dialog.showErrorBox(
+                    "JSON Error",
+                    "There is a problem with your JSON file.  It may be malformed " +
+                    "(e.g., the addition of a trailing comma), " +
+                    "or there could be some other problem with the file. " +
+                    "\n\nPlease check your file and try again. " +
+                    "\n\nThe error thrown by the system is: \n\n" + error
+                );
             });
         });
     });
