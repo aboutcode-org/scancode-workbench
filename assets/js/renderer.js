@@ -411,9 +411,13 @@ $(document).ready(function () {
             dbStorage: fileName
         });
 
+        reloadDataForViews();
+    }
+
+    function reloadDataForViews() {
         // The flattened data is used by the clue table and jstree
-        aboutCodeDB.db
-            .then(function() {
+        return aboutCodeDB.db
+            .then(() => {
                 // reload the DataTable after all insertions are done.
                 cluesTable.database(aboutCodeDB);
                 cluesTable.reload();
@@ -425,6 +429,8 @@ $(document).ready(function () {
 
                 // loading data into jstree
                 jstree.jstree(true).refresh(true);
+
+                return aboutCodeDB;
             })
             .catch(function(reason) {
                throw reason;
@@ -549,24 +555,13 @@ $(document).ready(function () {
                             dbName: "demo_schema",
                             dbStorage: fileName,
                         });
-                        showProgressIndicator();
+
                         // The flattened data is used by the clue table and jstree
-                        aboutCodeDB.addFlattenedRows(json)
+                        aboutCodeDB.db
+                            .then(() => showProgressIndicator())
+                            .then(() => aboutCodeDB.addFlattenedRows(json))
                             .then(() => aboutCodeDB.addScanData(json))
-                            .then(() => {
-                                // reload the DataTable after all insertions are done.
-                                cluesTable.database(aboutCodeDB);
-                                cluesTable.reload();
-
-                                // Load component table database
-                                componentsTable.database(aboutCodeDB);
-                                componentsTable.reload();
-
-                                nodeView = new AboutCodeNodeView(aboutCodeDB, onNodeClick);
-
-                                // loading data into jstree
-                                jstree.jstree(true).refresh(true);
-                            })
+                            .then(() => reloadDataForViews())
                             .then(() => hideProgressIndicator())
                             .catch((err) => {
                                 hideProgressIndicator();
