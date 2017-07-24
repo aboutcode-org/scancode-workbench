@@ -18,13 +18,6 @@ class ComponentDataTable {
     constructor(tableID, aboutCodeDB) {
         this.aboutCodeDB = aboutCodeDB;
         this.dataTable = this._createDataTable(tableID);
-        this.dataTable.buttons().container().attr({
-            "id": "show-components",
-            "data-toggle": "modal",
-            "data-placement": "right",
-            "title": "Upload Components to DejaCode",
-            "data-target": "#componentExportModal"
-        });
     }
 
     database(aboutCodeDB) {
@@ -49,7 +42,16 @@ class ComponentDataTable {
             "<'row'<'col-sm-5'i><'col-sm-7'p>>",
             buttons: [{
                 name: "uploadDeja",
-                text: '<i class=" fa fa-cloud-upload"></i> Upload Components'
+                text: '<i class=" fa fa-cloud-upload"></i> Upload Components',
+                action: function ( e, dt, node, config ) {
+                    var entryCount = dt.data().count();
+                    if (entryCount > 0) {
+                        $('#componentExportModal').modal('show');
+                    }
+                    else {
+                        alert("You have no Components to upload.  \n\nPlease create at least one Component and try again.");
+                    }
+                }
             }],
             "language": {
                 "emptyTable": "No Components created."
