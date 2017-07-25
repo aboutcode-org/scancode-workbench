@@ -43,14 +43,16 @@ class ComponentDataTable {
             buttons: [{
                 name: "uploadDeja",
                 text: '<i class=" fa fa-cloud-upload"></i> Upload Components',
-                action: function ( e, dt, node, config ) {
-                    var entryCount = dt.data().count();
-                    if (entryCount > 0) {
-                        $('#componentExportModal').modal('show');
-                    }
-                    else {
-                        alert("You have no Components to upload.  \n\nPlease create at least one Component and try again.");
-                    }
+                action: ( e, dt, node, config ) => {
+                    this.aboutCodeDB.findAllComponents( {} )
+                        .then((components) => {
+                            if (components.length > 0) {
+                                $('#componentExportModal').modal('show');
+                            }
+                            else {
+                                alert("You have no Components to upload.  \n\nPlease create at least one Component and try again.");
+                            }
+                        });
                 }
             }],
             "language": {
