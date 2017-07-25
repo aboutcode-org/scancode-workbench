@@ -48,8 +48,7 @@ class ComponentDataTable {
                         .then((components) => {
                             if (components.length > 0) {
                                 $('#componentExportModal').modal('show');
-                            }
-                            else {
+                            } else {
                                 alert("You have no Components to upload.  \n\nPlease create at least one Component and try again.");
                             }
                         });
