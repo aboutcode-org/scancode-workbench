@@ -52,6 +52,7 @@
     <script src="assets/js/export-to-dejacode.js"></script>
     <script src="assets/js/nodeview.js"></script>
     <script src="assets/js/select2.js"></script>
+    <script src="assets/js/bar-chart.js"></script>
 </head>
 <body>
 <div class="row">
@@ -75,6 +76,9 @@
                     <button class="btn btn-sidebar" id="show-component-table" data-toggle="modal" data-placement="right" title="Component Summary View"><i class="fa fa-list-ol" aria-hidden="true"></i></button>
                 </li>
                 <li>
+                    <button class="btn btn-sidebar" id="show-bar-chart" data-toggle="tooltip" data-placement="right" title="License and Copyright Summary"><i class="fa fa-bar-chart" aria-hidden="true"></i></button>
+                </li>
+                <li>
                     <button class="btn btn-sidebar" id="show-help" data-toggle="modal" data-placement="right" title="Help with Application" data-target="#helpModal"><i class="fa fa-question" aria-hidden="true"></i></button>
                 </li>
             </ul>
@@ -89,12 +93,12 @@
     <div id="tabbar" class="col-md-9">
         <table id="clues-table" class="display table table-striped table-bordered dataTable no-footer"  cellspacing="0" width="100%" >
         </table>
-        <div id="component-container" class="node-hide">
+        <div id="component-container" class="hide-container">
             <p class="lead">Component Summary</p>
             <table id="components-table" class="display table table-striped table-bordered dataTable no-footer"  cellspacing="0" width="100%" >
             </table>
         </div>
-        <div class="node-hide" id="node-container">
+        <div class="hide-container" id="node-container">
             <select id="node-drop-down" style="border-color: #eee; border-radius: 5px; padding: 5px;" multiple>
                 <option value="filename" selected>File Name</option>
                 <option value="license">License</option>
@@ -170,6 +174,11 @@
                     </div>
                 </div>
             </div>
+        </div>
+
+        <!-- Bar Charts -->
+        <div class="bar-chart-hide" id="bar-chart-container">
+            <svg class="bar-chart"></svg>
         </div>
 
         <!--Component Modal -->

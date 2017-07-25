@@ -27,6 +27,16 @@ $(document).ready(function () {
     const cluesTable = new AboutCodeDataTable("#clues-table", aboutCodeDB);
     const componentsTable = new ComponentDataTable("#components-table", aboutCodeDB);
 
+    const chartSelector = ".bar-chart";
+    const chartOptions = {
+        name: "License Summary",
+        margin: 30,
+        barHeight: 25,
+        xAxisName: "License Count",
+        yAxisName: "License Name"
+    };
+    let barChart = new BarChart([], chartOptions, chartSelector);
+
     // TODO: Move this into its own file
     // Create and setup the jstree, and the click-event logic
     const jstree = $("#jstree").jstree(
@@ -120,6 +130,7 @@ $(document).ready(function () {
     const showClueButton = $( "#show-clue-table" );
     const showNodeViewButton = $("#show-tree");
     const showComponentButton = $("#show-component-table");
+    const showBarChartButton = $("#show-bar-chart");
     const saveComponentButton = $("#save-component");
     const deleteComponentButton = $("#delete-component");
     const saveSQLiteFileButton = $("#save-file");
@@ -133,6 +144,7 @@ $(document).ready(function () {
     const nodeContainer = $("#node-container");
     const cluesContainer = $("#clues-table_wrapper");
     const componentContainer = $("#component-container");
+    const barChartContainer = $("#bar-chart-container");
 
     // Resize the nodes based on how many clues are selected
     const nodeDropdown = $("#node-drop-down");
@@ -360,6 +372,7 @@ $(document).ready(function () {
         cluesContainer.show();
         nodeContainer.hide();
         componentContainer.hide();
+        barChartContainer.hide();
         leftCol.addClass('col-md-2').show();
         tabBar.removeClass('col-md-11').addClass('col-md-9');
         cluesTable.draw();
@@ -376,6 +389,7 @@ $(document).ready(function () {
         nodeContainer.show();
         cluesContainer.hide();
         componentContainer.hide();
+        barChartContainer.hide();
         leftCol.addClass('col-md-2').show();
         tabBar.removeClass('col-md-11').addClass('col-md-9');
         nodeView.redraw();
@@ -392,6 +406,7 @@ $(document).ready(function () {
         componentContainer.show();
         nodeContainer.hide();
         cluesContainer.hide();
+        barChartContainer.hide();
         leftCol.removeClass('col-md-2').hide();
         tabBar.removeClass('col-md-9').addClass('col-md-11');
         componentsTable.reload();
@@ -402,6 +417,19 @@ $(document).ready(function () {
 
     // Show component summary table. Hide DataTable and node view -- custom menu
     ipcRenderer.on('component-summary-view', showComponentSummaryView);
+
+    // Show bar chart table. Hide other views
+    function showBarChartView() {
+        barChartContainer.show();
+        componentContainer.hide();
+        nodeContainer.hide();
+        cluesContainer.hide();
+        leftCol.addClass('col-md-2').show();
+        tabBar.removeClass('col-md-11').addClass('col-md-9');
+        barChart.draw();
+    }
+
+    showBarChartButton.click(showBarChartView);
 
     // Creates the database and all View objects from a SQLite file
     function loadDatabaseFromFile(fileName) {
@@ -418,6 +446,10 @@ $(document).ready(function () {
         // The flattened data is used by the clue table and jstree
         return aboutCodeDB.db
             .then(() => {
+                aboutCodeDB.getLicenseValues("short_name")
+                    .then((short_names) => {
+                        barChart = new BarChart(short_names, chartOptions, chartSelector);
+                    });
                 // reload the DataTable after all insertions are done.
                 cluesTable.database(aboutCodeDB);
                 cluesTable.reload();
@@ -563,6 +595,12 @@ $(document).ready(function () {
                             .then(() => aboutCodeDB.addScanData(json))
                             .then(() => reloadDataForViews())
                             .then(() => hideProgressIndicator())
+                            .then(function() {
+                                aboutCodeDB.getLicenseValues("short_name")
+                                    .then((short_names) => {
+                                        new BarChart(short_names, chartOptions, chartSelector);
+                                    });
+                            })
                             .catch((err) => {
                                 hideProgressIndicator();
                                 console.log(err);

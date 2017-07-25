@@ -231,6 +231,16 @@ class AboutCodeDB {
             });
     }
 
+    getLicenseValues(columnName) {
+        return this.db
+            .then(() => {
+                return this.License.findAll({
+                    attributes: [columnName]
+                });
+            })
+            .then((rows) => $.map(rows, row => row[columnName]));
+    };
+
     // ScanCode Scan Details Model definitions
     static scanCodeModel(sequelize) {
         return sequelize.define("scancode", {
