@@ -646,32 +646,42 @@ $(document).ready(function () {
     // TODO (@jdaguil): DejaCode doesn't require any field, but we probably
     // want to require name, version, and owner
     submitComponentButton.on("click", function () {
-        aboutCodeDB.findAllComponents({})
-            .then((components) => {
-                // Get product name and version
-                let productNameVersion = $("#product-name").val()
-                    .concat(":", $("#product-version").val());
-                let apiUrl = $("#apiURLDejaCode").val();
-                let apiKey = $("#apiKey").val();
+        let fieldProductName = $("#product-name").val();
+        let fieldProductVersion = $("#product-version").val();
+        let fieldApiUrl = $("#apiURLDejaCode").val();
+        let fieldApiKey = $("#apiKey").val();
+        // Test whether any form field is empty
+        if ((fieldProductName == "") || (fieldProductVersion == "") || (fieldApiUrl == "") || (fieldApiKey == "")) {
+            alert("Please make sure you complete all fields in the upload form.");
+        }
+        else {
+            aboutCodeDB.findAllComponents({})
+                .then((components) => {
+                    // Get product name and version
+                    let productNameVersion = $("#product-name").val()
+                        .concat(":", $("#product-version").val());
+                    let apiUrl = $("#apiURLDejaCode").val();
+                    let apiKey = $("#apiKey").val();
 
-                // Converts array of components from AboutCode Manager to
-                // DejaCode component format
-                dejaCodeComponents = $.map(components, (component, index) => {
-                    return {
-                        name: component.name,
-                        version: component.version,
-                        owner: component.owner,
-                        license_expression: component.license_expression,
-                        copyright: component.copyright,
-                        homepage_url: component.homepage_url,
-                        primary_language: component.programming_language,
-                        reference_notes: component.notes,
-                        product: productNameVersion
-                    }
+                    // Converts array of components from AboutCode Manager to
+                    // DejaCode component format
+                    dejaCodeComponents = $.map(components, (component, index) => {
+                        return {
+                            name: component.name,
+                            version: component.version,
+                            owner: component.owner,
+                            license_expression: component.license_expression,
+                            copyright: component.copyright,
+                            homepage_url: component.homepage_url,
+                            primary_language: component.programming_language,
+                            reference_notes: component.notes,
+                            product: productNameVersion
+                        }
+                    });
+
+                    uploadComponents(apiUrl, dejaCodeComponents, apiKey);
                 });
-
-                uploadComponents( apiUrl, dejaCodeComponents, apiKey);
-            });
-        $("#componentExportModal").modal("hide");
+            $("#componentExportModal").modal("hide");
+        }
     });
 });
