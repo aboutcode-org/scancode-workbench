@@ -248,7 +248,12 @@ class AboutCodeDB {
                     attributes: [columnName]
                 });
             })
-            .then((rows) => $.map(rows, row => row[columnName]));
+            .then((rows) => {
+                return $.map(rows, row => {
+                    let columnValue = row[columnName];
+                    return columnValue.length <= 0 ? [null] : columnValue;
+                })
+            });
     };
 
     // ScanCode Scan Details Model definitions

@@ -40,6 +40,14 @@ class AboutCodeBarChart {
     showLicenseSummary(attribute) {
         return this.aboutCodeDB.getLicenseValues(attribute)
             .then((values) => {
+                let noValue = 0;
+                values = $.map(values, (value, index) => {
+                    if (value === null) {
+                        noValue += 1;
+                        return "No Value Detected"
+                    }
+                    return value;
+                });
                 this.barChart = new BarChart(values, this.chartOptions, this.barChartId);
             });
     }
@@ -47,6 +55,14 @@ class AboutCodeBarChart {
     showCopyrightSummary(attribute) {
         return this.aboutCodeDB.getCopyrightValues(attribute)
             .then((values) => {
+                let noValue = 0;
+                values = $.map(values, (value, index) => {
+                    if (value === null) {
+                        noValue += 1;
+                        return "No Value Detected"
+                    }
+                    return value;
+                });
                 this.barChart = new BarChart(values, this.chartOptions, this.barChartId);
             });
     }

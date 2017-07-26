@@ -444,7 +444,7 @@ $(document).ready(function () {
                 componentsTable.database(aboutCodeDB);
                 componentsTable.reload();
 
-                nodeView = new AboutCodeNodeView("#node-view", aboutCodeDB, onNodeClick);
+                nodeView = new AboutCodeNodeView("#nodeview", aboutCodeDB, onNodeClick);
                 barChart = new AboutCodeBarChart("#summary-bar-chart", aboutCodeDB);
                 barChart.showCopyrightSummary("holders");
 
@@ -586,7 +586,7 @@ $(document).ready(function () {
                             .then(() => hideProgressIndicator())
                             .then(() => {
                                 barChart = new AboutCodeBarChart("#summary-bar-chart", aboutCodeDB);
-                                barChart.showLicenseSummary("holders");
+                                barChart.showCopyrightSummary("holders");
                             })
                             .catch((err) => {
                                 hideProgressIndicator();
