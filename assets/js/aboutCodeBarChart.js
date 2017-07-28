@@ -37,33 +37,23 @@ class AboutCodeBarChart {
         this.barChart.draw();
     }
 
-    showLicenseSummary(attribute) {
-        return this.aboutCodeDB.getLicenseValues(attribute)
+    showSummary(attribute) {
+        return this.aboutCodeDB.FlattenedFile
+            .findAll({
+                attributes: [Sequelize.fn("TRIM", Sequelize.col(attribute)), attribute],
+            })
+            .then((values) => AboutCodeBarChart.mapToAttributeValues(values, attribute))
             .then((values) => {
-                let noValue = 0;
-                values = $.map(values, (value, index) => {
-                    if (value === null) {
-                        noValue += 1;
-                        return "No Value Detected"
-                    }
-                    return value;
-                });
                 this.barChart = new BarChart(values, this.chartOptions, this.barChartId);
             });
     }
 
-    showCopyrightSummary(attribute) {
-        return this.aboutCodeDB.getCopyrightValues(attribute)
-            .then((values) => {
-                let noValue = 0;
-                values = $.map(values, (value, index) => {
-                    if (value === null) {
-                        noValue += 1;
-                        return "No Value Detected"
-                    }
-                    return value;
-                });
-                this.barChart = new BarChart(values, this.chartOptions, this.barChartId);
-            });
+    // Map each row to the given attribute value, and sanitize invalid values.
+    static mapToAttributeValues(values, attribute) {
+        return $.map(values, (value, index) => {
+            const attributeValue = value[attribute];
+            const isValidValue = attributeValue === null || attributeValue.length <= 0;
+            return isValidValue ? ["No Value Detected"] : attributeValue;
+        });
     }
 }

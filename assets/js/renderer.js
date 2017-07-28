@@ -91,6 +91,7 @@ $(document).ready(function () {
         .on('select_node.jstree', function (evt, data) {
             cluesTable.columns(0).search(data.node.id).draw();
             nodeView.setRoot(data.node.id);
+            // TODO: update barchart attribute, showSummary(currAttribute, currPath)
         });
 
     // The electron library for opening a dialog
@@ -136,6 +137,32 @@ $(document).ready(function () {
     const cluesContainer = $("#clues-table_wrapper");
     const componentContainer = $("#component-container");
     const barChartContainer = $("#bar-chart-container");
+
+    const chartAttributesSelect = $("select#select-chart-attribute");
+
+
+    chartAttributesSelect.select2({
+        placeholder: "Select an attribute"
+    });
+
+    // Populate bar chart summary select box values
+    $.each(AboutCodeDataTable.TABLE_COLUMNS, (i, column) => {
+        if (column.bar_chart_class) {
+            chartAttributesSelect.append(`<option class="${column.bar_chart_class}" value="${column.name}">${column.title}</option>`);
+        }
+    });
+
+    chartAttributesSelect.on( "change", function () {
+        // Get dropdown element selected value
+        let val = $(this).val();
+        barChart.showSummary(val);
+    });
+
+    $(".bar-chart-copyrights").wrapAll(`<optgroup label="Copyright Information"/>`);
+    $(".bar-chart-licenses").wrapAll(`<optgroup label="License Information"/>`);
+    $(".bar-chart-emails").wrapAll(`<optgroup label="Email Information"/>`);
+    $(".bar-chart-file-infos").wrapAll(`<optgroup label="File Information"/>`);
+    $(".bar-chart-package-infos").wrapAll(`<optgroup label="Package Information"/>`);
 
     // Resize the nodes based on how many clues are selected
     const nodeDropdown = $("#node-drop-down");
@@ -446,7 +473,6 @@ $(document).ready(function () {
 
                 nodeView = new AboutCodeNodeView("#nodeview", aboutCodeDB, onNodeClick);
                 barChart = new AboutCodeBarChart("#summary-bar-chart", aboutCodeDB);
-                barChart.showCopyrightSummary("holders");
 
                 // loading data into jstree
                 jstree.jstree(true).refresh(true);
@@ -586,7 +612,6 @@ $(document).ready(function () {
                             .then(() => hideProgressIndicator())
                             .then(() => {
                                 barChart = new AboutCodeBarChart("#summary-bar-chart", aboutCodeDB);
-                                barChart.showCopyrightSummary("holders");
                             })
                             .catch((err) => {
                                 hideProgressIndicator();
