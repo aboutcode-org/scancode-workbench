@@ -674,4 +674,12 @@ $(document).ready(function () {
             });
         $("#componentExportModal").modal("hide");
     });
+
+    // Handles the splitter in index.html between the jsTree and the views on the right.
+    Split(['#leftCol', '#tabbar'], {
+        sizes: [18, 76],
+        minSize: 200,
+        gutterSize: 5
+    });
+
 });
