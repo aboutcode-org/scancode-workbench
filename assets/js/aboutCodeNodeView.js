@@ -15,10 +15,10 @@
  */
 
 class AboutCodeNodeView extends NodeView {
-    constructor(aboutCodeDB, onNodeClicked) {
+    constructor(nodeViewId, aboutCodeDB, onNodeClicked) {
         // Call the NodeView's constructor
         super({
-            selector: "#nodeview",
+            selector: nodeViewId,
             orientation: "left-to-right",
             nodeWidth: 25,
             nodeHeight: 160,
