@@ -37,10 +37,17 @@ class AboutCodeBarChart {
         this.barChart.draw();
     }
 
-    showSummary(attribute) {
+    showSummary(attribute, parentPath) {
+        let where = {};
+
+        if (parentPath) {
+            where.path = { $like: `${parentPath}%` };
+        }
+
         return this.aboutCodeDB.FlattenedFile
             .findAll({
                 attributes: [Sequelize.fn("TRIM", Sequelize.col(attribute)), attribute],
+                where: where
             })
             .then((values) => AboutCodeBarChart.mapToAttributeValues(values, attribute))
             .then((values) => {
@@ -51,9 +58,18 @@ class AboutCodeBarChart {
     // Map each row to the given attribute value, and sanitize invalid values.
     static mapToAttributeValues(values, attribute) {
         return $.map(values, (value, index) => {
-            const attributeValue = value[attribute];
-            const isValidValue = attributeValue === null || attributeValue.length <= 0;
-            return isValidValue ? ["No Value Detected"] : attributeValue;
+            let attributeValue = value[attribute];
+            return AboutCodeBarChart.isValid(attributeValue)
+                ?  attributeValue : ["No Value Detected"];
         });
+    }
+
+    static isValid(value) {
+        if (Array.isArray(value)) {
+            return value.length > 0
+                && value.every((element) => AboutCodeBarChart.isValid(element));
+        } else {
+            return value !== null;
+        }
     }
 }

@@ -89,9 +89,10 @@ $(document).ready(function () {
         })
         // Get the node id when selected
         .on('select_node.jstree', function (evt, data) {
+            let barChartValue = chartAttributesSelect.val();
             cluesTable.columns(0).search(data.node.id).draw();
             nodeView.setRoot(data.node.id);
-            // TODO: update barchart attribute, showSummary(currAttribute, currPath)
+            barChart.showSummary(barChartValue, data.node.id);
         });
 
     // The electron library for opening a dialog
@@ -155,7 +156,8 @@ $(document).ready(function () {
     chartAttributesSelect.on( "change", function () {
         // Get dropdown element selected value
         let val = $(this).val();
-        barChart.showSummary(val);
+        const jstreePath = jstree.jstree("get_selected")[0];
+        barChart.showSummary(val, jstreePath);
     });
 
     $(".bar-chart-copyrights").wrapAll(`<optgroup label="Copyright Information"/>`);
