@@ -158,7 +158,7 @@ div.node-content {
   overflow-y: scroll;
   height: 100%;
   margin: 0 0 0 10px;
-  padding-top: 40px;
+  padding-top: 15px;
   background-color: #f9f9f9;
 }
 
@@ -316,5 +316,15 @@ html, body {
 .gutter.gutter-horizontal {
   height: 100%;
   float: left;
+}
+
+.div-hide {
+  display: none;
+  visibility: hidden;
+}
+
+.div-show {
+  display: block;
+  visibility: visible;
 }
 /* end of split.js-related CSS */
