@@ -200,7 +200,7 @@ describe("checkAboutCodeDB", function() {
     });
 
     describe("addFlattenedRows", function() {
-        it("should ", function() {
+        it("should add rows to the flattened files table", function() {
             let aboutCodeDB = new AboutCodeDB();
 
             return aboutCodeDB.db
@@ -213,6 +213,19 @@ describe("checkAboutCodeDB", function() {
                 .then((rows) => {
                     rows = rows.map((row) => row.toJSON());
                     assert.containSubset(rows, flattenedFilesResults);
+                })
+        });
+    });
+
+    describe("getFileCount", function() {
+        it("should return the ScanCode files_count", function() {
+            let aboutCodeDB = new AboutCodeDB();
+
+            return aboutCodeDB.db
+                .then(() => aboutCodeDB.addScanData(scanCodeJSONResults))
+                .then(() => aboutCodeDB.getFileCount())
+                .then((value) => {
+                    assert.strictEqual(value, 43);
                 })
         });
     });
