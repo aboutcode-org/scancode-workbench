@@ -140,6 +140,7 @@ $(document).ready(function () {
     const barChartContainer = $("#bar-chart-container");
 
     const chartAttributesSelect = $("select#select-chart-attribute");
+    const barChartTotalFiles = $("span.total-files");
 
 
     chartAttributesSelect.select2({
@@ -447,6 +448,10 @@ $(document).ready(function () {
         leftCol.addClass('col-md-2').show();
         tabBar.removeClass('col-md-11').addClass('col-md-9');
         barChart.draw();
+        aboutCodeDB.getFileCount()
+            .then((value) => {
+                barChartTotalFiles.text(value);
+            });
     }
 
     showBarChartButton.click(showBarChartView);
@@ -478,6 +483,11 @@ $(document).ready(function () {
 
                 // loading data into jstree
                 jstree.jstree(true).refresh(true);
+
+                aboutCodeDB.getFileCount()
+                    .then((value) => {
+                        barChartTotalFiles.text(value);
+                    });
 
                 return aboutCodeDB;
             })

@@ -231,30 +231,17 @@ class AboutCodeDB {
             });
     }
 
-    getLicenseValues(columnName) {
+    getFileCount() {
         return this.db
             .then(() => {
-                return this.License.findAll({
-                    attributes: [columnName]
-                });
-            })
-            .then((rows) => $.map(rows, row => row[columnName]));
-    };
-
-    getCopyrightValues(columnName) {
-        return this.db
-            .then(() => {
-                return this.Copyright.findAll({
-                    attributes: [columnName]
-                });
-            })
-            .then((rows) => {
-                return $.map(rows, row => {
-                    let columnValue = row[columnName];
-                    return columnValue.length <= 0 ? [null] : columnValue;
+                return this.ScanCode.findOne({
+                    attributes: ["files_count"]
                 })
+            })
+            .then((count) => {
+                return count.files_count;
             });
-    };
+    }
 
     // ScanCode Scan Details Model definitions
     static scanCodeModel(sequelize) {
@@ -262,7 +249,7 @@ class AboutCodeDB {
             scancode_notice: Sequelize.STRING,
             scancode_version: Sequelize.STRING,
             scancode_options: AboutCodeDB.jsonDataType('scancode_options'),
-            scancode_files_count: Sequelize.INTEGER
+            files_count: Sequelize.INTEGER
         });
     }
 
