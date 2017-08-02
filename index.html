@@ -53,6 +53,8 @@
     <script src="assets/js/nodeview.js"></script>
     <script src="assets/js/select2.js"></script>
     <script src='assets/js/split.js'></script>
+    <script src="assets/js/barChart.js"></script>
+    <script src="assets/js/aboutCodeBarChart.js"></script>
 </head>
 <body>
 <div class="row root-div" id="root-div">
@@ -65,6 +67,9 @@
                 </li>
                 <li>
                     <button class="btn btn-sidebar" id="save-file" data-toggle="tooltip" title="Save SQLite File"><i class="fa fa-floppy-o" aria-hidden="true"></i></button>
+                </li>
+                <li>
+                    <button class="btn btn-sidebar" id="show-bar-chart" data-toggle="tooltip" data-placement="right" title="Chart Summary View"><i class="fa fa-bar-chart" aria-hidden="true"></i></button>
                 </li>
                 <li>
                     <button class="btn btn-sidebar" id="show-clue-table" data-toggle="tooltip" title="Table View"><i class="fa fa-table" aria-hidden="true"></i></button>
@@ -90,12 +95,12 @@
      <div id="tabbar" class="split split-horizontal col-md-9">
         <table id="clues-table" class="display table table-striped table-bordered dataTable no-footer"  cellspacing="0" width="100%" >
         </table>
-         <div id="component-container" class="node-hide">
+        <div id="component-container" class="hide-container">
             <p class="lead">Component Summary</p>
             <table id="components-table" class="display table table-striped table-bordered dataTable no-footer"  cellspacing="0" width="100%" >
             </table>
         </div>
-        <div class="node-hide" id="node-container">
+        <div class="hide-container" id="node-container">
             <select id="node-drop-down" style="border-color: #eee; border-radius: 5px; padding: 5px;" multiple>
                 <option value="filename" selected>File Name</option>
                 <option value="license">License</option>
@@ -171,6 +176,13 @@
                     </div>
                 </div>
             </div>
+        </div>
+
+        <!-- Bar Charts -->
+        <div class="hide-container" id="bar-chart-container">
+            <select data-hide-on-select="true" class="form-control select-chart-attribute" id="select-chart-attribute" type="text"></select>
+            <h5>Total Files Scanned: <span class="total-files"></span></h5>
+            <svg class="bar-chart" id="summary-bar-chart"></svg>
         </div>
 
         <!--Component Modal -->

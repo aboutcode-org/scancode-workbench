@@ -135,9 +135,7 @@ div.node-content {
   stroke-width: 2px;
 }
 
-.node-hide {
-  display: none;
-}
+.hide-container { display: none; }
 
 /* select2 custom css */
 .select2-container {
@@ -328,3 +326,22 @@ html, body {
   visibility: visible;
 }
 /* end of split.js-related CSS */
+
+/* Bar Charts */
+.bar-chart{ width: 100%; }
+
+.bar-chart rect { fill: #3498db; }
+
+.bar-chart text {
+  fill: black;
+  font-size: 12px;
+  font-family: 'Lato', Helvetica, sans-serif;
+  text-anchor: end;
+}
+
+.axis path,
+.axis line {
+    fill: none;
+    stroke: #000;
+    shape-rendering: crispEdges;
+}

@@ -276,6 +276,7 @@ class AboutCodeDataTable {
                 },
                 "title": "Copyright Statements",
                 "name": "copyright_statements",
+                "bar_chart_class": "bar-chart-copyrights"
             },
             {
                 "data": function (row, type, val, meta) {
@@ -284,7 +285,8 @@ class AboutCodeDataTable {
                     }).join("<hr/>");
                 },
                 "title": "Copyright Holders",
-                "name": "copyright_holders"
+                "name": "copyright_holders",
+                "bar_chart_class": "bar-chart-copyrights"
             },
             {
                 "data": function (row, type, val, meta) {
@@ -293,7 +295,8 @@ class AboutCodeDataTable {
                     }).join("<hr/>");
                 },
                 "title": "Copyright Authors",
-                "name": "copyright_authors"
+                "name": "copyright_authors",
+                "bar_chart_class": "bar-chart-copyrights"
             },
             {
                 "data": "copyright_start_line[<hr/>]",
@@ -313,27 +316,32 @@ class AboutCodeDataTable {
             {
                 "data": "license_key[<hr/>]",
                 "title": "License Key",
-                "name": "license_key"
+                "name": "license_key",
+                "bar_chart_class": "bar-chart-licenses"
             },
             {
                 "data": "license_score[<hr/>]",
                 "title": "License Score",
-                "name": "license_score"
+                "name": "license_score",
+                "bar_chart_class": "bar-chart-licenses"
             },
             {
                 "data": "license_short_name[<hr/>]",
                 "title": "License Short Name",
-                "name": "license_short_name"
+                "name": "license_short_name",
+                "bar_chart_class": "bar-chart-licenses"
             },
             {
                 "data": "license_category",
                 "title": "License Category",
-                "name": "license_category"
+                "name": "license_category",
+                "bar_chart_class": "bar-chart-licenses"
             },
             {
                 "data": "license_owner[<hr/>]",
                 "title": "License Owner",
-                "name": "license_owner"
+                "name": "license_owner",
+                "bar_chart_class": "bar-chart-licenses"
             },
             {
                 "data": "license_homepage_url",
@@ -368,7 +376,8 @@ class AboutCodeDataTable {
             {
                 "data": "license_spdx_key[<hr/>]",
                 "title": "SPDX License Key",
-                "name": "license_spdx_key"
+                "name": "license_spdx_key",
+                "bar_chart_class": "bar-chart-licenses"
             },
             {
                 "data": "license_start_line[<hr/>]",
@@ -388,7 +397,8 @@ class AboutCodeDataTable {
             {
                 "data": "email[<hr/>]",
                 "title": "Email",
-                "name": "email"
+                "name": "email",
+                "bar_chart_class": "bar-chart-emails"
             },
             {
                 "data": "email_start_line[<hr/>]",
@@ -433,7 +443,8 @@ class AboutCodeDataTable {
             {
                 "data": "type",
                 "title": "Type",
-                "name": "type"
+                "name": "type",
+                "bar_chart_class": "bar-chart-file-infos"
             },
             {
                 "data": "name",
@@ -443,7 +454,8 @@ class AboutCodeDataTable {
             {
                 "data": "extension",
                 "title": "File Extension",
-                "name": "extension"
+                "name": "extension",
+                "bar_chart_class": "bar-chart-file-infos"
             },
             {
                 "data": "date",
@@ -478,42 +490,50 @@ class AboutCodeDataTable {
             {
                 "data": "file_type",
                 "title": "File Type",
-                "name": "file_type"
+                "name": "file_type",
+                "bar_chart_class": "bar-chart-file-infos"
             },
             {
                 "data": "programming_language",
                 "title": "Language",
-                "name": "programming_language"
+                "name": "programming_language",
+                "bar_chart_class": "bar-chart-file-infos"
             },
             {
                 "data": "is_binary",
                 "title": "Binary",
-                "name": "is_binary"
+                "name": "is_binary",
+                "bar_chart_class": "bar-chart-file-infos"
             },
             {
                 "data": "is_text",
                 "title": "Text File",
-                "name": "is_text"
+                "name": "is_text",
+                "bar_chart_class": "bar-chart-file-infos"
             },
             {
                 "data": "is_archive",
                 "title": "Archive File",
-                "name": "is_archive"
+                "name": "is_archive",
+                "bar_chart_class": "bar-chart-file-infos"
             },
             {
                 "data": "is_media",
                 "title": "Media File",
-                "name": "is_media"
+                "name": "is_media",
+                "bar_chart_class": "bar-chart-file-infos"
             },
             {
                 "data": "is_source",
                 "title": "Source File",
-                "name": "is_source"
+                "name": "is_source",
+                "bar_chart_class": "bar-chart-file-infos"
             },
             {
                 "data": "is_script",
                 "title": "Script File",
-                "name": "is_script"
+                "name": "is_script",
+                "bar_chart_class": "bar-chart-file-infos"
             }
         ];
     }
@@ -523,7 +543,8 @@ class AboutCodeDataTable {
             {
                 "data": "packages_type",
                 "title": "Package Type",
-                "name": "packages_type"
+                "name": "packages_type",
+                "bar_chart_class": "bar-chart-package-infos"
             },
             {
                 "data": "packages_name",
@@ -538,17 +559,20 @@ class AboutCodeDataTable {
             {
                 "data": "packages_asserted_licenses_license[<hr/>]",
                 "title": "Package Asserted License",
-                "name": "packages_asserted_licenses_license"
+                "name": "packages_asserted_licenses_license",
+                "bar_chart_class": "bar-chart-package-infos"
             },
             {
                 "data": "packages_primary_language",
                 "title": "Package Primary Language",
-                "name": "packages_primary_language"
+                "name": "packages_primary_language",
+                "bar_chart_class": "bar-chart-package-infos"
             },
             {
                 "data": "packages_authors_name[<hr/>]",
                 "title": "Package Authors Name",
-                "name": "packages_authors_name"
+                "name": "packages_authors_name",
+                "bar_chart_class": "bar-chart-package-infos"
             },
             {
                 "data": "packages_homepage_url",

@@ -231,13 +231,25 @@ class AboutCodeDB {
             });
     }
 
+    getFileCount() {
+        return this.db
+            .then(() => {
+                return this.ScanCode.findOne({
+                    attributes: ["files_count"]
+                })
+            })
+            .then((count) => {
+                return count.files_count;
+            });
+    }
+
     // ScanCode Scan Details Model definitions
     static scanCodeModel(sequelize) {
         return sequelize.define("scancode", {
             scancode_notice: Sequelize.STRING,
             scancode_version: Sequelize.STRING,
             scancode_options: AboutCodeDB.jsonDataType('scancode_options'),
-            scancode_files_count: Sequelize.INTEGER
+            files_count: Sequelize.INTEGER
         });
     }
 

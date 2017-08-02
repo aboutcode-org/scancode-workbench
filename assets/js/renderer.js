@@ -22,6 +22,7 @@ $(document).ready(function () {
     // Create default values for all of the data and ui classes
     let aboutCodeDB = new AboutCodeDB();
     let nodeView = new AboutCodeNodeView("#node-view", aboutCodeDB);
+    let barChart = new AboutCodeBarChart("#summary-bar-chart", aboutCodeDB);
 
     // These classes are only created once, otherwise DataTables will complain
     const cluesTable = new AboutCodeDataTable("#clues-table", aboutCodeDB);
@@ -88,8 +89,10 @@ $(document).ready(function () {
         })
         // Get the node id when selected
         .on('select_node.jstree', function (evt, data) {
+            let barChartValue = chartAttributesSelect.val();
             cluesTable.columns(0).search(data.node.id).draw();
             nodeView.setRoot(data.node.id);
+            barChart.showSummary(barChartValue, data.node.id);
         });
 
     // The electron library for opening a dialog
@@ -120,6 +123,7 @@ $(document).ready(function () {
     const showClueButton = $( "#show-clue-table" );
     const showNodeViewButton = $("#show-tree");
     const showComponentButton = $("#show-component-table");
+    const showBarChartButton = $("#show-bar-chart");
     const saveComponentButton = $("#save-component");
     const deleteComponentButton = $("#delete-component");
     const saveSQLiteFileButton = $("#save-file");
@@ -133,6 +137,35 @@ $(document).ready(function () {
     const nodeContainer = $("#node-container");
     const cluesContainer = $("#clues-table_wrapper");
     const componentContainer = $("#component-container");
+    const barChartContainer = $("#bar-chart-container");
+
+    const chartAttributesSelect = $("select#select-chart-attribute");
+    const barChartTotalFiles = $("span.total-files");
+
+
+    chartAttributesSelect.select2({
+        placeholder: "Select an attribute"
+    });
+
+    // Populate bar chart summary select box values
+    $.each(AboutCodeDataTable.TABLE_COLUMNS, (i, column) => {
+        if (column.bar_chart_class) {
+            chartAttributesSelect.append(`<option class="${column.bar_chart_class}" value="${column.name}">${column.title}</option>`);
+        }
+    });
+
+    chartAttributesSelect.on( "change", function () {
+        // Get dropdown element selected value
+        let val = $(this).val();
+        const jstreePath = jstree.jstree("get_selected")[0];
+        barChart.showSummary(val, jstreePath);
+    });
+
+    $(".bar-chart-copyrights").wrapAll(`<optgroup label="Copyright Information"/>`);
+    $(".bar-chart-licenses").wrapAll(`<optgroup label="License Information"/>`);
+    $(".bar-chart-emails").wrapAll(`<optgroup label="Email Information"/>`);
+    $(".bar-chart-file-infos").wrapAll(`<optgroup label="File Information"/>`);
+    $(".bar-chart-package-infos").wrapAll(`<optgroup label="Package Information"/>`);
 
     // Resize the nodes based on how many clues are selected
     const nodeDropdown = $("#node-drop-down");
@@ -403,6 +436,7 @@ $(document).ready(function () {
         cluesContainer.show();
         nodeContainer.hide();
         componentContainer.hide();
+        barChartContainer.hide();
         leftCol.addClass('col-md-2').show();
         tabBar.removeClass('col-md-11').addClass('col-md-9');
         cluesTable.draw();
@@ -421,6 +455,7 @@ $(document).ready(function () {
         nodeContainer.show();
         cluesContainer.hide();
         componentContainer.hide();
+        barChartContainer.hide();
         leftCol.addClass('col-md-2').show();
         tabBar.removeClass('col-md-11').addClass('col-md-9');
         nodeView.redraw();
@@ -439,6 +474,7 @@ $(document).ready(function () {
         componentContainer.show();
         nodeContainer.hide();
         cluesContainer.hide();
+        barChartContainer.hide();
         leftCol.removeClass('col-md-2').hide();
         tabBar.removeClass('col-md-9').addClass('col-md-11');
         componentsTable.reload();
@@ -450,6 +486,23 @@ $(document).ready(function () {
     // Show component summary table. Hide DataTable and node view -- custom menu
     ipcRenderer.on('component-summary-view', showComponentSummaryView);
 
+    // Show bar chart table. Hide other views
+    function showBarChartView() {
+        barChartContainer.show();
+        componentContainer.hide();
+        nodeContainer.hide();
+        cluesContainer.hide();
+        leftCol.addClass('col-md-2').show();
+        tabBar.removeClass('col-md-11').addClass('col-md-9');
+        barChart.draw();
+        aboutCodeDB.getFileCount()
+            .then((value) => {
+                barChartTotalFiles.text(value);
+            });
+    }
+
+    showBarChartButton.click(showBarChartView);
+
     // Creates the database and all View objects from a SQLite file
     function loadDatabaseFromFile(fileName) {
         // Create a new database when importing a json file
@@ -458,9 +511,13 @@ $(document).ready(function () {
             dbStorage: fileName
         });
 
+        reloadDataForViews();
+    }
+
+    function reloadDataForViews() {
         // The flattened data is used by the clue table and jstree
-        aboutCodeDB.db
-            .then(function() {
+        return aboutCodeDB.db
+            .then(() => {
                 // reload the DataTable after all insertions are done.
                 cluesTable.database(aboutCodeDB);
                 cluesTable.reload();
@@ -468,10 +525,18 @@ $(document).ready(function () {
                 componentsTable.database(aboutCodeDB);
                 componentsTable.reload();
 
-                nodeView = new AboutCodeNodeView(aboutCodeDB, onNodeClick);
+                nodeView = new AboutCodeNodeView("#nodeview", aboutCodeDB, onNodeClick);
+                barChart = new AboutCodeBarChart("#summary-bar-chart", aboutCodeDB);
 
                 // loading data into jstree
                 jstree.jstree(true).refresh(true);
+
+                aboutCodeDB.getFileCount()
+                    .then((value) => {
+                        barChartTotalFiles.text(value);
+                    });
+
+                return aboutCodeDB;
             })
             .catch(function(reason) {
                throw reason;
@@ -596,25 +661,17 @@ $(document).ready(function () {
                             dbName: "demo_schema",
                             dbStorage: fileName,
                         });
-                        showProgressIndicator();
+
                         // The flattened data is used by the clue table and jstree
-                        aboutCodeDB.addFlattenedRows(json)
+                        aboutCodeDB.db
+                            .then(() => showProgressIndicator())
+                            .then(() => aboutCodeDB.addFlattenedRows(json))
                             .then(() => aboutCodeDB.addScanData(json))
-                            .then(() => {
-                                // reload the DataTable after all insertions are done.
-                                cluesTable.database(aboutCodeDB);
-                                cluesTable.reload();
-
-                                // Load component table database
-                                componentsTable.database(aboutCodeDB);
-                                componentsTable.reload();
-
-                                nodeView = new AboutCodeNodeView(aboutCodeDB, onNodeClick);
-
-                                // loading data into jstree
-                                jstree.jstree(true).refresh(true);
-                            })
+                            .then(() => reloadDataForViews())
                             .then(() => hideProgressIndicator())
+                            .then(() => {
+                                barChart = new AboutCodeBarChart("#summary-bar-chart", aboutCodeDB);
+                            })
                             .catch((err) => {
                                 hideProgressIndicator();
                                 console.log(err);
@@ -693,33 +750,38 @@ $(document).ready(function () {
     // TODO (@jdaguil): DejaCode doesn't require any field, but we probably
     // want to require name, version, and owner
     submitComponentButton.on("click", function () {
-        aboutCodeDB.findAllComponents({})
-            .then((components) => {
-                // Get product name and version
-                let productNameVersion = $("#product-name").val()
-                    .concat(":", $("#product-version").val());
-                let apiUrl = $("#apiURLDejaCode").val();
-                let apiKey = $("#apiKey").val();
+        // Get product name and version
+        const productName = $("#product-name").val();
+        const productVersion = $("#product-version").val();
+        const productNameVersion = productName.concat(":", productVersion);
+        const apiUrl = $("#apiURLDejaCode").val();
+        const apiKey = $("#apiKey").val();
+        // Test whether any form field is empty
+        if ((productName === "") || (productVersion === "") || (apiUrl === "") || (apiKey === "")) {
+            alert("Please make sure you complete all fields in the upload form.");
+        } else {
+            aboutCodeDB.findAllComponents({})
+                .then((components) => {
+                    // Converts array of components from AboutCode Manager to
+                    // DejaCode component format
+                    dejaCodeComponents = $.map(components, (component, index) => {
+                        return {
+                            name: component.name,
+                            version: component.version,
+                            owner: component.owner,
+                            license_expression: component.license_expression,
+                            copyright: component.copyright,
+                            homepage_url: component.homepage_url,
+                            primary_language: component.programming_language,
+                            reference_notes: component.notes,
+                            product: productNameVersion
+                        }
+                    });
 
-                // Converts array of components from AboutCode Manager to
-                // DejaCode component format
-                dejaCodeComponents = $.map(components, (component, index) => {
-                    return {
-                        name: component.name,
-                        version: component.version,
-                        owner: component.owner,
-                        license_expression: component.license_expression,
-                        copyright: component.copyright,
-                        homepage_url: component.homepage_url,
-                        primary_language: component.programming_language,
-                        reference_notes: component.notes,
-                        product: productNameVersion
-                    }
+                    uploadComponents(apiUrl, dejaCodeComponents, apiKey);
                 });
-
-                uploadComponents( apiUrl, dejaCodeComponents, apiKey);
-            });
-        $("#componentExportModal").modal("hide");
+            $("#componentExportModal").modal("hide");
+        }
     });
 
 });
