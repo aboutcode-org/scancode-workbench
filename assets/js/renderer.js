@@ -388,50 +388,30 @@ $(document).ready(function () {
     // Center and reset node view
     resetZoomButton.click(() => nodeView.centerNode());
 
-    // Clear any saved splitter-related div widths from local storage when the app closes.
-    const clearDivs = () => {
-        if ('localStorage' in window && window['localStorage'] !== null) {
-            localStorage.removeItem('splitSizes');
-        }
-    }
-
-    window.addEventListener('beforeunload', function (event) {
-        clearDivs();
-    });
-
-    // Used in the split.js onDragEnd property below.
-    const saveResize = () => {
-        localStorage.setItem('splitSizes', JSON.stringify(instance.getSizes()));
-    }
-
     // Instantiate the splitter.
-    const instance = Split(['#leftCol', '#tabbar'], {
+    const splitter = Split(['#leftCol', '#tabbar'], {
         sizes: [18, 76],
         minSize: 200,
         gutterSize: 5,
-        onDragEnd: saveResize
+        onDragEnd: function() {
+            sessionStorage.setItem('splitSizes', JSON.stringify(splitter.getSizes()));
+        }
     });
 
-    // Retrieve any saved resize settings from localStorage or else use our default setting.
-    function getDivs() {
-        if (localStorage.getItem('splitSizes')) {
-            var dataSet;
-            try {
-                dataSet = JSON.parse(localStorage.getItem('splitSizes')) || [];
-            } catch (err) {
-                dataSet = [];
-            }
-            var key_firstDiv = dataSet[0];
-            var key_secondDiv = dataSet[1];
-            instance.setSizes([key_firstDiv, key_secondDiv]);
-        } else {
-            instance.setSizes([18, 76]);
+    // Retrieve any saved resize settings from sessionStorage or else use our default setting.
+    function restoreSplitterSizes() {
+        let splitSizes;
+        try {
+            splitSizes = JSON.parse(sessionStorage.getItem('splitSizes')) || [18, 76];
+        } catch (err) {
+            console.log(err);
         }
+        splitter.setSizes(splitSizes);
     }
 
     // Show Table View (aka "clue DataTable").  Hide node view and component summary table.
     function showTableView() {
-        getDivs();
+        restoreSplitterSizes();
         $(".gutter-horizontal").removeClass("div-hide").addClass("div-show");
         cluesContainer.show();
         nodeContainer.hide();
@@ -450,7 +430,7 @@ $(document).ready(function () {
 
     // Show node view. Hide clue and component table
     function showNodeView() {
-        getDivs();
+        restoreSplitterSizes();
         $(".gutter-horizontal").removeClass("div-hide").addClass("div-show");
         nodeContainer.show();
         cluesContainer.hide();
@@ -470,7 +450,7 @@ $(document).ready(function () {
     // Show component summary table. Hide DataTable and node view
     function showComponentSummaryView() {
         $(".gutter-horizontal ").removeClass("div-show").addClass("div-hide");
-        instance.setSizes([3, 91]);
+        splitter.setSizes([3, 91]);
         componentContainer.show();
         nodeContainer.hide();
         cluesContainer.hide();

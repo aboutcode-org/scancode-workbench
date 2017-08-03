@@ -8440,11 +8440,6 @@
       "from": "speedometer@>=0.1.2 <0.2.0",
       "resolved": "https://registry.npmjs.org/speedometer/-/speedometer-0.1.4.tgz"
     },
-    "split.js": {
-      "version": "1.3.5",
-      "from": "split.js@latest",
-      "resolved": "https://registry.npmjs.org/split.js/-/split.js-1.3.5.tgz"
-    },
     "sqlite3": {
       "version": "3.1.8",
       "from": "sqlite3@latest",

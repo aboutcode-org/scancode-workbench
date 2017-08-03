@@ -300,13 +300,11 @@ html, body {
   background-position: 50%;
 }
 
-.gutter.gutter-horizontal {
-  background-image: url('../../node_modules/split.js/grips/vertical.png');
+ .gutter.gutter-horizontal {
   cursor: ew-resize;
 }
 
 .gutter.gutter-vertical {
-  background-image: url('../../node_modules/split.js/grips/horizontal.png');
   cursor: ns-resize;
 }
 
