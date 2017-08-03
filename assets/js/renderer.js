@@ -400,9 +400,9 @@ $(document).ready(function () {
 
     // Retrieve any saved resize settings from sessionStorage or else use our default setting.
     function restoreSplitterSizes() {
-        let splitSizes;
+        let splitSizes = [18, 76];
         try {
-            splitSizes = JSON.parse(sessionStorage.getItem('splitSizes')) || [18, 76];
+            splitSizes = JSON.parse(sessionStorage.getItem('splitSizes')) || splitSizes;
         } catch (err) {
             console.log(err);
         }
@@ -468,6 +468,8 @@ $(document).ready(function () {
 
     // Show bar chart table. Hide other views
     function showBarChartView() {
+        restoreSplitterSizes();
+        $(".gutter-horizontal").removeClass("div-hide").addClass("div-show");
         barChartContainer.show();
         componentContainer.hide();
         nodeContainer.hide();
@@ -763,5 +765,7 @@ $(document).ready(function () {
             $("#componentExportModal").modal("hide");
         }
     });
+
+    restoreSplitterSizes();
 
 });
