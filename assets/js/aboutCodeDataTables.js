@@ -147,7 +147,7 @@ class AboutCodeDataTable {
             // plugin doesn't work with fixedColumns. Try updating
             // "scroller": true,
             "scrollX": true,
-            "scrollY": "75vh",
+            "scrollY": "71vh",
             "deferRender": true,
             initComplete: function () {
                 // Add a select element to each column's footer
