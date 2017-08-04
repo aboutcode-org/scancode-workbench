@@ -128,6 +128,13 @@ function getTemplate() {
           }
         },
         {
+          label: "Chart Summary View",
+          accelerator: 'Shift+CmdOrCtrl+Z',
+          click: function (menuItem, currentWindow) {
+            currentWindow.webContents.send('chart-summary-view')
+          }
+        },
+        {
           label: "Component Summary View",
           accelerator: 'Shift+CmdOrCtrl+C',
           click: function (menuItem, currentWindow) {
