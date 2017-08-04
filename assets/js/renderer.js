@@ -395,7 +395,9 @@ $(document).ready(function () {
         gutterSize: 5,
         onDragEnd: function() {
             sessionStorage.setItem('splitSizes', JSON.stringify(splitter.getSizes()));
-            barChart.draw();
+            if ($('#bar-chart-container').is(':visible')) {
+                barChart.draw();
+            }
         }
     });
 
