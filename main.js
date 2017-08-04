@@ -129,7 +129,7 @@ function getTemplate() {
         },
         {
           label: "Chart Summary View",
-          accelerator: 'Shift+CmdOrCtrl+Z',
+          accelerator: 'Shift+CmdOrCtrl+D',
           click: function (menuItem, currentWindow) {
             currentWindow.webContents.send('chart-summary-view')
           }
