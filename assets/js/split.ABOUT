@@ -1,0 +1,12 @@
+about_resource: split.js
+download_url: https://github.com/nathancahill/Split.js/tree/v1.3.5
+version: 1.3.5
+
+name: Split.js
+description: A lightweight utility for creating adjustable split views.
+home_url: https://github.com/nathancahill/Split.js#readme
+owner: Nathan Cahill
+contact: nathan@nathancahill.com
+dje_license: mit
+license_text_file: split.LICENSE
+copyright: Copyright (c) 2017 Nathan Cahill

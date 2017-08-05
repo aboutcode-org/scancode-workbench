@@ -388,8 +388,34 @@ $(document).ready(function () {
     // Center and reset node view
     resetZoomButton.click(() => nodeView.centerNode());
 
+    // Instantiate the splitter.
+    const splitter = Split(['#leftCol', '#tabbar'], {
+        sizes: [18, 76],
+        minSize: 200,
+        gutterSize: 5,
+        onDragEnd: function() {
+            sessionStorage.setItem('splitSizes', JSON.stringify(splitter.getSizes()));
+            if ($('#bar-chart-container').is(':visible')) {
+                barChart.draw();
+            }
+        }
+    });
+
+    // Retrieve any saved resize settings from sessionStorage or else use our default setting.
+    function restoreSplitterSizes() {
+        let splitSizes = [18, 76];
+        try {
+            splitSizes = JSON.parse(sessionStorage.getItem('splitSizes')) || splitSizes;
+        } catch (err) {
+            console.log(err);
+        }
+        splitter.setSizes(splitSizes);
+    }
+
     // Show Table View (aka "clue DataTable").  Hide node view and component summary table.
     function showTableView() {
+        restoreSplitterSizes();
+        $(".gutter-horizontal").removeClass("div-hide").addClass("div-show");
         cluesContainer.show();
         nodeContainer.hide();
         componentContainer.hide();
@@ -407,6 +433,8 @@ $(document).ready(function () {
 
     // Show node view. Hide clue and component table
     function showNodeView() {
+        restoreSplitterSizes();
+        $(".gutter-horizontal").removeClass("div-hide").addClass("div-show");
         nodeContainer.show();
         cluesContainer.hide();
         componentContainer.hide();
@@ -424,6 +452,8 @@ $(document).ready(function () {
 
     // Show component summary table. Hide DataTable and node view
     function showComponentSummaryView() {
+        $(".gutter-horizontal ").removeClass("div-show").addClass("div-hide");
+        splitter.setSizes([3, 91]);
         componentContainer.show();
         nodeContainer.hide();
         cluesContainer.hide();
@@ -441,6 +471,8 @@ $(document).ready(function () {
 
     // Show bar chart table. Hide other views
     function showBarChartView() {
+        restoreSplitterSizes();
+        $(".gutter-horizontal").removeClass("div-hide").addClass("div-show");
         barChartContainer.show();
         componentContainer.hide();
         nodeContainer.hide();
@@ -736,4 +768,7 @@ $(document).ready(function () {
             $("#componentExportModal").modal("hide");
         }
     });
+
+    restoreSplitterSizes();
+
 });

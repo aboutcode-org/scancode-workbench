@@ -154,9 +154,9 @@ div.node-content {
   min-height: 100px;
   overflow-x: scroll;
   overflow-y: scroll;
-  height: 600px;
+  height: 100%;
   margin: 0 0 0 10px;
-  padding-top: 40px;
+  padding-top: 15px;
   background-color: #f9f9f9;
 }
 
@@ -273,6 +273,57 @@ div.dataTables_scrollHead th:first-child {
 .fa_custom {
   color: #3498db;
 }
+
+/* This set of CSS is required for the split.js splitter/resizing functionality */
+
+.root-div {
+  height: 100%;
+  /* This removes the unwanted horizontal scrollbar. */
+  margin: 0;
+}
+
+html, body {
+  height: 100%;
+  margin: 0;
+}
+
+#sidebar-div {
+  height: 100%;
+  border: 0;
+  width: 100px;
+  max-width: 100px;
+}
+
+.gutter {
+  background-color: #e8e8e8;
+  background-repeat: no-repeat;
+  background-position: 50%;
+}
+
+ .gutter.gutter-horizontal {
+  cursor: ew-resize;
+}
+
+.gutter.gutter-vertical {
+  cursor: ns-resize;
+}
+
+.split.split-horizontal,
+.gutter.gutter-horizontal {
+  height: 100%;
+  float: left;
+}
+
+.div-hide {
+  display: none;
+  visibility: hidden;
+}
+
+.div-show {
+  display: block;
+  visibility: visible;
+}
+/* end of split.js-related CSS */
 
 /* Bar Charts */
 .bar-chart{ width: 100%; }
