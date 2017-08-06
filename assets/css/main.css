@@ -184,6 +184,7 @@ div.node-content {
 
 #leftCol {
   height: 100%;
+  width: 200px;
 }
 
 .btn-sidebar {
