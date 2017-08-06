@@ -15,16 +15,16 @@
 }
 
 #wrapper.toggled {
-    padding-left: 250px;
+    padding-left: 50px;
 }
 
 #sidebar-wrapper {
     z-index: 1000;
     position: fixed;
-    left: 250px;
+    left: 50px;
     width: 0;
     height: 100%;
-    margin-left: -250px;
+    margin-left: -50px;
     overflow-y: auto;
     background: #000;
     -webkit-transition: all 0.5s ease;
@@ -45,7 +45,7 @@
 
 #wrapper.toggled #page-content-wrapper {
     position: absolute;
-    margin-right: -250px;
+    margin-right: -50px;
 }
 
 /* Sidebar Styles */

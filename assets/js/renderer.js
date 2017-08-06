@@ -135,7 +135,7 @@ $(document).ready(function () {
 
     // Defines DOM element constants for the main view containers.
     const nodeContainer = $("#node-container");
-    const cluesContainer = $("#clues-table_wrapper");
+    const cluesContainer = $("#clues-container");
     const componentContainer = $("#component-container");
     const barChartContainer = $("#bar-chart-container");
 
@@ -390,7 +390,7 @@ $(document).ready(function () {
 
     // Instantiate the splitter.
     const splitter = Split(['#leftCol', '#tabbar'], {
-        sizes: [18, 76],
+        sizes: [20, 80],
         minSize: 200,
         gutterSize: 5,
         onDragEnd: function() {
@@ -403,7 +403,7 @@ $(document).ready(function () {
 
     // Retrieve any saved resize settings from sessionStorage or else use our default setting.
     function restoreSplitterSizes() {
-        let splitSizes = [18, 76];
+        let splitSizes = [20, 80];
         try {
             splitSizes = JSON.parse(sessionStorage.getItem('splitSizes')) || splitSizes;
         } catch (err) {
@@ -420,8 +420,6 @@ $(document).ready(function () {
         nodeContainer.hide();
         componentContainer.hide();
         barChartContainer.hide();
-        leftCol.addClass('col-md-2').show();
-        tabBar.removeClass('col-md-11').addClass('col-md-9');
         cluesTable.draw();
     }
 
@@ -439,8 +437,6 @@ $(document).ready(function () {
         cluesContainer.hide();
         componentContainer.hide();
         barChartContainer.hide();
-        leftCol.addClass('col-md-2').show();
-        tabBar.removeClass('col-md-11').addClass('col-md-9');
         nodeView.redraw();
     }
 
@@ -452,14 +448,12 @@ $(document).ready(function () {
 
     // Show component summary table. Hide DataTable and node view
     function showComponentSummaryView() {
-        $(".gutter-horizontal ").removeClass("div-show").addClass("div-hide");
-        splitter.setSizes([3, 91]);
+        $(".gutter-horizontal").removeClass("div-show").addClass("div-hide");
+        splitter.collapse(0);
         componentContainer.show();
         nodeContainer.hide();
         cluesContainer.hide();
         barChartContainer.hide();
-        leftCol.removeClass('col-md-2').hide();
-        tabBar.removeClass('col-md-9').addClass('col-md-11');
         componentsTable.reload();
     }
 
@@ -477,8 +471,6 @@ $(document).ready(function () {
         componentContainer.hide();
         nodeContainer.hide();
         cluesContainer.hide();
-        leftCol.addClass('col-md-2').show();
-        tabBar.removeClass('col-md-11').addClass('col-md-9');
         barChart.draw();
         aboutCodeDB.getFileCount()
             .then((value) => {

@@ -35,6 +35,8 @@ class ComponentDataTable {
 
     _createDataTable(tableID) {
         return $(tableID).DataTable({
+            "scrollX": true,
+            "scrollResize": true,
             columns: ComponentDataTable.COLUMNS,
             dom: // Needed to keep datatables buttons and search inline
             "<'row'<'col-sm-9'B><'col-sm-3'f>>" +
