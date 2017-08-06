@@ -18,6 +18,7 @@ class ComponentDataTable {
     constructor(tableID, aboutCodeDB) {
         this.aboutCodeDB = aboutCodeDB;
         this.dataTable = this._createDataTable(tableID);
+        $('<p class="lead">Component Summary</p>').prependTo($("#components-table_wrapper"))
     }
 
     database(aboutCodeDB) {

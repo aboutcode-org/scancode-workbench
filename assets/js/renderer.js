@@ -762,5 +762,5 @@ $(document).ready(function () {
     });
 
     restoreSplitterSizes();
-
+    showTableView();
 });
