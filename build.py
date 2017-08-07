@@ -109,7 +109,9 @@ def get_version(default=VERSION, template='{tag}.{distance}.{commit}{dirty}',
 
     except:
         # no git data: use default version
-        print('DEBUG: get_version: failed to get git data, usinf default:', default)
+        print('DEBUG: get_version: failed to get git data, usind default:', default)
+        import traceback
+        print(traceback.format_exc())
         return default
 
 
