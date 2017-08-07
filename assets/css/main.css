@@ -153,13 +153,11 @@ div.node-content {
 }
 
 #jstree {
-  border: 1px solid #ddd;
-  border-radius: 4px;
   overflow-x: scroll;
   overflow-y: scroll;
   height: 100%;
   padding-top: 15px;
-  background-color: #f9f9f9;
+  background-color: #f3f3f3;
 }
 
 .jstree-default .jstree-clicked {
@@ -191,11 +189,12 @@ div.node-content {
 #leftCol {
   height: 100%;
   width: 200px;
+  box-shadow: 2px 0 15px -8px #b1b1b1;
 }
 
 .btn-sidebar {
   color: grey;
-  background-color: #000;
+  background-color: #21252b;
   padding: 0;
   width: 50px;
 }
@@ -207,7 +206,7 @@ div.node-content {
 .sidebar-nav li .btn-sidebar {
     display: block;
     text-decoration: none;
-    color: #999999;
+    color: #fff;
 }
 
 .sidebar-nav li .btn-sidebar:hover {
@@ -284,7 +283,8 @@ div.dataTables_scrollHead th:first-child {
 }
 
  .gutter.gutter-horizontal {
-  cursor: ew-resize;
+  cursor: col-resize;
+  opacity: 0;
 }
 
 .gutter.gutter-vertical {
