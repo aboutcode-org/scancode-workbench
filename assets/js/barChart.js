@@ -71,7 +71,8 @@ class BarChart {
         this.rects = bars.append('rect')
             .attr('y', function(d) { return yScale(d.trimName); })
             .attr('height', yScale.rangeBand())
-            .on("mouseover", function (d) {
+            .on("mouseover", function (d) { tooltip.style("display", "inline-block"); })
+            .on("mousemove", function (d) {
                 tooltip
                     .style("left", d3.event.pageX - 50 + "px")
                     .style("top", d3.event.pageY - 70 + "px")
