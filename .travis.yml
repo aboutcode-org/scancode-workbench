@@ -14,5 +14,14 @@ before_install:
   - if [ $TRAVIS_OS_NAME = linux ]; then sudo apt-get update; sudo apt-get install build-essential -y; fi
 
 script:
-    - python build.py
-    - openssl version
+  - python build.py
+
+
+addons:
+  ssh_known_hosts: web.sourceforge.net
+
+
+after_success:
+  - openssl aes-256-cbc -K $encrypted_906d16ae5679_key -iv $encrypted_906d16ae5679_iv -in deploy_rsa.enc -out /tmp/deploy_rsa -d
+  - chmod 600 /tmp/deploy_rsa
+  - scp -i /tmp/deploy_rsa dist/AboutCode*.tar.gz aboutcode-rel@web.sourceforge.net:/home/frs/project/aboutcode-manager/builds/
