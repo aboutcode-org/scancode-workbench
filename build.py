@@ -87,8 +87,13 @@ def get_version(default=VERSION, template='{tag}.{distance}.{commit}{dirty}',
         return default
     try:
         tag, distance, commit, dirty = get_git_version()
+
+        print('DEBUG: get_version: tag:', tag, 'distance:', distance,
+              'commit:', commit, 'dirty:', dirty)
+
         if not distance and not dirty:
             # we are from a clean Git tag: use tag
+            print('DEBUG: get_version: clean, using tag:', tag)
             return tag
 
         distance = 'post{}'.format(distance)
@@ -98,9 +103,13 @@ def get_version(default=VERSION, template='{tag}.{distance}.{commit}{dirty}',
         else:
             dirty = ''
 
-        return template.format(**locals())
+        version = template.format(**locals())
+        print('DEBUG: get_version: dirty, using timestamp:', version)
+        return version
+
     except:
         # no git data: use default version
+        print('DEBUG: get_version: failed to get git data, usinf default:', default)
         return default
 
 
@@ -170,7 +179,7 @@ def build(clean=True, app_name=APP_NAME,
 
     print()
     print('=> BUILDING AboutCode App release:', build_version)
-    print('    platform:', std_platform.platform(), 'sys.platform:', sys_platform )
+    print('    platform:', std_platform.platform(), 'sys.platform:', sys_platform)
 
     if clean:
         # cleanup of previous build
@@ -233,7 +242,7 @@ def build(clean=True, app_name=APP_NAME,
     # TODO: Upload the archive somewhere we can fetch these
     # check scp
 #     print('Checking SCP...')
-# 
+#
 #     if on_windows:
 #         print(subprocess.check_output(['C:\\MinGW\\msys\\1.0\\bin\\scp.exe'], stderr=subprocess.STDOUT, shell=True).strip())
 #     else:
