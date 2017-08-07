@@ -132,9 +132,14 @@ def get_git_version():
     cmd = 'git', 'describe', '--tags', '--long', '--dirty',
     version = subprocess.check_output(cmd, stderr=subprocess.STDOUT).strip()
     dirty = version.endswith('-dirty')
-    tag, distance, commit = version.split('-')[:3]
+    if dirty:
+        version, _, _ = version.rpartition('-')
+
+    version, _, commit = version.rpartition('-')
+    tag, _, distance = version.rpartition('-')
+
     # lower tag and strip V prefix in tags
-    tag = tag.lower().lstrip('v ').strip()
+    tag = tag.lower().lstrip('v').strip()
     # strip leading g from git describe commit
     commit = commit.lstrip('g').strip()
     return tag, int(distance), commit, dirty
