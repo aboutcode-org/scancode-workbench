@@ -50,7 +50,7 @@ class BarChart {
 
         // Create scaling for y that converts formattedData names to pixels
         let yScale = d3.scale.ordinal()
-            .domain(formattedData.map(function(d) {return d.name; }))
+            .domain(formattedData.map(function(d) {return d.trimName; }))
             .rangeRoundBands([0, chartHeight], 0.1 /* white space percentage */);
 
         // Creates a d3 axis given a scale (takes care of tick marks and labels)
@@ -69,11 +69,24 @@ class BarChart {
             .enter().append('g');
 
         this.rects = bars.append('rect')
-            .attr('y', function(d) { return yScale(d.name); })
-            .attr('height', yScale.rangeBand());
+            .attr('y', function(d) { return yScale(d.trimName); })
+            .attr('height', yScale.rangeBand())
+            .on("mouseover", function (d) {
+                tooltip
+                    .style("left", d3.event.pageX - 50 + "px")
+                    .style("top", d3.event.pageY - 70 + "px")
+                    .style("display", "inline-block")
+                    .html((d.name.replace('<', '&lt;') + ' (' + d.val + ')'));
+            })
+            .on("mouseout", function (d) { tooltip.style("display", "none"); });
+
+        // Clear tooltip div created when inadvertently triggered during dropdown selection.
+        $( ".toolTip" ).remove();
+
+        let tooltip = d3.select("body").append("div").attr("class", "toolTip");
 
         this.texts = bars.append('text')
-            .attr('y', function(d) { return yScale(d.name); })
+            .attr('y', function(d) { return yScale(d.trimName); })
             .attr('dy', '1.2em')
             .text(function(d){ return '(' + d.val + ')'; })
             .style('text-anchor', 'start');
@@ -121,7 +134,7 @@ class BarChart {
 
     // Returns the pixel width of the string with the longest length
     maxNameWidth(data) {
-        let names = data.map(function(d) { return d.name; });
+        let names = data.map(function(d) { return d.trimName; });
 
         let maxStr = '';
         $.each(names, function(i, name) {
@@ -149,8 +162,15 @@ class BarChart {
 
         // Transform license count into array of objects with license name & count
         let chartData = $.map(count, function(val, key) {
+            let trimName = "";
+            if (key.length > 50) {
+                trimName = key.substring(0, 50) + ' . . .'
+            } else {
+                trimName = key;
+            }
             return {
                 name: key,
+                trimName: trimName,
                 val: val
             };
         });
