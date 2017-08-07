@@ -48,7 +48,7 @@ body {
 #leftCol {
   height: 100%;
   flex: 0 0 200px;
-  box-shadow: 2px 0 15px -8px #b1b1b1;
+  box-shadow: 1px 0 18px -3px #b1b1b1;
 }
 
 /*---------------------------------------
