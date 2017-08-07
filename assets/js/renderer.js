@@ -393,6 +393,13 @@ $(document).ready(function () {
         sizes: [20, 80],
         minSize: 200,
         gutterSize: 5,
+        elementStyle: function (dimension, size, gutterSize) {
+            const width = this.outerWidth * (size / 100);
+            return { 'flex-basis': `${width - gutterSize}px`}
+        },
+        gutterStyle: function (dimension, gutterSize) {
+            return { 'flex-basis': `${gutterSize}px`}
+        },
         onDragEnd: function() {
             sessionStorage.setItem('splitSizes', JSON.stringify(splitter.getSizes()));
             if ($('#bar-chart-container').is(':visible')) {

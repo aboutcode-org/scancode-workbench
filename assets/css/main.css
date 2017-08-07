@@ -140,8 +140,6 @@ div.node-content {
   stroke-width: 2px;
 }
 
-.hide-container { display: none; }
-
 /* select2 custom css */
 .select2-container {
   width: 100% !important;
@@ -180,15 +178,17 @@ div.node-content {
   height: 100%;
   width: 100%;
   padding-left: 50px;
+  display: flex;
 }
 
 #tabbar  {
   height: 100%;
+  flex: 1;
 }
 
 #leftCol {
   height: 100%;
-  width: 200px;
+  flex: 0 0 200px;
   box-shadow: 2px 0 15px -8px #b1b1b1;
 }
 
@@ -282,7 +282,7 @@ div.dataTables_scrollHead th:first-child {
   background-color: #e8e8e8;
 }
 
- .gutter.gutter-horizontal {
+.gutter.gutter-horizontal {
   cursor: col-resize;
   opacity: 0;
 }
@@ -291,7 +291,11 @@ div.dataTables_scrollHead th:first-child {
   cursor: ns-resize;
 }
 
-.split.split-horizontal,
+.split.split-flex {
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
 .gutter.gutter-horizontal {
   height: 100%;
   float: left;
