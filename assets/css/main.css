@@ -170,6 +170,12 @@ div.node-content {
   font-size: 18px;
 }
 
+.link {
+  fill: none;
+  stroke: #ccc;
+  stroke-width: 2px;
+}
+
 /* select2 custom css */
 .select2-container {
   width: 100% !important;
