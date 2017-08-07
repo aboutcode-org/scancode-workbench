@@ -111,19 +111,19 @@
         <div class="split split-flex" id="tabbar">
 
             <!-- Clue DataTable Tab-->
-            <div class="container" id="clues-container">
+            <div class="container tab-container" id="clues-container">
                 <table id="clues-table" class="display table table-striped table-bordered dataTable no-footer" cellspacing="0" width="100%" >
                 </table>
             </div>
 
             <!-- Component DataTable Tab -->
-            <div class="container" id="component-container">
+            <div class="container tab-container" id="component-container">
                 <table id="components-table" class="display table table-striped table-bordered dataTable no-footer" cellspacing="0" width="100%" >
                 </table>
             </div>
 
             <!-- Node View Tab -->
-            <div class="container" id="node-container">
+            <div class="container tab-container" id="node-container">
                 <select id="node-drop-down" style="border-color: #eee; border-radius: 5px; padding: 5px;" multiple>
                     <option value="filename" selected>File Name</option>
                     <option value="license">License</option>
@@ -141,7 +141,7 @@
             </div>
 
             <!-- Bar Chart Tab -->
-            <div class="container" id="bar-chart-container">
+            <div class="container tab-container" id="bar-chart-container">
                 <select data-hide-on-select="true" class="form-control select-chart-attribute" id="select-chart-attribute" type="text"></select>
                 <h5>Total Files Scanned: <span class="total-files"></span></h5>
                 <svg class="bar-chart" id="summary-bar-chart"></svg>

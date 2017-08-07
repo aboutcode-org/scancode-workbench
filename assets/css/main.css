@@ -27,7 +27,7 @@ body {
 /*---------------------------------------
   Layout
 -----------------------------------------*/
-#clues-container, #node-container, #component-container, #bar-chart-container {
+.tab-container {
   height: 100%;
   width: 100%;
   padding-top: 10px;
@@ -40,7 +40,7 @@ body {
   display: flex;
 }
 
-#tabbar  {
+#tabbar {
   height: 100%;
   flex: 1;
 }
