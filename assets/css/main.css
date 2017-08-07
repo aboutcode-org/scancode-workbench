@@ -1,3 +1,6 @@
+/*---------------------------------------
+  Font source mapping
+-----------------------------------------*/
 @import "../fonts/Raleway-Regular.ttf";
 @import "../fonts/Raleway-Medium.ttf";
 @import "../fonts/Raleway-SemiBold.ttf";
@@ -6,6 +9,9 @@
 @import "../fonts/Lato-Italic.ttf";
 @import "../fonts/Lato-Light.ttf";
 
+/*---------------------------------------
+  General
+-----------------------------------------*/
 body {
   font-family: 'Lato', Helvetica, sans-serif;
   height: 100%;
@@ -18,6 +24,36 @@ body {
   color: #0064cd;
 }
 
+/*---------------------------------------
+  Layout
+-----------------------------------------*/
+#clues-container, #node-container, #component-container, #bar-chart-container {
+  height: 100%;
+  width: 100%;
+  padding-top: 10px;
+}
+
+#root-div {
+  height: 100%;
+  width: 100%;
+  padding-left: 50px;
+  display: flex;
+}
+
+#tabbar  {
+  height: 100%;
+  flex: 1;
+}
+
+#leftCol {
+  height: 100%;
+  flex: 0 0 200px;
+  box-shadow: 2px 0 15px -8px #b1b1b1;
+}
+
+/*---------------------------------------
+  Node View
+-----------------------------------------*/
 .node {
   cursor: pointer;
 }
@@ -134,12 +170,6 @@ div.node-content {
   font-size: 18px;
 }
 
-.link {
-  fill: none;
-  stroke: #ccc;
-  stroke-width: 2px;
-}
-
 /* select2 custom css */
 .select2-container {
   width: 100% !important;
@@ -150,6 +180,9 @@ div.node-content {
   word-wrap: break-word;
 }
 
+/*---------------------------------------
+  jsTree custom
+-----------------------------------------*/
 #jstree {
   overflow-x: scroll;
   overflow-y: scroll;
@@ -162,36 +195,9 @@ div.node-content {
     background: rgba(158,158,158, 0.50);
 }
 
-.node-btn-group {
-  padding: 0 0 0 10px;
-}
-
-/*////// Sidebar //////*/
-
-#clues-container, #node-container, #component-container, #bar-chart-container {
-  height: 100%;
-  width: 100%;
-  padding-top: 10px;
-}
-
-#root-div {
-  height: 100%;
-  width: 100%;
-  padding-left: 50px;
-  display: flex;
-}
-
-#tabbar  {
-  height: 100%;
-  flex: 1;
-}
-
-#leftCol {
-  height: 100%;
-  flex: 0 0 200px;
-  box-shadow: 2px 0 15px -8px #b1b1b1;
-}
-
+/*---------------------------------------
+  Sidebar
+-----------------------------------------*/
 .btn-sidebar {
   color: grey;
   background-color: #21252b;
@@ -221,24 +227,27 @@ div.node-content {
     outline: none;
 }
 
-/*////// DataTables custom //////*/
-
+/*---------------------------------------
+  DataTables custom
+-----------------------------------------*/
 /*For rounded table border*/
 div.dataTables_scrollHead table,
 div.dataTables_scrollHead th:first-child {
   border-top-left-radius: 4px;
 }
 
-/*////// Help page //////*/
-
+/*---------------------------------------
+  Help page
+-----------------------------------------*/
 .help-image {
   width: 75%;
   height: 75%;
   padding: 10px 0;
 }
 
-/*////// Progress Indicator //////*/
-
+/*---------------------------------------
+  Progress Indicator
+-----------------------------------------*/
 /* Center the progress indicator */
 #db-indicator{
   position: absolute;
@@ -271,13 +280,15 @@ div.dataTables_scrollHead th:first-child {
   display: none;
 }
 
-/* Change the default color of the FontAwesome folder  */
+/*---------------------------------------
+  Icons
+-----------------------------------------*/
 .fa_custom {
   color: #3498db;
 }
-
-/*////// Split.js  //////*/
-
+/*---------------------------------------
+  Split.js
+-----------------------------------------*/
 .gutter {
   background-color: #e8e8e8;
 }
@@ -311,8 +322,9 @@ div.dataTables_scrollHead th:first-child {
   visibility: visible;
 }
 
-/*////// Bar Chart Summary  //////*/
-
+/*---------------------------------------
+  Bar Chart Summary
+-----------------------------------------*/
 .bar-chart{ width: 100%; }
 
 .bar-chart rect { fill: #3498db; }
