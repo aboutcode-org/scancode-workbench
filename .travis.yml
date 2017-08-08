@@ -4,7 +4,8 @@ node_js:
   - "6"
 
 env:
-  - CXX=g++-4.8
+  - CXX=gcc-4.8
+  - CC=gcc-4.8
 
 os:
   - linux
