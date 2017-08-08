@@ -9,12 +9,11 @@ install:
   - ps: Install-Product node 6 x64
   - node --version
   - npm --version
+  - openssl version
+  - ssh -V
 
 build_script:
   - npm install
   - python build.py
-  - openssl version
-  - ssh -V
-  - scp -v
 
 test: off
