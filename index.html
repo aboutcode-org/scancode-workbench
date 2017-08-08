@@ -55,288 +55,315 @@
     <script src='assets/js/split.js'></script>
     <script src="assets/js/barChart.js"></script>
     <script src="assets/js/aboutCodeBarChart.js"></script>
+    <script src="assets/js/scrollResize.js"></script>
 </head>
 <body>
-<div class="row root-div" id="root-div">
-        <div class="split split-horizontal col-md-1" id="sidebar-div">
-        <!-- Sidebar -->
-        <div id="sidebar-wrapper">
-            <ul class="sidebar-nav">
-                <li>
-                    <button class="btn btn-sidebar" id="open-file" data-toggle="tooltip" title="Open SQLite File"><i class="fa fa-folder-open-o" aria-hidden="true"></i></button>
-                </li>
-                <li>
-                    <button class="btn btn-sidebar" id="save-file" data-toggle="tooltip" title="Save SQLite File"><i class="fa fa-floppy-o" aria-hidden="true"></i></button>
-                </li>
-                <li>
-                    <button class="btn btn-sidebar" id="show-bar-chart" data-toggle="tooltip" data-placement="right" title="Chart Summary View"><i class="fa fa-bar-chart" aria-hidden="true"></i></button>
-                </li>
-                <li>
-                    <button class="btn btn-sidebar" id="show-clue-table" data-toggle="tooltip" title="Table View"><i class="fa fa-table" aria-hidden="true"></i></button>
-                </li>
-                <li>
-                    <button class="btn btn-sidebar" id="show-tree" data-toggle="tooltip" title="Node View"><i class="fa fa-code-fork" aria-hidden="true"></i></button>
-                </li>
-                <li>
-                    <button class="btn btn-sidebar" id="show-component-table" data-toggle="modal" data-placement="right" title="Component Summary View"><i class="fa fa-list-ol" aria-hidden="true"></i></button>
-                </li>
-                <li>
-                    <button class="btn btn-sidebar" id="show-help" data-toggle="modal" data-placement="right" title="Help with Application" data-target="#helpModal"><i class="fa fa-question" aria-hidden="true"></i></button>
-                </li>
-            </ul>
+    <!-- Sidebar -->
+    <div id="sidebar-wrapper">
+        <ul class="sidebar-nav">
+            <li>
+                <button class="btn btn-sidebar" id="open-file" data-toggle="tooltip" title="Open SQLite File">
+                    <i class="fa fa-folder-open-o" aria-hidden="true"></i>
+                </button>
+            </li>
+            <li>
+                <button class="btn btn-sidebar" id="save-file" data-toggle="tooltip" title="Save SQLite File">
+                    <i class="fa fa-floppy-o" aria-hidden="true"></i>
+                </button>
+            </li>
+            <li>
+                <button class="btn btn-sidebar" id="show-bar-chart" data-toggle="tooltip" data-placement="right" title="Chart Summary View">
+                    <i class="fa fa-bar-chart" aria-hidden="true"></i>
+                </button>
+            </li>
+            <li>
+                <button class="btn btn-sidebar" id="show-clue-table" data-toggle="tooltip" title="Table View">
+                    <i class="fa fa-table" aria-hidden="true"></i>
+                </button>
+            </li>
+            <li>
+                <button class="btn btn-sidebar" id="show-tree" data-toggle="tooltip" title="Node View">
+                    <i class="fa fa-code-fork" aria-hidden="true"></i>
+                </button>
+            </li>
+            <li>
+                <button class="btn btn-sidebar" id="show-component-table" data-toggle="modal" data-placement="right" title="Component Summary View">
+                    <i class="fa fa-list-ol" aria-hidden="true"></i>
+                </button>
+            </li>
+            <li>
+                <button class="btn btn-sidebar" id="show-help" data-toggle="modal" data-placement="right" title="Help with Application" data-target="#helpModal">
+                    <i class="fa fa-question" aria-hidden="true"></i>
+                </button>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Main Content -->
+    <div id="root-div">
+
+        <!-- JsTree -->
+        <div class="split split-flex" id="leftCol">
+             <div id="jstree"></div>
+        </div>
+
+        <!-- Tab Bar -->
+        <div class="split split-flex" id="tabbar">
+
+            <!-- Clue DataTable Tab-->
+            <div class="container tab-container" id="clues-container">
+                <table id="clues-table" class="display table table-striped table-bordered dataTable no-footer" cellspacing="0" width="100%" >
+                </table>
+            </div>
+
+            <!-- Component DataTable Tab -->
+            <div class="container tab-container" id="component-container">
+                <table id="components-table" class="display table table-striped table-bordered dataTable no-footer" cellspacing="0" width="100%" >
+                </table>
+            </div>
+
+            <!-- Node View Tab -->
+            <div class="container tab-container" id="node-container">
+                <select id="node-drop-down" style="border-color: #eee; border-radius: 5px; padding: 5px;" multiple>
+                    <option value="filename" selected>File Name</option>
+                    <option value="license">License</option>
+                    <option value="copyright">Copyright</option>
+                </select>
+                <div id="nodeview-container">
+                    <div id="zoom-controls">
+                        <button class="btn btn-zoom" id="reset-zoom" type="button">
+                            <a id="recenter" href="#" title="Center Node Tree"><i class="fa fa-refresh fa-refresh-scale" aria-hidden="true"></i></a>
+                        </button>
+                    </div>
+                    <div class="svg-container" id="nodeview">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bar Chart Tab -->
+            <div class="container tab-container" id="bar-chart-container">
+                <select data-hide-on-select="true" class="form-control select-chart-attribute" id="select-chart-attribute" type="text"></select>
+                <h5>Total Files Scanned: <span class="total-files"></span></h5>
+                <svg class="bar-chart" id="summary-bar-chart"></svg>
+            </div>
         </div>
     </div>
+
+    <!-- DB ProgressBar -->
     <div id="indicator-text"><h4>Creating Database ...</h4></div>
     <div id="db-indicator"></div>
-    <div class="split split-horizontal col-md-2" id="leftCol">
-         <div id="jstree"></div>
-    </div>
 
-     <div id="tabbar" class="split split-horizontal col-md-9">
-        <table id="clues-table" class="display table table-striped table-bordered dataTable no-footer"  cellspacing="0" width="100%" >
-        </table>
-        <div id="component-container" class="hide-container">
-            <p class="lead">Component Summary</p>
-            <table id="components-table" class="display table table-striped table-bordered dataTable no-footer"  cellspacing="0" width="100%" >
-            </table>
-        </div>
-        <div class="hide-container" id="node-container">
-            <select id="node-drop-down" style="border-color: #eee; border-radius: 5px; padding: 5px;" multiple>
-                <option value="filename" selected>File Name</option>
-                <option value="license">License</option>
-                <option value="copyright">Copyright</option>
-            </select>
-            <div id="nodeview-container">
-                <div id="zoom-controls">
-                    <button class="btn btn-zoom" id="reset-zoom" type="button">
-                        <a id="recenter" href="#" title="Center Node Tree"><i class="fa fa-refresh fa-refresh-scale" aria-hidden="true"></i></a>
-                    </button>
+    <!-- Node View Modal -->
+    <div class="modal fade action-create" id="nodeModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h3 class="modal-title" id="nodeModalLabel">Modal title</h3>
                 </div>
-                <div class="svg-container" id="nodeview">
+                <div class="modal-body">
+                    <form>
+                        <fieldset class="form-group">
+                            <label for="select-status">Status</label>
+                            <select class="form-control" id="select-status" type="text">
+                                <option value="analyzed">Analyzed</option>
+                                <option value="attention">Needs Attention</option>
+                                <option value="original">Original Code</option>
+                            </select>
+                        </fieldset>
+                        <fieldset class="form-group">
+                            <label for="component-name">Component</label>
+                            <input type="text" class="form-control" id="component-name" placeholder="Enter component">
+                        </fieldset>
+                        <fieldset class="form-group">
+                            <label for="component-version">Version</label>
+                            <input type="text" class="form-control" id="component-version" placeholder="Enter version">
+                        </fieldset>
+                        <fieldset class="form-group">
+                            <label>License</label>
+                            <select data-hide-on-select="true" class="form-control " id="select-license" type="text"></select>
+                        </fieldset>
+                        <fieldset class="form-group">
+                            <label>Owner</label>
+                            <select data-hide-on-select="true" class="form-control" id="select-owner" type="text"></select>
+                        </fieldset>
+                        <fieldset class="form-group">
+                            <label>Copyright</label>
+                            <select data-hide-on-select="true" class="form-control" id="select-copyright" type="text"></select>
+                        </fieldset>
+                         <fieldset class="form-group">
+                            <label>Programming Language</label>
+                            <select data-hide-on-select="true" class="form-control" id="select-language" type="text"></select>
+                        </fieldset>
+                         <fieldset class="form-group">
+                            <label>Homepage URL</label>
+                            <select data-hide-on-select="true" class="form-control" id="component-homepage-url" type="text"></select>
+                        </fieldset>
+                        <fieldset class="form-group">
+                            <label for="component-notes">Notes</label>
+                            <textarea class="form-control" id="component-notes" rows="3"></textarea>
+                        </fieldset>
+                    </form>
                 </div>
-            </div>
-        </div>
-        <div>
-            <div class="modal fade action-create" id="nodeModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                            <h3 class="modal-title" id="nodeModalLabel">Modal title</h3>
-                        </div>
-                        <div class="modal-body">
-                            <form>
-                                <fieldset class="form-group">
-                                    <label for="select-status">Status</label>
-                                    <select class="form-control" id="select-status" type="text">
-                                        <option value="analyzed">Analyzed</option>
-                                        <option value="attention">Needs Attention</option>
-                                        <option value="original">Original Code</option>
-                                    </select>
-                                </fieldset>
-                                <fieldset class="form-group">
-                                    <label for="component-name">Component</label>
-                                    <input type="text" class="form-control" id="component-name" placeholder="Enter component">
-                                </fieldset>
-                                <fieldset class="form-group">
-                                    <label for="component-version">Version</label>
-                                    <input type="text" class="form-control" id="component-version" placeholder="Enter version">
-                                </fieldset>
-                                <fieldset class="form-group">
-                                    <label>License</label>
-                                    <select data-hide-on-select="true" class="form-control " id="select-license" type="text"></select>
-                                </fieldset>
-                                <fieldset class="form-group">
-                                    <label>Owner</label>
-                                    <select data-hide-on-select="true" class="form-control" id="select-owner" type="text"></select>
-                                </fieldset>
-                                <fieldset class="form-group">
-                                    <label>Copyright</label>
-                                    <select data-hide-on-select="true" class="form-control" id="select-copyright" type="text"></select>
-                                </fieldset>
-                                 <fieldset class="form-group">
-                                    <label>Programming Language</label>
-                                    <select data-hide-on-select="true" class="form-control" id="select-language" type="text"></select>
-                                </fieldset>
-                                 <fieldset class="form-group">
-                                    <label>Homepage URL</label>
-                                    <select data-hide-on-select="true" class="form-control" id="component-homepage-url" type="text"></select>
-                                </fieldset>
-                                <fieldset class="form-group">
-                                    <label for="component-notes">Notes</label>
-                                    <textarea class="form-control" id="component-notes" rows="3"></textarea>
-                                </fieldset>
-                            </form>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-danger" data-dismiss="modal" id="delete-component">Delete Component</button>
-                            <button type="button" class="btn btn-primary" id="save-component">Save changes</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Bar Charts -->
-        <div class="hide-container" id="bar-chart-container">
-            <select data-hide-on-select="true" class="form-control select-chart-attribute" id="select-chart-attribute" type="text"></select>
-            <h5>Total Files Scanned: <span class="total-files"></span></h5>
-            <svg class="bar-chart" id="summary-bar-chart"></svg>
-        </div>
-
-        <!--Component Modal -->
-        <div class="modal fade" id="componentExportModal" tabindex="-1" role="dialog" aria-labelledby="componentExportModalLabel">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h4 class="modal-title" id="myModalLabel">Upload Components to DejaCode</h4>
-                    </div>
-                    <div class="modal-body">
-                        <form class="horizontal">
-                            <div class="form-group" id="prod">
-                                <label for="product-name">Product Name </label>
-                                <input type="text" class="form-control" id="product-name" name="product" placeholder="Ex: Starship Widget Framework" required="Product Name is required">
-                            </div>
-                            <div class="form-group" id="prodVersion">
-                                <label for="product-version">Product Version</label>
-                                <input type="text" class="form-control" id="product-version" name="version" placeholder="Product Version" required>
-                            </div>
-                            <div class="form-group" id="apiURL">
-                                <label for="apiURLDejaCode">DejaCode API URL</label>
-                                <input type="text" class="form-control" id="apiURLDejaCode" name="version" placeholder="DejaCode API URL" required>
-                                <small><em>Enter the Product Component API URL (For example, https://enterprise.dejacode.com/api/v2/product_components/).</em></small>
-                            </div>
-                            <div class="form-group" id="api">
-                                <label for="apiKey">DejaCode API Key</label>
-                                <input type="password" class="form-control" id="apiKey" name="api" placeholder="DejaCode API Key" required>
-                                <small><em>Your API key can be found in your DejaCode Profile Settings</em></small>
-                            </div>
-                        </form>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary" id="componentSubmit">Submit</button>
-                    </div>
-                </div>
-             </div>
-        </div>
-
-        <!-- Help Modal -->
-        <div class="modal fade" id="helpModal" tabindex="-1" role="dialog" aria-labelledby="helpModalLabel">
-            <div class="modal-dialog modal-lg" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <h2 class="modal-title" id="helpModalLabel">AboutCode Manager Help</h2>
-                    </div>
-                    <div class="modal-body">
-                        <h2>Overview</h2>
-                        <p>The AboutCode Manager allows you take the scan results
-                            from the ScanCode Toolkit and create a component-level
-                            software inventory. The conclusions (Concluded License,
-                            Concluded Owner, etc.) you make when creating your
-                            component can then be exported to a JSON file.
-                        </p>
-                        <h3>Views</h3>
-                        <h4>Directory Tree</h4>
-                        <p> An interactive directory tree is always present on
-                            the left side of the application. The tree is
-                            expandable and collapsible. This allows the user to
-                            navigate the codebase structure. If a directory is
-                            selected, only that directory and its sub-files and
-                            folders will be shown in the view. Similarly, if a
-                            single file is selected, only information for that
-                            selected file will be shown.
-                            <img class="help-image" alt="directory screenshot" src="assets/images/codebase-tree.gif">
-                        </p>
-                        <h4>Table View</h4>
-                        <p>In the table view, the available clues detected by
-                            ScanCode Toolkit are shown in a tabular format. A
-                            user can see provenance clues such as license and
-                            copyright information detected by ScanCode Toolkit.
-                            A user can also see the file information (such as
-                            file type, file size, sha1, etc) and package
-                            information (package type, primary language of
-                            package) that was detected. The columns can be
-                            sorted as well as shown or hidden based on what the
-                            user’s preferences. Searching for specific clues
-                            (license names, copyrights, etc.) is also available
-                            in this view.
-                            <img class="help-image" alt="table view screenshot" src="assets/images/table-view.gif">
-                        </p>
-                        <h4>Conclusions View</h4>
-                        <p>The node view is where a user can create components
-                            from packages or files in their codebase.
-                            Selecting the nodes of the tree
-                            will expand or collapse the code structure. The
-                            numbers next to the file name are intended to help
-                            the user navigate to directories with the most clues.
-                            The first number is the number of files contained in
-                            that directory. The second number is the number of
-                            detected clues from ScanCode Toolkit (for example,
-                            detected license and detected copyright). These
-                            numbers can help a user navigate to directories
-                            that have a large amount of scancode clues that were
-                            detected in proportion to files.
-                        </p>
-                            <img class="help-image" alt="node view screenshot" src="assets/images/node-view.gif">
-                        <h5>Creating Components</h5>
-                        <p>A Component is a set of software packages or files
-                            that share a name, version, owner, license and
-                            copyright.  A conclusion in the AboutCode Manager
-                            refers to documentation of your conclusion about the
-                            owner, copyright, and license for some set of
-                            software files at a Component level. To create a
-                            component, select the file name. A form appears
-                            where you can fill in concluded information.
-                        </p>
-                        <p>The following fields are available when creating a component:
-                        <ul>
-                            <li>Status - Used to document status of component creation (Analyzed - A component has been created, Needs Attention - A component is flagged for further review, Original Code - A component is from your organization)</li>
-                            <li>Component - Primary component (usually a file, directory or library name)</li>
-                            <li>Version - Component Version Number</li>
-                            <li>License - This is the license for the Component</li>
-                            <li>Owner - This is the owner of the Component</li>
-                            <li>Copyright - The Copyright notice that applies to the Component under the License.</li>
-                            <li>Notes - Comments that provide additional insight into the findings.</li>
-                        </ul>
-                            <img class="help-image" alt="create component screenshot" src="assets/images/create-component.gif">
-                        </p>
-                        <h5>Node colors</h5>
-                        <p>
-                        <ul>
-                            <li>Blue - The node is blue when no status has been set for the file or directory</li>
-                            <li>Green -  The node is green when a component is created.</li>
-                            <li>Red - The node is red when the Status is set to Needs Attention</li>
-                            <li>Purple - The node is purple when the Status is set to Original Code</li>
-                        </ul>
-                        It’s important to note that if you create a component at a directory level, the files underneath that directory are considered analyzed at that level. Our experience with hundreds of software audit projects is that you normally want to conclude and track provenance for software at the Component level.
-                        </p>
-                        <h3>Navigation</h3>
-                        <h4>Panning</h4>
-                        <p>Use the mouse to pan. Hold down click and move mouse</p>
-                        <h4>Zooming</h4>
-                        <p>Use the scroll wheel to zoom. On Mac use two fingers to zoom.</p>
-
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal" id="delete-component">Delete Component</button>
+                    <button type="button" class="btn btn-primary" id="save-component">Save changes</button>
                 </div>
             </div>
         </div>
     </div>
-</div>
-<script>
-    require('./assets/js/renderer.js');
-</script>
-<script src="assets/js/jstree.min.js"></script>
-<script src="assets/js/scandata.js"></script>
-<script src="assets/js/aboutCodeDB.js"></script>
-<script src="assets/js/aboutCodeNodeView.js"></script>
-<script src="assets/js/aboutCodeDataTables.js"></script>
-<script src="assets/js/componentDataTables.js"></script>
 
+    <!--Component Modal -->
+    <div class="modal fade" id="componentExportModal" tabindex="-1" role="dialog" aria-labelledby="componentExportModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="myModalLabel">Upload Components to DejaCode</h4>
+                </div>
+                <div class="modal-body">
+                    <form class="horizontal">
+                        <div class="form-group" id="prod">
+                            <label for="product-name">Product Name </label>
+                            <input type="text" class="form-control" id="product-name" name="product" placeholder="Ex: Starship Widget Framework" required="Product Name is required">
+                        </div>
+                        <div class="form-group" id="prodVersion">
+                            <label for="product-version">Product Version</label>
+                            <input type="text" class="form-control" id="product-version" name="version" placeholder="Product Version" required>
+                        </div>
+                        <div class="form-group" id="apiURL">
+                            <label for="apiURLDejaCode">DejaCode API URL</label>
+                            <input type="text" class="form-control" id="apiURLDejaCode" name="version" placeholder="DejaCode API URL" required>
+                            <small><em>Enter the Product Component API URL (For example, https://enterprise.dejacode.com/api/v2/product_components/).</em></small>
+                        </div>
+                        <div class="form-group" id="api">
+                            <label for="apiKey">DejaCode API Key</label>
+                            <input type="password" class="form-control" id="apiKey" name="api" placeholder="DejaCode API Key" required>
+                            <small><em>Your API key can be found in your DejaCode Profile Settings</em></small>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary" id="componentSubmit">Submit</button>
+                </div>
+            </div>
+         </div>
+    </div>
+
+    <!-- Help Modal -->
+    <div class="modal fade" id="helpModal" tabindex="-1" role="dialog" aria-labelledby="helpModalLabel">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h2 class="modal-title" id="helpModalLabel">AboutCode Manager Help</h2>
+                </div>
+                <div class="modal-body">
+                    <h2>Overview</h2>
+                    <p>The AboutCode Manager allows you take the scan results
+                        from the ScanCode Toolkit and create a component-level
+                        software inventory. The conclusions (Concluded License,
+                        Concluded Owner, etc.) you make when creating your
+                        component can then be exported to a JSON file.
+                    </p>
+                    <h3>Views</h3>
+                    <h4>Directory Tree</h4>
+                    <p> An interactive directory tree is always present on
+                        the left side of the application. The tree is
+                        expandable and collapsible. This allows the user to
+                        navigate the codebase structure. If a directory is
+                        selected, only that directory and its sub-files and
+                        folders will be shown in the view. Similarly, if a
+                        single file is selected, only information for that
+                        selected file will be shown.
+                        <img class="help-image" alt="directory screenshot" src="assets/images/codebase-tree.gif">
+                    </p>
+                    <h4>Table View</h4>
+                    <p>In the table view, the available clues detected by
+                        ScanCode Toolkit are shown in a tabular format. A
+                        user can see provenance clues such as license and
+                        copyright information detected by ScanCode Toolkit.
+                        A user can also see the file information (such as
+                        file type, file size, sha1, etc) and package
+                        information (package type, primary language of
+                        package) that was detected. The columns can be
+                        sorted as well as shown or hidden based on what the
+                        user’s preferences. Searching for specific clues
+                        (license names, copyrights, etc.) is also available
+                        in this view.
+                        <img class="help-image" alt="table view screenshot" src="assets/images/table-view.gif">
+                    </p>
+                    <h4>Conclusions View</h4>
+                    <p>The node view is where a user can create components
+                        from packages or files in their codebase.
+                        Selecting the nodes of the tree
+                        will expand or collapse the code structure. The
+                        numbers next to the file name are intended to help
+                        the user navigate to directories with the most clues.
+                        The first number is the number of files contained in
+                        that directory. The second number is the number of
+                        detected clues from ScanCode Toolkit (for example,
+                        detected license and detected copyright). These
+                        numbers can help a user navigate to directories
+                        that have a large amount of scancode clues that were
+                        detected in proportion to files.
+                    </p>
+                        <img class="help-image" alt="node view screenshot" src="assets/images/node-view.gif">
+                    <h5>Creating Components</h5>
+                    <p>A Component is a set of software packages or files
+                        that share a name, version, owner, license and
+                        copyright.  A conclusion in the AboutCode Manager
+                        refers to documentation of your conclusion about the
+                        owner, copyright, and license for some set of
+                        software files at a Component level. To create a
+                        component, select the file name. A form appears
+                        where you can fill in concluded information.
+                    </p>
+                    <p>The following fields are available when creating a component:
+                    <ul>
+                        <li>Status - Used to document status of component creation (Analyzed - A component has been created, Needs Attention - A component is flagged for further review, Original Code - A component is from your organization)</li>
+                        <li>Component - Primary component (usually a file, directory or library name)</li>
+                        <li>Version - Component Version Number</li>
+                        <li>License - This is the license for the Component</li>
+                        <li>Owner - This is the owner of the Component</li>
+                        <li>Copyright - The Copyright notice that applies to the Component under the License.</li>
+                        <li>Notes - Comments that provide additional insight into the findings.</li>
+                    </ul>
+                        <img class="help-image" alt="create component screenshot" src="assets/images/create-component.gif">
+                    </p>
+                    <h5>Node colors</h5>
+                    <p>
+                    <ul>
+                        <li>Blue - The node is blue when no status has been set for the file or directory</li>
+                        <li>Green -  The node is green when a component is created.</li>
+                        <li>Red - The node is red when the Status is set to Needs Attention</li>
+                        <li>Purple - The node is purple when the Status is set to Original Code</li>
+                    </ul>
+                    It’s important to note that if you create a component at a directory level, the files underneath that directory are considered analyzed at that level. Our experience with hundreds of software audit projects is that you normally want to conclude and track provenance for software at the Component level.
+                    </p>
+                    <h3>Navigation</h3>
+                    <h4>Panning</h4>
+                    <p>Use the mouse to pan. Hold down click and move mouse</p>
+                    <h4>Zooming</h4>
+                    <p>Use the scroll wheel to zoom. On Mac use two fingers to zoom.</p>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        require('./assets/js/renderer.js');
+    </script>
+    <script src="assets/js/jstree.min.js"></script>
+    <script src="assets/js/scandata.js"></script>
+    <script src="assets/js/aboutCodeDB.js"></script>
+    <script src="assets/js/aboutCodeNodeView.js"></script>
+    <script src="assets/js/aboutCodeDataTables.js"></script>
+    <script src="assets/js/componentDataTables.js"></script>
 </body>
 </html>

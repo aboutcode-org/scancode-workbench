@@ -18,6 +18,7 @@ class ComponentDataTable {
     constructor(tableID, aboutCodeDB) {
         this.aboutCodeDB = aboutCodeDB;
         this.dataTable = this._createDataTable(tableID);
+        $('<p class="lead">Component Summary</p>').prependTo($("#components-table_wrapper"))
     }
 
     database(aboutCodeDB) {
@@ -35,6 +36,8 @@ class ComponentDataTable {
 
     _createDataTable(tableID) {
         return $(tableID).DataTable({
+            "scrollX": true,
+            "scrollResize": true,
             columns: ComponentDataTable.COLUMNS,
             dom: // Needed to keep datatables buttons and search inline
             "<'row'<'col-sm-9'B><'col-sm-3'f>>" +

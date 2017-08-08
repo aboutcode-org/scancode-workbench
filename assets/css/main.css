@@ -1,3 +1,6 @@
+/*---------------------------------------
+  Font source mapping
+-----------------------------------------*/
 @import "../fonts/Raleway-Regular.ttf";
 @import "../fonts/Raleway-Medium.ttf";
 @import "../fonts/Raleway-SemiBold.ttf";
@@ -6,8 +9,14 @@
 @import "../fonts/Lato-Italic.ttf";
 @import "../fonts/Lato-Light.ttf";
 
+/*---------------------------------------
+  General
+-----------------------------------------*/
 body {
   font-family: 'Lato', Helvetica, sans-serif;
+  height: 100%;
+  width: 100%;
+  position: absolute;
 }
 
 .logo {
@@ -15,6 +24,36 @@ body {
   color: #0064cd;
 }
 
+/*---------------------------------------
+  Layout
+-----------------------------------------*/
+.tab-container {
+  height: 100%;
+  width: 100%;
+  padding-top: 10px;
+}
+
+#root-div {
+  height: 100%;
+  width: 100%;
+  padding-left: 50px;
+  display: flex;
+}
+
+#tabbar {
+  height: 100%;
+  flex: 1;
+}
+
+#leftCol {
+  height: 100%;
+  flex: 0 0 200px;
+  box-shadow: 1px 0 18px -3px #b1b1b1;
+}
+
+/*---------------------------------------
+  Node View
+-----------------------------------------*/
 .node {
   cursor: pointer;
 }
@@ -77,15 +116,15 @@ body {
 .svg-container{
   border: 1px solid #ddd;
   border-radius: 4px;
-  margin-top: 5px;
-  display: inline-block;
   position: absolute;
   width: 100%;
-  padding-bottom: 100%;
-  vertical-align: top;
+  height: 100%;
   overflow: hidden;
-  top: 0;
-  left: 0;
+}
+
+#node-container {
+  display: flex;
+  flex-flow: column;
 }
 
 .nodeview-content {
@@ -110,6 +149,8 @@ div.node-content {
 
 #nodeview-container {
   position: relative;
+  height: 100%;
+  width: 100%;
 }
 
 #recenter { color: #fff; }
@@ -135,67 +176,49 @@ div.node-content {
   stroke-width: 2px;
 }
 
-.hide-container { display: none; }
-
 /* select2 custom css */
 .select2-container {
   width: 100% !important;
-  padding: 0;
+  padding-bottom: 5px;
 }
 
 .modal-header {
   word-wrap: break-word;
 }
 
+/*---------------------------------------
+  jsTree custom
+-----------------------------------------*/
 #jstree {
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  min-width: 150px;
-  min-height: 100px;
   overflow-x: scroll;
   overflow-y: scroll;
   height: 100%;
-  margin: 0 0 0 10px;
   padding-top: 15px;
-  background-color: #f9f9f9;
+  background-color: #f3f3f3;
 }
 
 .jstree-default .jstree-clicked {
     background: rgba(158,158,158, 0.50);
 }
 
-.node-btn-group {
-  padding: 0 0 0 10px;
-}
-
-#tabbar {
-  padding-top: 10px;
-}
-
-#leftCol{
-  padding-top: 10px;
-  /* For sidebar space */
-  margin-left: -50px;
-}
-
-/*////// Sidebar //////*/
+/*---------------------------------------
+  Sidebar
+-----------------------------------------*/
 .btn-sidebar {
   color: grey;
-  background-color: #000;
-    /*border-color: #ccc;*/
+  background-color: #21252b;
   padding: 0;
   width: 50px;
 }
 
 .sidebar-nav li .btn-sidebar {
-    /*text-indent: 10px;*/
     line-height: 40px;
 }
 
 .sidebar-nav li .btn-sidebar {
     display: block;
     text-decoration: none;
-    color: #999999;
+    color: #fff;
 }
 
 .sidebar-nav li .btn-sidebar:hover {
@@ -210,33 +233,27 @@ div.node-content {
     outline: none;
 }
 
-
-/*////// DataTables custom //////*/
-
+/*---------------------------------------
+  DataTables custom
+-----------------------------------------*/
 /*For rounded table border*/
-div.dataTables_scrollHead table {
-  border-top-left-radius: 4px;
-}
-
-/*For rounded table border*/
+div.dataTables_scrollHead table,
 div.dataTables_scrollHead th:first-child {
   border-top-left-radius: 4px;
 }
 
-/*////// Help page //////*/
-
+/*---------------------------------------
+  Help page
+-----------------------------------------*/
 .help-image {
   width: 75%;
   height: 75%;
   padding: 10px 0;
 }
 
-/*////// Components view //////*/
-
-#tabbar.col-md-11 {margin-left: -15px;}
-
-/*////// Progress Indicator //////*/
-
+/*---------------------------------------
+  Progress Indicator
+-----------------------------------------*/
 /* Center the progress indicator */
 #db-indicator{
   position: absolute;
@@ -269,46 +286,33 @@ div.dataTables_scrollHead th:first-child {
   display: none;
 }
 
-/* Change the default color of the FontAwesome folder  */
+/*---------------------------------------
+  Icons
+-----------------------------------------*/
 .fa_custom {
   color: #3498db;
 }
-
-/* This set of CSS is required for the split.js splitter/resizing functionality */
-
-.root-div {
-  height: 100%;
-  /* This removes the unwanted horizontal scrollbar. */
-  margin: 0;
-}
-
-html, body {
-  height: 100%;
-  margin: 0;
-}
-
-#sidebar-div {
-  height: 100%;
-  border: 0;
-  width: 100px;
-  max-width: 100px;
-}
-
+/*---------------------------------------
+  Split.js
+-----------------------------------------*/
 .gutter {
   background-color: #e8e8e8;
-  background-repeat: no-repeat;
-  background-position: 50%;
 }
 
- .gutter.gutter-horizontal {
-  cursor: ew-resize;
+.gutter.gutter-horizontal {
+  cursor: col-resize;
+  opacity: 0;
 }
 
 .gutter.gutter-vertical {
   cursor: ns-resize;
 }
 
-.split.split-horizontal,
+.split.split-flex {
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
 .gutter.gutter-horizontal {
   height: 100%;
   float: left;
@@ -323,9 +327,10 @@ html, body {
   display: block;
   visibility: visible;
 }
-/* end of split.js-related CSS */
 
-/* Bar Charts */
+/*---------------------------------------
+  Bar Chart Summary
+-----------------------------------------*/
 .bar-chart{ width: 100%; }
 
 .bar-chart rect { fill: #3498db; }

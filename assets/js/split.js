@@ -105,7 +105,7 @@ var Split = function (ids, options) {
     var gutterSize = options.gutterSize !== undefined ? options.gutterSize : 10;
     var snapOffset = options.snapOffset !== undefined ? options.snapOffset : 30;
     var direction = options.direction || 'horizontal';
-    var cursor = options.cursor || (direction === 'horizontal' ? 'ew-resize' : 'ns-resize');
+    var cursor = options.cursor || (direction === 'horizontal' ? 'col-resize' : 'ns-resize');
     var gutter = options.gutter || (function (i, gutterDirection) {
         var gut = document.createElement('div');
         gut.className = "gutter gutter-" + gutterDirection;
