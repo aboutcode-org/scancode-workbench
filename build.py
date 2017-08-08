@@ -69,7 +69,9 @@ def call(cmd):
     """
     Run a `cmd` command (as a list of args) with all env vars.
     """
+
     cmd = ' '.join(cmd)
+    print('Running command: %(cmd)r...' % locals())
     if  subprocess.Popen(cmd, shell=True, env=dict(os.environ)).wait() != 0:
         print()
         print('Failed to execute command:\n%(cmd)r\nAborting...' % locals())
@@ -185,6 +187,7 @@ def build(clean=True, app_name=APP_NAME,
     build_version = get_version()
 
     print()
+    print('#############################################################')
     print('=> BUILDING AboutCode App release:', build_version)
     print('    platform:', std_platform.platform(), 'sys.platform:', sys_platform)
 
@@ -194,17 +197,17 @@ def build(clean=True, app_name=APP_NAME,
     else:
         npm_bin = subprocess.check_output(['npm', 'bin'], stderr=subprocess.STDOUT,)
     npm_bin = npm_bin.strip()
-    print('    using NPM bin:', npm_bin)
+    print('    using NPM bin at:', npm_bin)
 
+    # cleanup of previous build
     if clean:
-        # cleanup of previous build
         if os.path.exists(build_dir):
             shutil.rmtree(build_dir)
             os.makedirs(build_dir)
 
     # run rebuild
     electron_rebuild = os.path.join(npm_bin, 'electron-rebuild')
-    print('  Running electron-rebuild...')
+    print('    Running electron-rebuild...')
     call([electron_rebuild])
 
     electron_args = [
@@ -235,12 +238,12 @@ def build(clean=True, app_name=APP_NAME,
     # run the build with electron_packager
     electron_packager = os.path.join(npm_bin, 'electron-packager')
     cmd = [electron_packager] + electron_args
-    print('  Running Electron Packager with command:', ' '.join(cmd))
+    print('    Running electron-packager...')
     call(cmd)
 
     # rename the build dir to a proper directory that always includes a
     # version and a "nice" platform name as opposed to a code
-    print('  App build complete: building archives')
+    print('    Build complete: building release archives...')
 
     old_release_dir = "{app_name}-{platform}-{arch}".format(**locals())
     archive_base_name = "{app_name}-{platform_name}-{arch}-{build_version}".format(**locals())
@@ -254,20 +257,45 @@ def build(clean=True, app_name=APP_NAME,
         create_tar(build_dir, archive_base_name)
 
     print()
-    print('=> AboutCode App BUILD completed with these archives:')
+    print('##################################################')
+    print('AboutCode App BUILD completed with these archives:')
     for archive in os.listdir(build_dir):
         if archive.endswith(('zip', 'tar.gz')):
             print('   ', archive, 'size:', os.path.getsize(os.path.join(build_dir, archive)))
+    print('##################################################')
     print()
 
-    # TODO: Upload the archive somewhere we can fetch these
-    # check scp
-#     print('Checking SCP...')
-#
-#     if on_windows:
-#         print(subprocess.check_output(['C:\\MinGW\\msys\\1.0\\bin\\scp.exe'], stderr=subprocess.STDOUT, shell=True).strip())
-#     else:
-#         print(subprocess.check_output(['scp'], stderr=subprocess.STDOUT,).strip())
+    if False:
+        print('Uploading release archives...')
+        decpass = os.environ.get('DEPLOY_KEY_PASS')
+        deciv = os.environ.get('DEPLOY_KEY_IV')
+        if not decpass and deciv:
+            print('Missing secrets...')
+            sys.exit(1)
+        os.mkdir('secret')
+        deploy_key = os.path.join('secret', 'deploy_rsa.enc')
+        decrypt_cmd = [
+            'openssl', 'aes-256-cbc',
+            '-k', decpass, '-K', deciv,
+            '-in', 'deploy_rsa.enc',
+            '-out', deploy_key,
+            '-d'
+        ]
+
+        for archive in os.listdir(build_dir):
+            if archive.endswith(('zip', 'tar.gz')):
+                archive_loc = os.path.join(build_dir, archive)
+                cmd = [
+                    'scp'
+                ]
+                # TODO: Upload the archive somewhere we can fetch these
+                # check scp
+                # print('Checking SCP...')
+                # if on_windows:
+                #    print(subprocess.check_output(['C:\\MinGW\\msys\\1.0\\bin\\scp.exe'], stderr=subprocess.STDOUT, shell=True).strip())
+                # else:
+                #    print(subprocess.check_output(['scp'], stderr=subprocess.STDOUT,).strip())
+
 
 if __name__ == '__main__':
     build()

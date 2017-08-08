@@ -10,7 +10,9 @@ install:
   - node --version
   - npm --version
   - openssl version
+  - python --version
   - ssh -V
+  - pip -V
 
 build_script:
   - npm install

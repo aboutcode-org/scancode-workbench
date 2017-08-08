@@ -12,10 +12,16 @@ os:
 
 before_install:
   - if [ $TRAVIS_OS_NAME = linux ]; then sudo apt-get update; sudo apt-get install build-essential -y; fi
+  - node --version
+  - npm --version
+  - openssl version
+  - python --version
+  - ssh -V
+  - pip -V
 
 script:
+  - npm install
   - python build.py
-  - openssl version
 
 
 addons:
