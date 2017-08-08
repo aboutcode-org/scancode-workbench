@@ -189,7 +189,7 @@ def build(clean=True, app_name=APP_NAME,
     print()
     print('#############################################################')
     print('=> BUILDING AboutCode App release:', build_version)
-    print('    platform:', std_platform.platform(), 'sys.platform:', sys_platform)
+    print('platform:', std_platform.platform(), 'sys.platform:', sys_platform)
 
     # find the path to the NPM bin directory
     if on_windows:
@@ -197,7 +197,7 @@ def build(clean=True, app_name=APP_NAME,
     else:
         npm_bin = subprocess.check_output(['npm', 'bin'], stderr=subprocess.STDOUT,)
     npm_bin = npm_bin.strip()
-    print('    using NPM bin at:', npm_bin)
+    print('using NPM bin at:', npm_bin)
 
     # cleanup of previous build
     if clean:
@@ -207,7 +207,7 @@ def build(clean=True, app_name=APP_NAME,
 
     # run rebuild
     electron_rebuild = os.path.join(npm_bin, 'electron-rebuild')
-    print('    Running electron-rebuild...')
+    print('Running electron-rebuild...')
     call([electron_rebuild])
 
     electron_args = [
@@ -238,12 +238,12 @@ def build(clean=True, app_name=APP_NAME,
     # run the build with electron_packager
     electron_packager = os.path.join(npm_bin, 'electron-packager')
     cmd = [electron_packager] + electron_args
-    print('    Running electron-packager...')
+    print('Running electron-packager...')
     call(cmd)
 
     # rename the build dir to a proper directory that always includes a
     # version and a "nice" platform name as opposed to a code
-    print('    Build complete: building release archives...')
+    print('Build complete: building release archives...')
 
     old_release_dir = "{app_name}-{platform}-{arch}".format(**locals())
     archive_base_name = "{app_name}-{platform_name}-{arch}-{build_version}".format(**locals())
