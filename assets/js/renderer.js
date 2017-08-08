@@ -488,6 +488,9 @@ $(document).ready(function () {
 
     showBarChartButton.click(showBarChartView);
 
+    // Show chart summary table. Hide other views -- custom menu
+    ipcRenderer.on('chart-summary-view', showBarChartView);
+
     // Creates the database and all View objects from a SQLite file
     function loadDatabaseFromFile(fileName) {
         // Create a new database when importing a json file
