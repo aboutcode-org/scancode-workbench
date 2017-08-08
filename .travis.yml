@@ -1,15 +1,21 @@
 language: node_js
 sudo: required
+
+osx_image: xcode8.3
+dist: precise
+
 node_js:
   - "6"
 
-env:
-  - CXX=gcc-4.8
-  - CC=gcc-4.8
+
+#env:
+#  - CXX=gcc-4.8
+#  - CC=gcc-4.8
 
 os:
   - linux
   - osx
+
 
 before_install:
   - if [ $TRAVIS_OS_NAME = linux ]; then sudo apt-get update; sudo apt-get install build-essential -y; fi
