@@ -188,11 +188,24 @@ def build(clean=True, app_name=APP_NAME,
     print('=> BUILDING AboutCode App release:', build_version)
     print('    platform:', std_platform.platform(), 'sys.platform:', sys_platform)
 
+    # find the path to the NPM bin directory
+    if on_windows:
+        npm_bin = subprocess.check_output(['npm', 'bin'], stderr=subprocess.STDOUT, shell=True)
+    else:
+        npm_bin = subprocess.check_output(['npm', 'bin'], stderr=subprocess.STDOUT,)
+    npm_bin = npm_bin.strip()
+    print('    using NPM bin:', npm_bin)
+
     if clean:
         # cleanup of previous build
         if os.path.exists(build_dir):
             shutil.rmtree(build_dir)
             os.makedirs(build_dir)
+
+    # run rebuild
+    electron_rebuild = os.path.join(npm_bin, 'electron-rebuild')
+    print('  Running electron-rebuild...')
+    call([electron_rebuild])
 
     electron_args = [
         '.',
@@ -213,21 +226,22 @@ def build(clean=True, app_name=APP_NAME,
         '--overwrite=true'
     ]
 
-    # find the path to the NPM bin directory
     if on_windows:
-        npm_bin = subprocess.check_output(['npm', 'bin'], stderr=subprocess.STDOUT, shell=True)
-    else:
-        npm_bin = subprocess.check_output(['npm', 'bin'], stderr=subprocess.STDOUT,)
-    npm_bin = npm_bin.strip()
+        electron_args += [
+            '--win32metadata.CompanyName="https://AboutCode.org"',
+            '--win32metadata.ProductName="AboutCode Manager"',
+        ]
 
     # run the build with electron_packager
     electron_packager = os.path.join(npm_bin, 'electron-packager')
     cmd = [electron_packager] + electron_args
-    print('  Electron Packager command:', ' '.join(cmd))
+    print('  Running Electron Packager with command:', ' '.join(cmd))
     call(cmd)
 
     # rename the build dir to a proper directory that always includes a
     # version and a "nice" platform name as opposed to a code
+    print('  App build complete: building archives')
+
     old_release_dir = "{app_name}-{platform}-{arch}".format(**locals())
     archive_base_name = "{app_name}-{platform_name}-{arch}-{build_version}".format(**locals())
     os.rename(os.path.join(build_dir, old_release_dir),
