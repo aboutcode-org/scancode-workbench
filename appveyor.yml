@@ -17,6 +17,12 @@ install:
 build_script:
   - npm install
   - python build.py
-  - appveyor PushArtifact "dist/*.zip"
+
+artifacts:
+  - path: 'dist\*.zip'
+    name: build
+
+before_deploy:
+  - ps: foreach($artifactName in $artifacts.keys) { $artifacts[$artifactName] }
 
 test: off
