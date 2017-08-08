@@ -17,6 +17,6 @@ install:
 build_script:
   - npm install
   - python build.py
-  - appveyor PushArtifact dist\*.zip
+  - appveyor PushArtifact 'dist\*.zip'
 
 test: off
