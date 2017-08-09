@@ -50,7 +50,7 @@ class BarChart {
 
         // Create scaling for y that converts formattedData names to pixels
         let yScale = d3.scale.ordinal()
-            .domain(formattedData.map(function(d) {return d.trimName; }))
+            .domain(formattedData.map(function(d) {return d.name; }))
             .rangeRoundBands([0, chartHeight], 0.1 /* white space percentage */);
 
         // Creates a d3 axis given a scale (takes care of tick marks and labels)
@@ -61,6 +61,10 @@ class BarChart {
         // Creates a d3 axis given a scale (takes care of tick marks and labels)
         let yAxis = d3.svg.axis()
             .scale(yScale)
+            // Limit label length to 50 characters plus ellipses.
+            .tickFormat(function(d) {
+                return d.substring(0, 50) + (d.length > 50 ? " ..." : "");
+            })
             .orient('left');
 
         // Creates a graphic tag (<g>) for each bar in the chart
@@ -69,8 +73,9 @@ class BarChart {
             .enter().append('g');
 
         this.rects = bars.append('rect')
-            .attr('y', function(d) { return yScale(d.trimName); })
+            .attr('y', function(d) { return yScale(d.name); })
             .attr('height', yScale.rangeBand())
+            // Add a tooltip to the bar.
             .on("mouseover", function (d) { tooltip.style("display", "inline-block"); })
             .on("mousemove", function (d) {
                 tooltip
@@ -87,9 +92,9 @@ class BarChart {
         let tooltip = d3.select("body").append("div").attr("class", "toolTip");
 
         this.texts = bars.append('text')
-            .attr('y', function(d) { return yScale(d.trimName); })
+            .attr('y', function (d) { return yScale(d.name); })
             .attr('dy', '1.2em')
-            .text(function(d){ return '(' + d.val + ')'; })
+            .text(function (d) { return '(' + d.val + ')'; })
             .style('text-anchor', 'start');
 
         // Adds the y-axis to the chart if data exists
@@ -98,6 +103,23 @@ class BarChart {
                 .attr('class', 'y axis')
                 .call(yAxis);
         }
+
+        // Add a tooltip to the y-axis labels.
+        let summaryData = formattedData;
+        chart.selectAll(".y.axis .tick")
+            .on("mouseover", function (d) { tooltip.style("display", "inline-block"); })
+            .on("mousemove", function (d) {
+                let id = d;
+                let displayValue = '';
+                let result = $.grep(summaryData, function (e) { return e.name === id; });
+                displayValue = (result.length === 1 ? ' (' + result[0].val + ')' : '');
+                tooltip
+                    .style("left", d3.event.pageX - 50 + "px")
+                    .style("top", d3.event.pageY - 70 + "px")
+                    .style("display", "inline-block")
+                    .html((d.replace('<', '&lt;') + displayValue));
+            })
+            .on("mouseout", function (d) { tooltip.style("display", "none"); });
 
         this.draw();
     }
@@ -164,11 +186,7 @@ class BarChart {
         // Transform license count into array of objects with license name & count
         let chartData = $.map(count, function(val, key) {
             let trimName = "";
-            if (key.length > 50) {
-                trimName = key.substring(0, 50) + ' . . .'
-            } else {
-                trimName = key;
-            }
+            trimName = key.substring(0, 50) + (key.length > 50 ? " ..." : "");
             return {
                 name: key,
                 trimName: trimName,

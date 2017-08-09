@@ -355,7 +355,7 @@ div.dataTables_scrollHead th:first-child {
 }
 
 /* Tooltip for Bar Chart */
- .toolTip {
+.toolTip {
   position: absolute;
   display: none;
   min-width: 80px;
