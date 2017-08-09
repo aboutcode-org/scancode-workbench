@@ -214,25 +214,27 @@ def build(clean=True, app_name=APP_NAME,
         '.',
         app_name,
         '--prune',
+        # FIXME: could we use .npmignore instead?
         '--ignore=thirdparty/*',
         '--ignore=dist/*',
         '--ignore=/\.idea',
         '--ignore=/\.gitignore',
         '--ignore=/test',
+        '--ignore=/tmp',
         '--ignore=/bower.json',
         '--platform=' + platform,
         '--arch=' + arch,
         '--icon=assets/app-icon/' + icon,
         '--version=' + electron_version,
         '--out=' + build_dir,
-         '--asar=' + asar,
+        '--asar=' + asar,
         '--overwrite=true'
     ]
 
     if on_windows:
         electron_args += [
             '--win32metadata.CompanyName="https://AboutCode.org"',
-            '--win32metadata.ProductName="AboutCode Manager"',
+            '--win32metadata.ProductName="{}"'.format(app_name),
         ]
 
     # run the build with electron_packager
