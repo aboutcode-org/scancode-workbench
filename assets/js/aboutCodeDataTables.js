@@ -220,8 +220,7 @@ class AboutCodeDataTable {
                     text: "Copyright info",
                     show: AboutCodeDataTable.COPYRIGHT_GROUP
                         .map((column) => `${column.name}:name`),
-                    hide: $(AboutCodeDataTable.TABLE_COLUMNS)
-                        .not(AboutCodeDataTable.COPYRIGHT_GROUP)
+                    hide: AboutCodeDataTable.NOT_COPYRIGHT_GROUP
                         .map((column) => `${column.name}:name`)
                 },
                 {
@@ -230,8 +229,7 @@ class AboutCodeDataTable {
                     text: "License info",
                     show: AboutCodeDataTable.LICENSE_GROUP
                         .map((column) => `${column.name}:name`),
-                    hide: $(AboutCodeDataTable.TABLE_COLUMNS)
-                        .not(AboutCodeDataTable.LICENSE_GROUP)
+                    hide: AboutCodeDataTable.NOT_LICENSE_GROUP
                         .map((column) => `${column.name}:name`)
                 },
                 {
@@ -240,8 +238,7 @@ class AboutCodeDataTable {
                     text: "Origin info",
                     show: AboutCodeDataTable.ORIGIN_GROUP
                         .map((column) => `${column.name}:name`),
-                    hide: $(AboutCodeDataTable.TABLE_COLUMNS)
-                        .not(AboutCodeDataTable.ORIGIN_GROUP)
+                    hide: AboutCodeDataTable.NOT_ORIGIN_GROUP
                         .map((column) => `${column.name}:name`)
                 },
                 {
@@ -266,7 +263,7 @@ class AboutCodeDataTable {
         }];
     }
 
-    static get COPYRIGHT_COLUMNS() {
+    static get COPYRIGHT_COLUMNS_01() {
         return [
             {
                 "data": function (row, type, val, meta) {
@@ -277,7 +274,12 @@ class AboutCodeDataTable {
                 "title": "Copyright Statements",
                 "name": "copyright_statements",
                 "bar_chart_class": "bar-chart-copyrights"
-            },
+            }
+        ];
+    }
+
+    static get COPYRIGHT_COLUMNS_02() {
+        return [
             {
                 "data": function (row, type, val, meta) {
                     return row.copyright_holders.map(holders => {
@@ -311,7 +313,7 @@ class AboutCodeDataTable {
         ];
     }
 
-    static get LICENSE_COLUMNS() {
+    static get LICENSE_COLUMNS_01() {
         return [
             {
                 "data": "license_key[<hr/>]",
@@ -324,7 +326,12 @@ class AboutCodeDataTable {
                 "title": "License Score",
                 "name": "license_score",
                 "bar_chart_class": "bar-chart-licenses"
-            },
+            }
+        ];
+    }
+
+    static get LICENSE_COLUMNS_02() {
+        return [
             {
                 "data": "license_short_name[<hr/>]",
                 "title": "License Short Name",
@@ -336,7 +343,12 @@ class AboutCodeDataTable {
                 "title": "License Category",
                 "name": "license_category",
                 "bar_chart_class": "bar-chart-licenses"
-            },
+            }
+        ];
+    }
+
+    static get LICENSE_COLUMNS_03() {
+        return [
             {
                 "data": "license_owner[<hr/>]",
                 "title": "License Owner",
@@ -392,14 +404,19 @@ class AboutCodeDataTable {
         ];
     }
 
-    static get EMAIL_COLUMNS() {
+    static get EMAIL_COLUMNS_01() {
         return [
             {
                 "data": "email[<hr/>]",
                 "title": "Email",
                 "name": "email",
                 "bar_chart_class": "bar-chart-emails"
-            },
+            }
+        ];
+    }
+
+    static get EMAIL_COLUMNS_02() {
+        return [
             {
                 "data": "email_start_line[<hr/>]",
                 "title": "Email Start Line",
@@ -413,7 +430,7 @@ class AboutCodeDataTable {
         ];
     }
 
-    static get URL_COLUMNS() {
+    static get URL_COLUMNS_01() {
         return [
             {
                 "data": "url",
@@ -424,7 +441,12 @@ class AboutCodeDataTable {
                         return '<a href="'+href+'" target="_blank">'+href+'</a>';
                     }).join("<br>");
                 }
-            },
+            }
+        ];
+    }
+
+    static get URL_COLUMNS_02() {
+        return [
             {
                 "data": "url_start_line[<br>]",
                 "title": "URL Start Line",
@@ -596,7 +618,7 @@ class AboutCodeDataTable {
     static get ORIGIN_COLUMN_NAMES() {
         return [
             "copyright_statements",
-            "license_shortname",
+            "license_short_name",
             "license_category",
             "email",
             "url"
@@ -605,11 +627,16 @@ class AboutCodeDataTable {
 
     // Define DataTable columns
     static get TABLE_COLUMNS() {
-        return AboutCodeDataTable.LOCATION_COLUMN.concat(
-            AboutCodeDataTable.COPYRIGHT_COLUMNS,
-            AboutCodeDataTable.LICENSE_COLUMNS,
-            AboutCodeDataTable.EMAIL_COLUMNS,
-            AboutCodeDataTable.URL_COLUMNS,
+        return AboutCodeDataTable.LOCATION_COLUMN
+            .concat(AboutCodeDataTable.COPYRIGHT_COLUMNS_01,
+            AboutCodeDataTable.COPYRIGHT_COLUMNS_02,
+            AboutCodeDataTable.LICENSE_COLUMNS_01,
+            AboutCodeDataTable.LICENSE_COLUMNS_02,
+            AboutCodeDataTable.LICENSE_COLUMNS_03,
+            AboutCodeDataTable.EMAIL_COLUMNS_01,
+            AboutCodeDataTable.EMAIL_COLUMNS_02,
+            AboutCodeDataTable.URL_COLUMNS_01,
+            AboutCodeDataTable.URL_COLUMNS_02,
             AboutCodeDataTable.FILE_COLUMNS,
             AboutCodeDataTable.PACKAGE_COLUMNS);
     }
@@ -622,17 +649,53 @@ class AboutCodeDataTable {
 
     static get LICENSE_GROUP() {
         return AboutCodeDataTable.LOCATION_COLUMN
-            .concat(AboutCodeDataTable.LICENSE_COLUMNS);
+            .concat(AboutCodeDataTable.LICENSE_COLUMNS_01,
+            AboutCodeDataTable.LICENSE_COLUMNS_02,
+            AboutCodeDataTable.LICENSE_COLUMNS_03);
     }
 
     static get COPYRIGHT_GROUP() {
         return AboutCodeDataTable.LOCATION_COLUMN
-            .concat(AboutCodeDataTable.COPYRIGHT_COLUMNS);
+            .concat(AboutCodeDataTable.COPYRIGHT_COLUMNS_01,
+            AboutCodeDataTable.COPYRIGHT_COLUMNS_02);
     }
 
     static get ORIGIN_GROUP() {
         return AboutCodeDataTable.LOCATION_COLUMN
             .concat(AboutCodeDataTable.ORIGIN_COLUMNS);
+    }
+
+    static get NOT_COPYRIGHT_GROUP() {
+        return AboutCodeDataTable.LICENSE_COLUMNS_01
+            .concat(AboutCodeDataTable.LICENSE_COLUMNS_02,
+            AboutCodeDataTable.LICENSE_COLUMNS_03,
+            AboutCodeDataTable.EMAIL_COLUMNS_01,
+            AboutCodeDataTable.EMAIL_COLUMNS_02,
+            AboutCodeDataTable.URL_COLUMNS_01,
+            AboutCodeDataTable.URL_COLUMNS_02,
+            AboutCodeDataTable.FILE_COLUMNS,
+            AboutCodeDataTable.PACKAGE_COLUMNS);
+    }
+
+    static get NOT_LICENSE_GROUP() {
+        return AboutCodeDataTable.COPYRIGHT_COLUMNS_01
+            .concat(AboutCodeDataTable.COPYRIGHT_COLUMNS_02,
+            AboutCodeDataTable.EMAIL_COLUMNS_01,
+            AboutCodeDataTable.EMAIL_COLUMNS_02,
+            AboutCodeDataTable.URL_COLUMNS_01,
+            AboutCodeDataTable.URL_COLUMNS_02,
+            AboutCodeDataTable.FILE_COLUMNS,
+            AboutCodeDataTable.PACKAGE_COLUMNS);
+    }
+
+    static get NOT_ORIGIN_GROUP() {
+        return AboutCodeDataTable.COPYRIGHT_COLUMNS_02
+            .concat(AboutCodeDataTable.LICENSE_COLUMNS_01,
+            AboutCodeDataTable.LICENSE_COLUMNS_03,
+            AboutCodeDataTable.EMAIL_COLUMNS_02,
+            AboutCodeDataTable.URL_COLUMNS_02,
+            AboutCodeDataTable.FILE_COLUMNS,
+            AboutCodeDataTable.PACKAGE_COLUMNS);
     }
 }
 
