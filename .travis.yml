@@ -1,20 +1,38 @@
 language: node_js
 sudo: required
+dist: precise
+
 node_js:
   - "6"
 
 env:
-  - CXX=g++-4.8
+  global:
+    - CC=clang CXX=clang++ npm_config_clang=1
+
+os:
+  - linux
+  - osx
+
 
 before_install:
-  - sudo apt-get update
-  - sudo apt-get install build-essential -y
+  - if [ $TRAVIS_OS_NAME = linux ]; then sudo apt-get update; sudo apt-get install build-essential -y; fi
+  - node --version
+  - npm --version
+  - openssl version
+  - python --version
+  - ssh -V
+  - pip -V
 
-script: ./build.sh linux
+script:
+  - npm install
+  - python build.py
 
-deploy:
-  provider: bintray
-  file: .travis_bintray.json
-  user: pombreda
-  key:
-    secure: l8uNfriu2L+rHRRBsR8R6pGHFt+r1Rymfk+1pOKdJTR8NjgBAYEAxPU6IPr+drH1WheXGVFoWttWTcplvo8Xmc+skUMXKUnjNCgrRE0rYKqjdHmEBMKUAjAfZ3hq48ayjRm3FvAjPwcWbTD0siBjK1qm4SD7TBEEC28XuJhT1oE=
+
+addons:
+  ssh_known_hosts: web.sourceforge.net
+
+
+after_success:
+  - openssl aes-256-cbc -K $encrypted_906d16ae5679_key -iv $encrypted_906d16ae5679_iv -in deploy_rsa.enc -out /tmp/deploy_rsa -d
+  - chmod 600 /tmp/deploy_rsa
+  - scp -i /tmp/deploy_rsa dist/AboutCode*.tar.gz aboutcode-rel@web.sourceforge.net:/home/frs/project/aboutcode-manager/builds/

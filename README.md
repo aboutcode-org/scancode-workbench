@@ -6,11 +6,13 @@ about the effective license(s) for a component. AboutCode Manager is based on
 [Electron](https://electron.atom.io/) and will be the primary desktop/GUI tool for using nexB’s [AboutCode
 tools](https://github.com/nexB/aboutcode). This app works on Windows, OS X and Linux operating systems.
 
-As detailed in the [ScanCode README](https://github.com/nexB/scancode-toolkit/), ScanCode detects licenses, copyrights and other interesting information in your code and enables you to format the scan results as JSON or HTML. AboutCode Manager allows you to take the JSON-formatted scan results (HTML-formatted scans are not supported)
-from ScanCode and create components. By creating these components
-within your codebase, you are creating a software inventory of your product.
-The conclusions (Concluded License, Concluded Owner, etc.) you make when
-creating your component can then be exported to a JSON file.
+[ScanCode](https://github.com/nexB/scancode-toolkit/) detects licenses, copyrights 
+and other interesting information in your code and enables you to format the scan 
+results as JSON. AboutCode Manager allows you to take the JSON-formatted 
+scan results from ScanCode and create components. By creating these components within your codebase, you are creating 
+a software inventory of your product. The conclusions (Concluded License, 
+Concluded Owner, etc.) you make when creating your component can then be 
+exported to a JSON file.
 
 ![AboutCode Manager](assets/images/aboutcode-manager-nodeview.gif)
 
@@ -18,7 +20,10 @@ creating your component can then be exported to a JSON file.
 
 * You can [download the latest release](https://github.com/nexB/aboutcode-manager/releases) for your operating system or build it yourself (see below).
 Once downloaded, you can find `AboutCode-Manager` under `dist/AboutCode-Manager-<os>-x64-<version>`.
-* AboutCode Manager v2 is only compatible with scans from [ScanCode Toolkit v2.0.0-RC1](https://github.com/nexB/scancode-toolkit/releases) and above which are run with the ScanCode -i option.  You need to run ScanCode with the -c (copyright detection) and -l (license detection) options in order to get copyright and license data.  The -p option will detect and report package-level metadata if available.
+* AboutCode Manager v2 is only compatible with scans from 
+[ScanCode Toolkit v2.0.0](https://github.com/nexB/scancode-toolkit/releases) and 
+above which are run with the ScanCode `-i` option. For a list of available ScanCode 
+options see [How To: Set what will be detected in a scan](https://github.com/nexB/scancode-toolkit/wiki/How-To:-Set-what-will-be-detected-in-a-scan)
 
 ```bash
 ./scancode -clipeu <input> <output_file>
@@ -50,9 +55,11 @@ cd aboutcode-manager
 # Install dependencies and run the app
 npm install
 
-# Rebuild native Node.js modules against the version of Node.js that the app is using
-./node_modules/.bin/electron-rebuild (MacOS, Linux and Git Bash on Windows)
-.\node_modules\.bin\electron-rebuild.cmd (Windows except for Git Bash)
+# Rebuild native Node.js modules against the app version of Node.js
+# MacOS, Linux and Git Bash on Windows
+$(npm bin)/electron-rebuild
+# Windows except for Git Bash
+.\node_modules\.bin\electron-rebuild.cmd
 
 # Run the app
 npm start
@@ -60,10 +67,11 @@ npm start
 
 ## Release instructions
 
-You can build a `dist` directory containing executables for any one of three target platforms by running `./build.sh <target>` and replacing `<target>` with `linux`, `darwin` or `win32` (for Linux, Darwin/MacOS and Windows, respectively).  A build targeting Windows, for example, would look like this:
+You can build a `dist` directory containing executables for any one of three 
+target platforms by running:
 
 ```bash
-$ ./build.sh win32
+$ python build.py
 ```
 
 After building is done, you can find `AboutCode-Manager` under `dist/AboutCode-Manager-<os>-x64-<version>`.

@@ -1,0 +1,28 @@
+version: '{build}'
+
+image: Visual Studio 2013
+
+platform:
+  - x64
+
+install:
+  - ps: Install-Product node 6 x64
+  - node --version
+  - npm --version
+  - openssl version
+  - python --version
+  - ssh -V
+  - pip -V
+
+build_script:
+  - npm install
+  - python build.py
+
+artifacts:
+  - path: 'dist\*.zip'
+    name: build
+
+before_deploy:
+  - ps: foreach($artifactName in $artifacts.keys) { $artifacts[$artifactName] }
+
+test: off

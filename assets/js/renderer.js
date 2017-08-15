@@ -53,7 +53,7 @@ $(document).ready(function () {
                     "icon": "fa fa-file-text-o"
                 }
             },
-            "plugins": [ "types", "sort", "contextmenu"],
+            "plugins": [ "types", "sort", "contextmenu", "wholerow"],
             "sort": function (a, b) {
                 a1 = this.get_node(a);
                 b1 = this.get_node(b);
