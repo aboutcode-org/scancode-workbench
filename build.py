@@ -164,17 +164,13 @@ def create_zip(base_dir, archive_base_name,):
 
 def create_tar(base_dir, archive_base_name):
     """
-    Create a zip at path `archive_name` from the files in `base_dir`
+    Create a tar at path `archive_name` from the files in `base_dir`
     """
-    len_base_dir = len(base_dir) + 1
+    tarfile_name = os.path.join(base_dir, archive_base_name + '.tar.gz')
+    source_dir = os.path.join(base_dir, archive_base_name)
 
-    with closing(tarfile.open(os.path.join(base_dir, archive_base_name + '.tar.gz'), mode='w:gz')) as tarf:
-        for dirname, _, files in os.walk(os.path.join(base_dir, archive_base_name)):
-            relative_dir = dirname[len_base_dir:]
-            for name in files:
-                member_location = os.path.join(dirname, name)
-                member_path = os.path.join(relative_dir, name)
-                tarf.add(member_location, member_path)
+    with closing(tarfile.open(tarfile_name, mode='w:gz')) as tarf:
+        tarf.add(source_dir, arcname=archive_base_name)
 
 
 def build(clean=True, app_name=APP_NAME,
