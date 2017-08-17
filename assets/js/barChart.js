@@ -62,9 +62,7 @@ class BarChart {
         let yAxis = d3.svg.axis()
             .scale(yScale)
             // Limit label length to 50 characters plus ellipses.
-            .tickFormat(function(d) {
-                return BarChart.trimName(d);
-            })
+            .tickFormat(BarChart.trimName)
             .orient('left');
 
         // Creates a graphic tag (<g>) for each bar in the chart
@@ -184,10 +182,9 @@ class BarChart {
 
         // Transform license count into array of objects with license name & count
         let chartData = $.map(count, function(val, key) {
-            let trimmedName = BarChart.trimName(key);
             return {
                 name: key,
-                trimmedName: trimmedName,
+                trimmedName: BarChart.trimName(key),
                 val: val
             };
         });
