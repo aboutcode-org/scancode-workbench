@@ -220,7 +220,8 @@ class AboutCodeDataTable {
                     text: "Copyright info",
                     show: AboutCodeDataTable.COPYRIGHT_GROUP
                         .map((column) => `${column.name}:name`),
-                    hide: AboutCodeDataTable.NOT_COPYRIGHT_GROUP
+                    hide: AboutCodeDataTable.TABLE_COLUMNS
+                        .filter((column) => AboutCodeDataTable.COPYRIGHT_GROUP.indexOf(column) < 0)
                         .map((column) => `${column.name}:name`)
                 },
                 {
@@ -229,7 +230,8 @@ class AboutCodeDataTable {
                     text: "License info",
                     show: AboutCodeDataTable.LICENSE_GROUP
                         .map((column) => `${column.name}:name`),
-                    hide: AboutCodeDataTable.NOT_LICENSE_GROUP
+                    hide: AboutCodeDataTable.TABLE_COLUMNS
+                        .filter((column) => AboutCodeDataTable.LICENSE_GROUP.indexOf(column) < 0)
                         .map((column) => `${column.name}:name`)
                 },
                 {
@@ -238,7 +240,8 @@ class AboutCodeDataTable {
                     text: "Origin info",
                     show: AboutCodeDataTable.ORIGIN_GROUP
                         .map((column) => `${column.name}:name`),
-                    hide: AboutCodeDataTable.NOT_ORIGIN_GROUP
+                    hide: AboutCodeDataTable.TABLE_COLUMNS
+                        .filter((column) => AboutCodeDataTable.ORIGIN_GROUP.indexOf(column) < 0)
                         .map((column) => `${column.name}:name`)
                 },
                 {
@@ -254,389 +257,13 @@ class AboutCodeDataTable {
         });
     }
 
-    static get LOCATION_COLUMN() {
-        return [{
-            "data": "path",
-            "title": "Path",
-            "name": "path",
-            "skipFilter": true
-        }];
-    }
-
-    static get COPYRIGHT_COLUMNS_01() {
-        return [
-            {
-                "data": function (row, type, val, meta) {
-                    return row.copyright_statements.map(statements => {
-                        return statements.join("<br/>")
-                    }).join("<hr/>");
-                },
-                "title": "Copyright Statements",
-                "name": "copyright_statements",
-                "bar_chart_class": "bar-chart-copyrights"
-            }
-        ];
-    }
-
-    static get COPYRIGHT_COLUMNS_02() {
-        return [
-            {
-                "data": function (row, type, val, meta) {
-                    return row.copyright_holders.map(holders => {
-                        return holders.join("<br/>")
-                    }).join("<hr/>");
-                },
-                "title": "Copyright Holders",
-                "name": "copyright_holders",
-                "bar_chart_class": "bar-chart-copyrights"
-            },
-            {
-                "data": function (row, type, val, meta) {
-                    return row.copyright_authors.map(authors => {
-                        return authors.join("<br/>")
-                    }).join("<hr/>");
-                },
-                "title": "Copyright Authors",
-                "name": "copyright_authors",
-                "bar_chart_class": "bar-chart-copyrights"
-            },
-            {
-                "data": "copyright_start_line[<hr/>]",
-                "title": "Copyright Start Line",
-                "name": "copyright_start_line"
-            },
-            {
-                "data": "copyright_end_line[<hr/>]",
-                "title": "Copyright End Line",
-                "name": "copyright_end_line"
-            }
-        ];
-    }
-
-    static get LICENSE_COLUMNS_01() {
-        return [
-            {
-                "data": "license_key[<hr/>]",
-                "title": "License Key",
-                "name": "license_key",
-                "bar_chart_class": "bar-chart-licenses"
-            },
-            {
-                "data": "license_score[<hr/>]",
-                "title": "License Score",
-                "name": "license_score",
-                "bar_chart_class": "bar-chart-licenses"
-            }
-        ];
-    }
-
-    static get LICENSE_COLUMNS_02() {
-        return [
-            {
-                "data": "license_short_name[<hr/>]",
-                "title": "License Short Name",
-                "name": "license_short_name",
-                "bar_chart_class": "bar-chart-licenses"
-            },
-            {
-                "data": "license_category",
-                "title": "License Category",
-                "name": "license_category",
-                "bar_chart_class": "bar-chart-licenses"
-            }
-        ];
-    }
-
-    static get LICENSE_COLUMNS_03() {
-        return [
-            {
-                "data": "license_owner[<hr/>]",
-                "title": "License Owner",
-                "name": "license_owner",
-                "bar_chart_class": "bar-chart-licenses"
-            },
-            {
-                "data": "license_homepage_url",
-                "title": "License Homepage URL",
-                "name": "license_homepage_url",
-                "render": function ( data, type, full, meta ) {
-                    return $.map(data, function (href, i) {
-                        return '<a href="'+href+'" target="_blank">'+href+'</a>';
-                    }).join("<br>");
-                }
-            },
-            {
-                "data": "license_text_url",
-                "title": "License Text URL",
-                "name": "license_text_url",
-                "render": function ( data, type, full, meta ) {
-                    return $.map(data, function (href, i) {
-                        return '<a href="'+href+'" target="_blank">'+href+'</a>';
-                    }).join("<br>");
-                }
-            },
-            {
-                "data": "license_djc_url",
-                "title": "DejaCode License URL",
-                "name": "license_djc_url",
-                "render": function ( data, type, full, meta ) {
-                    return $.map(data, function (href, i) {
-                        return '<a href="'+href+'" target="_blank">'+href+'</a>';
-                    }).join("<br>");
-                }
-            },
-            {
-                "data": "license_spdx_key[<hr/>]",
-                "title": "SPDX License Key",
-                "name": "license_spdx_key",
-                "bar_chart_class": "bar-chart-licenses"
-            },
-            {
-                "data": "license_start_line[<hr/>]",
-                "title": "License Start Line",
-                "name": "license_start_line"
-            },
-            {
-                "data": "license_end_line[<hr/>]",
-                "title": "License End Line",
-                "name": "license_end_line"
-            }
-        ];
-    }
-
-    static get EMAIL_COLUMNS_01() {
-        return [
-            {
-                "data": "email[<hr/>]",
-                "title": "Email",
-                "name": "email",
-                "bar_chart_class": "bar-chart-emails"
-            }
-        ];
-    }
-
-    static get EMAIL_COLUMNS_02() {
-        return [
-            {
-                "data": "email_start_line[<hr/>]",
-                "title": "Email Start Line",
-                "name": "email_start_line"
-            },
-            {
-                "data": "email_start_line[<hr/>]",
-                "title": "End Start Line",
-                "name": "email_start_line"
-            }
-        ];
-    }
-
-    static get URL_COLUMNS_01() {
-        return [
-            {
-                "data": "url",
-                "title": "URL",
-                "name": "url",
-                "render": function ( data, type, full, meta ) {
-                    return $.map(data, function (href, i) {
-                        return '<a href="'+href+'" target="_blank">'+href+'</a>';
-                    }).join("<br>");
-                }
-            }
-        ];
-    }
-
-    static get URL_COLUMNS_02() {
-        return [
-            {
-                "data": "url_start_line[<br>]",
-                "title": "URL Start Line",
-                "name": "url_start_line"
-            },
-            {
-                "data": "url_end_line[<br>]",
-                "title": "URL End Line",
-                "name": "url_end_line"
-            }
-        ];
-    }
-
-    static get FILE_COLUMNS() {
-        return [
-            {
-                "data": "type",
-                "title": "Type",
-                "name": "type",
-                "bar_chart_class": "bar-chart-file-infos"
-            },
-            {
-                "data": "name",
-                "title": "File Name",
-                "name": "name"
-            },
-            {
-                "data": "extension",
-                "title": "File Extension",
-                "name": "extension",
-                "bar_chart_class": "bar-chart-file-infos"
-            },
-            {
-                "data": "date",
-                "title": "File Date",
-                "name": "date"
-            },
-            {
-                "data": "size",
-                "title": "File Size",
-                "name": "size"
-            },
-            {
-                "data": "sha1",
-                "title": "SHA1",
-                "name": "sha1"
-            },
-            {
-                "data": "md5",
-                "title": "MD5",
-                "name": "md5"
-            },
-            {
-                "data": "file_count",
-                "title": "File Count",
-                "name": "file_count"
-            },
-            {
-                "data": "mime_type",
-                "title": "MIME Type",
-                "name": "mime_type"
-            },
-            {
-                "data": "file_type",
-                "title": "File Type",
-                "name": "file_type",
-                "bar_chart_class": "bar-chart-file-infos"
-            },
-            {
-                "data": "programming_language",
-                "title": "Language",
-                "name": "programming_language",
-                "bar_chart_class": "bar-chart-file-infos"
-            },
-            {
-                "data": "is_binary",
-                "title": "Binary",
-                "name": "is_binary",
-                "bar_chart_class": "bar-chart-file-infos"
-            },
-            {
-                "data": "is_text",
-                "title": "Text File",
-                "name": "is_text",
-                "bar_chart_class": "bar-chart-file-infos"
-            },
-            {
-                "data": "is_archive",
-                "title": "Archive File",
-                "name": "is_archive",
-                "bar_chart_class": "bar-chart-file-infos"
-            },
-            {
-                "data": "is_media",
-                "title": "Media File",
-                "name": "is_media",
-                "bar_chart_class": "bar-chart-file-infos"
-            },
-            {
-                "data": "is_source",
-                "title": "Source File",
-                "name": "is_source",
-                "bar_chart_class": "bar-chart-file-infos"
-            },
-            {
-                "data": "is_script",
-                "title": "Script File",
-                "name": "is_script",
-                "bar_chart_class": "bar-chart-file-infos"
-            }
-        ];
-    }
-
-    static get PACKAGE_COLUMNS() {
-        return [
-            {
-                "data": "packages_type",
-                "title": "Package Type",
-                "name": "packages_type",
-                "bar_chart_class": "bar-chart-package-infos"
-            },
-            {
-                "data": "packages_name",
-                "title": "Package Name",
-                "name": "packages_name"
-            },
-            {
-                "data": "packages_version",
-                "title": "Package Version",
-                "name": "packages_version"
-            },
-            {
-                "data": "packages_asserted_licenses_license[<hr/>]",
-                "title": "Package Asserted License",
-                "name": "packages_asserted_licenses_license",
-                "bar_chart_class": "bar-chart-package-infos"
-            },
-            {
-                "data": "packages_primary_language",
-                "title": "Package Primary Language",
-                "name": "packages_primary_language",
-                "bar_chart_class": "bar-chart-package-infos"
-            },
-            {
-                "data": "packages_authors_name[<hr/>]",
-                "title": "Package Authors Name",
-                "name": "packages_authors_name",
-                "bar_chart_class": "bar-chart-package-infos"
-            },
-            {
-                "data": "packages_homepage_url",
-                "title": "Package Homepage URL",
-                "name": "packages_homepage_url"
-            },
-            {
-                "data": function (row, type, val, meta) {
-                    return row.packages_download_urls.map(urls => {
-                        return urls.map(url => {
-                             return '<a href="'+url+'" target="_blank">'+url+'</a>';
-                        }).join("<br/>")
-                    }).join("<hr/>");
-                },
-                "title": "Package Download URLs",
-                "name": "packages_download_urls"
-            },
-        ];
-    }
-
-    static get ORIGIN_COLUMN_NAMES() {
-        return [
-            "copyright_statements",
-            "license_short_name",
-            "license_category",
-            "email",
-            "url"
-        ];
-    }
-
     // Define DataTable columns
     static get TABLE_COLUMNS() {
         return AboutCodeDataTable.LOCATION_COLUMN
-            .concat(AboutCodeDataTable.COPYRIGHT_COLUMNS_01,
-            AboutCodeDataTable.COPYRIGHT_COLUMNS_02,
-            AboutCodeDataTable.LICENSE_COLUMNS_01,
-            AboutCodeDataTable.LICENSE_COLUMNS_02,
-            AboutCodeDataTable.LICENSE_COLUMNS_03,
-            AboutCodeDataTable.EMAIL_COLUMNS_01,
-            AboutCodeDataTable.EMAIL_COLUMNS_02,
-            AboutCodeDataTable.URL_COLUMNS_01,
-            AboutCodeDataTable.URL_COLUMNS_02,
+            .concat(AboutCodeDataTable.COPYRIGHT_COLUMNS,
+            AboutCodeDataTable.LICENSE_COLUMNS,
+            AboutCodeDataTable.EMAIL_COLUMNS,
+            AboutCodeDataTable.URL_COLUMNS,
             AboutCodeDataTable.FILE_COLUMNS,
             AboutCodeDataTable.PACKAGE_COLUMNS);
     }
@@ -649,54 +276,358 @@ class AboutCodeDataTable {
 
     static get LICENSE_GROUP() {
         return AboutCodeDataTable.LOCATION_COLUMN
-            .concat(AboutCodeDataTable.LICENSE_COLUMNS_01,
-            AboutCodeDataTable.LICENSE_COLUMNS_02,
-            AboutCodeDataTable.LICENSE_COLUMNS_03);
+            .concat(AboutCodeDataTable.LICENSE_COLUMNS);
     }
 
     static get COPYRIGHT_GROUP() {
         return AboutCodeDataTable.LOCATION_COLUMN
-            .concat(AboutCodeDataTable.COPYRIGHT_COLUMNS_01,
-            AboutCodeDataTable.COPYRIGHT_COLUMNS_02);
+            .concat(AboutCodeDataTable.COPYRIGHT_COLUMNS);
     }
 
     static get ORIGIN_GROUP() {
         return AboutCodeDataTable.LOCATION_COLUMN
             .concat(AboutCodeDataTable.ORIGIN_COLUMNS);
     }
-
-    static get NOT_COPYRIGHT_GROUP() {
-        return AboutCodeDataTable.LICENSE_COLUMNS_01
-            .concat(AboutCodeDataTable.LICENSE_COLUMNS_02,
-            AboutCodeDataTable.LICENSE_COLUMNS_03,
-            AboutCodeDataTable.EMAIL_COLUMNS_01,
-            AboutCodeDataTable.EMAIL_COLUMNS_02,
-            AboutCodeDataTable.URL_COLUMNS_01,
-            AboutCodeDataTable.URL_COLUMNS_02,
-            AboutCodeDataTable.FILE_COLUMNS,
-            AboutCodeDataTable.PACKAGE_COLUMNS);
-    }
-
-    static get NOT_LICENSE_GROUP() {
-        return AboutCodeDataTable.COPYRIGHT_COLUMNS_01
-            .concat(AboutCodeDataTable.COPYRIGHT_COLUMNS_02,
-            AboutCodeDataTable.EMAIL_COLUMNS_01,
-            AboutCodeDataTable.EMAIL_COLUMNS_02,
-            AboutCodeDataTable.URL_COLUMNS_01,
-            AboutCodeDataTable.URL_COLUMNS_02,
-            AboutCodeDataTable.FILE_COLUMNS,
-            AboutCodeDataTable.PACKAGE_COLUMNS);
-    }
-
-    static get NOT_ORIGIN_GROUP() {
-        return AboutCodeDataTable.COPYRIGHT_COLUMNS_02
-            .concat(AboutCodeDataTable.LICENSE_COLUMNS_01,
-            AboutCodeDataTable.LICENSE_COLUMNS_03,
-            AboutCodeDataTable.EMAIL_COLUMNS_02,
-            AboutCodeDataTable.URL_COLUMNS_02,
-            AboutCodeDataTable.FILE_COLUMNS,
-            AboutCodeDataTable.PACKAGE_COLUMNS);
-    }
 }
+
+AboutCodeDataTable.LOCATION_COLUMN =
+    [
+        {
+        "data": "path",
+        "title": "Path",
+        "name": "path",
+        "skipFilter": true
+        }
+    ];
+
+AboutCodeDataTable.COPYRIGHT_COLUMNS =
+    [
+        {
+            "data": function (row, type, val, meta) {
+                return row.copyright_statements.map(statements => {
+                    return statements.join("<br/>")
+                }).join("<hr/>");
+            },
+            "title": "Copyright Statements",
+            "name": "copyright_statements",
+            "bar_chart_class": "bar-chart-copyrights"
+        },
+        {
+            "data": function (row, type, val, meta) {
+                return row.copyright_holders.map(holders => {
+                    return holders.join("<br/>")
+                }).join("<hr/>");
+            },
+            "title": "Copyright Holders",
+            "name": "copyright_holders",
+            "bar_chart_class": "bar-chart-copyrights"
+        },
+        {
+            "data": function (row, type, val, meta) {
+                return row.copyright_authors.map(authors => {
+                    return authors.join("<br/>")
+                }).join("<hr/>");
+            },
+            "title": "Copyright Authors",
+            "name": "copyright_authors",
+            "bar_chart_class": "bar-chart-copyrights"
+        },
+        {
+            "data": "copyright_start_line[<hr/>]",
+            "title": "Copyright Start Line",
+            "name": "copyright_start_line"
+        },
+        {
+            "data": "copyright_end_line[<hr/>]",
+            "title": "Copyright End Line",
+            "name": "copyright_end_line"
+        }
+    ];
+
+AboutCodeDataTable.LICENSE_COLUMNS =
+    [
+        {
+            "data": "license_key[<hr/>]",
+            "title": "License Key",
+            "name": "license_key",
+            "bar_chart_class": "bar-chart-licenses"
+        },
+        {
+            "data": "license_score[<hr/>]",
+            "title": "License Score",
+            "name": "license_score",
+            "bar_chart_class": "bar-chart-licenses"
+        },
+        {
+            "data": "license_short_name[<hr/>]",
+            "title": "License Short Name",
+            "name": "license_short_name",
+            "bar_chart_class": "bar-chart-licenses"
+        },
+        {
+            "data": "license_category",
+            "title": "License Category",
+            "name": "license_category",
+            "bar_chart_class": "bar-chart-licenses"
+        },
+        {
+            "data": "license_owner[<hr/>]",
+            "title": "License Owner",
+            "name": "license_owner",
+            "bar_chart_class": "bar-chart-licenses"
+        },
+        {
+            "data": "license_homepage_url",
+            "title": "License Homepage URL",
+            "name": "license_homepage_url",
+            "render": function ( data, type, full, meta ) {
+                return $.map(data, function (href, i) {
+                    return '<a href="'+href+'" target="_blank">'+href+'</a>';
+                }).join("<br>");
+            }
+        },
+        {
+            "data": "license_text_url",
+            "title": "License Text URL",
+            "name": "license_text_url",
+            "render": function ( data, type, full, meta ) {
+                return $.map(data, function (href, i) {
+                    return '<a href="'+href+'" target="_blank">'+href+'</a>';
+                }).join("<br>");
+            }
+        },
+        {
+            "data": "license_djc_url",
+            "title": "DejaCode License URL",
+            "name": "license_djc_url",
+            "render": function ( data, type, full, meta ) {
+                return $.map(data, function (href, i) {
+                    return '<a href="'+href+'" target="_blank">'+href+'</a>';
+                }).join("<br>");
+            }
+        },
+        {
+            "data": "license_spdx_key[<hr/>]",
+            "title": "SPDX License Key",
+            "name": "license_spdx_key",
+            "bar_chart_class": "bar-chart-licenses"
+        },
+        {
+            "data": "license_start_line[<hr/>]",
+            "title": "License Start Line",
+            "name": "license_start_line"
+        },
+        {
+            "data": "license_end_line[<hr/>]",
+            "title": "License End Line",
+            "name": "license_end_line"
+        }
+    ];
+
+AboutCodeDataTable.EMAIL_COLUMNS =
+    [
+        {
+            "data": "email[<hr/>]",
+            "title": "Email",
+            "name": "email",
+            "bar_chart_class": "bar-chart-emails"
+        },
+        {
+            "data": "email_start_line[<hr/>]",
+            "title": "Email Start Line",
+            "name": "email_start_line"
+        },
+        {
+            "data": "email_start_line[<hr/>]",
+            "title": "End Start Line",
+            "name": "email_start_line"
+        }
+    ];
+
+AboutCodeDataTable.URL_COLUMNS =
+    [
+        {
+            "data": "url",
+            "title": "URL",
+            "name": "url",
+            "render": function ( data, type, full, meta ) {
+                return $.map(data, function (href, i) {
+                    return '<a href="'+href+'" target="_blank">'+href+'</a>';
+                }).join("<br>");
+            }
+        },
+        {
+            "data": "url_start_line[<br>]",
+            "title": "URL Start Line",
+            "name": "url_start_line"
+        },
+        {
+            "data": "url_end_line[<br>]",
+            "title": "URL End Line",
+            "name": "url_end_line"
+        }
+    ];
+
+AboutCodeDataTable.FILE_COLUMNS =
+    [
+        {
+            "data": "type",
+            "title": "Type",
+            "name": "type",
+            "bar_chart_class": "bar-chart-file-infos"
+        },
+        {
+            "data": "name",
+            "title": "File Name",
+            "name": "name"
+        },
+        {
+            "data": "extension",
+            "title": "File Extension",
+            "name": "extension",
+            "bar_chart_class": "bar-chart-file-infos"
+        },
+        {
+            "data": "date",
+            "title": "File Date",
+            "name": "date"
+        },
+        {
+            "data": "size",
+            "title": "File Size",
+            "name": "size"
+        },
+        {
+            "data": "sha1",
+            "title": "SHA1",
+            "name": "sha1"
+        },
+        {
+            "data": "md5",
+            "title": "MD5",
+            "name": "md5"
+        },
+        {
+            "data": "file_count",
+            "title": "File Count",
+            "name": "file_count"
+        },
+        {
+            "data": "mime_type",
+            "title": "MIME Type",
+            "name": "mime_type"
+        },
+        {
+            "data": "file_type",
+            "title": "File Type",
+            "name": "file_type",
+            "bar_chart_class": "bar-chart-file-infos"
+        },
+        {
+            "data": "programming_language",
+            "title": "Language",
+            "name": "programming_language",
+            "bar_chart_class": "bar-chart-file-infos"
+        },
+        {
+            "data": "is_binary",
+            "title": "Binary",
+            "name": "is_binary",
+            "bar_chart_class": "bar-chart-file-infos"
+        },
+        {
+            "data": "is_text",
+            "title": "Text File",
+            "name": "is_text",
+            "bar_chart_class": "bar-chart-file-infos"
+        },
+        {
+            "data": "is_archive",
+            "title": "Archive File",
+            "name": "is_archive",
+            "bar_chart_class": "bar-chart-file-infos"
+        },
+        {
+            "data": "is_media",
+            "title": "Media File",
+            "name": "is_media",
+            "bar_chart_class": "bar-chart-file-infos"
+        },
+        {
+            "data": "is_source",
+            "title": "Source File",
+            "name": "is_source",
+            "bar_chart_class": "bar-chart-file-infos"
+        },
+        {
+            "data": "is_script",
+            "title": "Script File",
+            "name": "is_script",
+            "bar_chart_class": "bar-chart-file-infos"
+        }
+    ];
+
+AboutCodeDataTable.PACKAGE_COLUMNS =
+    [
+        {
+            "data": "packages_type",
+            "title": "Package Type",
+            "name": "packages_type",
+            "bar_chart_class": "bar-chart-package-infos"
+        },
+        {
+            "data": "packages_name",
+            "title": "Package Name",
+            "name": "packages_name"
+        },
+        {
+            "data": "packages_version",
+            "title": "Package Version",
+            "name": "packages_version"
+        },
+        {
+            "data": "packages_asserted_licenses_license[<hr/>]",
+            "title": "Package Asserted License",
+            "name": "packages_asserted_licenses_license",
+            "bar_chart_class": "bar-chart-package-infos"
+        },
+        {
+            "data": "packages_primary_language",
+            "title": "Package Primary Language",
+            "name": "packages_primary_language",
+            "bar_chart_class": "bar-chart-package-infos"
+        },
+        {
+            "data": "packages_authors_name[<hr/>]",
+            "title": "Package Authors Name",
+            "name": "packages_authors_name",
+            "bar_chart_class": "bar-chart-package-infos"
+        },
+        {
+            "data": "packages_homepage_url",
+            "title": "Package Homepage URL",
+            "name": "packages_homepage_url"
+        },
+        {
+            "data": function (row, type, val, meta) {
+                return row.packages_download_urls.map(urls => {
+                    return urls.map(url => {
+                         return '<a href="'+url+'" target="_blank">'+url+'</a>';
+                    }).join("<br/>")
+                }).join("<hr/>");
+            },
+            "title": "Package Download URLs",
+            "name": "packages_download_urls"
+        },
+    ];
+
+AboutCodeDataTable.ORIGIN_COLUMN_NAMES =
+    [
+        "copyright_statements",
+        "license_short_name",
+        "license_category",
+        "email",
+        "url"
+    ];
 
 module.exports = AboutCodeDataTable;
