@@ -61,6 +61,8 @@ class BarChart {
         // Creates a d3 axis given a scale (takes care of tick marks and labels)
         let yAxis = d3.svg.axis()
             .scale(yScale)
+            // Limit label length to 50 characters plus ellipses.
+            .tickFormat(BarChart.trimName)
             .orient('left');
 
         // Creates a graphic tag (<g>) for each bar in the chart
@@ -68,14 +70,28 @@ class BarChart {
             .data(formattedData)
             .enter().append('g');
 
+        // Clear tooltip div created when inadvertently triggered during dropdown selection.
+        $( ".toolTip" ).remove();
+
+        let tooltip = d3.select("body").append("div").attr("class", "toolTip");
+
         this.rects = bars.append('rect')
             .attr('y', function(d) { return yScale(d.name); })
-            .attr('height', yScale.rangeBand());
+            .attr('height', yScale.rangeBand())
+            // Add a tooltip to the bar.
+            .on("mouseover", function (d) { tooltip.style("display", "inline-block"); })
+            .on("mousemove", function (d) {
+                tooltip
+                    .style("left", d3.event.pageX - 50 + "px")
+                    .style("top", d3.event.pageY - 70 + "px")
+                    .text((d.name + ' (' + d.val + ')'));
+            })
+            .on("mouseout", function (d) { tooltip.style("display", "none"); });
 
         this.texts = bars.append('text')
-            .attr('y', function(d) { return yScale(d.name); })
+            .attr('y', function (d) { return yScale(d.name); })
             .attr('dy', '1.2em')
-            .text(function(d){ return '(' + d.val + ')'; })
+            .text(function (d) { return '(' + d.val + ')'; })
             .style('text-anchor', 'start');
 
         // Adds the y-axis to the chart if data exists
@@ -85,7 +101,24 @@ class BarChart {
                 .call(yAxis);
         }
 
+        // Add a tooltip to the y-axis labels.
+        chart.selectAll(".y.axis .tick")
+            .on("mouseover", function (d) { tooltip.style("display", "inline-block"); })
+            .on("mousemove", function (d) {
+                let result = $.grep(formattedData, function (e) { return e.name === d; });
+                let displayValue = ' (' + result[0].val + ')';
+                tooltip
+                    .style("left", d3.event.pageX - 50 + "px")
+                    .style("top", d3.event.pageY - 70 + "px")
+                    .text((d + displayValue));
+            })
+            .on("mouseout", function (d) { tooltip.style("display", "none"); });
+
         this.draw();
+    }
+
+    static trimName(name) {
+        return name.substring(0, 50) + (name.length > 50 ? " ..." : "");
     }
 
     // Redraws chart and sets width based on available chart width.
@@ -121,7 +154,7 @@ class BarChart {
 
     // Returns the pixel width of the string with the longest length
     maxNameWidth(data) {
-        let names = data.map(function(d) { return d.name; });
+        let names = data.map(function(d) { return d.trimmedName; });
 
         let maxStr = '';
         $.each(names, function(i, name) {
@@ -151,6 +184,7 @@ class BarChart {
         let chartData = $.map(count, function(val, key) {
             return {
                 name: key,
+                trimmedName: BarChart.trimName(key),
                 val: val
             };
         });
