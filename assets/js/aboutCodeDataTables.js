@@ -248,6 +248,16 @@ class AboutCodeDataTable {
                     extend: "colvisGroup",
                     text: "Show all columns",
                     show: ":hidden"
+                },
+                {
+                    // Hide all columns except Path
+                    extend: "colvisGroup",
+                    text: "Hide all columns",
+                    show: AboutCodeDataTable.LOCATION_COLUMN
+                        .map((column) => `${column.name}:name`),
+                    hide: AboutCodeDataTable.TABLE_COLUMNS
+                        .filter((column) => AboutCodeDataTable.LOCATION_COLUMN.indexOf(column) < 0)
+                        .map((column) => `${column.name}:name`)
                 }
             ],
             dom: // Needed to keep datatables buttons and search inline
