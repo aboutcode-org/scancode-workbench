@@ -367,3 +367,14 @@ div.dataTables_scrollHead th:first-child {
   text-align: center;
   color: #ffffff;
 }
+
+/* Modify the colvis column-visibility and -grouping buttons */
+.buttons-colvis {
+  padding-right: 10px;
+  padding-left: 10px;
+}
+
+.buttons-colvisGroup {
+  padding-right: 10px;
+  padding-left: 10px;
+}
