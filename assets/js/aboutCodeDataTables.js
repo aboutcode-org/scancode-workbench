@@ -75,10 +75,17 @@ class AboutCodeDataTable {
             for (let i = 0; i < dataTablesInput.columns.length; i++) {
                 let columnSearch = dataTablesInput.columns[i].search.value;
                 if (columnSearch) {
-                    // Column 0 is the "path", which should only match wildcards
-                    // at the end of the path.
-                    query.where.$and[dataTablesInput.columns[i].name] = {
-                        $like: i === 0 ? `${columnSearch}%` : `%${columnSearch}%`
+                    // Return all non empty values
+                    if (columnSearch === "Has a Value") {
+                        query.where.$and[dataTablesInput.columns[i].name] = {
+                            $ne: "[]"
+                        }
+                    } else {
+                        // Column 0 is the "path", which should only match wildcards
+                        // at the end of the path.
+                        query.where.$and[dataTablesInput.columns[i].name] = {
+                            $like: i === 0 ? `${columnSearch}%` : `%${columnSearch}%`
+                        }
                     }
                 }
             }
@@ -193,6 +200,15 @@ class AboutCodeDataTable {
                                     let val = select.find("option:selected");
 
                                     select.empty().append(`<option value=""></option>`);
+
+                                    /**
+                                     * Add Has a Value option to dropdown menu to show all rows
+                                     * that contain a detected ScanCode value.
+                                     */
+                                    if (filterValues.length > 0) {
+                                        select.append(`<option value="Has a Value">Has a Value</option>`);
+                                    }
+
                                     $.each(filterValues, function ( i, filterValue ) {
                                         select.append(`<option value="${filterValue}">${filterValue}</option>`)
                                     });
