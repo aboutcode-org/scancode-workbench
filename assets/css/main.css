@@ -242,6 +242,17 @@ div.dataTables_scrollHead th:first-child {
   border-top-left-radius: 4px;
 }
 
+/* Modify the colvis column-visibility and -grouping buttons */
+.buttons-colvis {
+  padding-right: 10px;
+  padding-left: 10px;
+}
+
+.buttons-colvisGroup {
+  padding-right: 10px;
+  padding-left: 10px;
+}
+
 /*---------------------------------------
   Help page
 -----------------------------------------*/
@@ -366,15 +377,4 @@ div.dataTables_scrollHead th:first-child {
   padding: 14px;
   text-align: center;
   color: #ffffff;
-}
-
-/* Modify the colvis column-visibility and -grouping buttons */
-.buttons-colvis {
-  padding-right: 10px;
-  padding-left: 10px;
-}
-
-.buttons-colvisGroup {
-  padding-right: 10px;
-  padding-left: 10px;
 }

@@ -237,6 +237,31 @@ class AboutCodeDataTable {
                     collectionLayout: "fixed two-column"
                 },
                 {
+                    extend: "colvisGroup",
+                    text: "Show all",
+                    show: ":hidden"
+                },
+                {
+                    // Hide all columns except Path
+                    extend: "colvisGroup",
+                    text: "Hide all",
+                    show: AboutCodeDataTable.LOCATION_COLUMN
+                        .map((column) => `${column.name}:name`),
+                    hide: AboutCodeDataTable.TABLE_COLUMNS
+                        .filter((column) => AboutCodeDataTable.LOCATION_COLUMN.indexOf(column) < 0)
+                        .map((column) => `${column.name}:name`)
+                },
+                {
+                    // Show only origin columns
+                    extend: "colvisGroup",
+                    text: "Origin info",
+                    show: AboutCodeDataTable.ORIGIN_GROUP
+                        .map((column) => `${column.name}:name`),
+                    hide: AboutCodeDataTable.TABLE_COLUMNS
+                        .filter((column) => AboutCodeDataTable.ORIGIN_GROUP.indexOf(column) < 0)
+                        .map((column) => `${column.name}:name`)
+                },
+                {
                     // Show only copyright columns
                     extend: "colvisGroup",
                     text: "Copyright info",
@@ -257,16 +282,6 @@ class AboutCodeDataTable {
                         .map((column) => `${column.name}:name`)
                 },
                 {
-                    // Show only origin columns
-                    extend: "colvisGroup",
-                    text: "Origin info",
-                    show: AboutCodeDataTable.ORIGIN_GROUP
-                        .map((column) => `${column.name}:name`),
-                    hide: AboutCodeDataTable.TABLE_COLUMNS
-                        .filter((column) => AboutCodeDataTable.ORIGIN_GROUP.indexOf(column) < 0)
-                        .map((column) => `${column.name}:name`)
-                },
-                {
                     // Show only package columns
                     extend: "colvisGroup",
                     text: "Package info",
@@ -274,21 +289,6 @@ class AboutCodeDataTable {
                         .map((column) => `${column.name}:name`),
                     hide: AboutCodeDataTable.TABLE_COLUMNS
                         .filter((column) => AboutCodeDataTable.PACKAGE_GROUP.indexOf(column) < 0)
-                        .map((column) => `${column.name}:name`)
-                },
-                {
-                    extend: "colvisGroup",
-                    text: "Show all",
-                    show: ":hidden"
-                },
-                {
-                    // Hide all columns except Path
-                    extend: "colvisGroup",
-                    text: "Hide all",
-                    show: AboutCodeDataTable.LOCATION_COLUMN
-                        .map((column) => `${column.name}:name`),
-                    hide: AboutCodeDataTable.TABLE_COLUMNS
-                        .filter((column) => AboutCodeDataTable.LOCATION_COLUMN.indexOf(column) < 0)
                         .map((column) => `${column.name}:name`)
                 }
             ],
