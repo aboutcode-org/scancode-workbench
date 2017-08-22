@@ -50,7 +50,7 @@ function getTemplate() {
           }
         },
         {
-          label: "Save SQLite File",
+          label: "Save As New SQLite File",
           accelerator: 'CmdOrCtrl+S',
           click: function (menuItem, currentWindow) {
             currentWindow.webContents.send('save-SQLite')

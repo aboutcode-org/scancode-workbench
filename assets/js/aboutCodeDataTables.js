@@ -14,6 +14,8 @@
  #
  */
 
+const HAS_A_VALUE =  "about_code_data_table_has_a_value";
+
 class AboutCodeDataTable {
     constructor(tableID, aboutCodeDB) {
         this.aboutCodeDB = aboutCodeDB;
@@ -75,10 +77,21 @@ class AboutCodeDataTable {
             for (let i = 0; i < dataTablesInput.columns.length; i++) {
                 let columnSearch = dataTablesInput.columns[i].search.value;
                 if (columnSearch) {
-                    // Column 0 is the "path", which should only match wildcards
-                    // at the end of the path.
-                    query.where.$and[dataTablesInput.columns[i].name] = {
-                        $like: i === 0 ? `${columnSearch}%` : `%${columnSearch}%`
+                    // Return all non empty values
+                    if (columnSearch === HAS_A_VALUE) {
+                        query.where.$and[dataTablesInput.columns[i].name] = {
+                            $and: [
+                                { $ne: "[]" },
+                                { $ne: "" },
+                                { $ne: "{}" }
+                            ]
+                        }
+                    } else {
+                        // Column 0 is the "path", which should only match wildcards
+                        // at the end of the path.
+                        query.where.$and[dataTablesInput.columns[i].name] = {
+                            $like: i === 0 ? `${columnSearch}%` : `%${columnSearch}%`
+                        }
                     }
                 }
             }
@@ -166,38 +179,47 @@ class AboutCodeDataTable {
                         <option value=""></option></select>`)
                         .appendTo(footer)
                         .on("click", () => {
-                                let where = {};
-                                where[columnName] = {$ne: null};
+                            let where = {};
+                            where[columnName] = {$ne: null};
 
-                                that.aboutCodeDB.FlattenedFile.findAll({
-                                    attributes: [Sequelize.fn("TRIM",
-                                        Sequelize.col(columnName)), columnName],
-                                    group: [columnName],
-                                    where: where,
-                                    order: [columnName]
+                            that.aboutCodeDB.FlattenedFile.findAll({
+                                attributes: [Sequelize.fn("TRIM",
+                                    Sequelize.col(columnName)), columnName],
+                                group: [columnName],
+                                where: where,
+                                order: [columnName]
+                            })
+                            .then((rows) => {
+                                let filterValues = $.map(rows, (row) => {
+                                    return row[columnName];
                                 })
-                                .then((rows) => {
-                                    let filterValues = $.map(rows, (row) => {
-                                        return row[columnName];
-                                    })
-                                        .map(filterValue => (filterValue).toString())
-                                        .filter((filterValue) => filterValue.length > 0);
+                                    .map(filterValue => (filterValue).toString())
+                                    .filter((filterValue) => filterValue.length > 0);
 
-                                    filterValues = $.map(filterValues, (filterValue) => filterValue);
-                                    filterValues.forEach((filterValue) => {
-                                        filterValue.trim();
-                                    });
-                                    filterValues = $.unique(filterValues).sort();
-
-                                    const select = $(`select#clue-${columnName}`);
-                                    let val = select.find("option:selected");
-
-                                    select.empty().append(`<option value=""></option>`);
-                                    $.each(filterValues, function ( i, filterValue ) {
-                                        select.append(`<option value="${filterValue}">${filterValue}</option>`)
-                                    });
-                                    select.val(val);
+                                filterValues = $.map(filterValues, (filterValue) => filterValue);
+                                filterValues.forEach((filterValue) => {
+                                    filterValue.trim();
                                 });
+                                filterValues = $.unique(filterValues).sort();
+
+                                const select = $(`select#clue-${columnName}`);
+                                let val = select.find("option:selected");
+
+                                select.empty().append(`<option value=""></option>`);
+
+                                /**
+                                 * Add Has a Value option to dropdown menu to show all rows
+                                 * that contain a detected ScanCode value.
+                                 */
+                                if (filterValues.length > 0) {
+                                    select.append(`<option value="${HAS_A_VALUE}">Has a Value</option>`);
+                                }
+
+                                $.each(filterValues, function ( i, filterValue ) {
+                                    select.append(`<option value="${filterValue}">${filterValue}</option>`)
+                                });
+                                select.val(val);
+                            });
                         })
                         .on( "change", function () {
                             // Get dropdown element selected value
