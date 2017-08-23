@@ -14,7 +14,7 @@ a software inventory of your product. The conclusions (Concluded License,
 Concluded Owner, etc.) you make when creating your component can then be 
 exported to a JSON file.
 
-![AboutCode Manager](assets/images/aboutcode-manager-nodeview.gif)
+![AboutCode Manager](assets/images/aboutcode-manager-chart-summary-view.png)
 
 ## Using
 
@@ -42,7 +42,9 @@ See the [wiki](https://github.com/nexB/aboutcode-manager/wiki#tutorials) for mor
 
 ## Building
 
-You'll need [Node.js](https://nodejs.org) (which comes with [npm](http://npmjs.com)) installed on your computer in order to build this app.
+You'll need [Node.js](https://nodejs.org) (which comes with [npm](http://npmjs.com)) 
+installed on your computer in order to build this app. For a list of platform 
+specific requirements, see the Building section of the [wiki](https://github.com/nexB/aboutcode-manager/wiki/Building)
 Then, from your command line:
 
 ```bash
