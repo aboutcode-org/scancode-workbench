@@ -12,12 +12,11 @@ for using nexB’s [AboutCode tools](https://github.com/nexB/aboutcode). This ap
 works on Windows, OS X and Linux operating systems.
 
 [ScanCode](https://github.com/nexB/scancode-toolkit/) detects licenses, copyrights 
-and other interesting information in your code and enables you to format the scan 
-results as JSON. AboutCode Manager allows you to take the JSON-formatted 
+and other interesting information in your code. AboutCode Manager allows you to take the
 scan results from ScanCode and create components. By creating these components 
 within your codebase, you are creating a software inventory of your product. 
 The conclusions (Concluded License, Concluded Owner, etc.) you make when 
-creating your component can then be exported to a JSON file.
+creating your component can be exported as a JSON file or saved as SQLite file.
 
 ![AboutCode Manager](https://github.com/nexB/aboutcode-manager/wiki/aboutcode-manager-chart-summary.gif)
 
@@ -39,24 +38,10 @@ options see [How To: Set what will be detected in a scan](https://github.com/nex
 AboutCode Manager in order to get a sense of its functionality and the types of 
 information captured by a scan.  The samples are located at 
 [https://github.com/nexB/aboutcode-manager/tree/develop/samples](https://github.com/nexB/aboutcode-manager/tree/develop/samples).
-
-* To import a ScanCode JSON file:
-  * Open the `File` menu and select `Import JSON File` (keyboard shortcut: 
-  <kbd>Ctrl+I</kbd> or <kbd>&#8984;+I</kbd>).
-  * In the dialog window that opens, navigate to the JSON file you want to 
-  import, select the file and click `Open`.
-  * You will then be prompted to choose a filename and location to save the JSON 
-  file as a SQLite database file.  Add a filename, select the folder in which 
-  you want to save the SQLite database file, and click `Save`.
-  * AboutCode Manager will then create a SQLite database file from your JSON 
-  file, indicated by the status message "Creating Database ..."
-  * Once the process has finished, the status message will be replaced by an 
-  expandable tree displaying the root node of your SQLite database file and, to 
-  the right of the tree, a table displaying the root node attributes generated 
-  by ScanCode.
-
-See the [wiki](https://github.com/nexB/aboutcode-manager/wiki#tutorials) for 
-more documentation on how to use AboutCode Manager.
+* Import a ScanCode JSON file, and see what components are in your software! See 
+the [wiki](https://github.com/nexB/aboutcode-manager/wiki#tutorials) for more 
+documentation on how to use AboutCode Manager.
+![Import a JSON file](https://github.com/nexB/aboutcode-manager/wiki/import-json-file.gif)
 
 ## Building
 
