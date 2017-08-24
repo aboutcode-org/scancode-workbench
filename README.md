@@ -6,17 +6,18 @@
 AboutCode Manager provides an advanced visual UI to help you quickly evaluate
 license and other notices identified by 
 [ScanCode](https://github.com/nexB/scancode-toolkit/) and record your conclusion
-about the effective license(s) for a component. AboutCode Manager is based on
-[Electron](https://electron.atom.io/) and will be the primary desktop/GUI tool 
-for using nexB’s [AboutCode tools](https://github.com/nexB/aboutcode). This app 
-works on Windows, OS X and Linux operating systems.
-
+about the effective license(s) for a component.
 [ScanCode](https://github.com/nexB/scancode-toolkit/) detects licenses, copyrights 
 and other interesting information in your code. AboutCode Manager allows you to take the
 scan results from ScanCode and create components. By creating these components 
 within your codebase, you are creating a software inventory of your product. 
 The conclusions (Concluded License, Concluded Owner, etc.) you make when 
 creating your component can be exported as a JSON file or saved as SQLite file.
+
+AboutCode Manager is based on
+[Electron](https://electron.atom.io/) and will be the primary desktop/GUI tool 
+for using nexB’s [AboutCode tools](https://github.com/nexB/aboutcode). This app 
+works on Windows, OS X and Linux operating systems.
 
 ![AboutCode Manager](https://github.com/nexB/aboutcode-manager/wiki/aboutcode-manager-chart-summary.gif)
 
@@ -25,8 +26,8 @@ creating your component can be exported as a JSON file or saved as SQLite file.
 * You can [download the latest release](https://github.com/nexB/aboutcode-manager/releases) 
 for your operating system or build it yourself (see below). Once downloaded, you 
 can find `AboutCode-Manager` under `dist/AboutCode-Manager-<os>-x64-<version>`.
-* AboutCode Manager v2 is only compatible with scans from 
-[ScanCode Toolkit v2.0.0](https://github.com/nexB/scancode-toolkit/releases) and 
+* AboutCode Manager >= v2 is only compatible with scans from 
+[ScanCode v2.0.0](https://github.com/nexB/scancode-toolkit/releases) and 
 above which are run with the ScanCode `-i` option. For a list of available ScanCode 
 options see [How To: Set what will be detected in a scan](https://github.com/nexB/scancode-toolkit/wiki/How-To:-Set-what-will-be-detected-in-a-scan)
 
@@ -97,8 +98,7 @@ $ npm test
 
 ## License
 
-* Apache-2.0 with an acknowledgement required to accompany the scan output.
-* Public domain CC-0 for reference datasets.
+* Apache-2.0
 * Multiple licenses (LGPL, MIT, BSD, etc.) for third-party components.
 
 See the NOTICE file for more details.
