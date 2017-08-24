@@ -41,6 +41,7 @@ information captured by a scan.  The samples are located at
 * Import a ScanCode JSON file, and see what components are in your software! See 
 the [wiki](https://github.com/nexB/aboutcode-manager/wiki#tutorials) for more 
 documentation on how to use AboutCode Manager.
+
 ![Import a JSON file](https://github.com/nexB/aboutcode-manager/wiki/import-json-file.gif)
 
 ## Building
