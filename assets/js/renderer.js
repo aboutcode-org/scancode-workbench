@@ -90,6 +90,9 @@ $(document).ready(function () {
         // Get the node id when selected
         .on('select_node.jstree', function (evt, data) {
             let barChartValue = chartAttributesSelect.val();
+
+            // Set the search value for the first column (path) equal to the
+            // Selected jstree path and redraw the table
             cluesTable.columns(0).search(data.node.id).draw();
             nodeView.setRoot(data.node.id);
             barChart.showSummary(barChartValue, data.node.id);

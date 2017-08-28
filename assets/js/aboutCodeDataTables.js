@@ -77,9 +77,17 @@ class AboutCodeDataTable {
             for (let i = 0; i < dataTablesInput.columns.length; i++) {
                 let columnSearch = dataTablesInput.columns[i].search.value;
                 if (columnSearch) {
-                    // Return all non empty values
-                    if (columnSearch === HAS_A_VALUE) {
-                        query.where.$and[dataTablesInput.columns[i].name] = {
+                    const columnName = dataTablesInput.columns[i].name;
+
+                    if (i === 0) {
+                        // Column 0 is the "path", which should only match
+                        // wildcards at the end of the path.
+                        query.where.$and[columnName] = {
+                            $like: `${columnSearch}%`
+                        }
+                    } else if (columnSearch === HAS_A_VALUE) {
+                        // Return all non empty values
+                        query.where.$and[columnName] = {
                             $and: [
                                 { $ne: "[]" },
                                 { $ne: "" },
@@ -87,10 +95,8 @@ class AboutCodeDataTable {
                             ]
                         }
                     } else {
-                        // Column 0 is the "path", which should only match wildcards
-                        // at the end of the path.
-                        query.where.$and[dataTablesInput.columns[i].name] = {
-                            $like: i === 0 ? `${columnSearch}%` : `%${columnSearch}%`
+                        query.where.$and[columnName] = {
+                            $like: `%${columnSearch}%`
                         }
                     }
                 }
