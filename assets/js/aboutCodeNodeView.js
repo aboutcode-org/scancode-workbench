@@ -141,7 +141,7 @@ class AboutCodeNodeView extends NodeView {
         while (q.length > 0) {
             const {parent, child} = q.pop();
 
-            if (child.component && child.component.review_status === "not reporting") {
+            if (child.component && child.component.review_status === "NR") {
                 const i = parent.children.indexOf(child);
                 parent.children.splice(i, 1);
             }

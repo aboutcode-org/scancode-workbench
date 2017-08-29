@@ -65,19 +65,24 @@ body {
   r: 5;
 }
 
-.node circle.analyzed {
+.node circle.Analyzed {
   fill: #98db34;
   stroke: #98db34;
 }
 
-.node circle.attention {
+.node circle.Attention {
   fill: #db3445;
   stroke: #db3445;
 }
 
-.node circle.original {
+.node circle.Original {
   fill: #a73b8f;
   stroke: #a73b8f;
+}
+
+.node circle.NR {
+  fill: #fff;
+  stroke: #000;
 }
 
 .node.file text {
