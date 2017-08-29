@@ -132,6 +132,33 @@ class AboutCodeNodeView extends NodeView {
             .attr("transform", "translate(10,0)");
     }
 
+    pruneNodes(rootNode) {
+        const q = [{
+            parent: [],
+            child: rootNode
+        }];
+
+        while (q.length > 0) {
+            const {parent, child} = q.pop();
+
+            if (child.component && child.component.review_status === "not reporting") {
+                const i = parent.children.indexOf(child);
+                parent.children.splice(i, 1);
+            }
+
+            if (child.children) {
+                $.each(child.children, (index, grandchild) => {
+                    q.push({
+                        parent: child,
+                        child: grandchild
+                    });
+                })
+            }
+        }
+
+        return rootNode;
+    }
+
     _getReviewStatus(nodeData) {
         if (nodeData) {
             if (nodeData.component) {
