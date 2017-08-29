@@ -132,6 +132,7 @@ class AboutCodeNodeView extends NodeView {
             .attr("transform", "translate(10,0)");
     }
 
+    // Prune nodes with Review Status equal to NR (Not Reporting)
     pruneNodes(rootNode) {
         const q = [{
             parent: [],

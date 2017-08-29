@@ -112,17 +112,6 @@ class NodeView {
 
     redraw() {
         this._update(this.currentId);
-        // Update position data
-        // const root = this.nodeData[this.currentId];
-        // this.tree.nodes(this.pruneNodes(root));
-        //
-        // // Update nodes
-        // const nodes = this.container.selectAll("g.node");
-        // this._updateNodes(nodes);
-        //
-        // // Update links
-        // const links = this.container.selectAll("path.link");
-        // this._updateLinks(links);
     }
 
     // Resize the spacing between nodes
@@ -152,8 +141,8 @@ class NodeView {
         const newRoot = this.nodeData[rootId];
 
         this.currentId = rootId;
-        const nodeData = this.tree.nodes(this.pruneNodes(newRoot));
 
+        const nodeData = this.tree.nodes(this.pruneNodes(newRoot));
         const currPos = NodeView._pos(this.nodeData[toggleId || this.currentId]);
 
         // Handle nodes
