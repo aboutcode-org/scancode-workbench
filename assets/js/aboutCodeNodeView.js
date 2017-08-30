@@ -110,10 +110,7 @@ class AboutCodeNodeView extends NodeView {
     // This method is called by NodeView
     updateNode(nodes) {
         // Update circles
-        nodes.select("circle").attr("class", (d) =>  {
-            d.circleClass = this._getReviewStatus(d);
-            return d.circleClass;
-        });
+        nodes.select("circle").attr("class", (d) => d.review_status);
 
         const fileNodes = nodes.filter((d) => d.type !== "directory");
 
@@ -139,10 +136,13 @@ class AboutCodeNodeView extends NodeView {
             child: rootNode
         }];
 
+        // Perform a breadth-first traversal of the nodes.
         while (q.length > 0) {
             const {parent, child} = q.pop();
 
-            if (child.component && child.component.review_status === "NR") {
+            child.review_status = this._getReviewStatus(child);
+
+            if (child.review_status === "NR") {
                 const i = parent.children.indexOf(child);
                 parent.children.splice(i, 1);
             }
@@ -160,14 +160,17 @@ class AboutCodeNodeView extends NodeView {
         return rootNode;
     }
 
-    _getReviewStatus(nodeData) {
-        if (nodeData) {
-            if (nodeData.component) {
-                return nodeData.component.review_status;
-            } else if (nodeData.parent) {
-                return nodeData.parent.circleClass;
-            } else if (nodeData.parentId) {
-                return this._getReviewStatus(this.nodeData[nodeData.parentId]);
+    _getReviewStatus(node) {
+        if (node) {
+            if (node.component) {
+                // use this node component's review_status
+                return node.component.review_status;
+            } else if (node.parent) {
+                // use the parent node's inherited review status
+                return node.parent.review_status;
+            } else if (node.parentId) {
+                // the parent node is not drawn so get the node from nodeData
+                return this._getReviewStatus(this.nodeData[node.parentId]);
             }
         }
 

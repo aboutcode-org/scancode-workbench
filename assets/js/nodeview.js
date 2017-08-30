@@ -137,11 +137,15 @@ class NodeView {
     }
 
     _update(rootId, toggleId) {
+        // Get the position of the node with toggleId so that we can collapse
+        // or expand the child nodes to or from that position
         const prevPos = NodeView._pos(this.nodeData[toggleId || this.currentId]);
-        const newRoot = this.nodeData[rootId];
 
+        // Update the root and current id if it has changed.
+        const newRoot = this.nodeData[rootId];
         this.currentId = rootId;
 
+        // Calculate positions of each node.
         const nodeData = this.tree.nodes(this.pruneNodes(newRoot));
         const currPos = NodeView._pos(this.nodeData[toggleId || this.currentId]);
 
