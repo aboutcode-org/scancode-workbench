@@ -170,6 +170,16 @@ $(document).ready(function () {
     $(".bar-chart-file-infos").wrapAll(`<optgroup label="File Information"/>`);
     $(".bar-chart-package-infos").wrapAll(`<optgroup label="Package Information"/>`);
 
+    const statusDropDown = $("#status-drop-down");
+    statusDropDown.select2()
+        .change(() => {
+            const selectedStatuses = statusDropDown.val() || [];
+            nodeView.setCheckIfPruned((node) => {
+                return selectedStatuses.indexOf(node.review_status) >= 0;
+            });
+            nodeView.redraw();
+        });
+
     // Resize the nodes based on how many clues are selected
     const nodeDropdown = $("#node-drop-down");
     nodeDropdown.change(() => {

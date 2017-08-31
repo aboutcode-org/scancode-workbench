@@ -27,6 +27,9 @@ class AboutCodeNodeView extends NodeView {
 
         this.aboutCodeDB = aboutCodeDB;
         this.onNodeClicked = onNodeClicked;
+
+        // By default, do not prune any nodes
+        this.checkIfPruned = () => false;
     }
 
     // Map a scanned file to a node view data object.
@@ -132,7 +135,7 @@ class AboutCodeNodeView extends NodeView {
     // Prune nodes with Review Status equal to NR (Not Reporting)
     pruneNodes(rootNode) {
         const q = [{
-            parent: [],
+            parent: null,
             child: rootNode
         }];
 
@@ -142,13 +145,17 @@ class AboutCodeNodeView extends NodeView {
 
             child.review_status = this._getReviewStatus(child);
 
-            if (child.review_status === "NR") {
-                const i = parent.children.indexOf(child);
-                parent.children.splice(i, 1);
+            // Reset the displayed children to empty
+            child.children = [];
+
+            // If the parent is opened, and the child is not pruned, add it.
+            if (parent && parent.isOpened && !this.checkIfPruned(child)) {
+                parent.children.unshift(child);
             }
 
-            if (child.children) {
-                $.each(child.children, (index, grandchild) => {
+            // Add all child's children to the queue (breadth first search)
+            if (child._children) {
+                $.each(child._children, (index, grandchild) => {
                     q.push({
                         parent: child,
                         child: grandchild
@@ -158,6 +165,14 @@ class AboutCodeNodeView extends NodeView {
         }
 
         return rootNode;
+    }
+
+    /**
+     * Sets the prune function, which should return true if a node should be
+     * pruned.
+     */
+    setCheckIfPruned(checkIfPruned) {
+        this.checkIfPruned = checkIfPruned;
     }
 
     _getReviewStatus(node) {

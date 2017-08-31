@@ -103,10 +103,10 @@ class NodeView {
                         this.toggle(id);
                     }
                 });
-        } else if (this.nodeData[id].children !== this.nodeData[id]._children) {
-            this._expand(id);
         } else {
-            this._collapse(id);
+            // Toggle whether the node is opened and update the view.
+            this.nodeData[id].isOpened = !this.nodeData[id].isOpened;
+            this._update(this.currentId, id);
         }
     }
 
@@ -124,18 +124,6 @@ class NodeView {
         return `translate(${this.x(d)}, ${this.y(d)})`;
     }
 
-    // Toggle the nodes children to _children
-    _expand(id) {
-        this.nodeData[id].children = this.nodeData[id]._children;
-        this._update(this.currentId, id);
-    }
-
-    // Toggle the nodes children to an empty array
-    _collapse(id) {
-        this.nodeData[id].children = [];
-        this._update(this.currentId, id);
-    }
-
     _update(rootId, toggleId) {
         // Get the position of the node with toggleId so that we can collapse
         // or expand the child nodes to or from that position
@@ -146,7 +134,8 @@ class NodeView {
         this.currentId = rootId;
 
         // Calculate positions of each node.
-        const nodeData = this.tree.nodes(this.pruneNodes(newRoot));
+        const prunedRoot = this.pruneNodes(newRoot);
+        const nodeData = this.tree.nodes(prunedRoot);
         const currPos = NodeView._pos(this.nodeData[toggleId || this.currentId]);
 
         // Handle nodes
