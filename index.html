@@ -124,19 +124,26 @@
 
             <!-- Node View Tab -->
             <div class="container tab-container" id="node-container">
-                <select id="node-drop-down" style="border-color: #eee; border-radius: 5px; padding: 5px;" multiple>
-                    <option value="filename" selected>File Name</option>
-                    <option value="license">License</option>
-                    <option value="copyright">Copyright</option>
-                </select>
-                <fieldset>
-                    <select id="status-drop-down" data-hide-on-select="true" style="border-color: #eee; border-radius: 5px; padding: 5px;" multiple>
-                        <option value="Analyzed">Analyzed</option>
-                        <option value="Attention">Needs Attention</option>
-                        <option value="Original">Original Code</option>
-                        <option value="NR">Not Reporting</option>
+                <div class="node-options">
+                    <select id="node-drop-down" style="border-color: #eee; border-radius: 5px; padding: 5px;" multiple>
+                        <option value="filename" selected>File Name</option>
+                        <option value="license">License</option>
+                        <option value="copyright">Copyright</option>
                     </select>
-                </fieldset>
+                    <!-- Node status toggle -->
+                    <div class="dropdown component-status-dropdown">
+                        <button class="btn btn-default dropdown-toggle" type="button" id="nodeStatusDropDown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                            Hide Nodes
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu status-dropdown-menu dropdown-menu-left" aria-labelledby="nodeStatusDropDown">
+                            <li><a href="#" class="small" data-value="Analyzed" tabIndex="-1"><input type="checkbox"/>&nbsp; Analyzed</a></li>
+                            <li><a href="#" class="small" data-value="Attention" tabIndex="-1"><input type="checkbox"/>&nbsp; Attention</a></li>
+                            <li><a href="#" class="small" data-value="Original" tabIndex="-1"><input type="checkbox"/>&nbsp; Original</a></li>
+                            <li><a href="#" class="small" data-value="NR" tabIndex="-1"><input type="checkbox"/>&nbsp; NR</a></li>
+                        </ul>
+                    </div>
+                </div>
                 <div id="nodeview-container">
                     <div id="zoom-controls">
                         <button class="btn btn-zoom" id="reset-zoom" type="button">

@@ -170,15 +170,30 @@ $(document).ready(function () {
     $(".bar-chart-file-infos").wrapAll(`<optgroup label="File Information"/>`);
     $(".bar-chart-package-infos").wrapAll(`<optgroup label="Package Information"/>`);
 
-    const statusDropDown = $("#status-drop-down");
-    statusDropDown.select2()
-        .change(() => {
-            const selectedStatuses = statusDropDown.val() || [];
-            nodeView.setCheckIfPruned((node) => {
-                return selectedStatuses.indexOf(node.review_status) >= 0;
-            });
-            nodeView.redraw();
+    let selectedStatuses = [];
+
+    $(".status-dropdown-menu a").on("click", (event) => {
+        let $target = $(event.currentTarget),
+            value = $target.attr("data-value"),
+            $input = $target.find("input"),
+            index;
+
+        if ((index = selectedStatuses.indexOf(value)) > -1) {
+            selectedStatuses.splice( index, 1 );
+            setTimeout(() =>  $input.prop("checked", false), 0);
+        } else {
+            selectedStatuses.push(value);
+            setTimeout(() => $input.prop("checked", true), 0);
+        }
+        $(event.target).blur();
+
+        nodeView.setCheckIfPruned((node) => {
+            return selectedStatuses.indexOf(node.review_status) >= 0;
         });
+        nodeView.redraw();
+        return false;
+    });
+
 
     // Resize the nodes based on how many clues are selected
     const nodeDropdown = $("#node-drop-down");

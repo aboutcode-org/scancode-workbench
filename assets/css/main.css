@@ -144,6 +144,15 @@ div.node-content {
   width: 200px;
 }
 
+.node-options {
+  display: flex;
+  padding-bottom: 5px;
+}
+
+.component-status-dropdown { padding-left: 5px; }
+
+.status-dropdown-menu { min-width: 110px; }
+
 #zoom-controls {
   top: 15px;
   left: 10px;
@@ -156,6 +165,7 @@ div.node-content {
   position: relative;
   height: 100%;
   width: 100%;
+  margin-bottom: 10px;
 }
 
 #recenter { color: #fff; }
