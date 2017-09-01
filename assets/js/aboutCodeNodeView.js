@@ -132,14 +132,14 @@ class AboutCodeNodeView extends NodeView {
             .attr("transform", "translate(10,0)");
     }
 
-    // Prune nodes with Review Status equal to NR (Not Reporting)
+    // Prune nodes when status is checked in drop down menu
     pruneNodes(rootNode) {
         const q = [{
             parent: null,
             child: rootNode
         }];
 
-        // Perform a breadth-first traversal of the nodes.
+        // Perform a breadth first traversal of the nodes.
         while (q.length > 0) {
             const {parent, child} = q.pop();
 
