@@ -187,7 +187,7 @@ $(document).ready(function () {
         }
         $(event.target).blur();
 
-        nodeView.setCheckIfPruned((node) => {
+        nodeView.setIsNodePruned((node) => {
             return selectedStatuses.indexOf(node.review_status) >= 0;
         });
         nodeView.redraw();

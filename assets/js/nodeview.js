@@ -133,9 +133,9 @@ class NodeView {
         const newRoot = this.nodeData[rootId];
         this.currentId = rootId;
 
-        // Calculate positions of each node.
         const prunedRoot = this.pruneNodes(newRoot);
-        const nodeData = this.tree.nodes(prunedRoot);
+        // Calculate positions of each node or return an empty array if there are no nodes
+        const nodeData = prunedRoot ? this.tree.nodes(prunedRoot) : [];
         const currPos = NodeView._pos(this.nodeData[toggleId || this.currentId]);
 
         // Handle nodes

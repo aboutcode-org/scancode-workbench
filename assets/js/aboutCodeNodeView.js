@@ -29,7 +29,7 @@ class AboutCodeNodeView extends NodeView {
         this.onNodeClicked = onNodeClicked;
 
         // By default, do not prune any nodes
-        this.checkIfPruned = () => false;
+        this.isNodePruned = () => false;
     }
 
     // Map a scanned file to a node view data object.
@@ -149,7 +149,10 @@ class AboutCodeNodeView extends NodeView {
             child.children = [];
 
             // If the parent is opened, and the child is not pruned, add it.
-            if (parent && parent.isOpened && !this.checkIfPruned(child)) {
+            if (child === rootNode && this.isNodePruned(child)) {
+                // If the root node is pruned just return null because no nodes should be shown
+                return null;
+            } else if (parent && parent.isOpened && !this.isNodePruned(child)) {
                 parent.children.unshift(child);
             }
 
@@ -171,8 +174,8 @@ class AboutCodeNodeView extends NodeView {
      * Sets the prune function, which should return true if a node should be
      * pruned.
      */
-    setCheckIfPruned(checkIfPruned) {
-        this.checkIfPruned = checkIfPruned;
+    setIsNodePruned(isNodePruned) {
+        this.isNodePruned = isNodePruned;
     }
 
     _getReviewStatus(node) {
