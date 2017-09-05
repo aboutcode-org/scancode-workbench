@@ -87,6 +87,11 @@ $(document).ready(function () {
                 data.node,
                 'fa fa-folder fa_custom');
         })
+        // Select the root node when the tree is refreshed
+        .on('refresh.jstree', function (evt, data) {
+            let rootNode = jstree.jstree('get_node', '#').children;
+            jstree.jstree('select_node', rootNode);
+        })
         // Get the node id when selected
         .on('select_node.jstree', function (evt, data) {
             let barChartValue = chartAttributesSelect.val();
