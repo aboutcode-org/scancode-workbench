@@ -733,7 +733,7 @@ AboutCodeDataTable.ORIGIN_COLUMN_NAMES =
 // Get an array of the indices of all columns with a particular class.
 function getColumnsByClass(columns, className) {
     let indices = [];
-    $.each( columns, function(index, data) {
+    $.each(columns, function(index, data) {
         if(data.className === className) {
             indices.push(index);
         }
