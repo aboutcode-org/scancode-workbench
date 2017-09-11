@@ -161,12 +161,8 @@ class AboutCodeDataTable {
             "columns": AboutCodeDataTable.TABLE_COLUMNS,
             "columnDefs": [
                 {
-                    "targets": [ 2, 3, 4, 5, 6, 7, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 25, 26, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47 ],
+                    "targets": getColumnsByClass(AboutCodeDataTable.TABLE_COLUMNS, "hideOnload"),
                     "visible": false
-                },
-                {
-                    "targets": [ 0, 1, 8, 23, 24, 27, 28 ],
-                    "visible": true
                 }
             ],
             "fixedColumns": {
@@ -383,7 +379,8 @@ AboutCodeDataTable.COPYRIGHT_COLUMNS =
             },
             "title": "Copyright Holders",
             "name": "copyright_holders",
-            "bar_chart_class": "bar-chart-copyrights"
+            "bar_chart_class": "bar-chart-copyrights",
+            "className": "hideOnload"
         },
         {
             "data": function (row, type, val, meta) {
@@ -393,17 +390,20 @@ AboutCodeDataTable.COPYRIGHT_COLUMNS =
             },
             "title": "Copyright Authors",
             "name": "copyright_authors",
-            "bar_chart_class": "bar-chart-copyrights"
+            "bar_chart_class": "bar-chart-copyrights",
+            "className": "hideOnload"
         },
         {
             "data": "copyright_start_line[<hr/>]",
             "title": "Copyright Start Line",
-            "name": "copyright_start_line"
+            "name": "copyright_start_line",
+            "className": "hideOnload"
         },
         {
             "data": "copyright_end_line[<hr/>]",
             "title": "Copyright End Line",
-            "name": "copyright_end_line"
+            "name": "copyright_end_line",
+            "className": "hideOnload"
         }
     ];
 
@@ -413,13 +413,15 @@ AboutCodeDataTable.LICENSE_COLUMNS =
             "data": "license_key[<hr/>]",
             "title": "License Key",
             "name": "license_key",
-            "bar_chart_class": "bar-chart-licenses"
+            "bar_chart_class": "bar-chart-licenses",
+            "className": "hideOnload"
         },
         {
             "data": "license_score[<hr/>]",
             "title": "License Score",
             "name": "license_score",
-            "bar_chart_class": "bar-chart-licenses"
+            "bar_chart_class": "bar-chart-licenses",
+            "className": "hideOnload"
         },
         {
             "data": "license_short_name[<hr/>]",
@@ -431,13 +433,15 @@ AboutCodeDataTable.LICENSE_COLUMNS =
             "data": "license_category",
             "title": "License Category",
             "name": "license_category",
-            "bar_chart_class": "bar-chart-licenses"
+            "bar_chart_class": "bar-chart-licenses",
+            "className": "hideOnload"
         },
         {
             "data": "license_owner[<hr/>]",
             "title": "License Owner",
             "name": "license_owner",
-            "bar_chart_class": "bar-chart-licenses"
+            "bar_chart_class": "bar-chart-licenses",
+            "className": "hideOnload"
         },
         {
             "data": "license_homepage_url",
@@ -447,7 +451,8 @@ AboutCodeDataTable.LICENSE_COLUMNS =
                 return $.map(data, function (href, i) {
                     return '<a href="'+href+'" target="_blank">'+href+'</a>';
                 }).join("<br>");
-            }
+            },
+            "className": "hideOnload"
         },
         {
             "data": "license_text_url",
@@ -457,7 +462,8 @@ AboutCodeDataTable.LICENSE_COLUMNS =
                 return $.map(data, function (href, i) {
                     return '<a href="'+href+'" target="_blank">'+href+'</a>';
                 }).join("<br>");
-            }
+            },
+            "className": "hideOnload"
         },
         {
             "data": "license_djc_url",
@@ -467,23 +473,27 @@ AboutCodeDataTable.LICENSE_COLUMNS =
                 return $.map(data, function (href, i) {
                     return '<a href="'+href+'" target="_blank">'+href+'</a>';
                 }).join("<br>");
-            }
+            },
+            "className": "hideOnload"
         },
         {
             "data": "license_spdx_key[<hr/>]",
             "title": "SPDX License Key",
             "name": "license_spdx_key",
-            "bar_chart_class": "bar-chart-licenses"
+            "bar_chart_class": "bar-chart-licenses",
+            "className": "hideOnload"
         },
         {
             "data": "license_start_line[<hr/>]",
             "title": "License Start Line",
-            "name": "license_start_line"
+            "name": "license_start_line",
+            "className": "hideOnload"
         },
         {
             "data": "license_end_line[<hr/>]",
             "title": "License End Line",
-            "name": "license_end_line"
+            "name": "license_end_line",
+            "className": "hideOnload"
         }
     ];
 
@@ -493,17 +503,20 @@ AboutCodeDataTable.EMAIL_COLUMNS =
             "data": "email[<hr/>]",
             "title": "Email",
             "name": "email",
-            "bar_chart_class": "bar-chart-emails"
+            "bar_chart_class": "bar-chart-emails",
+            "className": "hideOnload"
         },
         {
             "data": "email_start_line[<hr/>]",
             "title": "Email Start Line",
-            "name": "email_start_line"
+            "name": "email_start_line",
+            "className": "hideOnload"
         },
         {
             "data": "email_start_line[<hr/>]",
             "title": "End Start Line",
-            "name": "email_start_line"
+            "name": "email_start_line",
+            "className": "hideOnload"
         }
     ];
 
@@ -517,17 +530,20 @@ AboutCodeDataTable.URL_COLUMNS =
                 return $.map(data, function (href, i) {
                     return '<a href="'+href+'" target="_blank">'+href+'</a>';
                 }).join("<br>");
-            }
+            },
+            "className": "hideOnload"
         },
         {
             "data": "url_start_line[<br>]",
             "title": "URL Start Line",
-            "name": "url_start_line"
+            "name": "url_start_line",
+            "className": "hideOnload"
         },
         {
             "data": "url_end_line[<br>]",
             "title": "URL End Line",
-            "name": "url_end_line"
+            "name": "url_end_line",
+            "className": "hideOnload"
         }
     ];
 
@@ -537,7 +553,8 @@ AboutCodeDataTable.FILE_COLUMNS =
             "data": "type",
             "title": "Type",
             "name": "type",
-            "bar_chart_class": "bar-chart-file-infos"
+            "bar_chart_class": "bar-chart-file-infos",
+            "className": "hideOnload"
         },
         {
             "data": "name",
@@ -548,12 +565,14 @@ AboutCodeDataTable.FILE_COLUMNS =
             "data": "extension",
             "title": "File Extension",
             "name": "extension",
-            "bar_chart_class": "bar-chart-file-infos"
+            "bar_chart_class": "bar-chart-file-infos",
+            "className": "hideOnload"
         },
         {
             "data": "date",
             "title": "File Date",
-            "name": "date"
+            "name": "date",
+            "className": "hideOnload"
         },
         {
             "data": "size",
@@ -568,17 +587,20 @@ AboutCodeDataTable.FILE_COLUMNS =
         {
             "data": "md5",
             "title": "MD5",
-            "name": "md5"
+            "name": "md5",
+            "className": "hideOnload"
         },
         {
             "data": "file_count",
             "title": "File Count",
-            "name": "file_count"
+            "name": "file_count",
+            "className": "hideOnload"
         },
         {
             "data": "mime_type",
             "title": "MIME Type",
-            "name": "mime_type"
+            "name": "mime_type",
+            "className": "hideOnload"
         },
         {
             "data": "file_type",
@@ -590,43 +612,50 @@ AboutCodeDataTable.FILE_COLUMNS =
             "data": "programming_language",
             "title": "Language",
             "name": "programming_language",
-            "bar_chart_class": "bar-chart-file-infos"
+            "bar_chart_class": "bar-chart-file-infos",
+            "className": "hideOnload"
         },
         {
             "data": "is_binary",
             "title": "Binary",
             "name": "is_binary",
-            "bar_chart_class": "bar-chart-file-infos"
+            "bar_chart_class": "bar-chart-file-infos",
+            "className": "hideOnload"
         },
         {
             "data": "is_text",
             "title": "Text File",
             "name": "is_text",
-            "bar_chart_class": "bar-chart-file-infos"
+            "bar_chart_class": "bar-chart-file-infos",
+            "className": "hideOnload"
         },
         {
             "data": "is_archive",
             "title": "Archive File",
             "name": "is_archive",
-            "bar_chart_class": "bar-chart-file-infos"
+            "bar_chart_class": "bar-chart-file-infos",
+            "className": "hideOnload"
         },
         {
             "data": "is_media",
             "title": "Media File",
             "name": "is_media",
-            "bar_chart_class": "bar-chart-file-infos"
+            "bar_chart_class": "bar-chart-file-infos",
+            "className": "hideOnload"
         },
         {
             "data": "is_source",
             "title": "Source File",
             "name": "is_source",
-            "bar_chart_class": "bar-chart-file-infos"
+            "bar_chart_class": "bar-chart-file-infos",
+            "className": "hideOnload"
         },
         {
             "data": "is_script",
             "title": "Script File",
             "name": "is_script",
-            "bar_chart_class": "bar-chart-file-infos"
+            "bar_chart_class": "bar-chart-file-infos",
+            "className": "hideOnload"
         }
     ];
 
@@ -636,40 +665,47 @@ AboutCodeDataTable.PACKAGE_COLUMNS =
             "data": "packages_type",
             "title": "Package Type",
             "name": "packages_type",
-            "bar_chart_class": "bar-chart-package-infos"
+            "bar_chart_class": "bar-chart-package-infos",
+            "className": "hideOnload"
         },
         {
             "data": "packages_name",
             "title": "Package Name",
-            "name": "packages_name"
+            "name": "packages_name",
+            "className": "hideOnload"
         },
         {
             "data": "packages_version",
             "title": "Package Version",
-            "name": "packages_version"
+            "name": "packages_version",
+            "className": "hideOnload"
         },
         {
             "data": "packages_asserted_licenses_license[<hr/>]",
             "title": "Package Asserted License",
             "name": "packages_asserted_licenses_license",
-            "bar_chart_class": "bar-chart-package-infos"
+            "bar_chart_class": "bar-chart-package-infos",
+            "className": "hideOnload"
         },
         {
             "data": "packages_primary_language",
             "title": "Package Primary Language",
             "name": "packages_primary_language",
-            "bar_chart_class": "bar-chart-package-infos"
+            "bar_chart_class": "bar-chart-package-infos",
+            "className": "hideOnload"
         },
         {
             "data": "packages_authors_name[<hr/>]",
             "title": "Package Authors Name",
             "name": "packages_authors_name",
-            "bar_chart_class": "bar-chart-package-infos"
+            "bar_chart_class": "bar-chart-package-infos",
+            "className": "hideOnload"
         },
         {
             "data": "packages_homepage_url",
             "title": "Package Homepage URL",
-            "name": "packages_homepage_url"
+            "name": "packages_homepage_url",
+            "className": "hideOnload"
         },
         {
             "data": function (row, type, val, meta) {
@@ -680,7 +716,8 @@ AboutCodeDataTable.PACKAGE_COLUMNS =
                 }).join("<hr/>");
             },
             "title": "Package Download URLs",
-            "name": "packages_download_urls"
+            "name": "packages_download_urls",
+            "className": "hideOnload"
         },
     ];
 
@@ -692,5 +729,16 @@ AboutCodeDataTable.ORIGIN_COLUMN_NAMES =
         "email",
         "url"
     ];
+
+// Get an array of the indices of all columns with a particular class.
+function getColumnsByClass(columns, className) {
+    let indices = [];
+    $.each( columns, function(index, data) {
+        if(data.className === className) {
+            indices.push(index);
+        }
+    } );
+    return indices;
+}
 
 module.exports = AboutCodeDataTable;
