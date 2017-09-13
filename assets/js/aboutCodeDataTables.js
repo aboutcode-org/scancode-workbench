@@ -349,7 +349,8 @@ AboutCodeDataTable.LOCATION_COLUMN =
         "data": "path",
         "title": "Path",
         "name": "path",
-        "skipFilter": true
+        "skipFilter": true,
+        "visible": true
         }
     ];
 
@@ -363,7 +364,8 @@ AboutCodeDataTable.COPYRIGHT_COLUMNS =
             },
             "title": "Copyright Statements",
             "name": "copyright_statements",
-            "bar_chart_class": "bar-chart-copyrights"
+            "bar_chart_class": "bar-chart-copyrights",
+            "visible": true
         },
         {
             "data": function (row, type, val, meta) {
@@ -373,7 +375,8 @@ AboutCodeDataTable.COPYRIGHT_COLUMNS =
             },
             "title": "Copyright Holders",
             "name": "copyright_holders",
-            "bar_chart_class": "bar-chart-copyrights"
+            "bar_chart_class": "bar-chart-copyrights",
+            "visible": false
         },
         {
             "data": function (row, type, val, meta) {
@@ -383,17 +386,20 @@ AboutCodeDataTable.COPYRIGHT_COLUMNS =
             },
             "title": "Copyright Authors",
             "name": "copyright_authors",
-            "bar_chart_class": "bar-chart-copyrights"
+            "bar_chart_class": "bar-chart-copyrights",
+            "visible": false
         },
         {
             "data": "copyright_start_line[<hr/>]",
             "title": "Copyright Start Line",
-            "name": "copyright_start_line"
+            "name": "copyright_start_line",
+            "visible": false
         },
         {
             "data": "copyright_end_line[<hr/>]",
             "title": "Copyright End Line",
-            "name": "copyright_end_line"
+            "name": "copyright_end_line",
+            "visible": false
         }
     ];
 
@@ -403,31 +409,36 @@ AboutCodeDataTable.LICENSE_COLUMNS =
             "data": "license_key[<hr/>]",
             "title": "License Key",
             "name": "license_key",
-            "bar_chart_class": "bar-chart-licenses"
+            "bar_chart_class": "bar-chart-licenses",
+            "visible": false
         },
         {
             "data": "license_score[<hr/>]",
             "title": "License Score",
             "name": "license_score",
-            "bar_chart_class": "bar-chart-licenses"
+            "bar_chart_class": "bar-chart-licenses",
+            "visible": false
         },
         {
             "data": "license_short_name[<hr/>]",
             "title": "License Short Name",
             "name": "license_short_name",
-            "bar_chart_class": "bar-chart-licenses"
+            "bar_chart_class": "bar-chart-licenses",
+            "visible": true
         },
         {
             "data": "license_category",
             "title": "License Category",
             "name": "license_category",
-            "bar_chart_class": "bar-chart-licenses"
+            "bar_chart_class": "bar-chart-licenses",
+            "visible": false
         },
         {
             "data": "license_owner[<hr/>]",
             "title": "License Owner",
             "name": "license_owner",
-            "bar_chart_class": "bar-chart-licenses"
+            "bar_chart_class": "bar-chart-licenses",
+            "visible": false
         },
         {
             "data": "license_homepage_url",
@@ -437,7 +448,8 @@ AboutCodeDataTable.LICENSE_COLUMNS =
                 return $.map(data, function (href, i) {
                     return '<a href="'+href+'" target="_blank">'+href+'</a>';
                 }).join("<br>");
-            }
+            },
+            "visible": false
         },
         {
             "data": "license_text_url",
@@ -447,7 +459,8 @@ AboutCodeDataTable.LICENSE_COLUMNS =
                 return $.map(data, function (href, i) {
                     return '<a href="'+href+'" target="_blank">'+href+'</a>';
                 }).join("<br>");
-            }
+            },
+            "visible": false
         },
         {
             "data": "license_djc_url",
@@ -457,23 +470,27 @@ AboutCodeDataTable.LICENSE_COLUMNS =
                 return $.map(data, function (href, i) {
                     return '<a href="'+href+'" target="_blank">'+href+'</a>';
                 }).join("<br>");
-            }
+            },
+            "visible": false
         },
         {
             "data": "license_spdx_key[<hr/>]",
             "title": "SPDX License Key",
             "name": "license_spdx_key",
-            "bar_chart_class": "bar-chart-licenses"
+            "bar_chart_class": "bar-chart-licenses",
+            "visible": false
         },
         {
             "data": "license_start_line[<hr/>]",
             "title": "License Start Line",
-            "name": "license_start_line"
+            "name": "license_start_line",
+            "visible": false
         },
         {
             "data": "license_end_line[<hr/>]",
             "title": "License End Line",
-            "name": "license_end_line"
+            "name": "license_end_line",
+            "visible": false
         }
     ];
 
@@ -483,17 +500,20 @@ AboutCodeDataTable.EMAIL_COLUMNS =
             "data": "email[<hr/>]",
             "title": "Email",
             "name": "email",
-            "bar_chart_class": "bar-chart-emails"
+            "bar_chart_class": "bar-chart-emails",
+            "visible": false
         },
         {
             "data": "email_start_line[<hr/>]",
             "title": "Email Start Line",
-            "name": "email_start_line"
+            "name": "email_start_line",
+            "visible": false
         },
         {
             "data": "email_start_line[<hr/>]",
             "title": "End Start Line",
-            "name": "email_start_line"
+            "name": "email_start_line",
+            "visible": false
         }
     ];
 
@@ -507,17 +527,20 @@ AboutCodeDataTable.URL_COLUMNS =
                 return $.map(data, function (href, i) {
                     return '<a href="'+href+'" target="_blank">'+href+'</a>';
                 }).join("<br>");
-            }
+            },
+            "visible": false
         },
         {
             "data": "url_start_line[<br>]",
             "title": "URL Start Line",
-            "name": "url_start_line"
+            "name": "url_start_line",
+            "visible": false
         },
         {
             "data": "url_end_line[<br>]",
             "title": "URL End Line",
-            "name": "url_end_line"
+            "name": "url_end_line",
+            "visible": false
         }
     ];
 
@@ -527,96 +550,113 @@ AboutCodeDataTable.FILE_COLUMNS =
             "data": "type",
             "title": "Type",
             "name": "type",
-            "bar_chart_class": "bar-chart-file-infos"
+            "bar_chart_class": "bar-chart-file-infos",
+            "visible": false
         },
         {
             "data": "name",
             "title": "File Name",
-            "name": "name"
+            "name": "name",
+            "visible": true
         },
         {
             "data": "extension",
             "title": "File Extension",
             "name": "extension",
-            "bar_chart_class": "bar-chart-file-infos"
+            "bar_chart_class": "bar-chart-file-infos",
+            "visible": false
         },
         {
             "data": "date",
             "title": "File Date",
-            "name": "date"
+            "name": "date",
+            "visible": false
         },
         {
             "data": "size",
             "title": "File Size",
-            "name": "size"
+            "name": "size",
+            "visible": true
         },
         {
             "data": "sha1",
             "title": "SHA1",
-            "name": "sha1"
+            "name": "sha1",
+            "visible": true
         },
         {
             "data": "md5",
             "title": "MD5",
-            "name": "md5"
+            "name": "md5",
+            "visible": false
         },
         {
             "data": "file_count",
             "title": "File Count",
-            "name": "file_count"
+            "name": "file_count",
+            "visible": false
         },
         {
             "data": "mime_type",
             "title": "MIME Type",
-            "name": "mime_type"
+            "name": "mime_type",
+            "visible": false
         },
         {
             "data": "file_type",
             "title": "File Type",
             "name": "file_type",
-            "bar_chart_class": "bar-chart-file-infos"
+            "bar_chart_class": "bar-chart-file-infos",
+            "visible": true
         },
         {
             "data": "programming_language",
             "title": "Language",
             "name": "programming_language",
-            "bar_chart_class": "bar-chart-file-infos"
+            "bar_chart_class": "bar-chart-file-infos",
+            "visible": false
         },
         {
             "data": "is_binary",
             "title": "Binary",
             "name": "is_binary",
-            "bar_chart_class": "bar-chart-file-infos"
+            "bar_chart_class": "bar-chart-file-infos",
+            "visible": false
         },
         {
             "data": "is_text",
             "title": "Text File",
             "name": "is_text",
-            "bar_chart_class": "bar-chart-file-infos"
+            "bar_chart_class": "bar-chart-file-infos",
+            "visible": false
         },
         {
             "data": "is_archive",
             "title": "Archive File",
             "name": "is_archive",
-            "bar_chart_class": "bar-chart-file-infos"
+            "bar_chart_class": "bar-chart-file-infos",
+            "visible": false
         },
         {
             "data": "is_media",
             "title": "Media File",
             "name": "is_media",
-            "bar_chart_class": "bar-chart-file-infos"
+            "bar_chart_class": "bar-chart-file-infos",
+            "visible": false
         },
         {
             "data": "is_source",
             "title": "Source File",
             "name": "is_source",
-            "bar_chart_class": "bar-chart-file-infos"
+            "bar_chart_class": "bar-chart-file-infos",
+            "visible": false
         },
         {
             "data": "is_script",
             "title": "Script File",
             "name": "is_script",
-            "bar_chart_class": "bar-chart-file-infos"
+            "bar_chart_class": "bar-chart-file-infos",
+            "visible": false
         }
     ];
 
@@ -626,40 +666,47 @@ AboutCodeDataTable.PACKAGE_COLUMNS =
             "data": "packages_type",
             "title": "Package Type",
             "name": "packages_type",
-            "bar_chart_class": "bar-chart-package-infos"
+            "bar_chart_class": "bar-chart-package-infos",
+            "visible": false
         },
         {
             "data": "packages_name",
             "title": "Package Name",
-            "name": "packages_name"
+            "name": "packages_name",
+            "visible": false
         },
         {
             "data": "packages_version",
             "title": "Package Version",
-            "name": "packages_version"
+            "name": "packages_version",
+            "visible": false
         },
         {
             "data": "packages_asserted_licenses_license[<hr/>]",
             "title": "Package Asserted License",
             "name": "packages_asserted_licenses_license",
-            "bar_chart_class": "bar-chart-package-infos"
+            "bar_chart_class": "bar-chart-package-infos",
+            "visible": false
         },
         {
             "data": "packages_primary_language",
             "title": "Package Primary Language",
             "name": "packages_primary_language",
-            "bar_chart_class": "bar-chart-package-infos"
+            "bar_chart_class": "bar-chart-package-infos",
+            "visible": false
         },
         {
             "data": "packages_authors_name[<hr/>]",
             "title": "Package Authors Name",
             "name": "packages_authors_name",
-            "bar_chart_class": "bar-chart-package-infos"
+            "bar_chart_class": "bar-chart-package-infos",
+            "visible": false
         },
         {
             "data": "packages_homepage_url",
             "title": "Package Homepage URL",
-            "name": "packages_homepage_url"
+            "name": "packages_homepage_url",
+            "visible": false
         },
         {
             "data": function (row, type, val, meta) {
@@ -670,7 +717,8 @@ AboutCodeDataTable.PACKAGE_COLUMNS =
                 }).join("<hr/>");
             },
             "title": "Package Download URLs",
-            "name": "packages_download_urls"
+            "name": "packages_download_urls",
+            "visible": false
         },
     ];
 

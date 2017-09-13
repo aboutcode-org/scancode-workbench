@@ -455,6 +455,9 @@ $(document).ready(function () {
             if ($('#bar-chart-container').is(':visible')) {
                 barChart.draw();
             }
+            if ($('#clues-container').is(':visible')) {
+                cluesTable.draw();
+            }
         }
     });
 
