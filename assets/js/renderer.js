@@ -109,6 +109,20 @@ $(document).ready(function () {
     // The Electron module used to communicate asynchronously from a renderer process to the main process.
     const ipcRenderer = require('electron').ipcRenderer;
 
+    // Setup css styling for sidebar button state when clicked.
+    const navButtons = $("#sidebar-wrapper").find(".btn-change");
+    navButtons.each((i, clickedButton) => {
+        $(clickedButton).click(function() {
+            navButtons.each((i, button) => {
+                if (button === clickedButton) {
+                    $(button).addClass("selected");
+                } else {
+                    $(button).removeClass("selected");
+                }
+            });
+        });
+    });
+
     // Define DOM element constants for the modal dialog.
     const componentModal = {
         container: $("#nodeModal"),
@@ -455,8 +469,8 @@ $(document).ready(function () {
         splitter.setSizes(splitSizes);
     }
 
-    // Show Table View (aka "clue DataTable").  Hide node view and component summary table.
-    function showTableView() {
+    // Show clue DataTable. Hide node view and component summary table
+    showClueButton.click(() => {
         restoreSplitterSizes();
         $(".gutter-horizontal").removeClass("div-hide").addClass("div-show");
         cluesContainer.show();
@@ -464,16 +478,13 @@ $(document).ready(function () {
         componentContainer.hide();
         barChartContainer.hide();
         cluesTable.draw();
-    }
-
-    // Show clue DataTable. Hide node view and component summary table
-    showClueButton.click(showTableView);
+    });
 
     // Show clue DataTable. Hide node view and component summary table -- custom menu
-    ipcRenderer.on('table-view', showTableView);
+    ipcRenderer.on('table-view', () => showClueButton.trigger("click"));
 
     // Show node view. Hide clue and component table
-    function showNodeView() {
+    showNodeViewButton.click(() => {
         restoreSplitterSizes();
         $(".gutter-horizontal").removeClass("div-hide").addClass("div-show");
         nodeContainer.show();
@@ -481,16 +492,13 @@ $(document).ready(function () {
         componentContainer.hide();
         barChartContainer.hide();
         nodeView.redraw();
-    }
-
-    // Show node view. Hide clue and component table
-    showNodeViewButton.click(showNodeView);
+    });
 
     // Show node view. Hide clue and component table -- custom menu
-    ipcRenderer.on('node-view', showNodeView);
+    ipcRenderer.on('node-view', () => showNodeViewButton.trigger("click"));
 
     // Show component summary table. Hide DataTable and node view
-    function showComponentSummaryView() {
+    showComponentButton.click(() => {
         $(".gutter-horizontal").removeClass("div-show").addClass("div-hide");
         splitter.collapse(0);
         componentContainer.show();
@@ -498,16 +506,12 @@ $(document).ready(function () {
         cluesContainer.hide();
         barChartContainer.hide();
         componentsTable.reload();
-    }
-
-    // Show component summary table. Hide DataTable and node view
-    showComponentButton.click(showComponentSummaryView);
+    });
 
     // Show component summary table. Hide DataTable and node view -- custom menu
-    ipcRenderer.on('component-summary-view', showComponentSummaryView);
+    ipcRenderer.on('component-summary-view', () => showComponentButton.trigger("click"));
 
-    // Show bar chart table. Hide other views
-    function showBarChartView() {
+    showBarChartButton.click(() => {
         restoreSplitterSizes();
         $(".gutter-horizontal").removeClass("div-hide").addClass("div-show");
         barChartContainer.show();
@@ -519,12 +523,10 @@ $(document).ready(function () {
             .then((value) => {
                 barChartTotalFiles.text(value);
             });
-    }
-
-    showBarChartButton.click(showBarChartView);
+    });
 
     // Show chart summary table. Hide other views -- custom menu
-    ipcRenderer.on('chart-summary-view', showBarChartView);
+    ipcRenderer.on('chart-summary-view', () => showBarChartButton.trigger("click"));
 
     // Creates the database and all View objects from a SQLite file
     function loadDatabaseFromFile(fileName) {
@@ -808,5 +810,5 @@ $(document).ready(function () {
     });
 
     restoreSplitterSizes();
-    showTableView();
+    showClueButton.trigger("click");
 });

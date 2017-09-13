@@ -239,7 +239,7 @@ class AboutCodeDB {
                 })
             })
             .then((count) => {
-                return count.files_count;
+                return count ? count.files_count : 0;
             });
     }
 

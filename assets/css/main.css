@@ -239,13 +239,18 @@ div.node-content {
 .sidebar-nav li .btn-sidebar:hover {
     text-decoration: none;
     color: #fff;
-    background: rgba(255,255,255,0.2);
+    background: rgba(255, 255, 255, 0.25);
 }
 
 .sidebar-nav li .btn-sidebar:active,
 .sidebar-nav li .btn-sidebar:focus {
     text-decoration: none;
     outline: none;
+}
+
+.sidebar-nav li .btn-change.selected {
+    color: #fff;
+    background: rgba(255, 255, 255, 0.12);
 }
 
 /*---------------------------------------

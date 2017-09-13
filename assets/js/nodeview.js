@@ -111,7 +111,9 @@ class NodeView {
     }
 
     redraw() {
-        this._update(this.currentId);
+        if (this.currentId) {
+            this._update(this.currentId);
+        }
     }
 
     // Resize the spacing between nodes
