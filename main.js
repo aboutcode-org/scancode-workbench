@@ -203,7 +203,7 @@ function getTemplate() {
         {
           label: 'Learn More',
           click: function() {
-            shell.openExternal('https://github.com/nexB/aboutcode-manager');
+            shell.openExternal('https://github.com/nexB/aboutcode-manager/wiki');
           }
         },
         {
