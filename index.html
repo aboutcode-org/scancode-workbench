@@ -277,93 +277,27 @@
                 </div>
                 <div class="modal-body">
                     <h2>Overview</h2>
-                    <p>The AboutCode Manager allows you take the scan results
-                        from the ScanCode Toolkit and create a component-level
+                    <p>AboutCode Manager allows you take the scan results
+                        from the ScanCode and create a component-level
                         software inventory. The conclusions (Concluded License,
                         Concluded Owner, etc.) you make when creating your
-                        component can then be exported to a JSON file.
+                        component can be exported as a JSON file or saved as
+                        SQLite file.
                     </p>
-                    <h3>Views</h3>
-                    <h4>Directory Tree</h4>
-                    <p> An interactive directory tree is always present on
-                        the left side of the application. The tree is
-                        expandable and collapsible. This allows the user to
-                        navigate the codebase structure. If a directory is
-                        selected, only that directory and its sub-files and
-                        folders will be shown in the view. Similarly, if a
-                        single file is selected, only information for that
-                        selected file will be shown.
-                        <img class="help-image" alt="directory screenshot" src="assets/images/codebase-tree.gif">
-                    </p>
-                    <h4>Table View</h4>
-                    <p>In the table view, the available clues detected by
-                        ScanCode Toolkit are shown in a tabular format. A
-                        user can see provenance clues such as license and
-                        copyright information detected by ScanCode Toolkit.
-                        A user can also see the file information (such as
-                        file type, file size, sha1, etc) and package
-                        information (package type, primary language of
-                        package) that was detected. The columns can be
-                        sorted as well as shown or hidden based on what the
-                        user’s preferences. Searching for specific clues
-                        (license names, copyrights, etc.) is also available
-                        in this view.
-                        <img class="help-image" alt="table view screenshot" src="assets/images/table-view.gif">
-                    </p>
-                    <h4>Conclusions View</h4>
-                    <p>The node view is where a user can create components
-                        from packages or files in their codebase.
-                        Selecting the nodes of the tree
-                        will expand or collapse the code structure. The
-                        numbers next to the file name are intended to help
-                        the user navigate to directories with the most clues.
-                        The first number is the number of files contained in
-                        that directory. The second number is the number of
-                        detected clues from ScanCode Toolkit (for example,
-                        detected license and detected copyright). These
-                        numbers can help a user navigate to directories
-                        that have a large amount of scancode clues that were
-                        detected in proportion to files.
-                    </p>
-                        <img class="help-image" alt="node view screenshot" src="assets/images/node-view.gif">
-                    <h5>Creating Components</h5>
-                    <p>A Component is a set of software packages or files
-                        that share a name, version, owner, license and
-                        copyright.  A conclusion in the AboutCode Manager
-                        refers to documentation of your conclusion about the
-                        owner, copyright, and license for some set of
-                        software files at a Component level. To create a
-                        component, select the file name. A form appears
-                        where you can fill in concluded information.
-                    </p>
-                    <p>The following fields are available when creating a component:
+                    <h3>Basics</h3>
                     <ul>
-                        <li>Status - Used to document status of component creation (Analyzed - A component has been created, Needs Attention - A component is flagged for further review, Original Code - A component is from your organization)</li>
-                        <li>Component - Primary component (usually a file, directory or library name)</li>
-                        <li>Version - Component Version Number</li>
-                        <li>License - This is the license for the Component</li>
-                        <li>Owner - This is the owner of the Component</li>
-                        <li>Copyright - The Copyright notice that applies to the Component under the License.</li>
-                        <li>Notes - Comments that provide additional insight into the findings.</li>
+                        <li><a class="open-in-default" href="https://github.com/nexB/aboutcode-manager/wiki/Building">Building</a></li>
+                        <li><a class="open-in-default" href="https://github.com/nexB/aboutcode-manager/wiki/AboutCode-Manager-Views">AboutCode Manager Views</a></li>
+                        <li><a class="open-in-default" href="https://github.com/nexB/aboutcode-manager/wiki/Platform-Support">Platform Support</a></li>
                     </ul>
-                        <img class="help-image" alt="create component screenshot" src="assets/images/create-component.gif">
-                    </p>
-                    <h5>Node colors</h5>
-                    <p>
+                    <h3>Tutorials</h3>
                     <ul>
-                        <li>Blue - The node is blue when no status has been set for the file or directory</li>
-                        <li>Green -  The node is green when a component is created.</li>
-                        <li>Red - The node is red when the Status is set to Needs Attention</li>
-                        <li>Purple - The node is purple when the Status is set to Original Code</li>
+                        <li><a class="open-in-default" href="https://github.com/nexB/aboutcode-manager/wiki/Import-JSON-%26-Export-JSON">Import JSON & Export JSON</a></li>
+                        <li><a class="open-in-default" href="https://github.com/nexB/aboutcode-manager/wiki/Open-%26-Save-a-SQLite-File">Open & Save a SQLite File</a></li>
+                        <li><a class="open-in-default" href="https://github.com/nexB/aboutcode-manager/wiki/Creating-Components">Creating Components</a></li>
+                        <li><a class="open-in-default" href="https://github.com/nexB/aboutcode-manager/wiki/Navigating-the-Chart-Summary-View">Navigating the Chart Summary View</a></li>
+                        <li><a class="open-in-default" href="https://github.com/nexB/aboutcode-manager/wiki/Navigating-the-Node-View">Navigating the Node View</a></li>
                     </ul>
-                    It’s important to note that if you create a component at a directory level, the files underneath that directory are considered analyzed at that level. Our experience with hundreds of software audit projects is that you normally want to conclude and track provenance for software at the Component level.
-                    </p>
-                    <h3>Navigation</h3>
-                    <h4>Panning</h4>
-                    <p>Use the mouse to pan. Hold down click and move mouse</p>
-                    <h4>Zooming</h4>
-                    <p>Use the scroll wheel to zoom. On Mac use two fingers to zoom.</p>
-
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>

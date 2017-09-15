@@ -16,6 +16,7 @@
 
 
 const fs = require('fs');
+const shell = require("electron").shell;
 
 
 $(document).ready(function () {
@@ -810,6 +811,12 @@ $(document).ready(function () {
                 });
             $("#componentExportModal").modal("hide");
         }
+    });
+
+    // Open links in default browser
+    $(".open-in-default").click((evt) => {
+           evt.preventDefault();
+           shell.openExternal(evt.target.href);
     });
 
     restoreSplitterSizes();
