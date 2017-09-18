@@ -26,7 +26,7 @@ import zipfile
 # Build configuration
 #######################
 APP_NAME = 'AboutCode-Manager'
-VERSION = '2.0.0'
+VERSION = '2.0.0-rc4'
 ELECTRON_VERSION = '1.4.0'
 
 #######################
