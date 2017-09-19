@@ -92,7 +92,7 @@ class ComponentDataTable {
                 defaultContent: ""
             },
             {
-                data: "licenses[<hr/>].short_name",
+                data: "licenses[<hr/>].key",
                 title: "License",
                 name: "license_expression",
                 defaultContent: ""

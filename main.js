@@ -69,6 +69,13 @@ function getTemplate() {
           click: function (menuItem, currentWindow) {
             currentWindow.webContents.send('export-JSON')
           }
+        },
+        {
+          label: "Export Components JSON File",
+          accelerator: 'CmdOrCtrl+J',
+          click: function (menuItem, currentWindow) {
+            currentWindow.webContents.send('export-JSON-components-only')
+          }
         }
       ]
     },

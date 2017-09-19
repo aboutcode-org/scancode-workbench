@@ -234,12 +234,12 @@ $(document).ready(function () {
 
         let licensesPromise = aboutCodeDB.File.findAll({
             attributes: [],
-            group: ['licenses.short_name'],
+            group: ['licenses.key'],
             where: { path: {$like: `${node.id}%`}},
             include: [{
                 model: aboutCodeDB.License,
-                attributes: ['short_name'],
-                where: {short_name: {$ne: null}}
+                attributes: ['key'],
+                where: {key: {$ne: null}}
             }]
         })
         .then((rows) => $.map(rows, (row) => row.licenses));
@@ -329,7 +329,7 @@ $(document).ready(function () {
         // update select2 selectors for node view component
         componentModal.license.html('').select2({
             data: $.unique($.map(licenses, (license, i) => {
-                return license.short_name;
+                return license.key;
             })),
             multiple: true,
             placeholder: "Enter license",
@@ -373,7 +373,7 @@ $(document).ready(function () {
         componentModal.component_name.val(component.name || "");
         componentModal.version.val(component.version || "");
         componentModal.license.val((component.licenses || [])
-            .map((license) => license.short_name));
+            .map((license) => license.key));
         componentModal.copyright.val((component.copyrights || [])
             .map((copyright) => copyright.statements.join("\n")));
         componentModal.owner.val(component.owner || []);
@@ -396,7 +396,7 @@ $(document).ready(function () {
             review_status: componentModal.status.val(),
             name: componentModal.component_name.val(),
             licenses: $.map(componentModal.license.val() || [], function(license) {
-                return { short_name: license };
+                return { key: license };
             }),
             copyrights: $.map(componentModal.copyright.val() || [], function(copyright) {
                 return { statements: copyright.split("\n") };
@@ -737,7 +737,7 @@ $(document).ready(function () {
         $("#indicator-text").hide();
     }
 
-    // Export JSON file with components that have been created
+    // Export JSON file with ScanCode data and components that have been created
     ipcRenderer.on('export-JSON', function () {
         dialog.showSaveDialog({
             properties: ['openFile'],
@@ -771,6 +771,35 @@ $(document).ready(function () {
 
                         fs.writeFile(fileName, JSON.stringify(json));
                     });
+
+            });
+    });
+
+    // Export JSON file with only components that have been created
+    ipcRenderer.on('export-JSON-components-only', function () {
+        dialog.showSaveDialog({
+            properties: ['openFile'],
+            title: "Save as JSON file",
+            filters: [{
+                name: 'JSON File Type',
+                extensions: ['json']
+            }]
+        },
+            function (fileName) {
+                if (fileName === undefined) return;
+
+                aboutCodeDB.findAllComponents({
+                    attributes: {
+                        exclude: ["id", "createdAt", "updatedAt"]
+                    }
+                })
+                .then((components) => {
+                    let json = {
+                        components: components
+                    };
+
+                    fs.writeFile(fileName, JSON.stringify(json));
+                });
 
             });
     });

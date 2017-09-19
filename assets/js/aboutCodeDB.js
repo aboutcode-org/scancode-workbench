@@ -395,7 +395,7 @@ class AboutCodeDB {
             getterMethods: {
                 license_expression: function()  {
                     return $.map(this.licenses, (license, index) => {
-                       return license.short_name;
+                       return license.key;
                     }).join(" AND ");
                 },
                 copyright: function() {
