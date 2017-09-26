@@ -428,7 +428,7 @@ AboutCodeDataTable.LICENSE_COLUMNS =
             "visible": true
         },
         {
-            "data": "license_category",
+            "data": "license_category[<hr/>]",
             "title": "License Category",
             "name": "license_category",
             "bar_chart_class": "bar-chart-licenses",
@@ -674,6 +674,7 @@ AboutCodeDataTable.PACKAGE_COLUMNS =
             "data": "packages_name",
             "title": "Package Name",
             "name": "packages_name",
+            "bar_chart_class": "bar-chart-package-infos",
             "visible": false
         },
         {

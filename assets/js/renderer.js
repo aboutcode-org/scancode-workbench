@@ -558,7 +558,7 @@ $(document).ready(function () {
                 barChart = new AboutCodeBarChart("#summary-bar-chart", aboutCodeDB)
                     .onSummaryChanged(() => {
                         $("#summary-bar-chart rect").on("click", chartSummaryToFiles);
-                        $("#summary-bar-chart g.tick text").on("click", chartSummaryToFiles);
+                        $("#summary-bar-chart .y.axis .tick").on("click", chartSummaryToFiles);
                     });
 
                 // loading data into jstree
@@ -577,32 +577,35 @@ $(document).ready(function () {
     }
 
     function chartSummaryToFiles() {
-        // Get the clue table column and make sure it's visible
-        const columnName = chartAttributesSelect.val();
-        const column = cluesTable.dataTable.column(`${columnName}:name`);
-        column.visible(true);
+        const val = $(this).data("value");
 
-        // Clear all other columns
-        $.each(AboutCodeDataTable.TABLE_COLUMNS, (i, column) => {
-            const columnSelect = $(`select#clue-${column.name}`);
-            columnSelect.val("");
-            cluesTable.dataTable
-                .column(`${column.name}:name`)
-                .search("", false, false);
-        });
+        if (val !== "No Value Detected") {
+            // Get the clue table column and make sure it's visible
+            const columnName = chartAttributesSelect.val();
+            const column = cluesTable.dataTable.column(`${columnName}:name`);
+            column.visible(true);
 
-        // Get the column's filter select box
-        const select = $(`select#clue-${columnName}`);
-        select.empty().append(`<option value=""></option>`);
+            // Clear all other columns
+            $.each(AboutCodeDataTable.TABLE_COLUMNS, (i, column) => {
+                const columnSelect = $(`select#clue-${column.name}`);
+                columnSelect.val("");
+                cluesTable.dataTable
+                    .column(`${column.name}:name`)
+                    .search("", false, false);
+            });
 
-        // Add the chart value options and select it.
-        const val = this.id;
-        select.append(`<option value="${val}">${val}</option>`);
-        select.val(val).change();
+            // Get the column's filter select box
+            const select = $(`select#clue-${columnName}`);
+            select.empty().append(`<option value=""></option>`);
 
-        // This needs to be done only when the column is visible.
-        // So we do it last to try our best
-        showClueButton.trigger("click");
+            // Add the chart value options and select it.
+            select.append(`<option value="${val}">${val}</option>`);
+            select.val(val).change();
+
+            // This needs to be done only when the column is visible.
+            // So we do it last to try our best
+            showClueButton.trigger("click");
+        }
     }
 
     // Open a SQLite Database File

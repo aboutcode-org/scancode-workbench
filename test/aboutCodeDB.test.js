@@ -133,11 +133,11 @@ describe("checkAboutCodeDB", function() {
         it("should create a component in Component Table", function() {
             let aboutCodeDB = new AboutCodeDB();
             let component = {
-                "license_expression": "Apache 1.1",
+                "license_expression": "apache-1.1",
                 "copyright": "(c) 2004 by Henrik Ravn",
                 "licenses": [
                     {
-                      "short_name": "Apache 1.1"
+                      "key": "apache-1.1"
                     }
                 ],
                 "copyrights": [
@@ -158,11 +158,11 @@ describe("checkAboutCodeDB", function() {
             };
 
             let component2 = {
-                "license_expression": "ZLIB License",
+                "license_expression": "zlib",
                 "copyright": "Copyright (c) 1995-2013 Jean-loup Gailly and Mark Adler",
                 "licenses": [
                 {
-                  "short_name": "ZLIB License"
+                  "key": "zlib"
                 }
                 ],
                 "copyrights": [
