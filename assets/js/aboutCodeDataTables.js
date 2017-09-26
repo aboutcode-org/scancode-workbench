@@ -78,6 +78,7 @@ class AboutCodeDataTable {
                 let columnSearch = dataTablesInput.columns[i].search.value;
                 if (columnSearch) {
                     const columnName = dataTablesInput.columns[i].name;
+                    this.dataTable.column(`${columnName}:name`).visible(true);
 
                     if (i === 0) {
                         // Column 0 is the "path", which should only match

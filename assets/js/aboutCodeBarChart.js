@@ -30,11 +30,15 @@ class AboutCodeBarChart {
         };
 
         this.barChart = new BarChart([], this.chartOptions, this.barChartId);
-
     }
 
     draw() {
         this.barChart.draw();
+    }
+
+    onSummaryChanged(onSummaryChangedHandler) {
+        this.onSummaryChangedHandler = onSummaryChangedHandler;
+        return this;
     }
 
     showSummary(attribute, parentPath) {
@@ -52,6 +56,9 @@ class AboutCodeBarChart {
             .then((values) => AboutCodeBarChart.mapToAttributeValues(values, attribute))
             .then((values) => {
                 this.barChart = new BarChart(values, this.chartOptions, this.barChartId);
+                if (this.onSummaryChangedHandler) {
+                    this.onSummaryChangedHandler();
+                }
             });
     }
 

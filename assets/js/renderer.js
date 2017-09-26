@@ -18,6 +18,12 @@
 const fs = require('fs');
 const shell = require("electron").shell;
 
+ // The electron library for opening a dialog
+const dialog = require('electron').remote.dialog;
+
+// The Electron module used to communicate asynchronously from a renderer process to the main process.
+const ipcRenderer = require('electron').ipcRenderer;
+
 
 $(document).ready(function () {
     // Create default values for all of the data and ui classes
@@ -103,12 +109,6 @@ $(document).ready(function () {
             nodeView.setRoot(data.node.id);
             barChart.showSummary(barChartValue, data.node.id);
         });
-
-    // The electron library for opening a dialog
-    const dialog = require('electron').remote.dialog;
-
-    // The Electron module used to communicate asynchronously from a renderer process to the main process.
-    const ipcRenderer = require('electron').ipcRenderer;
 
     // Setup css styling for sidebar button state when clicked.
     const navButtons = $("#sidebar-wrapper").find(".btn-change");
@@ -555,7 +555,11 @@ $(document).ready(function () {
                 componentsTable.reload();
 
                 nodeView = new AboutCodeNodeView("#nodeview", aboutCodeDB, onNodeClick);
-                barChart = new AboutCodeBarChart("#summary-bar-chart", aboutCodeDB);
+                barChart = new AboutCodeBarChart("#summary-bar-chart", aboutCodeDB)
+                    .onSummaryChanged(() => {
+                        $("#summary-bar-chart rect").on("click", chartSummaryToFiles);
+                        $("#summary-bar-chart g.tick text").on("click", chartSummaryToFiles);
+                    });
 
                 // loading data into jstree
                 jstree.jstree(true).refresh(true);
@@ -570,6 +574,35 @@ $(document).ready(function () {
             .catch(function(reason) {
                throw reason;
             });
+    }
+
+    function chartSummaryToFiles() {
+        // Get the clue table column and make sure it's visible
+        const columnName = chartAttributesSelect.val();
+        const column = cluesTable.dataTable.column(`${columnName}:name`);
+        column.visible(true);
+
+        // Clear all other columns
+        $.each(AboutCodeDataTable.TABLE_COLUMNS, (i, column) => {
+            const columnSelect = $(`select#clue-${column.name}`);
+            columnSelect.val("");
+            cluesTable.dataTable
+                .column(`${column.name}:name`)
+                .search("", false, false);
+        });
+
+        // Get the column's filter select box
+        const select = $(`select#clue-${columnName}`);
+        select.empty().append(`<option value=""></option>`);
+
+        // Add the chart value options and select it.
+        const val = this.id;
+        select.append(`<option value="${val}">${val}</option>`);
+        select.val(val).change();
+
+        // This needs to be done only when the column is visible.
+        // So we do it last to try our best
+        showClueButton.trigger("click");
     }
 
     // Open a SQLite Database File
@@ -698,9 +731,6 @@ $(document).ready(function () {
                             .then(() => aboutCodeDB.addScanData(json))
                             .then(() => reloadDataForViews())
                             .then(() => hideProgressIndicator())
-                            .then(() => {
-                                barChart = new AboutCodeBarChart("#summary-bar-chart", aboutCodeDB);
-                            })
                             .catch((err) => {
                                 hideProgressIndicator();
                                 console.log(err);

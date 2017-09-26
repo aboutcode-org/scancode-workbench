@@ -78,6 +78,9 @@ class BarChart {
         this.rects = bars.append('rect')
             .attr('y', function(d) { return yScale(d.name); })
             .attr('height', yScale.rangeBand())
+            .attr("id", function (d) {
+                return d.name;
+            })
             // Add a tooltip to the bar.
             .on("mouseover", function (d) { tooltip.style("display", "inline-block"); })
             .on("mousemove", function (d) {
@@ -113,6 +116,11 @@ class BarChart {
                     .text((d + displayValue));
             })
             .on("mouseout", function (d) { tooltip.style("display", "none"); });
+
+        let ticks = d3.selectAll(".tick text");
+        ticks.attr("id", function(d, i) {
+            return d;
+        });
 
         this.draw();
     }
