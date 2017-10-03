@@ -1,7 +1,7 @@
 /*
  #
- # Copyright (c) 2016 nexB Inc. and others. All rights reserved.
- # http://nexb.com and https://github.com/nexB/scancode-toolkit/
+ # Copyright (c) 2017 nexB Inc. and others. All rights reserved.
+ # http://nexb.com and https://github.com/nexB/aboutcode-manager/
  # The ScanCode software is licensed under the Apache License version 2.0.
  # AboutCode is a trademark of nexB Inc.
  #
@@ -30,6 +30,7 @@ $(document).ready(function () {
     let aboutCodeDB = new AboutCodeDB();
     let nodeView = new AboutCodeNodeView("#node-view", aboutCodeDB);
     let barChart = new AboutCodeBarChart("#summary-bar-chart", aboutCodeDB);
+    let dashboard = new AboutCodeDashboard("#dashboard-container", aboutCodeDB);
 
     // These classes are only created once, otherwise DataTables will complain
     const cluesTable = new AboutCodeDataTable("#clues-table", aboutCodeDB);
@@ -147,6 +148,7 @@ $(document).ready(function () {
     const showNodeViewButton = $("#show-tree");
     const showComponentButton = $("#show-component-table");
     const showBarChartButton = $("#show-bar-chart");
+    const showDashboardButton = $("#show-dashboard");
     const saveComponentButton = $("#save-component");
     const deleteComponentButton = $("#delete-component");
     const saveSQLiteFileButton = $("#save-file");
@@ -161,6 +163,7 @@ $(document).ready(function () {
     const cluesContainer = $("#clues-container");
     const componentContainer = $("#component-container");
     const barChartContainer = $("#bar-chart-container");
+    const dashboardContainer = $("#dashboard-container");
 
     const chartAttributesSelect = $("select#select-chart-attribute");
     const barChartTotalFiles = $("span.total-files");
@@ -481,6 +484,7 @@ $(document).ready(function () {
         nodeContainer.hide();
         componentContainer.hide();
         barChartContainer.hide();
+        dashboardContainer.hide();
         cluesTable.draw();
     });
 
@@ -495,6 +499,7 @@ $(document).ready(function () {
         cluesContainer.hide();
         componentContainer.hide();
         barChartContainer.hide();
+        dashboardContainer.hide();
         nodeView.redraw();
     });
 
@@ -509,6 +514,7 @@ $(document).ready(function () {
         nodeContainer.hide();
         cluesContainer.hide();
         barChartContainer.hide();
+        dashboardContainer.hide();
         componentsTable.reload();
     });
 
@@ -522,11 +528,23 @@ $(document).ready(function () {
         componentContainer.hide();
         nodeContainer.hide();
         cluesContainer.hide();
+        dashboardContainer.hide();
         barChart.draw();
         aboutCodeDB.getFileCount()
             .then((value) => {
                 barChartTotalFiles.text(value);
             });
+    });
+
+    showDashboardButton.click(() => {
+        $(".gutter-horizontal").removeClass("div-show").addClass("div-hide");
+        splitter.collapse(0);
+        dashboardContainer.show();
+        componentContainer.hide();
+        nodeContainer.hide();
+        cluesContainer.hide();
+        barChartContainer.hide();
+        componentsTable.reload();
     });
 
     // Show chart summary table. Hide other views -- custom menu
@@ -553,6 +571,9 @@ $(document).ready(function () {
 
                 componentsTable.database(aboutCodeDB);
                 componentsTable.reload();
+
+                dashboard.database(aboutCodeDB);
+                dashboard.reload();
 
                 nodeView = new AboutCodeNodeView("#nodeview", aboutCodeDB, onNodeClick);
                 barChart = new AboutCodeBarChart("#summary-bar-chart", aboutCodeDB)

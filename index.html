@@ -56,6 +56,7 @@
     <script src="assets/js/barChart.js"></script>
     <script src="assets/js/aboutCodeBarChart.js"></script>
     <script src="assets/js/scrollResize.js"></script>
+    <script src="assets/js/aboutCodeDashboard.js"></script>
 </head>
 <body>
     <!-- Sidebar -->
@@ -69,6 +70,11 @@
             <li>
                 <button class="btn btn-sidebar" id="save-file" data-toggle="tooltip" title="Save As New SQLite File">
                     <i class="fa fa-floppy-o" aria-hidden="true"></i>
+                </button>
+            </li>
+            <li>
+                <button class="btn btn-sidebar btn-change" id="show-dashboard" data-toggle="tooltip" data-placement="right" title="Dashboard View">
+                    <i class="fa fa-tachometer" aria-hidden="true"></i>
                 </button>
             </li>
             <li>
@@ -114,6 +120,45 @@
             <div class="container tab-container" id="clues-container">
                 <table id="clues-table" class="display table table-striped table-bordered dataTable no-footer" cellspacing="0" width="100%" >
                 </table>
+            </div>
+
+            <!-- Dashboard Tab -->
+            <div class="container tab-container" id="dashboard-container">
+                <h2 class="dashboard-lead">Dashboard</h2>
+                <div class="row">
+                    <div class="col-lg-3 col-sm-6 col-xs-12">
+                        <div class="card" id="total-files">
+                            <div class="header">
+                                <h3 class="title">0</h3>
+                                <p class="category">Files Scanned</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-sm-6 col-xs-12">
+                        <div class="card" id="unique-licenses">
+                            <div class="header">
+                                <h3 class="title">0</h3>
+                                <p class="category">Unique Licenses Detected</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-sm-6 col-xs-12">
+                        <div class="card" id="unique-copyrights">
+                            <div class="header">
+                                <h3 class="title">0</h3>
+                                <p class="category">Unique Copyrights Detected</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-sm-6 col-xs-12">
+                        <div class="card" id="total-packages">
+                            <div class="header">
+                                <h3 class="title">0</h3>
+                                <p class="category">Packages Detected</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <!-- Component DataTable Tab -->
