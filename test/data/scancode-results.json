@@ -41,7 +41,7 @@
               "owner": "JBoss Community",
               "homepage_url": "",
               "text_url": "http://repository.jboss.org/licenses/jbossorg-eula.txt",
-              "dejacode_url": "https://enterprise.dejacode.com/urn/urn:dje:license:jboss-eula",
+              "reference_url": "https://enterprise.dejacode.com/urn/urn:dje:license:jboss-eula",
               "spdx_license_key": "",
               "spdx_url": "",
               "start_line": 3,
