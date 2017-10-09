@@ -802,7 +802,9 @@ $(document).ready(function () {
                             components: arguments[1]
                         };
 
-                        fs.writeFile(fileName, JSON.stringify(json));
+                        fs.writeFile(fileName, JSON.stringify(json), (err) => {
+                            if (err) throw err;
+                        });
                     });
 
             });
@@ -831,7 +833,9 @@ $(document).ready(function () {
                         components: components
                     };
 
-                    fs.writeFile(fileName, JSON.stringify(json));
+                    fs.writeFile(fileName, JSON.stringify(json), (err) => {
+                        if (err) throw err;
+                    });
                 });
 
             });

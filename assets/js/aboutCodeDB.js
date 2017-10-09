@@ -62,12 +62,29 @@ class AboutCodeDB {
 
         // Include Array for queries
         this.fileIncludes = [
-            this.License,
-            this.Copyright,
-            this.Package,
-            this.Email,
-            this.Url,
-            this.Component
+            {
+                model: this.License,
+                separate: true
+            },
+            {
+                model: this.Copyright,
+                separate: true
+            },
+            {
+                model: this.Package,
+                separate: true
+            },
+            {
+                model: this.Email,
+                separate: true
+            },
+            {
+                model: this.Url,
+                separate: true
+            },
+            {
+                model: this.Component
+            }
         ];
 
         // A promise that will return when the db and tables have been created
