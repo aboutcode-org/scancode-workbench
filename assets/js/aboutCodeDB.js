@@ -62,12 +62,29 @@ class AboutCodeDB {
 
         // Include Array for queries
         this.fileIncludes = [
-            this.License,
-            this.Copyright,
-            this.Package,
-            this.Email,
-            this.Url,
-            this.Component
+            {
+                model: this.License,
+                separate: true
+            },
+            {
+                model: this.Copyright,
+                separate: true
+            },
+            {
+                model: this.Package,
+                separate: true
+            },
+            {
+                model: this.Email,
+                separate: true
+            },
+            {
+                model: this.Url,
+                separate: true
+            },
+            {
+                model: this.Component
+            }
         ];
 
         // A promise that will return when the db and tables have been created
@@ -292,7 +309,7 @@ class AboutCodeDB {
             owner: Sequelize.STRING,
             homepage_url: Sequelize.STRING,
             text_url: Sequelize.STRING,
-            dejacode_url: Sequelize.STRING,
+            reference_url: Sequelize.STRING,
             spdx_license_key: Sequelize.STRING,
             spdx_url: Sequelize.STRING,
             start_line: Sequelize.INTEGER,
@@ -441,7 +458,7 @@ class AboutCodeDB {
             license_owner: AboutCodeDB.jsonDataType("license_owner"),
             license_homepage_url: AboutCodeDB.jsonDataType("license_homepage_url"),
             license_text_url: AboutCodeDB.jsonDataType("license_text_url"),
-            license_djc_url: AboutCodeDB.jsonDataType("license_djc_url"),
+            license_reference_url: AboutCodeDB.jsonDataType("license_reference_url"),
             license_spdx_key: AboutCodeDB.jsonDataType("license_spdx_key"),
             license_start_line: AboutCodeDB.jsonDataType("license_start_line"),
             license_end_line: AboutCodeDB.jsonDataType("license_end_line"),
@@ -566,7 +583,7 @@ class AboutCodeDB {
             license_owner: AboutCodeDB.getValues(file.licenses, "owner"),
             license_homepage_url: AboutCodeDB.getValues(file.licenses, "homepage_url"),
             license_text_url: AboutCodeDB.getValues(file.licenses, "text_url"),
-            license_djc_url: AboutCodeDB.getValues(file.licenses, "dejacode_url"),
+            license_reference_url: AboutCodeDB.getValues(file.licenses, "reference_url"),
             license_spdx_key: AboutCodeDB.getValues(file.licenses, "spdx_license_key"),
             license_start_line: AboutCodeDB.getValues(file.licenses, "start_line"),
             license_end_line: AboutCodeDB.getValues(file.licenses, "end_line"),

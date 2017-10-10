@@ -464,9 +464,9 @@ AboutCodeDataTable.LICENSE_COLUMNS =
             "visible": false
         },
         {
-            "data": "license_djc_url",
-            "title": "DejaCode License URL",
-            "name": "license_djc_url",
+            "data": "license_reference_url",
+            "title": "License Reference URL",
+            "name": "license_reference_url",
             "render": function ( data, type, full, meta ) {
                 return $.map(data, function (href, i) {
                     return '<a href="'+href+'" target="_blank">'+href+'</a>';

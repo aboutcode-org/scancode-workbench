@@ -39,7 +39,7 @@
     "license_text_url": [
       "http://repository.jboss.org/licenses/jbossorg-eula.txt"
     ],
-    "license_djc_url": [
+    "license_reference_url": [
       "https://enterprise.dejacode.com/urn/urn:dje:license:jboss-eula"
     ],
     "license_spdx_key": [
@@ -203,7 +203,7 @@
     "license_owner": [],
     "license_homepage_url": [],
     "license_text_url": [],
-    "license_djc_url": [],
+    "license_reference_url": [],
     "license_spdx_key": [],
     "license_start_line": [],
     "license_end_line": [],

@@ -28,7 +28,7 @@
     "asar": "^0.11.0",
     "chai": "^3.5.0",
     "chai-subset": "^1.5.0",
-    "electron": "1.4.0",
+    "electron": "1.6.14",
     "electron-packager": "^7.0.3",
     "electron-rebuild": "^1.5.7",
     "grunt": "^1.0.0",
@@ -41,6 +41,6 @@
   "dependencies": {
     "sequelize": "^3.30.2",
     "sequelize-cli": "^2.5.1",
-    "sqlite3": "^3.1.8"
+    "sqlite3": "3.1.10"
   }
 }
