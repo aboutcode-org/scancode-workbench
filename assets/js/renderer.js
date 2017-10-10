@@ -544,7 +544,7 @@ $(document).ready(function () {
         nodeContainer.hide();
         cluesContainer.hide();
         barChartContainer.hide();
-        componentsTable.reload();
+        dashboard.reload();
     });
 
     // Show chart summary table. Hide other views -- custom menu

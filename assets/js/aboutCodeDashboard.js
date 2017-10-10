@@ -14,9 +14,21 @@
  #
  */
 
+const LEGEND_COLORS = [
+    "#A0D468",
+    "#FFCE54",
+    "#EC87C0",
+    "#48CFAD",
+    "#AC92EC",
+    "#4FC1E9",
+    "#AAB2BD",
+    "#3D7AFC"
+];
+
+const LEGEND_LIMIT = 8;
 
 // Dashboard with summary
- class AboutCodeDashboard {
+class AboutCodeDashboard {
     constructor(dashboardId, aboutCodeDB) {
         this.totalFilesScanned = $("#total-files .title");
         this.uniqueLicenses = $("#unique-licenses .title");
@@ -25,6 +37,54 @@
 
         this.dashboardId = dashboardId;
         this.aboutCodeDB = aboutCodeDB;
+
+        this.sourceLanguageChart = c3.generate({
+            bindto: "#source-chart",
+            data: {
+                columns: [],
+                type: "pie",
+                order: 'desc'
+            },
+            color: {
+                pattern: LEGEND_COLORS
+            }
+        });
+
+        this.licenseCategoryChart = c3.generate({
+                bindto: "#license-category-chart",
+                data: {
+                    columns: [],
+                    type: "pie",
+                    order: 'desc'
+                },
+                color: {
+                    pattern: LEGEND_COLORS
+                }
+        });
+
+        this.licenseKeyChart = c3.generate({
+                bindto: "#license-key-chart",
+                data: {
+                    columns: [],
+                    type: "pie",
+                    order: 'desc'
+                },
+                color: {
+                    pattern: LEGEND_COLORS
+                }
+        });
+
+        this.packagesTypeChart = c3.generate({
+                bindto: "#packages-type-chart",
+                data: {
+                    columns: [],
+                    type: "bar",
+                    order: 'desc'
+                },
+                color: {
+                    pattern: LEGEND_COLORS
+                }
+        });
     }
 
     database(aboutCodeDB) {
@@ -32,50 +92,125 @@
     }
 
     reload() {
-        // Get total number of files scanned
+        // Get total files scanned
         this.aboutCodeDB.ScanCode
-            .findOne({
-                attributes: ["files_count"]
-            })
-            .then((row) => {
-                const fileCount = row.files_count;
-                if (fileCount) {
-                    this.totalFilesScanned.text(fileCount);
-                } else {
-                    this.totalFilesScanned.text("0");
-                }
-            });
+            .findOne({ attributes: ["files_count"] })
+            .then(row => this.totalFilesScanned.text(row ? row.files_count : "0"));
 
         // Get total unique licenses detected
         this.aboutCodeDB.License.aggregate("key", "DISTINCT", { plain: false })
-            .then((row) => {
-                const uniqueLicenseCount = row.length;
-                if (uniqueLicenseCount) {
-                    this.uniqueLicenses.text(uniqueLicenseCount);
-                } else {
-                    this.uniqueLicenses.text("0");
-                }
-            });
+            .then(row => this.uniqueLicenses.text(row ? row.length : "0"));
 
         // Get total unique copyright statements detected
-        this.aboutCodeDB.Copyright.aggregate("statements", "DISTINCT", { plain: false })
-            .then((row) => {
-                const uniqueCopyrightCount = row.length;
-                if (uniqueCopyrightCount) {
-                    this.uniqueCopyrights.text(uniqueCopyrightCount);
-                } else {
-                    this.uniqueCopyrights.text("0");
-                }
-            });
+        this.aboutCodeDB.Copyright.aggregate("holders", "DISTINCT", { plain: false })
+            .then(row => this.uniqueCopyrights.text(row ? row.length : "0"));
 
         // Get total number of packages detected
         this.aboutCodeDB.Package.count("type")
-            .then((row) => {
-                if (row) {
-                    this.totalPackages.text(row);
+            .then(count => this.totalPackages.text(count ? count : "0"));
+
+        this.sourceLanguageChart.unload({
+            done: () => {
+                // Get unique programming languages detected
+                this._loadData("programming_language")
+                    .then(data => this.sourceLanguageChart.load({columns: data}));
+            }
+          });
+
+        this.licenseCategoryChart.unload({
+            done: () => {
+                // Get license categories detected
+                this._loadData("license_category")
+                    .then(data => this.licenseCategoryChart.load({columns: data}));
+            }
+          });
+
+        this.licenseKeyChart.unload({
+            done: () => {
+                // Get license keys detected
+                this._loadData("license_key")
+                    .then(data => this.licenseKeyChart.load({columns: data}));
+            }
+          });
+
+        this.packagesTypeChart.unload({
+            done: () => {
+                // Get package types detected
+                this._loadData("packages_type")
+                    .then(data => this.packagesTypeChart.load({columns: data}));
+            }
+          });
+    }
+
+    _loadData(attribute, parentPath) {
+        let where = {
+            $and: [{
+                type: {
+                    $eq: "file"
+                }
+            }]
+        };
+
+        if (parentPath) {
+            where.path.$and.append({$like: `${parentPath}%`});
+        }
+
+        return this.aboutCodeDB.FlattenedFile
+            .findAll({
+                attributes: [
+                    Sequelize.fn("TRIM", Sequelize.col(attribute)),
+                    attribute
+                ],
+                where: where
+            })
+            .then(data => AboutCodeDashboard.getAttributeValues(data, attribute))
+            .then(data => AboutCodeDashboard.formatData(data))
+            .then(data => AboutCodeDashboard.limitData(data, LEGEND_LIMIT));
+    }
+
+    static limitData(data, limit) {
+        // TODO: Use partitioning (like in quicksort) to find top "limit"
+        // more efficiently.
+        // Sort data by count
+        return data.sort((a,b) => (a[1] > b[1]) ? 1 : -1)
+            .map((dataPair, i) => {
+                if (data.length - i >= limit) {
+                    return ["other", dataPair[1]];
                 } else {
-                    this.totalPackages.text("0");
+                    return dataPair;
                 }
             });
+    }
+
+    // Formats data for c3: [[key1, count1], [key2, count2], ...]
+    static formatData(names) {
+        // Sum the total number of times the name appears
+        let count = {};
+        $.each(names, function(i, name){
+            count[name] = count[name] + 1 || 1;
+        });
+
+        // Transform license count into array of objects with license name & count
+        return $.map(count, function(val, key) {
+            return [[key, val]];
+        });
+    }
+
+    // Map each row to the given attribute value, and sanitize invalid values.
+    static getAttributeValues(values, attribute) {
+        return $.map(values, (value, index) => {
+            let attributeValue = value[attribute];
+            return AboutCodeDashboard.isValid(attributeValue)
+                ?  attributeValue : ["No Value Detected"];
+        });
+    }
+
+    static isValid(value) {
+        if (Array.isArray(value)) {
+            return value.length > 0
+                && value.every((element) => AboutCodeDashboard.isValid(element));
+        } else {
+            return value !== null;
+        }
     }
  }

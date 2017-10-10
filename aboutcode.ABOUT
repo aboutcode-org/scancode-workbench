@@ -3,8 +3,8 @@ name: AboutCode Manager
 version: 2.0.0-rc4
 license: apache-2.0
 owner: nexB Inc.
-copyright: Copyright (c) 2016 nexB Inc.
+copyright: Copyright (c) 2017 nexB Inc.
 
 notice_file: NOTICE
-license_file: apache-2.0.LICENSE
+license_file: LICENSE
 notes: AboutCode Manager is licensed under Apache 2.0. Some example code from electron-quickstart is used and is licensed under CC0-1.0.
