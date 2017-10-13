@@ -668,7 +668,7 @@ $(document).ready(function () {
                 reader.pipe(writer);
                 reader.on("end", function () {
                     loadDatabaseFromFile(newFileName);
-                })
+                });
             }
         );
     }
@@ -741,6 +741,16 @@ $(document).ready(function () {
                     },
                     function (fileName) {
                         if (fileName === undefined) return;
+
+                        // Overwrite existing sqlite file
+                        if (fs.existsSync(fileName)) {
+                            fs.unlink(fileName, (err) => {
+                              if (err) {
+                                  throw err;
+                              }
+                              console.info(`Deleted ${fileName}`);
+                            });
+                        }
 
                         // Create a new database when importing a json file
                         aboutCodeDB = new AboutCodeDB({
