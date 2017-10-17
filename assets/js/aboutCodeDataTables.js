@@ -153,7 +153,6 @@ class AboutCodeDataTable {
         let that = this;
 
         return $(tableID).DataTable({
-            "info": false,
             "colReorder": true,
             "serverSide": true,
             "processing": true,
