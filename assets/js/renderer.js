@@ -917,5 +917,5 @@ $(document).ready(function () {
     });
 
     restoreSplitterSizes();
-    showClueButton.trigger("click");
+    showDashboardButton.trigger("click");
 });

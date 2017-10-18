@@ -93,21 +93,31 @@ class AboutCodeDashboard {
 
     reload() {
         // Get total files scanned
-        this.aboutCodeDB.ScanCode
-            .findOne({ attributes: ["files_count"] })
-            .then(row => this.totalFilesScanned.text(row ? row.files_count : "0"));
+        this.aboutCodeDB.db.then(() => {
+            return this.aboutCodeDB.ScanCode
+                .findOne({ attributes: ["files_count"] })
+                .then(row => this.totalFilesScanned.text(row ? row.files_count : "0"));
+        });
 
         // Get total unique licenses detected
-        this.aboutCodeDB.License.aggregate("key", "DISTINCT", { plain: false })
-            .then(row => this.uniqueLicenses.text(row ? row.length : "0"));
+        this.aboutCodeDB.db.then(() => {
+            return this.aboutCodeDB.License
+                .aggregate("key", "DISTINCT", {plain: false})
+                .then(row => this.uniqueLicenses.text(row ? row.length : "0"));
+        });
 
         // Get total unique copyright statements detected
-        this.aboutCodeDB.Copyright.aggregate("holders", "DISTINCT", { plain: false })
-            .then(row => this.uniqueCopyrights.text(row ? row.length : "0"));
+        this.aboutCodeDB.db.then(() => {
+            return this.aboutCodeDB.Copyright
+                .aggregate("holders", "DISTINCT", { plain: false })
+                .then(row => this.uniqueCopyrights.text(row ? row.length : "0"));
+        });
 
         // Get total number of packages detected
-        this.aboutCodeDB.Package.count("type")
-            .then(count => this.totalPackages.text(count ? count : "0"));
+        this.aboutCodeDB.db.then(() => {
+            return this.aboutCodeDB.Package.count("type")
+                .then(count => this.totalPackages.text(count ? count : "0"));
+        });
 
         this.sourceLanguageChart.unload({
             done: () => {
@@ -155,17 +165,19 @@ class AboutCodeDashboard {
             where.path.$and.append({$like: `${parentPath}%`});
         }
 
-        return this.aboutCodeDB.FlattenedFile
-            .findAll({
-                attributes: [
-                    Sequelize.fn("TRIM", Sequelize.col(attribute)),
-                    attribute
-                ],
-                where: where
-            })
-            .then(data => AboutCodeDashboard.getAttributeValues(data, attribute))
-            .then(data => AboutCodeDashboard.formatData(data))
-            .then(data => AboutCodeDashboard.limitData(data, LEGEND_LIMIT));
+        return this.aboutCodeDB.db.then(() => {
+            return this.aboutCodeDB.FlattenedFile
+                .findAll({
+                    attributes: [
+                        Sequelize.fn("TRIM", Sequelize.col(attribute)),
+                        attribute
+                    ],
+                    where: where
+                })
+                .then(data => AboutCodeDashboard.getAttributeValues(data, attribute))
+                .then(data => AboutCodeDashboard.formatData(data))
+                .then(data => AboutCodeDashboard.limitData(data, LEGEND_LIMIT));
+        });
     }
 
     static limitData(data, limit) {
