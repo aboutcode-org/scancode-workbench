@@ -14,6 +14,7 @@ from __future__ import print_function
 from __future__ import unicode_literals
 
 from contextlib import closing
+import argparse
 import os
 import platform as std_platform
 import shutil
@@ -22,10 +23,10 @@ import sys
 import tarfile
 import zipfile
 
-
 # Build configuration
 #######################
 APP_NAME = 'AboutCode-Manager'
+APP_BUNDLE_ID = 'com.electron.aboutcode-manager'
 VERSION = '2.0.0-rc5'
 ELECTRON_VERSION = '1.6.14'
 
@@ -176,7 +177,7 @@ def create_tar(base_dir, archive_base_name):
 def build(clean=True, app_name=APP_NAME,
           platform=PLATFORM, platform_name=PLATFORM_NAME,
           arch=ARCH, build_dir=BUILD_DIR, icon=ICON,
-          electron_version=ELECTRON_VERSION, asar=ASAR):
+          electron_version=ELECTRON_VERSION, asar=ASAR, osx_sign=False):
     """
     Run a build.
     """
@@ -226,6 +227,12 @@ def build(clean=True, app_name=APP_NAME,
         '--asar=' + asar,
         '--overwrite=true'
     ]
+
+    if on_mac and osx_sign:
+        electron_args += [
+            '--app-bundle-id=' + APP_BUNDLE_ID,
+            '--osx-sign'
+        ]
 
     if on_windows:
         electron_args += [
@@ -296,4 +303,17 @@ def build(clean=True, app_name=APP_NAME,
 
 
 if __name__ == '__main__':
-    build()
+    parser = argparse.ArgumentParser(
+        description='Produces a build archive of AboutCode Manager for this '
+                    'platform.')
+
+    parser.add_argument('--osx-sign',
+                        default=False,
+                        action='store_true',
+                        help='Sign the app (Mac only).')
+
+    args = parser.parse_args()
+    if args.osx_sign and not on_mac:
+        parser.error('--osx-sign can only be used on Mac')
+
+    build(osx_sign=args.osx_sign)
