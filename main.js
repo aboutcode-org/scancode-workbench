@@ -5,6 +5,7 @@ const app = electron.app;
 const BrowserWindow = electron.BrowserWindow;
 const shell = electron.shell;
 const Menu  = electron.Menu;
+const packageJson = require('./package.json');
 
 
 let mainWindow;
@@ -208,6 +209,10 @@ function getTemplate() {
       role: 'help',
       submenu: [
         {
+          label: `Version ${packageJson.version}`,
+          enabled: false
+        },
+        {
           label: 'Learn More',
           click: function() {
             shell.openExternal('https://github.com/nexB/aboutcode-manager/wiki');
@@ -227,7 +232,7 @@ function getTemplate() {
           label: 'Documentation',
           click: function() {
             shell.openExternal(
-              `https://github.com/nexB/aboutcode-manager/blob/v${pjson.version}/README.md`
+              `https://github.com/nexB/aboutcode-manager/blob/v${packageJson.version}/README.md`
             );
           }
         },
@@ -240,7 +245,6 @@ function getTemplate() {
       ]
     },
   ];
-const pjson = require('./package.json');
 
   if (process.platform == 'darwin') {
     template.unshift({
@@ -260,7 +264,7 @@ const pjson = require('./package.json');
           type: 'separator'
         },
         {
-          label: `Version ${pjson.version}`,
+          label: `Version ${packageJson.version}`,
           enabled: false
         },
         {
