@@ -1,14 +1,32 @@
 /*---------------------------------------
   Font source mapping
 -----------------------------------------*/
-@import "../fonts/Raleway-Regular.ttf";
-@import "../fonts/Raleway-Medium.ttf";
-@import "../fonts/Raleway-SemiBold.ttf";
-@import "../fonts/Lato-Regular.ttf";
-@import "../fonts/Lato-Bold.ttf";
-@import "../fonts/Lato-Italic.ttf";
-@import "../fonts/Lato-Light.ttf";
+@font-face {
+  font-family: 'Raleway';
+  font-style: normal;
+  font-weight: 400;
+  src: url('../fonts/Raleway-Regular.ttf');
+  src: local('?'),
+          url('../fonts/Raleway-Regular.ttf') format('truetype');
+}
 
+@font-face {
+  font-family: 'Raleway Black';
+  font-style: normal;
+  font-weight: 800;
+  src: url('../fonts/Raleway-Black.ttf');
+  src: local('?'),
+          url('../fonts/Raleway-Black.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Lato';
+  font-style: normal;
+  font-weight: 400;
+  src: url('../fonts/Lato-Regular.ttf');
+  src: local('?'),
+          url('../fonts/Lato-Regular.ttf') format('truetype');
+}
 /*---------------------------------------
   General
 -----------------------------------------*/
@@ -22,6 +40,10 @@ body {
 .logo {
   font-family: 'Raleway', Helvetica, san-serif;
   color: #0064cd;
+}
+
+.strong-logo {
+  font-family: 'Raleway Black', Helvetica, san-serif;
 }
 
 /*---------------------------------------
