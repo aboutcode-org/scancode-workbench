@@ -107,6 +107,6 @@ See the NOTICE file for more details.
 
 If you have a question, a suggestion or find a bug, enter an issue.
 
-For questions and chats, there is an official #aboutcode IRC channel on freenode 
-for scancode and other related tools. You can use your favorite IRC client or 
-use the web chat at http://webchat.freenode.net/
+[![Gitter chat](https://badges.gitter.im/aboutcode-org/gitter.png)](https://gitter.im/aboutcode-org/discuss)
+
+For questions and chats, you can join the Gitter channel at https://gitter.im/aboutcode-org/discuss
