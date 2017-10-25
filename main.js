@@ -209,8 +209,24 @@ function getTemplate() {
       role: 'help',
       submenu: [
         {
+          label: 'About AboutCode Manager',
+          click: function(item, focusedWindow) {
+            var win = new BrowserWindow({ frame: true, width: 250, height: 200 });
+            win.on('closed', function () { win = null });
+            win.loadURL('file://' + __dirname + '/about.html');
+            win.show();
+
+          },
+        },
+        {
+          type: 'separator'
+        },
+        {
           label: `Version ${packageJson.version}`,
           enabled: false
+        },
+        {
+          type: 'separator'
         },
         {
           label: 'Learn More',
