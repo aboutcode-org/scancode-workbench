@@ -15,6 +15,7 @@
  */
 
 const HAS_A_VALUE =  "about_code_data_table_has_a_value";
+const shell = require("electron").shell;
 
 class AboutCodeDataTable {
     constructor(tableID, aboutCodeDB) {
@@ -359,7 +360,7 @@ AboutCodeDataTable.COPYRIGHT_COLUMNS =
         {
             "data": function (row, type, val, meta) {
                 return row.copyright_statements.map(statements => {
-                    return statements.join("<br/>")
+                    return statements.join("<br/>");
                 }).join("<hr/>");
             },
             "title": "Copyright Statements",
@@ -370,7 +371,7 @@ AboutCodeDataTable.COPYRIGHT_COLUMNS =
         {
             "data": function (row, type, val, meta) {
                 return row.copyright_holders.map(holders => {
-                    return holders.join("<br/>")
+                    return holders.join("<br/>");
                 }).join("<hr/>");
             },
             "title": "Copyright Holders",
@@ -381,7 +382,7 @@ AboutCodeDataTable.COPYRIGHT_COLUMNS =
         {
             "data": function (row, type, val, meta) {
                 return row.copyright_authors.map(authors => {
-                    return authors.join("<br/>")
+                    return authors.join("<br/>");
                 }).join("<hr/>");
             },
             "title": "Copyright Authors",
@@ -445,9 +446,7 @@ AboutCodeDataTable.LICENSE_COLUMNS =
             "title": "License Homepage URL",
             "name": "license_homepage_url",
             "render": function ( data, type, full, meta ) {
-                return $.map(data, function (href, i) {
-                    return '<a href="'+href+'" target="_blank">'+href+'</a>';
-                }).join("<br>");
+                return $.map(data, href => createAnchorTag(href)).join("<br>");
             },
             "visible": false
         },
@@ -456,9 +455,7 @@ AboutCodeDataTable.LICENSE_COLUMNS =
             "title": "License Text URL",
             "name": "license_text_url",
             "render": function ( data, type, full, meta ) {
-                return $.map(data, function (href, i) {
-                    return '<a href="'+href+'" target="_blank">'+href+'</a>';
-                }).join("<br>");
+                return $.map(data, href => createAnchorTag(href)).join("<br>");
             },
             "visible": false
         },
@@ -467,9 +464,7 @@ AboutCodeDataTable.LICENSE_COLUMNS =
             "title": "License Reference URL",
             "name": "license_reference_url",
             "render": function ( data, type, full, meta ) {
-                return $.map(data, function (href, i) {
-                    return '<a href="'+href+'" target="_blank">'+href+'</a>';
-                }).join("<br>");
+                return $.map(data, href => createAnchorTag(href)).join("<br>");
             },
             "visible": false
         },
@@ -524,9 +519,7 @@ AboutCodeDataTable.URL_COLUMNS =
             "title": "URL",
             "name": "url",
             "render": function ( data, type, full, meta ) {
-                return $.map(data, function (href, i) {
-                    return '<a href="'+href+'" target="_blank">'+href+'</a>';
-                }).join("<br>");
+                return $.map(data, href => createAnchorTag(href)).join("<br>");
             },
             "visible": false
         },
@@ -712,9 +705,7 @@ AboutCodeDataTable.PACKAGE_COLUMNS =
         {
             "data": function (row, type, val, meta) {
                 return row.packages_download_urls.map(urls => {
-                    return urls.map(url => {
-                         return '<a href="'+url+'" target="_blank">'+url+'</a>';
-                    }).join("<br/>")
+                    return urls.map(url => createAnchorTag(url)).join("<br/>");
                 }).join("<hr/>");
             },
             "title": "Package Download URLs",
@@ -731,5 +722,16 @@ AboutCodeDataTable.ORIGIN_COLUMN_NAMES =
         "email",
         "url"
     ];
+
+// Create anchor tag for URLs and opens in default browser
+function createAnchorTag(href) {
+    return `<a href="${href}" onclick="openInDefaultBrowser(event)">${href}</a>`;
+}
+
+// Overrides original event and opens URL in default browser
+function openInDefaultBrowser(evt) {
+    evt.preventDefault();
+    shell.openExternal(evt.target.href);
+}
 
 module.exports = AboutCodeDataTable;

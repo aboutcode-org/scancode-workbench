@@ -775,7 +775,7 @@ $(document).ready(function () {
                 // Show error for problem with the JSON file
                 dialog.showErrorBox(
                     "JSON Error",
-                    "There is a problem with your JSON file.  It may be malformed " +
+                    "There is a problem with your JSON file. It may be malformed " +
                     "(e.g., the addition of a trailing comma), " +
                     "or there could be some other problem with the file. " +
                     "\n\nPlease check your file and try again. " +
@@ -901,7 +901,7 @@ $(document).ready(function () {
                             primary_language: component.programming_language,
                             reference_notes: component.notes,
                             product: productNameVersion
-                        }
+                        };
                     });
 
                     uploadComponents(apiUrl, dejaCodeComponents, apiKey);
