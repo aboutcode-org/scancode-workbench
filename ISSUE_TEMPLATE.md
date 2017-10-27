@@ -19,7 +19,9 @@ Include the error logged in the Console tab: https://github.com/nexB/aboutcode-m
 
 ### System configuration
 **Operating System**:
+
 **AboutCode Manager Version**:
+
 **ScanCode Toolkit Version**:
 
 ### Additional Information
