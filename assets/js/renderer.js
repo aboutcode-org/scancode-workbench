@@ -51,7 +51,8 @@ $(document).ready(function () {
                         .then((children) => {
                             callback.call(this, children)
                         });
-                }
+                },
+                "animation": false
             },
             "types": {
                 "directory": {
