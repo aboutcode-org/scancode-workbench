@@ -598,6 +598,7 @@ $(document).ready(function () {
             });
     }
 
+    // Show files that contain attribute value selected by user in bar chart
     function chartSummaryToFiles() {
         const val = $(this).data("value");
 
@@ -608,13 +609,7 @@ $(document).ready(function () {
             column.visible(true);
 
             // Clear all other columns
-            $.each(AboutCodeDataTable.TABLE_COLUMNS, (i, column) => {
-                const columnSelect = $(`select#clue-${column.name}`);
-                columnSelect.val("");
-                cluesTable.dataTable
-                    .column(`${column.name}:name`)
-                    .search("", false, false);
-            });
+            clearClueDataTableFilterValue();
 
             // Get the column's filter select box
             const select = $(`select#clue-${columnName}`);
@@ -630,6 +625,17 @@ $(document).ready(function () {
         }
     }
 
+    // Clear all column filter that are set in clue DataTable
+    function clearClueDataTableFilterValue() {
+        $.each(AboutCodeDataTable.TABLE_COLUMNS, (i, column) => {
+            const columnSelect = $(`select#clue-${column.name}`);
+            columnSelect.val("");
+            cluesTable.dataTable
+                .column(`${column.name}:name`)
+                .search("", false, false);
+        });
+    }
+
     // Open a SQLite Database File
     function openSQLite() {
         dialog.showOpenDialog({
@@ -642,6 +648,7 @@ $(document).ready(function () {
         }, function(fileNames) {
             if (fileNames === undefined) return;
             loadDatabaseFromFile(fileNames[0]);
+            clearClueDataTableFilterValue();
         });
     }
 
@@ -772,6 +779,7 @@ $(document).ready(function () {
                                 alert(`Error: ${err.message ? err.message : err}`);
                             });
                     });
+                    clearClueDataTableFilterValue();
             }).fail(function (jqxhr, textStatus, error) {
                 // Show error for problem with the JSON file
                 dialog.showErrorBox(
