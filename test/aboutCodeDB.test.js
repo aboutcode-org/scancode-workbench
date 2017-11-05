@@ -63,10 +63,7 @@ describe("checkAboutCodeDB", function() {
             return aboutCodeDB.db
                 .then(() => aboutCodeDB.addScanData(duplicatePathsResults))
                 .then(() => assert.fail(true, true, "This code should not be called!"))
-                .catch((err) => {
-                    assert.equal(err.message, AboutCodeDB.getDuplicatePathsErrorMessage(duplicatePathsResults.files));
-                    assert.equal(err.name, "SequelizeUniqueConstraintError");
-                });
+                .catch((err) => assert.equal(err.name, "SequelizeUniqueConstraintError"));
         });
     });
 

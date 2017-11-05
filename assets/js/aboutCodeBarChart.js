@@ -42,17 +42,16 @@ class AboutCodeBarChart {
     }
 
     showSummary(attribute, parentPath) {
-        let where = {};
+        let query = {
+            attributes: [Sequelize.fn("TRIM", Sequelize.col(attribute)), attribute]
+        };
 
         if (parentPath) {
-            where.path = { $like: `${parentPath}%` };
+            query.where = { path: { $like: `${parentPath}%` } };
         }
 
-        return this.aboutCodeDB.FlattenedFile
-            .findAll({
-                attributes: [Sequelize.fn("TRIM", Sequelize.col(attribute)), attribute],
-                where: where
-            })
+        return this.aboutCodeDB.db
+            .then(() => this.aboutCodeDB.FlattenedFile.findAll(query))
             .then((values) => AboutCodeBarChart.mapToAttributeValues(values, attribute))
             .then((values) => {
                 this.barChart = new BarChart(values, this.chartOptions, this.barChartId);

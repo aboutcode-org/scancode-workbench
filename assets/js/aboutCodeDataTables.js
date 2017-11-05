@@ -118,23 +118,18 @@ class AboutCodeDataTable {
             }
 
             // Execute the database find to get the rows of data
-            let dFind = $.Deferred();
-            this.aboutCodeDB.FlattenedFile.findAll(query)
-                .then((result) => dFind.resolve(result));
+            let dFind = this.aboutCodeDB.FlattenedFile.findAll(query);
 
             // Execute the database count of all rows
-            let dCount = $.Deferred();
-            this.aboutCodeDB.FlattenedFile.count({})
-                .then((count) => dCount.resolve(count));
+            let dCount = this.aboutCodeDB.FlattenedFile.count({});
 
             // Execute the database count of filtered query rows
-            let dFilteredCount = $.Deferred();
-            this.aboutCodeDB.FlattenedFile.count(query)
-                .then((count) => dFilteredCount.resolve(count));
+            let dFilteredCount = this.aboutCodeDB.FlattenedFile.count(query);
 
             // Wait for all three of the Deferred objects to finish
-            $.when(dFind, dCount, dFilteredCount)
-                .then((rows, count, filteredCount) => {
+            Promise.all([dFind, dCount, dFilteredCount])
+                .then(values => {
+                    const [rows, count, filteredCount] = values;
                     dataTablesCallback({
                         draw: dataTablesInput.draw,
                         data: rows ? rows : [],

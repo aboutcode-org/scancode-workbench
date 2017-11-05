@@ -48,9 +48,7 @@ $(document).ready(function () {
                                 parent: currentDirectory.id
                             }
                         })
-                        .then((children) => {
-                            callback.call(this, children)
-                        });
+                        .then((children) => callback.call(this, children));
                 },
                 "animation": false
             },
@@ -79,7 +77,7 @@ $(document).ready(function () {
                         "edit_component": {
                             "label": "Edit Component",
                             "action": function () {
-                                onNodeClick(node)
+                                onNodeClick(node);
                             }
                         }
                     };
