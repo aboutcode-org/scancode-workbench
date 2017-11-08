@@ -24,7 +24,6 @@ const dialog = require('electron').remote.dialog;
 // The Electron module used to communicate asynchronously from a renderer process to the main process.
 const ipcRenderer = require('electron').ipcRenderer;
 
-
 $(document).ready(function () {
     // Create default values for all of the data and ui classes
     let aboutCodeDB = new AboutCodeDB();
@@ -697,98 +696,69 @@ $(document).ready(function () {
         function (fileNames) {
             if (fileNames === undefined) return;
 
-            const fileName = fileNames[0];
+            const jsonFileName = fileNames[0];
 
-            $.getJSON(fileName, function (json) {
+            // Immediately ask for a SQLite to save and create the database
+            dialog.showSaveDialog(
+                {
+                    title: 'Save a SQLite Database File',
+                    filters: [
+                        { name: 'SQLite File', extensions: ['sqlite'] }
+                    ]
+                },
+                function (fileName) {
+                    if (fileName === undefined) return;
 
-                // Show error for scans missing file type information
-                if (json.files != undefined && json.files.length > 0
-                    && json.files[0].type === undefined) {
-                    dialog.showErrorBox(
-                        "Missing File Type Information",
-                        "Missing file 'type' information in the " +
-                        "scanned data. \n\nThis probably means you ran " +
-                        "the scan without the -i option in ScanCode. " +
-                        "The app requires file information from a " +
-                        "ScanCode scan. Rerun the scan using \n./scancode " +
-                        "-clipeu options."
-                    );
-                    return;
-                }
-
-                // Add root directory into data
-                // See https://github.com/nexB/scancode-toolkit/issues/543
-                const rootPath = json.files[0].path.split("/")[0];
-                let hasRootPath = false;
-
-                for (let i = 0, n = json.files.length; i < n; i++) {
-                    if (rootPath === json.files[i].path) {
-                        hasRootPath = true;
-                        break;
-                    }
-                }
-
-                if (!hasRootPath) {
-                    json.files.push({
-                        path: rootPath,
-                        name: rootPath,
-                        type: "directory",
-                        files_count: json.files_count
-                    });
-                }
-
-                // Immediately ask for a SQLite to save and create the database
-                dialog.showSaveDialog(
-                    {
-                        title: 'Save a SQLite Database File',
-                        filters: [
-                            { name: 'SQLite File', extensions: ['sqlite'] }
-                        ]
-                    },
-                    function (fileName) {
-                        if (fileName === undefined) return;
-
-                        // Overwrite existing sqlite file
-                        if (fs.existsSync(fileName)) {
-                            fs.unlink(fileName, (err) => {
-                              if (err) {
-                                  throw err;
-                              }
-                              console.info(`Deleted ${fileName}`);
-                            });
-                        }
-
-                        // Create a new database when importing a json file
-                        aboutCodeDB = new AboutCodeDB({
-                            dbName: "demo_schema",
-                            dbStorage: fileName,
+                    // Overwrite existing sqlite file
+                    if (fs.existsSync(fileName)) {
+                        fs.unlink(fileName, (err) => {
+                          if (err) {
+                              throw err;
+                          }
+                          console.info(`Deleted ${fileName}`);
                         });
+                    }
 
-                        // The flattened data is used by the clue table and jstree
-                        aboutCodeDB.db
-                            .then(() => showProgressIndicator())
-                            .then(() => aboutCodeDB.addFlattenedRows(json))
-                            .then(() => aboutCodeDB.addScanData(json))
-                            .then(() => reloadDataForViews())
-                            .then(() => hideProgressIndicator())
-                            .catch((err) => {
-                                hideProgressIndicator();
-                                console.log(err);
-                                alert(`Error: ${err.message ? err.message : err}`);
-                            });
+                    // Create a new database when importing a json file
+                    aboutCodeDB = new AboutCodeDB({
+                        dbName: "demo_schema",
+                        dbStorage: fileName,
                     });
-                    clearClueDataTableFilterValue();
-            }).fail(function (jqxhr, textStatus, error) {
-                // Show error for problem with the JSON file
-                dialog.showErrorBox(
-                    "JSON Error",
-                    "There is a problem with your JSON file. It may be malformed " +
-                    "(e.g., the addition of a trailing comma), " +
-                    "or there could be some other problem with the file. " +
-                    "\n\nPlease check your file and try again. " +
-                    "\n\nThe error thrown by the system is: \n\n" + error
-                );
-            });
+
+                    const stream =
+                        fs.createReadStream(jsonFileName, {encoding: 'utf8'});
+                    aboutCodeDB.db
+                        .then(() => showProgressIndicator())
+                        .then(() => aboutCodeDB.addFromJsonStream(stream))
+                        .then(() => reloadDataForViews())
+                        .then(() => hideProgressIndicator())
+                        .catch((err) => {
+                            hideProgressIndicator();
+                            if (err instanceof MissingFileInfoError) {
+                                dialog.showErrorBox(
+                                    "Missing File Type Information",
+                                    "Missing file 'type' information in the " +
+                                    "scanned data. \n\nThis probably means you ran " +
+                                    "the scan without the -i option in ScanCode. " +
+                                    "The app requires file information from a " +
+                                    "ScanCode scan. Rerun the scan using \n./scancode " +
+                                    "-clipeu options."
+                                );
+                            } else {
+                                // Show error for problem with the JSON file
+                                dialog.showErrorBox(
+                                    "JSON Error",
+                                    "There is a problem with your JSON file. It may be malformed " +
+                                    "(e.g., the addition of a trailing comma), " +
+                                    "or there could be some other problem with the file. " +
+                                    "\n\nPlease check your file and try again. " +
+                                    "\n\nThe error thrown by the system is: \n\n" + err
+                                );
+                            }
+                            console.error(err);
+                        });
+                });
+            clearClueDataTableFilterValue();
         });
     });
 

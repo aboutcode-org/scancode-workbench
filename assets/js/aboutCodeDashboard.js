@@ -210,11 +210,16 @@ class AboutCodeDashboard {
 
     // Map each row to the given attribute value, and sanitize invalid values.
     static getAttributeValues(values, attribute) {
-        return $.map(values, (value, index) => {
-            let attributeValue = value[attribute];
-            return AboutCodeDashboard.isValid(attributeValue)
-                ?  attributeValue : ["No Value Detected"];
-        });
+        const validatedValues = [];
+        let attributeValue = null;
+
+        for (let i = 0; i < values.length; i++) {
+            attributeValue = values[i][attribute];
+            validatedValues.push(
+                AboutCodeBarChart.isValid(attributeValue) ?
+                    attributeValue : ["No Value Detected"]);
+        }
+        return validatedValues;
     }
 
     static isValid(value) {

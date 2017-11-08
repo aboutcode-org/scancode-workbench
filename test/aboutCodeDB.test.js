@@ -27,22 +27,24 @@ const chaiSubset = require('chai-subset');
 chai.use(chaiSubset);
 
 const AboutCodeDB = require("../assets/js/aboutCodeDB");
-const scanCodeJSONResults = JSON.parse(fs.readFileSync(__dirname + "/data/scancode-results.json", "utf8"));
-const flattenedFilesResults = JSON.parse(fs.readFileSync(__dirname + "/data/flattened-scancode-results.json", "utf8"));
-const duplicatePathsResults = JSON.parse(fs.readFileSync(__dirname + "/data/scancode-duplicate-path-values.json", "utf8"));
+
+const SCANCODE_FILE = __dirname + "/data/scancode-results.json";
+const FLATTENED_FILE = __dirname + "/data/flattened-scancode-results.json";
+const DUPLICATE_PATH_FILE = __dirname + "/data/scancode-duplicate-path-values.json";
 
 describe("checkAboutCodeDB", function() {
 
-    describe("addScanData", function() {
+    describe("addFromJsonFile", function() {
+        const scanCodeJSONStream = fs.createReadStream(SCANCODE_FILE, "utf8");
         it("should add rows to database", function () {
             let aboutCodeDB = new AboutCodeDB();
 
             return aboutCodeDB.db
                 .then(() => aboutCodeDB.File.count())
                 .then((rowCount) => assert.strictEqual(rowCount, 0))
-                .then(() => aboutCodeDB.addScanData(scanCodeJSONResults))
+                .then(() => aboutCodeDB.addFromJsonStream(scanCodeJSONStream))
                 .then(() => aboutCodeDB.File.count())
-                .then((rowCount) => assert.strictEqual(rowCount, 2))
+                .then((rowCount) => assert.strictEqual(rowCount, 3))
                 .then(() => aboutCodeDB.License.count())
                 .then((licenseCount) => assert.strictEqual(licenseCount,1))
                 .then(() => aboutCodeDB.Copyright.count())
@@ -52,52 +54,58 @@ describe("checkAboutCodeDB", function() {
                 .then(() => aboutCodeDB.Email.count())
                 .then((emailCount) => assert.strictEqual(emailCount, 1))
                 .then(() => aboutCodeDB.Url.count())
-                .then((urlCount) => assert.strictEqual(urlCount, 2))
+                .then((urlCount) => assert.strictEqual(urlCount, 2));
         });
     });
 
     describe("getDuplicatePaths", function() {
+        const stream = fs.createReadStream(DUPLICATE_PATH_FILE, "utf8");
         it("should throw SequelizeUniqueConstraintError error for duplicate path", function() {
             let aboutCodeDB = new AboutCodeDB();
 
             return aboutCodeDB.db
-                .then(() => aboutCodeDB.addScanData(duplicatePathsResults))
+                .then(() => aboutCodeDB.addFromJsonStream(stream))
                 .then(() => assert.fail(true, true, "This code should not be called!"))
-                .catch((err) => assert.equal(err.name, "SequelizeUniqueConstraintError"));
+                .catch((e) => assert.equal(e.name, "SequelizeUniqueConstraintError"));
         });
     });
 
     describe("findAll", function() {
+        const results = JSON.parse(fs.readFileSync(SCANCODE_FILE, "utf8"));
+        const stream = fs.createReadStream(SCANCODE_FILE, "utf8");
         it("should return all rows", function() {
             let aboutCodeDB = new AboutCodeDB();
 
             return aboutCodeDB.db
-                .then(() => aboutCodeDB.addScanData(scanCodeJSONResults))
+                .then(() => aboutCodeDB.addFromJsonStream(stream))
                 .then(() => aboutCodeDB.findAll({}))
                 .then((rows) => {
                     rows = rows.map(row => row.toJSON());
-                    assert.containSubset(rows, scanCodeJSONResults.files);
-                })
+                    assert.containSubset(rows, results.files.splice(1,3));
+                });
         });
     });
 
     describe("findOne", function() {
+        const results = JSON.parse(fs.readFileSync(SCANCODE_FILE, "utf8"));
+        const stream = fs.createReadStream(SCANCODE_FILE, "utf8");
         it("should return one", function() {
             let aboutCodeDB = new AboutCodeDB();
 
             return aboutCodeDB.db
-                .then(() => aboutCodeDB.addScanData(scanCodeJSONResults))
+                .then(() => aboutCodeDB.addFromJsonStream(stream))
                 .then(() => aboutCodeDB.findOne({
                     where: { path: "samples/JGroups/src"}
                 }))
                 .then((row) => {
                     row = row.toJSON();
-                    assert.containSubset(row, scanCodeJSONResults.files[1]);
-                })
+                    assert.containSubset(row, results.files[1]);
+                });
         });
     });
 
     describe("findAllJSTree", function() {
+        const stream = fs.createReadStream(SCANCODE_FILE, "utf8");
         it("should format ScanCode results to jsTree Format", function() {
             let aboutCodeDB = new AboutCodeDB();
             let expectedJSTreeFormat= [
@@ -114,15 +122,20 @@ describe("checkAboutCodeDB", function() {
                     parent: "samples/JGroups",
                     type: "directory",
                     children: true
+                },
+                {
+                    children: true,
+                    id: "samples",
+                    parent: "#",
+                    text: "samples",
+                    type: "directory"
                 }
             ];
 
             return aboutCodeDB.db
-                .then(() => aboutCodeDB.addScanData(scanCodeJSONResults))
+                .then(() => aboutCodeDB.addFromJsonStream(stream))
                 .then(() => aboutCodeDB.findAllJSTree())
-                .then((scanCodeJSONResults) => {
-                    assert.deepEqual(expectedJSTreeFormat, scanCodeJSONResults)
-                })
+                .then(results => assert.deepEqual(expectedJSTreeFormat, results));
         });
     });
 
@@ -184,46 +197,46 @@ describe("checkAboutCodeDB", function() {
                 .then(() => aboutCodeDB.Component.count())
                 .then((rowCount) => assert.strictEqual(rowCount, 1))
                 .then(() => aboutCodeDB.findComponent({
-                        where: { path: "samples"}
+                    where: { path: "samples"}
                 }))
-                .then((row) => {
-                    row = row.toJSON();
-                    assert.containSubset(row, component);
-                })
+                .then(row => assert.containSubset(row.toJSON(), component))
                 .then(() => aboutCodeDB.setComponent(component2))
                 .then(() => aboutCodeDB.Component.count())
-                .then((rowCount) => assert.strictEqual(rowCount, 2))
+                .then((rowCount) => assert.strictEqual(rowCount, 2));
         });
     });
 
     describe("addFlattenedRows", function() {
+        const results = JSON.parse(fs.readFileSync(FLATTENED_FILE, "utf8"));
+        const stream = fs.createReadStream(SCANCODE_FILE, "utf8");
         it("should add rows to the flattened files table", function() {
             let aboutCodeDB = new AboutCodeDB();
 
             return aboutCodeDB.db
                 .then(() => aboutCodeDB.FlattenedFile.count())
                 .then((rowCount) => assert.strictEqual(rowCount, 0))
-                .then(() => aboutCodeDB.addFlattenedRows(scanCodeJSONResults))
+                .then(() => aboutCodeDB.addFromJsonStream(stream))
                 .then(() => aboutCodeDB.FlattenedFile.count())
-                .then((rowCount) => assert.strictEqual(rowCount, 2))
+                .then((rowCount) => assert.strictEqual(rowCount, 3))
                 .then(() => aboutCodeDB.FlattenedFile.findAll())
                 .then((rows) => {
                     rows = rows.map((row) => row.toJSON());
-                    assert.containSubset(rows, flattenedFilesResults);
-                })
+                    assert.containSubset(rows, results);
+                });
         });
     });
 
     describe("getFileCount", function() {
+        const stream = fs.createReadStream(SCANCODE_FILE, "utf8");
         it("should return the ScanCode files_count", function() {
             let aboutCodeDB = new AboutCodeDB();
 
             return aboutCodeDB.db
-                .then(() => aboutCodeDB.addScanData(scanCodeJSONResults))
+                .then(() => aboutCodeDB.addFromJsonStream(stream))
                 .then(() => aboutCodeDB.getFileCount())
                 .then((value) => {
                     assert.strictEqual(value, 43);
-                })
+                });
         });
     });
 });

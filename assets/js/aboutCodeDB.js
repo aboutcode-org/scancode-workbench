@@ -18,6 +18,11 @@
 // Load Sequelize and create an in-memory database
 const Sequelize = require("sequelize");
 
+const fs = require('fs');
+const JSONStream = require('JSONStream');
+
+class MissingFileInfoError extends Error {}
+
 // Creates a new database on the flattened json data
 class AboutCodeDB {
     constructor(config) {
@@ -35,28 +40,32 @@ class AboutCodeDB {
             storage: storage
         });
 
-        // Flattened table is for the DataTable
-        // This table is used by the Clues DataTable
+        // Flattened table is used by the Clues DataTable
         this.FlattenedFile = this.sequelize.define(
             TABLE.FLATTEN_FILE.name,
-            TABLE.FLATTEN_FILE.columns, {
-                indexes: [
-                    // Create a unique index on path
-                    {
-                        unique: true,
-                        fields: ["path"]
-                    }
-                ]
-            });
+            TABLE.FLATTEN_FILE.columns, { timestamps: false });
 
         // Non-flattened tables are for the NodeView
-        this.ScanCode = this.sequelize.define(TABLE.SCANCODE.name, TABLE.SCANCODE.columns);
-        this.File = this.sequelize.define(TABLE.FILE.name, TABLE.FILE.columns);
-        this.License = this.sequelize.define(TABLE.LICENSE.name, TABLE.LICENSE.columns);
-        this.Copyright = this.sequelize.define(TABLE.COPYRIGHT.name, TABLE.COPYRIGHT.columns);
-        this.Package = this.sequelize.define(TABLE.PACKAGE.name, TABLE.PACKAGE.columns);
-        this.Email = this.sequelize.define(TABLE.EMAIL.name, TABLE.EMAIL.columns);
-        this.Url = this.sequelize.define(TABLE.URL.name, TABLE.URL.columns);
+        this.ScanCode = this.sequelize.define(
+            TABLE.SCANCODE.name, TABLE.SCANCODE.columns);
+
+        this.File = this.sequelize.define(
+            TABLE.FILE.name, TABLE.FILE.columns, { timestamps: false });
+
+        this.License = this.sequelize.define(
+            TABLE.LICENSE.name, TABLE.LICENSE.columns, { timestamps: false });
+
+        this.Copyright = this.sequelize.define(
+            TABLE.COPYRIGHT.name, TABLE.COPYRIGHT.columns, { timestamps: false });
+
+        this.Package = this.sequelize.define(
+            TABLE.PACKAGE.name, TABLE.PACKAGE.columns, { timestamps: false });
+
+        this.Email = this.sequelize.define(
+            TABLE.EMAIL.name, TABLE.EMAIL.columns, { timestamps: false });
+
+        this.Url = this.sequelize.define(
+            TABLE.URL.name, TABLE.URL.columns, { timestamps: false });
 
         // Component table is for creating custom components.
         this.Component = this.sequelize.define(
@@ -87,29 +96,12 @@ class AboutCodeDB {
 
         // Include Array for queries
         this.fileIncludes = [
-            {
-                model: this.License,
-                separate: true
-            },
-            {
-                model: this.Copyright,
-                separate: true
-            },
-            {
-                model: this.Package,
-                separate: true
-            },
-            {
-                model: this.Email,
-                separate: true
-            },
-            {
-                model: this.Url,
-                separate: true
-            },
-            {
-                model: this.Component
-            }
+            { model: this.License, separate: true },
+            { model: this.Copyright, separate: true },
+            { model: this.Package, separate: true },
+            { model: this.Email, separate: true },
+            { model: this.Url, separate: true },
+            { model: this.Component }
         ];
 
         // A promise that will return when the db and tables have been created
@@ -175,114 +167,187 @@ class AboutCodeDB {
     }
 
     // Add rows to the flattened files table from a ScanCode json object
-    addFlattenedRows(json) {
-        if (!json) {
+    addFromJsonStream(stream) {
+        if (!stream) {
             return this.db;
         }
 
-        // Add all rows to the flattened DB
-        return this.db
-            .then(() => {
-                return json.files.map((file) => flattenData(file));
-            })
-            .then((files) => {
-                let chain = Promise.resolve();
-                const fileCount = json.files.length;
-                const chunkCount = 1000;
+        let scancode = null;
+        let promiseChain = this.db;
+        let index = 0;
+        let rootPath = null;
+        let hasRootPath = false;
+        const batchSize  = 1000;
+        let files = [];
+        let progress = 0;
 
-                // Loop over each chunk and bulkCreate the rows. We separate
-                // into chunks to reduce memory allocations and allow GC.
-                for (let i = 0; i < fileCount; i += chunkCount) {
-                    // Ending index of chunk
-                    const j = Math.min(fileCount, i + chunkCount);
-                    chain = chain.then(() => {
-                        // Technically, this Promise isn't needed for
-                        // correctness but solves a memory leak (Issue #100)
-                        return new Promise((resolve, reject) => {
-                            this.FlattenedFile.bulkCreate(files.slice(i, j), {
-                                logging: false
+        console.time('Load Database');
+        return new Promise((resolve, reject) => {
+            let that = this;
+            stream
+                .pipe(JSONStream.parse('files.*'))
+                .on('header', header => {
+                    promiseChain = promiseChain
+                        .then(() => this.ScanCode.create(header))
+                        .then((result) => scancode = result);
+                })
+                .on('data', function(file) {
+                    if (!rootPath) {
+                        rootPath = file.path.split("/")[0];
+                        // Show error for scans missing file type information
+                        if (file.type === undefined) {
+                            reject(new MissingFileInfoError());
+                        }
+                    }
+                    if (rootPath === file.path) {
+                        hasRootPath = true;
+                    }
+                    files.push(file);
+                    if (files.length >= batchSize) {
+                        // Need to set a new variable before handing to promise
+                        this.pause();
+                        promiseChain = promiseChain
+                            .then(() => that._batchCreateFiles(files, scancode.id))
+                            .then(() => {
+                                index += files.length;
+                                const files_count = scancode.files_count;
+                                const currProgress = Math.round(index/files_count*100);
+                                if (currProgress > progress) {
+                                    progress = currProgress;
+                                    console.log("Progress: "
+                                        + `${progress}% `
+                                        + `(${index}/${files_count})`);
+
+                                }
                             })
                             .then(() => {
-                                resolve();
-                                console.log("Add FlattenedRows Progress: "
-                                    + Math.round(j/fileCount*100) + "%");
-                            })
-                            .catch((e) => reject(e));
-                        });
-                    });
-                }
-                return chain;
-            })
+                                files = [];
+                                this.resume();
+                            });
+                    }
+                })
+                .on('end', () => {
+                    // Add root directory into data
+                    // See https://github.com/nexB/scancode-toolkit/issues/543
+                    promiseChain
+                        .then(() => {
+                            if (rootPath && !hasRootPath) {
+                                files.push({
+                                    path: rootPath,
+                                    name: rootPath,
+                                    type: "directory",
+                                    files_count: scancode.files_count
+                                });
+                            }
+                        })
+                        .then(() => this._batchCreateFiles(files, scancode.id))
+                        .then(() => {
+                            console.timeEnd('Load Database');
+                            resolve();
+                        }).catch((e) => reject(e));
+                })
+                .on('error', e => reject(e));
+            });
+    }
+
+    _batchCreateFiles(files, scancodeId) {
+        // Add batched files to the DB
+        return this._addFlattenedFiles(files)
+            .then(() => this._addFiles(files, scancodeId))
             .catch((err) => {
                 if (err.name === "SequelizeUniqueConstraintError") {
-                    err.message = getDuplicatePathsErrorMessage(json.files);
+                    // FIXME: json.files no longer exists
+                    err.message = getDuplicatePathsErrorMessage(files);
                 }
                 throw err;
             });
     }
 
-    //  Adds rows to the ScanCode and File table
-    addScanData(json) {
-        if (!json) {
-            return this.db;
-        }
+    _addFlattenedFiles(files) {
+        files = $.map(files, file => flattenData(file));
+        return this.FlattenedFile.bulkCreate(files, {logging: false});
+    }
 
-        // Add all rows to the non-flattened DB
-        return this.db
-            .then(() => {
-                return this.ScanCode.create(json);
-            })
-            .then((scancode) => {
-                return json.files.map((file) => {
-                    file.parent = parent(file.path);
-                    file.scancodeId = scancode.id;
-                    return file;
-                });
-            })
-            .then((files) => {
-                let chain = Promise.resolve();
-                const fileCount = files.length;
-                for (let i = 0; i < fileCount; i++) {
-                    chain = chain.then(() => {
-                        // Technically, this Promise isn't needed for
-                        // correctness but solves a memory leak (Issue #100)
-                        return new Promise((resolve, reject) => {
-                            this.File.create(files[i],
-                                {
-                                    logging: false,
-                                    include: this.fileIncludes
-                                })
-                                .then(() => {
-                                    resolve();
-                                    if (i % 1000 === 0) {
-                                        console.log("Add Rows Progress: "
-                                            + Math.round(i/fileCount*100) + "%");
-                                    }
-                                })
-                                .catch((e) => reject(e));
+    _addFiles(files, scancodeId) {
+        let transactionOptions = {
+            logging: false,
+            autocommit: false,
+            isolationLevel: Sequelize.Transaction.ISOLATION_LEVELS.READ_COMMITTED
+        };
+        return this.sequelize.transaction(transactionOptions, (t) => {
+            let options = {
+                logging: false,
+                transaction: t
+            };
+            $.each(files, (i, file) => {
+                file.parent = parent(file.path);
+                file.scancodeId = scancodeId;
+            });
+            return this.File.bulkCreate(files, options)
+                .then((savedFiles) => {
+                    $.each(files, (i, file) => {
+                        file.id = savedFiles[i].id;
+                    });
+                })
+                .then(() => {
+                    let licenses = $.map(files, file => {
+                        return $.map(file.licenses || [], license => {
+                            license.fileId = file.id;
+                            return license;
                         });
                     });
-                }
-                return chain;
-            })
-            .catch((err) => {
-                if (err.name === "SequelizeUniqueConstraintError") {
-                    err.message = getDuplicatePathsErrorMessage(json.files);
-                }
-                throw err;
+                    this.License.bulkCreate(licenses || [], options);
+                })
+                .then(() => {
+                    let copyrights = $.map(files, file => {
+                        return $.map(file.copyrights || [], copyright => {
+                            copyright.fileId = file.id;
+                            return copyright;
+                        });
+                    });
+                    this.Copyright.bulkCreate(copyrights || [], options);
+                })
+                .then(() => {
+                    let packages = $.map(files, file => {
+                        return $.map(file.packages || [], pkg => {
+                            pkg.fileId = file.id;
+                            return pkg;
+                        });
+                    });
+                    this.Package.bulkCreate(packages || [], options);
+                })
+                .then(() => {
+                    let emails = $.map(files, file => {
+                        return $.map(file.emails || [], email => {
+                            email.fileId = file.id;
+                            return email;
+                        });
+                    });
+                    this.Email.bulkCreate(emails || [], options);
+                })
+                .then(() => {
+                    let urls = $.map(files, file => {
+                        return $.map(file.urls || [], url => {
+                            url.fileId = file.id;
+                            return url;
+                        });
+                    });
+                    this.Url.bulkCreate(urls || [], options);
+                })
+                .then(() => {
+                    return this.sequelize.Promise.each(files, file => {
+                        if (file.component) {
+                            return this.Component.create(file.component, options);
+                        }
+                    });
+                });
             });
     }
 
     getFileCount() {
         return this.db
-            .then(() => {
-                return this.ScanCode.findOne({
-                    attributes: ["files_count"]
-                })
-            })
-            .then((count) => {
-                return count ? count.files_count : 0;
-            });
+            .then(() => this.ScanCode.findOne({attributes: ["files_count"]}))
+            .then((count) => count ? count.files_count : 0);
     }
 }
 
