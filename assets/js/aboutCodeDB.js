@@ -187,6 +187,9 @@ class AboutCodeDB {
             stream
                 .pipe(JSONStream.parse('files.*'))
                 .on('header', header => {
+                    if ('header' in header) {
+                        header = header.header;
+                    }
                     promiseChain = promiseChain
                         .then(() => this.ScanCode.create(header))
                         .then((result) => scancode = result);
