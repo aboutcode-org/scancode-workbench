@@ -23,6 +23,8 @@ const dialog = require('electron').remote.dialog;
 
 // The Electron module used to communicate asynchronously from a renderer process to the main process.
 const ipcRenderer = require('electron').ipcRenderer;
+const packageJson = require('../../package.json');
+const aboutCodeVersion = packageJson.version;
 
 $(document).ready(function () {
     // Create default values for all of the data and ui classes
@@ -729,7 +731,7 @@ $(document).ready(function () {
                         fs.createReadStream(jsonFileName, {encoding: 'utf8'});
                     aboutCodeDB.db
                         .then(() => showProgressIndicator())
-                        .then(() => aboutCodeDB.addFromJsonStream(stream))
+                        .then(() => aboutCodeDB.addFromJsonStream(stream, aboutCodeVersion))
                         .then(() => reloadDataForViews())
                         .then(() => hideProgressIndicator())
                         .catch((err) => {
@@ -896,3 +898,5 @@ $(document).ready(function () {
     restoreSplitterSizes();
     showDashboardButton.trigger("click");
 });
+
+module.exports = aboutCodeVersion;

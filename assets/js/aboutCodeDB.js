@@ -46,6 +46,9 @@ class AboutCodeDB {
             TABLE.FLATTEN_FILE.columns, { timestamps: false });
 
         // Non-flattened tables are for the NodeView
+        this.AboutCode = this.sequelize.define(
+            TABLE.ABOUTCODE.name, TABLE.ABOUTCODE.columns);
+
         this.ScanCode = this.sequelize.define(
             TABLE.SCANCODE.name, TABLE.SCANCODE.columns);
 
@@ -167,11 +170,12 @@ class AboutCodeDB {
     }
 
     // Add rows to the flattened files table from a ScanCode json object
-    addFromJsonStream(stream) {
+    addFromJsonStream(stream, aboutCodeVersion) {
         if (!stream) {
             return this.db;
         }
 
+        const version = aboutCodeVersion;
         let scancode = null;
         let promiseChain = this.db;
         let index = 0;
@@ -190,6 +194,10 @@ class AboutCodeDB {
                     if ('header' in header) {
                         header = header.header;
                     }
+                    promiseChain = promiseChain
+                        .then(() => this.AboutCode.create({
+                            version: version
+                        }));
                     promiseChain = promiseChain
                         .then(() => this.ScanCode.create(header))
                         .then((result) => scancode = result);
@@ -356,6 +364,12 @@ class AboutCodeDB {
 
 // Define table names and columns
 const TABLE = {
+    ABOUTCODE: {
+        name: "aboutcode-manager",
+        columns: {
+            version: Sequelize.STRING
+        }
+    },
     SCANCODE: {
         name: "scancode",
         columns: {
