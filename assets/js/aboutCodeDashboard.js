@@ -43,7 +43,8 @@ class AboutCodeDashboard {
             data: {
                 columns: [],
                 type: "pie",
-                order: 'desc'
+                order: 'desc',
+                hide: 'No Value Detected'
             },
             color: {
                 pattern: LEGEND_COLORS
@@ -55,7 +56,8 @@ class AboutCodeDashboard {
                 data: {
                     columns: [],
                     type: "pie",
-                    order: 'desc'
+                    order: 'desc',
+                    hide: 'No Value Detected'
                 },
                 color: {
                     pattern: LEGEND_COLORS
@@ -67,7 +69,8 @@ class AboutCodeDashboard {
                 data: {
                     columns: [],
                     type: "pie",
-                    order: 'desc'
+                    order: 'desc',
+                    hide: 'No Value Detected'
                 },
                 color: {
                     pattern: LEGEND_COLORS
@@ -79,7 +82,8 @@ class AboutCodeDashboard {
                 data: {
                     columns: [],
                     type: "bar",
-                    order: 'desc'
+                    order: 'desc',
+                    hide: 'No Value Detected'
                 },
                 color: {
                     pattern: LEGEND_COLORS
