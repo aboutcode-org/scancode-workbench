@@ -215,9 +215,16 @@ class AboutCodeDashboard {
 
         for (let i = 0; i < values.length; i++) {
             attributeValue = values[i][attribute];
-            validatedValues.push(
-                AboutCodeBarChart.isValid(attributeValue) ?
-                    attributeValue : ["No Value Detected"]);
+
+            if (!Array.isArray(attributeValue) || attributeValue.length === 0){
+                attributeValue = [attributeValue];
+            }
+
+            for (let j = 0; j < attributeValue.length; j++) {
+                validatedValues.push(
+                    AboutCodeDashboard.isValid(attributeValue[j]) ?
+                        attributeValue[j] : "No Value Detected");
+            }
         }
         return validatedValues;
     }
