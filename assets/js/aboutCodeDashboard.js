@@ -36,7 +36,7 @@ class AboutCodeDashboard {
         this.totalPackages = $("#total-packages .title");
 
         this.dashboardId = dashboardId;
-        this.aboutCodeDB = aboutCodeDB;
+        this.database(aboutCodeDB);
 
         this.sourceLanguageChart = c3.generate({
             bindto: "#source-chart",
@@ -44,11 +44,10 @@ class AboutCodeDashboard {
                 columns: [],
                 type: "pie",
                 order: 'desc',
-                hide: 'No Value Detected'
             },
             color: {
                 pattern: LEGEND_COLORS
-            }
+            },
         });
 
         this.licenseCategoryChart = c3.generate({
@@ -57,7 +56,6 @@ class AboutCodeDashboard {
                     columns: [],
                     type: "pie",
                     order: 'desc',
-                    hide: 'No Value Detected'
                 },
                 color: {
                     pattern: LEGEND_COLORS
@@ -70,7 +68,6 @@ class AboutCodeDashboard {
                     columns: [],
                     type: "pie",
                     order: 'desc',
-                    hide: 'No Value Detected'
                 },
                 color: {
                     pattern: LEGEND_COLORS
@@ -83,7 +80,6 @@ class AboutCodeDashboard {
                     columns: [],
                     type: "bar",
                     order: 'desc',
-                    hide: 'No Value Detected'
                 },
                 color: {
                     pattern: LEGEND_COLORS
@@ -93,9 +89,7 @@ class AboutCodeDashboard {
 
     database(aboutCodeDB) {
         this.aboutCodeDB = aboutCodeDB;
-    }
 
-    reload() {
         // Get total files scanned
         this.aboutCodeDB.db.then(() => {
             return this.aboutCodeDB.ScanCode
@@ -123,37 +117,59 @@ class AboutCodeDashboard {
                 .then(count => this.totalPackages.text(count ? count : "0"));
         });
 
-        this.sourceLanguageChart.unload({
-            done: () => {
-                // Get unique programming languages detected
-                this._loadData("programming_language")
-                    .then(data => this.sourceLanguageChart.load({columns: data}));
-            }
-          });
+        // Get unique programming languages detected
+        this.sourceLanguageData = this._loadData("programming_language");
 
-        this.licenseCategoryChart.unload({
-            done: () => {
-                // Get license categories detected
-                this._loadData("license_category")
-                    .then(data => this.licenseCategoryChart.load({columns: data}));
-            }
-          });
+        // Get license categories detected
+        this.licenseCategoryData = this._loadData("license_category");
 
-        this.licenseKeyChart.unload({
-            done: () => {
-                // Get license keys detected
-                this._loadData("license_key")
-                    .then(data => this.licenseKeyChart.load({columns: data}));
-            }
-          });
+        // Get license keys detected
+        this.licenseKeyData = this._loadData("license_key");
 
-        this.packagesTypeChart.unload({
-            done: () => {
-                // Get package types detected
-                this._loadData("packages_type")
-                    .then(data => this.packagesTypeChart.load({columns: data}));
-            }
-          });
+        // Get package types detected
+        this.packagesTypeData = this._loadData("packages_type");
+    }
+
+    reload() {
+        this.sourceLanguageData
+            .then(data => this.sourceLanguageChart.load({
+                columns: data,
+                unload: true,
+                done: () => {
+                    this.sourceLanguageChart.legend.show();
+                    this.sourceLanguageChart.hide('No Value Detected');
+                }
+            }));
+
+        this.licenseCategoryData
+            .then(data => this.licenseCategoryChart.load({
+                columns: data,
+                unload: true,
+                done: () => {
+                    this.licenseCategoryChart.legend.show();
+                    this.licenseCategoryChart.hide('No Value Detected');
+                }
+            }));
+
+        this.licenseKeyData
+            .then(data => this.licenseKeyChart.load({
+                columns: data,
+                unload:true,
+                done: () => {
+                    this.licenseKeyChart.legend.show();
+                    this.licenseKeyChart.hide('No Value Detected');
+                }
+            }));
+
+        this.packagesTypeData
+            .then(data => this.packagesTypeChart.load({
+                columns: data,
+                unload: true,
+                done: () => {
+                    this.packagesTypeChart.legend.show();
+                    this.packagesTypeChart.hide('No Value Detected');
+                }
+            }));
     }
 
     _loadData(attribute, parentPath) {
