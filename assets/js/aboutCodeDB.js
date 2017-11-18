@@ -213,6 +213,7 @@ class AboutCodeDB {
                     if (rootPath === file.path) {
                         hasRootPath = true;
                     }
+                    file.id = index++;
                     files.push(file);
                     if (files.length >= batchSize) {
                         // Need to set a new variable before handing to promise
@@ -220,7 +221,6 @@ class AboutCodeDB {
                         promiseChain = promiseChain
                             .then(() => that._batchCreateFiles(files, scancode.id))
                             .then(() => {
-                                index += files.length;
                                 const files_count = scancode.files_count;
                                 const currProgress = Math.round(index/files_count*100);
                                 if (currProgress > progress) {
@@ -295,11 +295,6 @@ class AboutCodeDB {
                 file.scancodeId = scancodeId;
             });
             return this.File.bulkCreate(files, options)
-                .then((savedFiles) => {
-                    $.each(files, (i, file) => {
-                        file.id = savedFiles[i].id;
-                    });
-                })
                 .then(() => {
                     let licenses = $.map(files, file => {
                         return $.map(file.licenses || [], license => {
