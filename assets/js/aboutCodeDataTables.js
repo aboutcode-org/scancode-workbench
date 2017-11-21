@@ -165,6 +165,7 @@ class AboutCodeDataTable {
             "scrollResize": true,
             "deferRender": true,
             initComplete: function () {
+                const pathCol = this.api().columns(0);
                 // Add a select element to each column's footer
                 this.api().columns().every(function (columnIndex) {
                     const columnInfo = AboutCodeDataTable.TABLE_COLUMNS[columnIndex];
@@ -180,7 +181,9 @@ class AboutCodeDataTable {
                     let select = $(`<select id="clue-${columnName}"><option value=""></option></select>`)
                         .appendTo(footer)
                         .on("click", () => {
-                            let where = {};
+                            const currPath = pathCol.search()[0];
+                            let where = { path: { $like: `${currPath}%`} };
+
                             where[columnName] = {$ne: null};
 
                             that.aboutCodeDB.FlattenedFile.findAll({
@@ -190,23 +193,18 @@ class AboutCodeDataTable {
                                 ],
                                 group: [columnName],
                                 where: where,
-                                order: [columnName]
                             })
-                            .then((rows) => {
-                                let filterValues = $.map(rows, (row) => {
-                                    return row[columnName];
-                                })
-                                    .map(filterValue => (filterValue).toString())
-                                    .filter((filterValue) => filterValue.length > 0);
+                            .then(rows => {
+                                let filterValues =
+                                    // $.map is used to flatten array values.
+                                    $.map(rows, row => row[columnName])
+                                        .map(row => row.toString().trim())
+                                        .filter(val => val.length > 0);
 
-                                filterValues = $.map(filterValues, (filterValue) => filterValue);
-                                filterValues.forEach((filterValue) => {
-                                    filterValue.trim();
-                                });
                                 filterValues = $.unique(filterValues).sort();
 
                                 const select = $(`select#clue-${columnName}`);
-                                let val = select.find("option:selected");
+                                const val = select.find("option:selected");
 
                                 select
                                     .empty()
@@ -221,7 +219,7 @@ class AboutCodeDataTable {
                                 }
 
                                 $.each(filterValues, function ( i, filterValue ) {
-                                    select.append(`<option value="${filterValue}">${filterValue}</option>`)
+                                    select.append(`<option value="${filterValue}">${filterValue}</option>`);
                                 });
                                 select.val(val);
                             });
