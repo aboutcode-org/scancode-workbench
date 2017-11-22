@@ -177,16 +177,17 @@ class AboutCodeDataTable {
                     const footer = $(column.footer());
                     const columnName = columnInfo.name;
 
-                    let select = $(`<select id="clue-${columnName}" class="form-control">
-                        <option value=""></option></select>`)
+                    let select = $(`<select id="clue-${columnName}"><option value=""></option></select>`)
                         .appendTo(footer)
                         .on("click", () => {
                             let where = {};
                             where[columnName] = {$ne: null};
 
                             that.aboutCodeDB.FlattenedFile.findAll({
-                                attributes: [Sequelize.fn("TRIM",
-                                    Sequelize.col(columnName)), columnName],
+                                attributes: [
+                                    Sequelize.fn("TRIM",  Sequelize.col(columnName)),
+                                    columnName
+                                ],
                                 group: [columnName],
                                 where: where,
                                 order: [columnName]
@@ -207,7 +208,9 @@ class AboutCodeDataTable {
                                 const select = $(`select#clue-${columnName}`);
                                 let val = select.find("option:selected");
 
-                                select.empty().append(`<option value=""></option>`);
+                                select
+                                    .empty()
+                                    .append(`<option value=""></option>`);
 
                                 /**
                                  * Add Has a Value option to dropdown menu to show all rows

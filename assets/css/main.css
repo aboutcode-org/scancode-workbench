@@ -278,6 +278,12 @@ div.node-content {
 /*---------------------------------------
   DataTables custom
 -----------------------------------------*/
+
+.dataTable td select {
+  word-wrap: break-word;
+  width: 100%;
+}
+
 /*For rounded table border*/
 div.dataTables_scrollHead table,
 div.dataTables_scrollHead th:first-child {
