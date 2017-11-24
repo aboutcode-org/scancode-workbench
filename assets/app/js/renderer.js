@@ -39,74 +39,16 @@ $(document).ready(function () {
 
     // TODO: Move this into its own file
     // Create and setup the jstree, and the click-event logic
-    const jstree = $("#jstree").jstree(
-        {
-            "core": {
-                "data": function (currentDirectory, callback) {
-                    aboutCodeDB
-                        .findAllJSTree({
-                            where: {
-                                parent: currentDirectory.id
-                            }
-                        })
-                        .then((children) => callback.call(this, children));
-                },
-                "animation": false
-            },
-            "types": {
-                "directory": {
-                    "icon": "fa fa-folder fa_custom"
-                },
-                "file": {
-                    "icon": "fa fa-file-text-o"
-                }
-            },
-            "plugins": [ "types", "sort", "contextmenu", "wholerow"],
-            "sort": function (a, b) {
-                a1 = this.get_node(a);
-                b1 = this.get_node(b);
-                if (a1.type == b1.type) {
-                    return a1.text.localeCompare(b1.text, 'en-US-u-kf-upper');
-                }
-                else {
-                    return (a1.type === 'directory') ? -1 : 1;
-                }
-            },
-            "contextmenu" : {
-                "items": function (node) {
-                    return {
-                        "edit_component": {
-                            "label": "Edit Component",
-                            "action": () => componentDialog().show(node.id)
-                        }
-                    };
-                }
-            }
-        })
-        .on('open_node.jstree', function (evt, data) {
-            data.instance.set_icon(
-                data.node,
-                'fa fa-folder-open fa_custom');
-        })
-        .on('close_node.jstree', function (evt, data) {
-            data.instance.set_icon(
-                data.node,
-                'fa fa-folder fa_custom');
-        })
-        // Select the root node when the tree is refreshed
-        .on('refresh.jstree', function (evt, data) {
-            let rootNode = jstree.jstree('get_node', '#').children;
-            jstree.jstree('select_node', rootNode);
-        })
-        // Get the node id when selected
-        .on('select_node.jstree', function (evt, data) {
+    const jstree = new AboutCodeJsTree("#jstree", aboutCodeDB)
+        .on('node-edit', node => componentDialog().show(node.id))
+        .on("node-selected", node => {
             let barChartValue = chartAttributesSelect.val();
 
             // Set the search value for the first column (path) equal to the
             // Selected jstree path and redraw the table
-            cluesTable.columns(0).search(data.node.id).draw();
-            nodeView.setRoot(data.node.id);
-            barChart.showSummary(barChartValue, data.node.id);
+            cluesTable.columns(0).search(node.id).draw();
+            nodeView.setRoot(node.id);
+            barChart.showSummary(barChartValue, node.id);
         });
 
     // Setup css styling for sidebar button state when clicked.
@@ -348,6 +290,9 @@ $(document).ready(function () {
         // The flattened data is used by the clue table and jstree
         return aboutCodeDB.db
             .then(() => {
+                jstree.database(aboutCodeDB);
+                jstree.reload();
+
                 // reload the DataTable after all insertions are done.
                 cluesTable.database(aboutCodeDB);
                 cluesTable.reload();
@@ -365,9 +310,6 @@ $(document).ready(function () {
                         $("#summary-bar-chart rect").on("click", chartSummaryToFiles);
                         $("#summary-bar-chart .y.axis .tick").on("click", chartSummaryToFiles);
                     });
-
-                // loading data into jstree
-                jstree.jstree(true).refresh(true);
 
                 aboutCodeDB.getFileCount()
                     .then((value) => {
