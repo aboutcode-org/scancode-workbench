@@ -15,7 +15,7 @@
  */
 
 class AboutCodeNodeView extends NodeView {
-    constructor(nodeViewId, aboutCodeDB, onNodeClicked) {
+    constructor(nodeViewId, aboutCodeDB) {
         // Call the NodeView's constructor
         super({
             selector: nodeViewId,
@@ -26,7 +26,7 @@ class AboutCodeNodeView extends NodeView {
         });
 
         this.aboutCodeDB = aboutCodeDB;
-        this.onNodeClicked = onNodeClicked;
+        this.events = {};
 
         // By default, do not prune any nodes
         this.isNodePruned = () => false;
@@ -46,6 +46,11 @@ class AboutCodeNodeView extends NodeView {
             component: file.component,
             children: []
         };
+    }
+
+    on(event, handler) {
+        this.events[event] = handler;
+        return this;
     }
 
     // Set the root of the node view to the given rootId. This will call
@@ -98,7 +103,7 @@ class AboutCodeNodeView extends NodeView {
                 // return `${d.name} (${d.files_count}, ${d.clues_count})`;
                 return `${d.name} (${d.files_count})`;
             })
-            .on("click", this.onNodeClicked);
+            .on("click", node => this.events['node-clicked'](node));
 
         // Setup file nodes
         nodes.filter((d) => d.type !== "directory")
@@ -106,7 +111,7 @@ class AboutCodeNodeView extends NodeView {
             .append("g")
             .attr("class", "clues")
             .attr("x", 10)
-            .on("click", this.onNodeClicked);
+            .on("click", node => this.events['node-clicked'](node));
     }
 
     // Update the nodes when data changes

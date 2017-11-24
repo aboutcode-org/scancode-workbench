@@ -77,9 +77,7 @@ $(document).ready(function () {
                     return {
                         "edit_component": {
                             "label": "Edit Component",
-                            "action": function () {
-                                onNodeClick(node);
-                            }
+                            "action": () => componentDialog().show(node.id)
                         }
                     };
                 }
@@ -125,32 +123,12 @@ $(document).ready(function () {
         });
     });
 
-    // Define DOM element constants for the modal dialog.
-    const componentModal = {
-        container: $("#nodeModal"),
-        label: $("#nodeModalLabel"),
-        status: $("#select-status"),
-        component_name: $("#component-name"),
-        license: $("#select-license"),
-        owner: $("#select-owner"),
-        copyright: $("#select-copyright"),
-        language: $("#select-language"),
-        version: $("#component-version"),
-        homepage: $("#component-homepage-url"),
-        notes: $("#component-notes")
-    };
-
-    // Make node view modal box draggable
-    componentModal.container.draggable({ handle: ".modal-header" });
-
     // Defines DOM element constants for buttons.
-    const showClueButton = $( "#show-clue-table" );
+    const showClueButton = $("#show-clue-table");
     const showNodeViewButton = $("#show-tree");
     const showComponentButton = $("#show-component-table");
     const showBarChartButton = $("#show-bar-chart");
     const showDashboardButton = $("#show-dashboard");
-    const saveComponentButton = $("#save-component");
-    const deleteComponentButton = $("#delete-component");
     const saveSQLiteFileButton = $("#save-file");
     const openSQLiteFileButton = $("#open-file");
     const submitComponentButton = $("#componentSubmit");
@@ -220,218 +198,23 @@ $(document).ready(function () {
         return false;
     });
 
+    function componentDialog() {
+        return new ComponentDialog("#nodeModal", aboutCodeDB)
+            .on('save', component => {
+                nodeView.nodeData[component.path].component = component;
+                nodeView.redraw();
+            })
+            .on('delete', component => {
+                nodeView.nodeData[component.path].component = null;
+                nodeView.redraw();
+            });
+    }
 
     // Resize the nodes based on how many clues are selected
     const nodeDropdown = $("#node-drop-down");
     nodeDropdown.change(() => {
         let numClueSelected = nodeDropdown.val().length;
         nodeView.resize(numClueSelected * 30, 180);
-    });
-
-    // Populate modal input fields with suggestions from ScanCode results
-    function onNodeClick (node) {
-        let componentPromise = aboutCodeDB.findComponent({
-            where: { path: node.id }
-        })
-        .then((component) => component ? component : {});
-
-        let licensesPromise = aboutCodeDB.File.findAll({
-            attributes: [],
-            group: ['licenses.key'],
-            where: { path: {$like: `${node.id}%`}},
-            include: [{
-                model: aboutCodeDB.License,
-                attributes: ['key'],
-                where: {key: {$ne: null}}
-            }]
-        })
-        .then((rows) => $.map(rows, (row) => row.licenses));
-
-        let copyrightsPromise = aboutCodeDB.File.findAll({
-            attributes: [],
-            group: ['copyrights.statements'],
-            where: { path: {$like: `${node.id}%`}},
-            include: [{
-                model: aboutCodeDB.Copyright,
-                attributes: ['statements'],
-                where: {statements: {$ne: null}}
-            }]
-        })
-        .then((rows) => $.map(rows, (row) => row.copyrights));
-
-        let ownersPromise = aboutCodeDB.File.findAll({
-            attributes: [],
-            group: ['copyrights.holders'],
-            where: { path: {$like: `${node.id}%`}},
-            include: [{
-                model: aboutCodeDB.Copyright,
-                attributes: ['holders'],
-                where: {holders: {$ne: null}}
-            }]
-        })
-        .then((rows) => $.map(rows, (row) => {
-            return $.map(row.copyrights, (copyright) => {
-                return copyright.holders;
-            });
-        }));
-
-        let languagePromise = aboutCodeDB.File.findAll({
-            attributes: ["programming_language"],
-            group: ['programming_language'],
-            where: {
-                path: {$like: `${node.id}%`},
-                programming_language: {$ne: null}
-            }
-        })
-        .then((rows) => $.map(rows, (row) => row.programming_language));
-
-        let homepageUrlPromise = aboutCodeDB.File.findAll({
-            attributes: [],
-            group: ['urls.url'],
-            where: { path: {$like: `${node.id}%`}},
-            include: [{
-                model: aboutCodeDB.Url,
-                attributes: ['url'],
-                where: {url: {$ne: null}}
-            }]
-        })
-        .then((rows) => $.map(rows, (row) => $.map(row.urls, (url) => url.url)));
-
-        Promise.all([componentPromise, licensesPromise, copyrightsPromise,
-            ownersPromise, languagePromise, homepageUrlPromise
-        ])
-            .then(([component, licenses, copyrights, owners,
-                       programming_languages, urls]) => {
-                showDialog(node, component, {
-                    licenses: licenses,
-                    copyrights: copyrights,
-                    owners: owners,
-                    programming_languages: programming_languages,
-                    urls: urls
-                });
-            });
-    }
-
-    function showDialog(node, component, subNodeData) {
-        // Add sub-node clue data to the select menu options
-        let licenses = subNodeData.licenses;
-        let copyrights = subNodeData.copyrights;
-        let owners = subNodeData.owners;
-        let programming_languages = subNodeData.programming_languages;
-        let urls = subNodeData.urls;
-
-        // Add saved data to the select menu options
-        licenses = licenses.concat(component.licenses || []);
-        copyrights = copyrights.concat(component.copyrights || []);
-        owners = owners.concat(component.owner || []);
-        programming_languages = $.unique(programming_languages.concat(
-            component.programming_language || []));
-        urls =  $.unique(urls.concat(
-            component.homepage_url || []));
-
-        // update select2 selectors for node view component
-        componentModal.license.html('').select2({
-            data: $.unique($.map(licenses, (license, i) => {
-                return license.key;
-            })),
-            multiple: true,
-            placeholder: "Enter license",
-            tags: true
-        }, true);
-
-        componentModal.owner.html('').select2({
-            data: $.unique(owners),
-            multiple: true,
-            maximumSelectionLength: 1,
-            placeholder: "Enter owner",
-            tags: true
-        }, true);
-
-        componentModal.copyright.html('').select2({
-            data: $.unique($.map(copyrights, (copyright, i) => {
-                return copyright.statements;
-            })),
-            multiple: true,
-            placeholder: "Enter copyright",
-            tags: true
-        }, true);
-
-        componentModal.language.html('').select2({
-            data: programming_languages,
-            multiple: true,
-            maximumSelectionLength: 1,
-            placeholder: "Enter language",
-            tags: true
-        }, true);
-
-        componentModal.homepage.html('').select2({
-            data: urls,
-            multiple: true,
-            maximumSelectionLength: 1,
-            placeholder: "Enter Homepage URL",
-            tags: true
-        }, true);
-
-        componentModal.status.val(component.review_status || "");
-        componentModal.component_name.val(component.name || "");
-        componentModal.version.val(component.version || "");
-        componentModal.license.val((component.licenses || [])
-            .map((license) => license.key));
-        componentModal.copyright.val((component.copyrights || [])
-            .map((copyright) => copyright.statements.join("\n")));
-        componentModal.owner.val(component.owner || []);
-        componentModal.language.val(component.programming_language || []);
-        componentModal.homepage.val(component.homepage_url || "");
-        componentModal.notes.val(component.notes || "");
-
-        // Notify only select2 of changes
-        $('select').trigger('change.select2');
-
-        componentModal.label.text(node.id);
-        componentModal.container.modal('show');
-    }
-
-    saveComponentButton.on('click', function () {
-        let id = componentModal.label.text();
-        let component = {
-            path: id,
-            fileId: nodeView.nodeData[id].fileId,
-            review_status: componentModal.status.val(),
-            name: componentModal.component_name.val(),
-            licenses: $.map(componentModal.license.val() || [], function(license) {
-                return { key: license };
-            }),
-            copyrights: $.map(componentModal.copyright.val() || [], function(copyright) {
-                return { statements: copyright.split("\n") };
-            }),
-            version: componentModal.version.val(),
-            owner: (componentModal.owner.val() || [null])[0],
-            homepage_url: (componentModal.homepage.val() || [null])[0],
-            programming_language: (componentModal.language.val() || [null])[0],
-            notes: componentModal.notes.val()
-        };
-        aboutCodeDB.setComponent(component)
-            .then(() => {
-                nodeView.nodeData[id].component = component;
-                nodeView.redraw();
-            });
-        componentModal.container.modal('hide');
-    });
-
-    // Delete a created Component inside the Component Modal
-    deleteComponentButton.click(function () {
-        let id = componentModal.label.text();
-
-        aboutCodeDB.findComponent({ where: { path: id }})
-            .then((component) => {
-                if (component !== null) {
-                    return component.destroy();
-                }
-            })
-            .then(() => {
-                nodeView.nodeData[id].component = null;
-                nodeView.redraw();
-            });
     });
 
     nodeDropdown.select2({
@@ -575,7 +358,8 @@ $(document).ready(function () {
                 dashboard.database(aboutCodeDB);
                 dashboard.reload();
 
-                nodeView = new AboutCodeNodeView("#nodeview", aboutCodeDB, onNodeClick);
+                nodeView = new AboutCodeNodeView("#nodeview", aboutCodeDB);
+                nodeView.on('node-clicked', node => componentDialog().show(node.id));
                 barChart = new AboutCodeBarChart("#summary-bar-chart", aboutCodeDB)
                     .onSummaryChanged(() => {
                         $("#summary-bar-chart rect").on("click", chartSummaryToFiles);
