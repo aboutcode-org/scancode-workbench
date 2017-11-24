@@ -149,7 +149,7 @@ class AboutCodeDataTable {
         let that = this;
 
         return $(tableID).DataTable({
-            "colReorder": true,
+            // "colReorder": false,
             "serverSide": true,
             "processing": true,
             "ajax": (dataTablesInput, dataTablesCallback) =>
@@ -158,9 +158,7 @@ class AboutCodeDataTable {
             "fixedColumns": {
                 leftColumns: 1
             },
-            // TODO: We want to use scroller but the current version of the
-            // plugin doesn't work with fixedColumns. Try updating
-            // "scroller": true,
+            "colResize": true,
             "scrollX": true,
             "scrollResize": true,
             "deferRender": true,
@@ -296,16 +294,16 @@ class AboutCodeDataTable {
                 }
             ],
             dom: // Needed to keep datatables buttons and search inline
-            "<'row'<'col-sm-9'B><'col-sm-3'f>>" +
-            "<'row'<'col-sm-12'tr>>" +
-            "<'row'<'col-sm-5'i><'col-sm-7'p>>"
+                "<'row'<'col-sm-9'B><'col-sm-3'f>>" +
+                "<'row'<'col-sm-12'tr>>" +
+                "<'row'<'col-sm-4'i><'col-sm-3'l><'col-sm-5'p>>"
         });
     }
 
     // Define DataTable columns
     static get TABLE_COLUMNS() {
-        return AboutCodeDataTable.LOCATION_COLUMN
-            .concat(AboutCodeDataTable.COPYRIGHT_COLUMNS,
+        return AboutCodeDataTable.LOCATION_COLUMN.concat(
+            AboutCodeDataTable.COPYRIGHT_COLUMNS,
             AboutCodeDataTable.LICENSE_COLUMNS,
             AboutCodeDataTable.EMAIL_COLUMNS,
             AboutCodeDataTable.URL_COLUMNS,

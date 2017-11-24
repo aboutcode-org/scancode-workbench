@@ -23,7 +23,7 @@ const dialog = require('electron').remote.dialog;
 
 // The Electron module used to communicate asynchronously from a renderer process to the main process.
 const ipcRenderer = require('electron').ipcRenderer;
-const packageJson = require('../../package.json');
+const packageJson = require('../../../package.json');
 const aboutCodeVersion = packageJson.version;
 
 $(document).ready(function () {

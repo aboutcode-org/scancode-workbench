@@ -5,27 +5,27 @@
   font-family: 'Raleway';
   font-style: normal;
   font-weight: 400;
-  src: url('../fonts/Raleway-Regular.ttf');
+  src: url('../../thirdparty/fonts/Raleway-Regular.ttf');
   src: local('?'),
-          url('../fonts/Raleway-Regular.ttf') format('truetype');
+          url('../../thirdparty/fonts/Raleway-Regular.ttf') format('truetype');
 }
 
 @font-face {
   font-family: 'Raleway Black';
   font-style: normal;
   font-weight: 800;
-  src: url('../fonts/Raleway-Black.ttf');
+  src: url('../../thirdparty/fonts/Raleway-Black.ttf');
   src: local('?'),
-          url('../fonts/Raleway-Black.ttf') format('truetype');
+          url('../../thirdparty/fonts/Raleway-Black.ttf') format('truetype');
 }
 
 @font-face {
   font-family: 'Lato';
   font-style: normal;
   font-weight: 400;
-  src: url('../fonts/Lato-Regular.ttf');
+  src: url('../../thirdparty/fonts/Lato-Regular.ttf');
   src: local('?'),
-          url('../fonts/Lato-Regular.ttf') format('truetype');
+          url('../../thirdparty/fonts/Lato-Regular.ttf') format('truetype');
 }
 /*---------------------------------------
   General

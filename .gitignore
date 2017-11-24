@@ -4,7 +4,6 @@
 *.egg-info
 /dist
 /build
-thirdparty/
 /bin
 /lib
 /scripts
