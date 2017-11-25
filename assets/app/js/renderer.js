@@ -29,11 +29,32 @@ const aboutCodeVersion = packageJson.version;
 $(document).ready(function () {
     // Create default values for all of the data and ui classes
     let aboutCodeDB = new AboutCodeDB();
-    let nodeView = new AboutCodeNodeView("#node-view", aboutCodeDB);
-    let barChart = new AboutCodeBarChart("#summary-bar-chart", aboutCodeDB);
     let dashboard = new AboutCodeDashboard("#dashboard-container", aboutCodeDB);
 
-    // These classes are only created once, otherwise DataTables will complain
+    const barChart = new AboutCodeBarChart("#summary-bar-chart", aboutCodeDB)
+        .on('bar-clicked', (attribute, value) => {
+            chartSummaryToFiles(attribute, value);
+        })
+        .on('query-interceptor', query => {
+            query.where = { path: { $like: `${jstree.getSelected()}%` } };
+        });
+
+    const componentDialog = new ComponentDialog("#nodeModal", aboutCodeDB)
+        .on('save', component => {
+            nodeView.nodeData()[component.path].component = component;
+            nodeView.redraw();
+        })
+        .on('delete', component => {
+            nodeView.nodeData()[component.path].component = null;
+            nodeView.redraw();
+        });
+
+    const dejaCodeExportDialog =
+        new DejaCodeExportDialog("#componentExportModal", aboutCodeDB);
+
+    const nodeView = new AboutCodeNodeView("#nodeview", aboutCodeDB)
+        .on('node-clicked', node => componentDialog.show(node.id));
+
     const cluesTable = new AboutCodeDataTable("#clues-table", aboutCodeDB);
     const componentsTable = new ComponentDataTable("#components-table", aboutCodeDB)
         .on('upload-clicked', components => {
@@ -46,15 +67,13 @@ $(document).ready(function () {
         });
 
     const jstree = new AboutCodeJsTree("#jstree", aboutCodeDB)
-        .on('node-edit', node => componentDialog().show(node.id))
+        .on('node-edit', node => componentDialog.show(node.id))
         .on("node-selected", node => {
-            let barChartValue = chartAttributesSelect.val();
-
             // Set the search value for the first column (path) equal to the
             // Selected jstree path and redraw the table
             cluesTable.columns(0).search(node.id).draw();
             nodeView.setRoot(node.id);
-            barChart.showSummary(barChartValue, node.id);
+            barChart.draw();
         });
 
     const splitter = new Splitter('#leftCol', '#tabbar')
@@ -89,7 +108,6 @@ $(document).ready(function () {
     const showDashboardButton = $("#show-dashboard");
     const saveSQLiteFileButton = $("#save-file");
     const openSQLiteFileButton = $("#open-file");
-    const resetZoomButton = $("#reset-zoom");
     const leftCol = $("#leftCol");
     const tabBar = $("#tabbar");
 
@@ -99,91 +117,6 @@ $(document).ready(function () {
     const componentContainer = $("#component-container");
     const barChartContainer = $("#bar-chart-container");
     const dashboardContainer = $("#dashboard-container");
-
-    const chartAttributesSelect = $("select#select-chart-attribute");
-    const barChartTotalFiles = $("span.total-files");
-
-    chartAttributesSelect.select2({
-        placeholder: "Select an attribute"
-    });
-
-    // Populate bar chart summary select box values
-    $.each(AboutCodeDataTable.TABLE_COLUMNS, (i, column) => {
-        if (column.bar_chart_class) {
-            chartAttributesSelect.append(`<option class="${column.bar_chart_class}" value="${column.name}">${column.title}</option>`);
-        }
-    });
-
-    chartAttributesSelect.on( "change", function () {
-        // Get dropdown element selected value
-        let val = $(this).val();
-        const jstreePath = jstree.jstree("get_selected")[0];
-        barChart.showSummary(val, jstreePath);
-    });
-
-    $(".bar-chart-copyrights").wrapAll(`<optgroup label="Copyright Information"/>`);
-    $(".bar-chart-licenses").wrapAll(`<optgroup label="License Information"/>`);
-    $(".bar-chart-emails").wrapAll(`<optgroup label="Email Information"/>`);
-    $(".bar-chart-file-infos").wrapAll(`<optgroup label="File Information"/>`);
-    $(".bar-chart-package-infos").wrapAll(`<optgroup label="Package Information"/>`);
-
-    let selectedStatuses = ["Analyzed", "Attention", "Original", "NR"];
-
-    $(".status-dropdown-menu a").on("click", (event) => {
-        let target = $(event.currentTarget),
-            value = target.attr("data-value"),
-            input = target.find("input"),
-            index;
-
-        if ((index = selectedStatuses.indexOf(value)) > -1) {
-            selectedStatuses.splice(index, 1);
-            // setTimeout is needed for checkbox to show up
-            setTimeout(() =>  input.prop("checked", false), 0);
-        } else {
-            selectedStatuses.push(value);
-            setTimeout(() => input.prop("checked", true), 0);
-        }
-        $(event.target).blur();
-
-        nodeView.setIsNodePruned((node) => {
-            return selectedStatuses.indexOf(node.review_status) < 0 &&
-                node.review_status !== "";
-        });
-
-        nodeView.redraw();
-        return false;
-    });
-
-    function componentDialog() {
-        return new ComponentDialog("#nodeModal", aboutCodeDB)
-            .on('save', component => {
-                nodeView.nodeData[component.path].component = component;
-                nodeView.redraw();
-            })
-            .on('delete', component => {
-                nodeView.nodeData[component.path].component = null;
-                nodeView.redraw();
-            });
-    }
-
-    function dejaCodeExportDialog() {
-        return new DejaCodeExportDialog("#componentExportModal", aboutCodeDB);
-    }
-
-    // Resize the nodes based on how many clues are selected
-    const nodeDropdown = $("#node-drop-down");
-    nodeDropdown.change(() => {
-        let numClueSelected = nodeDropdown.val().length;
-        nodeView.resize(numClueSelected * 30, 180);
-    });
-
-    nodeDropdown.select2({
-        closeOnSelect: false,
-        placeholder: "select me"
-    });
-
-    // Center and reset node view
-    resetZoomButton.click(() => nodeView.centerNode());
 
     // Open a SQLite Database File
     openSQLiteFileButton.click(openSQLite);
@@ -248,10 +181,6 @@ $(document).ready(function () {
         cluesContainer.hide();
         dashboardContainer.hide();
         barChart.draw();
-        aboutCodeDB.getFileCount()
-            .then((value) => {
-                barChartTotalFiles.text(value);
-            });
     });
 
     showDashboardButton.click(() => {
@@ -281,6 +210,9 @@ $(document).ready(function () {
         // The flattened data is used by the clue table and jstree
         return aboutCodeDB.db
             .then(() => {
+                componentDialog.database(aboutCodeDB);
+                dejaCodeExportDialog.database(aboutCodeDB);
+
                 jstree.database(aboutCodeDB);
                 jstree.reload();
 
@@ -294,18 +226,11 @@ $(document).ready(function () {
                 dashboard.database(aboutCodeDB);
                 dashboard.reload();
 
-                nodeView = new AboutCodeNodeView("#nodeview", aboutCodeDB);
-                nodeView.on('node-clicked', node => componentDialog().show(node.id));
-                barChart = new AboutCodeBarChart("#summary-bar-chart", aboutCodeDB)
-                    .onSummaryChanged(() => {
-                        $("#summary-bar-chart rect").on("click", chartSummaryToFiles);
-                        $("#summary-bar-chart .y.axis .tick").on("click", chartSummaryToFiles);
-                    });
+                nodeView.database(aboutCodeDB);
+                nodeView.reload();
 
-                aboutCodeDB.getFileCount()
-                    .then((value) => {
-                        barChartTotalFiles.text(value);
-                    });
+                barChart.database(aboutCodeDB);
+                barChart.reload();
 
                 return aboutCodeDB;
             })
@@ -315,41 +240,27 @@ $(document).ready(function () {
     }
 
     // Show files that contain attribute value selected by user in bar chart
-    function chartSummaryToFiles() {
-        const val = $(this).data("value");
-
-        if (val !== "No Value Detected") {
+    function chartSummaryToFiles(attribute, value) {
+        if (value !== "No Value Detected") {
             // Get the clue table column and make sure it's visible
-            const columnName = chartAttributesSelect.val();
-            const column = cluesTable.dataTable.column(`${columnName}:name`);
+            const column = cluesTable.dataTable.column(`${attribute}:name`);
             column.visible(true);
 
             // Clear all other columns
-            clearClueDataTableFilterValue();
+            cluesTable.clearColumnFilters();
 
             // Get the column's filter select box
-            const select = $(`select#clue-${columnName}`);
+            const select = $(`select#clue-${attribute}`);
             select.empty().append(`<option value=""></option>`);
 
             // Add the chart value options and select it.
-            select.append(`<option value="${val}">${val}</option>`);
-            select.val(val).change();
+            select.append(`<option value="${value}">${value}</option>`);
+            select.val(value).change();
 
             // This needs to be done only when the column is visible.
             // So we do it last to try our best
             showClueButton.trigger("click");
         }
-    }
-
-    // Clear all column filter that are set in clue DataTable
-    function clearClueDataTableFilterValue() {
-        $.each(AboutCodeDataTable.TABLE_COLUMNS, (i, column) => {
-            const columnSelect = $(`select#clue-${column.name}`);
-            columnSelect.val("");
-            cluesTable.dataTable
-                .column(`${column.name}:name`)
-                .search("", false, false);
-        });
     }
 
     // Open a SQLite Database File
@@ -362,9 +273,11 @@ $(document).ready(function () {
                 extensions: ['sqlite']
             }]
         }, function(fileNames) {
-            if (fileNames === undefined) return;
+            if (fileNames === undefined) {
+                return;
+            }
             loadDatabaseFromFile(fileNames[0]);
-            clearClueDataTableFilterValue();
+            cluesTable.clearColumnFilters();
         });
     }
 
@@ -378,15 +291,15 @@ $(document).ready(function () {
                 ]
             },
             function (newFileName) {
-                if (newFileName === undefined) return;
+                if (newFileName === undefined) {
+                    return;
+                }
 
                 let oldFileName = aboutCodeDB.sequelize.options.storage;
                 let reader = fs.createReadStream(oldFileName);
                 let writer = fs.createWriteStream(newFileName);
                 reader.pipe(writer);
-                reader.on("end", function () {
-                    loadDatabaseFromFile(newFileName);
-                });
+                reader.on("end", () => loadDatabaseFromFile(newFileName));
             }
         );
     }
@@ -398,9 +311,10 @@ $(document).ready(function () {
                 name: 'JSON File',
                 extensions: ['json']
             }]
-        },
-        function (fileNames) {
-            if (fileNames === undefined) return;
+        }, (fileNames) => {
+            if (fileNames === undefined) {
+                return;
+            }
 
             const jsonFileName = fileNames[0];
 
@@ -413,7 +327,9 @@ $(document).ready(function () {
                     ]
                 },
                 function (fileName) {
-                    if (fileName === undefined) return;
+                    if (fileName === undefined) {
+                        return;
+                    }
 
                     // Overwrite existing sqlite file
                     if (fs.existsSync(fileName)) {
@@ -464,7 +380,7 @@ $(document).ready(function () {
                             console.error(err);
                         });
                 });
-            clearClueDataTableFilterValue();
+            cluesTable.clearColumnFilters();
         });
     }
 
@@ -493,35 +409,37 @@ $(document).ready(function () {
                 name: 'JSON File Type',
                 extensions: ['json']
             }]
-        },
-            function (fileName) {
-                if (fileName === undefined) return;
+        }, (fileName) => {
+            if (fileName === undefined) {
+                return;
+            }
 
-                let clueFiles = aboutCodeDB.findAll({
-                    attributes: {
-                        exclude: ["id", "createdAt", "updatedAt"]
-                    }
-                });
-
-                let components = aboutCodeDB.findAllComponents({
-                    attributes: {
-                        exclude: ["id", "createdAt", "updatedAt"]
-                    }
-                });
-
-                Promise.all([clueFiles, components])
-                    .then((arguments) => {
-                        let json = {
-                            files: arguments[0],
-                            components: arguments[1]
-                        };
-
-                        fs.writeFile(fileName, JSON.stringify(json), (err) => {
-                            if (err) throw err;
-                        });
-                    });
-
+            let clueFilesPromise = aboutCodeDB.findAll({
+                attributes: {
+                    exclude: ["id", "createdAt", "updatedAt"]
+                }
             });
+
+            let componentsPromise = aboutCodeDB.findAllComponents({
+                attributes: {
+                    exclude: ["id", "createdAt", "updatedAt"]
+                }
+            });
+
+            Promise.all([clueFilesPromise, componentsPromise])
+                .then(([clueFiles, components]) => {
+                    let json = {
+                        files: clueFiles,
+                        components: components
+                    };
+
+                    fs.writeFile(fileName, JSON.stringify(json), (err) => {
+                        if (err) {
+                            throw err;
+                        }
+                    });
+                });
+        });
     }
 
     // Export JSON file with only components that have been created
@@ -533,11 +451,13 @@ $(document).ready(function () {
                 name: 'JSON File Type',
                 extensions: ['json']
             }]
-        },
-            function (fileName) {
-                if (fileName === undefined) return;
+        }, (fileName) => {
+            if (fileName === undefined) {
+                return;
+            }
 
-                aboutCodeDB.findAllComponents({
+            aboutCodeDB
+                .findAllComponents({
                     attributes: {
                         exclude: ["id", "createdAt", "updatedAt"]
                     }
@@ -548,11 +468,12 @@ $(document).ready(function () {
                     };
 
                     fs.writeFile(fileName, JSON.stringify(json), (err) => {
-                        if (err) throw err;
+                        if (err) {
+                            throw err;
+                        }
                     });
                 });
-
-            });
+        });
     }
 });
 

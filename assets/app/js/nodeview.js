@@ -17,9 +17,14 @@
 class NodeView {
     constructor(config) {
         this.config = config;
+        this.handlers = {};
+        this.reload();
+    }
+
+    reload() {
         this.nextId = 0;
 
-        this.orientation = NodeView.orientation(config.orientation);
+        this.orientation = NodeView.orientation(this.config.orientation);
         this.x = (d) => this.orientation.x(d);
         this.y = (d) => this.orientation.y(d);
 
@@ -34,8 +39,9 @@ class NodeView {
             });
 
         // Clear the selector DOM element in case something already exists.
-        $(config.selector).empty();
-        const svg = d3.select(config.selector).append("svg")
+        $(this.config.selector).empty();
+        const svg = d3.select(this.config.selector)
+            .append("svg")
             .attr("preserveAspectRatio", "xMinYMin meet")
             .attr("viewBox", "-150 -150 1000 1000")
             .classed("nodeview-content", true)
@@ -45,7 +51,7 @@ class NodeView {
             .attr("id", "node-group");
 
         this.tree = d3.layout.tree()
-            .nodeSize([config.nodeWidth, config.nodeHeight]);
+            .nodeSize([this.config.nodeWidth, this.config.nodeHeight]);
 
         this.diagonal = d3.svg.diagonal().projection((d)=> {
             return [this.x(d), this.y(d)];
@@ -54,22 +60,9 @@ class NodeView {
         this.nodeData = {};
     }
 
-    static orientation(orientKey) {
-        if (orientKey === "top-to-bottom") {
-            return {
-                x: (node) => node.x,
-                y: (node) => node.y
-            };
-        } else if (orientKey === "left-to-right") {
-            return {
-                x: (node) => node.y,
-                y: (node) => node.x
-            }
-        }
-    }
-
-    static _pos(node) {
-        return {x: node.x || 0, y: node.y || 0};
+    on(event, handler) {
+        this.handlers[event] = handler;
+        return this;
     }
 
     // Center node and reset scaling
@@ -82,7 +75,9 @@ class NodeView {
 
     // Set the root of the node view to the given root
     setRoot(root) {
-        if (!root) return;
+        if (!root) {
+            return;
+        }
 
         this.nodeData[root.id] = root;
 
@@ -93,12 +88,12 @@ class NodeView {
     toggle(id) {
         // _children will be undefined the first time the node is toggled
         if (this.nodeData[id]._children === undefined) {
-            this.getChildren(id)
-                .then((children) => {
+            this.handlers['get-children'](id)
+                .then(children => {
                     if (children !== undefined) {
                         this.nodeData[id]._children = children;
                         children.forEach(child => {
-                            this.nodeData[child.id] = child
+                            this.nodeData[child.id] = child;
                         });
                         this.toggle(id);
                     }
@@ -119,7 +114,7 @@ class NodeView {
     // Resize the spacing between nodes
     resize(nodeWidth, nodeHeight) {
         this.tree.nodeSize([nodeWidth, nodeHeight]);
-        this._update(this.currentId)
+        this._update(this.currentId);
     }
 
     _translate(d) {
@@ -135,7 +130,7 @@ class NodeView {
         const newRoot = this.nodeData[rootId];
         this.currentId = rootId;
 
-        const prunedRoot = this.pruneNodes(newRoot);
+        const prunedRoot = this.handlers['prune-nodes'](newRoot);
         // Calculate positions of each node or return an empty array if there are no nodes
         const nodeData = prunedRoot ? this.tree.nodes(prunedRoot) : [];
         const currPos = NodeView._pos(this.nodeData[toggleId || this.currentId]);
@@ -163,7 +158,7 @@ class NodeView {
             .style("opacity", 0);
 
         // Add custom elements
-        this.addNode(nodeGroup);
+        this.handlers['add-nodes'](nodeGroup);
         this._updateNodes(nodeGroup);
     }
 
@@ -174,7 +169,7 @@ class NodeView {
             .style("opacity", 1);
 
         // Update custom elements
-        this.updateNode(nodes);
+        this.handlers['update-nodes'](nodes);
     }
 
     _removeNodes(nodes, pos) {
@@ -211,4 +206,24 @@ class NodeView {
             .style("opacity", 0)
             .remove();
     }
+
+    static orientation(orientKey) {
+        if (orientKey === "top-to-bottom") {
+            return {
+                x: (node) => node.x,
+                y: (node) => node.y
+            };
+        } else if (orientKey === "left-to-right") {
+            return {
+                x: (node) => node.y,
+                y: (node) => node.x
+            };
+        }
+    }
+
+    static _pos(node) {
+        return {x: node.x || 0, y: node.y || 0};
+    }
 }
+
+module.exports = NodeView;

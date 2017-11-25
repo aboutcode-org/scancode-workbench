@@ -14,50 +14,105 @@
  #
  */
 
-class AboutCodeNodeView extends NodeView {
+class AboutCodeNodeView {
     constructor(nodeViewId, aboutCodeDB) {
-        // Call the NodeView's constructor
-        super({
-            selector: nodeViewId,
-            orientation: "left-to-right",
-            nodeWidth: 25,
-            nodeHeight: 160,
-            duration: 1000
-        });
+        this.nodeView = new NodeView(
+            {
+                selector: nodeViewId,
+                orientation: "left-to-right",
+                nodeWidth: 25,
+                nodeHeight: 160,
+                duration: 1000
+            })
+            .on('add-nodes', (nodes) => this._addNodes(nodes))
+            .on('update-nodes', (nodes) => this._updateNodes(nodes))
+            .on('prune-nodes', (rootNode) => this._pruneNodes(rootNode))
+            .on('get-children', (nodeId) => this._getChildren(nodeId));
 
         this.aboutCodeDB = aboutCodeDB;
-        this.events = {};
+        this.handlers = {};
 
         // By default, do not prune any nodes
         this.isNodePruned = () => false;
-    }
 
-    // Map a scanned file to a node view data object.
-    static fileToNode(file) {
-        return {
-            id: file.path,
-            fileId: file.id,
-            parentId: file.parent,
-            name: file.name,
-            type: file.type,
-            licenses: file.licenses,
-            copyrights: file.copyrights,
-            files_count: file.files_count,
-            component: file.component,
-            children: []
-        };
+        // Center and reset node view
+        $("#reset-zoom").click(() => this.centerNode());
+
+        this.nodeDropdown = $("#node-drop-down");
+        this.nodeDropdown.select2({
+            closeOnSelect: false,
+            placeholder: "select me"
+        });
+
+        // Resize the nodes based on how many clues are selected
+        this.nodeDropdown
+            .change(() => {
+                if (this.nodeDropdown.val()) {
+                    this.nodeView.resize(
+                        (this.nodeDropdown.val() || []).length * 30, 180);
+                } else {
+                    this.nodeView.resize(30, 180);
+                }
+            });
+
+        const selectedStatuses = ["Analyzed", "Attention", "Original", "NR"];
+
+        $(".status-dropdown-menu a").on("click", event => {
+            const target = $(event.currentTarget);
+            const value = target.attr("data-value");
+            const input = target.find("input");
+            const index = selectedStatuses.indexOf(value);
+
+            if (index > -1) {
+                selectedStatuses.splice(index, 1);
+                // setTimeout is needed for checkbox to show up
+                setTimeout(() =>  input.prop("checked", false), 0);
+            } else {
+                selectedStatuses.push(value);
+                setTimeout(() => input.prop("checked", true), 0);
+            }
+            $(event.target).blur();
+
+            this._setIsNodePruned((node) => {
+                return selectedStatuses.indexOf(
+                    node.review_status) < 0 && node.review_status !== "";
+            });
+
+            this.redraw();
+            return false;
+        });
     }
 
     on(event, handler) {
-        this.events[event] = handler;
+        this.handlers[event] = handler;
         return this;
+    }
+
+    database(aboutCodeDB) {
+        this.aboutCodeDB = aboutCodeDB;
+    }
+
+    reload() {
+        this.nodeView.reload();
+    }
+
+    redraw() {
+        this.nodeView.redraw();
+    }
+
+    centerNode() {
+        this.nodeView.centerNode();
+    }
+
+    nodeData() {
+        return this.nodeView.nodeData;
     }
 
     // Set the root of the node view to the given rootId. This will call
     // the database if the root's data is not found in the node view.
     setRoot(rootId) {
-        if (rootId in this.nodeData) {
-            super.setRoot(this.nodeData[rootId]);
+        if (rootId in this.nodeData()) {
+            this.nodeView.setRoot(this.nodeData()[rootId]);
         } else {
             let splits = rootId.split("/");
             let rootIds = $.map(splits, (split, index) => {
@@ -67,30 +122,30 @@ class AboutCodeNodeView extends NodeView {
             this.aboutCodeDB.findAll({where: { $or: rootIds } })
                 .then((files) => {
                     $.each(files, (index, file) => {
-                        this.nodeData[file.path] =
+                        this.nodeData()[file.path] =
                             AboutCodeNodeView.fileToNode(file);
+                        console.log(file.path);
+                        console.log(this.nodeData()[file.path]);
                     });
                 })
-                .then(() => {
-                    super.setRoot(this.nodeData[rootId])
-                });
+                .then(() => this.nodeView.setRoot(this.nodeData()[rootId]))
+                .catch((err) => console.error(err));
         }
     }
 
     // Gets the children for a particular node from the DB.
-    // This method is called by NodeView
-    getChildren(id) {
-        return this.aboutCodeDB.findAll({where: {parent: id}})
-            .then((files) => {
-                return files.map((file) => AboutCodeNodeView.fileToNode(file));
-            });
+    _getChildren(id) {
+        return this.aboutCodeDB
+            .findAll({where: {parent: id}})
+            .then((files) =>
+                files.map((file) => AboutCodeNodeView.fileToNode(file)))
+            .catch((err) => console.error(err));
     }
 
     // Define the visuals of a node when it's added
-    // This method is called by NodeView
-    addNode(nodes) {
+    _addNodes(nodes) {
         const circle = nodes.append("circle")
-            .on("click", (d) => this.toggle(d.id));
+            .on("click", (d) => this.nodeView.toggle(d.id));
 
         // Setup directory nodes
         nodes.filter((d) => d.type === "directory")
@@ -103,7 +158,7 @@ class AboutCodeNodeView extends NodeView {
                 // return `${d.name} (${d.files_count}, ${d.clues_count})`;
                 return `${d.name} (${d.files_count})`;
             })
-            .on("click", node => this.events['node-clicked'](node));
+            .on("click", node => this.handlers['node-clicked'](node));
 
         // Setup file nodes
         nodes.filter((d) => d.type !== "directory")
@@ -111,34 +166,33 @@ class AboutCodeNodeView extends NodeView {
             .append("g")
             .attr("class", "clues")
             .attr("x", 10)
-            .on("click", node => this.events['node-clicked'](node));
+            .on("click", node => this.handlers['node-clicked'](node));
     }
 
     // Update the nodes when data changes
-    // This method is called by NodeView
-    updateNode(nodes) {
+    _updateNodes(nodes) {
         // Update circles
-        nodes.select("circle").attr("class", (d) => d.review_status);
-
-        const fileNodes = nodes.filter((d) => d.type !== "directory");
+        nodes.select("circle").attr("class", d => d.review_status);
 
         // Get the selected values
-        const selected = $("#node-drop-down").val();
+        const selected = this.nodeDropdown.val();
 
-        // Select all clue nodes
-        const clueGroup = fileNodes.selectAll("g.clues");
-        const clueNodes = clueGroup.selectAll("g").data(selected, (d) => d);
-
-        AboutCodeNodeView._updateClueNodes(clueNodes);
-        AboutCodeNodeView._addClueNodes(clueNodes.enter());
-        AboutCodeNodeView._removeClueNodes(clueNodes.exit());
+        if (selected) {
+            // Select all clue nodes
+            const fileNodes = nodes.filter((d) => d.type !== "directory");
+            const clueGroup = fileNodes.selectAll("g.clues");
+            const clueNodes = clueGroup.selectAll("g").data(selected, d => d);
+            AboutCodeNodeView._updateClueNodes(clueNodes);
+            AboutCodeNodeView._addClueNodes(clueNodes.enter());
+            AboutCodeNodeView._removeClueNodes(clueNodes.exit());
+        }
 
         nodes.select("g.dir-node").transition().duration(1000)
             .attr("transform", "translate(10,0)");
     }
 
     // Prune nodes when status is checked in drop down menu
-    pruneNodes(rootNode) {
+    _pruneNodes(rootNode) {
         const q = [{
             parent: null,
             child: rootNode
@@ -168,7 +222,7 @@ class AboutCodeNodeView extends NodeView {
                         parent: child,
                         child: grandchild
                     });
-                })
+                });
             }
         }
 
@@ -179,7 +233,7 @@ class AboutCodeNodeView extends NodeView {
      * Sets the prune function, which should return true if a node should be
      * pruned.
      */
-    setIsNodePruned(isNodePruned) {
+    _setIsNodePruned(isNodePruned) {
         this.isNodePruned = isNodePruned;
     }
 
@@ -193,11 +247,27 @@ class AboutCodeNodeView extends NodeView {
                 return node.parent.review_status;
             } else if (node.parentId) {
                 // the parent node is not drawn so get the node from nodeData
-                return this._getReviewStatus(this.nodeData[node.parentId]);
+                return this._getReviewStatus(this.nodeData()[node.parentId]);
             }
         }
 
         return "";
+    }
+
+    // Map a scanned file to a node view data object.
+    static fileToNode(file) {
+        return {
+            id: file.path,
+            fileId: file.id,
+            parentId: file.parent,
+            name: file.name,
+            type: file.type,
+            licenses: file.licenses,
+            copyrights: file.copyrights,
+            files_count: file.files_count,
+            component: file.component,
+            children: []
+        };
     }
 
     // Create new visual for any new clues
@@ -216,7 +286,7 @@ class AboutCodeNodeView extends NodeView {
                 const data = newClueNodes[j].parentNode.__data__;
 
                 if (d === "filename") {
-                    return data.name
+                    return data.name;
                 } else if (d === "license") {
                     return data.licenses
                         .map((license) => license.short_name)
@@ -248,7 +318,7 @@ class AboutCodeNodeView extends NodeView {
         nodes.transition().duration(1000)
             .style("opacity", 1)
             .each("end", function () {
-                d3.select(this).style("opacity", "inherit")
+                d3.select(this).style("opacity", "inherit");
             })
             .attr("transform", (d, i) => `translate(10, ${25*i})`);
     }

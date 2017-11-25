@@ -36,9 +36,13 @@ class ComponentDialog {
 
         // Make node view modal box draggable
         this.dialog.draggable({ handle: ".modal-header" });
-        this.events = {};
+        this.handlers = {};
         this.saveButton.click(() => this._saveComponent());
         this.deleteButton.click(() => this._deleteComponent());
+    }
+
+    database(aboutCodeDB) {
+        this.aboutCodeDB = aboutCodeDB;
     }
 
     // Populate modal input fields with suggestions from ScanCode results
@@ -67,7 +71,7 @@ class ComponentDialog {
     }
 
     on(event, handler) {
-        this.events[event] = handler;
+        this.handlers[event] = handler;
         return this;
     }
 
@@ -154,6 +158,18 @@ class ComponentDialog {
         let id = this.title.text();
         this._component(id)
             .then(component => {
+                // Set the file id on the component.
+                return this.aboutCodeDB.File
+                    .findOne({
+                        attributes: ["id"],
+                        where: { path: { $eq: id } }
+                    })
+                    .then(row => {
+                        component.fileId = row.id;
+                        return component;
+                    });
+            })
+            .then(component => {
                 return {
                     path: id,
                     fileId: component.fileId,
@@ -173,7 +189,7 @@ class ComponentDialog {
                 };
             })
             .then(component => this.aboutCodeDB.setComponent(component))
-            .then(component => this.events.save(component));
+            .then(component => this.handlers.save(component));
         this.dialog.modal('hide');
     }
 
@@ -183,10 +199,10 @@ class ComponentDialog {
         this.aboutCodeDB.findComponent({ where: { path: id }})
             .then(component => {
                 if (component !== null) {
-                    return component.destroy();
+                    return component.destroy()
+                        .then(() => this.handlers.delete(component));
                 }
-            })
-            .then(component => this.events.delete(component));
+            });
     }
 
     _component(componentId) {

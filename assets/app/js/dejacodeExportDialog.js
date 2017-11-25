@@ -28,6 +28,10 @@ class DejaCodeExportDialog {
         this.submitButton.click(() => this._exportComponents());
     }
 
+    database(aboutCodeDB) {
+        this.aboutCodeDB = aboutCodeDB;
+    }
+
     show() {
         this.dialog.modal('show');
     }

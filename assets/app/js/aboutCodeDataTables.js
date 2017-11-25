@@ -43,6 +43,16 @@ class AboutCodeDataTable {
         return this.dataTable.ajax.reload();
     }
 
+    clearColumnFilters() {
+        $.each(AboutCodeDataTable.TABLE_COLUMNS, (i, column) => {
+            const columnSelect = $(`select#clue-${column.name}`);
+            columnSelect.val("");
+            this.dataTable
+                .column(`${column.name}:name`)
+                .search("", false, false);
+        });
+    }
+
     // This function is called every time DataTables needs to be redrawn.
     // For details on the parameters https://datatables.net/manual/server-side
     _query(dataTablesInput, dataTablesCallback) {

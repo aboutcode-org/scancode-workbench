@@ -86,12 +86,14 @@ class AboutCodeJsTree {
 
     database(aboutCodeDB) {
         this.aboutCodeDB = aboutCodeDB;
-        return this;
     }
 
     reload() {
-        // loading data into jstree
         this.jsTree.jstree(true).refresh(true);
+    }
+
+    getSelected() {
+        return this.jsTree.jstree("get_selected")[0];
     }
 }
 

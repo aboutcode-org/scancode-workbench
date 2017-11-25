@@ -20,6 +20,7 @@ class AboutCodeBarChart {
     constructor(barChartId, aboutCodeDB) {
         this.barChartId = barChartId;
         this.aboutCodeDB = aboutCodeDB;
+        this.handlers = {};
 
         this.chartOptions = {
             name: "License Summary",
@@ -29,6 +30,44 @@ class AboutCodeBarChart {
             yAxisName: "License Name"
         };
 
+        this.chartAttributesSelect = $("select#select-chart-attribute");
+        this.barChartTotalFiles = $("span.total-files");
+
+        this.chartAttributesSelect.select2({ placeholder: "Select an attribute" });
+
+        // Populate bar chart summary select box values
+        $.each(AboutCodeDataTable.TABLE_COLUMNS, (i, column) => {
+            if (column.bar_chart_class) {
+                this.chartAttributesSelect.append(
+                    `<option class="${column.bar_chart_class}" value="${column.name}">${column.title}</option>`);
+            }
+        });
+
+        this.chartAttributesSelect.on( "change", () => this.showSummary());
+
+        $(".bar-chart-copyrights").wrapAll(`<optgroup label="Copyright Information"/>`);
+        $(".bar-chart-licenses").wrapAll(`<optgroup label="License Information"/>`);
+        $(".bar-chart-emails").wrapAll(`<optgroup label="Email Information"/>`);
+        $(".bar-chart-file-infos").wrapAll(`<optgroup label="File Information"/>`);
+        $(".bar-chart-package-infos").wrapAll(`<optgroup label="Package Information"/>`);
+
+        this.reload();
+    }
+
+    on(event, handler) {
+        this.handlers[event] = handler;
+        return this;
+    }
+
+    database(aboutCodeDB) {
+        this.aboutCodeDB = aboutCodeDB;
+    }
+
+    reload() {
+        this.aboutCodeDB
+            .getFileCount()
+            .then(value => this.barChartTotalFiles.text(value));
+
         this.barChart = new BarChart([], this.chartOptions, this.barChartId);
     }
 
@@ -36,27 +75,37 @@ class AboutCodeBarChart {
         this.barChart.draw();
     }
 
-    onSummaryChanged(onSummaryChangedHandler) {
-        this.onSummaryChangedHandler = onSummaryChangedHandler;
-        return this;
+    showSummary() {
+        if (this.chartAttributesSelect.val()) {
+            this._showSummary(this.chartAttributesSelect.val());
+        }
     }
 
-    showSummary(attribute, parentPath) {
+    _showSummary(attribute) {
         let query = {
             attributes: [Sequelize.fn("TRIM", Sequelize.col(attribute)), attribute]
         };
 
-        if (parentPath) {
-            query.where = { path: { $like: `${parentPath}%` } };
-        }
+        // Allow the query to be intercepted and modified by the caller.
+        this.handlers['query-interceptor'](query);
 
         return this.aboutCodeDB.db
             .then(() => this.aboutCodeDB.FlattenedFile.findAll(query))
-            .then((values) => AboutCodeBarChart.mapToAttributeValues(values, attribute))
-            .then((values) => {
+            .then(values => AboutCodeBarChart.mapToAttributeValues(values, attribute))
+            .then(values => {
                 this.barChart = new BarChart(values, this.chartOptions, this.barChartId);
-                if (this.onSummaryChangedHandler) {
-                    this.onSummaryChangedHandler();
+                if (this.handlers['bar-clicked']) {
+                    const that = this;
+                    $("#summary-bar-chart rect").click(function () {
+                        const attribute =  that.chartAttributesSelect.val();
+                        const value = $(this).data("value");
+                        that.handlers['bar-clicked'](attribute, value);
+                    });
+                    $("#summary-bar-chart .y.axis .tick").click(function () {
+                        const attribute =  that.chartAttributesSelect.val();
+                        const value = $(this).data("value");
+                        that.handlers['bar-clicked'](attribute, value);
+                    });
                 }
             });
     }
@@ -91,3 +140,5 @@ class AboutCodeBarChart {
         }
     }
 }
+
+module.exports = AboutCodeBarChart;
