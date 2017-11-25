@@ -45,8 +45,6 @@ $(document).ready(function () {
             }
         });
 
-    // TODO: Move this into its own file
-    // Create and setup the jstree, and the click-event logic
     const jstree = new AboutCodeJsTree("#jstree", aboutCodeDB)
         .on('node-edit', node => componentDialog().show(node.id))
         .on("node-selected", node => {
@@ -57,6 +55,16 @@ $(document).ready(function () {
             cluesTable.columns(0).search(node.id).draw();
             nodeView.setRoot(node.id);
             barChart.showSummary(barChartValue, node.id);
+        });
+
+    const splitter = new Splitter('#leftCol', '#tabbar')
+        .on('drag-end', () => {
+            if ($('#bar-chart-container').is(':visible')) {
+                barChart.draw();
+            }
+            if ($('#clues-container').is(':visible')) {
+                cluesTable.draw();
+            }
         });
 
     // Setup css styling for sidebar button state when clicked.
@@ -94,7 +102,6 @@ $(document).ready(function () {
 
     const chartAttributesSelect = $("select#select-chart-attribute");
     const barChartTotalFiles = $("span.total-files");
-
 
     chartAttributesSelect.select2({
         placeholder: "Select an attribute"
@@ -178,44 +185,31 @@ $(document).ready(function () {
     // Center and reset node view
     resetZoomButton.click(() => nodeView.centerNode());
 
-    // Instantiate the splitter.
-    const splitter = Split(['#leftCol', '#tabbar'], {
-        sizes: [20, 80],
-        minSize: 200,
-        gutterSize: 5,
-        elementStyle: function (dimension, size, gutterSize) {
-            const width = this.outerWidth * (size / 100);
-            return { 'flex-basis': `${width - gutterSize}px`}
-        },
-        gutterStyle: function (dimension, gutterSize) {
-            return { 'flex-basis': `${gutterSize}px`}
-        },
-        onDragEnd: function() {
-            sessionStorage.setItem('splitSizes', JSON.stringify(splitter.getSizes()));
-            if ($('#bar-chart-container').is(':visible')) {
-                barChart.draw();
-            }
-            if ($('#clues-container').is(':visible')) {
-                cluesTable.draw();
-            }
-        }
-    });
+    // Open a SQLite Database File
+    openSQLiteFileButton.click(openSQLite);
 
-    // Retrieve any saved resize settings from sessionStorage or else use our default setting.
-    function restoreSplitterSizes() {
-        let splitSizes = [20, 80];
-        try {
-            splitSizes = JSON.parse(sessionStorage.getItem('splitSizes')) || splitSizes;
-        } catch (err) {
-            console.log(err);
-        }
-        splitter.setSizes(splitSizes);
-    }
+    // Save a SQLite Database file
+    saveSQLiteFileButton.click(saveSQLite);
+
+    ipcRenderer.on('table-view', () => showClueButton.trigger("click"));
+    ipcRenderer.on('node-view', () => showNodeViewButton.trigger("click"));
+    ipcRenderer.on('component-summary-view', () => showComponentButton.trigger("click"));
+    ipcRenderer.on('open-SQLite', openSQLite);
+    ipcRenderer.on('chart-summary-view', () => showBarChartButton.trigger("click"));
+    ipcRenderer.on('save-SQLite', saveSQLite);
+    ipcRenderer.on('import-JSON', importJson);
+    ipcRenderer.on('export-JSON', exportJson);
+    ipcRenderer.on('export-JSON-components-only', exportJsonComponents);
+
+    // Open links in default browser
+    $(".open-in-default").click((evt) => {
+           evt.preventDefault();
+           shell.openExternal(evt.target.href);
+    });
 
     // Show clue DataTable. Hide node view and component summary table
     showClueButton.click(() => {
-        restoreSplitterSizes();
-        $(".gutter-horizontal").removeClass("div-hide").addClass("div-show");
+        splitter.show();
         cluesContainer.show();
         nodeContainer.hide();
         componentContainer.hide();
@@ -224,13 +218,9 @@ $(document).ready(function () {
         cluesTable.draw();
     });
 
-    // Show clue DataTable. Hide node view and component summary table -- custom menu
-    ipcRenderer.on('table-view', () => showClueButton.trigger("click"));
-
     // Show node view. Hide clue and component table
     showNodeViewButton.click(() => {
-        restoreSplitterSizes();
-        $(".gutter-horizontal").removeClass("div-hide").addClass("div-show");
+        splitter.show();
         nodeContainer.show();
         cluesContainer.hide();
         componentContainer.hide();
@@ -239,13 +229,9 @@ $(document).ready(function () {
         nodeView.redraw();
     });
 
-    // Show node view. Hide clue and component table -- custom menu
-    ipcRenderer.on('node-view', () => showNodeViewButton.trigger("click"));
-
     // Show component summary table. Hide DataTable and node view
     showComponentButton.click(() => {
-        $(".gutter-horizontal").removeClass("div-show").addClass("div-hide");
-        splitter.collapse(0);
+        splitter.hide();
         componentContainer.show();
         nodeContainer.hide();
         cluesContainer.hide();
@@ -254,12 +240,8 @@ $(document).ready(function () {
         componentsTable.reload();
     });
 
-    // Show component summary table. Hide DataTable and node view -- custom menu
-    ipcRenderer.on('component-summary-view', () => showComponentButton.trigger("click"));
-
     showBarChartButton.click(() => {
-        restoreSplitterSizes();
-        $(".gutter-horizontal").removeClass("div-hide").addClass("div-show");
+        splitter.show();
         barChartContainer.show();
         componentContainer.hide();
         nodeContainer.hide();
@@ -273,8 +255,7 @@ $(document).ready(function () {
     });
 
     showDashboardButton.click(() => {
-        $(".gutter-horizontal").removeClass("div-show").addClass("div-hide");
-        splitter.collapse(0);
+        splitter.hide();
         dashboardContainer.show();
         componentContainer.hide();
         nodeContainer.hide();
@@ -283,8 +264,7 @@ $(document).ready(function () {
         dashboard.reload();
     });
 
-    // Show chart summary table. Hide other views -- custom menu
-    ipcRenderer.on('chart-summary-view', () => showBarChartButton.trigger("click"));
+    showDashboardButton.trigger("click");
 
     // Creates the database and all View objects from a SQLite file
     function loadDatabaseFromFile(fileName) {
@@ -388,12 +368,6 @@ $(document).ready(function () {
         });
     }
 
-    // Open a SQLite Database File
-    openSQLiteFileButton.click(openSQLite);
-
-    // Open a SQLite Database File -- custom menu
-    ipcRenderer.on('open-SQLite', openSQLite);
-
     // Save a SQLite Database File
     function saveSQLite() {
         dialog.showSaveDialog(
@@ -417,14 +391,7 @@ $(document).ready(function () {
         );
     }
 
-    // Save a SQLite Database file
-    saveSQLiteFileButton.click(saveSQLite);
-
-    // Save a SQLite Database File -- custom menu
-    ipcRenderer.on('save-SQLite', saveSQLite);
-
-    // Open a ScanCode results JSON file
-    ipcRenderer.on('import-JSON', function () {
+    function importJson() {
         dialog.showOpenDialog({
             title: "Open a JSON File",
             filters: [{
@@ -499,7 +466,7 @@ $(document).ready(function () {
                 });
             clearClueDataTableFilterValue();
         });
-    });
+    }
 
     // Show database creation indicator and hide table view
     function showProgressIndicator() {
@@ -518,7 +485,7 @@ $(document).ready(function () {
     }
 
     // Export JSON file with ScanCode data and components that have been created
-    ipcRenderer.on('export-JSON', function () {
+    function exportJson() {
         dialog.showSaveDialog({
             properties: ['openFile'],
             title: "Save as JSON file",
@@ -555,10 +522,10 @@ $(document).ready(function () {
                     });
 
             });
-    });
+    }
 
     // Export JSON file with only components that have been created
-    ipcRenderer.on('export-JSON-components-only', function () {
+    function exportJsonComponents() {
         dialog.showSaveDialog({
             properties: ['openFile'],
             title: "Save as JSON file",
@@ -586,16 +553,7 @@ $(document).ready(function () {
                 });
 
             });
-    });
-
-    // Open links in default browser
-    $(".open-in-default").click((evt) => {
-           evt.preventDefault();
-           shell.openExternal(evt.target.href);
-    });
-
-    restoreSplitterSizes();
-    showDashboardButton.trigger("click");
+    }
 });
 
 module.exports = aboutCodeVersion;
