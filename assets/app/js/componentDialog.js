@@ -20,22 +20,22 @@ class ComponentDialog {
 
         // Define DOM element constants for the modal dialog.
         // TODO: Use nested ids to avoid collisions, e.g. #nodeModal .nodeModalLabel
-        this.container = $("#componentDialog");
-        this.title = this.container.find(".modal-title");
-        this.status = this.container.find("#component-status");
-        this.name = this.container.find("#component-name");
-        this.license = this.container.find("#component-license");
-        this.copyright = this.container.find("#component-copyright");
-        this.owner = this.container.find("#component-owner");
-        this.language = this.container.find("#component-language");
-        this.version = this.container.find("#component-version");
-        this.homepage = this.container.find("#component-homepage-url");
-        this.notes = this.container.find("#component-notes");
-        this.saveButton = this.container.find("button#component-save");
-        this.deleteButton = this.container.find("button#component-delete");
+        this.dialog = $("#componentDialog");
+        this.title = this.dialog.find(".modal-title");
+        this.status = this.dialog.find("#component-status");
+        this.name = this.dialog.find("#component-name");
+        this.license = this.dialog.find("#component-license");
+        this.copyright = this.dialog.find("#component-copyright");
+        this.owner = this.dialog.find("#component-owner");
+        this.language = this.dialog.find("#component-language");
+        this.version = this.dialog.find("#component-version");
+        this.homepage = this.dialog.find("#component-homepage-url");
+        this.notes = this.dialog.find("#component-notes");
+        this.saveButton = this.dialog.find("button#component-save");
+        this.deleteButton = this.dialog.find("button#component-delete");
 
         // Make node view modal box draggable
-        this.container.draggable({ handle: ".modal-header" });
+        this.dialog.draggable({ handle: ".modal-header" });
         this.events = {};
         this.saveButton.click(() => this._saveComponent());
         this.deleteButton.click(() => this._deleteComponent());
@@ -147,7 +147,7 @@ class ComponentDialog {
         $('select').trigger('change.select2');
 
         this.title.text(data.id);
-        this.container.modal('show');
+        this.dialog.modal('show');
     }
 
     _saveComponent() {
@@ -174,7 +174,7 @@ class ComponentDialog {
             })
             .then(component => this.aboutCodeDB.setComponent(component))
             .then(component => this.events.save(component));
-        this.container.modal('hide');
+        this.dialog.modal('hide');
     }
 
     // Delete a created Component inside the Component Modal

@@ -16,6 +16,7 @@
 
 class ComponentDataTable {
     constructor(tableID, aboutCodeDB) {
+        this.handlers = {}
         this.aboutCodeDB = aboutCodeDB;
         this.dataTable = this._createDataTable(tableID);
         $('<p class="lead">Component Summary</p>').prependTo($("#components-table_wrapper"))
@@ -34,6 +35,11 @@ class ComponentDataTable {
             });
     }
 
+    on(event, handler) {
+        this.handlers[event] = handler;
+        return this;
+    }
+
     _createDataTable(tableID) {
         return $(tableID).DataTable({
             "scrollX": true,
@@ -46,15 +52,11 @@ class ComponentDataTable {
             buttons: [{
                 name: "uploadDeja",
                 text: '<i class=" fa fa-cloud-upload"></i> Upload Components',
-                action: ( e, dt, node, config ) => {
-                    this.aboutCodeDB.findAllComponents( {} )
-                        .then((components) => {
-                            if (components.length > 0) {
-                                $('#componentExportModal').modal('show');
-                            } else {
-                                alert("You have no Components to upload.  \n\nPlease create at least one Component and try again.");
-                            }
-                        });
+                action: () => {
+                    this.aboutCodeDB
+                        .findAllComponents({})
+                        .then(components =>
+                            this.handlers['upload-clicked'](components));
                 }
             }],
             "language": {

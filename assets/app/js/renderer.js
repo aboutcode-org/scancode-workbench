@@ -35,7 +35,15 @@ $(document).ready(function () {
 
     // These classes are only created once, otherwise DataTables will complain
     const cluesTable = new AboutCodeDataTable("#clues-table", aboutCodeDB);
-    const componentsTable = new ComponentDataTable("#components-table", aboutCodeDB);
+    const componentsTable = new ComponentDataTable("#components-table", aboutCodeDB)
+        .on('upload-clicked', components => {
+            if (components.length > 0) {
+                dejaCodeExportDialog().show();
+            } else {
+                alert("You have no Components to upload.\n\n" +
+                    "Please create at least one Component and try again.");
+            }
+        });
 
     // TODO: Move this into its own file
     // Create and setup the jstree, and the click-event logic
@@ -73,7 +81,6 @@ $(document).ready(function () {
     const showDashboardButton = $("#show-dashboard");
     const saveSQLiteFileButton = $("#save-file");
     const openSQLiteFileButton = $("#open-file");
-    const submitComponentButton = $("#componentSubmit");
     const resetZoomButton = $("#reset-zoom");
     const leftCol = $("#leftCol");
     const tabBar = $("#tabbar");
@@ -150,6 +157,10 @@ $(document).ready(function () {
                 nodeView.nodeData[component.path].component = null;
                 nodeView.redraw();
             });
+    }
+
+    function dejaCodeExportDialog() {
+        return new DejaCodeExportDialog("#componentExportModal", aboutCodeDB);
     }
 
     // Resize the nodes based on how many clues are selected
@@ -575,44 +586,6 @@ $(document).ready(function () {
                 });
 
             });
-    });
-
-    // Submit components to a DejaCode Product via ProductComponent API
-    // TODO (@jdaguil): DejaCode doesn't require any field, but we probably
-    // want to require name, version, and owner
-    submitComponentButton.on("click", function () {
-        // Get product name and version
-        const productName = $("#product-name").val();
-        const productVersion = $("#product-version").val();
-        const productNameVersion = productName.concat(":", productVersion);
-        const apiUrl = $("#apiURLDejaCode").val();
-        const apiKey = $("#apiKey").val();
-        // Test whether any form field is empty
-        if ((productName === "") || (productVersion === "") || (apiUrl === "") || (apiKey === "")) {
-            alert("Please make sure you complete all fields in the upload form.");
-        } else {
-            aboutCodeDB.findAllComponents({})
-                .then((components) => {
-                    // Converts array of components from AboutCode Manager to
-                    // DejaCode component format
-                    dejaCodeComponents = $.map(components, (component, index) => {
-                        return {
-                            name: component.name,
-                            version: component.version,
-                            owner: component.owner,
-                            license_expression: component.license_expression,
-                            copyright: component.copyright,
-                            homepage_url: component.homepage_url,
-                            primary_language: component.programming_language,
-                            reference_notes: component.notes,
-                            product: productNameVersion
-                        };
-                    });
-
-                    uploadComponents(apiUrl, dejaCodeComponents, apiKey);
-                });
-            $("#componentExportModal").modal("hide");
-        }
     });
 
     // Open links in default browser
