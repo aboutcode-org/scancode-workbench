@@ -124,8 +124,6 @@ class AboutCodeNodeView {
                     $.each(files, (index, file) => {
                         this.nodeData()[file.path] =
                             AboutCodeNodeView.fileToNode(file);
-                        console.log(file.path);
-                        console.log(this.nodeData()[file.path]);
                     });
                 })
                 .then(() => this.nodeView.setRoot(this.nodeData()[rootId]))

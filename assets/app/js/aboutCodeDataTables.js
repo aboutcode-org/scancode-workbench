@@ -18,9 +18,10 @@ const HAS_A_VALUE =  "about_code_data_table_has_a_value";
 const shell = require("electron").shell;
 
 class AboutCodeDataTable {
-    constructor(tableID, aboutCodeDB) {
+    constructor(tableId, aboutCodeDB) {
+        this.tableId = tableId;
         this.aboutCodeDB = aboutCodeDB;
-        this.dataTable = this._createDataTable(tableID);
+        this.dataTable = this._createDataTable(tableId);
     }
 
     database(aboutCodeDB) {
@@ -51,6 +52,20 @@ class AboutCodeDataTable {
                 .column(`${column.name}:name`)
                 .search("", false, false);
         });
+    }
+
+    setColumnFilter(columnName, value) {
+        // Get the clue table column and make sure it's visible
+        const column = this.dataTable.column(`${columnName}:name`);
+        column.visible(true);
+
+        // Get the column's filter select box
+        const select = $(`select#clue-${columnName}`);
+        select.empty().append(`<option value=""></option>`);
+
+        // Add the chart value options and select it.
+        select.append(`<option value="${value}">${value}</option>`);
+        select.val(value).change();
     }
 
     // This function is called every time DataTables needs to be redrawn.
@@ -150,15 +165,15 @@ class AboutCodeDataTable {
         });
     }
 
-    _createDataTable(tableID) {
+    _createDataTable(tableId) {
         // Adds a footer for each column. This needs to be done before creating
         // the DataTable
         let cells = $.map(AboutCodeDataTable.TABLE_COLUMNS, () => "<td></td>")
             .join("");
-        $(tableID).append("<tfoot><tr>" + cells + "</tr></tfoot>");
+        $(tableId).append("<tfoot><tr>" + cells + "</tr></tfoot>");
         let that = this;
 
-        return $(tableID).DataTable({
+        return $(tableId).DataTable({
             // "colReorder": false,
             "serverSide": true,
             "processing": true,
@@ -306,7 +321,7 @@ class AboutCodeDataTable {
             dom: // Needed to keep datatables buttons and search inline
                 "<'row'<'col-sm-9'B><'col-sm-3'f>>" +
                 "<'row'<'col-sm-12'tr>>" +
-                "<'row'<'col-sm-4'i><'col-sm-3'l><'col-sm-5'p>>"
+                "<'row'<'col-sm-3'l><'col-sm-4'i><'col-sm-5'p>>"
         });
     }
 

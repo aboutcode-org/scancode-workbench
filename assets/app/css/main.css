@@ -49,28 +49,29 @@ body {
 /*---------------------------------------
   Layout
 -----------------------------------------*/
-.tab-container {
-  height: 100%;
-  width: 100%;
-  padding-top: 10px;
-}
 
-#root-div {
+#content {
   height: 100%;
   width: 100%;
   padding-left: 50px;
   display: flex;
 }
 
-#tabbar {
-  height: 100%;
-  flex: 1;
-}
-
 #leftCol {
   height: 100%;
   flex: 0 0 200px;
   box-shadow: 1px 0 18px -3px #b1b1b1;
+}
+
+#rightCol {
+  height: 100%;
+  flex: 1;
+}
+
+.tab-pane {
+  height: 100%;
+  width: 100%;
+  padding-top: 10px;
 }
 
 /*---------------------------------------
@@ -270,7 +271,7 @@ div.node-content {
     outline: none;
 }
 
-.sidebar-nav li .btn-change.selected {
+.sidebar-nav li.active .btn-sidebar {
     color: #fff;
     background: rgba(255, 255, 255, 0.12);
 }
@@ -282,6 +283,10 @@ div.node-content {
 .dataTable td select {
   word-wrap: break-word;
   width: 100%;
+}
+
+.dataTable td hr {
+  margin: 0;
 }
 
 /*For rounded table border*/
@@ -325,35 +330,40 @@ div.dataTables_scrollHead th:first-child {
   Progress Indicator
 -----------------------------------------*/
 /* Center the progress indicator */
-#db-indicator{
+.progress {
   position: absolute;
-  left: 50%;
-  top: 50%;
+  left: 0;
+  right: 0;
+  bottom: 50%;
+  margin: auto;
   z-index: 1;
-  width: 150px;
-  height: 150px;
-  margin: -75px 0 0 -75px;
+  width: auto;
+  height: auto;
+  border: none;
+  background-color: transparent;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+}
+
+.progress .title {
+  text-align: center;
+}
+
+.progress .indicator {
+  position: relative;
+  width: 50px;
+  height: 50px;
+  margin: auto;
   border: 6px solid #B4DDF8;
   border-radius: 50%;
   border-top: 6px solid #3498db;
-  width: 50px;
-  height: 50px;
   animation: spin 1s linear infinite;
-  display: none;
 }
 
 @keyframes spin {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
-}
-
-#indicator-text {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  z-index: 1;
-  margin: -120px 0 0 -125px;
-  display: none;
 }
 
 /*---------------------------------------

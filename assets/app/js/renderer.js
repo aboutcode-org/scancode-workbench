@@ -17,23 +17,29 @@
 
 const fs = require('fs');
 const shell = require("electron").shell;
-
- // The electron library for opening a dialog
 const dialog = require('electron').remote.dialog;
 
 // The Electron module used to communicate asynchronously from a renderer process to the main process.
 const ipcRenderer = require('electron').ipcRenderer;
-const packageJson = require('../../../package.json');
-const aboutCodeVersion = packageJson.version;
+const aboutCodeVersion = require('../../../package.json').version;
 
 $(document).ready(function () {
     // Create default values for all of the data and ui classes
     let aboutCodeDB = new AboutCodeDB();
-    let dashboard = new AboutCodeDashboard("#dashboard-container", aboutCodeDB);
+
+    const dashboard = new AboutCodeDashboard("#dashboard-container", aboutCodeDB);
 
     const barChart = new AboutCodeBarChart("#summary-bar-chart", aboutCodeDB)
         .on('bar-clicked', (attribute, value) => {
-            chartSummaryToFiles(attribute, value);
+            // Show files that contain attribute value selected by user in bar chart
+            if (value !== "No Value Detected") {
+                cluesTable.clearColumnFilters();
+                cluesTable.setColumnFilter(attribute, value);
+
+                // This needs to be done only when the column is visible.
+                // So we do it last to try our best
+                showClueButton.trigger("click");
+            }
         })
         .on('query-interceptor', query => {
             query.where = { path: { $like: `${jstree.getSelected()}%` } };
@@ -76,47 +82,32 @@ $(document).ready(function () {
             barChart.draw();
         });
 
-    const splitter = new Splitter('#leftCol', '#tabbar')
+    const splitter = new Splitter('#leftCol', '#rightCol')
         .on('drag-end', () => {
-            if ($('#bar-chart-container').is(':visible')) {
+            if ($('#tab-barchart').is(':visible')) {
                 barChart.draw();
             }
-            if ($('#clues-container').is(':visible')) {
+            if ($('#tab-clues').is(':visible')) {
                 cluesTable.draw();
             }
         });
 
-    // Setup css styling for sidebar button state when clicked.
-    const navButtons = $("#sidebar-wrapper").find(".btn-change");
-    navButtons.each((i, clickedButton) => {
-        $(clickedButton).click(function() {
-            navButtons.each((i, button) => {
-                if (button === clickedButton) {
-                    $(button).addClass("selected");
-                } else {
-                    $(button).removeClass("selected");
-                }
-            });
-        });
-    });
-
-    // Defines DOM element constants for buttons.
-    const showClueButton = $("#show-clue-table");
-    const showNodeViewButton = $("#show-tree");
-    const showComponentButton = $("#show-component-table");
-    const showBarChartButton = $("#show-bar-chart");
-    const showDashboardButton = $("#show-dashboard");
+    // Defines DOM element constants for sidebar buttons.
     const saveSQLiteFileButton = $("#save-file");
     const openSQLiteFileButton = $("#open-file");
-    const leftCol = $("#leftCol");
-    const tabBar = $("#tabbar");
+    const showClueButton = $("#show-tab-clues");
+    const showNodeViewButton = $("#show-tab-nodeview");
+    const showComponentButton = $("#show-tab-component");
+    const showBarChartButton = $("#show-tab-barchart");
+    const showDashboardButton = $("#show-tab-dashboard");
 
-    // Defines DOM element constants for the main view containers.
-    const nodeContainer = $("#node-container");
-    const cluesContainer = $("#clues-container");
-    const componentContainer = $("#component-container");
-    const barChartContainer = $("#bar-chart-container");
-    const dashboardContainer = $("#dashboard-container");
+    // Defines DOM element constants for the main content
+    const mainContent = $("#content");
+    const nodeviewTab = $("#tab-nodeview");
+    const cluesTab = $("#tab-clues");
+    const componentTab = $("#tab-component");
+    const barChartTab = $("#tab-barchart");
+    const dashboardContainer = $("#tab-dashboard");
 
     // Open a SQLite Database File
     openSQLiteFileButton.click(openSQLite);
@@ -124,12 +115,40 @@ $(document).ready(function () {
     // Save a SQLite Database file
     saveSQLiteFileButton.click(saveSQLite);
 
+    // Show clue DataTable. Hide node view and component summary table
+    showClueButton.click(() => {
+        splitter.show();
+        cluesTable.draw();
+    });
+
+    // Show node view. Hide clue and component table
+    showNodeViewButton.click(() => {
+        splitter.show();
+        nodeView.redraw();
+    });
+
+    // Show component summary table. Hide DataTable and node view
+    showComponentButton.click(() => {
+        splitter.hide();
+        componentsTable.reload();
+    });
+
+    showBarChartButton.click(() => {
+        splitter.show();
+        barChart.draw();
+    });
+
+    showDashboardButton.click(() => {
+        splitter.hide();
+        dashboard.reload();
+    });
+
     ipcRenderer.on('table-view', () => showClueButton.trigger("click"));
     ipcRenderer.on('node-view', () => showNodeViewButton.trigger("click"));
     ipcRenderer.on('component-summary-view', () => showComponentButton.trigger("click"));
-    ipcRenderer.on('open-SQLite', openSQLite);
+    ipcRenderer.on('open-SQLite', () => openSQLiteFileButton.trigger("click"));
     ipcRenderer.on('chart-summary-view', () => showBarChartButton.trigger("click"));
-    ipcRenderer.on('save-SQLite', saveSQLite);
+    ipcRenderer.on('save-SQLite', () => saveSQLiteFileButton.trigger("click"));
     ipcRenderer.on('import-JSON', importJson);
     ipcRenderer.on('export-JSON', exportJson);
     ipcRenderer.on('export-JSON-components-only', exportJsonComponents);
@@ -140,128 +159,7 @@ $(document).ready(function () {
            shell.openExternal(evt.target.href);
     });
 
-    // Show clue DataTable. Hide node view and component summary table
-    showClueButton.click(() => {
-        splitter.show();
-        cluesContainer.show();
-        nodeContainer.hide();
-        componentContainer.hide();
-        barChartContainer.hide();
-        dashboardContainer.hide();
-        cluesTable.draw();
-    });
-
-    // Show node view. Hide clue and component table
-    showNodeViewButton.click(() => {
-        splitter.show();
-        nodeContainer.show();
-        cluesContainer.hide();
-        componentContainer.hide();
-        barChartContainer.hide();
-        dashboardContainer.hide();
-        nodeView.redraw();
-    });
-
-    // Show component summary table. Hide DataTable and node view
-    showComponentButton.click(() => {
-        splitter.hide();
-        componentContainer.show();
-        nodeContainer.hide();
-        cluesContainer.hide();
-        barChartContainer.hide();
-        dashboardContainer.hide();
-        componentsTable.reload();
-    });
-
-    showBarChartButton.click(() => {
-        splitter.show();
-        barChartContainer.show();
-        componentContainer.hide();
-        nodeContainer.hide();
-        cluesContainer.hide();
-        dashboardContainer.hide();
-        barChart.draw();
-    });
-
-    showDashboardButton.click(() => {
-        splitter.hide();
-        dashboardContainer.show();
-        componentContainer.hide();
-        nodeContainer.hide();
-        cluesContainer.hide();
-        barChartContainer.hide();
-        dashboard.reload();
-    });
-
     showDashboardButton.trigger("click");
-
-    // Creates the database and all View objects from a SQLite file
-    function loadDatabaseFromFile(fileName) {
-        // Create a new database when importing a json file
-        aboutCodeDB = new AboutCodeDB({
-            dbName: "demo_schema",
-            dbStorage: fileName
-        });
-
-        reloadDataForViews();
-    }
-
-    function reloadDataForViews() {
-        // The flattened data is used by the clue table and jstree
-        return aboutCodeDB.db
-            .then(() => {
-                componentDialog.database(aboutCodeDB);
-                dejaCodeExportDialog.database(aboutCodeDB);
-
-                jstree.database(aboutCodeDB);
-                jstree.reload();
-
-                // reload the DataTable after all insertions are done.
-                cluesTable.database(aboutCodeDB);
-                cluesTable.reload();
-
-                componentsTable.database(aboutCodeDB);
-                componentsTable.reload();
-
-                dashboard.database(aboutCodeDB);
-                dashboard.reload();
-
-                nodeView.database(aboutCodeDB);
-                nodeView.reload();
-
-                barChart.database(aboutCodeDB);
-                barChart.reload();
-
-                return aboutCodeDB;
-            })
-            .catch(function(reason) {
-               throw reason;
-            });
-    }
-
-    // Show files that contain attribute value selected by user in bar chart
-    function chartSummaryToFiles(attribute, value) {
-        if (value !== "No Value Detected") {
-            // Get the clue table column and make sure it's visible
-            const column = cluesTable.dataTable.column(`${attribute}:name`);
-            column.visible(true);
-
-            // Clear all other columns
-            cluesTable.clearColumnFilters();
-
-            // Get the column's filter select box
-            const select = $(`select#clue-${attribute}`);
-            select.empty().append(`<option value=""></option>`);
-
-            // Add the chart value options and select it.
-            select.append(`<option value="${value}">${value}</option>`);
-            select.val(value).change();
-
-            // This needs to be done only when the column is visible.
-            // So we do it last to try our best
-            showClueButton.trigger("click");
-        }
-    }
 
     // Open a SQLite Database File
     function openSQLite() {
@@ -276,7 +174,7 @@ $(document).ready(function () {
             if (fileNames === undefined) {
                 return;
             }
-            loadDatabaseFromFile(fileNames[0]);
+            loadDatabase(fileNames[0]);
             cluesTable.clearColumnFilters();
         });
     }
@@ -299,7 +197,7 @@ $(document).ready(function () {
                 let reader = fs.createReadStream(oldFileName);
                 let writer = fs.createWriteStream(newFileName);
                 reader.pipe(writer);
-                reader.on("end", () => loadDatabaseFromFile(newFileName));
+                reader.on("end", () => loadDatabase(newFileName));
             }
         );
     }
@@ -347,15 +245,15 @@ $(document).ready(function () {
                         dbStorage: fileName,
                     });
 
-                    const stream =
-                        fs.createReadStream(jsonFileName, {encoding: 'utf8'});
+                    const progress =
+                        new Progress("#content", {title: "Creating Database"});
                     aboutCodeDB.db
-                        .then(() => showProgressIndicator())
-                        .then(() => aboutCodeDB.addFromJsonStream(stream, aboutCodeVersion))
-                        .then(() => reloadDataForViews())
-                        .then(() => hideProgressIndicator())
+                        .then(() => progress.show())
+                        .then(() => aboutCodeDB.addFromJson(jsonFileName, aboutCodeVersion))
+                        .then(() => progress.hide())
+                        .then(() => loadDataForViews())
                         .catch((err) => {
-                            hideProgressIndicator();
+                            progress.hide();
                             if (err instanceof MissingFileInfoError) {
                                 dialog.showErrorBox(
                                     "Missing File Type Information",
@@ -382,22 +280,6 @@ $(document).ready(function () {
                 });
             cluesTable.clearColumnFilters();
         });
-    }
-
-    // Show database creation indicator and hide table view
-    function showProgressIndicator() {
-        $("#db-indicator").show();
-        $("#indicator-text").show();
-        $("#tabbar").hide();
-        $("#leftCol").hide();
-    }
-
-    // Hide database creation indicator and show table view
-    function hideProgressIndicator() {
-        $("#tabbar").show();
-        $("#leftCol").show();
-        $("#db-indicator").hide();
-        $("#indicator-text").hide();
     }
 
     // Export JSON file with ScanCode data and components that have been created
@@ -474,6 +356,50 @@ $(document).ready(function () {
                     });
                 });
         });
+    }
+
+    // Creates the database and all View objects from a SQLite file
+    function loadDatabase(fileName) {
+        // Create a new database when importing a json file
+        aboutCodeDB = new AboutCodeDB({
+            dbName: "demo_schema",
+            dbStorage: fileName
+        });
+
+        loadDataForViews();
+    }
+
+    // loads data for all views based on the current data
+    function loadDataForViews() {
+        return aboutCodeDB.db
+            .then(() => {
+                componentDialog.database(aboutCodeDB);
+                dejaCodeExportDialog.database(aboutCodeDB);
+
+                jstree.database(aboutCodeDB);
+                jstree.reload();
+
+                // reload the DataTable after all insertions are done.
+                cluesTable.database(aboutCodeDB);
+                cluesTable.reload();
+
+                componentsTable.database(aboutCodeDB);
+                componentsTable.reload();
+
+                dashboard.database(aboutCodeDB);
+                dashboard.reload();
+
+                nodeView.database(aboutCodeDB);
+                nodeView.reload();
+
+                barChart.database(aboutCodeDB);
+                barChart.reload();
+
+                return aboutCodeDB;
+            })
+            .catch(function(reason) {
+               throw reason;
+            });
     }
 });
 

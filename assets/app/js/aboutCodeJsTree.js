@@ -17,9 +17,31 @@
 class AboutCodeJsTree {
     constructor(jsTreeId, aboutCodeDB) {
         this.events = {};
+        this.jsTreeId = jsTreeId;
         this.aboutCodeDB = aboutCodeDB;
+        this.jsTree = this._initJsTree(jsTreeId);
+    }
+
+    on(event, handler) {
+        this.events[event] = handler;
+        return this;
+    }
+
+    database(aboutCodeDB) {
+        this.aboutCodeDB = aboutCodeDB;
+    }
+
+    reload() {
+        this.jsTree.jstree(true).refresh(true);
+    }
+
+    getSelected() {
+        return this.jsTree.jstree("get_selected")[0];
+    }
+
+    _initJsTree(jsTreeId) {
         const that = this;
-        this.jsTree = $(jsTreeId).jstree(
+        return $(jsTreeId).jstree(
             {
                 "core": {
                     "data": function (currentDirectory, callback) {
@@ -41,7 +63,7 @@ class AboutCodeJsTree {
                         "icon": "fa fa-file-text-o"
                     }
                 },
-                "plugins": [ "types", "sort", "contextmenu", "wholerow"],
+                "plugins": ["types", "sort", "contextmenu", "wholerow"],
                 "sort": function (a, b) {
                     const a1 = this.get_node(a);
                     const b1 = this.get_node(b);
@@ -52,7 +74,7 @@ class AboutCodeJsTree {
                         return (a1.type === 'directory') ? -1 : 1;
                     }
                 },
-                "contextmenu" : {
+                "contextmenu": {
                     "items": (node) => {
                         return {
                             "edit_component": {
@@ -77,23 +99,6 @@ class AboutCodeJsTree {
             .on('select_node.jstree', (evt, data) => {
                 this.events['node-selected'](data.node);
             });
-    }
-
-    on(event, handler) {
-        this.events[event] = handler;
-        return this;
-    }
-
-    database(aboutCodeDB) {
-        this.aboutCodeDB = aboutCodeDB;
-    }
-
-    reload() {
-        this.jsTree.jstree(true).refresh(true);
-    }
-
-    getSelected() {
-        return this.jsTree.jstree("get_selected")[0];
     }
 }
 

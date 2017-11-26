@@ -71,27 +71,27 @@
                 </button>
             </li>
             <li>
-                <button class="btn btn-sidebar btn-change" id="show-dashboard" data-toggle="tooltip" data-placement="right" title="Dashboard View">
+                <button class="btn btn-sidebar" id="show-tab-dashboard" data-toggle="tab" data-target="#tab-dashboard" data-placement="right" title="Dashboard View">
                     <i class="fa fa-tachometer" aria-hidden="true"></i>
                 </button>
             </li>
             <li>
-                <button class="btn btn-sidebar btn-change" id="show-bar-chart" data-toggle="tooltip" data-placement="right" title="Chart Summary View">
+                <button class="btn btn-sidebar" id="show-tab-barchart" data-toggle="tab" data-target="#tab-barchart" data-placement="right" title="Chart Summary View">
                     <i class="fa fa-bar-chart" aria-hidden="true"></i>
                 </button>
             </li>
             <li>
-                <button class="btn btn-sidebar btn-change" id="show-clue-table" data-toggle="tooltip" title="Table View">
+                <button class="btn btn-sidebar" id="show-tab-clues" data-toggle="tab" data-target="#tab-clues" title="Table View">
                     <i class="fa fa-table" aria-hidden="true"></i>
                 </button>
             </li>
             <li>
-                <button class="btn btn-sidebar btn-change" id="show-tree" data-toggle="tooltip" title="Node View">
+                <button class="btn btn-sidebar" id="show-tab-nodeview" data-toggle="tab" data-target="#tab-nodeview" title="Node View">
                     <i class="fa fa-code-fork" aria-hidden="true"></i>
                 </button>
             </li>
             <li>
-                <button class="btn btn-sidebar btn-change" id="show-component-table" data-toggle="modal" data-placement="right" title="Component Summary View">
+                <button class="btn btn-sidebar" id="show-tab-component" data-toggle="tab" data-target="#tab-component" title="Component Summary View">
                     <i class="fa fa-list-ol" aria-hidden="true"></i>
                 </button>
             </li>
@@ -104,7 +104,7 @@
     </div>
 
     <!-- Main Content -->
-    <div id="root-div">
+    <div id="content">
 
         <!-- JsTree -->
         <div class="split split-flex" id="leftCol">
@@ -112,16 +112,16 @@
         </div>
 
         <!-- Tab Bar -->
-        <div class="split split-flex" id="tabbar">
+        <div class="tab-content split split-flex" id="rightCol">
 
             <!-- Clue DataTable Tab-->
-            <div class="container tab-container" id="clues-container">
+            <div class="tab-pane container" id="tab-clues">
                 <table id="clues-table" class="display table table-striped table-bordered dataTable no-footer" cellspacing="0" width="100%" >
                 </table>
             </div>
 
             <!-- Dashboard Tab -->
-            <div class="container tab-container" id="dashboard-container">
+            <div class="tab-pane container" id="tab-dashboard">
                 <h2 class="dashboard-lead">Dashboard</h2>
                 <div class="row">
                     <div class="col-lg-3 col-sm-6 col-xs-12">
@@ -202,13 +202,13 @@
             </div>
 
             <!-- Component DataTable Tab -->
-            <div class="container tab-container" id="component-container">
+            <div class="tab-pane container" id="tab-component">
                 <table id="components-table" class="display table table-striped table-bordered dataTable no-footer" cellspacing="0" width="100%" >
                 </table>
             </div>
 
             <!-- Node View Tab -->
-            <div class="container tab-container" id="node-container">
+            <div class="tab-pane container" id="tab-nodeview">
                 <div class="node-options">
                     <select id="node-drop-down" style="border-color: #eee; border-radius: 5px; padding: 5px;" multiple>
                         <option value="filename" selected>File Name</option>
@@ -241,17 +241,13 @@
             </div>
 
             <!-- Bar Chart Tab -->
-            <div class="container tab-container" id="bar-chart-container">
+            <div class="tab-pane container" id="tab-barchart">
                 <select data-hide-on-select="true" class="form-control select-chart-attribute" id="select-chart-attribute" type="text"></select>
                 <h5>Total Files Scanned: <span class="total-files"></span></h5>
                 <svg class="bar-chart" id="summary-bar-chart"></svg>
             </div>
         </div>
     </div>
-
-    <!-- DB ProgressBar -->
-    <div id="indicator-text"><h4>Creating Database ...</h4></div>
-    <div id="db-indicator"></div>
 
     <!-- Node View Modal -->
     <div class="modal fade action-create" id="componentDialog" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
@@ -395,6 +391,7 @@
     <script src="assets/app/js/splitter.js"></script>
     <script src="assets/app/js/nodeview.js"></script>
     <script src="assets/app/js/barChart.js"></script>
+    <script src="assets/app/js/progress.js"></script>
     <script src="assets/app/js/componentDialog.js"></script>
     <script src="assets/app/js/dejacodeExportDialog.js"></script>
     <script src="assets/app/js/aboutCodeJsTree.js"></script>

@@ -170,11 +170,12 @@ class AboutCodeDB {
     }
 
     // Add rows to the flattened files table from a ScanCode json object
-    addFromJsonStream(stream, aboutCodeVersion) {
-        if (!stream) {
-            return this.db;
+    addFromJson(jsonFileName, aboutCodeVersion) {
+        if (!jsonFileName) {
+            throw new Error("Invalid json file name: " + jsonFileName);
         }
 
+        const stream = fs.createReadStream(jsonFileName, {encoding: 'utf8'});
         const version = aboutCodeVersion;
         let scancode = null;
         let promiseChain = this.db;
@@ -195,10 +196,7 @@ class AboutCodeDB {
                         header = header.header;
                     }
                     promiseChain = promiseChain
-                        .then(() => this.AboutCode.create({
-                            version: version
-                        }));
-                    promiseChain = promiseChain
+                        .then(() => this.AboutCode.create({ version: version }))
                         .then(() => this.ScanCode.create(header))
                         .then((result) => scancode = result);
                 })
