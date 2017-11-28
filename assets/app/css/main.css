@@ -150,7 +150,7 @@ body {
   overflow: hidden;
 }
 
-#node-container {
+#tab-nodeview {
   display: flex;
   flex-flow: column;
 }
