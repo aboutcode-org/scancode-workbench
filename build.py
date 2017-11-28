@@ -212,7 +212,6 @@ def build(clean=True, app_name=APP_NAME,
         app_name,
         '--prune',
         # FIXME: could we use .npmignore instead?
-        '--ignore=thirdparty/*',
         '--ignore=dist/*',
         '--ignore=/\.idea',
         '--ignore=/\.gitignore',
