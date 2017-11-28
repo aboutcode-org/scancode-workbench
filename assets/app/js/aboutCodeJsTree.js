@@ -16,14 +16,14 @@
 
 class AboutCodeJsTree {
     constructor(jsTreeId, aboutCodeDB) {
-        this.events = {};
+        this.handlers = {};
         this.jsTreeId = jsTreeId;
         this.aboutCodeDB = aboutCodeDB;
         this.jsTree = this._initJsTree(jsTreeId);
     }
 
     on(event, handler) {
-        this.events[event] = handler;
+        this.handlers[event] = handler;
         return this;
     }
 
@@ -79,7 +79,7 @@ class AboutCodeJsTree {
                         return {
                             "edit_component": {
                                 "label": "Edit Component",
-                                "action": () => this.events['node-edit'](node)
+                                "action": () => this.handlers['node-edit'](node)
                             }
                         };
                     }
@@ -97,7 +97,7 @@ class AboutCodeJsTree {
                 this.jsTree.jstree('select_node', rootNode);
             })
             .on('select_node.jstree', (evt, data) => {
-                this.events['node-selected'](data.node);
+                this.handlers['node-selected'](data.node);
             });
     }
 }
