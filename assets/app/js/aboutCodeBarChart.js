@@ -72,7 +72,7 @@ class AboutCodeBarChart {
     }
 
     draw() {
-        this.barChart.draw();
+        this.showSummary();
     }
 
     showSummary() {
