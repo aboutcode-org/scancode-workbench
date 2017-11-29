@@ -188,24 +188,7 @@ function getTemplate() {
             role: 'help',
             submenu: [
                 {
-                    label: 'About AboutCode Manager',
-                    click: (item, focusedWindow) => {
-                        let win = new BrowserWindow({
-                            frame: true,
-                            width: 250,
-                            height: 200
-                        });
-                        win.on('closed', () => win = null);
-                        win.loadURL('file://' + __dirname + '/about.html');
-                        win.show();
-
-                    },
-                },
-                {
-                    type: 'separator'
-                },
-                {
-                    label: `Version ${packageJson.version}`,
+                    label: `AboutCode Manager Version ${packageJson.version}`,
                     enabled: false
                 },
                 {
@@ -220,6 +203,7 @@ function getTemplate() {
                     label: 'Licensing Information',
                     click: (item, focusedWindow) => {
                         let win = new BrowserWindow({frame: true});
+                        win.setMenu(null);
                         win.on('closed', () => win = null);
                         win.loadURL('file://' + __dirname + '/attribution.html');
                         win.show();
