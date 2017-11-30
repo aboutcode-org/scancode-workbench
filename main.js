@@ -14,9 +14,18 @@ function createWindow() {
         height: 800,
         icon: path.join(__dirname, '/assets/app/app-icon/png/aboutcode_512x512.png')
     });
+    mainWindow.setTitle('AboutCode Manager');
     mainWindow.loadURL('file://' + __dirname + '/index.html');
+    mainWindow.webContents.on('did-finish-load',() => {
+        mainWindow.setTitle('AboutCode Manager');
+      });
     mainWindow.on('closed', () => mainWindow = null);
 }
+
+const {ipcMain} = require('electron');
+ipcMain.on('request-mainprocess-action', (event, filename) => {
+    mainWindow.setTitle('AboutCode Manager' + ' - ' + filename);
+});
 
 app.on('ready', () => {
     createWindow();
