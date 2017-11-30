@@ -22,11 +22,6 @@ function createWindow() {
     mainWindow.on('closed', () => mainWindow = null);
 }
 
-const {ipcMain} = require('electron');
-ipcMain.on('request-mainprocess-action', (event, filename) => {
-    mainWindow.setTitle('AboutCode Manager' + ' - ' + filename);
-});
-
 app.on('ready', () => {
     createWindow();
     Menu.setApplicationMenu(Menu.buildFromTemplate(getTemplate()));

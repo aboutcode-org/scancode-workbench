@@ -175,10 +175,6 @@ $(document).ready(function () {
                 return;
             }
             loadDatabase(fileNames[0]);
-            // Send the filename to main.js to display in the title
-            const path = require('path');
-            let fileNames_split = fileNames[0].split(path.sep).pop();
-            ipcRenderer.send('request-mainprocess-action', fileNames_split);
             cluesTable.clearColumnFilters();
         });
     }
@@ -255,7 +251,7 @@ $(document).ready(function () {
                         .then(() => progress.show())
                         .then(() => aboutCodeDB.addFromJson(jsonFileName, aboutCodeVersion))
                         .then(() => progress.hide())
-                        .then(() => loadDataForViews())
+                        .then(() => loadDataForViews(fileName))
                         .catch((err) => {
                             progress.hide();
                             if (err instanceof MissingFileInfoError) {
@@ -281,10 +277,6 @@ $(document).ready(function () {
                             }
                             console.error(err);
                         });
-                        // Send the filename to main.js to display in the title
-                        const path = require('path');
-                        let new_fileName_split = fileName.split(path.sep).pop();
-                        ipcRenderer.send('request-mainprocess-action', new_fileName_split);
                 });
             cluesTable.clearColumnFilters();
         });
@@ -374,11 +366,13 @@ $(document).ready(function () {
             dbStorage: fileName
         });
 
-        loadDataForViews();
+        loadDataForViews(fileName);
     }
 
     // loads data for all views based on the current data
-    function loadDataForViews() {
+    function loadDataForViews(fileName) {
+        const path = require('path');
+        document.title = 'AboutCode Manager - ' + path.basename(fileName);
         return aboutCodeDB.db
             .then(() => {
                 componentDialog.database(aboutCodeDB);
