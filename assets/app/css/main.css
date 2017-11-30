@@ -55,6 +55,7 @@ body {
   width: 100%;
   padding-left: 50px;
   display: flex;
+  flex-direction: row;
 }
 
 #leftCol {
@@ -77,6 +78,27 @@ body {
 /*---------------------------------------
   Node View
 -----------------------------------------*/
+
+#nodeview-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+}
+
+#nodeview-options {
+  display: flex;
+  flex-direction: row;
+  padding-bottom: 5px;
+}
+
+#nodeview-view {
+  position: relative;
+  height: 100%;
+  width: 100%;
+  margin-bottom: 10px;
+}
+
 .node {
   cursor: pointer;
 }
@@ -150,28 +172,6 @@ body {
   overflow: hidden;
 }
 
-#tab-nodeview {
-  display: flex;
-  flex-flow: column;
-}
-
-.nodeview-content {
-  display: inline-block;
-  position: absolute;
-  top: 0;
-  left: 0;
-}
-
-div.node-content {
-  border: 1px solid #ddd;
-  width: 200px;
-}
-
-.node-options {
-  display: flex;
-  padding-bottom: 5px;
-}
-
 .component-status-dropdown { padding-left: 5px; }
 
 .status-dropdown-menu { min-width: 110px; }
@@ -182,13 +182,6 @@ div.node-content {
   z-index: 10;
   width: auto;
   position: absolute;
-}
-
-#nodeview-container {
-  position: relative;
-  height: 100%;
-  width: 100%;
-  margin-bottom: 10px;
 }
 
 #recenter { color: #fff; }
@@ -451,7 +444,24 @@ div.dataTables_scrollHead th:first-child {
 /*---------------------------------------
   Dashboard
 -----------------------------------------*/
-#dashboard-container{
+
+#dashboard-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+}
+
+#dashboard-title {
+  padding-bottom: 5px;
+}
+
+#dashboard-view {
+  height: 100%;
+  width: 100%;
+}
+
+#tab-dashboard{
   background-color: #FAFAFB;
 }
 
@@ -480,14 +490,12 @@ div.dataTables_scrollHead th:first-child {
   margin: 0;
   color: #3D7AFC;
   font-weight: 600;
-  padding-bottom: 10px;
 }
 
 .card .category {
   font-size: 17px;
   font-weight: 400;
-  color: #9A9A9A;
-  margin-bottom: 0px;
+  color: #555;
 }
 
 .c3 svg {

@@ -122,79 +122,85 @@
 
             <!-- Dashboard Tab -->
             <div class="tab-pane container" id="tab-dashboard">
-                <h2 class="dashboard-lead">Dashboard</h2>
-                <div class="row">
-                    <div class="col-lg-3 col-sm-6 col-xs-12">
-                        <div class="card" id="total-files">
-                            <div class="header">
-                                <h3 class="title">0</h3>
-                                <p class="category">Files Scanned</p>
+                <div id="dashboard-container">
+                    <div id="dashboard-title">
+                        <h2>Dashboard</h2>
+                    </div>
+                    <div id="dashboard-view">
+                        <div class="row">
+                            <div class="col-lg-3 col-sm-6 col-xs-12">
+                                <div class="card" id="total-files">
+                                    <div class="header">
+                                        <h3 class="title">0</h3>
+                                        <p class="category">Files Scanned</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-sm-6 col-xs-12">
+                                <div class="card" id="unique-licenses">
+                                    <div class="header">
+                                        <h3 class="title">0</h3>
+                                        <p class="category">Unique Licenses Detected</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-sm-6 col-xs-12">
+                                <div class="card" id="unique-copyrights">
+                                    <div class="header">
+                                        <h3 class="title">0</h3>
+                                        <p class="category">Unique Copyrights Detected</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-sm-6 col-xs-12">
+                                <div class="card" id="total-packages">
+                                    <div class="header">
+                                        <h3 class="title">0</h3>
+                                        <p class="category">Packages Detected</p>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-lg-3 col-sm-6 col-xs-12">
-                        <div class="card" id="unique-licenses">
-                            <div class="header">
-                                <h3 class="title">0</h3>
-                                <p class="category">Unique Licenses Detected</p>
+                        <div class="row">
+                            <div class="col-lg-3 col-sm-6 col-xs-12">
+                                <div class="card">
+                                    <div class="header">
+                                        <p class="category">Programming Languages</p>
+                                    </div>
+                                    <div class="content">
+                                        <div id="source-chart"></div>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-sm-6 col-xs-12">
-                        <div class="card" id="unique-copyrights">
-                            <div class="header">
-                                <h3 class="title">0</h3>
-                                <p class="category">Unique Copyrights Detected</p>
+                            <div class="col-lg-3 col-sm-6 col-xs-12">
+                                <div class="card">
+                                    <div class="header">
+                                        <p class="category">License Categories</p>
+                                    </div>
+                                    <div class="content">
+                                        <div id="license-category-chart"></div>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-sm-6 col-xs-12">
-                        <div class="card" id="total-packages">
-                            <div class="header">
-                                <h3 class="title">0</h3>
-                                <p class="category">Packages Detected</p>
+                            <div class="col-lg-3 col-sm-6 col-xs-12">
+                                <div class="card">
+                                    <div class="header">
+                                        <p class="category">License Keys</p>
+                                    </div>
+                                    <div class="content">
+                                        <div id="license-key-chart"></div>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-lg-3 col-sm-6 col-xs-12">
-                        <div class="card">
-                            <div class="header">
-                                <p class="category">Programming Languages</p>
-                            </div>
-                            <div class="content">
-                                <div id="source-chart"></div>
-                            </div>
-                        </div>
-                    </div>
-                     <div class="col-lg-3 col-sm-6 col-xs-12">
-                        <div class="card">
-                            <div class="header">
-                                <p class="category">License Categories</p>
-                            </div>
-                            <div class="content">
-                                <div id="license-category-chart"></div>
-                            </div>
-                        </div>
-                    </div>
-                     <div class="col-lg-3 col-sm-6 col-xs-12">
-                        <div class="card">
-                            <div class="header">
-                                <p class="category">License Keys</p>
-                            </div>
-                            <div class="content">
-                                <div id="license-key-chart"></div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-sm-6 col-xs-12">
-                        <div class="card">
-                            <div class="header">
-                                <p class="category">Package Types</p>
-                            </div>
-                            <div class="content">
-                                <div id="packages-type-chart"></div>
+                            <div class="col-lg-3 col-sm-6 col-xs-12">
+                                <div class="card">
+                                    <div class="header">
+                                        <p class="category">Package Types</p>
+                                    </div>
+                                    <div class="content">
+                                        <div id="packages-type-chart"></div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -209,33 +215,34 @@
 
             <!-- Node View Tab -->
             <div class="tab-pane container" id="tab-nodeview">
-                <div class="node-options">
-                    <select id="node-drop-down" style="border-color: #eee; border-radius: 5px; padding: 5px;" multiple>
-                        <option value="filename" selected>File Name</option>
-                        <option value="license">License</option>
-                        <option value="copyright">Copyright</option>
-                    </select>
-                    <!-- Node status toggle -->
-                    <div class="dropdown component-status-dropdown">
-                        <button class="btn btn-default dropdown-toggle" type="button" id="nodeStatusDropDown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                            Node Visibility
-                            <span class="caret"></span>
-                        </button>
-                        <ul class="dropdown-menu status-dropdown-menu dropdown-menu-left" aria-labelledby="nodeStatusDropDown">
-                            <li><a href="#" class="small" data-value="Analyzed" tabIndex="-1"><input type="checkbox" checked/>&nbsp; Analyzed</a></li>
-                            <li><a href="#" class="small" data-value="Attention" tabIndex="-1"><input type="checkbox" checked/>&nbsp; Attention</a></li>
-                            <li><a href="#" class="small" data-value="Original" tabIndex="-1"><input type="checkbox" checked/>&nbsp; Original</a></li>
-                            <li><a href="#" class="small" data-value="NR" tabIndex="-1"><input type="checkbox" checked/>&nbsp; NR</a></li>
-                        </ul>
-                    </div>
-                </div>
                 <div id="nodeview-container">
-                    <div id="zoom-controls">
-                        <button class="btn btn-zoom" id="reset-zoom" type="button">
-                            <a id="recenter" href="#" title="Center Node Tree"><i class="fa fa-refresh fa-refresh-scale" aria-hidden="true"></i></a>
-                        </button>
+                    <div id="nodeview-options">
+                        <select id="node-drop-down" style="border-color: #eee; border-radius: 5px; padding: 5px;" multiple>
+                            <option value="filename" selected>File Name</option>
+                            <option value="license">License</option>
+                            <option value="copyright">Copyright</option>
+                        </select>
+                        <!-- Node status toggle -->
+                        <div class="dropdown component-status-dropdown">
+                            <button class="btn btn-default dropdown-toggle" type="button" id="nodeStatusDropDown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                Node Visibility
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu status-dropdown-menu dropdown-menu-left" aria-labelledby="nodeStatusDropDown">
+                                <li><a href="#" class="small" data-value="Analyzed" tabIndex="-1"><input type="checkbox" checked/>&nbsp; Analyzed</a></li>
+                                <li><a href="#" class="small" data-value="Attention" tabIndex="-1"><input type="checkbox" checked/>&nbsp; Attention</a></li>
+                                <li><a href="#" class="small" data-value="Original" tabIndex="-1"><input type="checkbox" checked/>&nbsp; Original</a></li>
+                                <li><a href="#" class="small" data-value="NR" tabIndex="-1"><input type="checkbox" checked/>&nbsp; NR</a></li>
+                            </ul>
+                        </div>
                     </div>
-                    <div class="svg-container" id="nodeview">
+                    <div id="nodeview-view">
+                        <div id="zoom-controls">
+                            <button class="btn btn-zoom" id="reset-zoom" type="button">
+                                <a id="recenter" href="#" title="Center Node Tree"><i class="fa fa-refresh fa-refresh-scale" aria-hidden="true"></i></a>
+                            </button>
+                        </div>
+                        <div class="svg-container" id="nodeview"></div>
                     </div>
                 </div>
             </div>
