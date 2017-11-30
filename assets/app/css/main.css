@@ -490,6 +490,7 @@ div.dataTables_scrollHead th:first-child {
   margin: 0;
   color: #3D7AFC;
   font-weight: 600;
+  padding-bottom: 10px;
 }
 
 .card .category {
