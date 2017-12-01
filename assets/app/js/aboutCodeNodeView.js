@@ -294,24 +294,25 @@ class AboutCodeNodeView {
                         .map((copyright) => copyright.statements.join(" "))
                         .join(", ");
                 }
+            })
+            .each(function (d, i) {
+                // Update rect size (has to be done after text is added)
+                d3.select(this.parentNode).select("rect")
+                    .attr("y", function() {
+                        return -this.parentNode.getBBox().height/2;
+                    })
+                    .attr("width", function() {
+                        return this.parentNode.getBBox().width;
+                    })
+                    .attr("height", function() {
+                        return this.parentNode.getBBox().height;
+                    });
             });
 
         this._updateClueNodes(newClueNodes);
     }
 
-    // Update rect size (has to be done after text is added)
     static _updateClueNodes(nodes) {
-        nodes.select("rect")
-            .attr("y", function() {
-                return -this.parentNode.getBBox().height/2;
-            })
-            .attr("width", function() {
-                return this.parentNode.getBBox().width;
-            })
-            .attr("height", function() {
-                return this.parentNode.getBBox().height;
-            });
-
         // Update each clue's translation and set opacity to 1
         nodes.transition().duration(1000)
             .style("opacity", 1)
