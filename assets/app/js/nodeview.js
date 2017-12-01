@@ -1,7 +1,7 @@
 /*
  #
  # Copyright (c) 2016 nexB Inc. and others. All rights reserved.
- # http://nexb.com and https://github.com/nexB/scancode-toolkit/
+ # https://nexb.com and https://github.com/nexB/scancode-toolkit/
  # The ScanCode software is licensed under the Apache License version 2.0.
  # AboutCode is a trademark of nexB Inc.
  #
