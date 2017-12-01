@@ -1,4 +1,4 @@
-# <img src="assets/images/aboutcode-logo.png" align="center" alt="AboutCode Manager">
+# <img src="assets/app/images/aboutcode-logo.png" align="center" alt="AboutCode Manager">
 
 [![Travis Build Status](https://travis-ci.org/nexB/aboutcode-manager.svg?branch=develop)](https://travis-ci.org/nexB/aboutcode-manager) 
 [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/nexB/aboutcode-manager)](https://ci.appveyor.com/project/nexB/aboutcode-manager)
