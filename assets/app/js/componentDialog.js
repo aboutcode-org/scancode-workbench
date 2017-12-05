@@ -160,10 +160,12 @@ class ComponentDialog {
 
         this.title.text(data.id);
 
-        // Disable the ability to close the dialog by clicking outside the dialog or pressing the escape key.
+        // Disable the ability to close the dialog by clicking outside
+        // the dialog or pressing the escape key.
         this.dialog.modal({ backdrop: "static", keyboard: false });
 
-        // Retrieve any previously-saved values -- use below in _closeComponent() to compare with any new edits before closing the dialog.
+        // Retrieve any previously-saved values -- use below in _closeComponent()
+        // to compare with any new edits before closing the dialog.
         this.initialSerialization = this.dialog.find("form").serialize();
 
         this.dialog.modal('show');
@@ -175,10 +177,7 @@ class ComponentDialog {
         this.currentSerialization = this.dialog.find("form").serialize();
 
         if (this.initialSerialization !== this.currentSerialization) {
-            if(!confirm('Any edits you\'ve made will be lost if you close without saving.  \n\nClick "OK" if you don\'t want to save your edits.')) {
-                // This closes the alert and leaves the modal open if "Cancel" is clicked.
-                return false;
-            }
+            return confirm('Your new changes haven\'t been saved.  \n\nAre you sure you want to exit without saving?')
         }
     }
 
