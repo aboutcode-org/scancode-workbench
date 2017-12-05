@@ -47,17 +47,6 @@ class ComponentDialog {
         // Link each close button's click event to a method that checks for unsaved edits.
         this.exitButton.click(() => this._closeComponent());
         this.closeButton.click(() => this._closeComponent());
-
-        // Define attributes that will be modified as necessary in _showDialog() to represent any previously-saved values.
-        this.statusOriginal = "";
-        this.nameOriginal = "";
-        this.versionOriginal = "";
-        this.licenseOriginal = "";
-        this.ownerOriginal = "";
-        this.copyrightOriginal = "";
-        this.languageOriginal = "";
-        this.homepageOriginal = "";
-        this.notesOriginal = "";
     }
 
     database(aboutCodeDB) {
@@ -175,32 +164,17 @@ class ComponentDialog {
         this.dialog.modal({ backdrop: "static", keyboard: false });
 
         // Retrieve any previously-saved values -- use below in _closeComponent() to compare with any new edits before closing the dialog.
-        this.statusOriginal = this.status.val();
-        this.nameOriginal = this.name.val();
-        this.versionOriginal = this.version.val();
-        this.licenseOriginal = this.license.val();
-        this.ownerOriginal = this.owner.val();
-        this.copyrightOriginal = this.copyright.val();
-        this.languageOriginal = this.language.val();
-        this.homepageOriginal = this.homepage.val();
-        this.notesOriginal = this.notes.val();
+        this.initialSerialization = this.dialog.find("form").serialize();
 
         this.dialog.modal('show');
     }
 
     // Check whether the user has made any new edits.
     _closeComponent() {
-        if (($("#component-status").val() != this.statusOriginal) ||
-            ($("#component-name").val() != this.nameOriginal) ||
-            ($("#component-version").val() != this.versionOriginal) ||
-            // The next 4 compare the arrays, e.g., the array of selected licenses.
-            ($($("#component-license").val()).not(this.licenseOriginal).length != 0 || $(this.licenseOriginal).not($("#component-license").val()).length != 0) ||
-            ($($("#component-owner").val()).not(this.ownerOriginal).length != 0 || $(this.ownerOriginal).not($("#component-owner").val()).length != 0) ||
-            ($($("#component-copyright").val()).not(this.copyrightOriginal).length != 0 || $(this.copyrightOriginal).not($("#component-copyright").val()).length != 0) ||
-            ($($("#component-language").val()).not(this.languageOriginal).length != 0 || $(this.languageOriginal).not($("#component-language").val()).length != 0) ||
-            ($("#component-homepage-url").val() != this.homepageOriginal) ||
-            ($("#component-notes").val() != this.notesOriginal)
-            ) {
+        // Retrieve the current form values, i.e., including edits not yet saved.
+        this.currentSerialization = this.dialog.find("form").serialize();
+
+        if (this.initialSerialization !== this.currentSerialization) {
             if(!confirm('Any edits you\'ve made will be lost if you close without saving.  \n\nClick "OK" if you don\'t want to save your edits.')) {
                 // This closes the alert and leaves the modal open if "Cancel" is clicked.
                 return false;
