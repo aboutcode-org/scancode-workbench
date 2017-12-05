@@ -97,7 +97,7 @@ class DejaCodeExportDialog {
         let requests = [];
 
         // Make individual requests to DejaCode to create each component
-        $.each(components, function( index, component) {
+        $.each(components, (index, component) => {
             let request = $.Deferred();
             requests.push(request);
             this._createComponent(host, apiKey, component)

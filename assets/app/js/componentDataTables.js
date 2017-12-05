@@ -52,6 +52,7 @@ class ComponentDataTable {
             buttons: [{
                 name: "uploadDeja",
                 text: '<i class=" fa fa-cloud-upload"></i> Upload Components',
+                titleAttr: 'Upload Components to DejaCode',
                 action: () => {
                     this.aboutCodeDB
                         .findAllComponents({})

@@ -65,7 +65,7 @@ $(document).ready(function () {
     const componentsTable = new ComponentDataTable("#components-table", aboutCodeDB)
         .on('upload-clicked', components => {
             if (components.length > 0) {
-                dejaCodeExportDialog().show();
+                dejaCodeExportDialog.show();
             } else {
                 alert("You have no Components to upload.\n\n" +
                     "Please create at least one Component and try again.");
