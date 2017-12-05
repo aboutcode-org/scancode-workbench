@@ -34,11 +34,19 @@ class ComponentDialog {
         this.saveButton = this.dialog.find("button#component-save");
         this.deleteButton = this.dialog.find("button#component-delete");
 
+        // Define the buttons that can be used to close the dialog.
+        this.exitButton = this.dialog.find("button#component-exit")
+        this.closeButton = this.dialog.find("button#component-close")
+
         // Make node view modal box draggable
         this.dialog.draggable({ handle: ".modal-header" });
         this.handlers = {};
         this.saveButton.click(() => this._saveComponent());
         this.deleteButton.click(() => this._deleteComponent());
+
+        // Link each close button's click event to a method that checks for unsaved edits.
+        this.exitButton.click(() => this._closeComponent());
+        this.closeButton.click(() => this._closeComponent());
     }
 
     database(aboutCodeDB) {
@@ -151,7 +159,26 @@ class ComponentDialog {
         $('select').trigger('change.select2');
 
         this.title.text(data.id);
+
+        // Disable the ability to close the dialog by clicking outside
+        // the dialog or pressing the escape key.
+        this.dialog.modal({ backdrop: "static", keyboard: false });
+
+        // Retrieve any previously-saved values -- use below in _closeComponent()
+        // to compare with any new edits before closing the dialog.
+        this.initialSerialization = this.dialog.find("form").serialize();
+
         this.dialog.modal('show');
+    }
+
+    // Check whether the user has made any new edits.
+    _closeComponent() {
+        // Retrieve the current form values, i.e., including edits not yet saved.
+        this.currentSerialization = this.dialog.find("form").serialize();
+
+        if (this.initialSerialization !== this.currentSerialization) {
+            return confirm('Your new changes haven\'t been saved.  \n\nAre you sure you want to exit without saving?')
+        }
     }
 
     _saveComponent() {
