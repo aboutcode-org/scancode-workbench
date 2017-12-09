@@ -170,7 +170,7 @@ class AboutCodeDB {
     }
 
     // Add rows to the flattened files table from a ScanCode json object
-    addFromJson(jsonFileName, aboutCodeVersion) {
+    addFromJson(jsonFileName, aboutCodeVersion, onProgressUpdate) {
         if (!jsonFileName) {
             throw new Error("Invalid json file name: " + jsonFileName);
         }
@@ -223,6 +223,7 @@ class AboutCodeDB {
                                 const currProgress = Math.round(index/files_count*100);
                                 if (currProgress > progress) {
                                     progress = currProgress;
+                                    onProgressUpdate(progress);
                                     console.log("Progress: "
                                         + `${progress}% `
                                         + `(${index}/${files_count})`);

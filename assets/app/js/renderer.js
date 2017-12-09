@@ -245,15 +245,21 @@ $(document).ready(function () {
                         dbStorage: fileName,
                     });
 
-                    const progress =
-                        new Progress("#content", {title: "Creating Database"});
+                    const progressbar =
+                        new Progress("#content", {
+                            title: "Creating Database...",
+                            size: 100,
+                        });
                     aboutCodeDB.db
-                        .then(() => progress.show())
-                        .then(() => aboutCodeDB.addFromJson(jsonFileName, aboutCodeVersion))
-                        .then(() => progress.hide())
+                        .then(() => progressbar.showDeterminate())
+                        .then(() => aboutCodeDB.addFromJson(
+                            jsonFileName,
+                            aboutCodeVersion,
+                            progress => progressbar.update(progress/100)))
+                        .then(() => progressbar.hide())
                         .then(() => loadDataForViews(fileName))
                         .catch((err) => {
-                            progress.hide();
+                            progressbar.hide();
                             if (err instanceof MissingFileInfoError) {
                                 dialog.showErrorBox(
                                     "Missing File Type Information",

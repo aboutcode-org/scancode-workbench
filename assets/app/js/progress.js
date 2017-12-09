@@ -1,8 +1,8 @@
 /*
  #
  # Copyright (c) 2017 nexB Inc. and others. All rights reserved.
- # https://nexb.com and https://github.com/nexB/scancode-toolkit/
- # The ScanCode software is licensed under the Apache License version 2.0.
+ # https://nexb.com and https://github.com/nexB/aboutcode-manager
+ # The AboutCode Manager software is licensed under the Apache License version 2.0.
  # AboutCode is a trademark of nexB Inc.
  #
  # You may not use this software except in compliance with the License.
@@ -16,31 +16,36 @@
 
 class Progress {
     constructor(elementId, options) {
+        this.id = elementId;
         this.container = $(elementId);
         this.options = options;
     }
 
-    show() {
-        if (!this.progressContainer) {
-            this.progress = $("<div>", {
-                class: "progress"
-            });
-            this.progressTitle = $("<h4>", {
-                text: this.options.title,
-                class: "title"
-            });
-            this.progressIndicator = $("<div>", {
-                class: "indicator"
-            });
+    showIndeterminate() {
+        this._show(this._createProgressElement('indeterminate'));
+    }
 
-            this.progress
-                .append(this.progressTitle)
-                .append(this.progressIndicator);
+    showDeterminate() {
+        this._show(this._createProgressElement('determinate'));
+        this.progressBar = new ProgressBar
+            .Circle(`${this.id} .determinate`, {
+                color: '#3D7AFC',
+                strokeWidth: 4,
+                trailWidth: 1,
+                step: function(state, circle) {
+                    const value = Math.round(circle.value() * 100);
+                    if (value === 0) {
+                        circle.setText('');
+                    } else {
+                      circle.setText(`${value}%`);
+                    }
+                }
+            });
+    }
 
-            this.progressContainer =
-                this.container.clone().empty().append(this.progress);
-
-            this.container.before(this.progressContainer);
+    update(progress) {
+        if (this.progressBar) {
+            this.progressBar.animate(progress);
         }
     }
 
@@ -49,6 +54,30 @@ class Progress {
             this.progressContainer.remove();
             this.progressContainer = null;
         }
+    }
+
+    _show(progressBar) {
+        if (!this.progressContainer) {
+            this.progressContainer =
+                this.container.clone().empty().append(progressBar);
+            this.container.before(this.progressContainer);
+        }
+    }
+
+    _createProgressElement(progressbarClass) {
+        const progressElement = $(
+            `<div class='progress'>
+                 <h4 class='title'>${this.options.title}</h4>
+                 <div class='progressbar ${progressbarClass}'></div>
+             </div>`);
+
+        if (this.options.size) {
+            progressElement.find('.progressbar').css({
+                "width": `${this.options.size}px`,
+                "height": `${this.options.size}px`
+            });
+        }
+        return progressElement;
     }
 }
 

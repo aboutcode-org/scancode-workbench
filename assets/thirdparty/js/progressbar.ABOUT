@@ -1,0 +1,11 @@
+about_resource: progressbar.min.js
+download_url: https://github.com/kimmobrunfeldt/progressbar.js/blob/acbe78ba5c341ea9432fb11dfd7464d7ec669c06/dist/progressbar.min.js
+version: acbe78b
+
+name: ProgressBar.js
+description: Responsive and slick progress bars with animated SVG paths
+home_url: https://kimmobrunfeldt.github.io/progressbar.js/
+owner: Kimmo Brunfeldt
+dje_license: mit
+license_text_file: progressbar.LICENSE
+copyright: Copyright (c) 2015 Kimmo Brunfeldt
