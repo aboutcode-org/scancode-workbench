@@ -25,12 +25,20 @@ class ComponentDialog {
         this.status = this.dialog.find("#component-status");
         this.name = this.dialog.find("#component-name");
         this.license = this.dialog.find("#component-license");
-        this.copyright = this.dialog.find("#component-copyright");
         this.owner = this.dialog.find("#component-owner");
+        this.copyright = this.dialog.find("#component-copyright");
+        this.modified = this.dialog.find('input[name=component-modified]:checked');
+        this.deployed = this.dialog.find('input[name=component-deployed]:checked');
+        this.codeType = this.dialog.find("#component-code-type");
+        this.notes = this.dialog.find("#component-notes");
+        this.feature = this.dialog.find("#component-feature");
+        this.purpose = this.dialog.find("#component-purpose");
         this.language = this.dialog.find("#component-language");
         this.version = this.dialog.find("#component-version");
-        this.homepage = this.dialog.find("#component-homepage-url");
-        this.notes = this.dialog.find("#component-notes");
+        this.homepageUrl = this.dialog.find("#component-homepage-url");
+        this.downloadUrl = this.dialog.find("#component-download-url");
+        this.licenseUrl = this.dialog.find("#component-license-url");
+        this.noticeUrl = this.dialog.find("#component-notice-url");
         this.saveButton = this.dialog.find("button#component-save");
         this.deleteButton = this.dialog.find("button#component-delete");
 
@@ -127,6 +135,14 @@ class ComponentDialog {
             tags: true
         }, true);
 
+        this.codeType.html('').select2({
+            data: component.code_type ? [component.code_type] : [],
+            multiple: true,
+            maximumSelectionLength: 1,
+            placeholder: "Enter code type",
+            tags: true
+        }, true);
+
         this.language.html('').select2({
             data: programming_languages,
             multiple: true,
@@ -135,11 +151,35 @@ class ComponentDialog {
             tags: true
         }, true);
 
-        this.homepage.html('').select2({
+        this.homepageUrl.html('').select2({
             data: urls,
             multiple: true,
             maximumSelectionLength: 1,
             placeholder: "Enter Homepage URL",
+            tags: true
+        }, true);
+
+        this.downloadUrl.html('').select2({
+            data: component.download_url ? [component.download_url] : [],
+            multiple: true,
+            maximumSelectionLength: 1,
+            placeholder: "Enter Download URL",
+            tags: true
+        }, true);
+
+        this.licenseUrl.html('').select2({
+            data: component.license_url ? [component.license_url] : [],
+            multiple: true,
+            maximumSelectionLength: 1,
+            placeholder: "Enter License URL",
+            tags: true
+        }, true);
+
+        this.noticeUrl.html('').select2({
+            data: component.notice_url ? [component.notice_url] : [],
+            multiple: true,
+            maximumSelectionLength: 1,
+            placeholder: "Enter Notice URL",
             tags: true
         }, true);
 
@@ -148,11 +188,19 @@ class ComponentDialog {
         this.version.val(component.version || "");
         this.license.val((component.licenses || [])
             .map((license) => license.key));
+        this.owner.val(component.owner || []);
         this.copyright.val((component.copyrights || [])
             .map((copyright) => copyright.statements.join("\n")));
-        this.owner.val(component.owner || []);
+        this.codeType.val(component.code_type);
+        this.modified.checked = component.is_modified;
+        this.deployed.checked = component.is_deployed;
+        this.feature.val(component.feature);
+        this.purpose.val(component.purpose);
         this.language.val(component.programming_language || []);
-        this.homepage.val(component.homepage_url || "");
+        this.homepageUrl.val(component.homepage_url || "");
+        this.downloadUrl.val(component.download_url || "");
+        this.licenseUrl.val(component.license_url || "");
+        this.noticeUrl.val(component.notice_url || "");
         this.notes.val(component.notes || "");
 
         // Notify only select2 of changes
@@ -208,9 +256,17 @@ class ComponentDialog {
                     copyrights: $.map(this.copyright.val() || [], copyright => {
                         return { statements: copyright.split("\n") };
                     }),
+                    code_type: (this.codeType.val() || [null])[0],
+                    is_modified: this.deployed.val() == true,
+                    is_deployed: this.deployed.val() == true,
                     version: this.version.val(),
                     owner: (this.owner.val() || [null])[0],
-                    homepage_url: (this.homepage.val() || [null])[0],
+                    feature: this.feature.val(),
+                    purpose: this.purpose.val(),
+                    homepage_url: (this.homepageUrl.val() || [null])[0],
+                    download_url: (this.downloadUrl.val() || [null])[0],
+                    license_url: (this.licenseUrl.val() || [null])[0],
+                    notice_url: (this.noticeUrl.val() || [null])[0],
                     programming_language: (this.language.val() || [null])[0],
                     notes: this.notes.val()
                 };

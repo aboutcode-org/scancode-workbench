@@ -502,7 +502,15 @@ const TABLE = {
             licenses: jsonDataType('licenses'),
             copyrights: jsonDataType('copyrights'),
             owner: Sequelize.STRING,
+            code_type: Sequelize.STRING,
+            is_modified: Sequelize.BOOLEAN,
+            is_deployed: Sequelize.BOOLEAN,
+            feature: Sequelize.STRING,
+            purpose: Sequelize.STRING,
             homepage_url: Sequelize.STRING,
+            download_url: Sequelize.STRING,
+            license_url: Sequelize.STRING,
+            notice_url: Sequelize.STRING,
             programming_language: Sequelize.STRING,
             notes: Sequelize.STRING
         }
