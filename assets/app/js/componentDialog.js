@@ -27,8 +27,8 @@ class ComponentDialog {
         this.license = this.dialog.find("#component-license");
         this.owner = this.dialog.find("#component-owner");
         this.copyright = this.dialog.find("#component-copyright");
-        this.modified = this.dialog.find('input[name=component-modified]:checked');
-        this.deployed = this.dialog.find('input[name=component-deployed]:checked');
+        this.deployed = this.dialog.find($("input[name=component-deployed]:checked").val());
+        this.modified = this.dialog.find($("input[name=component-modified]:checked").val());
         this.codeType = this.dialog.find("#component-code-type");
         this.notes = this.dialog.find("#component-notes");
         this.feature = this.dialog.find("#component-feature");
@@ -43,8 +43,8 @@ class ComponentDialog {
         this.deleteButton = this.dialog.find("button#component-delete");
 
         // Define the buttons that can be used to close the dialog.
-        this.exitButton = this.dialog.find("button#component-exit")
-        this.closeButton = this.dialog.find("button#component-close")
+        this.exitButton = this.dialog.find("button#component-exit");
+        this.closeButton = this.dialog.find("button#component-close");
 
         // Make node view modal box draggable
         this.dialog.draggable({ handle: ".modal-header" });
@@ -192,8 +192,18 @@ class ComponentDialog {
         this.copyright.val((component.copyrights || [])
             .map((copyright) => copyright.statements.join("\n")));
         this.codeType.val(component.code_type);
-        this.modified.checked = component.is_modified;
-        this.deployed.checked = component.is_deployed;
+        if (component.is_modified !== null && component.is_modified !== undefined) {
+            const modifiedValue = component.is_modified ? 'yes' : 'no';
+            $(`input[name=component-modified][value='${modifiedValue}']`).prop("checked", true);
+        } else {
+            $("input[name=component-modified]").prop("checked", false);
+        }
+        if (component.is_deployed !== null && component.is_deployed !== undefined) {
+            const deployedValue = component.is_deployed ? 'yes' : 'no';
+            $(`input[name=component-deployed][value='${deployedValue}']`).prop("checked", true);
+        } else {
+            $("input[name=component-deployed]").prop("checked", false);
+        }
         this.feature.val(component.feature);
         this.purpose.val(component.purpose);
         this.language.val(component.programming_language || []);
@@ -245,6 +255,9 @@ class ComponentDialog {
                     });
             })
             .then(component => {
+                const modifiedValue = $("input[name=component-modified]:checked").val();
+                const deployedValue = $("input[name=component-deployed]:checked").val();
+
                 return {
                     path: id,
                     fileId: component.fileId,
@@ -257,8 +270,8 @@ class ComponentDialog {
                         return { statements: copyright.split("\n") };
                     }),
                     code_type: (this.codeType.val() || [null])[0],
-                    is_modified: this.deployed.val() == true,
-                    is_deployed: this.deployed.val() == true,
+                    is_modified: modifiedValue ? (modifiedValue === "yes") : null,
+                    is_deployed: deployedValue ? (deployedValue === "yes") : null,
                     version: this.version.val(),
                     owner: (this.owner.val() || [null])[0],
                     feature: this.feature.val(),
