@@ -42,27 +42,34 @@ class ComponentDataTable {
 
     _createDataTable(tableID) {
         return $(tableID).DataTable({
-            "scrollX": true,
-            "scrollResize": true,
+            scrollX: true,
+            scrollResize: true,
             columns: ComponentDataTable.COLUMNS,
-            dom: // Needed to keep datatables buttons and search inline
-            "<'row'<'col-sm-9'B><'col-sm-3'f>>" +
-            "<'row'<'col-sm-12'tr>>" +
-            "<'row'<'col-sm-5'i><'col-sm-7'p>>",
-            buttons: [{
-                name: "uploadDeja",
-                text: '<i class=" fa fa-cloud-upload"></i> Upload Components',
-                titleAttr: 'Upload Components to DejaCode',
-                action: () => {
-                    this.aboutCodeDB
-                        .findAllComponents({})
-                        .then(components =>
-                            this.handlers['upload-clicked'](components));
-                }
-            }],
-            "language": {
+            buttons: [
+                {
+                    name: "uploadDeja",
+                    text: '<i class=" fa fa-cloud-upload"></i> Upload Components',
+                    titleAttr: 'Upload Components to DejaCode',
+                    action: () => {
+                        this.aboutCodeDB
+                            .findAllComponents({})
+                            .then(components =>
+                                this.handlers['upload-clicked'](components));
+                    },
+                },
+                {   // Do not allow the first 2 columns to be hidden
+                    extend: "colvis",
+                    columns: ":gt(1)",
+                    collectionLayout: "fixed two-column"
+                },
+            ],
+            language: {
                 "emptyTable": "No Components created."
-            }
+            },
+            dom: // Needed to keep datatables buttons and search inline
+                "<'row'<'col-sm-9'B><'col-sm-3'f>>" +
+                "<'row'<'col-sm-12'tr>>" +
+                "<'row'<'col-sm-3'l><'col-sm-4'i><'col-sm-5'p>>",
         });
     }
 

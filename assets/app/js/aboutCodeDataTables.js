@@ -88,7 +88,7 @@ class AboutCodeDataTable {
             buttons: [
                 {   // Do not allow the first column to be hidden
                     extend: "colvis",
-                    columns: ":not(:first-child)",
+                    columns: ":gt(0)",
                     collectionLayout: "fixed two-column"
                 },
                 {
