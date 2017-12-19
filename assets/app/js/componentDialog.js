@@ -81,13 +81,13 @@ class ComponentDialog {
         let path = this.title.text();
         this._component(path)
             .then(component => {
-                // Set the file id on the component.
                 return this.aboutCodeDB.File
                     .findOne({
                         attributes: ["id"],
                         where: { path: { $eq: path } }
                     })
                     .then(row => {
+                        // Set the file id on the component.
                         component.fileId = row.id;
                         return component;
                     });
@@ -188,22 +188,7 @@ class ComponentDialog {
 
     _setupLicenses(component) {
         const saved = (component.licenses || []).map(license => license.key);
-        return this.aboutCodeDB.db
-            .then(() => {
-                return this.aboutCodeDB.File
-                    .findAll({
-                        attributes: [],
-                        group: ['licenses.key'],
-                        where: { path: {$like: `${component.path}%`}},
-                        include: [{
-                            model: this.aboutCodeDB.License,
-                            attributes: ['key'],
-                            where: {key: {$ne: null}}
-                        }]
-                    });
-            })
-            .then(rows => $.map(rows, row => row.licenses))
-            .then(licenses => $.map(licenses, (license, i) => license.key))
+        return this._licenseQuery(component.path, 'key')
             .then(license_keys => license_keys.concat(saved))
             .then(license_keys => {
                 this.license.html('').select2({
@@ -220,22 +205,7 @@ class ComponentDialog {
         const saved = $.map((component.copyrights || []), copyright => {
             return copyright.statements;
         });
-        return this.aboutCodeDB.db
-            .then(() => {
-                return this.aboutCodeDB
-                    .File.findAll({
-                        attributes: [],
-                        group: ['copyrights.statements'],
-                        where: {path: {$like: `${component.path}%`}},
-                        include: [{
-                            model: this.aboutCodeDB.Copyright,
-                            attributes: ['statements'],
-                            where: {statements: {$ne: null}}
-                        }]
-                    });
-            })
-            .then(rows => $.map(rows, row => row.copyrights))
-            .then(copyrights => $.map(copyrights, copyright => copyright.statements))
+        return this._copyrightQuery(component.path, 'statements')
             .then(copyright_statements => copyright_statements.concat(saved))
             .then(copyright_statements => {
                 this.copyright.html('').select2({
@@ -250,22 +220,7 @@ class ComponentDialog {
 
     _setupOwners(component) {
         const saved = component.owner || [];
-        return this.aboutCodeDB.db
-            .then(() => {
-                return this.aboutCodeDB
-                    .File.findAll({
-                        attributes: [],
-                        group: ['copyrights.holders'],
-                        where: {path: {$like: `${component.path}%`}},
-                        include: [{
-                            model: this.aboutCodeDB.Copyright,
-                            attributes: ['holders'],
-                            where: {holders: {$ne: null}}
-                        }]
-                    });
-            })
-            .then(rows => $.map(rows, row => row.copyrights))
-            .then(copyrights => $.map(copyrights, copyright => copyright.holders))
+        return this._copyrightQuery(component.path, 'holders')
             .then(owners => owners.concat(saved))
             .then(owners => {
                 this.owner.html('').select2({
@@ -281,19 +236,8 @@ class ComponentDialog {
 
     _setupLanguage(component) {
         const saved = component.programming_language || [];
-        return this.aboutCodeDB.db
-            .then(() => {
-                return this.aboutCodeDB
-                    .File.findAll({
-                        attributes: ["programming_language"],
-                        group: ['programming_language'],
-                        where: {
-                            path: {$like: `${component.path}%`},
-                            programming_language: {$ne: null}
-                        }
-                    });
-            })
-            .then(rows => $.map(rows, row => row.programming_language))
+        return this.aboutCodeDB
+            .findAllUnique(component.path, 'programming_language')
             .then(languages => languages.concat(saved))
             .then(languages => {
                 this.language.html('').select2({
@@ -308,9 +252,10 @@ class ComponentDialog {
     }
 
     _setupCodeType(component) {
-        const saved = component.code_type || [];
+        const saved = component.code_type || [] ;
+        let codeTypes = ["Source", "Binary", "Mixed", "Document"].concat(saved);
         this.codeType.html('').select2({
-            data: [saved],
+            data: $.unique(codeTypes),
             multiple: true,
             maximumSelectionLength: 1,
             placeholder: "Enter code type",
@@ -321,22 +266,7 @@ class ComponentDialog {
 
     _setupHomepageUrl(component) {
         const saved = component.homepage_url || [];
-        return this.aboutCodeDB.db
-            .then(() => {
-                return this.aboutCodeDB
-                    .File.findAll({
-                        attributes: [],
-                        group: ['urls.url'],
-                        where: {path: {$like: `${component.path}%`}},
-                        include: [{
-                            model: this.aboutCodeDB.Url,
-                            attributes: ['url'],
-                            where: {url: {$ne: null}}
-                        }]
-                    });
-            })
-            .then(rows => $.map(rows, row => row.urls))
-            .then(urls => $.map(urls, url => url.url))
+        return this._urlQuery(component.path, 'url')
             .then(homepage_urls => homepage_urls.concat(saved))
             .then(homepage_urls => {
                 this.homepageUrl.html('').select2({
@@ -352,38 +282,60 @@ class ComponentDialog {
 
     _setupDownloadUrl(component) {
         const saved = component.download_url || [];
-        this.downloadUrl.html('').select2({
-            data: [saved],
-            multiple: true,
-            maximumSelectionLength: 1,
-            placeholder: "Enter Download URL",
-            tags: true
-        }, true);
-        this.downloadUrl.val(saved);
+        return Promise.all([
+                this._urlQuery(component.path, 'url'),
+                this._packageQuery(component.path, 'download_urls'),
+            ])
+            .then(rows => $.map(rows, row => row))
+            .then(download_urls => download_urls.concat(saved))
+            .then(download_urls => {
+                this.downloadUrl.html('').select2({
+                    data: $.unique(download_urls),
+                    multiple: true,
+                    maximumSelectionLength: 1,
+                    placeholder: "Enter Download URL",
+                    tags: true
+                }, true);
+                this.downloadUrl.val(saved);
+            });
     }
 
     _setupLicenseUrl(component) {
         const saved = component.license_url || [];
-        this.licenseUrl.html('').select2({
-            data: [saved],
-            multiple: true,
-            maximumSelectionLength: 1,
-            placeholder: "Enter License URL",
-            tags: true
-        }, true);
-        this.licenseUrl.val(saved);
+        return Promise.all([
+                this._licenseQuery(component.path, 'homepage_url'),
+                this._licenseQuery(component.path, 'text_url'),
+                this._licenseQuery(component.path, 'reference_url'),
+                this._licenseQuery(component.path, 'spdx_url')
+            ])
+            .then(rows => $.map(rows, row => row))
+            .then(licenese_urls => licenese_urls.concat(saved))
+            .then(licenese_urls => {
+                this.licenseUrl.html('').select2({
+                    data: $.unique(licenese_urls),
+                    multiple: true,
+                    maximumSelectionLength: 1,
+                    placeholder: "Enter License URL",
+                    tags: true
+                }, true);
+                this.licenseUrl.val(saved);
+            });
     }
 
     _setupNoticeUrl(component) {
         const saved = component.notice_url || [];
-        this.noticeUrl.html('').select2({
-            data: [saved],
-            multiple: true,
-            maximumSelectionLength: 1,
-            placeholder: "Enter Notice URL",
-            tags: true
-        }, true);
-        this.noticeUrl.val(saved);
+        return this._licenseQuery(component.path, 'text_url')
+            .then(notice_urls => notice_urls.concat(saved))
+            .then(notice_urls => {
+                this.noticeUrl.html('').select2({
+                    data: $.unique(notice_urls),
+                    multiple: true,
+                    maximumSelectionLength: 1,
+                    placeholder: "Enter Notice URL",
+                    tags: true
+                }, true);
+                this.noticeUrl.val(saved);
+            });
     }
 
     _setupModified(component) {
@@ -428,6 +380,22 @@ class ComponentDialog {
 
     _setupNotes(component) {
         this.notes.val(component.notes || "");
+    }
+
+    _copyrightQuery(path, field) {
+        return this.aboutCodeDB.findAllUnique(path, field, this.aboutCodeDB.Copyright);
+    }
+
+    _urlQuery(path, field) {
+        return this.aboutCodeDB.findAllUnique(path, field, this.aboutCodeDB.Url);
+    }
+
+    _packageQuery(path, field) {
+        return this.aboutCodeDB.findAllUnique(path, field, this.aboutCodeDB.Package);
+    }
+
+    _licenseQuery(path, field) {
+        return this.aboutCodeDB.findAllUnique(path, field, this.aboutCodeDB.License);
     }
 }
 
