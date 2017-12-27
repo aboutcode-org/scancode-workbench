@@ -96,7 +96,7 @@ class AboutCodeDataTable {
                 // Only take the chunk of data DataTables needs
                 limit: dataTablesInput.length,
                 offset: dataTablesInput.start,
-                order: [[columnName, direction]]
+                order: `${columnName} COLLATE NOCASE ${direction}`
             };
 
             // If a column search exists, add search for that column
