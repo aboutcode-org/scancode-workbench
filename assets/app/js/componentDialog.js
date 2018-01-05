@@ -183,7 +183,8 @@ class ComponentDialog {
     _component(path) {
         return this.aboutCodeDB
             .findComponent({ where: { path: path } })
-            .then(component => component ? component : {});
+            // if the component doesn't exist return an object with only the path
+            .then(component => component ? component : { path: path });
     }
 
     _setupLicenses(component) {
