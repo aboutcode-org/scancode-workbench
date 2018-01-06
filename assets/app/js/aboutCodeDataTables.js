@@ -15,7 +15,6 @@
  */
 
 const HAS_A_VALUE =  "about_code_data_table_has_a_value";
-const shell = require("electron").shell;
 
 class AboutCodeDataTable {
     constructor(tableId, aboutCodeDB) {
@@ -66,6 +65,93 @@ class AboutCodeDataTable {
         // Add the chart value options and select it.
         select.append(`<option value="${value}">${value}</option>`);
         select.val(value).change();
+    }
+
+    _createDataTable(tableId) {
+        // Adds a footer for each column. This needs to be done before creating
+        // the DataTable
+        let cells = $.map(AboutCodeDataTable.TABLE_COLUMNS, () => "<td></td>").join("");
+        $(tableId).append("<tfoot><tr>" + cells + "</tr></tfoot>");
+
+        return $(tableId).DataTable({
+            serverSide: true,
+            processing: true,
+            ajax: (dataTablesInput, dataTablesCallback) =>
+                this._query(dataTablesInput, dataTablesCallback),
+            columns: AboutCodeDataTable.TABLE_COLUMNS,
+            fixedColumns: { leftColumns: 1 },
+            colResize: true,
+            scrollX: true,
+            scrollResize: true,
+            deferRender: true,
+            initComplete: () => this._initComplete(),
+            buttons: [
+                {   // Do not allow the first column to be hidden
+                    extend: "colvis",
+                    columns: ":gt(0)",
+                    collectionLayout: "fixed two-column"
+                },
+                {
+                    extend: "colvisGroup",
+                    text: "Show all",
+                    show: ":hidden"
+                },
+                {
+                    // Hide all columns except Path
+                    extend: "colvisGroup",
+                    text: "Hide all",
+                    show: AboutCodeDataTable.LOCATION_COLUMN
+                        .map((column) => `${column.name}:name`),
+                    hide: AboutCodeDataTable.TABLE_COLUMNS
+                        .filter((column) => AboutCodeDataTable.LOCATION_COLUMN.indexOf(column) < 0)
+                        .map((column) => `${column.name}:name`)
+                },
+                {
+                    // Show only origin columns
+                    extend: "colvisGroup",
+                    text: "Origin info",
+                    show: AboutCodeDataTable.ORIGIN_GROUP
+                        .map((column) => `${column.name}:name`),
+                    hide: AboutCodeDataTable.TABLE_COLUMNS
+                        .filter((column) => AboutCodeDataTable.ORIGIN_GROUP.indexOf(column) < 0)
+                        .map((column) => `${column.name}:name`)
+                },
+                {
+                    // Show only copyright columns
+                    extend: "colvisGroup",
+                    text: "Copyright info",
+                    show: AboutCodeDataTable.COPYRIGHT_GROUP
+                        .map((column) => `${column.name}:name`),
+                    hide: AboutCodeDataTable.TABLE_COLUMNS
+                        .filter((column) => AboutCodeDataTable.COPYRIGHT_GROUP.indexOf(column) < 0)
+                        .map((column) => `${column.name}:name`)
+                },
+                {
+                    // Show only license columns
+                    extend: "colvisGroup",
+                    text: "License info",
+                    show: AboutCodeDataTable.LICENSE_GROUP
+                        .map((column) => `${column.name}:name`),
+                    hide: AboutCodeDataTable.TABLE_COLUMNS
+                        .filter((column) => AboutCodeDataTable.LICENSE_GROUP.indexOf(column) < 0)
+                        .map((column) => `${column.name}:name`)
+                },
+                {
+                    // Show only package columns
+                    extend: "colvisGroup",
+                    text: "Package info",
+                    show: AboutCodeDataTable.PACKAGE_GROUP
+                        .map((column) => `${column.name}:name`),
+                    hide: AboutCodeDataTable.TABLE_COLUMNS
+                        .filter((column) => AboutCodeDataTable.PACKAGE_GROUP.indexOf(column) < 0)
+                        .map((column) => `${column.name}:name`)
+                }
+            ],
+            dom: // Needed to keep datatables buttons and search inline
+                "<'row'<'col-sm-9'B><'col-sm-3'f>>" +
+                "<'row'<'col-sm-12'tr>>" +
+                "<'row'<'col-sm-3'l><'col-sm-4'i><'col-sm-5'p>>"
+        });
     }
 
     // This function is called every time DataTables needs to be redrawn.
@@ -165,163 +251,75 @@ class AboutCodeDataTable {
         });
     }
 
-    _createDataTable(tableId) {
-        // Adds a footer for each column. This needs to be done before creating
-        // the DataTable
-        let cells = $.map(AboutCodeDataTable.TABLE_COLUMNS, () => "<td></td>")
-            .join("");
-        $(tableId).append("<tfoot><tr>" + cells + "</tr></tfoot>");
-        let that = this;
+    _initComplete() {
+        const that = this;
+        const pathCol = this.dataTable.columns(0);
 
-        return $(tableId).DataTable({
-            // "colReorder": false,
-            "serverSide": true,
-            "processing": true,
-            "ajax": (dataTablesInput, dataTablesCallback) =>
-                this._query(dataTablesInput, dataTablesCallback),
-            "columns": AboutCodeDataTable.TABLE_COLUMNS,
-            "fixedColumns": {
-                leftColumns: 1
-            },
-            "colResize": true,
-            "scrollX": true,
-            "scrollResize": true,
-            "deferRender": true,
-            initComplete: function () {
-                const pathCol = this.api().columns(0);
-                // Add a select element to each column's footer
-                this.api().columns().every(function (columnIndex) {
-                    const columnInfo = AboutCodeDataTable.TABLE_COLUMNS[columnIndex];
+        // Add a select element to each column's footer
+        this.dataTable.columns().every(function (columnIndex) {
+            const columnInfo = AboutCodeDataTable.TABLE_COLUMNS[columnIndex];
 
-                    if ("skipFilter" in columnInfo && columnInfo.skipFilter) {
-                        return;
-                    }
+            if ("skipFilter" in columnInfo && columnInfo.skipFilter) {
+                return;
+            }
 
-                    const column = this;
-                    const footer = $(column.footer());
-                    const columnName = columnInfo.name;
+            const column = this;
+            const footer = $(column.footer());
+            const columnName = columnInfo.name;
 
-                    let select = $(`<select id="clue-${columnName}"><option value=""></option></select>`)
-                        .appendTo(footer)
-                        .on("click", () => {
-                            const currPath = pathCol.search()[0];
-                            let where = { path: { $like: `${currPath}%`} };
+            let select = $(`<select id="clue-${columnName}"><option value=""></option></select>`)
+                .appendTo(footer)
+                .on("click", () => {
+                    const currPath = pathCol.search()[0];
+                    let where = { path: { $like: `${currPath}%`} };
 
-                            where[columnName] = {$ne: null};
+                    where[columnName] = {$ne: null};
 
-                            that.aboutCodeDB.FlattenedFile.findAll({
-                                attributes: [
-                                    Sequelize.fn("TRIM",  Sequelize.col(columnName)),
-                                    columnName
-                                ],
-                                group: [columnName],
-                                where: where,
-                            })
-                            .then(rows => {
-                                let filterValues =
-                                    // $.map is used to flatten array values.
-                                    $.map(rows, row => row[columnName])
-                                        .map(row => row.toString().trim())
-                                        .filter(val => val.length > 0);
+                    that.aboutCodeDB.FlattenedFile.findAll({
+                        attributes: [
+                            Sequelize.fn("TRIM",  Sequelize.col(columnName)),
+                            columnName
+                        ],
+                        group: [columnName],
+                        where: where,
+                    })
+                    .then(rows => {
+                        let filterValues =
+                            // $.map is used to flatten array values.
+                            $.map(rows, row => row[columnName])
+                                .map(row => row.toString().trim())
+                                .filter(val => val.length > 0);
 
-                                filterValues = $.unique(filterValues).sort();
+                        filterValues = $.unique(filterValues).sort();
 
-                                const select = $(`select#clue-${columnName}`);
-                                const val = select.find("option:selected");
+                        const select = $(`select#clue-${columnName}`);
+                        const val = select.find("option:selected");
 
-                                select
-                                    .empty()
-                                    .append(`<option value=""></option>`);
+                        select
+                            .empty()
+                            .append(`<option value=""></option>`);
 
-                                /**
-                                 * Add Has a Value option to dropdown menu to show all rows
-                                 * that contain a detected ScanCode value.
-                                 */
-                                if (filterValues.length > 0) {
-                                    select.append(`<option value="${HAS_A_VALUE}">Has a Value</option>`);
-                                }
+                        /**
+                         * Add Has a Value option to dropdown menu to show all rows
+                         * that contain a detected ScanCode value.
+                         */
+                        if (filterValues.length > 0) {
+                            select.append(`<option value="${HAS_A_VALUE}">Has a Value</option>`);
+                        }
 
-                                $.each(filterValues, function ( i, filterValue ) {
-                                    select.append(`<option value="${filterValue}">${filterValue}</option>`);
-                                });
-                                select.val(val);
-                            });
-                        })
-                        .on( "change", function () {
-                            // Get dropdown element selected value
-                            let val = $(this).val();
-                            column
-                                .search(val, false, false)
-                                .draw();
+                        $.each(filterValues, function ( i, filterValue ) {
+                            select.append(`<option value="${filterValue}">${filterValue}</option>`);
                         });
+                        select.val(val);
+                    });
+                })
+                .on( "change", function () {
+                    // Get dropdown element selected value
+                    let val = $(this).val();
+                    column
+                        .search(val, false, false)
+                        .draw();
                 });
-             },
-            "buttons": [
-                {   // Do not allow the first column to be hidden
-                    extend: "colvis",
-                    columns: ":not(:first-child)",
-                    collectionLayout: "fixed two-column"
-                },
-                {
-                    extend: "colvisGroup",
-                    text: "Show all",
-                    show: ":hidden"
-                },
-                {
-                    // Hide all columns except Path
-                    extend: "colvisGroup",
-                    text: "Hide all",
-                    show: AboutCodeDataTable.LOCATION_COLUMN
-                        .map((column) => `${column.name}:name`),
-                    hide: AboutCodeDataTable.TABLE_COLUMNS
-                        .filter((column) => AboutCodeDataTable.LOCATION_COLUMN.indexOf(column) < 0)
-                        .map((column) => `${column.name}:name`)
-                },
-                {
-                    // Show only origin columns
-                    extend: "colvisGroup",
-                    text: "Origin info",
-                    show: AboutCodeDataTable.ORIGIN_GROUP
-                        .map((column) => `${column.name}:name`),
-                    hide: AboutCodeDataTable.TABLE_COLUMNS
-                        .filter((column) => AboutCodeDataTable.ORIGIN_GROUP.indexOf(column) < 0)
-                        .map((column) => `${column.name}:name`)
-                },
-                {
-                    // Show only copyright columns
-                    extend: "colvisGroup",
-                    text: "Copyright info",
-                    show: AboutCodeDataTable.COPYRIGHT_GROUP
-                        .map((column) => `${column.name}:name`),
-                    hide: AboutCodeDataTable.TABLE_COLUMNS
-                        .filter((column) => AboutCodeDataTable.COPYRIGHT_GROUP.indexOf(column) < 0)
-                        .map((column) => `${column.name}:name`)
-                },
-                {
-                    // Show only license columns
-                    extend: "colvisGroup",
-                    text: "License info",
-                    show: AboutCodeDataTable.LICENSE_GROUP
-                        .map((column) => `${column.name}:name`),
-                    hide: AboutCodeDataTable.TABLE_COLUMNS
-                        .filter((column) => AboutCodeDataTable.LICENSE_GROUP.indexOf(column) < 0)
-                        .map((column) => `${column.name}:name`)
-                },
-                {
-                    // Show only package columns
-                    extend: "colvisGroup",
-                    text: "Package info",
-                    show: AboutCodeDataTable.PACKAGE_GROUP
-                        .map((column) => `${column.name}:name`),
-                    hide: AboutCodeDataTable.TABLE_COLUMNS
-                        .filter((column) => AboutCodeDataTable.PACKAGE_GROUP.indexOf(column) < 0)
-                        .map((column) => `${column.name}:name`)
-                }
-            ],
-            dom: // Needed to keep datatables buttons and search inline
-                "<'row'<'col-sm-9'B><'col-sm-3'f>>" +
-                "<'row'<'col-sm-12'tr>>" +
-                "<'row'<'col-sm-3'l><'col-sm-4'i><'col-sm-5'p>>"
         });
     }
 
@@ -377,7 +375,7 @@ AboutCodeDataTable.LOCATION_COLUMN =
 AboutCodeDataTable.COPYRIGHT_COLUMNS =
     [
         {
-            "data": function (row, type, val, meta) {
+            "data": function (row) {
                 return row.copyright_statements.map(statements => {
                     return statements.join("<br/>");
                 }).join("<hr/>");
@@ -388,7 +386,7 @@ AboutCodeDataTable.COPYRIGHT_COLUMNS =
             "visible": true
         },
         {
-            "data": function (row, type, val, meta) {
+            "data": function (row) {
                 return row.copyright_holders.map(holders => {
                     return holders.join("<br/>");
                 }).join("<hr/>");
@@ -399,7 +397,7 @@ AboutCodeDataTable.COPYRIGHT_COLUMNS =
             "visible": false
         },
         {
-            "data": function (row, type, val, meta) {
+            "data": function (row) {
                 return row.copyright_authors.map(authors => {
                     return authors.join("<br/>");
                 }).join("<hr/>");
@@ -464,27 +462,21 @@ AboutCodeDataTable.LICENSE_COLUMNS =
             "data": "license_homepage_url",
             "title": "License Homepage URL",
             "name": "license_homepage_url",
-            "render": function ( data, type, full, meta ) {
-                return $.map(data, href => createAnchorTag(href)).join("<br>");
-            },
+            "render": hrefs => $.map(hrefs, Utils.anchorTag).join("<br>"),
             "visible": false
         },
         {
             "data": "license_text_url",
             "title": "License Text URL",
             "name": "license_text_url",
-            "render": function ( data, type, full, meta ) {
-                return $.map(data, href => createAnchorTag(href)).join("<br>");
-            },
+            "render": hrefs => $.map(hrefs, Utils.anchorTag).join("<br>"),
             "visible": false
         },
         {
             "data": "license_reference_url",
             "title": "License Reference URL",
             "name": "license_reference_url",
-            "render": function ( data, type, full, meta ) {
-                return $.map(data, href => createAnchorTag(href)).join("<br>");
-            },
+            "render": hrefs => $.map(hrefs, Utils.anchorTag).join("<br>"),
             "visible": false
         },
         {
@@ -537,8 +529,8 @@ AboutCodeDataTable.URL_COLUMNS =
             "data": "url",
             "title": "URL",
             "name": "url",
-            "render": function ( data, type, full, meta ) {
-                return $.map(data, href => createAnchorTag(href)).join("<br>");
+            "render": function (data) {
+                return $.map(data, Utils.anchorTag).join("<br>");
             },
             "visible": false
         },
@@ -722,9 +714,9 @@ AboutCodeDataTable.PACKAGE_COLUMNS =
             "visible": false
         },
         {
-            "data": function (row, type, val, meta) {
-                return row.packages_download_urls.map(urls => {
-                    return urls.map(url => createAnchorTag(url)).join("<br/>");
+            "data": function (row) {
+                return row.packages_download_urls.map(hrefs => {
+                    return hrefs.map(Utils.anchorTag).join("<br/>");
                 }).join("<hr/>");
             },
             "title": "Package Download URLs",
@@ -741,16 +733,5 @@ AboutCodeDataTable.ORIGIN_COLUMN_NAMES =
         "email",
         "url"
     ];
-
-// Create anchor tag for URLs and opens in default browser
-function createAnchorTag(href) {
-    return `<a href="${href}" onclick="openInDefaultBrowser(event)">${href}</a>`;
-}
-
-// Overrides original event and opens URL in default browser
-function openInDefaultBrowser(evt) {
-    evt.preventDefault();
-    shell.openExternal(evt.target.href);
-}
 
 module.exports = AboutCodeDataTable;

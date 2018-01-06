@@ -19,7 +19,7 @@ class ComponentDataTable {
         this.handlers = {}
         this.aboutCodeDB = aboutCodeDB;
         this.dataTable = this._createDataTable(tableID);
-        $('<p class="lead">Component Summary</p>').prependTo($("#components-table_wrapper"))
+        $('<p class="lead">Component Summary</p>').prependTo($("#components-table_wrapper"));
     }
 
     database(aboutCodeDB) {
@@ -42,27 +42,34 @@ class ComponentDataTable {
 
     _createDataTable(tableID) {
         return $(tableID).DataTable({
-            "scrollX": true,
-            "scrollResize": true,
+            scrollX: true,
+            scrollResize: true,
             columns: ComponentDataTable.COLUMNS,
-            dom: // Needed to keep datatables buttons and search inline
-            "<'row'<'col-sm-9'B><'col-sm-3'f>>" +
-            "<'row'<'col-sm-12'tr>>" +
-            "<'row'<'col-sm-5'i><'col-sm-7'p>>",
-            buttons: [{
-                name: "uploadDeja",
-                text: '<i class=" fa fa-cloud-upload"></i> Upload Components',
-                titleAttr: 'Upload Components to DejaCode',
-                action: () => {
-                    this.aboutCodeDB
-                        .findAllComponents({})
-                        .then(components =>
-                            this.handlers['upload-clicked'](components));
-                }
-            }],
-            "language": {
+            buttons: [
+                {
+                    name: "uploadDeja",
+                    text: '<i class=" fa fa-cloud-upload"></i> Upload Components',
+                    titleAttr: 'Upload Components to DejaCode',
+                    action: () => {
+                        this.aboutCodeDB
+                            .findAllComponents({})
+                            .then(components =>
+                                this.handlers['upload-clicked'](components));
+                    },
+                },
+                {   // Do not allow the first 2 columns to be hidden
+                    extend: "colvis",
+                    columns: ":gt(1)",
+                    collectionLayout: "fixed two-column"
+                },
+            ],
+            language: {
                 "emptyTable": "No Components created."
-            }
+            },
+            dom: // Needed to keep datatables buttons and search inline
+                "<'row'<'col-sm-9'B><'col-sm-3'f>>" +
+                "<'row'<'col-sm-12'tr>>" +
+                "<'row'<'col-sm-3'l><'col-sm-4'i><'col-sm-5'p>>",
         });
     }
 
@@ -91,14 +98,12 @@ class ComponentDataTable {
             {
                 data: "owner",
                 title: "Owner",
-                name: "owner",
-                defaultContent: ""
+                name: "owner"
             },
             {
                 data: "licenses[<hr/>].key",
                 title: "License",
-                name: "license_expression",
-                defaultContent: ""
+                name: "license_expression"
             },
             {
                 "data": "copyrights[<hr/>].statements[]",
@@ -106,29 +111,64 @@ class ComponentDataTable {
                 "name": "copyright_statements"
             },
             {
+                "data": "is_modified",
+                "title": "Modified",
+                "name": "is_modified"
+            },
+            {
+                "data": "is_deployed",
+                "title": "Deployed",
+                "name": "is_deployed"
+            },
+            {
+                data: "code_type",
+                title: "Code Type",
+                name: "code_type",
+            },
+            {
                 data: "programming_language",
                 title: "Programming Language",
-                name: "programming_language",
-                defaultContent: ""
+                name: "programming_language"
             },
             {
                 "data": "homepage_url",
                 "title": "Homepage URL",
                 "name": "homepage_url",
-                "defaultContent": "",
-                "render": function(href) {
-                    if (href) {
-                        return `<a href='${href}' target="_blank"> ${href}</a>`
-                    }
-                    return ""
-                }
+                "render": Utils.anchorTag
+            },
+            {
+                "data": "download_url",
+                "title": "Download URL",
+                "name": "download_url",
+                "render": Utils.anchorTag
+            },
+            {
+                "data": "license_url",
+                "title": "License URL",
+                "name": "license_url",
+                "render": Utils.anchorTag
+            },
+            {
+                "data": "notice_url",
+                "title": "Notice URL",
+                "name": "notice_url",
+                "render": Utils.anchorTag
+            },
+            {
+                data: "feature",
+                title: "Feature",
+                name: "feature"
+            },
+            {
+                data: "purpose",
+                title: "Purpose",
+                name: "purpose"
             },
             {
                 data: "notes",
                 title: "Notes",
                 name: "notes",
-                defaultContent: ""
-            }
+            },
         ];
     }
 }

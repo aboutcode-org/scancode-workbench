@@ -25,18 +25,26 @@ class ComponentDialog {
         this.status = this.dialog.find("#component-status");
         this.name = this.dialog.find("#component-name");
         this.license = this.dialog.find("#component-license");
-        this.copyright = this.dialog.find("#component-copyright");
         this.owner = this.dialog.find("#component-owner");
+        this.copyright = this.dialog.find("#component-copyright");
+        this.deployed = this.dialog.find("input[name=component-deployed]");
+        this.modified = this.dialog.find("input[name=component-modified]");
+        this.codeType = this.dialog.find("#component-code-type");
+        this.notes = this.dialog.find("#component-notes");
+        this.feature = this.dialog.find("#component-feature");
+        this.purpose = this.dialog.find("#component-purpose");
         this.language = this.dialog.find("#component-language");
         this.version = this.dialog.find("#component-version");
-        this.homepage = this.dialog.find("#component-homepage-url");
-        this.notes = this.dialog.find("#component-notes");
+        this.homepageUrl = this.dialog.find("#component-homepage-url");
+        this.downloadUrl = this.dialog.find("#component-download-url");
+        this.licenseUrl = this.dialog.find("#component-license-url");
+        this.noticeUrl = this.dialog.find("#component-notice-url");
         this.saveButton = this.dialog.find("button#component-save");
         this.deleteButton = this.dialog.find("button#component-delete");
 
         // Define the buttons that can be used to close the dialog.
-        this.exitButton = this.dialog.find("button#component-exit")
-        this.closeButton = this.dialog.find("button#component-close")
+        this.exitButton = this.dialog.find("button#component-exit");
+        this.closeButton = this.dialog.find("button#component-close");
 
         // Make node view modal box draggable
         this.dialog.draggable({ handle: ".modal-header" });
@@ -53,122 +61,9 @@ class ComponentDialog {
         this.aboutCodeDB = aboutCodeDB;
     }
 
-    // Populate modal input fields with suggestions from ScanCode results
-    show(componentId) {
-        Promise.all(
-            [
-                this._component(componentId), this._licenses(componentId),
-                this._copyrights(componentId), this._owners(componentId),
-                this._language(componentId), this._homepageUrl(componentId)
-            ])
-            .then(([component, licenses, copyrights, owners, programming_languages, urls]) => {
-                this._showDialog(component, {
-                    id: componentId,
-                    licenses: licenses,
-                    copyrights: copyrights,
-                    owners: owners,
-                    programming_languages: programming_languages,
-                    urls: urls
-                });
-            });
-    }
-
-    database(aboutCodeDB) {
-        this.aboutCodeDB = aboutCodeDB;
-        return this;
-    }
-
     on(event, handler) {
         this.handlers[event] = handler;
         return this;
-    }
-
-    _showDialog(component, data) {
-        // Add clue data to the select menu options
-        let licenses = data.licenses;
-        let copyrights = data.copyrights;
-        let owners = data.owners;
-        let programming_languages = data.programming_languages;
-        let urls = data.urls;
-
-        // Add saved data to the select menu options
-        licenses = licenses.concat(component.licenses || []);
-        copyrights = copyrights.concat(component.copyrights || []);
-        owners = owners.concat(component.owner || []);
-        programming_languages = $.unique(programming_languages.concat(
-            component.programming_language || []));
-        urls =  $.unique(urls.concat(
-            component.homepage_url || []));
-
-        // update select2 selectors for node view component
-        this.license.html('').select2({
-            data: $.unique($.map(licenses, (license, i) => {
-                return license.key;
-            })),
-            multiple: true,
-            placeholder: "Enter license",
-            tags: true
-        }, true);
-
-        this.owner.html('').select2({
-            data: $.unique(owners),
-            multiple: true,
-            maximumSelectionLength: 1,
-            placeholder: "Enter owner",
-            tags: true
-        }, true);
-
-        this.copyright.html('').select2({
-            data: $.unique($.map(copyrights, (copyright, i) => {
-                return copyright.statements;
-            })),
-            multiple: true,
-            placeholder: "Enter copyright",
-            tags: true
-        }, true);
-
-        this.language.html('').select2({
-            data: programming_languages,
-            multiple: true,
-            maximumSelectionLength: 1,
-            placeholder: "Enter language",
-            tags: true
-        }, true);
-
-        this.homepage.html('').select2({
-            data: urls,
-            multiple: true,
-            maximumSelectionLength: 1,
-            placeholder: "Enter Homepage URL",
-            tags: true
-        }, true);
-
-        this.status.val(component.review_status || "");
-        this.name.val(component.name || "");
-        this.version.val(component.version || "");
-        this.license.val((component.licenses || [])
-            .map((license) => license.key));
-        this.copyright.val((component.copyrights || [])
-            .map((copyright) => copyright.statements.join("\n")));
-        this.owner.val(component.owner || []);
-        this.language.val(component.programming_language || []);
-        this.homepage.val(component.homepage_url || "");
-        this.notes.val(component.notes || "");
-
-        // Notify only select2 of changes
-        $('select').trigger('change.select2');
-
-        this.title.text(data.id);
-
-        // Disable the ability to close the dialog by clicking outside
-        // the dialog or pressing the escape key.
-        this.dialog.modal({ backdrop: "static", keyboard: false });
-
-        // Retrieve any previously-saved values -- use below in _closeComponent()
-        // to compare with any new edits before closing the dialog.
-        this.initialSerialization = this.dialog.find("form").serialize();
-
-        this.dialog.modal('show');
     }
 
     // Check whether the user has made any new edits.
@@ -177,28 +72,32 @@ class ComponentDialog {
         this.currentSerialization = this.dialog.find("form").serialize();
 
         if (this.initialSerialization !== this.currentSerialization) {
-            return confirm('Your new changes haven\'t been saved.  \n\nAre you sure you want to exit without saving?')
+            return confirm('Your new changes haven\'t been saved.  \n\n' +
+                'Are you sure you want to exit without saving?');
         }
     }
 
     _saveComponent() {
-        let id = this.title.text();
-        this._component(id)
+        let path = this.title.text();
+        this._component(path)
             .then(component => {
-                // Set the file id on the component.
                 return this.aboutCodeDB.File
                     .findOne({
                         attributes: ["id"],
-                        where: { path: { $eq: id } }
+                        where: { path: { $eq: path } }
                     })
                     .then(row => {
+                        // Set the file id on the component.
                         component.fileId = row.id;
                         return component;
                     });
             })
             .then(component => {
+                const modifiedValue = $("input[name=component-modified]:checked").val();
+                const deployedValue = $("input[name=component-deployed]:checked").val();
+
                 return {
-                    path: id,
+                    path: path,
                     fileId: component.fileId,
                     review_status: this.status.val(),
                     name: this.name.val(),
@@ -208,9 +107,17 @@ class ComponentDialog {
                     copyrights: $.map(this.copyright.val() || [], copyright => {
                         return { statements: copyright.split("\n") };
                     }),
+                    code_type: (this.codeType.val() || [null])[0],
+                    is_modified: modifiedValue ? (modifiedValue === "yes") : null,
+                    is_deployed: deployedValue ? (deployedValue === "yes") : null,
                     version: this.version.val(),
                     owner: (this.owner.val() || [null])[0],
-                    homepage_url: (this.homepage.val() || [null])[0],
+                    feature: this.feature.val(),
+                    purpose: this.purpose.val(),
+                    homepage_url: (this.homepageUrl.val() || [null])[0],
+                    download_url: (this.downloadUrl.val() || [null])[0],
+                    license_url: (this.licenseUrl.val() || [null])[0],
+                    notice_url: (this.noticeUrl.val() || [null])[0],
                     programming_language: (this.language.val() || [null])[0],
                     notes: this.notes.val()
                 };
@@ -232,100 +139,264 @@ class ComponentDialog {
             });
     }
 
-    _component(componentId) {
+    // Populate modal input fields with suggestions from ScanCode results
+    show(path) {
+        this._component(path)
+            .then(component => {
+                this.title.text(path);
+                return Promise.all([
+                    this._setupStatus(component),
+                    this._setupName(component),
+                    this._setupVersion(component),
+                    this._setupLicenses(component),
+                    this._setupCopyrights(component),
+                    this._setupOwners(component),
+                    this._setupLanguage(component),
+                    this._setupHomepageUrl(component),
+                    this._setupFeature(component),
+                    this._setupPurpose(component),
+                    this._setupCodeType(component),
+                    this._setupModified(component),
+                    this._setupDeployed(component),
+                    this._setupDownloadUrl(component),
+                    this._setupLicenseUrl(component),
+                    this._setupNoticeUrl(component),
+                    this._setupNotes(component)
+                ]);
+            })
+            .then(() => {
+                // Notify only select2 of changes
+                $('select').trigger('change.select2');
+
+                // Disable the ability to close the dialog by clicking outside
+                // the dialog or pressing the escape key.
+                this.dialog.modal({ backdrop: "static", keyboard: false });
+
+                // Retrieve any previously-saved values -- use below in _closeComponent()
+                // to compare with any new edits before closing the dialog.
+                this.initialSerialization = this.dialog.find("form").serialize();
+
+                this.dialog.modal('show');
+            });
+    }
+
+    _component(path) {
         return this.aboutCodeDB
-            .findComponent({where: {path: componentId}})
-            .then((component) => component ? component : {});
+            .findComponent({ where: { path: path } })
+            // if the component doesn't exist return an object with only the path
+            .then(component => component ? component : { path: path });
     }
 
-    _licenses(componentId) {
-        return this.aboutCodeDB.db
-            .then(() => {
-                return this.aboutCodeDB.File
-                    .findAll({
-                        attributes: [],
-                        group: ['licenses.key'],
-                        where: { path: {$like: `${componentId}%`}},
-                        include: [{
-                            model: this.aboutCodeDB.License,
-                            attributes: ['key'],
-                            where: {key: {$ne: null}}
-                        }]
-                    });
-            })
-            .then(rows => $.map(rows, row => row.licenses));
+    _setupLicenses(component) {
+        const saved = (component.licenses || []).map(license => license.key);
+        return this._licenseQuery(component.path, 'key')
+            .then(license_keys => license_keys.concat(saved))
+            .then(license_keys => {
+                this.license.html('').select2({
+                    data: $.unique(license_keys),
+                    multiple: true,
+                    placeholder: "Enter license",
+                    tags: true
+                }, true);
+                this.license.val(saved);
+            });
     }
 
-    _copyrights(componentId) {
-        return this.aboutCodeDB.db
-            .then(() => {
-                return this.aboutCodeDB
-                    .File.findAll({
-                        attributes: [],
-                        group: ['copyrights.statements'],
-                        where: {path: {$like: `${componentId}%`}},
-                        include: [{
-                            model: this.aboutCodeDB.Copyright,
-                            attributes: ['statements'],
-                            where: {statements: {$ne: null}}
-                        }]
-                    });
-            })
-            .then(rows => $.map(rows, row => row.copyrights));
+    _setupCopyrights(component) {
+        const saved = $.map((component.copyrights || []), copyright => {
+            return copyright.statements;
+        });
+        return this._copyrightQuery(component.path, 'statements')
+            .then(copyright_statements => copyright_statements.concat(saved))
+            .then(copyright_statements => {
+                this.copyright.html('').select2({
+                    data: $.unique(copyright_statements),
+                    multiple: true,
+                    placeholder: "Enter copyright",
+                    tags: true
+                }, true);
+                this.copyright.val(saved);
+            });
     }
 
-    _owners(componentId) {
-        return this.aboutCodeDB.db
-            .then(() => {
-                return this.aboutCodeDB
-                    .File.findAll({
-                        attributes: [],
-                        group: ['copyrights.holders'],
-                        where: {path: {$like: `${componentId}%`}},
-                        include: [{
-                            model: this.aboutCodeDB.Copyright,
-                            attributes: ['holders'],
-                            where: {holders: {$ne: null}}
-                        }]
-                    });
-            })
-            .then(rows =>
-                $.map(rows, row =>
-                    $.map(row.copyrights, copyright => copyright.holders)));
+    _setupOwners(component) {
+        const saved = component.owner || [];
+        return this._copyrightQuery(component.path, 'holders')
+            .then(owners => owners.concat(saved))
+            .then(owners => {
+                this.owner.html('').select2({
+                    data: $.unique(owners),
+                    multiple: true,
+                    maximumSelectionLength: 1,
+                    placeholder: "Enter owner",
+                    tags: true
+                }, true);
+                this.owner.val(saved);
+            });
     }
 
-    _language(componentId) {
-        return this.aboutCodeDB.db
-            .then(() => {
-                return this.aboutCodeDB
-                    .File.findAll({
-                        attributes: ["programming_language"],
-                        group: ['programming_language'],
-                        where: {
-                            path: {$like: `${componentId}%`},
-                            programming_language: {$ne: null}
-                        }
-                    });
-            })
-            .then(rows => $.map(rows, row => row.programming_language));
+    _setupLanguage(component) {
+        const saved = component.programming_language || [];
+        return this.aboutCodeDB
+            .findAllUnique(component.path, 'programming_language')
+            .then(languages => languages.concat(saved))
+            .then(languages => {
+                this.language.html('').select2({
+                    data: $.unique(languages),
+                    multiple: true,
+                    maximumSelectionLength: 1,
+                    placeholder: "Enter language",
+                    tags: true
+                }, true);
+                this.language.val(saved);
+            });
     }
 
-    _homepageUrl(componentId) {
-        return this.aboutCodeDB.db
-            .then(() => {
-                return this.aboutCodeDB
-                    .File.findAll({
-                        attributes: [],
-                        group: ['urls.url'],
-                        where: {path: {$like: `${componentId}%`}},
-                        include: [{
-                            model: this.aboutCodeDB.Url,
-                            attributes: ['url'],
-                            where: {url: {$ne: null}}
-                        }]
-                    });
-            })
-            .then(rows => $.map(rows, row => $.map(row.urls, url => url.url)));
+    _setupCodeType(component) {
+        const saved = component.code_type || [] ;
+        let codeTypes = ["Source", "Binary", "Mixed", "Document"].concat(saved);
+        this.codeType.html('').select2({
+            data: $.unique(codeTypes),
+            multiple: true,
+            maximumSelectionLength: 1,
+            placeholder: "Enter code type",
+            tags: true
+        }, true);
+        this.codeType.val(saved);
+    }
+
+    _setupHomepageUrl(component) {
+        const saved = component.homepage_url || [];
+        return this._urlQuery(component.path, 'url')
+            .then(homepage_urls => homepage_urls.concat(saved))
+            .then(homepage_urls => {
+                this.homepageUrl.html('').select2({
+                    data: $.unique(homepage_urls),
+                    multiple: true,
+                    maximumSelectionLength: 1,
+                    placeholder: "Enter Homepage URL",
+                    tags: true
+                }, true);
+                this.homepageUrl.val(saved);
+            });
+    }
+
+    _setupDownloadUrl(component) {
+        const saved = component.download_url || [];
+        return Promise.all([
+                this._urlQuery(component.path, 'url'),
+                this._packageQuery(component.path, 'download_urls'),
+            ])
+            .then(rows => $.map(rows, row => row))
+            .then(download_urls => download_urls.concat(saved))
+            .then(download_urls => {
+                this.downloadUrl.html('').select2({
+                    data: $.unique(download_urls),
+                    multiple: true,
+                    maximumSelectionLength: 1,
+                    placeholder: "Enter Download URL",
+                    tags: true
+                }, true);
+                this.downloadUrl.val(saved);
+            });
+    }
+
+    _setupLicenseUrl(component) {
+        const saved = component.license_url || [];
+        return Promise.all([
+                this._licenseQuery(component.path, 'homepage_url'),
+                this._licenseQuery(component.path, 'text_url'),
+                this._licenseQuery(component.path, 'reference_url'),
+                this._licenseQuery(component.path, 'spdx_url')
+            ])
+            .then(rows => $.map(rows, row => row))
+            .then(licenese_urls => licenese_urls.concat(saved))
+            .then(licenese_urls => {
+                this.licenseUrl.html('').select2({
+                    data: $.unique(licenese_urls),
+                    multiple: true,
+                    maximumSelectionLength: 1,
+                    placeholder: "Enter License URL",
+                    tags: true
+                }, true);
+                this.licenseUrl.val(saved);
+            });
+    }
+
+    _setupNoticeUrl(component) {
+        const saved = component.notice_url || [];
+        return this._licenseQuery(component.path, 'text_url')
+            .then(notice_urls => notice_urls.concat(saved))
+            .then(notice_urls => {
+                this.noticeUrl.html('').select2({
+                    data: $.unique(notice_urls),
+                    multiple: true,
+                    maximumSelectionLength: 1,
+                    placeholder: "Enter Notice URL",
+                    tags: true
+                }, true);
+                this.noticeUrl.val(saved);
+            });
+    }
+
+    _setupModified(component) {
+        if (component.is_modified !== null && component.is_modified !== undefined) {
+            const modifiedValue = component.is_modified ? 'yes' : 'no';
+            $(`input[name=component-modified][value='${modifiedValue}']`)
+                .prop("checked", true);
+        } else {
+            this.modified.prop("checked", false);
+        }
+    }
+
+    _setupDeployed(component) {
+        if (component.is_deployed !== null && component.is_deployed !== undefined) {
+            const deployedValue = component.is_deployed ? 'yes' : 'no';
+            $(`input[name=component-deployed][value='${deployedValue}']`)
+                .prop("checked", true);
+        } else {
+            this.deployed.prop("checked", false);
+        }
+    }
+
+    _setupStatus(component) {
+        this.status.val(component.review_status || "");
+    }
+
+    _setupName(component) {
+        this.name.val(component.name || "");
+    }
+
+    _setupVersion(component) {
+        this.version.val(component.version || "");
+    }
+
+    _setupFeature(component) {
+        this.feature.val(component.feature || "");
+    }
+
+    _setupPurpose(component) {
+        this.purpose.val(component.purpose || "");
+    }
+
+    _setupNotes(component) {
+        this.notes.val(component.notes || "");
+    }
+
+    _copyrightQuery(path, field) {
+        return this.aboutCodeDB.findAllUnique(path, field, this.aboutCodeDB.Copyright);
+    }
+
+    _urlQuery(path, field) {
+        return this.aboutCodeDB.findAllUnique(path, field, this.aboutCodeDB.Url);
+    }
+
+    _packageQuery(path, field) {
+        return this.aboutCodeDB.findAllUnique(path, field, this.aboutCodeDB.Package);
+    }
+
+    _licenseQuery(path, field) {
+        return this.aboutCodeDB.findAllUnique(path, field, this.aboutCodeDB.License);
     }
 }
 

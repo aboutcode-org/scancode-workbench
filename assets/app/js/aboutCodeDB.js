@@ -169,6 +169,45 @@ class AboutCodeDB {
         return this.db.then(() => this.File.findAll(query));
     }
 
+    findAllUnique(path, field, subTable) {
+        return this.db
+            .then(() => {
+                if (!subTable) {
+                    return this.File
+                        .findAll({
+                            attributes: [field],
+                            group: [field],
+                            where: {
+                                path: {$like: `${path}%`},
+                                $and: [
+                                    {[field]: {$ne: null}},
+                                    {[field]: {$ne: ""}}
+                                ]
+                            }
+                        })
+                        .then(rows => $.map(rows, row => row[field]));
+                }
+                return this.File
+                    .findAll({
+                        attributes: [],
+                        group: [`${subTable.name}.${field}`],
+                        where: { path: {$like: `${path}%`} },
+                        include: [{
+                            model: subTable,
+                            attributes: [field],
+                            where: {
+                                $and: [
+                                    { [field]: {$ne: null} },
+                                    { [field]: {$ne: ""} }
+                                ]
+                            },
+                        }]
+                    })
+                    .then(rows => $.map(rows, row => row[subTable.name]))
+                    .then(values => $.map(values, value => value[field]));
+            });
+    }
+
     // Add rows to the flattened files table from a ScanCode json object
     addFromJson(jsonFileName, aboutCodeVersion, onProgressUpdate) {
         if (!jsonFileName) {
@@ -502,7 +541,15 @@ const TABLE = {
             licenses: jsonDataType('licenses'),
             copyrights: jsonDataType('copyrights'),
             owner: Sequelize.STRING,
+            code_type: Sequelize.STRING,
+            is_modified: Sequelize.BOOLEAN,
+            is_deployed: Sequelize.BOOLEAN,
+            feature: Sequelize.STRING,
+            purpose: Sequelize.STRING,
             homepage_url: Sequelize.STRING,
+            download_url: Sequelize.STRING,
+            license_url: Sequelize.STRING,
+            notice_url: Sequelize.STRING,
             programming_language: Sequelize.STRING,
             notes: Sequelize.STRING
         }

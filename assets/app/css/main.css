@@ -505,3 +505,11 @@ div.dataTables_scrollHead th:first-child {
 .c3 svg {
   font-family: 'Lato', Helvetica, san-serif;
 }
+
+/*---------------------------------------
+  Select2 custom
+-----------------------------------------*/
+
+.select2-container .select2-search__field{
+  width: 100% !important;
+}
