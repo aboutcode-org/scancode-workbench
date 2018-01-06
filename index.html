@@ -62,12 +62,12 @@
     <div id="sidebar-wrapper">
         <ul class="sidebar-nav">
             <li>
-                <button class="btn btn-sidebar" id="open-file" data-toggle="tooltip" title="Open SQLite File">
+                <button class="btn btn-sidebar" id="open-file" data-toggle="tooltip" data-placement="right" title="Open SQLite File">
                     <i class="fa fa-folder-open-o" aria-hidden="true"></i>
                 </button>
             </li>
             <li>
-                <button class="btn btn-sidebar" id="save-file" data-toggle="tooltip" title="Save As New SQLite File">
+                <button class="btn btn-sidebar" id="save-file" data-toggle="tooltip" data-placement="right" title="Save As New SQLite File">
                     <i class="fa fa-floppy-o" aria-hidden="true"></i>
                 </button>
             </li>
@@ -82,17 +82,17 @@
                 </button>
             </li>
             <li>
-                <button class="btn btn-sidebar" id="show-tab-clues" data-toggle="tab" data-target="#tab-clues" title="Table View">
+                <button class="btn btn-sidebar" id="show-tab-clues" data-toggle="tab" data-target="#tab-clues" data-placement="right" title="Table View">
                     <i class="fa fa-table" aria-hidden="true"></i>
                 </button>
             </li>
             <li>
-                <button class="btn btn-sidebar" id="show-tab-nodeview" data-toggle="tab" data-target="#tab-nodeview" title="Node View">
+                <button class="btn btn-sidebar" id="show-tab-nodeview" data-toggle="tab" data-target="#tab-nodeview" data-placement="right" title="Node View">
                     <i class="fa fa-code-fork" aria-hidden="true"></i>
                 </button>
             </li>
             <li>
-                <button class="btn btn-sidebar" id="show-tab-component" data-toggle="tab" data-target="#tab-component" title="Component Summary View">
+                <button class="btn btn-sidebar" id="show-tab-component" data-toggle="tab" data-target="#tab-component" data-placement="right" title="Component Summary View">
                     <i class="fa fa-list-ol" aria-hidden="true"></i>
                 </button>
             </li>
@@ -277,23 +277,23 @@
                             </select>
                         </fieldset>
                         <fieldset class="form-group">
-                            <label for="component-name">Component</label>
+                            <label for="component-name" data-toggle="tooltip" data-placement="top" title="Name by which the component is commonly referenced.">Component</label>
                             <input type="text" class="form-control" id="component-name" name="component-name" placeholder="Enter component">
                         </fieldset>
                         <fieldset class="form-group">
-                            <label for="component-version">Version</label>
+                            <label for="component-version" data-toggle="tooltip" data-placement="top" title="Identifies a specific version of a component. The combination of name + version uniquely identifies a component. If the version is (nv) or blank, it signifies an unstated/unknown version (or it indicates that version does not apply to the component), and it does not imply that the information in this component definition applies to any or all possible versions of the component.">Version</label>
                             <input type="text" class="form-control" id="component-version" name="component-version" placeholder="Enter version">
                         </fieldset>
                         <fieldset class="form-group">
-                            <label for="component-license">License</label>
+                            <label for="component-license" data-toggle="tooltip" data-placement="top" title="The license that applies to a component. There could be more than one license, in which case a choice is usually required.">License</label>
                             <select data-hide-on-select="true" class="form-control " id="component-license" name="component-license" type="text"></select>
                         </fieldset>
                         <fieldset class="form-group">
-                            <label for="component-owner">Owner</label>
+                            <label for="component-owner" data-toggle="tooltip" data-placement="top" title="The unique user-maintained name of the author, custodian, or provider of one or more software objects (licenses, components, products).">Owner</label>
                             <select data-hide-on-select="true" class="form-control" id="component-owner" name="component-owner" type="text"></select>
                         </fieldset>
                         <fieldset class="form-group">
-                            <label for="component-copyright">Copyright</label>
+                            <label for="component-copyright" data-toggle="tooltip" data-placement="top" title="The copyright statement(s) that pertain to this component, as contained in the source or as specified in an associated file.">Copyright</label>
                             <select data-hide-on-select="true" class="form-control" id="component-copyright" name="component-copyright" type="text"></select>
                         </fieldset>
                         <fieldset>
@@ -308,7 +308,7 @@
                             </div>
                         </fieldset>
                         <fieldset>
-                            <label>Deployed</label>
+                            <label data-toggle="tooltip" data-placement="top" title="Indicates if the component is deployed.">Deployed</label>
                             <div class="radio">
                                 <label for="component-deployed-yes" class="radio-inline">
                                     <input name="component-deployed" type="radio" id="component-deployed-yes" value="yes">Yes
@@ -319,11 +319,11 @@
                             </div>
                         </fieldset>
                         <fieldset class="form-group">
-                            <label for="component-code-type">Code Type</label>
+                            <label for="component-code-type" data-toggle="tooltip" data-placement="top" title="Contents of the package (Source, Binary, Mixed, or Documentation).">Code Type</label>
                             <select data-hide-on-select="true" class="form-control" id="component-code-type" name="component-code-type" type="text"></select>
                         </fieldset>
                         <fieldset class="form-group">
-                            <label for="component-notes">Notes</label>
+                            <label for="component-notes" data-toggle="tooltip" data-placement="top" title="Comments that might provide additional insight into the findings, Remediation or options available.">Notes</label>
                             <textarea class="form-control" id="component-notes" name="component-notes" rows="3"></textarea>
                         </fieldset>
                         <fieldset class="form-group">
@@ -335,23 +335,23 @@
                             <input type="text" class="form-control" id="component-purpose" name="component-purpose" placeholder="Enter purpose">
                         </fieldset>
                         <fieldset class="form-group">
-                            <label for="component-language">Programming Language</label>
+                            <label for="component-language" data-toggle="tooltip" data-placement="top" title="The primary programming language associated with the component.">Programming Language</label>
                             <select data-hide-on-select="true" class="form-control" id="component-language" name="component-language" type="text"></select>
                         </fieldset>
                         <fieldset class="form-group">
-                            <label for="component-homepage-url">Homepage URL</label>
+                            <label for="component-homepage-url" data-toggle="tooltip" data-placement="top" title="Homepage URL for the component.">Homepage URL</label>
                             <select data-hide-on-select="true" class="form-control" id="component-homepage-url" name="component-homepage-url" type="text"></select>
                         </fieldset>
                         <fieldset class="form-group">
-                            <label for="component-download-url">Download URL</label>
+                            <label for="component-download-url" data-toggle="tooltip" data-placement="top" title="The download URL for obtaining the package.">Download URL</label>
                             <select data-hide-on-select="true" class="form-control" id="component-download-url" name="component-download-url" type="text"></select>
                         </fieldset>
                         <fieldset class="form-group">
-                            <label for="component-license-url">License URL</label>
+                            <label for="component-license-url" data-toggle="tooltip" data-placement="top" title="Where available, the URL to the license text.">License URL</label>
                             <select data-hide-on-select="true" class="form-control" id="component-license-url" name="component-license-url" type="text"></select>
                         </fieldset>
                         <fieldset class="form-group">
-                            <label for="component-notice-url">Notice URL</label>
+                            <label for="component-notice-url" data-toggle="tooltip" data-placement="top" title="A URL that contains notice text for a component.">Notice URL</label>
                             <select data-hide-on-select="true" class="form-control" id="component-notice-url" name="component-notice-url" type="text"></select>
                         </fieldset>
                     </form>

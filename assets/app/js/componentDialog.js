@@ -55,6 +55,9 @@ class ComponentDialog {
         // Link each close button's click event to a method that checks for unsaved edits.
         this.exitButton.click(() => this._closeComponent());
         this.closeButton.click(() => this._closeComponent());
+
+        // Enables tooltips for component field labels
+        $('[data-toggle="tooltip"]').tooltip();
     }
 
     database(aboutCodeDB) {
