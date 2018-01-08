@@ -268,7 +268,7 @@
                 <div class="modal-body">
                     <form>
                         <fieldset class="form-group">
-                            <label for="component-status">Status</label>
+                            <label for="component-status" data-toggle="tooltip" data-placement="top" title="The status can be used to communicate the current stage of the review process and whether additional review is required.">Status</label>
                             <select class="form-control status" id="component-status" name="component-status" type="text">
                                 <option value="Analyzed">Analyzed</option>
                                 <option value="Attention">Needs Attention</option>
@@ -297,7 +297,7 @@
                             <select data-hide-on-select="true" class="form-control" id="component-copyright" name="component-copyright" type="text"></select>
                         </fieldset>
                         <fieldset>
-                            <label>Modified</label>
+                            <label data-toggle="tooltip" data-placement="top" title="Indicates that the component is a copy of third-party code that has been modified by the product team.">Modified</label>
                             <div class="radio">
                                 <label for="component-modified-yes" class="radio-inline">
                                     <input name="component-modified" type="radio" id="component-modified-yes" value="yes">Yes
@@ -327,11 +327,11 @@
                             <textarea class="form-control" id="component-notes" name="component-notes" rows="3"></textarea>
                         </fieldset>
                         <fieldset class="form-group">
-                            <label for="component-feature">Feature</label>
+                            <label for="component-feature" data-toggle="tooltip" data-placement="top" title="Identifies a feature or module within the codebase, such as UI or Application and used to group components for reporting within a software inventory or BOM.">Feature</label>
                             <input type="text" class="form-control" id="component-feature" name="component-feature" placeholder="Enter feature">
                         </fieldset>
                         <fieldset class="form-group">
-                            <label for="component-purpose">Purpose</label>
+                            <label for="component-purpose" data-toggle="tooltip" data-placement="top" title="Identifies the purpose or usage of a component, such as Build, Test or Core.">Purpose</label>
                             <input type="text" class="form-control" id="component-purpose" name="component-purpose" placeholder="Enter purpose">
                         </fieldset>
                         <fieldset class="form-group">
