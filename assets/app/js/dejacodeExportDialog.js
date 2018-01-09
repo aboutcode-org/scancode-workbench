@@ -64,9 +64,13 @@ class DejaCodeExportDialog {
                         owner: component.owner,
                         license_expression: component.license_expression,
                         copyright: component.copyright,
+                        is_deployed: component.is_deployed,
+                        is_modified: component.is_modified,
                         homepage_url: component.homepage_url,
                         primary_language: component.programming_language,
                         reference_notes: component.notes,
+                        feature: component.feature,
+                        purpose: component.purpose,
                         product: productNameVersion
                     };
                 });
