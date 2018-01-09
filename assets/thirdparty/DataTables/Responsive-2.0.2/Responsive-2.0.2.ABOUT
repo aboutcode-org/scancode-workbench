@@ -3,10 +3,10 @@ download_url: https://github.com/DataTables/Responsive/releases/tag/2.0.2
 
 version: 2.0.2
 name: Responsive
-home_url: https://github.com/DataTables/Responsive/tree/2.0.2
+homepage_url: https://github.com/DataTables/Responsive/tree/2.0.2
 owner: SpryMedia Limited
 copyright: Copyright (c) 2014-2015 SpryMedia Limited
 
 license_url: https://raw.githubusercontent.com/DataTables/Responsive/2.0.2/License.txt
-dje_license: mit
-license_text_file: Responsive-2.0.2.LICENSE
+license_expression: mit
+license_file: Responsive-2.0.2.LICENSE

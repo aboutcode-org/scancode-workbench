@@ -3,8 +3,8 @@ download_url: http://www.latofonts.com/lato-free-fonts/#download
 
 version: 1.104
 name: Lato
-home_url: http://www.latofonts.com/
+homepage_url: http://www.latofonts.com/
 owner: Lukasz Dziedzic
 copyright: Copyright (c) 2010-2015 by Lukasz Dziedzic Dziedzic with Reserved Font Name "Lato"
-dje_license: ofl-1.1
-license_text_file: lato.LICENSE
+license_expression: ofl-1.1
+license_file: lato.LICENSE

@@ -3,11 +3,10 @@ download_url: https://github.com/twbs/bootstrap/releases/tag/v3.3.6
 
 version: 3.3.6
 name: Bootstrap
-home_url: https://github.com/DataTables/AutoFill/tree/2.1.1
+homepage_url: https://github.com/DataTables/AutoFill/tree/2.1.1
 owner: Twitter, Inc
 copyright: Copyright (c) 2011-2015 Twitter, Inc
 
 license_url: https://raw.githubusercontent.com/twbs/bootstrap/v3.3.6/LICENSE
-dje_license: mit
-license_text_file: Bootstrap-3.3.6.LICENSE
-notes:
+license_expression: mit
+license_file: Bootstrap-3.3.6.LICENSE

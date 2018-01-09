@@ -4,9 +4,9 @@ version: 0.4.18
 
 name: C3.js
 description: c3 is a D3-based reusable chart library that enables deeper integration of charts into web applications.
-home_url: http://c3js.org
+homepage_url: http://c3js.org
 owner: Masayuki Tanaka
 contact: masayuki0812@mac.com
-dje_license: mit
-license_text_file: c3.LICENSE
+license_expression: mit
+license_file: c3.LICENSE
 copyright: Copyright (c) 2013 Masayuki Tanaka

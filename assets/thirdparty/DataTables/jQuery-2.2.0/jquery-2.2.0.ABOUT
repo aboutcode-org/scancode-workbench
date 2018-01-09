@@ -3,10 +3,10 @@ download_url: https://github.com/jquery/jquery/archive/2.2.0.tar.gz
 
 version: 2.2.0
 name: jQuery
-home_url: http://jquery.com/
+homepage_url: http://jquery.com/
 owner: jQuery Foundation, Inc.
 copyright: Copyright jQuery Foundation and other contributors, https://jquery.org/
 
 license_url: https://raw.githubusercontent.com/jquery/jquery/2.2.0/LICENSE.txt
-dje_license: mit
-license_text_file: jquery-2.2.0.LICENSE
+license_expression: mit
+license_file: jquery-2.2.0.LICENSE

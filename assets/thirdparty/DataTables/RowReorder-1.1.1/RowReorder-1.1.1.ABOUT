@@ -3,10 +3,10 @@ download_url: https://github.com/DataTables/RowReorder/releases/tag/1.1.1
 
 version: 1.1.1
 name: RowReorder
-home_url: https://github.com/DataTables/RowReorder/tree/1.1.1
+homepage_url: https://github.com/DataTables/RowReorder/tree/1.1.1
 owner: SpryMedia Limited
 copyright: Copyright (c) 2015 SpryMedia Limited
 
 license_url: https://raw.githubusercontent.com/DataTables/RowReorder/1.1.1/License.txt
-dje_license: mit
-license_text_file: RowReorder-1.1.1.LICENSE
+license_expression: mit
+license_file: RowReorder-1.1.1.LICENSE

@@ -3,10 +3,10 @@ download_url: https://github.com/DataTables/Select/releases/tag/1.1.2
 
 version: 1.1.2
 name: Select
-home_url: https://github.com/DataTables/Select
+homepage_url: https://github.com/DataTables/Select
 owner: SpryMedia Limited
 copyright: Copyright (c) 2015 SpryMedia Limited
 
 license_url: https://raw.githubusercontent.com/DataTables/Select/1.1.2/License.txt
-dje_license: mit
-license_text_file: Select-1.1.2.LICENSE
+license_expression: mit
+license_file: Select-1.1.2.LICENSE

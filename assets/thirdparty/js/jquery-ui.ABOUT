@@ -3,10 +3,10 @@ download_url: https://jqueryui.com/resources/download/jquery-ui-1.12.0.zip
 
 version: 1.12.0
 name: jQuery UI
-home_url: https://jqueryui.com/
+homepage_url: https://jqueryui.com/
 owner: jQuery Foundation, Inc.
 copyright: Copyright jQuery Foundation and other contributors
 
 license_url: https://raw.githubusercontent.com/jquery/jquery-ui/1.12.0/LICENSE.txt
-dje_license: mit
-license_text_file: jquery-ui.js.LICENSE
+license_expression: mit
+license_file: jquery-ui.js.LICENSE

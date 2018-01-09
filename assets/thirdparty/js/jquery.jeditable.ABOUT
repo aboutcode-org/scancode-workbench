@@ -3,10 +3,10 @@ download_url: https://github.com/tuupola/jquery_jeditable/archive/1.7.3.tar.gz
 
 version: 1.7.3
 name: Jeditable
-home_url: http://www.appelsiini.net/projects/jeditable
+homepage_url: http://www.appelsiini.net/projects/jeditable
 owner: Mika Tuupola, Dylan Verheul
 copyright: Copyright (c) 2006-2013 Mika Tuupola, Dylan Verheul
 
 license_url: https://raw.githubusercontent.com/tuupola/jquery_jeditable/master/jquery.jeditable.js
-dje_license: mit
-license_text_file: jquery.jeditable.LICENSE
+license_expression: mit
+license_file: jquery.jeditable.LICENSE
