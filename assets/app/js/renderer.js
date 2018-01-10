@@ -320,11 +320,18 @@ $(document).ready(function () {
                 }
             });
 
-            Promise.all([aboutCodeInfoPromise, clueFilesPromise, componentsPromise])
-                .then(([aboutCodeInfo, clueFiles, components]) => {
+            let filesCountPromise = aboutCodeDB.getFileCount({
+                attributes: {
+                    exclude: ["id", "createdAt", "updatedAt"]
+                }
+            });
+
+            Promise.all([aboutCodeInfoPromise, filesCountPromise, clueFilesPromise, componentsPromise])
+                .then(([aboutCodeInfo, filesCount, clueFiles, components]) => {
                     let json = {
                         aboutcode_manager_notice: aboutCodeInfo.notice,
                         aboutcode_manager_version: aboutCodeInfo.version,
+                        files_count: filesCount,
                         files: clueFiles,
                         components: components
                     };
