@@ -302,6 +302,12 @@ $(document).ready(function () {
                 return;
             }
 
+            let aboutCodeInfoPromise = aboutCodeDB.getAboutCodeInfo({
+                attributes: {
+                    exclude: ["id", "createdAt", "updatedAt"]
+                }
+            });
+
             let clueFilesPromise = aboutCodeDB.findAll({
                 attributes: {
                     exclude: ["id", "createdAt", "updatedAt"]
@@ -314,9 +320,11 @@ $(document).ready(function () {
                 }
             });
 
-            Promise.all([clueFilesPromise, componentsPromise])
-                .then(([clueFiles, components]) => {
+            Promise.all([aboutCodeInfoPromise, clueFilesPromise, componentsPromise])
+                .then(([aboutCodeInfo, clueFiles, components]) => {
                     let json = {
+                        aboutcode_manager_notice: aboutCodeInfo.notice,
+                        aboutcode_manager_version: aboutCodeInfo.version,
                         files: clueFiles,
                         components: components
                     };
@@ -344,14 +352,23 @@ $(document).ready(function () {
                 return;
             }
 
-            aboutCodeDB
-                .findAllComponents({
-                    attributes: {
-                        exclude: ["id", "createdAt", "updatedAt"]
-                    }
-                })
-                .then((components) => {
+            let aboutCodeInfoPromise = aboutCodeDB.getAboutCodeInfo({
+                attributes: {
+                    exclude: ["id", "createdAt", "updatedAt"]
+                }
+            });
+
+            let componentsPromise = aboutCodeDB.findAllComponents({
+                attributes: {
+                    exclude: ["id", "createdAt", "updatedAt"]
+                }
+            });
+
+            Promise.all([aboutCodeInfoPromise, componentsPromise])
+                .then(([aboutCodeInfo, components]) => {
                     let json = {
+                        aboutcode_manager_notice: aboutCodeInfo.notice,
+                        aboutcode_manager_version: aboutCodeInfo.version,
                         components: components
                     };
 

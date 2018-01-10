@@ -111,6 +111,14 @@ class AboutCodeDB {
         this.db = this.sequelize.sync();
     }
 
+    // Get AboutCode Manager app information
+    getAboutCodeInfo() {
+        return this.db
+            .then(() => this.AboutCode.findOne({
+                attributes: ["notice", "version"]
+            }));
+    }
+
     // Uses the components table to do a findAll query
     findAllComponents(query) {
         return this.db.then(() => this.Component.findAll(query));
@@ -235,7 +243,12 @@ class AboutCodeDB {
                         header = header.header;
                     }
                     promiseChain = promiseChain
-                        .then(() => this.AboutCode.create({ version: version }))
+                        .then(() => this.AboutCode.create(
+                            {
+                                version: version,
+                                notice: "Exported from AboutCode Manager ScanCode and provided on an \"AS IS\" BASIS, WITHOUT WARRANTIES\\nOR CONDITIONS OF ANY KIND, either express or implied. No content created from\\nAboutCode Manager should be considered or used as legal advice. Consult an Attorney\\nfor any legal advice.\\nAboutCode Manager is a free software analysis application from nexB Inc. and others.\\nVisit https://github.com/nexB/aboutcode-manager/ for support and download.\""
+                            }
+                        ))
                         .then(() => this.ScanCode.create(header))
                         .then((result) => scancode = result);
                 })
@@ -400,7 +413,8 @@ const TABLE = {
     ABOUTCODE: {
         name: "aboutcode-manager",
         columns: {
-            version: Sequelize.STRING
+            version: Sequelize.STRING,
+            notice: Sequelize.STRING
         }
     },
     SCANCODE: {
