@@ -285,7 +285,8 @@ class AboutCodeDB {
                             .then(() => {
                                 files = [];
                                 this.resume();
-                            });
+                            })
+                            .catch(e => reject(e));
                     }
                 })
                 .on('end', () => {
@@ -353,7 +354,7 @@ class AboutCodeDB {
                             return license;
                         });
                     });
-                    this.License.bulkCreate(licenses || [], options);
+                    return this.License.bulkCreate(licenses || [], options);
                 })
                 .then(() => {
                     let copyrights = $.map(files, file => {
@@ -362,7 +363,7 @@ class AboutCodeDB {
                             return copyright;
                         });
                     });
-                    this.Copyright.bulkCreate(copyrights || [], options);
+                    return this.Copyright.bulkCreate(copyrights || [], options);
                 })
                 .then(() => {
                     let packages = $.map(files, file => {
@@ -371,7 +372,7 @@ class AboutCodeDB {
                             return pkg;
                         });
                     });
-                    this.Package.bulkCreate(packages || [], options);
+                    return this.Package.bulkCreate(packages || [], options);
                 })
                 .then(() => {
                     let emails = $.map(files, file => {
@@ -380,7 +381,7 @@ class AboutCodeDB {
                             return email;
                         });
                     });
-                    this.Email.bulkCreate(emails || [], options);
+                    return this.Email.bulkCreate(emails || [], options);
                 })
                 .then(() => {
                     let urls = $.map(files, file => {
@@ -389,7 +390,7 @@ class AboutCodeDB {
                             return url;
                         });
                     });
-                    this.Url.bulkCreate(urls || [], options);
+                    return this.Url.bulkCreate(urls || [], options);
                 })
                 .then(() => {
                     return this.sequelize.Promise.each(files, file => {
