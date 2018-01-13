@@ -35,11 +35,10 @@ class AboutCodeDashboard {
         this.uniqueCopyrights = $("#unique-copyrights .title");
         this.totalPackages = $("#total-packages .title");
 
-        this.dashboardId = dashboardId;
-        this.database(aboutCodeDB);
-
+        this.sourceLanguageChartProgressbar =
+            new Progress("#source-chart .content", {size: 50});
         this.sourceLanguageChart = c3.generate({
-            bindto: "#source-chart",
+            bindto: "#source-chart .chart",
             data: {
                 columns: [],
                 type: "pie",
@@ -50,8 +49,10 @@ class AboutCodeDashboard {
             },
         });
 
+        this.licenseCategoryChartProgressbar =
+            new Progress("#license-category-chart .content", {size: 50});
         this.licenseCategoryChart = c3.generate({
-                bindto: "#license-category-chart",
+                bindto: "#license-category-chart .chart",
                 data: {
                     columns: [],
                     type: "pie",
@@ -62,8 +63,10 @@ class AboutCodeDashboard {
                 }
         });
 
+        this.licenseKeyChartProgressbar =
+            new Progress("#license-key-chart .content", {size: 50});
         this.licenseKeyChart = c3.generate({
-                bindto: "#license-key-chart",
+                bindto: "#license-key-chart .chart",
                 data: {
                     columns: [],
                     type: "pie",
@@ -74,8 +77,10 @@ class AboutCodeDashboard {
                 }
         });
 
+        this.packagesTypeChartProgressbar =
+            new Progress("#packages-type-chart .content", {size: 50});
         this.packagesTypeChart = c3.generate({
-                bindto: "#packages-type-chart",
+                bindto: "#packages-type-chart .chart",
                 data: {
                     columns: [],
                     type: "bar",
@@ -85,6 +90,9 @@ class AboutCodeDashboard {
                     pattern: LEGEND_COLORS
                 }
         });
+
+        this.dashboardId = dashboardId;
+        this.database(aboutCodeDB);
     }
 
     database(aboutCodeDB) {
@@ -131,43 +139,64 @@ class AboutCodeDashboard {
     }
 
     reload() {
+
+        this.sourceLanguageChart.legend.hide();
+        this.sourceLanguageChart.hide();
+        this.sourceLanguageChartProgressbar.showIndeterminate();
         this.sourceLanguageData
             .then(data => this.sourceLanguageChart.load({
-                columns: data,
-                unload: true,
-                done: () => {
-                    this.sourceLanguageChart.legend.show();
-                    this.sourceLanguageChart.hide('No Value Detected');
-                }
-            }));
+                    columns: data,
+                    unload: true,
+                    done: () => {
+                        this.sourceLanguageChart.show();
+                        this.sourceLanguageChart.legend.show();
+                        this.sourceLanguageChart.hide('No Value Detected');
+                        this.sourceLanguageChartProgressbar.hide();
+                    }
+                }));
 
+        this.licenseCategoryChart.legend.hide();
+        this.licenseCategoryChart.hide();
+        this.licenseCategoryChartProgressbar.showIndeterminate();
         this.licenseCategoryData
             .then(data => this.licenseCategoryChart.load({
                 columns: data,
                 unload: true,
                 done: () => {
+                    this.licenseCategoryChart.show();
                     this.licenseCategoryChart.legend.show();
                     this.licenseCategoryChart.hide('No Value Detected');
+                    this.licenseCategoryChartProgressbar.hide();
                 }
             }));
 
+        this.licenseKeyChart.legend.hide();
+        this.licenseKeyChart.hide();
+        this.licenseKeyChartProgressbar.showIndeterminate();
         this.licenseKeyData
             .then(data => this.licenseKeyChart.load({
                 columns: data,
                 unload:true,
                 done: () => {
+                    this.licenseKeyChart.show();
                     this.licenseKeyChart.legend.show();
                     this.licenseKeyChart.hide('No Value Detected');
+                    this.licenseKeyChartProgressbar.hide();
                 }
             }));
 
+        this.packagesTypeChart.legend.hide();
+        this.packagesTypeChart.hide();
+        this.packagesTypeChartProgressbar.showIndeterminate();
         this.packagesTypeData
             .then(data => this.packagesTypeChart.load({
                 columns: data,
                 unload: true,
                 done: () => {
+                    this.packagesTypeChart.show();
                     this.packagesTypeChart.legend.show();
                     this.packagesTypeChart.hide('No Value Detected');
+                    this.packagesTypeChartProgressbar.hide();
                 }
             }));
     }

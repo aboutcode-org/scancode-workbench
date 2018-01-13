@@ -18,7 +18,7 @@ class Progress {
     constructor(elementId, options) {
         this.id = elementId;
         this.container = $(elementId);
-        this.options = options;
+        this.options = options || {};
     }
 
     showIndeterminate() {
@@ -67,7 +67,7 @@ class Progress {
     _createProgressElement(progressbarClass) {
         const progressElement = $(
             `<div class='progress'>
-                 <h4 class='title'>${this.options.title}</h4>
+                 <h4 class='title'>${this.options.title || ""}</h4>
                  <div class='progressbar ${progressbarClass}'></div>
              </div>`);
 
