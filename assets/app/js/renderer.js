@@ -158,9 +158,10 @@ $(document).ready(function () {
            shell.openExternal(evt.target.href);
     });
 
+    // Opens the dashboard view when the app is first opened
     showDashboardButton.trigger("click");
 
-    // Open a SQLite Database File
+    /** Open a SQLite Database File */
     function openSQLite() {
         dialog.showOpenDialog({
             properties: ['openFile'],
@@ -178,7 +179,7 @@ $(document).ready(function () {
         });
     }
 
-    // Save a SQLite Database File
+    /** Save a SQLite Database File */
     function saveSQLite() {
         dialog.showSaveDialog(
             {
@@ -201,6 +202,7 @@ $(document).ready(function () {
         );
     }
 
+    /** Import a ScanCode JSON file and create a SQLite database */
     function importJson() {
         dialog.showOpenDialog({
             title: "Open a JSON File",
@@ -287,7 +289,7 @@ $(document).ready(function () {
         });
     }
 
-    // Export JSON file with ScanCode data and components that have been created
+    /** Export JSON file with original ScanCode data and components that have been created */
     function exportJson() {
         dialog.showSaveDialog({
             properties: ['openFile'],
@@ -344,7 +346,7 @@ $(document).ready(function () {
         });
     }
 
-    // Export JSON file with only components that have been created
+    /** Export JSON file with only components that have been created */
     function exportJsonComponents() {
         dialog.showSaveDialog({
             properties: ['openFile'],
@@ -387,7 +389,7 @@ $(document).ready(function () {
         });
     }
 
-    // Creates the database and all View objects from a SQLite file
+    /** Creates the database and all View objects from a SQLite file */
     function loadDatabase(fileName) {
         // Create a new database when importing a json file
         aboutCodeDB = new AboutCodeDB({
@@ -398,7 +400,7 @@ $(document).ready(function () {
         loadDataForViews(fileName);
     }
 
-    // loads data for all views based on the current data
+    /** Loads data for all views based on the current data */
     function loadDataForViews(fileName) {
         const path = require('path');
         document.title = 'AboutCode Manager - ' + path.basename(fileName);
