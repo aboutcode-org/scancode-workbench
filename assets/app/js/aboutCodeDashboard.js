@@ -35,8 +35,6 @@ class AboutCodeDashboard {
         this.uniqueCopyrights = $("#unique-copyrights .title");
         this.totalPackages = $("#total-packages .title");
 
-        this.sourceLanguageChartProgressbar =
-            new Progress("#source-chart .content", {size: 50});
         this.sourceLanguageChart = c3.generate({
             bindto: "#source-chart .chart",
             data: {
@@ -49,8 +47,6 @@ class AboutCodeDashboard {
             },
         });
 
-        this.licenseCategoryChartProgressbar =
-            new Progress("#license-category-chart .content", {size: 50});
         this.licenseCategoryChart = c3.generate({
                 bindto: "#license-category-chart .chart",
                 data: {
@@ -63,8 +59,6 @@ class AboutCodeDashboard {
                 }
         });
 
-        this.licenseKeyChartProgressbar =
-            new Progress("#license-key-chart .content", {size: 50});
         this.licenseKeyChart = c3.generate({
                 bindto: "#license-key-chart .chart",
                 data: {
@@ -77,8 +71,6 @@ class AboutCodeDashboard {
                 }
         });
 
-        this.packagesTypeChartProgressbar =
-            new Progress("#packages-type-chart .content", {size: 50});
         this.packagesTypeChart = c3.generate({
                 bindto: "#packages-type-chart .chart",
                 data: {
@@ -99,104 +91,94 @@ class AboutCodeDashboard {
         this.aboutCodeDB = aboutCodeDB;
 
         // Get total files scanned
-        this.aboutCodeDB.db.then(() => {
-            return this.aboutCodeDB.ScanCode
-                .findOne({ attributes: ["files_count"] })
-                .then(row => this.totalFilesScanned.text(row ? row.files_count : "0"));
-        });
+        const totalFilesProgressbar =
+            new Progress("#total-files .title", {size: 25});
+        totalFilesProgressbar.showIndeterminate();
+        this.aboutCodeDB.db
+            .then(() => this.aboutCodeDB.ScanCode.findOne({ attributes: ["files_count"] }))
+            .then(row => this.totalFilesScanned.text(row ? row.files_count : "0"))
+            .then(() => totalFilesProgressbar.hide());
 
         // Get total unique licenses detected
-        this.aboutCodeDB.db.then(() => {
-            return this.aboutCodeDB.License
-                .aggregate("key", "DISTINCT", {plain: false})
-                .then(row => this.uniqueLicenses.text(row ? row.length : "0"));
-        });
+        const uniqueLicensesProgressbar =
+            new Progress("#unique-licenses .title", {size: 25});
+        uniqueLicensesProgressbar.showIndeterminate();
+        this.aboutCodeDB.db
+            .then(() => this.aboutCodeDB.License.aggregate("key", "DISTINCT", {plain: false}))
+            .then(row => this.uniqueLicenses.text(row ? row.length : "0"))
+            .then(() => uniqueLicensesProgressbar.hide());
 
         // Get total unique copyright statements detected
-        this.aboutCodeDB.db.then(() => {
-            return this.aboutCodeDB.Copyright
-                .aggregate("holders", "DISTINCT", { plain: false })
-                .then(row => this.uniqueCopyrights.text(row ? row.length : "0"));
-        });
+        const uniqueCopyrightsProgressbar =
+            new Progress("#unique-copyrights .title", {size: 25});
+        uniqueCopyrightsProgressbar.showIndeterminate();
+        this.aboutCodeDB.db
+            .then(() => this.aboutCodeDB.Copyright.aggregate("holders", "DISTINCT", { plain: false }))
+            .then(row => this.uniqueCopyrights.text(row ? row.length : "0"))
+            .then(() => uniqueCopyrightsProgressbar.hide());
 
         // Get total number of packages detected
-        this.aboutCodeDB.db.then(() => {
-            return this.aboutCodeDB.Package.count("type")
-                .then(count => this.totalPackages.text(count ? count : "0"));
-        });
+        const totalPackagesProgressbar =
+            new Progress("#total-packages .title", {size: 25});
+        totalPackagesProgressbar.showIndeterminate();
+        this.aboutCodeDB.db
+            .then(() => this.aboutCodeDB.Package.count("type"))
+            .then(count => this.totalPackages.text(count ? count : "0"))
+            .then(() => totalPackagesProgressbar.hide());
 
         // Get unique programming languages detected
-        this.sourceLanguageData = this._loadData("programming_language");
-
-        // Get license categories detected
-        this.licenseCategoryData = this._loadData("license_category");
-
-        // Get license keys detected
-        this.licenseKeyData = this._loadData("license_key");
-
-        // Get package types detected
-        this.packagesTypeData = this._loadData("packages_type");
-    }
-
-    reload() {
-
-        this.sourceLanguageChart.legend.hide();
-        this.sourceLanguageChart.hide();
-        this.sourceLanguageChartProgressbar.showIndeterminate();
-        this.sourceLanguageData
+        const sourceLanguageChartProgressbar =
+            new Progress("#source-chart .content", {size: 50});
+        sourceLanguageChartProgressbar.showIndeterminate();
+        this._loadData("programming_language")
             .then(data => this.sourceLanguageChart.load({
                     columns: data,
                     unload: true,
                     done: () => {
-                        this.sourceLanguageChart.show();
-                        this.sourceLanguageChart.legend.show();
                         this.sourceLanguageChart.hide('No Value Detected');
-                        this.sourceLanguageChartProgressbar.hide();
+                        sourceLanguageChartProgressbar.hide();
                     }
                 }));
 
-        this.licenseCategoryChart.legend.hide();
-        this.licenseCategoryChart.hide();
-        this.licenseCategoryChartProgressbar.showIndeterminate();
-        this.licenseCategoryData
+        // Get license categories detected
+        const licenseCategoryChartProgressbar =
+            new Progress("#license-category-chart .content", {size: 50});
+        licenseCategoryChartProgressbar.showIndeterminate();
+        this._loadData("license_category")
             .then(data => this.licenseCategoryChart.load({
-                columns: data,
-                unload: true,
-                done: () => {
-                    this.licenseCategoryChart.show();
-                    this.licenseCategoryChart.legend.show();
-                    this.licenseCategoryChart.hide('No Value Detected');
-                    this.licenseCategoryChartProgressbar.hide();
-                }
-            }));
+                    columns: data,
+                    unload: true,
+                    done: () => {
+                        this.licenseCategoryChart.hide('No Value Detected');
+                        licenseCategoryChartProgressbar.hide();
+                    }
+                }))
 
-        this.licenseKeyChart.legend.hide();
-        this.licenseKeyChart.hide();
-        this.licenseKeyChartProgressbar.showIndeterminate();
-        this.licenseKeyData
+        // Get license keys detected
+        const licenseKeyChartProgressbar =
+            new Progress("#license-key-chart .content", {size: 50});
+        licenseKeyChartProgressbar.showIndeterminate();
+        this._loadData("license_key")
             .then(data => this.licenseKeyChart.load({
-                columns: data,
-                unload:true,
-                done: () => {
-                    this.licenseKeyChart.show();
-                    this.licenseKeyChart.legend.show();
-                    this.licenseKeyChart.hide('No Value Detected');
-                    this.licenseKeyChartProgressbar.hide();
-                }
-            }));
+                    columns: data,
+                    unload:true,
+                    done: () => {
+                        this.licenseKeyChart.hide('No Value Detected');
+                        licenseKeyChartProgressbar.hide();
+                    }
+                }))
 
-        this.packagesTypeChart.legend.hide();
-        this.packagesTypeChart.hide();
-        this.packagesTypeChartProgressbar.showIndeterminate();
-        this.packagesTypeData
+        // Get package types detected
+        const packagesTypeChartProgressbar =
+            new Progress("#packages-type-chart .content", {size: 50});
+        packagesTypeChartProgressbar.showIndeterminate();
+        this._loadData("packages_type")
             .then(data => this.packagesTypeChart.load({
                 columns: data,
                 unload: true,
                 done: () => {
-                    this.packagesTypeChart.show();
-                    this.packagesTypeChart.legend.show();
                     this.packagesTypeChart.hide('No Value Detected');
-                    this.packagesTypeChartProgressbar.hide();
+                    packagesTypeChartProgressbar.hide();
                 }
             }));
     }

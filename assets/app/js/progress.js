@@ -53,6 +53,7 @@ class Progress {
         if (this.progressContainer) {
             this.progressContainer.remove();
             this.progressContainer = null;
+            this.container.removeClass("div-invisible");
         }
     }
 
@@ -61,6 +62,7 @@ class Progress {
             this.progressContainer =
                 this.container.clone().empty().append(progressBar);
             this.container.before(this.progressContainer);
+            this.container.addClass("div-invisible");
         }
     }
 

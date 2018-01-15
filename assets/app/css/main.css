@@ -328,7 +328,6 @@ div.dataTables_scrollHead th:first-child {
   left: 0;
   right: 0;
   bottom: 50%;
-  margin: auto;
   z-index: 1;
   width: auto;
   height: auto;
@@ -402,6 +401,12 @@ div.dataTables_scrollHead th:first-child {
 .div-show {
   display: block;
   visibility: visible;
+}
+
+.div-invisible {
+  display: block;
+  visibility: hidden;
+  opacity: 0;
 }
 
 /*---------------------------------------

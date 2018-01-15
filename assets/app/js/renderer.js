@@ -140,7 +140,6 @@ $(document).ready(function () {
 
     showDashboardButton.click(() => {
         splitter.hide();
-        dashboard.reload();
     });
 
     ipcRenderer.on('table-view', () => showClueButton.trigger("click"));
@@ -419,7 +418,6 @@ $(document).ready(function () {
                 componentsTable.reload();
 
                 dashboard.database(aboutCodeDB);
-                dashboard.reload();
 
                 nodeView.database(aboutCodeDB);
                 nodeView.reload();
