@@ -26,6 +26,11 @@ class DejaCodeExportDialog {
         this.apiKey = this.dialog.find("#apiKey");
         this.submitButton = this.dialog.find("button#componentSubmit");
         this.submitButton.click(() => this._exportComponents());
+        this.progressBar = new Progress("#tab-component .components-table-container",
+            {
+                title: "Uploading Components ... ",
+                size: 100
+            });
     }
 
     database(aboutCodeDB) {
@@ -40,21 +45,24 @@ class DejaCodeExportDialog {
     // TODO (@jdaguil): DejaCode doesn't require any field, but we probably
     // want to require name, version, and owner
     _exportComponents() {
-        // Get product name and version
-        const productName = this.productName.val();
-        const productVersion = this.productVersion.val();
-        const productNameVersion = productName.concat(":", productVersion);
-        const apiUrl = this.apiUrl.val();
-        const apiKey = this.apiKey.val();
-        // Test whether any form field is empty
-        if (productName === "" || productVersion === "" || apiUrl === "" || apiKey === "") {
-            // TODO: change this to throw an error instead
-            alert("Please make sure you complete all fields in the upload form.");
-            return;
-        }
-        this.aboutCodeDB
-            .findAllComponents({})
+        this.progressBar.showIndeterminate();
+        return this.aboutCodeDB.db
+            .then(() => this.aboutCodeDB.findAllComponents({}))
             .then(components => {
+                // Get product name and version
+                const productName = this.productName.val();
+                const productVersion = this.productVersion.val();
+                const productNameVersion = productName.concat(":", productVersion);
+                const apiUrl = this.apiUrl.val();
+                const apiKey = this.apiKey.val();
+
+                // Test whether any form field is empty
+                if (productName === "" || productVersion === "" || apiUrl === "" || apiKey === "") {
+                    throw new Error("Please make sure you complete all fields in the upload form.");
+                }
+
+                this.dialog.modal('hide');
+
                 // Converts array of components from AboutCode Manager to
                 // DejaCode component format
                 const dejaCodeComponents = $.map(components, component => {
@@ -74,61 +82,55 @@ class DejaCodeExportDialog {
                         product: productNameVersion
                     };
                 });
-                this._uploadComponents(apiUrl, apiKey, dejaCodeComponents);
+                return this._uploadComponents(apiUrl, apiKey, dejaCodeComponents);
+            })
+            .then(() => this.progressBar.hide())
+            .then(() => alert("Components submitted to DejaCode"))
+            .catch((err) => {
+                this.progressBar.hide();
+                throw err;
             });
-        this.dialog.modal('hide');
     }
-
-    // Uses DejaCode API to create a component
-    _createComponent(productComponentUrl, apiKey, component) {
-        let headers = {
-            'Authorization': 'Token ' + apiKey,
-            'Accept': 'application/json; indent=4'
-        };
-
-        return $.ajax({
-            type: 'POST',
-            headers: headers,
-            url: productComponentUrl,
-            data: component
-        });
-    }
-
 
     // Upload created Components to a Product in DejaCode using the API
     _uploadComponents(host, apiKey, components) {
         let errorMessages = {};
-        let requests = [];
 
         // Make individual requests to DejaCode to create each component
-        $.each(components, (index, component) => {
-            let request = $.Deferred();
-            requests.push(request);
-            this._createComponent(host, apiKey, component)
-                .done(function (data) {
-                    console.log('Successfully exported: ' + JSON.stringify(data));
-                })
-                .fail(function(error) {
-                    console.log(error);
-                    errorMessages[component.name] = error.responseText;
-                })
-                .complete(function () {
-                    request.resolve();
-                });
+        const requests = $.map(components, (component, index) => {
+            return this._createComponent(host, apiKey, component)
+                .catch(err => errorMessages[component.name] = err);
         });
 
         // This will be called when all requests finish.
-        $.when.apply($, requests)
-            .done(function () {
+        return Promise.all(requests)
+            .then(() => {
                 if (Object.keys(errorMessages).length > 0) {
                     let msg = $.map(errorMessages, function(errorMessage, component) {
                         return component + ": " + errorMessage;
                     });
-                    alert("The following errors occurred:\n" + msg.join("\n\n"));
-                } else {
-                    alert("Components submitted to DejaCode");
+                    throw new Error("The following errors occurred:\n" + msg.join("\n\n"));
                 }
             });
+    }
+
+    // Uses DejaCode API to create a component
+    _createComponent(productComponentUrl, apiKey, component) {
+        const headers = {
+            'Authorization': 'Token ' + apiKey,
+            'Accept': 'application/json; indent=4'
+        };
+
+        return new Promise((resolve, reject) => {
+            $.ajax({
+                type: 'POST',
+                headers: headers,
+                url: productComponentUrl,
+                data: component,
+            })
+                .done(data => resolve(data))
+                .fail(err => reject(err));
+        });
     }
 }
 

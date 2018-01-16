@@ -63,6 +63,7 @@ $(document).ready(function () {
 
     const cluesTable = new AboutCodeDataTable("#clues-table", aboutCodeDB);
     const componentsTable = new ComponentDataTable("#components-table", aboutCodeDB)
+    // TODO: Move this into componentDataTable.js
         .on('upload-clicked', components => {
             if (components.length > 0) {
                 dejaCodeExportDialog.show();
