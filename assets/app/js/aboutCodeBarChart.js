@@ -22,6 +22,8 @@ class AboutCodeBarChart {
         this.aboutCodeDB = aboutCodeDB;
         this.handlers = {};
 
+        this.progressBar = new Progress("#barchart-view .svg-container", {size: 100});
+
         this.chartOptions = {
             name: "License Summary",
             margin: 30,
@@ -89,9 +91,18 @@ class AboutCodeBarChart {
         // Allow the query to be intercepted and modified by the caller.
         this.handlers['query-interceptor'](query);
 
+        this.progressBar.showIndeterminate();
         return this.aboutCodeDB.db
             .then(() => this.aboutCodeDB.FlattenedFile.findAll(query))
             .then(values => AboutCodeBarChart.mapToAttributeValues(values, attribute))
+            .then(values => {
+                this.progressBar.hide();
+                return values;
+            })
+            .catch(err => {
+                this.progressBar.hide();
+                throw err;
+            })
             .then(values => {
                 this.barChart = new BarChart(values, this.chartOptions, this.barChartId);
                 if (this.handlers['bar-clicked']) {

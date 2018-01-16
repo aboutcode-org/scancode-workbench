@@ -250,9 +250,17 @@
 
             <!-- Bar Chart Tab -->
             <div class="tab-pane container" id="tab-barchart">
-                <select data-hide-on-select="true" class="form-control select-chart-attribute" id="select-chart-attribute" type="text"></select>
-                <h5>Total Files Scanned: <span class="total-files"></span></h5>
-                <svg class="bar-chart" id="summary-bar-chart"></svg>
+                <div id="barchart-container">
+                    <div id="barchart-options">
+                        <h5>Total Files Scanned: <span class="total-files"></span></h5>
+                        <select data-hide-on-select="true" class="form-control select-chart-attribute" id="select-chart-attribute" type="text"></select>
+                    </div>
+                    <div id="barchart-view">
+                        <div class="svg-container">
+                            <svg class="bar-chart" id="summary-bar-chart"></svg>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

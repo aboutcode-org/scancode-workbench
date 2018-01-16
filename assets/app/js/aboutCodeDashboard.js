@@ -35,6 +35,23 @@ class AboutCodeDashboard {
         this.uniqueCopyrights = $("#unique-copyrights .title");
         this.totalPackages = $("#total-packages .title");
 
+        this.totalFilesProgressbar =
+            new Progress("#total-files .title", {size: 25});
+        this.uniqueLicensesProgressbar =
+            new Progress("#unique-licenses .title", {size: 25});
+        this.uniqueCopyrightsProgressbar =
+            new Progress("#unique-copyrights .title", {size: 25});
+        this.totalPackagesProgressbar =
+            new Progress("#total-packages .title", {size: 25});
+        this.sourceLanguageChartProgressbar =
+            new Progress("#source-chart .content", {size: 50});
+        this.licenseCategoryChartProgressbar =
+            new Progress("#license-category-chart .content", {size: 50});
+        this.licenseKeyChartProgressbar =
+            new Progress("#license-key-chart .content", {size: 50});
+        this.packagesTypeChartProgressbar =
+            new Progress("#packages-type-chart .content", {size: 50});
+
         this.sourceLanguageChart = c3.generate({
             bindto: "#source-chart .chart",
             data: {
@@ -91,94 +108,97 @@ class AboutCodeDashboard {
         this.aboutCodeDB = aboutCodeDB;
 
         // Get total files scanned
-        const totalFilesProgressbar =
-            new Progress("#total-files .title", {size: 25});
-        totalFilesProgressbar.showIndeterminate();
+        this.totalFilesProgressbar.showIndeterminate();
         this.aboutCodeDB.db
             .then(() => this.aboutCodeDB.ScanCode.findOne({ attributes: ["files_count"] }))
             .then(row => this.totalFilesScanned.text(row ? row.files_count : "0"))
-            .then(() => totalFilesProgressbar.hide());
+            .then(() => this.totalFilesProgressbar.hide());
 
         // Get total unique licenses detected
-        const uniqueLicensesProgressbar =
-            new Progress("#unique-licenses .title", {size: 25});
-        uniqueLicensesProgressbar.showIndeterminate();
+        this.uniqueLicensesProgressbar.showIndeterminate();
         this.aboutCodeDB.db
             .then(() => this.aboutCodeDB.License.aggregate("key", "DISTINCT", {plain: false}))
             .then(row => this.uniqueLicenses.text(row ? row.length : "0"))
-            .then(() => uniqueLicensesProgressbar.hide());
+            .then(() => this.uniqueLicensesProgressbar.hide());
 
         // Get total unique copyright statements detected
-        const uniqueCopyrightsProgressbar =
-            new Progress("#unique-copyrights .title", {size: 25});
-        uniqueCopyrightsProgressbar.showIndeterminate();
+        this.uniqueCopyrightsProgressbar.showIndeterminate();
         this.aboutCodeDB.db
             .then(() => this.aboutCodeDB.Copyright.aggregate("holders", "DISTINCT", { plain: false }))
             .then(row => this.uniqueCopyrights.text(row ? row.length : "0"))
-            .then(() => uniqueCopyrightsProgressbar.hide());
+            .then(() => this.uniqueCopyrightsProgressbar.hide());
 
         // Get total number of packages detected
-        const totalPackagesProgressbar =
-            new Progress("#total-packages .title", {size: 25});
-        totalPackagesProgressbar.showIndeterminate();
+        this.totalPackagesProgressbar.showIndeterminate();
         this.aboutCodeDB.db
             .then(() => this.aboutCodeDB.Package.count("type"))
             .then(count => this.totalPackages.text(count ? count : "0"))
-            .then(() => totalPackagesProgressbar.hide());
+            .then(() => this.totalPackagesProgressbar.hide());
 
         // Get unique programming languages detected
-        const sourceLanguageChartProgressbar =
-            new Progress("#source-chart .content", {size: 50});
-        sourceLanguageChartProgressbar.showIndeterminate();
-        this._loadData("programming_language")
-            .then(data => this.sourceLanguageChart.load({
-                    columns: data,
-                    unload: true,
-                    done: () => {
-                        this.sourceLanguageChart.hide('No Value Detected');
-                        sourceLanguageChartProgressbar.hide();
-                    }
-                }));
+        this.sourceLanguageChartData = this._loadData("programming_language");
 
         // Get license categories detected
-        const licenseCategoryChartProgressbar =
-            new Progress("#license-category-chart .content", {size: 50});
-        licenseCategoryChartProgressbar.showIndeterminate();
-        this._loadData("license_category")
-            .then(data => this.licenseCategoryChart.load({
-                    columns: data,
-                    unload: true,
-                    done: () => {
-                        this.licenseCategoryChart.hide('No Value Detected');
-                        licenseCategoryChartProgressbar.hide();
-                    }
-                }))
+        this.licenseCategoryChartData = this._loadData("license_category");
 
         // Get license keys detected
-        const licenseKeyChartProgressbar =
-            new Progress("#license-key-chart .content", {size: 50});
-        licenseKeyChartProgressbar.showIndeterminate();
-        this._loadData("license_key")
-            .then(data => this.licenseKeyChart.load({
-                    columns: data,
-                    unload:true,
-                    done: () => {
-                        this.licenseKeyChart.hide('No Value Detected');
-                        licenseKeyChartProgressbar.hide();
-                    }
-                }))
+        this.licenseKeyChartData = this._loadData("license_key");
 
         // Get package types detected
-        const packagesTypeChartProgressbar =
-            new Progress("#packages-type-chart .content", {size: 50});
-        packagesTypeChartProgressbar.showIndeterminate();
-        this._loadData("packages_type")
+        this.packagesTypeChartData = this._loadData("packages_type");
+
+        this.reload();
+    }
+
+    reload() {
+        // Get unique programming languages detected
+        this.sourceLanguageChartProgressbar.showIndeterminate();
+        this.sourceLanguageChartData
+            .then(data => this.sourceLanguageChart.load({
+                columns: data,
+                unload: true,
+                done: () => {
+                    this.sourceLanguageChart.hide('No Value Detected');
+                    this.sourceLanguageChartProgressbar.hide();
+                }
+            }));
+
+        // Get license categories detected
+        this.licenseCategoryChartProgressbar.showIndeterminate();
+        this.licenseCategoryChartData
+            .then(data => this.licenseCategoryChart.load({
+                columns: data,
+                unload: true,
+                done: () => {
+                    this.licenseCategoryChart.hide('No Value Detected');
+                    this.licenseCategoryChartProgressbar.hide();
+                }
+            }));
+
+        // Get license keys detected
+        this.licenseKeyChartProgressbar.showIndeterminate();
+        this.licenseKeyChartData
+            .then(data => this.licenseKeyChart.load({
+                columns: data,
+                unload:true,
+                done: () => {
+                    this.licenseKeyChart.hide('No Value Detected');
+                    this.licenseKeyChartProgressbar.hide();
+                }
+            }));
+
+        // Get package types detected
+        this.packagesTypeChartProgressbar.showIndeterminate();
+        this.packagesTypeChartData
             .then(data => this.packagesTypeChart.load({
                 columns: data,
                 unload: true,
                 done: () => {
+                    // We have to reshow the chart and legend
+                    this.packagesTypeChart.show();
+                    this.packagesTypeChart.legend.show();
                     this.packagesTypeChart.hide('No Value Detected');
-                    packagesTypeChartProgressbar.hide();
+                    this.packagesTypeChartProgressbar.hide();
                 }
             }));
     }

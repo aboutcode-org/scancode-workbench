@@ -324,18 +324,19 @@ div.dataTables_scrollHead th:first-child {
 -----------------------------------------*/
 /* Center the progress indicator */
 .progress {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 50%;
-  z-index: 1;
-  width: auto;
-  height: auto;
-  border: none;
-  background-color: transparent;
-  -webkit-box-shadow: none;
-  -moz-box-shadow: none;
-  box-shadow: none;
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 50%;
+    transform: translate(0, 25%);
+    z-index: 1;
+    width: auto;
+    height: auto;
+    border: none;
+    background-color: transparent;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
 }
 
 .progress .title {
@@ -412,6 +413,29 @@ div.dataTables_scrollHead th:first-child {
 /*---------------------------------------
   Bar Chart Summary
 -----------------------------------------*/
+
+#barchart-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+}
+
+#barchart-options {
+  padding-bottom: 5px;
+}
+
+#barchart-view {
+  position: relative;
+  height: 100%;
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+#barchart-view .svg-container {
+    overflow-y: scroll;
+}
+
 .bar-chart{ width: 100%; }
 
 .bar-chart rect { fill: #3498db; }

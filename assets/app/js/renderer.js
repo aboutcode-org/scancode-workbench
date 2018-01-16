@@ -92,6 +92,9 @@ $(document).ready(function () {
             }
         });
 
+    // The id of the currently selected nav bar button.
+    const currentNavButtonId = "#sidebar-wrapper .sidebar-nav .active button";
+
     // Defines DOM element constants for sidebar buttons.
     const saveSQLiteFileButton = $("#save-file");
     const openSQLiteFileButton = $("#open-file");
@@ -140,6 +143,7 @@ $(document).ready(function () {
 
     showDashboardButton.click(() => {
         splitter.hide();
+        dashboard.reload();
     });
 
     ipcRenderer.on('table-view', () => showClueButton.trigger("click"));
@@ -406,27 +410,20 @@ $(document).ready(function () {
         document.title = 'AboutCode Manager - ' + path.basename(fileName);
         return aboutCodeDB.db
             .then(() => {
+                // update all views with the new database.
                 componentDialog.database(aboutCodeDB);
                 dejaCodeExportDialog.database(aboutCodeDB);
 
                 jstree.database(aboutCodeDB);
-                jstree.reload();
-
-                // reload the DataTable after all insertions are done.
                 cluesTable.database(aboutCodeDB);
-                cluesTable.reload();
-
                 componentsTable.database(aboutCodeDB);
-                componentsTable.reload();
-
                 dashboard.database(aboutCodeDB);
-
                 nodeView.database(aboutCodeDB);
-                nodeView.reload();
-
                 barChart.database(aboutCodeDB);
-                barChart.reload();
 
+                // Reload the jstree, then trigger the current view to reload.
+                jstree.reload();
+                $(currentNavButtonId).trigger("click");
                 return aboutCodeDB;
             })
             .catch(function(reason) {
