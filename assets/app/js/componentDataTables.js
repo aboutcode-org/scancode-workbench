@@ -62,6 +62,14 @@ class ComponentDataTable {
                     columns: ":gt(1)",
                     collectionLayout: "fixed two-column"
                 },
+                {
+                    extend: "csv",
+                    text: "Export CSV"
+                },
+                {
+                    extend: "excel",
+                    text: "Export Excel"
+                }
             ],
             language: {
                 "emptyTable": "No Components created."
