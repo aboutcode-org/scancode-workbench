@@ -69,6 +69,12 @@ class ComponentDataTable {
                 {
                     extend: "excel",
                     text: "Export Excel"
+                },
+                {
+                    name: "json",
+                    text: "Export JSON",
+                    titleAttr: 'Export JSON file',
+                    action: () => this.handlers['export-json']()
                 }
             ],
             language: {

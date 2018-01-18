@@ -70,7 +70,8 @@ $(document).ready(function () {
                 alert("You have no Components to upload.\n\n" +
                     "Please create at least one Component and try again.");
             }
-        });
+        })
+        .on('export-json', exportJsonComponents);
 
     const jstree = new AboutCodeJsTree("#jstree", aboutCodeDB)
         .on('node-edit', node => componentDialog.show(node.id))
