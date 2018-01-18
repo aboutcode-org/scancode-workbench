@@ -78,7 +78,9 @@ $(document).ready(function () {
         .on("node-selected", node => {
             // Set the search value for the first column (path) equal to the
             // Selected jstree path and redraw the table
-            cluesTable.columns(0).search(node.id + "/").draw();
+            const searchTerm = node.id + (node.type === "file" ? "" : "/");
+
+            cluesTable.columns(0).search(searchTerm).draw();
             nodeView.setRoot(node.id);
             barChart.draw();
         });
