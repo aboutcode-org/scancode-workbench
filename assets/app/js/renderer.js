@@ -71,14 +71,17 @@ $(document).ready(function () {
                 alert("You have no Components to upload.\n\n" +
                     "Please create at least one Component and try again.");
             }
-        });
+        })
+        .on('export-json', exportJsonComponents);
 
     const jstree = new AboutCodeJsTree("#jstree", aboutCodeDB)
         .on('node-edit', node => componentDialog.show(node.id))
         .on("node-selected", node => {
             // Set the search value for the first column (path) equal to the
             // Selected jstree path and redraw the table
-            cluesTable.columns(0).search(node.id + "/").draw();
+            const searchTerm = node.id + (node.type === "file" ? "" : "/");
+
+            cluesTable.columns(0).search(searchTerm).draw();
             nodeView.setRoot(node.id);
             barChart.draw();
         });

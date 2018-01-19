@@ -62,6 +62,20 @@ class ComponentDataTable {
                     columns: ":gt(1)",
                     collectionLayout: "fixed two-column"
                 },
+                {
+                    extend: "csv",
+                    text: "Export CSV"
+                },
+                {
+                    extend: "excel",
+                    text: "Export Excel"
+                },
+                {
+                    name: "json",
+                    text: "Export JSON",
+                    titleAttr: 'Export JSON file',
+                    action: () => this.handlers['export-json']()
+                }
             ],
             language: {
                 "emptyTable": "No Components created."
