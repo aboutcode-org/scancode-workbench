@@ -14,6 +14,8 @@
  #
  */
 
+const Progress = require('./progress');
+
 class DejaCodeExportDialog {
     constructor(dialogId, aboutCodeDB) {
         this.aboutCodeDB = aboutCodeDB;
@@ -85,6 +87,8 @@ class DejaCodeExportDialog {
                 return this._uploadComponents(apiUrl, apiKey, dejaCodeComponents);
             })
             .then(() => this.progressBar.hide())
+            // TODO: throw an exception and handle this in render with
+            // dialog.showErrorBox
             .then(() => alert("Components submitted to DejaCode"))
             .catch((err) => {
                 this.progressBar.hide();

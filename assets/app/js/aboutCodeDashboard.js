@@ -14,6 +14,9 @@
  #
  */
 
+const Sequelize = require('sequelize');
+const Progress = require('./progress');
+
 const LEGEND_COLORS = [
     "#A0D468",
     "#FFCE54",
@@ -30,10 +33,10 @@ const LEGEND_LIMIT = 8;
 // Dashboard with summary
 class AboutCodeDashboard {
     constructor(dashboardId, aboutCodeDB) {
-        this.totalFilesScanned = $("#total-files .title");
-        this.uniqueLicenses = $("#unique-licenses .title");
-        this.uniqueCopyrights = $("#unique-copyrights .title");
-        this.totalPackages = $("#total-packages .title");
+        this.totalFilesScanned = $("#total-files").find(".title");
+        this.uniqueLicenses = $("#unique-licenses").find(".title");
+        this.uniqueCopyrights = $("#unique-copyrights").find(".title");
+        this.totalPackages = $("#total-packages").find(".title");
 
         this.totalFilesProgressbar =
             new Progress("#total-files .title", {size: 25});
@@ -158,8 +161,9 @@ class AboutCodeDashboard {
                 columns: data,
                 unload: true,
                 done: () => {
-                    this.sourceLanguageChart.hide('No Value Detected');
                     this.sourceLanguageChartProgressbar.hide();
+                    this.sourceLanguageChart.flush();
+                    this.sourceLanguageChart.hide('No Value Detected');
                 }
             }));
 
@@ -170,8 +174,9 @@ class AboutCodeDashboard {
                 columns: data,
                 unload: true,
                 done: () => {
-                    this.licenseCategoryChart.hide('No Value Detected');
                     this.licenseCategoryChartProgressbar.hide();
+                    this.licenseCategoryChart.flush();
+                    this.licenseCategoryChart.hide('No Value Detected');
                 }
             }));
 
@@ -182,8 +187,9 @@ class AboutCodeDashboard {
                 columns: data,
                 unload:true,
                 done: () => {
-                    this.licenseKeyChart.hide('No Value Detected');
                     this.licenseKeyChartProgressbar.hide();
+                    this.licenseKeyChart.flush();
+                    this.licenseKeyChart.hide('No Value Detected');
                 }
             }));
 
@@ -194,11 +200,9 @@ class AboutCodeDashboard {
                 columns: data,
                 unload: true,
                 done: () => {
-                    // We have to reshow the chart and legend
-                    this.packagesTypeChart.show();
-                    this.packagesTypeChart.legend.show();
-                    this.packagesTypeChart.hide('No Value Detected');
                     this.packagesTypeChartProgressbar.hide();
+                    this.packagesTypeChart.flush();
+                    this.packagesTypeChart.hide('No Value Detected');
                 }
             }));
     }
@@ -282,10 +286,12 @@ class AboutCodeDashboard {
 
     static isValid(value) {
         if (Array.isArray(value)) {
-            return value.length > 0
-                && value.every((element) => AboutCodeDashboard.isValid(element));
+            return value.length > 0 &&
+                value.every((element) => AboutCodeDashboard.isValid(element));
         } else {
             return value !== null;
         }
     }
- }
+}
+
+module.exports = AboutCodeDashboard;

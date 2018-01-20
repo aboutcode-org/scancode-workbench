@@ -14,6 +14,10 @@
  #
  */
 
+const Progress = require('./progress');
+const Sequelize = require('sequelize');
+const BarChart = require('./barChart');
+const AboutCodeDataTable = require('./aboutCodeDataTables');
 
 // Bar chart summary for AboutCode scan data
 class AboutCodeBarChart {
@@ -107,12 +111,13 @@ class AboutCodeBarChart {
                 this.barChart = new BarChart(values, this.chartOptions, this.barChartId);
                 if (this.handlers['bar-clicked']) {
                     const that = this;
-                    $("#summary-bar-chart rect").click(function () {
+                    const chartElement = $("#summary-bar-chart");
+                    chartElement.find("rect").click(function () {
                         const attribute =  that.chartAttributesSelect.val();
                         const value = $(this).data("value");
                         that.handlers['bar-clicked'](attribute, value);
                     });
-                    $("#summary-bar-chart .y.axis .tick").click(function () {
+                    chartElement.find(".y.axis .tick").click(function () {
                         const attribute =  that.chartAttributesSelect.val();
                         const value = $(this).data("value");
                         that.handlers['bar-clicked'](attribute, value);
@@ -144,8 +149,8 @@ class AboutCodeBarChart {
 
     static isValid(value) {
         if (Array.isArray(value)) {
-            return value.length > 0
-                && value.every((element) => AboutCodeBarChart.isValid(element));
+            return value.length > 0 &&
+                value.every((element) => AboutCodeBarChart.isValid(element));
         } else {
             return value !== null;
         }

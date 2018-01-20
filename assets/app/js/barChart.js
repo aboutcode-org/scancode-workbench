@@ -26,21 +26,21 @@ class BarChart {
         this.margin = {
             left: chartOptions.margin + this.maxNameWidth(formattedData),
             top: chartOptions.margin,
-            right: chartOptions.margin + this.maxValueWidth(formattedData),
+            right: chartOptions.margin + BarChart.maxValueWidth(formattedData),
             bottom: chartOptions.margin
         };
 
         // The chart height is bar height * the number of licenses in the data
-        let chartHeight = chartOptions.barHeight * formattedData.length;
+        const chartHeight = chartOptions.barHeight * formattedData.length;
 
         // Build up the chart (Sum of chart + margin top + margin bottom)
-        let boundHeight = chartHeight + this.margin.top + this.margin.bottom;
+        const boundHeight = chartHeight + this.margin.top + this.margin.bottom;
 
         // Create bounds of chart
-        let bounds = d3.select(chartSelector).attr('height', boundHeight);
+        const bounds = d3.select(chartSelector).attr('height', boundHeight);
 
         // The chart sits within the bounds starting at (margin.left , margin.top)
-        let chart = bounds.append('g')
+        const chart = bounds.append('g')
             .attr('transform', 'translate('+ this.margin.left + ',' + this.margin.top + ')');
 
         // Create scaling for x that converts formattedData values to pixels
@@ -49,31 +49,31 @@ class BarChart {
             .domain([0, d3.max(formattedData, function(d) { return d.val; })]);
 
         // Create scaling for y that converts formattedData names to pixels
-        let yScale = d3.scale.ordinal()
+        const yScale = d3.scale.ordinal()
             .domain(formattedData.map(function(d) {return d.name; }))
             .rangeRoundBands([0, chartHeight], 0.1 /* white space percentage */);
 
         // Creates a d3 axis given a scale (takes care of tick marks and labels)
-        let xAxis = d3.svg.axis()
+        const xAxis = d3.svg.axis()
             .scale(this.xScale)
             .orient('bottom');
 
         // Creates a d3 axis given a scale (takes care of tick marks and labels)
-        let yAxis = d3.svg.axis()
+        const yAxis = d3.svg.axis()
             .scale(yScale)
             // Limit label length to 50 characters plus ellipses.
             .tickFormat(BarChart.trimName)
             .orient('left');
 
         // Creates a graphic tag (<g>) for each bar in the chart
-        let bars = chart.selectAll('g')
+        const bars = chart.selectAll('g')
             .data(formattedData)
             .enter().append('g');
 
         // Clear tooltip div created when inadvertently triggered during dropdown selection.
         $( ".toolTip" ).remove();
 
-        let tooltip = d3.select("body").append("div").attr("class", "toolTip");
+        const tooltip = d3.select("body").append("div").attr("class", "toolTip");
 
         this.rects = bars.append('rect')
             .attr('y', function(d) { return yScale(d.name); })
@@ -82,14 +82,14 @@ class BarChart {
                 return d.name;
             })
             // Add a tooltip to the bar.
-            .on("mouseover", function (d) { tooltip.style("display", "inline-block"); })
+            .on("mouseover", function () { tooltip.style("display", "inline-block"); })
             .on("mousemove", function (d) {
                 tooltip
                     .style("left", d3.event.pageX - 50 + "px")
                     .style("top", d3.event.pageY - 70 + "px")
                     .text((d.name + ' (' + d.val + ')'));
             })
-            .on("mouseout", function (d) { tooltip.style("display", "none"); });
+            .on("mouseout", function () { tooltip.style("display", "none"); });
 
         this.texts = bars.append('text')
             .attr('y', function (d) { return yScale(d.name); })
@@ -106,7 +106,7 @@ class BarChart {
 
         // Add a tooltip to the y-axis labels.
         chart.selectAll(".y.axis .tick")
-            .on("mouseover", function (d) { tooltip.style("display", "inline-block"); })
+            .on("mouseover", function () { tooltip.style("display", "inline-block"); })
             .on("mousemove", function (d) {
                 let result = $.grep(formattedData, function (e) { return e.name === d; });
                 let displayValue = ' (' + result[0].val + ')';
@@ -115,8 +115,8 @@ class BarChart {
                     .style("top", d3.event.pageY - 70 + "px")
                     .text((d + displayValue));
             })
-            .on("mouseout", function (d) { tooltip.style("display", "none"); })
-            .attr("data-value", function(d, i) {
+            .on("mouseout", function () { tooltip.style("display", "none"); })
+            .attr("data-value", function(d) {
                 return d;
             });
 
@@ -150,7 +150,7 @@ class BarChart {
     // Appends a span element with that name to the DOM. Gets the width in
     // pixels. Removes the appended span element from the DOM and returns the
     // width.
-    strPixelWidth(str) {
+    static strPixelWidth(str) {
         let tmp = $('<span></span>').text(str);
         $('body').append(tmp);
         let width = tmp.width();
@@ -160,7 +160,7 @@ class BarChart {
 
     // Returns the pixel width of the string with the longest length
     maxNameWidth(data) {
-        let names = data.map(function(d) { return d.trimmedName; });
+        const names = data.map(function(d) { return d.trimmedName; });
 
         let maxStr = '';
         $.each(names, function(i, name) {
@@ -169,13 +169,13 @@ class BarChart {
             }
         });
 
-        return this.strPixelWidth(maxStr);
+        return BarChart.strPixelWidth(maxStr);
     }
 
     // Returns the pixel width of the value with the longest length
-    maxValueWidth(data) {
-        let maxValue = d3.max(data, function(d) { return d.val; });
-        return this.strPixelWidth('(' + maxValue + ')');
+    static maxValueWidth(data) {
+        const maxValue = d3.max(data, function(d) { return d.val; });
+        return BarChart.strPixelWidth('(' + maxValue + ')');
     }
 
     static formatChartData(names) {
@@ -187,7 +187,7 @@ class BarChart {
         });
 
         // Transform license count into array of objects with license name & count
-        let chartData = $.map(count, function(val, key) {
+        const chartData = $.map(count, function(val, key) {
             return {
                 name: key,
                 trimmedName: BarChart.trimName(key),
@@ -206,3 +206,5 @@ class BarChart {
         return chartData;
     }
 }
+
+module.exports = BarChart;

@@ -14,10 +14,22 @@
  #
  */
 
-
 const fs = require('fs');
 const shell = require("electron").shell;
 const dialog = require('electron').remote.dialog;
+const path = require('path');
+
+const AboutCodeDB = require('./aboutCodeDB');
+const Splitter = require("./splitter");
+const Progress = require("./progress");
+const AboutCodeDashboard = require('./aboutCodeDashboard');
+const AboutCodeBarChart = require('./aboutCodeBarChart');
+const DejaCodeExportDialog = require('./dejacodeExportDialog');
+const ComponentDialog = require('./componentDialog');
+const AboutCodeJsTree = require('./aboutCodeJsTree');
+const AboutCodeNodeView = require('./aboutCodeNodeView');
+const AboutCodeDataTable = require('./aboutCodeDataTables');
+const ComponentDataTable = require('./componentDataTables');
 
 // The Electron module used to communicate asynchronously from a renderer process to the main process.
 const ipcRenderer = require('electron').ipcRenderer;
@@ -68,7 +80,9 @@ $(document).ready(function () {
             if (components.length > 0) {
                 dejaCodeExportDialog.show();
             } else {
-                alert("You have no Components to upload.\n\n" +
+                dialog.showErrorBox(
+                    "No Components to Upload",
+                    "You have no Components to upload.\n\n" +
                     "Please create at least one Component and try again.");
             }
         })
@@ -107,14 +121,6 @@ $(document).ready(function () {
     const showComponentButton = $("#show-tab-component");
     const showBarChartButton = $("#show-tab-barchart");
     const showDashboardButton = $("#show-tab-dashboard");
-
-    // Defines DOM element constants for the main content
-    const mainContent = $("#content");
-    const nodeviewTab = $("#tab-nodeview");
-    const cluesTab = $("#tab-clues");
-    const componentTab = $("#tab-component");
-    const barChartTab = $("#tab-barchart");
-    const dashboardContainer = $("#tab-dashboard");
 
     // Open a SQLite Database File
     openSQLiteFileButton.click(openSQLite);
@@ -201,9 +207,9 @@ $(document).ready(function () {
                     return;
                 }
 
-                let oldFileName = aboutCodeDB.sequelize.options.storage;
-                let reader = fs.createReadStream(oldFileName);
-                let writer = fs.createWriteStream(newFileName);
+                const oldFileName = aboutCodeDB.sequelize.options.storage;
+                const reader = fs.createReadStream(oldFileName);
+                const writer = fs.createWriteStream(newFileName);
                 reader.pipe(writer);
                 reader.on("end", () => loadDatabase(newFileName));
             }
@@ -269,7 +275,7 @@ $(document).ready(function () {
                         .then(() => loadDataForViews(fileName))
                         .catch((err) => {
                             progressbar.hide();
-                            if (err instanceof MissingFileInfoError) {
+                            if (err instanceof AboutCodeDB.MissingFileInfoError) {
                                 dialog.showErrorBox(
                                     "Missing File Type Information",
                                     "Missing file 'type' information in the " +
@@ -410,7 +416,6 @@ $(document).ready(function () {
 
     /** Loads data for all views based on the current data */
     function loadDataForViews(fileName) {
-        const path = require('path');
         document.title = 'AboutCode Manager - ' + path.basename(fileName);
         return aboutCodeDB.db
             .then(() => {

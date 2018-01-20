@@ -17,13 +17,18 @@
 
 // Load Sequelize and create an in-memory database
 const Sequelize = require("sequelize");
-
 const fs = require('fs');
 const JSONStream = require('JSONStream');
 
-class MissingFileInfoError extends Error {}
-
-// Creates a new database on the flattened json data
+/**
+ * Creates a new database on the flattened json data
+ *
+ * @param config
+ * @param config.dbName
+ * @param config.dbUser
+ * @param config.dbPassword
+ * @param config.dbStorage
+ */
 class AboutCodeDB {
     constructor(config) {
         // Constructor returns an object which effectively represents a connection
@@ -31,9 +36,7 @@ class AboutCodeDB {
         let name = (config && config.dbName) ? config.dbName : "tmp";
         let user = (config && config.dbUser) ? config.dbUser : null;
         let password = (config && config.dbPassword) ? config.dbPassword : null;
-        let storage = (config && config.dbStorage)
-            ? config.dbStorage
-            : ":memory:";
+        let storage = (config && config.dbStorage) ? config.dbStorage : ":memory:";
 
         this.sequelize = new Sequelize(name, user, password, {
             dialect: "sqlite",
@@ -257,7 +260,7 @@ class AboutCodeDB {
                         rootPath = file.path.split("/")[0];
                         // Show error for scans missing file type information
                         if (file.type === undefined) {
-                            reject(new MissingFileInfoError());
+                            reject(new AboutCodeDB.MissingFileInfoError());
                         }
                     }
                     if (rootPath === file.path) {
@@ -276,9 +279,9 @@ class AboutCodeDB {
                                 if (currProgress > progress) {
                                     progress = currProgress;
                                     onProgressUpdate(progress);
-                                    console.log("Progress: "
-                                        + `${progress}% `
-                                        + `(${index}/${files_count})`);
+                                    console.log("Progress: " +
+                                        `${progress}% ` +
+                                        `(${index}/${files_count})`);
 
                                 }
                             })
@@ -333,13 +336,13 @@ class AboutCodeDB {
 
     _addFiles(files, scancodeId) {
         let transactionOptions = {
-            logging: false,
+            logging: () => {},
             autocommit: false,
             isolationLevel: Sequelize.Transaction.ISOLATION_LEVELS.READ_COMMITTED
         };
         return this.sequelize.transaction(transactionOptions, (t) => {
             let options = {
-                logging: false,
+                logging: () => {},
                 transaction: t
             };
             $.each(files, (i, file) => {
@@ -414,70 +417,70 @@ const TABLE = {
     ABOUTCODE: {
         name: "aboutcode-manager",
         columns: {
-            version: Sequelize.STRING,
-            notice: Sequelize.STRING
+            version: Sequelize.DataTypes.STRING,
+            notice: Sequelize.DataTypes.STRING
         }
     },
     SCANCODE: {
         name: "scancode",
         columns: {
-            scancode_notice: Sequelize.STRING,
-            scancode_version: Sequelize.STRING,
+            scancode_notice: Sequelize.DataTypes.STRING,
+            scancode_version: Sequelize.DataTypes.STRING,
             scancode_options: jsonDataType('scancode_options'),
-            files_count: Sequelize.INTEGER
+            files_count: Sequelize.DataTypes.INTEGER
         }
     },
     FILE: {
         name: "files",
         columns: {
             path: {
-                type: Sequelize.STRING,
+                type: Sequelize.DataTypes.STRING,
                 unique: true,
                 allowNull: false
             },
-            parent: Sequelize.STRING,
-            type: Sequelize.STRING,
-            name: Sequelize.STRING,
-            extension: Sequelize.STRING,
-            date: Sequelize.STRING,
-            size: Sequelize.INTEGER,
-            sha1: Sequelize.STRING,
-            md5: Sequelize.STRING,
-            files_count: Sequelize.INTEGER,
-            mime_type: Sequelize.STRING,
-            file_type: Sequelize.STRING,
-            programming_language: Sequelize.STRING,
-            is_binary: Sequelize.BOOLEAN,
-            is_text: Sequelize.BOOLEAN,
-            is_archive: Sequelize.BOOLEAN,
-            is_media: Sequelize.BOOLEAN,
-            is_source: Sequelize.BOOLEAN,
-            is_script: Sequelize.BOOLEAN
+            parent: Sequelize.DataTypes.STRING,
+            type: Sequelize.DataTypes.STRING,
+            name: Sequelize.DataTypes.STRING,
+            extension: Sequelize.DataTypes.STRING,
+            date: Sequelize.DataTypes.STRING,
+            size: Sequelize.DataTypes.INTEGER,
+            sha1: Sequelize.DataTypes.STRING,
+            md5: Sequelize.DataTypes.STRING,
+            files_count: Sequelize.DataTypes.INTEGER,
+            mime_type: Sequelize.DataTypes.STRING,
+            file_type: Sequelize.DataTypes.STRING,
+            programming_language: Sequelize.DataTypes.STRING,
+            is_binary: Sequelize.DataTypes.BOOLEAN,
+            is_text: Sequelize.DataTypes.BOOLEAN,
+            is_archive: Sequelize.DataTypes.BOOLEAN,
+            is_media: Sequelize.DataTypes.BOOLEAN,
+            is_source: Sequelize.DataTypes.BOOLEAN,
+            is_script: Sequelize.DataTypes.BOOLEAN
         }
     },
     LICENSE: {
         name: "licenses",
         columns: {
-            key: Sequelize.STRING,
-            score: Sequelize.INTEGER,
-            short_name: Sequelize.STRING,
-            category: Sequelize.STRING,
-            owner: Sequelize.STRING,
-            homepage_url: Sequelize.STRING,
-            text_url: Sequelize.STRING,
-            reference_url: Sequelize.STRING,
-            spdx_license_key: Sequelize.STRING,
-            spdx_url: Sequelize.STRING,
-            start_line: Sequelize.INTEGER,
-            end_line: Sequelize.INTEGER,
+            key: Sequelize.DataTypes.STRING,
+            score: Sequelize.DataTypes.INTEGER,
+            short_name: Sequelize.DataTypes.STRING,
+            category: Sequelize.DataTypes.STRING,
+            owner: Sequelize.DataTypes.STRING,
+            homepage_url: Sequelize.DataTypes.STRING,
+            text_url: Sequelize.DataTypes.STRING,
+            reference_url: Sequelize.DataTypes.STRING,
+            spdx_license_key: Sequelize.DataTypes.STRING,
+            spdx_url: Sequelize.DataTypes.STRING,
+            start_line: Sequelize.DataTypes.INTEGER,
+            end_line: Sequelize.DataTypes.INTEGER,
             matched_rule: jsonDataType("matched_rule")
         }
     },
     COPYRIGHT: {
         name: "copyrights",
         columns: {
-            start_line: Sequelize.INTEGER,
-            end_line: Sequelize.INTEGER,
+            start_line: Sequelize.DataTypes.INTEGER,
+            end_line: Sequelize.DataTypes.INTEGER,
             holders: jsonDataType("holders"),
             authors: jsonDataType("authors"),
             statements: jsonDataType("statements")
@@ -486,16 +489,16 @@ const TABLE = {
     PACKAGE: {
         name: "packages",
         columns: {
-            type: Sequelize.STRING,
-            name: Sequelize.STRING,
-            version: Sequelize.STRING,
-            primary_language: Sequelize.STRING,
-            packaging: Sequelize.STRING,
-            summary: Sequelize.STRING,
-            description: Sequelize.STRING,
-            payload_type: Sequelize.STRING,
-            size: Sequelize.INTEGER,
-            release_date: Sequelize.STRING,
+            type: Sequelize.DataTypes.STRING,
+            name: Sequelize.DataTypes.STRING,
+            version: Sequelize.DataTypes.STRING,
+            primary_language: Sequelize.DataTypes.STRING,
+            packaging: Sequelize.DataTypes.STRING,
+            summary: Sequelize.DataTypes.STRING,
+            description: Sequelize.DataTypes.STRING,
+            payload_type: Sequelize.DataTypes.STRING,
+            size: Sequelize.DataTypes.INTEGER,
+            release_date: Sequelize.DataTypes.STRING,
             authors: jsonDataType("authors"),
             maintainers: jsonDataType("maintainers"),
             contributors: jsonDataType("contributors"),
@@ -504,26 +507,26 @@ const TABLE = {
             distributors: jsonDataType("distributors"),
             vendors: jsonDataType("vendors"),
             keywords: jsonDataType("keywords"),
-            keywords_doc_url: Sequelize.STRING,
+            keywords_doc_url: Sequelize.DataTypes.STRING,
             metafile_locations: jsonDataType("metafile_locations"),
             metafile_urls: jsonDataType("metafile_urls"),
-            homepage_url: Sequelize.STRING,
-            notes: Sequelize.STRING,
+            homepage_url: Sequelize.DataTypes.STRING,
+            notes: Sequelize.DataTypes.STRING,
             download_urls: jsonDataType("download_urls"),
-            download_sha1: Sequelize.STRING,
-            download_sha256: Sequelize.STRING,
-            download_md5: Sequelize.STRING,
-            bug_tracking_url: Sequelize.STRING,
+            download_sha1: Sequelize.DataTypes.STRING,
+            download_sha256: Sequelize.DataTypes.STRING,
+            download_md5: Sequelize.DataTypes.STRING,
+            bug_tracking_url: Sequelize.DataTypes.STRING,
             support_contacts: jsonDataType("support_contacts"),
-            code_view_url: Sequelize.STRING,
-            vcs_tool: Sequelize.STRING,
-            vcs_repository: Sequelize.STRING,
-            vcs_revision: Sequelize.STRING,
-            copyright_top_level: Sequelize.STRING,
+            code_view_url: Sequelize.DataTypes.STRING,
+            vcs_tool: Sequelize.DataTypes.STRING,
+            vcs_repository: Sequelize.DataTypes.STRING,
+            vcs_revision: Sequelize.DataTypes.STRING,
+            copyright_top_level: Sequelize.DataTypes.STRING,
             copyrights: jsonDataType("copyrights"),
             asserted_licenses: jsonDataType("asserted_licenses"),
             legal_file_locations: jsonDataType("legal_file_locations"),
-            license_expression: Sequelize.STRING,
+            license_expression: Sequelize.DataTypes.STRING,
             license_texts: jsonDataType("license_texts"),
             notice_texts: jsonDataType("notice_texts"),
             dependencies: jsonDataType("dependencies"),
@@ -533,51 +536,51 @@ const TABLE = {
     EMAIL: {
         name: "emails",
         columns: {
-            email: Sequelize.STRING,
-            start_line: Sequelize.INTEGER,
-            end_line: Sequelize.INTEGER
+            email: Sequelize.DataTypes.STRING,
+            start_line: Sequelize.DataTypes.INTEGER,
+            end_line: Sequelize.DataTypes.INTEGER
         }
     },
     URL: {
         name: "urls",
         columns: {
-            url: Sequelize.STRING,
-            start_line: Sequelize.INTEGER,
-            end_line: Sequelize.INTEGER
+            url: Sequelize.DataTypes.STRING,
+            start_line: Sequelize.DataTypes.INTEGER,
+            end_line: Sequelize.DataTypes.INTEGER
         }
     },
     COMPONENT: {
         name: "components",
         columns: {
-            path: Sequelize.STRING,
-            review_status: Sequelize.STRING,
-            name: Sequelize.STRING,
-            version: Sequelize.STRING,
+            path: Sequelize.DataTypes.STRING,
+            review_status: Sequelize.DataTypes.STRING,
+            name: Sequelize.DataTypes.STRING,
+            version: Sequelize.DataTypes.STRING,
             licenses: jsonDataType('licenses'),
             copyrights: jsonDataType('copyrights'),
-            owner: Sequelize.STRING,
-            code_type: Sequelize.STRING,
-            is_modified: Sequelize.BOOLEAN,
-            is_deployed: Sequelize.BOOLEAN,
-            feature: Sequelize.STRING,
-            purpose: Sequelize.STRING,
-            homepage_url: Sequelize.STRING,
-            download_url: Sequelize.STRING,
-            license_url: Sequelize.STRING,
-            notice_url: Sequelize.STRING,
-            programming_language: Sequelize.STRING,
-            notes: Sequelize.STRING
+            owner: Sequelize.DataTypes.STRING,
+            code_type: Sequelize.DataTypes.STRING,
+            is_modified: Sequelize.DataTypes.BOOLEAN,
+            is_deployed: Sequelize.DataTypes.BOOLEAN,
+            feature: Sequelize.DataTypes.STRING,
+            purpose: Sequelize.DataTypes.STRING,
+            homepage_url: Sequelize.DataTypes.STRING,
+            download_url: Sequelize.DataTypes.STRING,
+            license_url: Sequelize.DataTypes.STRING,
+            notice_url: Sequelize.DataTypes.STRING,
+            programming_language: Sequelize.DataTypes.STRING,
+            notes: Sequelize.DataTypes.STRING
         }
     },
     FLATTEN_FILE: {
         name: "flattened_file",
         columns: {
             path: {
-                type: Sequelize.STRING,
+                type: Sequelize.DataTypes.STRING,
                 unique: true,
                 allowNull: false
             },
-            parent: {type: Sequelize.STRING, defaultValue: ""},
+            parent: {type: Sequelize.DataTypes.STRING, defaultValue: ""},
             copyright_statements: jsonDataType("copyright_statements"),
             copyright_holders: jsonDataType("copyright_holders"),
             copyright_authors: jsonDataType("copyright_authors"),
@@ -601,23 +604,23 @@ const TABLE = {
             url: jsonDataType("url"),
             url_start_line: jsonDataType("url_start_line"),
             url_end_line: jsonDataType("url_end_line"),
-            type: {type: Sequelize.STRING, defaultValue: ""},
-            name: {type: Sequelize.STRING, defaultValue: ""},
-            extension: {type: Sequelize.STRING, defaultValue: ""},
-            date: {type: Sequelize.STRING, defaultValue: ""},
-            size: {type: Sequelize.INTEGER, defaultValue: ""},
-            sha1: {type: Sequelize.STRING, defaultValue: ""},
-            md5: {type: Sequelize.STRING, defaultValue: ""},
-            file_count: {type: Sequelize.INTEGER, defaultValue: ""},
-            mime_type: {type: Sequelize.STRING, defaultValue: ""},
-            file_type: {type: Sequelize.STRING, defaultValue: ""},
-            programming_language: {type: Sequelize.STRING, defaultValue: ""},
-            is_binary: Sequelize.BOOLEAN,
-            is_text: Sequelize.BOOLEAN,
-            is_archive: Sequelize.BOOLEAN,
-            is_media: Sequelize.BOOLEAN,
-            is_source: Sequelize.BOOLEAN,
-            is_script: Sequelize.BOOLEAN,
+            type: {type: Sequelize.DataTypes.STRING, defaultValue: ""},
+            name: {type: Sequelize.DataTypes.STRING, defaultValue: ""},
+            extension: {type: Sequelize.DataTypes.STRING, defaultValue: ""},
+            date: {type: Sequelize.DataTypes.STRING, defaultValue: ""},
+            size: {type: Sequelize.DataTypes.INTEGER, defaultValue: ""},
+            sha1: {type: Sequelize.DataTypes.STRING, defaultValue: ""},
+            md5: {type: Sequelize.DataTypes.STRING, defaultValue: ""},
+            file_count: {type: Sequelize.DataTypes.INTEGER, defaultValue: ""},
+            mime_type: {type: Sequelize.DataTypes.STRING, defaultValue: ""},
+            file_type: {type: Sequelize.DataTypes.STRING, defaultValue: ""},
+            programming_language: {type: Sequelize.DataTypes.STRING, defaultValue: ""},
+            is_binary: Sequelize.DataTypes.BOOLEAN,
+            is_text: Sequelize.DataTypes.BOOLEAN,
+            is_archive: Sequelize.DataTypes.BOOLEAN,
+            is_media: Sequelize.DataTypes.BOOLEAN,
+            is_source: Sequelize.DataTypes.BOOLEAN,
+            is_script: Sequelize.DataTypes.BOOLEAN,
             packages_type: jsonDataType("packages_type"),
             packages_name: jsonDataType("packages_name"),
             packages_version: jsonDataType("packages_version"),
@@ -691,7 +694,34 @@ const TABLE = {
     }
 };
 
-// Flatten ScanCode results data to load into database
+/**
+ * Flatten ScanCode results data to load into database
+ *
+ * @param file
+ * @param file.path
+ * @param file.copyrights
+ * @param file.licenses
+ * @param file.emails
+ * @param file.urls
+ * @param file.packages
+ * @param file.type
+ * @param file.name
+ * @param file.extension
+ * @param file.date
+ * @param file.size
+ * @param file.sha1
+ * @param file.md5
+ * @param file.files_count
+ * @param file.mime_type
+ * @param file.file_type
+ * @param file.programming_language
+ * @param file.is_binary
+ * @param file.is_text
+ * @param file.is_archive
+ * @param file.is_media
+ * @param file.is_source
+ * @param file.is_script
+ */
 function flattenData(file) {
     return {
         path: file.path,
@@ -808,17 +838,19 @@ function flattenData(file) {
     };
 }
 
+AboutCodeDB.MissingFileInfoError = class MissingFileInfoError extends Error {};
+
 // Stores an object as a json string internally, but as an object externally
 function jsonDataType(attributeName) {
     return {
-        type: Sequelize.STRING,
+        type: Sequelize.DataTypes.STRING,
         get: function() {
             return JSON.parse(this.getDataValue(attributeName));
         },
         set: function(val) {
             return this.setDataValue(attributeName, JSON.stringify(val));
         }
-    }
+    };
 }
 
 function parent(path) {
@@ -835,18 +867,18 @@ function getValues(array, key) {
 
 // [{key: [{ nestedKey: val0}], {key: [ nestedKey: val1]}] => [val0, val1]
 function getNestedValues(array, key, nestedKey) {
-    return $.map(array ? array : [], (elem, i) => {
-        return $.map(elem[key] ? elem[key] : [], (nestedElem, i) => {
-            return [nestedElem[nestedKey] ? nestedElem[nestedKey] : []]
+    return $.map(array ? array : [], elem => {
+        return $.map(elem[key] ? elem[key] : [], nestedElem => {
+            return [nestedElem[nestedKey] ? nestedElem[nestedKey] : []];
         });
     });
 }
 
 function getDuplicatePathsErrorMessage(files) {
-    return "The files in the ScanCode output "
-        + "should have unique path values. The following path "
-        + "values were not unique:\n"
-        + getDuplicatePaths(files);
+    return "The files in the ScanCode output " +
+        "should have unique path values. The following path " +
+        "values were not unique:\n" +
+        getDuplicatePaths(files);
 }
 
 // Gets the duplicate paths in a set of files

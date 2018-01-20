@@ -14,6 +14,8 @@
  #
  */
 
+const NodeView = require('./nodeview');
+
 class AboutCodeNodeView {
     constructor(nodeViewId, aboutCodeDB) {
         this.nodeView = new NodeView(

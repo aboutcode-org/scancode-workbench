@@ -14,6 +14,9 @@
  #
  */
 
+const Sequelize = require('sequelize');
+const Utils = require('./utils');
+
 const HAS_A_VALUE =  "about_code_data_table_has_a_value";
 
 class AboutCodeDataTable {
@@ -197,7 +200,7 @@ class AboutCodeDataTable {
                         // wildcards at the end of the path.
                         query.where.$and[columnName] = {
                             $like: `${columnSearch}%`
-                        }
+                        };
                     } else if (columnSearch === HAS_A_VALUE) {
                         // Return all non empty values
                         query.where.$and[columnName] = {
@@ -206,11 +209,11 @@ class AboutCodeDataTable {
                                 { $ne: "" },
                                 { $ne: "{}" }
                             ]
-                        }
+                        };
                     } else {
                         query.where.$and[columnName] = {
                             $like: `%${columnSearch}%`
-                        }
+                        };
                     }
                 }
             }
@@ -267,7 +270,7 @@ class AboutCodeDataTable {
             const footer = $(column.footer());
             const columnName = columnInfo.name;
 
-            let select = $(`<select id="clue-${columnName}"><option value=""></option></select>`)
+            $(`<select id="clue-${columnName}"><option value=""></option></select>`)
                 .appendTo(footer)
                 .on("click", () => {
                     const currPath = pathCol.search()[0];

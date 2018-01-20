@@ -14,6 +14,8 @@
  #
  */
 
+const Utils = require('./utils');
+
 class ComponentDataTable {
     constructor(tableID, aboutCodeDB) {
         this.handlers = {}
