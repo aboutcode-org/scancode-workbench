@@ -38,21 +38,21 @@ describe("checkAboutCodeDB", function() {
         it("should add rows to database", function () {
             let aboutCodeDB = new AboutCodeDB();
 
-            return aboutCodeDB.db
-                .then(() => aboutCodeDB.File.count())
+            return aboutCodeDB.sync
+                .then(() => aboutCodeDB.db.File.count())
                 .then((rowCount) => assert.strictEqual(rowCount, 0))
                 .then(() => aboutCodeDB.addFromJson(SCANCODE_FILE))
-                .then(() => aboutCodeDB.File.count())
+                .then(() => aboutCodeDB.db.File.count())
                 .then((rowCount) => assert.strictEqual(rowCount, 3))
-                .then(() => aboutCodeDB.License.count())
+                .then(() => aboutCodeDB.db.License.count())
                 .then((licenseCount) => assert.strictEqual(licenseCount,1))
-                .then(() => aboutCodeDB.Copyright.count())
+                .then(() => aboutCodeDB.db.Copyright.count())
                 .then((copyrightCount) => assert.strictEqual(copyrightCount, 2))
-                .then(() => aboutCodeDB.Package.count())
+                .then(() => aboutCodeDB.db.Package.count())
                 .then((packageCount) => assert.strictEqual(packageCount, 1))
-                .then(() => aboutCodeDB.Email.count())
+                .then(() => aboutCodeDB.db.Email.count())
                 .then((emailCount) => assert.strictEqual(emailCount, 1))
-                .then(() => aboutCodeDB.Url.count())
+                .then(() => aboutCodeDB.db.Url.count())
                 .then((urlCount) => assert.strictEqual(urlCount, 2));
         });
     });
@@ -61,7 +61,7 @@ describe("checkAboutCodeDB", function() {
         it("should throw SequelizeUniqueConstraintError error for duplicate path", function() {
             let aboutCodeDB = new AboutCodeDB();
 
-            return aboutCodeDB.db
+            return aboutCodeDB.sync
                 .then(() => aboutCodeDB.addFromJson(DUPLICATE_PATH_FILE))
                 .then(() => assert.fail(true, true, "This code should not be called!"))
                 .catch((e) => assert.equal(e.name, "SequelizeUniqueConstraintError"));
@@ -73,7 +73,7 @@ describe("checkAboutCodeDB", function() {
         it("should return all rows", function() {
             let aboutCodeDB = new AboutCodeDB();
 
-            return aboutCodeDB.db
+            return aboutCodeDB.sync
                 .then(() => aboutCodeDB.addFromJson(SCANCODE_FILE))
                 .then(() => aboutCodeDB.findAll({}))
                 .then((rows) => {
@@ -88,7 +88,7 @@ describe("checkAboutCodeDB", function() {
         it("should return one", function() {
             let aboutCodeDB = new AboutCodeDB();
 
-            return aboutCodeDB.db
+            return aboutCodeDB.sync
                 .then(() => aboutCodeDB.addFromJson(SCANCODE_FILE))
                 .then(() => aboutCodeDB.findOne({
                     where: { path: "samples/JGroups/src"}
@@ -127,7 +127,7 @@ describe("checkAboutCodeDB", function() {
                 }
             ];
 
-            return aboutCodeDB.db
+            return aboutCodeDB.sync
                 .then(() => aboutCodeDB.addFromJson(SCANCODE_FILE))
                 .then(() => aboutCodeDB.findAllJSTree())
                 .then(results => assert.deepEqual(expectedJSTreeFormat, results));
@@ -187,16 +187,16 @@ describe("checkAboutCodeDB", function() {
                 "notes": ""
                 };
 
-            return aboutCodeDB.db
+            return aboutCodeDB.sync
                 .then(() => aboutCodeDB.setComponent(component))
-                .then(() => aboutCodeDB.Component.count())
+                .then(() => aboutCodeDB.db.Component.count())
                 .then((rowCount) => assert.strictEqual(rowCount, 1))
                 .then(() => aboutCodeDB.findComponent({
                     where: { path: "samples"}
                 }))
                 .then(row => assert.containSubset(row.toJSON(), component))
                 .then(() => aboutCodeDB.setComponent(component2))
-                .then(() => aboutCodeDB.Component.count())
+                .then(() => aboutCodeDB.db.Component.count())
                 .then((rowCount) => assert.strictEqual(rowCount, 2));
         });
     });
@@ -206,13 +206,13 @@ describe("checkAboutCodeDB", function() {
         it("should add rows to the flattened files table", function() {
             let aboutCodeDB = new AboutCodeDB();
 
-            return aboutCodeDB.db
-                .then(() => aboutCodeDB.FlattenedFile.count())
+            return aboutCodeDB.sync
+                .then(() => aboutCodeDB.db.FlatFile.count())
                 .then((rowCount) => assert.strictEqual(rowCount, 0))
                 .then(() => aboutCodeDB.addFromJson(SCANCODE_FILE))
-                .then(() => aboutCodeDB.FlattenedFile.count())
+                .then(() => aboutCodeDB.db.FlatFile.count())
                 .then((rowCount) => assert.strictEqual(rowCount, 3))
-                .then(() => aboutCodeDB.FlattenedFile.findAll())
+                .then(() => aboutCodeDB.db.FlatFile.findAll())
                 .then((rows) => {
                     rows = rows.map((row) => row.toJSON());
                     assert.containSubset(rows, results);
@@ -224,7 +224,7 @@ describe("checkAboutCodeDB", function() {
         it("should return the ScanCode files_count", function() {
             let aboutCodeDB = new AboutCodeDB();
 
-            return aboutCodeDB.db
+            return aboutCodeDB.sync
                 .then(() => aboutCodeDB.addFromJson(SCANCODE_FILE))
                 .then(() => aboutCodeDB.getFileCount())
                 .then((value) => {

@@ -14,7 +14,7 @@
  #
  */
 
-const Progress = require('./progress');
+const Progress = require('../helpers/progress');
 
 class DejaCodeExportDialog {
     constructor(dialogId, aboutCodeDB) {

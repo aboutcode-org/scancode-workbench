@@ -84,7 +84,7 @@ class ComponentDialog {
         let path = this.title.text();
         this._component(path)
             .then(component => {
-                return this.aboutCodeDB.File
+                return this.aboutCodeDB.db.File
                     .findOne({
                         attributes: ["id"],
                         where: { path: { $eq: path } }
@@ -180,7 +180,8 @@ class ComponentDialog {
                 this.initialSerialization = this.dialog.find("form").serialize();
 
                 this.dialog.modal('show');
-            });
+            })
+            .catch(err => { throw err; });
     }
 
     _component(path) {
@@ -387,19 +388,19 @@ class ComponentDialog {
     }
 
     _copyrightQuery(path, field) {
-        return this.aboutCodeDB.findAllUnique(path, field, this.aboutCodeDB.Copyright);
+        return this.aboutCodeDB.findAllUnique(path, field, this.aboutCodeDB.db.Copyright);
     }
 
     _urlQuery(path, field) {
-        return this.aboutCodeDB.findAllUnique(path, field, this.aboutCodeDB.Url);
+        return this.aboutCodeDB.findAllUnique(path, field, this.aboutCodeDB.db.Url);
     }
 
     _packageQuery(path, field) {
-        return this.aboutCodeDB.findAllUnique(path, field, this.aboutCodeDB.Package);
+        return this.aboutCodeDB.findAllUnique(path, field, this.aboutCodeDB.db.Package);
     }
 
     _licenseQuery(path, field) {
-        return this.aboutCodeDB.findAllUnique(path, field, this.aboutCodeDB.License);
+        return this.aboutCodeDB.findAllUnique(path, field, this.aboutCodeDB.db.License);
     }
 }
 

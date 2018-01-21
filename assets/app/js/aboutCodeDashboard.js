@@ -15,7 +15,8 @@
  */
 
 const Sequelize = require('sequelize');
-const Progress = require('./progress');
+const Progress = require('./helpers/progress');
+const Utils = require('./helpers/utils');
 
 const LEGEND_COLORS = [
     "#A0D468",
@@ -112,29 +113,29 @@ class AboutCodeDashboard {
 
         // Get total files scanned
         this.totalFilesProgressbar.showIndeterminate();
-        this.aboutCodeDB.db
-            .then(() => this.aboutCodeDB.ScanCode.findOne({ attributes: ["files_count"] }))
+        this.aboutCodeDB.sync
+            .then(db => db.Header.findOne({ attributes: ["files_count"] }))
             .then(row => this.totalFilesScanned.text(row ? row.files_count : "0"))
             .then(() => this.totalFilesProgressbar.hide());
 
         // Get total unique licenses detected
         this.uniqueLicensesProgressbar.showIndeterminate();
-        this.aboutCodeDB.db
-            .then(() => this.aboutCodeDB.License.aggregate("key", "DISTINCT", {plain: false}))
+        this.aboutCodeDB.sync
+            .then(db => db.License.aggregate("key", "DISTINCT", {plain: false}))
             .then(row => this.uniqueLicenses.text(row ? row.length : "0"))
             .then(() => this.uniqueLicensesProgressbar.hide());
 
         // Get total unique copyright statements detected
         this.uniqueCopyrightsProgressbar.showIndeterminate();
-        this.aboutCodeDB.db
-            .then(() => this.aboutCodeDB.Copyright.aggregate("holders", "DISTINCT", { plain: false }))
+        this.aboutCodeDB.sync
+            .then(db => db.Copyright.aggregate("holders", "DISTINCT", { plain: false }))
             .then(row => this.uniqueCopyrights.text(row ? row.length : "0"))
             .then(() => this.uniqueCopyrightsProgressbar.hide());
 
         // Get total number of packages detected
         this.totalPackagesProgressbar.showIndeterminate();
-        this.aboutCodeDB.db
-            .then(() => this.aboutCodeDB.Package.count("type"))
+        this.aboutCodeDB.sync
+            .then(db => db.Package.count("type"))
             .then(count => this.totalPackages.text(count ? count : "0"))
             .then(() => this.totalPackagesProgressbar.hide());
 
@@ -220,8 +221,8 @@ class AboutCodeDashboard {
             where.path.$and.append({$like: `${parentPath}%`});
         }
 
-        return this.aboutCodeDB.db.then(() => {
-            return this.aboutCodeDB.FlattenedFile
+        return this.aboutCodeDB.sync.then(db => {
+            return db.FlatFile
                 .findAll({
                     attributes: [
                         Sequelize.fn("TRIM", Sequelize.col(attribute)),
@@ -229,7 +230,7 @@ class AboutCodeDashboard {
                     ],
                     where: where
                 })
-                .then(data => AboutCodeDashboard.getAttributeValues(data, attribute))
+                .then(data => Utils.getAttributeValues(data, attribute))
                 .then(data => AboutCodeDashboard.formatData(data))
                 .then(data => AboutCodeDashboard.limitData(data, LEGEND_LIMIT));
         });
@@ -261,36 +262,6 @@ class AboutCodeDashboard {
         return $.map(count, function(val, key) {
             return [[key, val]];
         });
-    }
-
-    // Map each row to the given attribute value, and sanitize invalid values.
-    static getAttributeValues(values, attribute) {
-        const validatedValues = [];
-        let attributeValue = null;
-
-        for (let i = 0; i < values.length; i++) {
-            attributeValue = values[i][attribute];
-
-            if (!Array.isArray(attributeValue) || attributeValue.length === 0){
-                attributeValue = [attributeValue];
-            }
-
-            for (let j = 0; j < attributeValue.length; j++) {
-                validatedValues.push(
-                    AboutCodeDashboard.isValid(attributeValue[j]) ?
-                        attributeValue[j] : "No Value Detected");
-            }
-        }
-        return validatedValues;
-    }
-
-    static isValid(value) {
-        if (Array.isArray(value)) {
-            return value.length > 0 &&
-                value.every((element) => AboutCodeDashboard.isValid(element));
-        } else {
-            return value !== null;
-        }
     }
 }
 

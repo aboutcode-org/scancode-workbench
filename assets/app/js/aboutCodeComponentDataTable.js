@@ -14,9 +14,9 @@
  #
  */
 
-const Utils = require('./utils');
+const Utils = require('./helpers/utils');
 
-class ComponentDataTable {
+class AboutCodeComponentDataTable {
     constructor(tableID, aboutCodeDB) {
         this.handlers = {}
         this.aboutCodeDB = aboutCodeDB;
@@ -46,7 +46,7 @@ class ComponentDataTable {
         return $(tableID).DataTable({
             scrollX: true,
             scrollResize: true,
-            columns: ComponentDataTable.COLUMNS,
+            columns: AboutCodeComponentDataTable.COLUMNS,
             buttons: [
                 {
                     name: "uploadDeja",
@@ -189,4 +189,4 @@ class ComponentDataTable {
     }
 }
 
-module.exports = ComponentDataTable;
+module.exports = AboutCodeComponentDataTable;

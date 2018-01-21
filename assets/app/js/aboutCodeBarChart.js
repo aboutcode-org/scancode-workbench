@@ -14,10 +14,11 @@
  #
  */
 
-const Progress = require('./progress');
 const Sequelize = require('sequelize');
-const BarChart = require('./barChart');
-const AboutCodeDataTable = require('./aboutCodeDataTables');
+const Progress = require('./helpers/progress');
+const BarChart = require('./helpers/barChart');
+const Utils = require('./helpers/utils');
+const AboutCodeClueDataTable = require('./aboutCodeClueDataTable');
 
 // Bar chart summary for AboutCode scan data
 class AboutCodeBarChart {
@@ -42,7 +43,7 @@ class AboutCodeBarChart {
         this.chartAttributesSelect.select2({ placeholder: "Select an attribute" });
 
         // Populate bar chart summary select box values
-        $.each(AboutCodeDataTable.TABLE_COLUMNS, (i, column) => {
+        $.each(AboutCodeClueDataTable.TABLE_COLUMNS, (i, column) => {
             if (column.bar_chart_class) {
                 this.chartAttributesSelect.append(
                     `<option class="${column.bar_chart_class}" value="${column.name}">${column.title}</option>`);
@@ -96,9 +97,9 @@ class AboutCodeBarChart {
         this.handlers['query-interceptor'](query);
 
         this.progressBar.showIndeterminate();
-        return this.aboutCodeDB.db
-            .then(() => this.aboutCodeDB.FlattenedFile.findAll(query))
-            .then(values => AboutCodeBarChart.mapToAttributeValues(values, attribute))
+        return this.aboutCodeDB.sync
+            .then(db => db.FlatFile.findAll(query))
+            .then(values => Utils.getAttributeValues(values, attribute))
             .then(values => {
                 this.progressBar.hide();
                 return values;
@@ -124,36 +125,6 @@ class AboutCodeBarChart {
                     });
                 }
             });
-    }
-
-    // Map each row to the given attribute value, and sanitize invalid values.
-    static mapToAttributeValues(values, attribute) {
-        const validatedValues = [];
-        let attributeValue = null;
-
-        for (let i = 0; i < values.length; i++) {
-            attributeValue = values[i][attribute];
-
-            if (!Array.isArray(attributeValue) || attributeValue.length === 0){
-                attributeValue = [attributeValue];
-            }
-
-            for (let j = 0; j < attributeValue.length; j++) {
-                validatedValues.push(
-                    AboutCodeBarChart.isValid(attributeValue[j]) ?
-                        attributeValue[j] : "No Value Detected");
-            }
-        }
-        return validatedValues;
-    }
-
-    static isValid(value) {
-        if (Array.isArray(value)) {
-            return value.length > 0 &&
-                value.every((element) => AboutCodeBarChart.isValid(element));
-        } else {
-            return value !== null;
-        }
     }
 }
 

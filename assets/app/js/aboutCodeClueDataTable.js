@@ -15,11 +15,11 @@
  */
 
 const Sequelize = require('sequelize');
-const Utils = require('./utils');
+const Utils = require('./helpers/utils');
 
 const HAS_A_VALUE =  "about_code_data_table_has_a_value";
 
-class AboutCodeDataTable {
+class AboutCodeClueDataTable {
     constructor(tableId, aboutCodeDB) {
         this.tableId = tableId;
         this.aboutCodeDB = aboutCodeDB;
@@ -47,7 +47,7 @@ class AboutCodeDataTable {
     }
 
     clearColumnFilters() {
-        $.each(AboutCodeDataTable.TABLE_COLUMNS, (i, column) => {
+        $.each(AboutCodeClueDataTable.TABLE_COLUMNS, (i, column) => {
             const columnSelect = $(`select#clue-${column.name}`);
             columnSelect.val("");
             this.dataTable
@@ -73,7 +73,7 @@ class AboutCodeDataTable {
     _createDataTable(tableId) {
         // Adds a footer for each column. This needs to be done before creating
         // the DataTable
-        let cells = $.map(AboutCodeDataTable.TABLE_COLUMNS, () => "<td></td>").join("");
+        let cells = $.map(AboutCodeClueDataTable.TABLE_COLUMNS, () => "<td></td>").join("");
         $(tableId).append("<tfoot><tr>" + cells + "</tr></tfoot>");
 
         return $(tableId).DataTable({
@@ -81,7 +81,7 @@ class AboutCodeDataTable {
             processing: true,
             ajax: (dataTablesInput, dataTablesCallback) =>
                 this._query(dataTablesInput, dataTablesCallback),
-            columns: AboutCodeDataTable.TABLE_COLUMNS,
+            columns: AboutCodeClueDataTable.TABLE_COLUMNS,
             fixedColumns: { leftColumns: 1 },
             colResize: true,
             scrollX: true,
@@ -103,50 +103,50 @@ class AboutCodeDataTable {
                     // Hide all columns except Path
                     extend: "colvisGroup",
                     text: "Hide all",
-                    show: AboutCodeDataTable.LOCATION_COLUMN
+                    show: AboutCodeClueDataTable.LOCATION_COLUMN
                         .map((column) => `${column.name}:name`),
-                    hide: AboutCodeDataTable.TABLE_COLUMNS
-                        .filter((column) => AboutCodeDataTable.LOCATION_COLUMN.indexOf(column) < 0)
+                    hide: AboutCodeClueDataTable.TABLE_COLUMNS
+                        .filter((column) => AboutCodeClueDataTable.LOCATION_COLUMN.indexOf(column) < 0)
                         .map((column) => `${column.name}:name`)
                 },
                 {
                     // Show only origin columns
                     extend: "colvisGroup",
                     text: "Origin info",
-                    show: AboutCodeDataTable.ORIGIN_GROUP
+                    show: AboutCodeClueDataTable.ORIGIN_GROUP
                         .map((column) => `${column.name}:name`),
-                    hide: AboutCodeDataTable.TABLE_COLUMNS
-                        .filter((column) => AboutCodeDataTable.ORIGIN_GROUP.indexOf(column) < 0)
+                    hide: AboutCodeClueDataTable.TABLE_COLUMNS
+                        .filter((column) => AboutCodeClueDataTable.ORIGIN_GROUP.indexOf(column) < 0)
                         .map((column) => `${column.name}:name`)
                 },
                 {
                     // Show only copyright columns
                     extend: "colvisGroup",
                     text: "Copyright info",
-                    show: AboutCodeDataTable.COPYRIGHT_GROUP
+                    show: AboutCodeClueDataTable.COPYRIGHT_GROUP
                         .map((column) => `${column.name}:name`),
-                    hide: AboutCodeDataTable.TABLE_COLUMNS
-                        .filter((column) => AboutCodeDataTable.COPYRIGHT_GROUP.indexOf(column) < 0)
+                    hide: AboutCodeClueDataTable.TABLE_COLUMNS
+                        .filter((column) => AboutCodeClueDataTable.COPYRIGHT_GROUP.indexOf(column) < 0)
                         .map((column) => `${column.name}:name`)
                 },
                 {
                     // Show only license columns
                     extend: "colvisGroup",
                     text: "License info",
-                    show: AboutCodeDataTable.LICENSE_GROUP
+                    show: AboutCodeClueDataTable.LICENSE_GROUP
                         .map((column) => `${column.name}:name`),
-                    hide: AboutCodeDataTable.TABLE_COLUMNS
-                        .filter((column) => AboutCodeDataTable.LICENSE_GROUP.indexOf(column) < 0)
+                    hide: AboutCodeClueDataTable.TABLE_COLUMNS
+                        .filter((column) => AboutCodeClueDataTable.LICENSE_GROUP.indexOf(column) < 0)
                         .map((column) => `${column.name}:name`)
                 },
                 {
                     // Show only package columns
                     extend: "colvisGroup",
                     text: "Package info",
-                    show: AboutCodeDataTable.PACKAGE_GROUP
+                    show: AboutCodeClueDataTable.PACKAGE_GROUP
                         .map((column) => `${column.name}:name`),
-                    hide: AboutCodeDataTable.TABLE_COLUMNS
-                        .filter((column) => AboutCodeDataTable.PACKAGE_GROUP.indexOf(column) < 0)
+                    hide: AboutCodeClueDataTable.TABLE_COLUMNS
+                        .filter((column) => AboutCodeClueDataTable.PACKAGE_GROUP.indexOf(column) < 0)
                         .map((column) => `${column.name}:name`)
                 }
             ],
@@ -161,7 +161,7 @@ class AboutCodeDataTable {
     // For details on the parameters https://datatables.net/manual/server-side
     _query(dataTablesInput, dataTablesCallback) {
         // Sorting and Querying of data for DataTables
-        this.aboutCodeDB.db.then(() => {
+        this.aboutCodeDB.sync.then(db => {
             let columnIndex = dataTablesInput.order[0].column;
             let columnName = dataTablesInput.columns[columnIndex].name;
             let direction = dataTablesInput.order[0].dir === "desc" ? "DESC" : "ASC";
@@ -232,13 +232,13 @@ class AboutCodeDataTable {
             }
 
             // Execute the database find to get the rows of data
-            let dFind = this.aboutCodeDB.FlattenedFile.findAll(query);
+            let dFind = db.FlatFile.findAll(query);
 
             // Execute the database count of all rows
-            let dCount = this.aboutCodeDB.FlattenedFile.count({});
+            let dCount = db.FlatFile.count({});
 
             // Execute the database count of filtered query rows
-            let dFilteredCount = this.aboutCodeDB.FlattenedFile.count(query);
+            let dFilteredCount = db.FlatFile.count(query);
 
             // Wait for all three of the Deferred objects to finish
             Promise.all([dFind, dCount, dFilteredCount])
@@ -260,7 +260,7 @@ class AboutCodeDataTable {
 
         // Add a select element to each column's footer
         this.dataTable.columns().every(function (columnIndex) {
-            const columnInfo = AboutCodeDataTable.TABLE_COLUMNS[columnIndex];
+            const columnInfo = AboutCodeClueDataTable.TABLE_COLUMNS[columnIndex];
 
             if ("skipFilter" in columnInfo && columnInfo.skipFilter) {
                 return;
@@ -278,14 +278,14 @@ class AboutCodeDataTable {
 
                     where[columnName] = {$ne: null};
 
-                    that.aboutCodeDB.FlattenedFile.findAll({
+                    that.aboutCodeDB.sync.then(db => db.FlatFile.findAll({
                         attributes: [
                             Sequelize.fn("TRIM",  Sequelize.col(columnName)),
                             columnName
                         ],
                         group: [columnName],
                         where: where,
-                    })
+                    }))
                     .then(rows => {
                         let filterValues =
                             // $.map is used to flatten array values.
@@ -328,43 +328,43 @@ class AboutCodeDataTable {
 
     // Define DataTable columns
     static get TABLE_COLUMNS() {
-        return AboutCodeDataTable.LOCATION_COLUMN.concat(
-            AboutCodeDataTable.COPYRIGHT_COLUMNS,
-            AboutCodeDataTable.LICENSE_COLUMNS,
-            AboutCodeDataTable.EMAIL_COLUMNS,
-            AboutCodeDataTable.URL_COLUMNS,
-            AboutCodeDataTable.FILE_COLUMNS,
-            AboutCodeDataTable.PACKAGE_COLUMNS);
+        return AboutCodeClueDataTable.LOCATION_COLUMN.concat(
+            AboutCodeClueDataTable.COPYRIGHT_COLUMNS,
+            AboutCodeClueDataTable.LICENSE_COLUMNS,
+            AboutCodeClueDataTable.EMAIL_COLUMNS,
+            AboutCodeClueDataTable.URL_COLUMNS,
+            AboutCodeClueDataTable.FILE_COLUMNS,
+            AboutCodeClueDataTable.PACKAGE_COLUMNS);
     }
 
     static get ORIGIN_COLUMNS() {
-        return $.grep(AboutCodeDataTable.TABLE_COLUMNS, function (column) {
-            return $.inArray(column.name, AboutCodeDataTable.ORIGIN_COLUMN_NAMES) >= 0;
+        return $.grep(AboutCodeClueDataTable.TABLE_COLUMNS, function (column) {
+            return $.inArray(column.name, AboutCodeClueDataTable.ORIGIN_COLUMN_NAMES) >= 0;
         });
     }
 
     static get LICENSE_GROUP() {
-        return AboutCodeDataTable.LOCATION_COLUMN
-            .concat(AboutCodeDataTable.LICENSE_COLUMNS);
+        return AboutCodeClueDataTable.LOCATION_COLUMN
+            .concat(AboutCodeClueDataTable.LICENSE_COLUMNS);
     }
 
     static get COPYRIGHT_GROUP() {
-        return AboutCodeDataTable.LOCATION_COLUMN
-            .concat(AboutCodeDataTable.COPYRIGHT_COLUMNS);
+        return AboutCodeClueDataTable.LOCATION_COLUMN
+            .concat(AboutCodeClueDataTable.COPYRIGHT_COLUMNS);
     }
 
     static get ORIGIN_GROUP() {
-        return AboutCodeDataTable.LOCATION_COLUMN
-            .concat(AboutCodeDataTable.ORIGIN_COLUMNS);
+        return AboutCodeClueDataTable.LOCATION_COLUMN
+            .concat(AboutCodeClueDataTable.ORIGIN_COLUMNS);
     }
 
     static get PACKAGE_GROUP() {
-        return AboutCodeDataTable.LOCATION_COLUMN
-            .concat(AboutCodeDataTable.PACKAGE_COLUMNS);
+        return AboutCodeClueDataTable.LOCATION_COLUMN
+            .concat(AboutCodeClueDataTable.PACKAGE_COLUMNS);
     }
 }
 
-AboutCodeDataTable.LOCATION_COLUMN =
+AboutCodeClueDataTable.LOCATION_COLUMN =
     [
         {
         "data": "path",
@@ -375,7 +375,7 @@ AboutCodeDataTable.LOCATION_COLUMN =
         }
     ];
 
-AboutCodeDataTable.COPYRIGHT_COLUMNS =
+AboutCodeClueDataTable.COPYRIGHT_COLUMNS =
     [
         {
             "data": function (row) {
@@ -424,7 +424,7 @@ AboutCodeDataTable.COPYRIGHT_COLUMNS =
         }
     ];
 
-AboutCodeDataTable.LICENSE_COLUMNS =
+AboutCodeClueDataTable.LICENSE_COLUMNS =
     [
         {
             "data": "license_key[<hr/>]",
@@ -503,7 +503,7 @@ AboutCodeDataTable.LICENSE_COLUMNS =
         }
     ];
 
-AboutCodeDataTable.EMAIL_COLUMNS =
+AboutCodeClueDataTable.EMAIL_COLUMNS =
     [
         {
             "data": "email[<hr/>]",
@@ -526,7 +526,7 @@ AboutCodeDataTable.EMAIL_COLUMNS =
         }
     ];
 
-AboutCodeDataTable.URL_COLUMNS =
+AboutCodeClueDataTable.URL_COLUMNS =
     [
         {
             "data": "url",
@@ -551,7 +551,7 @@ AboutCodeDataTable.URL_COLUMNS =
         }
     ];
 
-AboutCodeDataTable.FILE_COLUMNS =
+AboutCodeClueDataTable.FILE_COLUMNS =
     [
         {
             "data": "type",
@@ -667,7 +667,7 @@ AboutCodeDataTable.FILE_COLUMNS =
         }
     ];
 
-AboutCodeDataTable.PACKAGE_COLUMNS =
+AboutCodeClueDataTable.PACKAGE_COLUMNS =
     [
         {
             "data": "packages_type",
@@ -728,7 +728,7 @@ AboutCodeDataTable.PACKAGE_COLUMNS =
         },
     ];
 
-AboutCodeDataTable.ORIGIN_COLUMN_NAMES =
+AboutCodeClueDataTable.ORIGIN_COLUMN_NAMES =
     [
         "copyright_statements",
         "license_short_name",
@@ -737,4 +737,4 @@ AboutCodeDataTable.ORIGIN_COLUMN_NAMES =
         "url"
     ];
 
-module.exports = AboutCodeDataTable;
+module.exports = AboutCodeClueDataTable;

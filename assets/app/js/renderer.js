@@ -14,22 +14,23 @@
  #
  */
 
+const AboutCodeDB = require('./aboutCodeDB');
+const Splitter = require("./helpers/splitter");
+const Progress = require("./helpers/progress");
+const DejaCodeExportDialog = require('./dialogs/dejacodeExportDialog');
+const ComponentDialog = require('./dialogs/componentDialog');
+
+const AboutCodeDashboard = require('./aboutCodeDashboard');
+const AboutCodeBarChart = require('./aboutCodeBarChart');
+const AboutCodeJsTree = require('./aboutCodeJsTree');
+const AboutCodeNodeView = require('./aboutCodeNodeView');
+const AboutCodeClueDataTable = require('./aboutCodeClueDataTable');
+const AboutCodeComponentDataTable = require('./aboutCodeComponentDataTable');
+
 const fs = require('fs');
 const shell = require("electron").shell;
 const dialog = require('electron').remote.dialog;
 const path = require('path');
-
-const AboutCodeDB = require('./aboutCodeDB');
-const Splitter = require("./splitter");
-const Progress = require("./progress");
-const AboutCodeDashboard = require('./aboutCodeDashboard');
-const AboutCodeBarChart = require('./aboutCodeBarChart');
-const DejaCodeExportDialog = require('./dejacodeExportDialog');
-const ComponentDialog = require('./componentDialog');
-const AboutCodeJsTree = require('./aboutCodeJsTree');
-const AboutCodeNodeView = require('./aboutCodeNodeView');
-const AboutCodeDataTable = require('./aboutCodeDataTables');
-const ComponentDataTable = require('./componentDataTables');
 
 // The Electron module used to communicate asynchronously from a renderer process to the main process.
 const ipcRenderer = require('electron').ipcRenderer;
@@ -73,9 +74,8 @@ $(document).ready(function () {
     const nodeView = new AboutCodeNodeView("#nodeview", aboutCodeDB)
         .on('node-clicked', node => componentDialog.show(node.id));
 
-    const cluesTable = new AboutCodeDataTable("#clues-table", aboutCodeDB);
-    const componentsTable = new ComponentDataTable("#components-table", aboutCodeDB)
-    // TODO: Move this into componentDataTable.js
+    const cluesTable = new AboutCodeClueDataTable("#clues-table", aboutCodeDB);
+    const componentsTable = new AboutCodeComponentDataTable("#components-table", aboutCodeDB)
         .on('upload-clicked', components => {
             if (components.length > 0) {
                 dejaCodeExportDialog.show();
@@ -102,11 +102,10 @@ $(document).ready(function () {
 
     const splitter = new Splitter('#leftCol', '#rightCol')
         .on('drag-end', () => {
-            if ($('#tab-barchart').is(':visible')) {
-                barChart.draw();
-            }
             if ($('#tab-clues').is(':visible')) {
                 cluesTable.draw();
+            } else if ($('#tab-barchart').is(':visible')) {
+                barChart.draw();
             }
         });
 
@@ -156,6 +155,12 @@ $(document).ready(function () {
         dashboard.reload();
     });
 
+    // Open links in default browser
+    $(".open-in-default").click((evt) => {
+           evt.preventDefault();
+           shell.openExternal(evt.target.href);
+    });
+
     ipcRenderer.on('table-view', () => showClueButton.trigger("click"));
     ipcRenderer.on('node-view', () => showNodeViewButton.trigger("click"));
     ipcRenderer.on('component-summary-view', () => showComponentButton.trigger("click"));
@@ -166,14 +171,45 @@ $(document).ready(function () {
     ipcRenderer.on('export-JSON', exportJson);
     ipcRenderer.on('export-JSON-components-only', exportJsonComponents);
 
-    // Open links in default browser
-    $(".open-in-default").click((evt) => {
-           evt.preventDefault();
-           shell.openExternal(evt.target.href);
-    });
-
     // Opens the dashboard view when the app is first opened
     showDashboardButton.trigger("click");
+
+    /** Creates the database and all View objects from a SQLite file */
+    function loadDatabase(fileName) {
+        // Create a new database when importing a json file
+        aboutCodeDB = new AboutCodeDB({
+            dbName: "aboutcode_db",
+            dbStorage: fileName
+        });
+
+        return updateViews();
+    }
+
+    /** Loads data for all views based on the current data */
+    function updateViews() {
+        return aboutCodeDB.sync
+            .then(() => {
+                const currFile = aboutCodeDB.sequelize.options.storage;
+                document.title = 'AboutCode Manager - ' + path.basename(currFile);
+                cluesTable.clearColumnFilters();
+
+                // update all views with the new database.
+                componentDialog.database(aboutCodeDB);
+                dejaCodeExportDialog.database(aboutCodeDB);
+
+                jstree.database(aboutCodeDB);
+                cluesTable.database(aboutCodeDB);
+                componentsTable.database(aboutCodeDB);
+                dashboard.database(aboutCodeDB);
+                nodeView.database(aboutCodeDB);
+                barChart.database(aboutCodeDB);
+
+                // Reload the jstree, then trigger the current view to reload.
+                jstree.reload();
+                $(currentNavButtonId).trigger("click");
+            })
+            .catch(reason => { throw reason; });
+    }
 
     /** Open a SQLite Database File */
     function openSQLite() {
@@ -184,36 +220,29 @@ $(document).ready(function () {
                 name: 'SQLite File',
                 extensions: ['sqlite']
             }]
-        }, function(fileNames) {
-            if (fileNames === undefined) {
-                return;
+        }, fileNames => {
+            if (fileNames && fileNames[0]) {
+                loadDatabase(fileNames[0]);
             }
-            loadDatabase(fileNames[0]);
-            cluesTable.clearColumnFilters();
         });
     }
 
     /** Save a SQLite Database File */
     function saveSQLite() {
-        dialog.showSaveDialog(
-            {
-                title: 'Save as a Database File',
-                filters: [
-                  { name: 'SQLite File', extensions: ['sqlite'] }
-                ]
-            },
-            function (newFileName) {
-                if (newFileName === undefined) {
-                    return;
-                }
-
+        dialog.showSaveDialog({
+            title: 'Save as a Database File',
+            filters: [
+              { name: 'SQLite File', extensions: ['sqlite'] }
+            ]
+        }, newFileName => {
+            if (newFileName) {
                 const oldFileName = aboutCodeDB.sequelize.options.storage;
                 const reader = fs.createReadStream(oldFileName);
                 const writer = fs.createWriteStream(newFileName);
                 reader.pipe(writer);
                 reader.on("end", () => loadDatabase(newFileName));
             }
-        );
+        });
     }
 
     /** Import a ScanCode JSON file and create a SQLite database */
@@ -224,7 +253,7 @@ $(document).ready(function () {
                 name: 'JSON File',
                 extensions: ['json']
             }]
-        }, (fileNames) => {
+        }, fileNames => {
             if (fileNames === undefined) {
                 return;
             }
@@ -232,74 +261,72 @@ $(document).ready(function () {
             const jsonFileName = fileNames[0];
 
             // Immediately ask for a SQLite to save and create the database
-            dialog.showSaveDialog(
-                {
-                    title: 'Save a SQLite Database File',
-                    filters: [
-                        { name: 'SQLite File', extensions: ['sqlite'] }
-                    ]
-                },
-                function (fileName) {
-                    if (fileName === undefined) {
-                        return;
-                    }
+            dialog.showSaveDialog({
+                title: 'Save a SQLite Database File',
+                filters: [{
+                    name: 'SQLite File',
+                    extensions: ['sqlite']
+                }]
+            }, sqliteFileName => {
+                if (sqliteFileName === undefined) {
+                    return;
+                }
 
-                    // Overwrite existing sqlite file
-                    if (fs.existsSync(fileName)) {
-                        fs.unlink(fileName, (err) => {
-                          if (err) {
-                              throw err;
-                          }
-                          console.info(`Deleted ${fileName}`);
-                        });
-                    }
-
-                    // Create a new database when importing a json file
-                    aboutCodeDB = new AboutCodeDB({
-                        dbName: "demo_schema",
-                        dbStorage: fileName,
+                // Overwrite existing sqlite file
+                if (fs.existsSync(sqliteFileName)) {
+                    fs.unlink(sqliteFileName, (err) => {
+                      if (err) {
+                          throw err;
+                      }
+                      console.info(`Deleted ${sqliteFileName}`);
                     });
+                }
 
-                    const progressbar =
-                        new Progress("#content", {
-                            title: "Creating Database...",
-                            size: 100,
-                        });
-                    aboutCodeDB.db
-                        .then(() => progressbar.showDeterminate())
-                        .then(() => aboutCodeDB.addFromJson(
-                            jsonFileName,
-                            aboutCodeVersion,
-                            progress => progressbar.update(progress/100)))
-                        .then(() => progressbar.hide())
-                        .then(() => loadDataForViews(fileName))
-                        .catch((err) => {
-                            progressbar.hide();
-                            if (err instanceof AboutCodeDB.MissingFileInfoError) {
-                                dialog.showErrorBox(
-                                    "Missing File Type Information",
-                                    "Missing file 'type' information in the " +
-                                    "scanned data. \n\nThis probably means you ran " +
-                                    "the scan without the -i option in ScanCode. " +
-                                    "The app requires file information from a " +
-                                    "ScanCode scan. Rerun the scan using \n./scancode " +
-                                    "-clipeu options."
-                                );
-                            } else {
-                                // Show error for problem with the JSON file
-                                dialog.showErrorBox(
-                                    "JSON Error",
-                                    "There is a problem with your JSON file. It may be malformed " +
-                                    "(e.g., the addition of a trailing comma), " +
-                                    "or there could be some other problem with the file. " +
-                                    "\n\nPlease check your file and try again. " +
-                                    "\n\nThe error thrown by the system is: \n\n" + err
-                                );
-                            }
-                            console.error(err);
-                        });
+                // Create a new database when importing a json file
+                aboutCodeDB = new AboutCodeDB({
+                    dbName: "demo_schema",
+                    dbStorage: sqliteFileName,
                 });
-            cluesTable.clearColumnFilters();
+
+                const progressbar = new Progress("#content", {
+                    title: "Creating Database...",
+                    size: 100,
+                });
+
+                aboutCodeDB.sync
+                    .then(() => progressbar.showDeterminate())
+                    .then(() => aboutCodeDB.addFromJson(
+                        jsonFileName,
+                        aboutCodeVersion,
+                        progress => progressbar.update(progress/100)))
+                    .then(() => progressbar.hide())
+                    .then(updateViews)
+                    .catch((err) => {
+                        progressbar.hide();
+                        if (err instanceof AboutCodeDB.MissingFileInfoError) {
+                            dialog.showErrorBox(
+                                "Missing File Type Information",
+                                "Missing file 'type' information in the " +
+                                "scanned data. \n\nThis probably means you ran " +
+                                "the scan without the -i option in ScanCode. " +
+                                "The app requires file information from a " +
+                                "ScanCode scan. Rerun the scan using \n./scancode " +
+                                "-clipeu options."
+                            );
+                        } else {
+                            // Show error for problem with the JSON file
+                            dialog.showErrorBox(
+                                "JSON Error",
+                                "There is a problem with your JSON file. It may be malformed " +
+                                "(e.g., the addition of a trailing comma), " +
+                                "or there could be some other problem with the file. " +
+                                "\n\nPlease check your file and try again. " +
+                                "\n\nThe error thrown by the system is: \n\n" + err
+                            );
+                        }
+                        console.error(err);
+                    });
+                });
         });
     }
 
@@ -312,7 +339,7 @@ $(document).ready(function () {
                 name: 'JSON File Type',
                 extensions: ['json']
             }]
-        }, (fileName) => {
+        }, fileName => {
             if (fileName === undefined) {
                 return;
             }
@@ -369,7 +396,7 @@ $(document).ready(function () {
                 name: 'JSON File Type',
                 extensions: ['json']
             }]
-        }, (fileName) => {
+        }, fileName => {
             if (fileName === undefined) {
                 return;
             }
@@ -389,8 +416,8 @@ $(document).ready(function () {
             Promise.all([aboutCodeInfoPromise, componentsPromise])
                 .then(([aboutCodeInfo, components]) => {
                     let json = {
-                        aboutcode_manager_notice: aboutCodeInfo.notice,
-                        aboutcode_manager_version: aboutCodeInfo.version,
+                        aboutcode_manager_notice: aboutCodeInfo.aboutcode_manager_notice,
+                        aboutcode_manager_version: aboutCodeInfo.aboutcode_manager_notice,
                         components: components
                     };
 
@@ -401,43 +428,6 @@ $(document).ready(function () {
                     });
                 });
         });
-    }
-
-    /** Creates the database and all View objects from a SQLite file */
-    function loadDatabase(fileName) {
-        // Create a new database when importing a json file
-        aboutCodeDB = new AboutCodeDB({
-            dbName: "demo_schema",
-            dbStorage: fileName
-        });
-
-        loadDataForViews(fileName);
-    }
-
-    /** Loads data for all views based on the current data */
-    function loadDataForViews(fileName) {
-        document.title = 'AboutCode Manager - ' + path.basename(fileName);
-        return aboutCodeDB.db
-            .then(() => {
-                // update all views with the new database.
-                componentDialog.database(aboutCodeDB);
-                dejaCodeExportDialog.database(aboutCodeDB);
-
-                jstree.database(aboutCodeDB);
-                cluesTable.database(aboutCodeDB);
-                componentsTable.database(aboutCodeDB);
-                dashboard.database(aboutCodeDB);
-                nodeView.database(aboutCodeDB);
-                barChart.database(aboutCodeDB);
-
-                // Reload the jstree, then trigger the current view to reload.
-                jstree.reload();
-                $(currentNavButtonId).trigger("click");
-                return aboutCodeDB;
-            })
-            .catch(function(reason) {
-               throw reason;
-            });
     }
 });
 
