@@ -14,13 +14,18 @@
  #
  */
 
-class ComponentDialog {
+const View = require('./helpers/view');
+
+/**
+ * The view responsible for displaying the Component modal dialog
+ */
+class ComponentDialog extends View {
     constructor(dialogId, aboutCodeDB) {
-        this.aboutCodeDB = aboutCodeDB;
+        super(dialogId, aboutCodeDB);
 
         // Define DOM element constants for the modal dialog.
         // TODO: Use nested ids to avoid collisions, e.g. #nodeModal .nodeModalLabel
-        this.dialog = $("#componentDialog");
+        this.dialog = this.element();
         this.title = this.dialog.find(".modal-title");
         this.status = this.dialog.find("#component-status");
         this.name = this.dialog.find("#component-name");
@@ -60,15 +65,6 @@ class ComponentDialog {
         $('[data-toggle="tooltip"]').tooltip();
     }
 
-    database(aboutCodeDB) {
-        this.aboutCodeDB = aboutCodeDB;
-    }
-
-    on(event, handler) {
-        this.handlers[event] = handler;
-        return this;
-    }
-
     // Check whether the user has made any new edits.
     _closeComponent() {
         // Retrieve the current form values, i.e., including edits not yet saved.
@@ -84,7 +80,7 @@ class ComponentDialog {
         let path = this.title.text();
         this._component(path)
             .then(component => {
-                return this.aboutCodeDB.db.File
+                return this.db().db.File
                     .findOne({
                         attributes: ["id"],
                         where: { path: { $eq: path } }
@@ -125,7 +121,7 @@ class ComponentDialog {
                     notes: this.notes.val()
                 };
             })
-            .then(component => this.aboutCodeDB.setComponent(component))
+            .then(component => this.db().setComponent(component))
             .then(component => this.handlers.save(component));
         this.dialog.modal('hide');
     }
@@ -133,7 +129,7 @@ class ComponentDialog {
     // Delete a created Component inside the Component Modal
     _deleteComponent() {
         let id = this.title.text();
-        this.aboutCodeDB.findComponent({ where: { path: id }})
+        this.db().findComponent({ where: { path: id }})
             .then(component => {
                 if (component !== null) {
                     return component.destroy()
@@ -181,11 +177,14 @@ class ComponentDialog {
 
                 this.dialog.modal('show');
             })
-            .catch(err => { throw err; });
+            .catch(err => {
+                console.error(err);
+                throw err;
+            });
     }
 
     _component(path) {
-        return this.aboutCodeDB
+        return this.db()
             .findComponent({ where: { path: path } })
             // if the component doesn't exist return an object with only the path
             .then(component => component ? component : { path: path });
@@ -241,7 +240,7 @@ class ComponentDialog {
 
     _setupLanguage(component) {
         const saved = component.programming_language || [];
-        return this.aboutCodeDB
+        return this.db()
             .findAllUnique(component.path, 'programming_language')
             .then(languages => languages.concat(saved))
             .then(languages => {
@@ -388,19 +387,19 @@ class ComponentDialog {
     }
 
     _copyrightQuery(path, field) {
-        return this.aboutCodeDB.findAllUnique(path, field, this.aboutCodeDB.db.Copyright);
+        return this.db().findAllUnique(path, field, this.db().db.Copyright);
     }
 
     _urlQuery(path, field) {
-        return this.aboutCodeDB.findAllUnique(path, field, this.aboutCodeDB.db.Url);
+        return this.db().findAllUnique(path, field, this.db().db.Url);
     }
 
     _packageQuery(path, field) {
-        return this.aboutCodeDB.findAllUnique(path, field, this.aboutCodeDB.db.Package);
+        return this.db().findAllUnique(path, field, this.db().db.Package);
     }
 
     _licenseQuery(path, field) {
-        return this.aboutCodeDB.findAllUnique(path, field, this.aboutCodeDB.db.License);
+        return this.db().findAllUnique(path, field, this.db().db.License);
     }
 }
 

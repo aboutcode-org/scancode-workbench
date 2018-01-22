@@ -17,6 +17,7 @@
 const Sequelize = require('sequelize');
 const Progress = require('./helpers/progress');
 const Utils = require('./helpers/utils');
+const View = require('./helpers/view');
 
 const LEGEND_COLORS = [
     "#A0D468",
@@ -31,9 +32,14 @@ const LEGEND_COLORS = [
 
 const LEGEND_LIMIT = 8;
 
-// Dashboard with summary
-class AboutCodeDashboard {
+/**
+ * The view responsible for displaying the summary information from ScanCode
+ * clue data
+ */
+class AboutCodeDashboard extends View {
     constructor(dashboardId, aboutCodeDB) {
+        super(dashboardId, aboutCodeDB);
+
         this.totalFilesScanned = $("#total-files").find(".title");
         this.uniqueLicenses = $("#unique-licenses").find(".title");
         this.uniqueCopyrights = $("#unique-copyrights").find(".title");
@@ -69,72 +75,69 @@ class AboutCodeDashboard {
         });
 
         this.licenseCategoryChart = c3.generate({
-                bindto: "#license-category-chart .chart",
-                data: {
-                    columns: [],
-                    type: "pie",
-                    order: 'desc',
-                },
-                color: {
-                    pattern: LEGEND_COLORS
-                }
+            bindto: "#license-category-chart .chart",
+            data: {
+                columns: [],
+                type: "pie",
+                order: 'desc',
+            },
+            color: {
+                pattern: LEGEND_COLORS
+            }
         });
 
         this.licenseKeyChart = c3.generate({
-                bindto: "#license-key-chart .chart",
-                data: {
-                    columns: [],
-                    type: "pie",
-                    order: 'desc',
-                },
-                color: {
-                    pattern: LEGEND_COLORS
-                }
+            bindto: "#license-key-chart .chart",
+            data: {
+                columns: [],
+                type: "pie",
+                order: 'desc',
+            },
+            color: {
+                pattern: LEGEND_COLORS
+            }
         });
 
         this.packagesTypeChart = c3.generate({
-                bindto: "#packages-type-chart .chart",
-                data: {
-                    columns: [],
-                    type: "bar",
-                    order: 'desc',
-                },
-                color: {
-                    pattern: LEGEND_COLORS
-                }
+            bindto: "#packages-type-chart .chart",
+            data: {
+                columns: [],
+                type: "bar",
+                order: 'desc',
+            },
+            color: {
+                pattern: LEGEND_COLORS
+            }
         });
-
-        this.dashboardId = dashboardId;
-        this.database(aboutCodeDB);
     }
 
-    database(aboutCodeDB) {
-        this.aboutCodeDB = aboutCodeDB;
+    reload() {
+        this.needsReload(false);
 
         // Get total files scanned
         this.totalFilesProgressbar.showIndeterminate();
-        this.aboutCodeDB.sync
+        this.db().sync
             .then(db => db.Header.findOne({ attributes: ["files_count"] }))
             .then(row => this.totalFilesScanned.text(row ? row.files_count : "0"))
             .then(() => this.totalFilesProgressbar.hide());
 
         // Get total unique licenses detected
         this.uniqueLicensesProgressbar.showIndeterminate();
-        this.aboutCodeDB.sync
+        this.db().sync
             .then(db => db.License.aggregate("key", "DISTINCT", {plain: false}))
             .then(row => this.uniqueLicenses.text(row ? row.length : "0"))
             .then(() => this.uniqueLicensesProgressbar.hide());
 
         // Get total unique copyright statements detected
         this.uniqueCopyrightsProgressbar.showIndeterminate();
-        this.aboutCodeDB.sync
+        this.db().sync
             .then(db => db.Copyright.aggregate("holders", "DISTINCT", { plain: false }))
             .then(row => this.uniqueCopyrights.text(row ? row.length : "0"))
             .then(() => this.uniqueCopyrightsProgressbar.hide());
 
         // Get total number of packages detected
         this.totalPackagesProgressbar.showIndeterminate();
-        this.aboutCodeDB.sync
+        this.db().sync
             .then(db => db.Package.count("type"))
             .then(count => this.totalPackages.text(count ? count : "0"))
             .then(() => this.totalPackagesProgressbar.hide());
@@ -150,11 +153,13 @@ class AboutCodeDashboard {
 
         // Get package types detected
         this.packagesTypeChartData = this._loadData("packages_type");
-
-        this.reload();
     }
 
-    reload() {
+    redraw() {
+        if (this.needsReload()) {
+            this.reload();
+        }
+
         // Get unique programming languages detected
         this.sourceLanguageChartProgressbar.showIndeterminate();
         this.sourceLanguageChartData
@@ -163,8 +168,8 @@ class AboutCodeDashboard {
                 unload: true,
                 done: () => {
                     this.sourceLanguageChartProgressbar.hide();
-                    this.sourceLanguageChart.flush();
                     this.sourceLanguageChart.hide('No Value Detected');
+                    this.sourceLanguageChart.flush();
                 }
             }));
 
@@ -176,8 +181,8 @@ class AboutCodeDashboard {
                 unload: true,
                 done: () => {
                     this.licenseCategoryChartProgressbar.hide();
-                    this.licenseCategoryChart.flush();
                     this.licenseCategoryChart.hide('No Value Detected');
+                    this.licenseCategoryChart.flush();
                 }
             }));
 
@@ -189,8 +194,8 @@ class AboutCodeDashboard {
                 unload:true,
                 done: () => {
                     this.licenseKeyChartProgressbar.hide();
-                    this.licenseKeyChart.flush();
                     this.licenseKeyChart.hide('No Value Detected');
+                    this.licenseKeyChart.flush();
                 }
             }));
 
@@ -202,8 +207,8 @@ class AboutCodeDashboard {
                 unload: true,
                 done: () => {
                     this.packagesTypeChartProgressbar.hide();
-                    this.packagesTypeChart.flush();
                     this.packagesTypeChart.hide('No Value Detected');
+                    this.packagesTypeChart.flush();
                 }
             }));
     }
@@ -221,7 +226,7 @@ class AboutCodeDashboard {
             where.path.$and.append({$like: `${parentPath}%`});
         }
 
-        return this.aboutCodeDB.sync.then(db => {
+        return this.db().sync.then(db => {
             return db.FlatFile
                 .findAll({
                     attributes: [

@@ -14,38 +14,43 @@
  #
  */
 
-class AboutCodeJsTree {
+const View = require('./helpers/view');
+
+/**
+ * The view responsible for displaying the jsTree representing file paths in the
+ * ScanCode clue data
+ */
+class AboutCodeJsTree extends View {
     constructor(jsTreeId, aboutCodeDB) {
-        this.handlers = {};
-        this.jsTreeId = jsTreeId;
-        this.aboutCodeDB = aboutCodeDB;
-        this.jsTree = this._initJsTree(jsTreeId);
-    }
-
-    on(event, handler) {
-        this.handlers[event] = handler;
-        return this;
-    }
-
-    database(aboutCodeDB) {
-        this.aboutCodeDB = aboutCodeDB;
+        super(jsTreeId, aboutCodeDB);
     }
 
     reload() {
-        this.jsTree.jstree(true).refresh(true);
+        this.needsReload(false);
+        this.jsTree().jstree(true).refresh(true);
+    }
+
+    redraw() {
+        if (this.needsReload()) {
+            this.reload();
+        }
     }
 
     getSelected() {
-        return this.jsTree.jstree("get_selected")[0];
+        return this.jsTree().jstree("get_selected")[0];
     }
 
-    _initJsTree(jsTreeId) {
+    jsTree() {
+        if (this._jsTree) {
+            return this._jsTree;
+        }
+
         const that = this;
-        return $(jsTreeId).jstree(
+        this._jsTree = $(this.id()).jstree(
             {
                 "core": {
                     "data": function (currentDirectory, callback) {
-                        that.aboutCodeDB
+                        that.db()
                             .findAllJSTree({
                                 where: {
                                     parent: currentDirectory.id
@@ -79,7 +84,7 @@ class AboutCodeJsTree {
                         return {
                             "edit_component": {
                                 "label": "Edit Component",
-                                "action": () => this.handlers['node-edit'](node)
+                                "action": () => this.getHandler('node-edit')(node)
                             }
                         };
                     }
@@ -93,12 +98,14 @@ class AboutCodeJsTree {
             })
             // Select the root node when the tree is refreshed
             .on('refresh.jstree', (evt, data) => {
-                let rootNode = this.jsTree.jstree('get_node', '#').children;
-                this.jsTree.jstree('select_node', rootNode);
+                let rootNode = this.jsTree().jstree('get_node', '#').children;
+                this.jsTree().jstree('select_node', rootNode);
             })
             .on('select_node.jstree', (evt, data) => {
-                this.handlers['node-selected'](data.node);
+                this.getHandler('node-selected')(data.node);
             });
+
+        return this._jsTree;
     }
 }
 

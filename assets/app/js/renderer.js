@@ -17,8 +17,8 @@
 const AboutCodeDB = require('./aboutCodeDB');
 const Splitter = require("./helpers/splitter");
 const Progress = require("./helpers/progress");
-const DejaCodeExportDialog = require('./dialogs/dejacodeExportDialog');
-const ComponentDialog = require('./dialogs/componentDialog');
+const DejaCodeExportDialog = require('./dejacodeExportDialog');
+const ComponentDialog = require('./componentDialog');
 
 const AboutCodeDashboard = require('./aboutCodeDashboard');
 const AboutCodeBarChart = require('./aboutCodeBarChart');
@@ -36,6 +36,10 @@ const path = require('path');
 const ipcRenderer = require('electron').ipcRenderer;
 const aboutCodeVersion = require('../../../package.json').version;
 
+/**
+ * This is the UI Controller for the application. It's responsible for
+ * initializing and updating all of the views and handling user interaction
+ */
 $(document).ready(function () {
     // Create default values for all of the data and ui classes
     let aboutCodeDB = new AboutCodeDB();
@@ -53,12 +57,9 @@ $(document).ready(function () {
                 // So we do it last to try our best
                 showClueButton.trigger("click");
             }
-        })
-        .on('query-interceptor', query => {
-            query.where = { path: { $like: `${jstree.getSelected()}%` } };
         });
 
-    const componentDialog = new ComponentDialog("#nodeModal", aboutCodeDB)
+    const componentDialog = new ComponentDialog("#componentDialog", aboutCodeDB)
         .on('save', component => {
             nodeView.nodeData()[component.path].component = component;
             nodeView.redraw();
@@ -94,20 +95,23 @@ $(document).ready(function () {
             // Set the search value for the first column (path) equal to the
             // Selected jstree path and redraw the table
             const searchTerm = node.id + (node.type === "file" ? "" : "/");
+            cluesTable.columns(0).search(searchTerm);
 
-            cluesTable.columns(0).search(searchTerm).draw();
-            nodeView.setRoot(node.id);
-            barChart.draw();
+            // update all views with the new selected path.
+            componentDialog.selectedPath(node.id);
+            dejaCodeExportDialog.selectedPath(node.id);
+            jstree.selectedPath(node.id);
+            cluesTable.selectedPath(node.id);
+            componentsTable.selectedPath(node.id);
+            dashboard.selectedPath(node.id);
+            nodeView.selectedPath(node.id);
+            barChart.selectedPath(node.id);
+
+            redrawCurrentView();
         });
 
     const splitter = new Splitter('#leftCol', '#rightCol')
-        .on('drag-end', () => {
-            if ($('#tab-clues').is(':visible')) {
-                cluesTable.draw();
-            } else if ($('#tab-barchart').is(':visible')) {
-                barChart.draw();
-            }
-        });
+        .on('drag-end', () => redrawCurrentView());
 
     // The id of the currently selected nav bar button.
     const currentNavButtonId = "#sidebar-wrapper .sidebar-nav .active button";
@@ -130,7 +134,7 @@ $(document).ready(function () {
     // Show clue DataTable. Hide node view and component summary table
     showClueButton.click(() => {
         splitter.show();
-        cluesTable.draw();
+        cluesTable.redraw();
     });
 
     // Show node view. Hide clue and component table
@@ -142,17 +146,17 @@ $(document).ready(function () {
     // Show component summary table. Hide DataTable and node view
     showComponentButton.click(() => {
         splitter.hide();
-        componentsTable.reload();
+        componentsTable.redraw();
     });
 
     showBarChartButton.click(() => {
         splitter.show();
-        barChart.draw();
+        barChart.redraw();
     });
 
     showDashboardButton.click(() => {
         splitter.hide();
-        dashboard.reload();
+        dashboard.redraw();
     });
 
     // Open links in default browser
@@ -194,21 +198,23 @@ $(document).ready(function () {
                 cluesTable.clearColumnFilters();
 
                 // update all views with the new database.
-                componentDialog.database(aboutCodeDB);
-                dejaCodeExportDialog.database(aboutCodeDB);
-
-                jstree.database(aboutCodeDB);
-                cluesTable.database(aboutCodeDB);
-                componentsTable.database(aboutCodeDB);
-                dashboard.database(aboutCodeDB);
-                nodeView.database(aboutCodeDB);
-                barChart.database(aboutCodeDB);
+                componentDialog.db(aboutCodeDB);
+                dejaCodeExportDialog.db(aboutCodeDB);
+                jstree.db(aboutCodeDB);
+                cluesTable.db(aboutCodeDB);
+                componentsTable.db(aboutCodeDB);
+                dashboard.db(aboutCodeDB);
+                nodeView.db(aboutCodeDB);
+                barChart.db(aboutCodeDB);
 
                 // Reload the jstree, then trigger the current view to reload.
-                jstree.reload();
-                $(currentNavButtonId).trigger("click");
+                jstree.redraw();
             })
             .catch(reason => { throw reason; });
+    }
+
+    function redrawCurrentView() {
+        $(currentNavButtonId).trigger("click");
     }
 
     /** Open a SQLite Database File */

@@ -19,15 +19,14 @@ const Progress = require('./helpers/progress');
 const BarChart = require('./helpers/barChart');
 const Utils = require('./helpers/utils');
 const AboutCodeClueDataTable = require('./aboutCodeClueDataTable');
+const View = require('./helpers/view');
 
-// Bar chart summary for AboutCode scan data
-class AboutCodeBarChart {
+/**
+ * Bar chart summary for AboutCode scan data
+ */
+class AboutCodeBarChart extends View {
     constructor(barChartId, aboutCodeDB) {
-        this.barChartId = barChartId;
-        this.aboutCodeDB = aboutCodeDB;
-        this.handlers = {};
-
-        this.progressBar = new Progress("#barchart-view .svg-container", {size: 100});
+        super(barChartId, aboutCodeDB);
 
         this.chartOptions = {
             name: "License Summary",
@@ -36,6 +35,10 @@ class AboutCodeBarChart {
             xAxisName: "License Count",
             yAxisName: "License Name"
         };
+
+        this.barChart = new BarChart([], this.chartOptions, this.id());
+
+        this.progressBar = new Progress("#barchart-view .svg-container", {size: 100});
 
         this.chartAttributesSelect = $("select#select-chart-attribute");
         this.barChartTotalFiles = $("span.total-files");
@@ -50,80 +53,75 @@ class AboutCodeBarChart {
             }
         });
 
-        this.chartAttributesSelect.on( "change", () => this.showSummary());
-
         $(".bar-chart-copyrights").wrapAll(`<optgroup label="Copyright Information"/>`);
         $(".bar-chart-licenses").wrapAll(`<optgroup label="License Information"/>`);
         $(".bar-chart-emails").wrapAll(`<optgroup label="Email Information"/>`);
         $(".bar-chart-file-infos").wrapAll(`<optgroup label="File Information"/>`);
         $(".bar-chart-package-infos").wrapAll(`<optgroup label="Package Information"/>`);
 
-        this.reload();
-    }
+        this.chartAttributesSelect.val([]);
 
-    on(event, handler) {
-        this.handlers[event] = handler;
-        return this;
-    }
-
-    database(aboutCodeDB) {
-        this.aboutCodeDB = aboutCodeDB;
+        this.chartAttributesSelect.on("change", () => {
+            this.needsReload(true);
+            this.redraw();
+        });
     }
 
     reload() {
-        this.aboutCodeDB
+        this.needsReload(false);
+
+        this.db()
             .getFileCount()
             .then(value => this.barChartTotalFiles.text(value));
 
-        this.barChart = new BarChart([], this.chartOptions, this.barChartId);
-    }
-
-    draw() {
-        this.showSummary();
-    }
-
-    showSummary() {
         if (this.chartAttributesSelect.val()) {
-            this._showSummary(this.chartAttributesSelect.val());
+            const attribute = this.chartAttributesSelect.val();
+            let query = {
+                attributes: [Sequelize.fn("TRIM", Sequelize.col(attribute)), attribute],
+                where: { path: { $like: `${this.selectedPath()}%` } }
+            };
+
+            this.progressBar.showIndeterminate();
+            this.barChartData = this.db().sync
+                .then(db => db.FlatFile.findAll(query))
+                .then(values => Utils.getAttributeValues(values, attribute))
+                .then(values => {
+                    this.progressBar.hide();
+                    return values;
+                })
+                .catch(err => {
+                    this.progressBar.hide();
+                    throw err;
+                });
+        } else {
+            this.barChartData = Promise.resolve([]);
         }
     }
 
-    _showSummary(attribute) {
-        let query = {
-            attributes: [Sequelize.fn("TRIM", Sequelize.col(attribute)), attribute]
-        };
+    redraw() {
+        if (this.needsReload()) {
+            this.reload();
+        }
 
-        // Allow the query to be intercepted and modified by the caller.
-        this.handlers['query-interceptor'](query);
+        this.barChartData
+            .then(values => {
+                this.barChart = new BarChart(values, this.chartOptions, this.id());
+                const that = this;
+                const chartElement = $("#summary-bar-chart");
+                chartElement.find("rect").click(function () {
+                    const attribute =  that.chartAttributesSelect.val();
+                    const value = $(this).data("value");
+                    that.getHandler('bar-clicked')(attribute, value);
+                });
+                chartElement.find(".y.axis .tick").click(function () {
+                    const attribute =  that.chartAttributesSelect.val();
+                    const value = $(this).data("value");
+                    that.getHandler('bar-clicked')(attribute, value);
+                });
 
-        this.progressBar.showIndeterminate();
-        return this.aboutCodeDB.sync
-            .then(db => db.FlatFile.findAll(query))
-            .then(values => Utils.getAttributeValues(values, attribute))
-            .then(values => {
-                this.progressBar.hide();
-                return values;
-            })
-            .catch(err => {
-                this.progressBar.hide();
-                throw err;
-            })
-            .then(values => {
-                this.barChart = new BarChart(values, this.chartOptions, this.barChartId);
-                if (this.handlers['bar-clicked']) {
-                    const that = this;
-                    const chartElement = $("#summary-bar-chart");
-                    chartElement.find("rect").click(function () {
-                        const attribute =  that.chartAttributesSelect.val();
-                        const value = $(this).data("value");
-                        that.handlers['bar-clicked'](attribute, value);
-                    });
-                    chartElement.find(".y.axis .tick").click(function () {
-                        const attribute =  that.chartAttributesSelect.val();
-                        const value = $(this).data("value");
-                        that.handlers['bar-clicked'](attribute, value);
-                    });
-                }
+                // This is needed to give the dom time to set the bounds of
+                // the barchart element.
+                setTimeout(() => this.barChart.redraw(), 0);
             });
     }
 }

@@ -16,41 +16,48 @@
 
 const Sequelize = require('sequelize');
 const Utils = require('./helpers/utils');
+const View = require('./helpers/view');
 
 const HAS_A_VALUE =  "about_code_data_table_has_a_value";
 
-class AboutCodeClueDataTable {
+/**
+ * The view responsible for displaying the DataTable containing the ScanCode
+ * clue data
+ */
+class AboutCodeClueDataTable extends View {
     constructor(tableId, aboutCodeDB) {
-        this.tableId = tableId;
-        this.aboutCodeDB = aboutCodeDB;
-        this.dataTable = this._createDataTable(tableId);
-    }
-
-    database(aboutCodeDB) {
-        this.aboutCodeDB = aboutCodeDB;
+        super(tableId, aboutCodeDB);
     }
 
     draw() {
-        return this.dataTable.draw();
+        return this.dataTable().draw();
     }
 
     rows() {
-        return this.dataTable.rows();
+        return this.dataTable().rows();
     }
 
     columns(columnId) {
-        return this.dataTable.columns(columnId);
+        return this.dataTable().columns(columnId);
     }
 
     reload() {
-        return this.dataTable.ajax.reload();
+        this.needsReload(false);
+        this.dataTable().ajax.reload()
+    }
+
+    redraw() {
+        if (this.needsReload()) {
+            this.reload();
+        }
+        this.dataTable().draw();
     }
 
     clearColumnFilters() {
         $.each(AboutCodeClueDataTable.TABLE_COLUMNS, (i, column) => {
             const columnSelect = $(`select#clue-${column.name}`);
             columnSelect.val("");
-            this.dataTable
+            this.dataTable()
                 .column(`${column.name}:name`)
                 .search("", false, false);
         });
@@ -58,7 +65,7 @@ class AboutCodeClueDataTable {
 
     setColumnFilter(columnName, value) {
         // Get the clue table column and make sure it's visible
-        const column = this.dataTable.column(`${columnName}:name`);
+        const column = this.dataTable().column(`${columnName}:name`);
         column.visible(true);
 
         // Get the column's filter select box
@@ -70,13 +77,17 @@ class AboutCodeClueDataTable {
         select.val(value).change();
     }
 
-    _createDataTable(tableId) {
+    dataTable() {
+        if (this._dataTable) {
+            return this._dataTable;
+        }
+
         // Adds a footer for each column. This needs to be done before creating
         // the DataTable
         let cells = $.map(AboutCodeClueDataTable.TABLE_COLUMNS, () => "<td></td>").join("");
-        $(tableId).append("<tfoot><tr>" + cells + "</tr></tfoot>");
+        $(this.id()).append("<tfoot><tr>" + cells + "</tr></tfoot>");
 
-        return $(tableId).DataTable({
+        this._dataTable = $(this.id()).DataTable({
             serverSide: true,
             processing: true,
             ajax: (dataTablesInput, dataTablesCallback) =>
@@ -155,13 +166,15 @@ class AboutCodeClueDataTable {
                 "<'row'<'col-sm-12'tr>>" +
                 "<'row'<'col-sm-3'l><'col-sm-4'i><'col-sm-5'p>>"
         });
+
+        return this._dataTable;
     }
 
     // This function is called every time DataTables needs to be redrawn.
     // For details on the parameters https://datatables.net/manual/server-side
     _query(dataTablesInput, dataTablesCallback) {
         // Sorting and Querying of data for DataTables
-        this.aboutCodeDB.sync.then(db => {
+        this.db().sync.then(db => {
             let columnIndex = dataTablesInput.order[0].column;
             let columnName = dataTablesInput.columns[columnIndex].name;
             let direction = dataTablesInput.order[0].dir === "desc" ? "DESC" : "ASC";
@@ -193,7 +206,7 @@ class AboutCodeClueDataTable {
                 let columnSearch = dataTablesInput.columns[i].search.value;
                 if (columnSearch) {
                     const columnName = dataTablesInput.columns[i].name;
-                    this.dataTable.column(`${columnName}:name`).visible(true);
+                    this.dataTable().column(`${columnName}:name`).visible(true);
 
                     if (i === 0) {
                         // Column 0 is the "path", which should only match
@@ -256,10 +269,10 @@ class AboutCodeClueDataTable {
 
     _initComplete() {
         const that = this;
-        const pathCol = this.dataTable.columns(0);
+        const pathCol = this.dataTable().columns(0);
 
         // Add a select element to each column's footer
-        this.dataTable.columns().every(function (columnIndex) {
+        this.dataTable().columns().every(function (columnIndex) {
             const columnInfo = AboutCodeClueDataTable.TABLE_COLUMNS[columnIndex];
 
             if ("skipFilter" in columnInfo && columnInfo.skipFilter) {
@@ -278,7 +291,7 @@ class AboutCodeClueDataTable {
 
                     where[columnName] = {$ne: null};
 
-                    that.aboutCodeDB.sync.then(db => db.FlatFile.findAll({
+                    that.db().sync.then(db => db.FlatFile.findAll({
                         attributes: [
                             Sequelize.fn("TRIM",  Sequelize.col(columnName)),
                             columnName

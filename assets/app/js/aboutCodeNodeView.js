@@ -15,24 +15,15 @@
  */
 
 const NodeView = require('./helpers/nodeview');
+const View = require('./helpers/view');
 
-class AboutCodeNodeView {
+/**
+ * The view responsible for displaying the ScanCode clue data as expandable
+ * nodes (aka the node view).
+ */
+class AboutCodeNodeView extends View {
     constructor(nodeViewId, aboutCodeDB) {
-        this.nodeView = new NodeView(
-            {
-                selector: nodeViewId,
-                orientation: "left-to-right",
-                nodeWidth: 25,
-                nodeHeight: 160,
-                duration: 1000
-            })
-            .on('add-nodes', (nodes) => this._addNodes(nodes))
-            .on('update-nodes', (nodes) => this._updateNodes(nodes))
-            .on('prune-nodes', (rootNode) => this._pruneNodes(rootNode))
-            .on('get-children', (nodeId) => this._getChildren(nodeId));
-
-        this.aboutCodeDB = aboutCodeDB;
-        this.handlers = {};
+        super(nodeViewId, aboutCodeDB);
 
         // By default, do not prune any nodes
         this.isNodePruned = () => false;
@@ -50,10 +41,10 @@ class AboutCodeNodeView {
         this.nodeDropdown
             .change(() => {
                 if (this.nodeDropdown.val()) {
-                    this.nodeView.resize(
+                    this.nodeView().resize(
                         (this.nodeDropdown.val() || []).length * 30, 180);
                 } else {
-                    this.nodeView.resize(30, 180);
+                    this.nodeView().resize(30, 180);
                 }
             });
 
@@ -85,57 +76,87 @@ class AboutCodeNodeView {
         });
     }
 
-    on(event, handler) {
-        this.handlers[event] = handler;
-        return this;
-    }
-
-    database(aboutCodeDB) {
-        this.aboutCodeDB = aboutCodeDB;
-    }
-
     reload() {
-        this.nodeView.reload();
+        return this.db()
+            .findOne({ where: { parent: "#" } })
+            .then(root => {
+                if (root) {
+                    return this.setRoot(root.path);
+                }
+            })
+            .then(() => this.needsReload(false));
     }
 
     redraw() {
-        this.nodeView.redraw();
+        if (this.needsReload()) {
+            this.reload().then(() => this.redraw());
+        } else {
+            this.nodeView().redraw();
+        }
+    }
+
+    selectedPath(path) {
+        this.setRoot(path).then(() => this.redraw());
     }
 
     centerNode() {
-        this.nodeView.centerNode();
+        this.nodeView().centerNode();
     }
 
     nodeData() {
-        return this.nodeView.nodeData;
+        return this.nodeView().nodeData;
     }
 
     // Set the root of the node view to the given rootId. This will call
     // the database if the root's data is not found in the node view.
     setRoot(rootId) {
-        if (rootId in this.nodeData()) {
-            this.nodeView.setRoot(this.nodeData()[rootId]);
-        } else {
-            let splits = rootId.split("/");
-            let rootIds = $.map(splits, (split, index) => {
-                return { path: splits.slice(0, index + 1).join("/") };
-            });
-
-            this.aboutCodeDB.findAll({where: { $or: rootIds } })
-                .then((files) => {
-                    $.each(files, (index, file) => {
-                        this.nodeData()[file.path] =
-                            AboutCodeNodeView.fileToNode(file);
+        return Promise.resolve()
+            .then(() => {
+                if (rootId in this.nodeData()) {
+                    this.nodeView().setRoot(this.nodeData()[rootId]);
+                } else if (rootId) {
+                    let splits = rootId.split("/");
+                    let rootIds = $.map(splits, (split, index) => {
+                        return { path: splits.slice(0, index + 1).join("/") };
                     });
-                })
-                .then(() => this.nodeView.setRoot(this.nodeData()[rootId]))
-                .catch((err) => console.error(err));
+
+                    return Promise.resolve()
+                        .then(() => this.db().findAll({where: { $or: rootIds } }))
+                        .then((files) => {
+                            $.each(files, (index, file) => {
+                                this.nodeData()[file.path] =
+                                    AboutCodeNodeView.fileToNode(file);
+                            });
+                        })
+                        .then(() => this.nodeView().setRoot(this.nodeData()[rootId]));
+                }
+            })
+            .catch((err) => console.error(err));
+    }
+
+    nodeView() {
+        if (this._nodeView) {
+            return this._nodeView;
         }
+
+        this._nodeView = new NodeView({
+                selector: this.id(),
+                orientation: "left-to-right",
+                nodeWidth: 25,
+                nodeHeight: 160,
+                duration: 1000
+            })
+            .on('add-nodes', (nodes) => this._addNodes(nodes))
+            .on('update-nodes', (nodes) => this._updateNodes(nodes))
+            .on('prune-nodes', (rootNode) => this._pruneNodes(rootNode))
+            .on('get-children', (nodeId) => this._getChildren(nodeId));
+
+        return this._nodeView;
     }
 
     // Gets the children for a particular node from the DB.
     _getChildren(id) {
-        return this.aboutCodeDB
+        return this.db()
             .findAll({where: {parent: id}})
             .then((files) =>
                 files.map((file) => AboutCodeNodeView.fileToNode(file)))
@@ -145,7 +166,7 @@ class AboutCodeNodeView {
     // Define the visuals of a node when it's added
     _addNodes(nodes) {
         const circle = nodes.append("circle")
-            .on("click", (d) => this.nodeView.toggle(d.id));
+            .on("click", (d) => this.nodeView().toggle(d.id));
 
         // Setup directory nodes
         nodes.filter((d) => d.type === "directory")
@@ -158,7 +179,7 @@ class AboutCodeNodeView {
                 // return `${d.name} (${d.files_count}, ${d.clues_count})`;
                 return `${d.name} (${d.files_count})`;
             })
-            .on("click", node => this.handlers['node-clicked'](node));
+            .on("click", node => this.getHandler('node-clicked')(node));
 
         // Setup file nodes
         nodes.filter((d) => d.type !== "directory")
@@ -166,7 +187,7 @@ class AboutCodeNodeView {
             .append("g")
             .attr("class", "clues")
             .attr("x", 10)
-            .on("click", node => this.handlers['node-clicked'](node));
+            .on("click", node => this.getHandler('node-clicked')(node));
     }
 
     // Update the nodes when data changes

@@ -18,10 +18,7 @@ class NodeView {
     constructor(config) {
         this.config = config;
         this.handlers = {};
-        this.reload();
-    }
 
-    reload() {
         this.nextId = 0;
 
         this.orientation = NodeView.orientation(this.config.orientation);
@@ -80,9 +77,7 @@ class NodeView {
         }
 
         this.nodeData[root.id] = root;
-
         this.currentId = root.id;
-        this._update(root.id);
     }
 
     toggle(id) {
@@ -114,7 +109,7 @@ class NodeView {
     // Resize the spacing between nodes
     resize(nodeWidth, nodeHeight) {
         this.tree.nodeSize([nodeWidth, nodeHeight]);
-        this._update(this.currentId);
+        this.redraw(this.currentId);
     }
 
     _translate(d) {

@@ -120,7 +120,7 @@ class BarChart {
                 return d;
             });
 
-        this.draw();
+        this.redraw();
     }
 
     static trimName(name) {
@@ -129,7 +129,7 @@ class BarChart {
 
     // Redraws chart and sets width based on available chart width.
     // User needs to call this function whenever the width of the chart changes.
-    draw() {
+    redraw() {
         let boundWidth = $(this.chartSelector).width();
 
         let chartWidth = boundWidth - this.margin.left - this.margin.right;

@@ -15,35 +15,41 @@
  */
 
 const Utils = require('./helpers/utils');
+const View = require('./helpers/view');
 
-class AboutCodeComponentDataTable {
+/**
+ * The view responsible for displaying the DataTable containing the concluded
+ * data created for Components
+ */
+class AboutCodeComponentDataTable extends View {
     constructor(tableID, aboutCodeDB) {
-        this.handlers = {}
-        this.aboutCodeDB = aboutCodeDB;
-        this.dataTable = this._createDataTable(tableID);
-        $('<p class="lead">Component Summary</p>').prependTo($("#components-table_wrapper"));
-    }
-
-    database(aboutCodeDB) {
-        this.aboutCodeDB = aboutCodeDB;
+        super(tableID, aboutCodeDB);
     }
 
     reload() {
-        this.aboutCodeDB.findAllComponents({})
+        this.needsReload(false);
+        this.db().findAllComponents({})
             .then((components) => {
-                this.dataTable.clear();
-                this.dataTable.rows.add(components);
-                this.dataTable.draw();
+                this.dataTable().clear();
+                this.dataTable().rows.add(components);
+                this.dataTable().draw();
             });
     }
 
-    on(event, handler) {
-        this.handlers[event] = handler;
-        return this;
+    redraw() {
+        if (this.needsReload()) {
+            this.reload();
+        }
+        this.dataTable().draw();
     }
 
-    _createDataTable(tableID) {
-        return $(tableID).DataTable({
+    dataTable() {
+        if (this._dataTable) {
+            return this._dataTable;
+        }
+
+        $('<p class="lead">Component Summary</p>').prependTo($("#components-table_wrapper"));
+        this._dataTable = $(this.id()).DataTable({
             scrollX: true,
             scrollResize: true,
             columns: AboutCodeComponentDataTable.COLUMNS,
@@ -53,10 +59,10 @@ class AboutCodeComponentDataTable {
                     text: '<i class=" fa fa-cloud-upload"></i> Upload Components',
                     titleAttr: 'Upload Components to DejaCode',
                     action: () => {
-                        this.aboutCodeDB
+                        this.db()
                             .findAllComponents({})
                             .then(components =>
-                                this.handlers['upload-clicked'](components));
+                                this.getHandler('upload-clicked')(components));
                     },
                 },
                 {   // Do not allow the first 2 columns to be hidden
@@ -76,7 +82,7 @@ class AboutCodeComponentDataTable {
                     name: "json",
                     text: "Export JSON",
                     titleAttr: 'Export JSON file',
-                    action: () => this.handlers['export-json']()
+                    action: () => this.getHandler('export-json')()
                 }
             ],
             language: {
@@ -87,6 +93,8 @@ class AboutCodeComponentDataTable {
                 "<'row'<'col-sm-12'tr>>" +
                 "<'row'<'col-sm-3'l><'col-sm-4'i><'col-sm-5'p>>",
         });
+
+        return this._dataTable;
     }
 
     static get COLUMNS() {

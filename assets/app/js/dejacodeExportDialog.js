@@ -14,14 +14,18 @@
  #
  */
 
-const Progress = require('../helpers/progress');
+const Progress = require('./helpers/progress');
+const View = require('./helpers/view');
 
-class DejaCodeExportDialog {
+/**
+ * The view responsible for displaying the DejaCode Component Export dialog
+ */
+class DejaCodeExportDialog extends View {
     constructor(dialogId, aboutCodeDB) {
-        this.aboutCodeDB = aboutCodeDB;
+        super(dialogId, aboutCodeDB);
 
         // Get product name and version
-        this.dialog = $(dialogId);
+        this.dialog = this.element();
         this.productName = this.dialog.find("#product-name");
         this.productVersion = this.dialog.find("#product-version");
         this.apiUrl = this.dialog.find("#apiURLDejaCode");
@@ -35,10 +39,6 @@ class DejaCodeExportDialog {
             });
     }
 
-    database(aboutCodeDB) {
-        this.aboutCodeDB = aboutCodeDB;
-    }
-
     show() {
         this.dialog.modal('show');
     }
@@ -48,8 +48,8 @@ class DejaCodeExportDialog {
     // want to require name, version, and owner
     _exportComponents() {
         this.progressBar.showIndeterminate();
-        return this.aboutCodeDB.db
-            .then(() => this.aboutCodeDB.findAllComponents({}))
+        return this.db().sync
+            .then(() => this.db().findAllComponents({}))
             .then(components => {
                 // Get product name and version
                 const productName = this.productName.val();

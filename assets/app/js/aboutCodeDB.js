@@ -23,7 +23,8 @@ const Database = require('./models/database');
 const {parentPath} = require('./models/databaseUtils');
 
 /**
- * Creates a new database on the flattened json data
+ * Manages the database created from a ScanCode JSON input.
+ * The database contains tables for both flattened and unflattened data
  *
  * @param config
  * @param config.dbName
