@@ -62,11 +62,15 @@ $(document).ready(function () {
     const componentDialog = new ComponentDialog("#componentDialog", aboutCodeDB)
         .on('save', component => {
             nodeView.nodeData()[component.path].component = component;
-            nodeView.redraw();
+            componentsTable.needsReload(true);
+            nodeView.needsReload(true);
+            redrawCurrentView();
         })
         .on('delete', component => {
             nodeView.nodeData()[component.path].component = null;
-            nodeView.redraw();
+            componentsTable.needsReload(true);
+            nodeView.needsReload(true);
+            redrawCurrentView();
         });
 
     const dejaCodeExportDialog =
