@@ -16,6 +16,7 @@
 
 const Progress = require('./helpers/progress');
 const View = require('./helpers/view');
+const dialog = require('electron').remote.dialog;
 
 /**
  * The view responsible for displaying the DejaCode Component Export dialog
@@ -92,28 +93,34 @@ class DejaCodeExportDialog extends View {
             .then(() => alert("Components submitted to DejaCode"))
             .catch((err) => {
                 this.progressBar.hide();
+                console.log(err);
+                dialog.showErrorBox("Dejacode Upload Error", err.toString());
                 throw err;
             });
     }
 
     // Upload created Components to a Product in DejaCode using the API
     _uploadComponents(host, apiKey, components) {
-        let errorMessages = {};
+        const errors = [];
 
         // Make individual requests to DejaCode to create each component
         const requests = $.map(components, (component, index) => {
             return this._createComponent(host, apiKey, component)
-                .catch(err => errorMessages[component.name] = err);
+                .catch(err => {
+                    errors.push(JSON.stringify({
+                        component_name: component.name,
+                        error_status: `${err.status} (${err.statusText})`,
+                        error: err.responseJSON
+                    }, null, 2));
+                });
         });
 
         // This will be called when all requests finish.
         return Promise.all(requests)
             .then(() => {
-                if (Object.keys(errorMessages).length > 0) {
-                    let msg = $.map(errorMessages, function(errorMessage, component) {
-                        return component + ": " + errorMessage;
-                    });
-                    throw new Error("The following errors occurred:\n" + msg.join("\n\n"));
+                if (Object.keys(errors).length > 0) {
+                    throw new Error(
+                        "The following errors occurred:\n" + errors.join("\n\n"));
                 }
             });
     }
