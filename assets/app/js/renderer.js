@@ -350,6 +350,12 @@ $(document).ready(function () {
                 return;
             }
 
+            let scanCodeInfoPromise = aboutCodeDB.getScanCodeInfo({
+               attributes: {
+                    exclude: ["id", "createdAt", "updatedAt"]
+               }
+            });
+
             let aboutCodeInfoPromise = aboutCodeDB.getAboutCodeInfo({
                 attributes: {
                     exclude: ["id", "createdAt", "updatedAt"]
@@ -374,11 +380,14 @@ $(document).ready(function () {
                 }
             });
 
-            Promise.all([aboutCodeInfoPromise, filesCountPromise, clueFilesPromise, componentsPromise])
-                .then(([aboutCodeInfo, filesCount, clueFiles, components]) => {
+            Promise.all([scanCodeInfoPromise, aboutCodeInfoPromise,
+                filesCountPromise, clueFilesPromise, componentsPromise])
+                .then(([scanCodeInfo, aboutCodeInfo, filesCount, clueFiles, components]) => {
                     let json = {
-                        aboutcode_manager_notice: aboutCodeInfo.notice,
-                        aboutcode_manager_version: aboutCodeInfo.version,
+                        aboutcode_manager_notice: aboutCodeInfo.aboutcode_manager_notice,
+                        aboutcode_manager_version: aboutCodeInfo.aboutcode_manager_version,
+                        scancode_version: scanCodeInfo.scancode_version,
+                        scancode_options: scanCodeInfo.scancode_options,
                         files_count: filesCount,
                         files: clueFiles,
                         components: components
@@ -423,7 +432,7 @@ $(document).ready(function () {
                 .then(([aboutCodeInfo, components]) => {
                     let json = {
                         aboutcode_manager_notice: aboutCodeInfo.aboutcode_manager_notice,
-                        aboutcode_manager_version: aboutCodeInfo.aboutcode_manager_notice,
+                        aboutcode_manager_version: aboutCodeInfo.aboutcode_manager_version,
                         components: components
                     };
 

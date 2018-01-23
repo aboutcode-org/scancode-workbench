@@ -62,6 +62,17 @@ class AboutCodeDB {
         }));
     }
 
+    // Get ScanCode Toolkit information
+    getScanCodeInfo() {
+        return this.sync.then(db => db.Header.findOne({
+            attributes: [
+                "scancode_notice",
+                "scancode_version",
+                "scancode_options"
+            ]
+        }));
+    }
+
     getFileCount() {
         return this.sync
             .then(db => db.Header.findOne({attributes: ["files_count"]}))
@@ -191,7 +202,7 @@ class AboutCodeDB {
                     }
                     $.extend(header, {
                         aboutcode_manager_version: version,
-                        aboutcode_manager_notice: "Exported from AboutCode Manager ScanCode and provided on an \"AS IS\" BASIS, WITHOUT WARRANTIES\\nOR CONDITIONS OF ANY KIND, either express or implied. No content created from\\nAboutCode Manager should be considered or used as legal advice. Consult an Attorney\\nfor any legal advice.\\nAboutCode Manager is a free software analysis application from nexB Inc. and others.\\nVisit https://github.com/nexB/aboutcode-manager/ for support and download.\""
+                        aboutcode_manager_notice: "Exported from AboutCode Manager and provided on an \"AS IS\" BASIS, WITHOUT WARRANTIES\\nOR CONDITIONS OF ANY KIND, either express or implied. No content created from\\nAboutCode Manager should be considered or used as legal advice. Consult an Attorney\\nfor any legal advice.\\nAboutCode Manager is a free software analysis application from nexB Inc. and others.\\nVisit https://github.com/nexB/aboutcode-manager/ for support and download.\""
                     });
                     files_count = header.files_count;
                     promiseChain = promiseChain
