@@ -122,7 +122,7 @@ class ComponentDialog extends View {
                 };
             })
             .then(component => this.db().setComponent(component))
-            .then(component => this.handlers.save(component));
+            .then(component => this.getHandler("save")(component));
         this.dialog.modal('hide');
     }
 
@@ -133,7 +133,7 @@ class ComponentDialog extends View {
             .then(component => {
                 if (component !== null) {
                     return component.destroy()
-                        .then(() => this.handlers.delete(component));
+                        .then(() => this.getHandler("delete")(component));
                 }
             });
     }
