@@ -15,8 +15,8 @@
  */
 
 const AboutCodeDB = require('./aboutCodeDB');
-const Splitter = require("./helpers/splitter");
-const Progress = require("./helpers/progress");
+const Splitter = require('./helpers/splitter');
+const Progress = require('./helpers/progress');
 const DejaCodeExportDialog = require('./dejacodeExportDialog');
 const ComponentDialog = require('./componentDialog');
 
@@ -28,7 +28,7 @@ const AboutCodeClueDataTable = require('./aboutCodeClueDataTable');
 const AboutCodeComponentDataTable = require('./aboutCodeComponentDataTable');
 
 const fs = require('fs');
-const shell = require("electron").shell;
+const shell = require('electron').shell;
 const dialog = require('electron').remote.dialog;
 const path = require('path');
 
@@ -44,22 +44,22 @@ $(document).ready(function () {
     // Create default values for all of the data and ui classes
     let aboutCodeDB = new AboutCodeDB();
 
-    const dashboard = new AboutCodeDashboard("#dashboard-container", aboutCodeDB);
+    const dashboard = new AboutCodeDashboard('#dashboard-container', aboutCodeDB);
 
-    const barChart = new AboutCodeBarChart("#summary-bar-chart", aboutCodeDB)
+    const barChart = new AboutCodeBarChart('#summary-bar-chart', aboutCodeDB)
         .on('bar-clicked', (attribute, value) => {
             // Show files that contain attribute value selected by user in bar chart
-            if (value !== "No Value Detected") {
+            if (value !== 'No Value Detected') {
                 cluesTable.clearColumnFilters();
                 cluesTable.setColumnFilter(attribute, value);
 
                 // This needs to be done only when the column is visible.
                 // So we do it last to try our best
-                showClueButton.trigger("click");
+                showClueButton.trigger('click');
             }
         });
 
-    const componentDialog = new ComponentDialog("#componentDialog", aboutCodeDB)
+    const componentDialog = new ComponentDialog('#componentDialog', aboutCodeDB)
         .on('save', component => {
             nodeView.nodeData()[component.path].component = component;
             componentsTable.needsReload(true);
@@ -74,31 +74,31 @@ $(document).ready(function () {
         });
 
     const dejaCodeExportDialog =
-        new DejaCodeExportDialog("#componentExportModal", aboutCodeDB);
+        new DejaCodeExportDialog('#componentExportModal', aboutCodeDB);
 
-    const nodeView = new AboutCodeNodeView("#nodeview", aboutCodeDB)
+    const nodeView = new AboutCodeNodeView('#nodeview', aboutCodeDB)
         .on('node-clicked', node => componentDialog.show(node.id));
 
-    const cluesTable = new AboutCodeClueDataTable("#clues-table", aboutCodeDB);
-    const componentsTable = new AboutCodeComponentDataTable("#components-table", aboutCodeDB)
+    const cluesTable = new AboutCodeClueDataTable('#clues-table', aboutCodeDB);
+    const componentsTable = new AboutCodeComponentDataTable('#components-table', aboutCodeDB)
         .on('upload-clicked', components => {
             if (components.length > 0) {
                 dejaCodeExportDialog.show();
             } else {
                 dialog.showErrorBox(
-                    "No Components to Upload",
-                    "You have no Components to upload.\n\n" +
-                    "Please create at least one Component and try again.");
+                    'No Components to Upload',
+                    'You have no Components to upload.\n\n' +
+                    'Please create at least one Component and try again.');
             }
         })
         .on('export-json', exportJsonComponents);
 
-    const jstree = new AboutCodeJsTree("#jstree", aboutCodeDB)
+    const jstree = new AboutCodeJsTree('#jstree', aboutCodeDB)
         .on('node-edit', node => componentDialog.show(node.id))
-        .on("node-selected", node => {
+        .on('node-selected', node => {
             // Set the search value for the first column (path) equal to the
             // Selected jstree path and redraw the table
-            const searchTerm = node.id + (node.type === "file" ? "" : "/");
+            const searchTerm = node.id + (node.type === 'file' ? '' : '/');
             cluesTable.columns(0).search(searchTerm);
 
             // update all views with the new selected path.
@@ -118,16 +118,16 @@ $(document).ready(function () {
         .on('drag-end', () => redrawCurrentView());
 
     // The id of the currently selected nav bar button.
-    const currentNavButtonId = "#sidebar-wrapper .sidebar-nav .active button";
+    const currentNavButtonId = '#sidebar-wrapper .sidebar-nav .active button';
 
     // Defines DOM element constants for sidebar buttons.
-    const saveSQLiteFileButton = $("#save-file");
-    const openSQLiteFileButton = $("#open-file");
-    const showClueButton = $("#show-tab-clues");
-    const showNodeViewButton = $("#show-tab-nodeview");
-    const showComponentButton = $("#show-tab-component");
-    const showBarChartButton = $("#show-tab-barchart");
-    const showDashboardButton = $("#show-tab-dashboard");
+    const saveSQLiteFileButton = $('#save-file');
+    const openSQLiteFileButton = $('#open-file');
+    const showClueButton = $('#show-tab-clues');
+    const showNodeViewButton = $('#show-tab-nodeview');
+    const showComponentButton = $('#show-tab-component');
+    const showBarChartButton = $('#show-tab-barchart');
+    const showDashboardButton = $('#show-tab-dashboard');
 
     // Open a SQLite Database File
     openSQLiteFileButton.click(openSQLite);
@@ -164,29 +164,29 @@ $(document).ready(function () {
     });
 
     // Open links in default browser
-    $(".open-in-default").click((evt) => {
+    $('.open-in-default').click((evt) => {
            evt.preventDefault();
            shell.openExternal(evt.target.href);
     });
 
-    ipcRenderer.on('table-view', () => showClueButton.trigger("click"));
-    ipcRenderer.on('node-view', () => showNodeViewButton.trigger("click"));
-    ipcRenderer.on('component-summary-view', () => showComponentButton.trigger("click"));
-    ipcRenderer.on('open-SQLite', () => openSQLiteFileButton.trigger("click"));
-    ipcRenderer.on('chart-summary-view', () => showBarChartButton.trigger("click"));
-    ipcRenderer.on('save-SQLite', () => saveSQLiteFileButton.trigger("click"));
+    ipcRenderer.on('table-view', () => showClueButton.trigger('click'));
+    ipcRenderer.on('node-view', () => showNodeViewButton.trigger('click'));
+    ipcRenderer.on('component-summary-view', () => showComponentButton.trigger('click'));
+    ipcRenderer.on('open-SQLite', () => openSQLiteFileButton.trigger('click'));
+    ipcRenderer.on('chart-summary-view', () => showBarChartButton.trigger('click'));
+    ipcRenderer.on('save-SQLite', () => saveSQLiteFileButton.trigger('click'));
     ipcRenderer.on('import-JSON', importJson);
     ipcRenderer.on('export-JSON', exportJson);
     ipcRenderer.on('export-JSON-components-only', exportJsonComponents);
 
     // Opens the dashboard view when the app is first opened
-    showDashboardButton.trigger("click");
+    showDashboardButton.trigger('click');
 
     /** Creates the database and all View objects from a SQLite file */
     function loadDatabase(fileName) {
         // Create a new database when importing a json file
         aboutCodeDB = new AboutCodeDB({
-            dbName: "aboutcode_db",
+            dbName: 'aboutcode_db',
             dbStorage: fileName
         });
 
@@ -218,14 +218,14 @@ $(document).ready(function () {
     }
 
     function redrawCurrentView() {
-        $(currentNavButtonId).trigger("click");
+        $(currentNavButtonId).trigger('click');
     }
 
     /** Open a SQLite Database File */
     function openSQLite() {
         dialog.showOpenDialog({
             properties: ['openFile'],
-            title: "Open a SQLite File",
+            title: 'Open a SQLite File',
             filters: [{
                 name: 'SQLite File',
                 extensions: ['sqlite']
@@ -250,7 +250,7 @@ $(document).ready(function () {
                 const reader = fs.createReadStream(oldFileName);
                 const writer = fs.createWriteStream(newFileName);
                 reader.pipe(writer);
-                reader.on("end", () => loadDatabase(newFileName));
+                reader.on('end', () => loadDatabase(newFileName));
             }
         });
     }
@@ -258,7 +258,7 @@ $(document).ready(function () {
     /** Import a ScanCode JSON file and create a SQLite database */
     function importJson() {
         dialog.showOpenDialog({
-            title: "Open a JSON File",
+            title: 'Open a JSON File',
             filters: [{
                 name: 'JSON File',
                 extensions: ['json']
@@ -294,12 +294,12 @@ $(document).ready(function () {
 
                 // Create a new database when importing a json file
                 aboutCodeDB = new AboutCodeDB({
-                    dbName: "demo_schema",
+                    dbName: 'demo_schema',
                     dbStorage: sqliteFileName,
                 });
 
-                const progressbar = new Progress("#content", {
-                    title: "Creating Database...",
+                const progressbar = new Progress('#content', {
+                    title: 'Creating Database...',
                     size: 100,
                 });
 
@@ -315,23 +315,23 @@ $(document).ready(function () {
                         progressbar.hide();
                         if (err instanceof AboutCodeDB.MissingFileInfoError) {
                             dialog.showErrorBox(
-                                "Missing File Type Information",
-                                "Missing file 'type' information in the " +
-                                "scanned data. \n\nThis probably means you ran " +
-                                "the scan without the -i option in ScanCode. " +
-                                "The app requires file information from a " +
-                                "ScanCode scan. Rerun the scan using \n./scancode " +
-                                "-clipeu options."
+                                'Missing File Type Information',
+                                'Missing file \'type\' information in the ' +
+                                'scanned data. \n\nThis probably means you ran ' +
+                                'the scan without the -i option in ScanCode. ' +
+                                'The app requires file information from a ' +
+                                'ScanCode scan. Rerun the scan using \n./scancode ' +
+                                '-clipeu options.'
                             );
                         } else {
                             // Show error for problem with the JSON file
                             dialog.showErrorBox(
-                                "JSON Error",
-                                "There is a problem with your JSON file. It may be malformed " +
-                                "(e.g., the addition of a trailing comma), " +
-                                "or there could be some other problem with the file. " +
-                                "\n\nPlease check your file and try again. " +
-                                "\n\nThe error thrown by the system is: \n\n" + err
+                                'JSON Error',
+                                'There is a problem with your JSON file. It may be malformed ' +
+                                '(e.g., the addition of a trailing comma), ' +
+                                'or there could be some other problem with the file. ' +
+                                '\n\nPlease check your file and try again. ' +
+                                '\n\nThe error thrown by the system is: \n\n' + err
                             );
                         }
                         console.error(err);
@@ -344,7 +344,7 @@ $(document).ready(function () {
     function exportJson() {
         dialog.showSaveDialog({
             properties: ['openFile'],
-            title: "Save as JSON file",
+            title: 'Save as JSON file',
             filters: [{
                 name: 'JSON File Type',
                 extensions: ['json']
@@ -356,31 +356,31 @@ $(document).ready(function () {
 
             let scanCodeInfoPromise = aboutCodeDB.getScanCodeInfo({
                attributes: {
-                    exclude: ["id", "createdAt", "updatedAt"]
+                    exclude: ['id', 'createdAt', 'updatedAt']
                }
             });
 
             let aboutCodeInfoPromise = aboutCodeDB.getAboutCodeInfo({
                 attributes: {
-                    exclude: ["id", "createdAt", "updatedAt"]
+                    exclude: ['id', 'createdAt', 'updatedAt']
                 }
             });
 
             let clueFilesPromise = aboutCodeDB.findAll({
                 attributes: {
-                    exclude: ["id", "createdAt", "updatedAt"]
+                    exclude: ['id', 'createdAt', 'updatedAt']
                 }
             });
 
             let componentsPromise = aboutCodeDB.findAllComponents({
                 attributes: {
-                    exclude: ["id", "createdAt", "updatedAt"]
+                    exclude: ['id', 'createdAt', 'updatedAt']
                 }
             });
 
             let filesCountPromise = aboutCodeDB.getFileCount({
                 attributes: {
-                    exclude: ["id", "createdAt", "updatedAt"]
+                    exclude: ['id', 'createdAt', 'updatedAt']
                 }
             });
 
@@ -410,7 +410,7 @@ $(document).ready(function () {
     function exportJsonComponents() {
         dialog.showSaveDialog({
             properties: ['openFile'],
-            title: "Save as JSON file",
+            title: 'Save as JSON file',
             filters: [{
                 name: 'JSON File Type',
                 extensions: ['json']
@@ -422,13 +422,13 @@ $(document).ready(function () {
 
             let aboutCodeInfoPromise = aboutCodeDB.getAboutCodeInfo({
                 attributes: {
-                    exclude: ["id", "createdAt", "updatedAt"]
+                    exclude: ['id', 'createdAt', 'updatedAt']
                 }
             });
 
             let componentsPromise = aboutCodeDB.findAllComponents({
                 attributes: {
-                    exclude: ["id", "createdAt", "updatedAt"]
+                    exclude: ['id', 'createdAt', 'updatedAt']
                 }
             });
 

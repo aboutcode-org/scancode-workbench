@@ -42,14 +42,14 @@ module.exports = function(sequelize, DataTypes) {
         {
             getterMethods: {
                 license_expression: function()  {
-                    return $.map(this.licenses, (license, index) => {
+                    return $.map(this.licenses, (license) => {
                        return license.key;
-                    }).join(" AND ");
+                    }).join(' AND ');
                 },
                 copyright: function() {
-                    return $.map(this.copyrights, (copyright, index) => {
-                        return copyright.statements.join(" ");
-                    }).join("\n");
+                    return $.map(this.copyrights, (copyright) => {
+                        return copyright.statements.join(' ');
+                    }).join('\n');
                 }
             }
         });

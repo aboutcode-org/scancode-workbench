@@ -1,4 +1,4 @@
-const shell = require("electron").shell;
+const shell = require('electron').shell;
 
 class Utils {
     // Overrides original event and opens URL in default browser
@@ -12,7 +12,7 @@ class Utils {
         if (href) {
             return `<a href="${href}" onclick="Utils._openInDefaultBrowser(event)">${href}</a>`;
         }
-        return "";
+        return '';
     }
 
      // Map each row to the given attribute value, and sanitize invalid values.
@@ -30,7 +30,7 @@ class Utils {
             for (let j = 0; j < attributeValue.length; j++) {
                 validatedValues.push(
                     Utils.isValid(attributeValue[j]) ?
-                        attributeValue[j] : "No Value Detected");
+                        attributeValue[j] : 'No Value Detected');
             }
         }
         return validatedValues;

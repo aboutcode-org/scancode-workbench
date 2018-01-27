@@ -20,14 +20,14 @@ const Utils = require('./helpers/utils');
 const View = require('./helpers/view');
 
 const LEGEND_COLORS = [
-    "#A0D468",
-    "#FFCE54",
-    "#EC87C0",
-    "#48CFAD",
-    "#AC92EC",
-    "#4FC1E9",
-    "#AAB2BD",
-    "#3D7AFC"
+    '#A0D468',
+    '#FFCE54',
+    '#EC87C0',
+    '#48CFAD',
+    '#AC92EC',
+    '#4FC1E9',
+    '#AAB2BD',
+    '#3D7AFC'
 ];
 
 const LEGEND_LIMIT = 8;
@@ -40,33 +40,33 @@ class AboutCodeDashboard extends View {
     constructor(dashboardId, aboutCodeDB) {
         super(dashboardId, aboutCodeDB);
 
-        this.totalFilesScanned = $("#total-files").find(".title");
-        this.uniqueLicenses = $("#unique-licenses").find(".title");
-        this.uniqueCopyrights = $("#unique-copyrights").find(".title");
-        this.totalPackages = $("#total-packages").find(".title");
+        this.totalFilesScanned = $('#total-files').find('.title');
+        this.uniqueLicenses = $('#unique-licenses').find('.title');
+        this.uniqueCopyrights = $('#unique-copyrights').find('.title');
+        this.totalPackages = $('#total-packages').find('.title');
 
         this.totalFilesProgressbar =
-            new Progress("#total-files .title", {size: 25});
+            new Progress('#total-files .title', {size: 25});
         this.uniqueLicensesProgressbar =
-            new Progress("#unique-licenses .title", {size: 25});
+            new Progress('#unique-licenses .title', {size: 25});
         this.uniqueCopyrightsProgressbar =
-            new Progress("#unique-copyrights .title", {size: 25});
+            new Progress('#unique-copyrights .title', {size: 25});
         this.totalPackagesProgressbar =
-            new Progress("#total-packages .title", {size: 25});
+            new Progress('#total-packages .title', {size: 25});
         this.sourceLanguageChartProgressbar =
-            new Progress("#source-chart .content", {size: 50});
+            new Progress('#source-chart .content', {size: 50});
         this.licenseCategoryChartProgressbar =
-            new Progress("#license-category-chart .content", {size: 50});
+            new Progress('#license-category-chart .content', {size: 50});
         this.licenseKeyChartProgressbar =
-            new Progress("#license-key-chart .content", {size: 50});
+            new Progress('#license-key-chart .content', {size: 50});
         this.packagesTypeChartProgressbar =
-            new Progress("#packages-type-chart .content", {size: 50});
+            new Progress('#packages-type-chart .content', {size: 50});
 
         this.sourceLanguageChart = c3.generate({
-            bindto: "#source-chart .chart",
+            bindto: '#source-chart .chart',
             data: {
                 columns: [],
-                type: "pie",
+                type: 'pie',
                 order: 'desc',
             },
             color: {
@@ -75,10 +75,10 @@ class AboutCodeDashboard extends View {
         });
 
         this.licenseCategoryChart = c3.generate({
-            bindto: "#license-category-chart .chart",
+            bindto: '#license-category-chart .chart',
             data: {
                 columns: [],
-                type: "pie",
+                type: 'pie',
                 order: 'desc',
             },
             color: {
@@ -87,10 +87,10 @@ class AboutCodeDashboard extends View {
         });
 
         this.licenseKeyChart = c3.generate({
-            bindto: "#license-key-chart .chart",
+            bindto: '#license-key-chart .chart',
             data: {
                 columns: [],
-                type: "pie",
+                type: 'pie',
                 order: 'desc',
             },
             color: {
@@ -99,10 +99,10 @@ class AboutCodeDashboard extends View {
         });
 
         this.packagesTypeChart = c3.generate({
-            bindto: "#packages-type-chart .chart",
+            bindto: '#packages-type-chart .chart',
             data: {
                 columns: [],
-                type: "bar",
+                type: 'bar',
                 order: 'desc',
             },
             color: {
@@ -117,42 +117,42 @@ class AboutCodeDashboard extends View {
         // Get total files scanned
         this.totalFilesProgressbar.showIndeterminate();
         this.db().sync
-            .then(db => db.Header.findOne({ attributes: ["files_count"] }))
-            .then(row => this.totalFilesScanned.text(row ? row.files_count : "0"))
+            .then(db => db.Header.findOne({ attributes: ['files_count'] }))
+            .then(row => this.totalFilesScanned.text(row ? row.files_count : '0'))
             .then(() => this.totalFilesProgressbar.hide());
 
         // Get total unique licenses detected
         this.uniqueLicensesProgressbar.showIndeterminate();
         this.db().sync
-            .then(db => db.License.aggregate("key", "DISTINCT", {plain: false}))
-            .then(row => this.uniqueLicenses.text(row ? row.length : "0"))
+            .then(db => db.License.aggregate('key', 'DISTINCT', {plain: false}))
+            .then(row => this.uniqueLicenses.text(row ? row.length : '0'))
             .then(() => this.uniqueLicensesProgressbar.hide());
 
         // Get total unique copyright statements detected
         this.uniqueCopyrightsProgressbar.showIndeterminate();
         this.db().sync
-            .then(db => db.Copyright.aggregate("holders", "DISTINCT", { plain: false }))
-            .then(row => this.uniqueCopyrights.text(row ? row.length : "0"))
+            .then(db => db.Copyright.aggregate('holders', 'DISTINCT', { plain: false }))
+            .then(row => this.uniqueCopyrights.text(row ? row.length : '0'))
             .then(() => this.uniqueCopyrightsProgressbar.hide());
 
         // Get total number of packages detected
         this.totalPackagesProgressbar.showIndeterminate();
         this.db().sync
-            .then(db => db.Package.count("type"))
-            .then(count => this.totalPackages.text(count ? count : "0"))
+            .then(db => db.Package.count('type'))
+            .then(count => this.totalPackages.text(count ? count : '0'))
             .then(() => this.totalPackagesProgressbar.hide());
 
         // Get unique programming languages detected
-        this.sourceLanguageChartData = this._loadData("programming_language");
+        this.sourceLanguageChartData = this._loadData('programming_language');
 
         // Get license categories detected
-        this.licenseCategoryChartData = this._loadData("license_category");
+        this.licenseCategoryChartData = this._loadData('license_category');
 
         // Get license keys detected
-        this.licenseKeyChartData = this._loadData("license_key");
+        this.licenseKeyChartData = this._loadData('license_key');
 
         // Get package types detected
-        this.packagesTypeChartData = this._loadData("packages_type");
+        this.packagesTypeChartData = this._loadData('packages_type');
     }
 
     redraw() {
@@ -217,7 +217,7 @@ class AboutCodeDashboard extends View {
         let where = {
             $and: [{
                 type: {
-                    $eq: "file"
+                    $eq: 'file'
                 }
             }]
         };
@@ -230,7 +230,7 @@ class AboutCodeDashboard extends View {
             return db.FlatFile
                 .findAll({
                     attributes: [
-                        Sequelize.fn("TRIM", Sequelize.col(attribute)),
+                        Sequelize.fn('TRIM', Sequelize.col(attribute)),
                         attribute
                     ],
                     where: where
@@ -248,7 +248,7 @@ class AboutCodeDashboard extends View {
         return data.sort((a,b) => (a[1] > b[1]) ? 1 : -1)
             .map((dataPair, i) => {
                 if (data.length - i >= limit) {
-                    return ["other", dataPair[1]];
+                    return ['other', dataPair[1]];
                 } else {
                     return dataPair;
                 }

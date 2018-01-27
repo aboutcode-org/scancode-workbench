@@ -28,8 +28,8 @@ class NodeView {
         this.zoom = d3.behavior.zoom()
             .x(d3.scale.linear())
             .y(d3.scale.linear())
-            .on("zoom", () => {
-                this.container.attr("transform",
+            .on('zoom', () => {
+                this.container.attr('transform',
                     `translate(${d3.event.translate})` +
                     `scale(${d3.event.scale})`
                 );
@@ -38,14 +38,14 @@ class NodeView {
         // Clear the selector DOM element in case something already exists.
         $(this.config.selector).empty();
         const svg = d3.select(this.config.selector)
-            .append("svg")
-            .attr("preserveAspectRatio", "xMinYMin meet")
-            .attr("viewBox", "-150 -150 1000 1000")
-            .classed("nodeview-content", true)
+            .append('svg')
+            .attr('preserveAspectRatio', 'xMinYMin meet')
+            .attr('viewBox', '-150 -150 1000 1000')
+            .classed('nodeview-content', true)
             .call(this.zoom);
 
-        this.container = svg.append("g")
-            .attr("id", "node-group");
+        this.container = svg.append('g')
+            .attr('id', 'node-group');
 
         this.tree = d3.layout.tree()
             .nodeSize([this.config.nodeWidth, this.config.nodeHeight]);
@@ -64,7 +64,7 @@ class NodeView {
 
     // Center node and reset scaling
     centerNode() {
-        d3.select("g#node-group")
+        d3.select('g#node-group')
             .transition()
             .duration(750)
             .call(this.zoom.translate([0,0]).scale(1).event);
@@ -131,7 +131,7 @@ class NodeView {
         const currPos = NodeView._pos(this.nodeData[toggleId || this.currentId]);
 
         // Handle nodes
-        const nodes = this.container.selectAll("g.node")
+        const nodes = this.container.selectAll('g.node')
             .data(nodeData, (d) => d.id || (d.id = this.nextId++));
         this._updateNodes(nodes);
         this._addNodes(nodes.enter(), prevPos);
@@ -139,7 +139,7 @@ class NodeView {
 
         // Handle links
         const linkData = this.tree.links(nodeData);
-        const links = this.container.selectAll("path.link")
+        const links = this.container.selectAll('path.link')
             .data(linkData, (d) => d.target.id);
         this._updateLinks(links);
         this._addLinks(links.enter(), prevPos);
@@ -148,9 +148,9 @@ class NodeView {
 
     _addNodes(node, pos) {
         // create Node group
-        const nodeGroup = node.append("g").attr("class", "node")
-            .attr("transform", () => this._translate(pos))
-            .style("opacity", 0);
+        const nodeGroup = node.append('g').attr('class', 'node')
+            .attr('transform', () => this._translate(pos))
+            .style('opacity', 0);
 
         // Add custom elements
         this.handlers['add-nodes'](nodeGroup);
@@ -160,8 +160,8 @@ class NodeView {
     _updateNodes(nodes) {
         // Animate Node group open
         nodes.transition().duration(this.config.duration)
-            .attr("transform", (d) => this._translate(NodeView._pos(d)))
-            .style("opacity", 1);
+            .attr('transform', (d) => this._translate(NodeView._pos(d)))
+            .style('opacity', 1);
 
         // Update custom elements
         this.handlers['update-nodes'](nodes);
@@ -170,19 +170,19 @@ class NodeView {
     _removeNodes(nodes, pos) {
         // Transition exiting nodes to the clicked source's position.
         nodes.transition().duration(this.config.duration)
-            .attr("transform", () => this._translate(pos))
-            .style("opacity", 0)
+            .attr('transform', () => this._translate(pos))
+            .style('opacity', 0)
             .remove();
 
         // Transition exiting nodes radius to 0
-        nodes.select("circle").transition().duration(this.config.duration)
-            .attr("r", 0);
+        nodes.select('circle').transition().duration(this.config.duration)
+            .attr('r', 0);
     }
 
     _addLinks(link, pos) {
-        const linkGroup = link.insert("path", "g")
-            .attr("class", "link")
-            .attr("d", () => this.diagonal({source: pos, target: pos}));
+        const linkGroup = link.insert('path', 'g')
+            .attr('class', 'link')
+            .attr('d', () => this.diagonal({source: pos, target: pos}));
 
         this._updateLinks(linkGroup);
     }
@@ -190,25 +190,25 @@ class NodeView {
     _updateLinks(links) {
         // Transition links to their new position.
         links.transition().duration(this.config.duration)
-            .attr("d", this.diagonal)
-            .style("opacity", 1);
+            .attr('d', this.diagonal)
+            .style('opacity', 1);
     }
 
     _removeLinks(links, pos) {
         // Transition exiting nodes to the parent's new position.
         links.transition().duration(this.config.duration)
-            .attr("d", () => this.diagonal({source: pos, target: pos}))
-            .style("opacity", 0)
+            .attr('d', () => this.diagonal({source: pos, target: pos}))
+            .style('opacity', 0)
             .remove();
     }
 
     static orientation(orientKey) {
-        if (orientKey === "top-to-bottom") {
+        if (orientKey === 'top-to-bottom') {
             return {
                 x: (node) => node.x,
                 y: (node) => node.y
             };
-        } else if (orientKey === "left-to-right") {
+        } else if (orientKey === 'left-to-right') {
             return {
                 x: (node) => node.y,
                 y: (node) => node.x

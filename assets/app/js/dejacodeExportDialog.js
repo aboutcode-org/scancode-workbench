@@ -27,15 +27,15 @@ class DejaCodeExportDialog extends View {
 
         // Get product name and version
         this.dialog = this.element();
-        this.productName = this.dialog.find("#product-name");
-        this.productVersion = this.dialog.find("#product-version");
-        this.apiUrl = this.dialog.find("#apiURLDejaCode");
-        this.apiKey = this.dialog.find("#apiKey");
-        this.submitButton = this.dialog.find("button#componentSubmit");
+        this.productName = this.dialog.find('#product-name');
+        this.productVersion = this.dialog.find('#product-version');
+        this.apiUrl = this.dialog.find('#apiURLDejaCode');
+        this.apiKey = this.dialog.find('#apiKey');
+        this.submitButton = this.dialog.find('button#componentSubmit');
         this.submitButton.click(() => this._exportComponents());
-        this.progressBar = new Progress("#tab-component .components-table-container",
+        this.progressBar = new Progress('#tab-component .components-table-container',
             {
-                title: "Uploading Components ... ",
+                title: 'Uploading Components ... ',
                 size: 100
             });
     }
@@ -55,13 +55,13 @@ class DejaCodeExportDialog extends View {
                 // Get product name and version
                 const productName = this.productName.val();
                 const productVersion = this.productVersion.val();
-                const productNameVersion = productName.concat(":", productVersion);
+                const productNameVersion = productName.concat(':', productVersion);
                 const apiUrl = this.apiUrl.val();
                 const apiKey = this.apiKey.val();
 
                 // Test whether any form field is empty
-                if (productName === "" || productVersion === "" || apiUrl === "" || apiKey === "") {
-                    throw new Error("Please make sure you complete all fields in the upload form.");
+                if (productName === '' || productVersion === '' || apiUrl === '' || apiKey === '') {
+                    throw new Error('Please make sure you complete all fields in the upload form.');
                 }
 
                 this.dialog.modal('hide');
@@ -90,11 +90,11 @@ class DejaCodeExportDialog extends View {
             .then(() => this.progressBar.hide())
             // TODO: throw an exception and handle this in render with
             // dialog.showErrorBox
-            .then(() => alert("Components submitted to DejaCode"))
+            .then(() => alert('Components submitted to DejaCode'))
             .catch((err) => {
                 this.progressBar.hide();
                 console.log(err);
-                dialog.showErrorBox("Dejacode Upload Error", err.toString());
+                dialog.showErrorBox('Dejacode Upload Error', err.toString());
                 throw err;
             });
     }
@@ -104,7 +104,7 @@ class DejaCodeExportDialog extends View {
         const errors = [];
 
         // Make individual requests to DejaCode to create each component
-        const requests = $.map(components, (component, index) => {
+        const requests = $.map(components, (component) => {
             return this._createComponent(host, apiKey, component)
                 .catch(err => {
                     errors.push(JSON.stringify({
@@ -120,7 +120,7 @@ class DejaCodeExportDialog extends View {
             .then(() => {
                 if (Object.keys(errors).length > 0) {
                     throw new Error(
-                        "The following errors occurred:\n" + errors.join("\n\n"));
+                        'The following errors occurred:\n' + errors.join('\n\n'));
                 }
             });
     }

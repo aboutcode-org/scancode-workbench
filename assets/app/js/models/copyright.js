@@ -22,9 +22,9 @@ module.exports = function(sequelize, DataTypes) {
         {
             start_line: DataTypes.INTEGER,
             end_line: DataTypes.INTEGER,
-            holders: jsonDataType("holders"),
-            authors: jsonDataType("authors"),
-            statements: jsonDataType("statements")
+            holders: jsonDataType('holders'),
+            authors: jsonDataType('authors'),
+            statements: jsonDataType('statements')
         },
         {
             timestamps: false

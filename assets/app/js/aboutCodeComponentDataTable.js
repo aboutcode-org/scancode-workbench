@@ -48,14 +48,14 @@ class AboutCodeComponentDataTable extends View {
             return this._dataTable;
         }
 
-        $('<p class="lead">Component Summary</p>').prependTo($("#components-table_wrapper"));
+        $('<p class="lead">Component Summary</p>').prependTo($('#components-table_wrapper'));
         this._dataTable = $(this.id()).DataTable({
             scrollX: true,
             scrollResize: true,
             columns: AboutCodeComponentDataTable.COLUMNS,
             buttons: [
                 {
-                    name: "uploadDeja",
+                    name: 'uploadDeja',
                     text: '<i class=" fa fa-cloud-upload"></i> Upload Components',
                     titleAttr: 'Upload Components to DejaCode',
                     action: () => {
@@ -66,27 +66,27 @@ class AboutCodeComponentDataTable extends View {
                     },
                 },
                 {   // Do not allow the first 2 columns to be hidden
-                    extend: "colvis",
-                    columns: ":gt(1)",
-                    collectionLayout: "fixed two-column"
+                    extend: 'colvis',
+                    columns: ':gt(1)',
+                    collectionLayout: 'fixed two-column'
                 },
                 {
-                    extend: "csv",
-                    text: "Export CSV"
+                    extend: 'csv',
+                    text: 'Export CSV'
                 },
                 {
-                    extend: "excel",
-                    text: "Export Excel"
+                    extend: 'excel',
+                    text: 'Export Excel'
                 },
                 {
-                    name: "json",
-                    text: "Export JSON",
+                    name: 'json',
+                    text: 'Export JSON',
                     titleAttr: 'Export JSON file',
                     action: () => this.getHandler('export-json')()
                 }
             ],
             language: {
-                "emptyTable": "No Components created."
+                'emptyTable': 'No Components created.'
             },
             dom: // Needed to keep datatables buttons and search inline
                 "<'row'<'col-sm-9'B><'col-sm-3'f>>" +
@@ -100,98 +100,98 @@ class AboutCodeComponentDataTable extends View {
     static get COLUMNS() {
         return [
             {
-                data: "review_status",
-                title: "Status",
-                name: "status"
+                data: 'review_status',
+                title: 'Status',
+                name: 'status'
             },
             {
-                data: "path",
-                title: "Path",
-                name: "path"
+                data: 'path',
+                title: 'Path',
+                name: 'path'
             },
             {
-                data: "name",
-                title: "Name",
-                name: "name"
+                data: 'name',
+                title: 'Name',
+                name: 'name'
             },
             {
-                data: "version",
-                title: "Version",
-                name: "version"
+                data: 'version',
+                title: 'Version',
+                name: 'version'
             },
             {
-                data: "owner",
-                title: "Owner",
-                name: "owner"
+                data: 'owner',
+                title: 'Owner',
+                name: 'owner'
             },
             {
-                data: "licenses[<hr/>].key",
-                title: "License",
-                name: "license_expression"
+                data: 'licenses[<hr/>].key',
+                title: 'License',
+                name: 'license_expression'
             },
             {
-                "data": "copyrights[<hr/>].statements[]",
-                "title": "Copyright",
-                "name": "copyright_statements"
+                'data': 'copyrights[<hr/>].statements[]',
+                'title': 'Copyright',
+                'name': 'copyright_statements'
             },
             {
-                "data": "is_modified",
-                "title": "Modified",
-                "name": "is_modified"
+                'data': 'is_modified',
+                'title': 'Modified',
+                'name': 'is_modified'
             },
             {
-                "data": "is_deployed",
-                "title": "Deployed",
-                "name": "is_deployed"
+                'data': 'is_deployed',
+                'title': 'Deployed',
+                'name': 'is_deployed'
             },
             {
-                data: "code_type",
-                title: "Code Type",
-                name: "code_type",
+                data: 'code_type',
+                title: 'Code Type',
+                name: 'code_type',
             },
             {
-                data: "programming_language",
-                title: "Programming Language",
-                name: "programming_language"
+                data: 'programming_language',
+                title: 'Programming Language',
+                name: 'programming_language'
             },
             {
-                "data": "homepage_url",
-                "title": "Homepage URL",
-                "name": "homepage_url",
-                "render": Utils.anchorTag
+                'data': 'homepage_url',
+                'title': 'Homepage URL',
+                'name': 'homepage_url',
+                'render': Utils.anchorTag
             },
             {
-                "data": "download_url",
-                "title": "Download URL",
-                "name": "download_url",
-                "render": Utils.anchorTag
+                'data': 'download_url',
+                'title': 'Download URL',
+                'name': 'download_url',
+                'render': Utils.anchorTag
             },
             {
-                "data": "license_url",
-                "title": "License URL",
-                "name": "license_url",
-                "render": Utils.anchorTag
+                'data': 'license_url',
+                'title': 'License URL',
+                'name': 'license_url',
+                'render': Utils.anchorTag
             },
             {
-                "data": "notice_url",
-                "title": "Notice URL",
-                "name": "notice_url",
-                "render": Utils.anchorTag
+                'data': 'notice_url',
+                'title': 'Notice URL',
+                'name': 'notice_url',
+                'render': Utils.anchorTag
             },
             {
-                data: "feature",
-                title: "Feature",
-                name: "feature"
+                data: 'feature',
+                title: 'Feature',
+                name: 'feature'
             },
             {
-                data: "purpose",
-                title: "Purpose",
-                name: "purpose"
+                data: 'purpose',
+                title: 'Purpose',
+                name: 'purpose'
             },
             {
-                data: "notes",
-                title: "Notes",
-                name: "notes",
+                data: 'notes',
+                title: 'Notes',
+                name: 'notes',
             },
         ];
     }

@@ -16,7 +16,7 @@
 
 
 // Load Sequelize and create an in-memory database
-const Sequelize = require("sequelize");
+const Sequelize = require('sequelize');
 const fs = require('fs');
 const JSONStream = require('JSONStream');
 const Database = require('./models/database');
@@ -36,13 +36,13 @@ class AboutCodeDB {
     constructor(config) {
         // Constructor returns an object which effectively represents a connection
         // to the db arguments (name of db, username for db, pw for that user)
-        let name = (config && config.dbName) ? config.dbName : "tmp";
+        let name = (config && config.dbName) ? config.dbName : 'tmp';
         let user = (config && config.dbUser) ? config.dbUser : null;
         let password = (config && config.dbPassword) ? config.dbPassword : null;
-        let storage = (config && config.dbStorage) ? config.dbStorage : ":memory:";
+        let storage = (config && config.dbStorage) ? config.dbStorage : ':memory:';
 
         this.sequelize = new Sequelize(name, user, password, {
-            dialect: "sqlite",
+            dialect: 'sqlite',
             storage: storage
         });
 
@@ -56,8 +56,8 @@ class AboutCodeDB {
     getAboutCodeInfo() {
         return this.sync.then(db => db.Header.findOne({
             attributes: [
-                "aboutcode_manager_notice",
-                "aboutcode_manager_version"
+                'aboutcode_manager_notice',
+                'aboutcode_manager_version'
             ]
         }));
     }
@@ -66,16 +66,16 @@ class AboutCodeDB {
     getScanCodeInfo() {
         return this.sync.then(db => db.Header.findOne({
             attributes: [
-                "scancode_notice",
-                "scancode_version",
-                "scancode_options"
+                'scancode_notice',
+                'scancode_version',
+                'scancode_options'
             ]
         }));
     }
 
     getFileCount() {
         return this.sync
-            .then(db => db.Header.findOne({attributes: ["files_count"]}))
+            .then(db => db.Header.findOne({attributes: ['files_count']}))
             .then(count => count ? count.files_count : 0);
     }
 
@@ -126,7 +126,7 @@ class AboutCodeDB {
                                 path: {$like: `${path}%`},
                                 $and: [
                                     {[field]: {$ne: null}},
-                                    {[field]: {$ne: ""}}
+                                    {[field]: {$ne: ''}}
                                 ]
                             }
                         })
@@ -143,7 +143,7 @@ class AboutCodeDB {
                             where: {
                                 $and: [
                                     { [field]: {$ne: null} },
-                                    { [field]: {$ne: ""} }
+                                    { [field]: {$ne: ''} }
                                 ]
                             },
                         }]
@@ -156,7 +156,7 @@ class AboutCodeDB {
     // Uses findAll to return JSTree format from the File Table
     findAllJSTree(query) {
         query = $.extend(query, {
-            attributes: ["path", "parent", "name", "type"]
+            attributes: ['path', 'parent', 'name', 'type']
         });
         return this.sync
             .then(db => db.File.findAll(query))
@@ -167,7 +167,7 @@ class AboutCodeDB {
                         text: file.name,
                         parent: file.parent,
                         type: file.type,
-                        children: file.type === "directory"
+                        children: file.type === 'directory'
                     };
                 });
             });
@@ -176,7 +176,7 @@ class AboutCodeDB {
     // Add rows to the flattened files table from a ScanCode json object
     addFromJson(jsonFileName, aboutCodeVersion, onProgressUpdate) {
         if (!jsonFileName) {
-            throw new Error("Invalid json file name: " + jsonFileName);
+            throw new Error('Invalid json file name: ' + jsonFileName);
         }
 
         const stream = fs.createReadStream(jsonFileName, {encoding: 'utf8'});
@@ -202,7 +202,7 @@ class AboutCodeDB {
                     }
                     $.extend(header, {
                         aboutcode_manager_version: version,
-                        aboutcode_manager_notice: "Exported from AboutCode Manager and provided on an \"AS IS\" BASIS, WITHOUT WARRANTIES\\nOR CONDITIONS OF ANY KIND, either express or implied. No content created from\\nAboutCode Manager should be considered or used as legal advice. Consult an Attorney\\nfor any legal advice.\\nAboutCode Manager is a free software analysis application from nexB Inc. and others.\\nVisit https://github.com/nexB/aboutcode-manager/ for support and download.\""
+                        aboutcode_manager_notice: 'Exported from AboutCode Manager and provided on an "AS IS" BASIS, WITHOUT WARRANTIES\\nOR CONDITIONS OF ANY KIND, either express or implied. No content created from\\nAboutCode Manager should be considered or used as legal advice. Consult an Attorney\\nfor any legal advice.\\nAboutCode Manager is a free software analysis application from nexB Inc. and others.\\nVisit https://github.com/nexB/aboutcode-manager/ for support and download."'
                     });
                     files_count = header.files_count;
                     promiseChain = promiseChain
@@ -211,7 +211,7 @@ class AboutCodeDB {
                 })
                 .on('data', function(file) {
                     if (!rootPath) {
-                        rootPath = file.path.split("/")[0];
+                        rootPath = file.path.split('/')[0];
                         // Show error for scans missing file type information
                         if (file.type === undefined) {
                             reject(new AboutCodeDB.MissingFileInfoError());
@@ -232,7 +232,7 @@ class AboutCodeDB {
                                 if (currProgress > progress) {
                                     progress = currProgress;
                                     onProgressUpdate(progress);
-                                    console.log("Progress: " +
+                                    console.log('Progress: ' +
                                         `${progress}% ` +
                                         `(${index}/${files_count})`);
 
@@ -254,7 +254,7 @@ class AboutCodeDB {
                                 files.push({
                                     path: rootPath,
                                     name: rootPath,
-                                    type: "directory",
+                                    type: 'directory',
                                     files_count: files_count
                                 });
                             }

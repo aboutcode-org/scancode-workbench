@@ -29,21 +29,21 @@ class AboutCodeBarChart extends View {
         super(barChartId, aboutCodeDB);
 
         this.chartOptions = {
-            name: "License Summary",
+            name: 'License Summary',
             margin: 30,
             barHeight: 25,
-            xAxisName: "License Count",
-            yAxisName: "License Name"
+            xAxisName: 'License Count',
+            yAxisName: 'License Name'
         };
 
         this.barChart = new BarChart([], this.chartOptions, this.id());
 
-        this.progressBar = new Progress("#barchart-view .svg-container", {size: 100});
+        this.progressBar = new Progress('#barchart-view .svg-container', {size: 100});
 
-        this.chartAttributesSelect = $("select#select-chart-attribute");
-        this.barChartTotalFiles = $("span.total-files");
+        this.chartAttributesSelect = $('select#select-chart-attribute');
+        this.barChartTotalFiles = $('span.total-files');
 
-        this.chartAttributesSelect.select2({ placeholder: "Select an attribute" });
+        this.chartAttributesSelect.select2({ placeholder: 'Select an attribute' });
 
         // Populate bar chart summary select box values
         $.each(AboutCodeClueDataTable.TABLE_COLUMNS, (i, column) => {
@@ -53,15 +53,15 @@ class AboutCodeBarChart extends View {
             }
         });
 
-        $(".bar-chart-copyrights").wrapAll(`<optgroup label="Copyright Information"/>`);
-        $(".bar-chart-licenses").wrapAll(`<optgroup label="License Information"/>`);
-        $(".bar-chart-emails").wrapAll(`<optgroup label="Email Information"/>`);
-        $(".bar-chart-file-infos").wrapAll(`<optgroup label="File Information"/>`);
-        $(".bar-chart-package-infos").wrapAll(`<optgroup label="Package Information"/>`);
+        $('.bar-chart-copyrights').wrapAll(`<optgroup label="Copyright Information"/>`);
+        $('.bar-chart-licenses').wrapAll(`<optgroup label="License Information"/>`);
+        $('.bar-chart-emails').wrapAll(`<optgroup label="Email Information"/>`);
+        $('.bar-chart-file-infos').wrapAll(`<optgroup label="File Information"/>`);
+        $('.bar-chart-package-infos').wrapAll(`<optgroup label="Package Information"/>`);
 
         this.chartAttributesSelect.val([]);
 
-        this.chartAttributesSelect.on("change", () => {
+        this.chartAttributesSelect.on('change', () => {
             this.needsReload(true);
             this.redraw();
         });
@@ -77,7 +77,7 @@ class AboutCodeBarChart extends View {
         if (this.chartAttributesSelect.val()) {
             const attribute = this.chartAttributesSelect.val();
             let query = {
-                attributes: [Sequelize.fn("TRIM", Sequelize.col(attribute)), attribute],
+                attributes: [Sequelize.fn('TRIM', Sequelize.col(attribute)), attribute],
                 where: { path: { $like: `${this.selectedPath()}%` } }
             };
 
@@ -107,15 +107,15 @@ class AboutCodeBarChart extends View {
             .then(values => {
                 this.barChart = new BarChart(values, this.chartOptions, this.id());
                 const that = this;
-                const chartElement = $("#summary-bar-chart");
-                chartElement.find("rect").click(function () {
+                const chartElement = $('#summary-bar-chart');
+                chartElement.find('rect').click(function () {
                     const attribute =  that.chartAttributesSelect.val();
-                    const value = $(this).data("value");
+                    const value = $(this).data('value');
                     that.getHandler('bar-clicked')(attribute, value);
                 });
-                chartElement.find(".y.axis .tick").click(function () {
+                chartElement.find('.y.axis .tick').click(function () {
                     const attribute =  that.chartAttributesSelect.val();
-                    const value = $(this).data("value");
+                    const value = $(this).data('value');
                     that.getHandler('bar-clicked')(attribute, value);
                 });
 

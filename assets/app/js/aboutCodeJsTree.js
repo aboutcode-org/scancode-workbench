@@ -37,7 +37,7 @@ class AboutCodeJsTree extends View {
     }
 
     getSelected() {
-        return this.jsTree().jstree("get_selected")[0];
+        return this.jsTree().jstree('get_selected')[0];
     }
 
     jsTree() {
@@ -48,8 +48,8 @@ class AboutCodeJsTree extends View {
         const that = this;
         this._jsTree = $(this.id()).jstree(
             {
-                "core": {
-                    "data": function (currentDirectory, callback) {
+                'core': {
+                    'data': function (currentDirectory, callback) {
                         that.db()
                             .findAllJSTree({
                                 where: {
@@ -58,18 +58,18 @@ class AboutCodeJsTree extends View {
                             })
                             .then((children) => callback.call(this, children));
                     },
-                    "animation": false
+                    'animation': false
                 },
-                "types": {
-                    "directory": {
-                        "icon": "fa fa-folder fa_custom"
+                'types': {
+                    'directory': {
+                        'icon': 'fa fa-folder fa_custom'
                     },
-                    "file": {
-                        "icon": "fa fa-file-text-o"
+                    'file': {
+                        'icon': 'fa fa-file-text-o'
                     }
                 },
-                "plugins": ["types", "sort", "contextmenu", "wholerow"],
-                "sort": function (a, b) {
+                'plugins': ['types', 'sort', 'contextmenu', 'wholerow'],
+                'sort': function (a, b) {
                     const a1 = this.get_node(a);
                     const b1 = this.get_node(b);
                     if (a1.type === b1.type) {
@@ -79,12 +79,12 @@ class AboutCodeJsTree extends View {
                         return (a1.type === 'directory') ? -1 : 1;
                     }
                 },
-                "contextmenu": {
-                    "items": (node) => {
+                'contextmenu': {
+                    'items': (node) => {
                         return {
-                            "edit_component": {
-                                "label": "Edit Component",
-                                "action": () => this.getHandler('node-edit')(node)
+                            'edit_component': {
+                                'label': 'Edit Component',
+                                'action': () => this.getHandler('node-edit')(node)
                             }
                         };
                     }
@@ -97,7 +97,7 @@ class AboutCodeJsTree extends View {
                 data.instance.set_icon(data.node, 'fa fa-folder fa_custom');
             })
             // Select the root node when the tree is refreshed
-            .on('refresh.jstree', (evt, data) => {
+            .on('refresh.jstree', () => {
                 let rootNode = this.jsTree().jstree('get_node', '#').children;
                 this.jsTree().jstree('select_node', rootNode);
             })

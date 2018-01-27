@@ -29,12 +29,12 @@ class AboutCodeNodeView extends View {
         this.isNodePruned = () => false;
 
         // Center and reset node view
-        $("#reset-zoom").click(() => this.centerNode());
+        $('#reset-zoom').click(() => this.centerNode());
 
-        this.nodeDropdown = $("#node-drop-down");
+        this.nodeDropdown = $('#node-drop-down');
         this.nodeDropdown.select2({
             closeOnSelect: false,
-            placeholder: "select me"
+            placeholder: 'select me'
         });
 
         // Resize the nodes based on how many clues are selected
@@ -48,27 +48,27 @@ class AboutCodeNodeView extends View {
                 }
             });
 
-        const selectedStatuses = ["Analyzed", "Attention", "Original", "NR"];
+        const selectedStatuses = ['Analyzed', 'Attention', 'Original', 'NR'];
 
-        $(".status-dropdown-menu a").on("click", event => {
+        $('.status-dropdown-menu a').on('click', event => {
             const target = $(event.currentTarget);
-            const value = target.attr("data-value");
-            const input = target.find("input");
+            const value = target.attr('data-value');
+            const input = target.find('input');
             const index = selectedStatuses.indexOf(value);
 
             if (index > -1) {
                 selectedStatuses.splice(index, 1);
                 // setTimeout is needed for checkbox to show up
-                setTimeout(() =>  input.prop("checked", false), 0);
+                setTimeout(() =>  input.prop('checked', false), 0);
             } else {
                 selectedStatuses.push(value);
-                setTimeout(() => input.prop("checked", true), 0);
+                setTimeout(() => input.prop('checked', true), 0);
             }
             $(event.target).blur();
 
             this._setIsNodePruned((node) => {
                 return selectedStatuses.indexOf(
-                    node.review_status) < 0 && node.review_status !== "";
+                    node.review_status) < 0 && node.review_status !== '';
             });
 
             this.redraw();
@@ -78,7 +78,7 @@ class AboutCodeNodeView extends View {
 
     reload() {
         return this.db()
-            .findOne({ where: { parent: "#" } })
+            .findOne({ where: { parent: '#' } })
             .then(root => {
                 if (root) {
                     return this.setRoot(root.path);
@@ -115,9 +115,9 @@ class AboutCodeNodeView extends View {
                 if (rootId in this.nodeData()) {
                     this.nodeView().setRoot(this.nodeData()[rootId]);
                 } else if (rootId) {
-                    let splits = rootId.split("/");
+                    let splits = rootId.split('/');
                     let rootIds = $.map(splits, (split, index) => {
-                        return { path: splits.slice(0, index + 1).join("/") };
+                        return { path: splits.slice(0, index + 1).join('/') };
                     });
 
                     return Promise.resolve()
@@ -141,7 +141,7 @@ class AboutCodeNodeView extends View {
 
         this._nodeView = new NodeView({
                 selector: this.id(),
-                orientation: "left-to-right",
+                orientation: 'left-to-right',
                 nodeWidth: 25,
                 nodeHeight: 160,
                 duration: 1000
@@ -165,51 +165,50 @@ class AboutCodeNodeView extends View {
 
     // Define the visuals of a node when it's added
     _addNodes(nodes) {
-        const circle = nodes.append("circle")
-            .on("click", (d) => this.nodeView().toggle(d.id));
+        nodes.append('circle').on('click', (d) => this.nodeView().toggle(d.id));
 
         // Setup directory nodes
-        nodes.filter((d) => d.type === "directory")
-            .attr("class", "node dir")
-            .append("text")
-            .attr("x", 10)
-            .attr("alignment-baseline", "central")
+        nodes.filter((d) => d.type === 'directory')
+            .attr('class', 'node dir')
+            .append('text')
+            .attr('x', 10)
+            .attr('alignment-baseline', 'central')
             .text(function (d) {
                 // TODO: Calculate clue count from DB when loading node data.
                 // return `${d.name} (${d.files_count}, ${d.clues_count})`;
                 return `${d.name} (${d.files_count})`;
             })
-            .on("click", node => this.getHandler('node-clicked')(node));
+            .on('click', node => this.getHandler('node-clicked')(node));
 
         // Setup file nodes
-        nodes.filter((d) => d.type !== "directory")
-            .attr("class", "node file")
-            .append("g")
-            .attr("class", "clues")
-            .attr("x", 10)
-            .on("click", node => this.getHandler('node-clicked')(node));
+        nodes.filter((d) => d.type !== 'directory')
+            .attr('class', 'node file')
+            .append('g')
+            .attr('class', 'clues')
+            .attr('x', 10)
+            .on('click', node => this.getHandler('node-clicked')(node));
     }
 
     // Update the nodes when data changes
     _updateNodes(nodes) {
         // Update circles
-        nodes.select("circle").attr("class", d => d.review_status);
+        nodes.select('circle').attr('class', d => d.review_status);
 
         // Get the selected values
         const selected = this.nodeDropdown.val();
 
         if (selected) {
             // Select all clue nodes
-            const fileNodes = nodes.filter((d) => d.type !== "directory");
-            const clueGroup = fileNodes.selectAll("g.clues");
-            const clueNodes = clueGroup.selectAll("g").data(selected, d => d);
+            const fileNodes = nodes.filter((d) => d.type !== 'directory');
+            const clueGroup = fileNodes.selectAll('g.clues');
+            const clueNodes = clueGroup.selectAll('g').data(selected, d => d);
             AboutCodeNodeView._updateClueNodes(clueNodes);
             AboutCodeNodeView._addClueNodes(clueNodes.enter());
             AboutCodeNodeView._removeClueNodes(clueNodes.exit());
         }
 
-        nodes.select("g.dir-node").transition().duration(1000)
-            .attr("transform", "translate(10,0)");
+        nodes.select('g.dir-node').transition().duration(1000)
+            .attr('transform', 'translate(10,0)');
     }
 
     // Prune nodes when status is checked in drop down menu
@@ -272,7 +271,7 @@ class AboutCodeNodeView extends View {
             }
         }
 
-        return "";
+        return '';
     }
 
     // Map a scanned file to a node view data object.
@@ -293,41 +292,41 @@ class AboutCodeNodeView extends View {
 
     // Create new visual for any new clues
     static _addClueNodes(node) {
-        const newClueNodes = node.append("g")
-            .attr("class", (name) => `clue-${name}`)
-            .style("opacity", 0);
+        const newClueNodes = node.append('g')
+            .attr('class', (name) => `clue-${name}`)
+            .style('opacity', 0);
 
         // Append clue rect
-        newClueNodes.append("rect");
+        newClueNodes.append('rect');
 
         // Append clue text
-        newClueNodes.append("text")
-            .attr("alignment-baseline", "central")
+        newClueNodes.append('text')
+            .attr('alignment-baseline', 'central')
             .text((d, i, j) => {
                 const data = newClueNodes[j].parentNode.__data__;
 
-                if (d === "filename") {
+                if (d === 'filename') {
                     return data.name;
-                } else if (d === "license") {
+                } else if (d === 'license') {
                     return data.licenses
                         .map((license) => license.short_name)
-                        .join(", ");
-                } else if (d === "copyright") {
+                        .join(', ');
+                } else if (d === 'copyright') {
                     return data.copyrights
-                        .map((copyright) => copyright.statements.join(" "))
-                        .join(", ");
+                        .map((copyright) => copyright.statements.join(' '))
+                        .join(', ');
                 }
             })
-            .each(function (d, i) {
+            .each(function () {
                 // Update rect size (has to be done after text is added)
-                d3.select(this.parentNode).select("rect")
-                    .attr("y", function() {
+                d3.select(this.parentNode).select('rect')
+                    .attr('y', function() {
                         return -this.parentNode.getBBox().height/2;
                     })
-                    .attr("width", function() {
+                    .attr('width', function() {
                         return this.parentNode.getBBox().width;
                     })
-                    .attr("height", function() {
+                    .attr('height', function() {
                         return this.parentNode.getBBox().height;
                     });
             });
@@ -338,17 +337,17 @@ class AboutCodeNodeView extends View {
     static _updateClueNodes(nodes) {
         // Update each clue's translation and set opacity to 1
         nodes.transition().duration(1000)
-            .style("opacity", 1)
-            .each("end", function () {
-                d3.select(this).style("opacity", "inherit");
+            .style('opacity', 1)
+            .each('end', function () {
+                d3.select(this).style('opacity', 'inherit');
             })
-            .attr("transform", (d, i) => `translate(10, ${25*i})`);
+            .attr('transform', (d, i) => `translate(10, ${25*i})`);
     }
 
     // Update removed clues
     static _removeClueNodes(nodes) {
         nodes.transition().duration(1000)
-            .style("opacity", 0)
+            .style('opacity', 0)
             .remove();
     }
 }

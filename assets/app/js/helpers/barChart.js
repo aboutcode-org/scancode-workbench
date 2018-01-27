@@ -54,7 +54,7 @@ class BarChart {
             .rangeRoundBands([0, chartHeight], 0.1 /* white space percentage */);
 
         // Creates a d3 axis given a scale (takes care of tick marks and labels)
-        const xAxis = d3.svg.axis()
+        d3.svg.axis()
             .scale(this.xScale)
             .orient('bottom');
 
@@ -71,25 +71,25 @@ class BarChart {
             .enter().append('g');
 
         // Clear tooltip div created when inadvertently triggered during dropdown selection.
-        $( ".toolTip" ).remove();
+        $( '.toolTip' ).remove();
 
-        const tooltip = d3.select("body").append("div").attr("class", "toolTip");
+        const tooltip = d3.select('body').append('div').attr('class', 'toolTip');
 
         this.rects = bars.append('rect')
             .attr('y', function(d) { return yScale(d.name); })
             .attr('height', yScale.rangeBand())
-            .attr("data-value", function (d) {
+            .attr('data-value', function (d) {
                 return d.name;
             })
             // Add a tooltip to the bar.
-            .on("mouseover", function () { tooltip.style("display", "inline-block"); })
-            .on("mousemove", function (d) {
+            .on('mouseover', function () { tooltip.style('display', 'inline-block'); })
+            .on('mousemove', function (d) {
                 tooltip
-                    .style("left", d3.event.pageX - 50 + "px")
-                    .style("top", d3.event.pageY - 70 + "px")
+                    .style('left', d3.event.pageX - 50 + 'px')
+                    .style('top', d3.event.pageY - 70 + 'px')
                     .text((d.name + ' (' + d.val + ')'));
             })
-            .on("mouseout", function () { tooltip.style("display", "none"); });
+            .on('mouseout', function () { tooltip.style('display', 'none'); });
 
         this.texts = bars.append('text')
             .attr('y', function (d) { return yScale(d.name); })
@@ -105,18 +105,18 @@ class BarChart {
         }
 
         // Add a tooltip to the y-axis labels.
-        chart.selectAll(".y.axis .tick")
-            .on("mouseover", function () { tooltip.style("display", "inline-block"); })
-            .on("mousemove", function (d) {
+        chart.selectAll('.y.axis .tick')
+            .on('mouseover', function () { tooltip.style('display', 'inline-block'); })
+            .on('mousemove', function (d) {
                 let result = $.grep(formattedData, function (e) { return e.name === d; });
                 let displayValue = ' (' + result[0].val + ')';
                 tooltip
-                    .style("left", d3.event.pageX - 50 + "px")
-                    .style("top", d3.event.pageY - 70 + "px")
+                    .style('left', d3.event.pageX - 50 + 'px')
+                    .style('top', d3.event.pageY - 70 + 'px')
                     .text((d + displayValue));
             })
-            .on("mouseout", function () { tooltip.style("display", "none"); })
-            .attr("data-value", function(d) {
+            .on('mouseout', function () { tooltip.style('display', 'none'); })
+            .attr('data-value', function(d) {
                 return d;
             });
 
@@ -124,7 +124,7 @@ class BarChart {
     }
 
     static trimName(name) {
-        return name.substring(0, 50) + (name.length > 50 ? " ..." : "");
+        return name.substring(0, 50) + (name.length > 50 ? ' ...' : '');
     }
 
     // Redraws chart and sets width based on available chart width.

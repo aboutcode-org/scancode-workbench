@@ -53,7 +53,7 @@ class Progress {
         if (this.progressContainer && this.container.parent().has(this.progressContainer)) {
             this.progressContainer.remove();
             this.progressContainer = null;
-            this.container.removeClass("div-invisible");
+            this.container.removeClass('div-invisible');
         }
     }
 
@@ -62,7 +62,7 @@ class Progress {
             this.progressContainer =
                 this.container.clone().empty().append(progressBar);
             this.container.before(this.progressContainer);
-            this.container.addClass("div-invisible");
+            this.container.addClass('div-invisible');
         }
     }
 
@@ -70,7 +70,7 @@ class Progress {
         const progressElement = $(`<div class='progress'></div>`);
         if (this.options.title) {
             progressElement.append(
-                `<h4 class='title'>${this.options.title || ""}</h4>
+                `<h4 class='title'>${this.options.title || ''}</h4>
                  <div class='progressbar ${progressbarClass}'></div>`);
         } else {
             progressElement.append(
@@ -79,8 +79,8 @@ class Progress {
 
         if (this.options.size) {
             progressElement.find('.progressbar').css({
-                "width": `${this.options.size}px`,
-                "height": `${this.options.size}px`
+                'width': `${this.options.size}px`,
+                'height': `${this.options.size}px`
             });
         }
         return progressElement;

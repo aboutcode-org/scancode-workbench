@@ -26,33 +26,33 @@ class ComponentDialog extends View {
         // Define DOM element constants for the modal dialog.
         // TODO: Use nested ids to avoid collisions, e.g. #nodeModal .nodeModalLabel
         this.dialog = this.element();
-        this.title = this.dialog.find(".modal-title");
-        this.status = this.dialog.find("#component-status");
-        this.name = this.dialog.find("#component-name");
-        this.license = this.dialog.find("#component-license");
-        this.owner = this.dialog.find("#component-owner");
-        this.copyright = this.dialog.find("#component-copyright");
-        this.deployed = this.dialog.find("input[name=component-deployed]");
-        this.modified = this.dialog.find("input[name=component-modified]");
-        this.codeType = this.dialog.find("#component-code-type");
-        this.notes = this.dialog.find("#component-notes");
-        this.feature = this.dialog.find("#component-feature");
-        this.purpose = this.dialog.find("#component-purpose");
-        this.language = this.dialog.find("#component-language");
-        this.version = this.dialog.find("#component-version");
-        this.homepageUrl = this.dialog.find("#component-homepage-url");
-        this.downloadUrl = this.dialog.find("#component-download-url");
-        this.licenseUrl = this.dialog.find("#component-license-url");
-        this.noticeUrl = this.dialog.find("#component-notice-url");
-        this.saveButton = this.dialog.find("button#component-save");
-        this.deleteButton = this.dialog.find("button#component-delete");
+        this.title = this.dialog.find('.modal-title');
+        this.status = this.dialog.find('#component-status');
+        this.name = this.dialog.find('#component-name');
+        this.license = this.dialog.find('#component-license');
+        this.owner = this.dialog.find('#component-owner');
+        this.copyright = this.dialog.find('#component-copyright');
+        this.deployed = this.dialog.find('input[name=component-deployed]');
+        this.modified = this.dialog.find('input[name=component-modified]');
+        this.codeType = this.dialog.find('#component-code-type');
+        this.notes = this.dialog.find('#component-notes');
+        this.feature = this.dialog.find('#component-feature');
+        this.purpose = this.dialog.find('#component-purpose');
+        this.language = this.dialog.find('#component-language');
+        this.version = this.dialog.find('#component-version');
+        this.homepageUrl = this.dialog.find('#component-homepage-url');
+        this.downloadUrl = this.dialog.find('#component-download-url');
+        this.licenseUrl = this.dialog.find('#component-license-url');
+        this.noticeUrl = this.dialog.find('#component-notice-url');
+        this.saveButton = this.dialog.find('button#component-save');
+        this.deleteButton = this.dialog.find('button#component-delete');
 
         // Define the buttons that can be used to close the dialog.
-        this.exitButton = this.dialog.find("button#component-exit");
-        this.closeButton = this.dialog.find("button#component-close");
+        this.exitButton = this.dialog.find('button#component-exit');
+        this.closeButton = this.dialog.find('button#component-close');
 
         // Make node view modal box draggable
-        this.dialog.draggable({ handle: ".modal-header" });
+        this.dialog.draggable({ handle: '.modal-header' });
         this.handlers = {};
         this.saveButton.click(() => this._saveComponent());
         this.deleteButton.click(() => this._deleteComponent());
@@ -68,7 +68,7 @@ class ComponentDialog extends View {
     // Check whether the user has made any new edits.
     _closeComponent() {
         // Retrieve the current form values, i.e., including edits not yet saved.
-        this.currentSerialization = this.dialog.find("form").serialize();
+        this.currentSerialization = this.dialog.find('form').serialize();
 
         if (this.initialSerialization !== this.currentSerialization) {
             return confirm('Your new changes haven\'t been saved.  \n\n' +
@@ -82,7 +82,7 @@ class ComponentDialog extends View {
             .then(component => {
                 return this.db().db.File
                     .findOne({
-                        attributes: ["id"],
+                        attributes: ['id'],
                         where: { path: { $eq: path } }
                     })
                     .then(row => {
@@ -92,8 +92,8 @@ class ComponentDialog extends View {
                     });
             })
             .then(component => {
-                const modifiedValue = $("input[name=component-modified]:checked").val();
-                const deployedValue = $("input[name=component-deployed]:checked").val();
+                const modifiedValue = $('input[name=component-modified]:checked').val();
+                const deployedValue = $('input[name=component-deployed]:checked').val();
 
                 return {
                     path: path,
@@ -104,11 +104,11 @@ class ComponentDialog extends View {
                         return { key: license };
                     }),
                     copyrights: $.map(this.copyright.val() || [], copyright => {
-                        return { statements: copyright.split("\n") };
+                        return { statements: copyright.split('\n') };
                     }),
                     code_type: (this.codeType.val() || [null])[0],
-                    is_modified: modifiedValue ? (modifiedValue === "yes") : null,
-                    is_deployed: deployedValue ? (deployedValue === "yes") : null,
+                    is_modified: modifiedValue ? (modifiedValue === 'yes') : null,
+                    is_deployed: deployedValue ? (deployedValue === 'yes') : null,
                     version: this.version.val(),
                     owner: (this.owner.val() || [null])[0],
                     feature: this.feature.val(),
@@ -122,7 +122,7 @@ class ComponentDialog extends View {
                 };
             })
             .then(component => this.db().setComponent(component))
-            .then(component => this.getHandler("save")(component));
+            .then(component => this.getHandler('save')(component));
         this.dialog.modal('hide');
     }
 
@@ -133,7 +133,7 @@ class ComponentDialog extends View {
             .then(component => {
                 if (component !== null) {
                     return component.destroy()
-                        .then(() => this.getHandler("delete")(component));
+                        .then(() => this.getHandler('delete')(component));
                 }
             });
     }
@@ -169,11 +169,11 @@ class ComponentDialog extends View {
 
                 // Disable the ability to close the dialog by clicking outside
                 // the dialog or pressing the escape key.
-                this.dialog.modal({ backdrop: "static", keyboard: false });
+                this.dialog.modal({ backdrop: 'static', keyboard: false });
 
                 // Retrieve any previously-saved values -- use below in _closeComponent()
                 // to compare with any new edits before closing the dialog.
-                this.initialSerialization = this.dialog.find("form").serialize();
+                this.initialSerialization = this.dialog.find('form').serialize();
 
                 this.dialog.modal('show');
             })
@@ -198,7 +198,7 @@ class ComponentDialog extends View {
                 this.license.html('').select2({
                     data: $.unique(license_keys),
                     multiple: true,
-                    placeholder: "Enter license",
+                    placeholder: 'Enter license',
                     tags: true
                 }, true);
                 this.license.val(saved);
@@ -215,7 +215,7 @@ class ComponentDialog extends View {
                 this.copyright.html('').select2({
                     data: $.unique(copyright_statements),
                     multiple: true,
-                    placeholder: "Enter copyright",
+                    placeholder: 'Enter copyright',
                     tags: true
                 }, true);
                 this.copyright.val(saved);
@@ -231,7 +231,7 @@ class ComponentDialog extends View {
                     data: $.unique(owners),
                     multiple: true,
                     maximumSelectionLength: 1,
-                    placeholder: "Enter owner",
+                    placeholder: 'Enter owner',
                     tags: true
                 }, true);
                 this.owner.val(saved);
@@ -248,7 +248,7 @@ class ComponentDialog extends View {
                     data: $.unique(languages),
                     multiple: true,
                     maximumSelectionLength: 1,
-                    placeholder: "Enter language",
+                    placeholder: 'Enter language',
                     tags: true
                 }, true);
                 this.language.val(saved);
@@ -257,12 +257,12 @@ class ComponentDialog extends View {
 
     _setupCodeType(component) {
         const saved = component.code_type || [] ;
-        let codeTypes = ["Source", "Binary", "Mixed", "Document"].concat(saved);
+        let codeTypes = ['Source', 'Binary', 'Mixed', 'Document'].concat(saved);
         this.codeType.html('').select2({
             data: $.unique(codeTypes),
             multiple: true,
             maximumSelectionLength: 1,
-            placeholder: "Enter code type",
+            placeholder: 'Enter code type',
             tags: true
         }, true);
         this.codeType.val(saved);
@@ -277,7 +277,7 @@ class ComponentDialog extends View {
                     data: $.unique(homepage_urls),
                     multiple: true,
                     maximumSelectionLength: 1,
-                    placeholder: "Enter Homepage URL",
+                    placeholder: 'Enter Homepage URL',
                     tags: true
                 }, true);
                 this.homepageUrl.val(saved);
@@ -297,7 +297,7 @@ class ComponentDialog extends View {
                     data: $.unique(download_urls),
                     multiple: true,
                     maximumSelectionLength: 1,
-                    placeholder: "Enter Download URL",
+                    placeholder: 'Enter Download URL',
                     tags: true
                 }, true);
                 this.downloadUrl.val(saved);
@@ -319,7 +319,7 @@ class ComponentDialog extends View {
                     data: $.unique(licenese_urls),
                     multiple: true,
                     maximumSelectionLength: 1,
-                    placeholder: "Enter License URL",
+                    placeholder: 'Enter License URL',
                     tags: true
                 }, true);
                 this.licenseUrl.val(saved);
@@ -335,7 +335,7 @@ class ComponentDialog extends View {
                     data: $.unique(notice_urls),
                     multiple: true,
                     maximumSelectionLength: 1,
-                    placeholder: "Enter Notice URL",
+                    placeholder: 'Enter Notice URL',
                     tags: true
                 }, true);
                 this.noticeUrl.val(saved);
@@ -346,9 +346,9 @@ class ComponentDialog extends View {
         if (component.is_modified !== null && component.is_modified !== undefined) {
             const modifiedValue = component.is_modified ? 'yes' : 'no';
             $(`input[name=component-modified][value='${modifiedValue}']`)
-                .prop("checked", true);
+                .prop('checked', true);
         } else {
-            this.modified.prop("checked", false);
+            this.modified.prop('checked', false);
         }
     }
 
@@ -356,34 +356,34 @@ class ComponentDialog extends View {
         if (component.is_deployed !== null && component.is_deployed !== undefined) {
             const deployedValue = component.is_deployed ? 'yes' : 'no';
             $(`input[name=component-deployed][value='${deployedValue}']`)
-                .prop("checked", true);
+                .prop('checked', true);
         } else {
-            this.deployed.prop("checked", false);
+            this.deployed.prop('checked', false);
         }
     }
 
     _setupStatus(component) {
-        this.status.val(component.review_status || "");
+        this.status.val(component.review_status || '');
     }
 
     _setupName(component) {
-        this.name.val(component.name || "");
+        this.name.val(component.name || '');
     }
 
     _setupVersion(component) {
-        this.version.val(component.version || "");
+        this.version.val(component.version || '');
     }
 
     _setupFeature(component) {
-        this.feature.val(component.feature || "");
+        this.feature.val(component.feature || '');
     }
 
     _setupPurpose(component) {
-        this.purpose.val(component.purpose || "");
+        this.purpose.val(component.purpose || '');
     }
 
     _setupNotes(component) {
-        this.notes.val(component.notes || "");
+        this.notes.val(component.notes || '');
     }
 
     _copyrightQuery(path, field) {

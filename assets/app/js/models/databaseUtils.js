@@ -14,7 +14,7 @@
  #
  */
 
-const Sequelize = require("sequelize");
+const Sequelize = require('sequelize');
 
 // Stores an object as a json string internally, but as an object externally
 module.exports = {
@@ -30,7 +30,7 @@ module.exports = {
         };
     },
     parentPath: function(path) {
-        let splits = path.split("/");
-        return splits.length === 1 ? "#" : splits.slice(0, -1).join("/");
+        let splits = path.split('/');
+        return splits.length === 1 ? '#' : splits.slice(0, -1).join('/');
     }
 };

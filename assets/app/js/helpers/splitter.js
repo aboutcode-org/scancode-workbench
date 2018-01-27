@@ -41,11 +41,11 @@ class Splitter {
 
     show() {
         this.splitter.setSizes(this.splitSizes);
-        $(".gutter-horizontal").removeClass("div-hide").addClass("div-show");
+        $('.gutter-horizontal').removeClass('div-hide').addClass('div-show');
     }
 
     hide() {
-        $(".gutter-horizontal").removeClass("div-show").addClass("div-hide");
+        $('.gutter-horizontal').removeClass('div-show').addClass('div-hide');
         this.splitter.collapse(0);
     }
 

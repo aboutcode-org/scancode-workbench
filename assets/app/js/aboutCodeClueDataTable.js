@@ -18,7 +18,7 @@ const Sequelize = require('sequelize');
 const Utils = require('./helpers/utils');
 const View = require('./helpers/view');
 
-const HAS_A_VALUE =  "about_code_data_table_has_a_value";
+const HAS_A_VALUE =  'about_code_data_table_has_a_value';
 
 /**
  * The view responsible for displaying the DataTable containing the ScanCode
@@ -43,7 +43,7 @@ class AboutCodeClueDataTable extends View {
 
     reload() {
         this.needsReload(false);
-        this.dataTable().ajax.reload()
+        this.dataTable().ajax.reload();
     }
 
     redraw() {
@@ -56,10 +56,10 @@ class AboutCodeClueDataTable extends View {
     clearColumnFilters() {
         $.each(AboutCodeClueDataTable.TABLE_COLUMNS, (i, column) => {
             const columnSelect = $(`select#clue-${column.name}`);
-            columnSelect.val("");
+            columnSelect.val('');
             this.dataTable()
                 .column(`${column.name}:name`)
-                .search("", false, false);
+                .search('', false, false);
         });
     }
 
@@ -84,8 +84,8 @@ class AboutCodeClueDataTable extends View {
 
         // Adds a footer for each column. This needs to be done before creating
         // the DataTable
-        let cells = $.map(AboutCodeClueDataTable.TABLE_COLUMNS, () => "<td></td>").join("");
-        $(this.id()).append("<tfoot><tr>" + cells + "</tr></tfoot>");
+        let cells = $.map(AboutCodeClueDataTable.TABLE_COLUMNS, () => '<td></td>').join('');
+        $(this.id()).append('<tfoot><tr>' + cells + '</tr></tfoot>');
 
         this._dataTable = $(this.id()).DataTable({
             serverSide: true,
@@ -101,19 +101,19 @@ class AboutCodeClueDataTable extends View {
             initComplete: () => this._initComplete(),
             buttons: [
                 {   // Do not allow the first column to be hidden
-                    extend: "colvis",
-                    columns: ":gt(0)",
-                    collectionLayout: "fixed two-column"
+                    extend: 'colvis',
+                    columns: ':gt(0)',
+                    collectionLayout: 'fixed two-column'
                 },
                 {
-                    extend: "colvisGroup",
-                    text: "Show all",
-                    show: ":hidden"
+                    extend: 'colvisGroup',
+                    text: 'Show all',
+                    show: ':hidden'
                 },
                 {
                     // Hide all columns except Path
-                    extend: "colvisGroup",
-                    text: "Hide all",
+                    extend: 'colvisGroup',
+                    text: 'Hide all',
                     show: AboutCodeClueDataTable.LOCATION_COLUMN
                         .map((column) => `${column.name}:name`),
                     hide: AboutCodeClueDataTable.TABLE_COLUMNS
@@ -122,8 +122,8 @@ class AboutCodeClueDataTable extends View {
                 },
                 {
                     // Show only origin columns
-                    extend: "colvisGroup",
-                    text: "Origin info",
+                    extend: 'colvisGroup',
+                    text: 'Origin info',
                     show: AboutCodeClueDataTable.ORIGIN_GROUP
                         .map((column) => `${column.name}:name`),
                     hide: AboutCodeClueDataTable.TABLE_COLUMNS
@@ -132,8 +132,8 @@ class AboutCodeClueDataTable extends View {
                 },
                 {
                     // Show only copyright columns
-                    extend: "colvisGroup",
-                    text: "Copyright info",
+                    extend: 'colvisGroup',
+                    text: 'Copyright info',
                     show: AboutCodeClueDataTable.COPYRIGHT_GROUP
                         .map((column) => `${column.name}:name`),
                     hide: AboutCodeClueDataTable.TABLE_COLUMNS
@@ -142,8 +142,8 @@ class AboutCodeClueDataTable extends View {
                 },
                 {
                     // Show only license columns
-                    extend: "colvisGroup",
-                    text: "License info",
+                    extend: 'colvisGroup',
+                    text: 'License info',
                     show: AboutCodeClueDataTable.LICENSE_GROUP
                         .map((column) => `${column.name}:name`),
                     hide: AboutCodeClueDataTable.TABLE_COLUMNS
@@ -152,8 +152,8 @@ class AboutCodeClueDataTable extends View {
                 },
                 {
                     // Show only package columns
-                    extend: "colvisGroup",
-                    text: "Package info",
+                    extend: 'colvisGroup',
+                    text: 'Package info',
                     show: AboutCodeClueDataTable.PACKAGE_GROUP
                         .map((column) => `${column.name}:name`),
                     hide: AboutCodeClueDataTable.TABLE_COLUMNS
@@ -177,7 +177,7 @@ class AboutCodeClueDataTable extends View {
         this.db().sync.then(db => {
             let columnIndex = dataTablesInput.order[0].column;
             let columnName = dataTablesInput.columns[columnIndex].name;
-            let direction = dataTablesInput.order[0].dir === "desc" ? "DESC" : "ASC";
+            let direction = dataTablesInput.order[0].dir === 'desc' ? 'DESC' : 'ASC';
 
             // query = {
             //   where: {
@@ -218,9 +218,9 @@ class AboutCodeClueDataTable extends View {
                         // Return all non empty values
                         query.where.$and[columnName] = {
                             $and: [
-                                { $ne: "[]" },
-                                { $ne: "" },
-                                { $ne: "{}" }
+                                { $ne: '[]' },
+                                { $ne: '' },
+                                { $ne: '{}' }
                             ]
                         };
                     } else {
@@ -275,7 +275,7 @@ class AboutCodeClueDataTable extends View {
         this.dataTable().columns().every(function (columnIndex) {
             const columnInfo = AboutCodeClueDataTable.TABLE_COLUMNS[columnIndex];
 
-            if ("skipFilter" in columnInfo && columnInfo.skipFilter) {
+            if ('skipFilter' in columnInfo && columnInfo.skipFilter) {
                 return;
             }
 
@@ -285,7 +285,7 @@ class AboutCodeClueDataTable extends View {
 
             $(`<select id="clue-${columnName}"><option value=""></option></select>`)
                 .appendTo(footer)
-                .on("click", () => {
+                .on('click', () => {
                     const currPath = pathCol.search()[0];
                     let where = { path: { $like: `${currPath}%`} };
 
@@ -293,7 +293,7 @@ class AboutCodeClueDataTable extends View {
 
                     that.db().sync.then(db => db.FlatFile.findAll({
                         attributes: [
-                            Sequelize.fn("TRIM",  Sequelize.col(columnName)),
+                            Sequelize.fn('TRIM',  Sequelize.col(columnName)),
                             columnName
                         ],
                         group: [columnName],
@@ -309,7 +309,7 @@ class AboutCodeClueDataTable extends View {
                         filterValues = $.unique(filterValues).sort();
 
                         const select = $(`select#clue-${columnName}`);
-                        const val = select.find("option:selected");
+                        const val = select.find('option:selected');
 
                         select
                             .empty()
@@ -329,7 +329,7 @@ class AboutCodeClueDataTable extends View {
                         select.val(val);
                     });
                 })
-                .on( "change", function () {
+                .on( 'change', function () {
                     // Get dropdown element selected value
                     let val = $(this).val();
                     column
@@ -380,374 +380,374 @@ class AboutCodeClueDataTable extends View {
 AboutCodeClueDataTable.LOCATION_COLUMN =
     [
         {
-        "data": "path",
-        "title": "Path",
-        "name": "path",
-        "skipFilter": true,
-        "visible": true
+        'data': 'path',
+        'title': 'Path',
+        'name': 'path',
+        'skipFilter': true,
+        'visible': true
         }
     ];
 
 AboutCodeClueDataTable.COPYRIGHT_COLUMNS =
     [
         {
-            "data": function (row) {
+            'data': function (row) {
                 return row.copyright_statements.map(statements => {
-                    return statements.join("<br/>");
-                }).join("<hr/>");
+                    return statements.join('<br/>');
+                }).join('<hr/>');
             },
-            "title": "Copyright Statements",
-            "name": "copyright_statements",
-            "bar_chart_class": "bar-chart-copyrights",
-            "visible": true
+            'title': 'Copyright Statements',
+            'name': 'copyright_statements',
+            'bar_chart_class': 'bar-chart-copyrights',
+            'visible': true
         },
         {
-            "data": function (row) {
+            'data': function (row) {
                 return row.copyright_holders.map(holders => {
-                    return holders.join("<br/>");
-                }).join("<hr/>");
+                    return holders.join('<br/>');
+                }).join('<hr/>');
             },
-            "title": "Copyright Holders",
-            "name": "copyright_holders",
-            "bar_chart_class": "bar-chart-copyrights",
-            "visible": false
+            'title': 'Copyright Holders',
+            'name': 'copyright_holders',
+            'bar_chart_class': 'bar-chart-copyrights',
+            'visible': false
         },
         {
-            "data": function (row) {
+            'data': function (row) {
                 return row.copyright_authors.map(authors => {
-                    return authors.join("<br/>");
-                }).join("<hr/>");
+                    return authors.join('<br/>');
+                }).join('<hr/>');
             },
-            "title": "Copyright Authors",
-            "name": "copyright_authors",
-            "bar_chart_class": "bar-chart-copyrights",
-            "visible": false
+            'title': 'Copyright Authors',
+            'name': 'copyright_authors',
+            'bar_chart_class': 'bar-chart-copyrights',
+            'visible': false
         },
         {
-            "data": "copyright_start_line[<hr/>]",
-            "title": "Copyright Start Line",
-            "name": "copyright_start_line",
-            "visible": false
+            'data': 'copyright_start_line[<hr/>]',
+            'title': 'Copyright Start Line',
+            'name': 'copyright_start_line',
+            'visible': false
         },
         {
-            "data": "copyright_end_line[<hr/>]",
-            "title": "Copyright End Line",
-            "name": "copyright_end_line",
-            "visible": false
+            'data': 'copyright_end_line[<hr/>]',
+            'title': 'Copyright End Line',
+            'name': 'copyright_end_line',
+            'visible': false
         }
     ];
 
 AboutCodeClueDataTable.LICENSE_COLUMNS =
     [
         {
-            "data": "license_key[<hr/>]",
-            "title": "License Key",
-            "name": "license_key",
-            "bar_chart_class": "bar-chart-licenses",
-            "visible": false
+            'data': 'license_key[<hr/>]',
+            'title': 'License Key',
+            'name': 'license_key',
+            'bar_chart_class': 'bar-chart-licenses',
+            'visible': false
         },
         {
-            "data": "license_score[<hr/>]",
-            "title": "License Score",
-            "name": "license_score",
-            "bar_chart_class": "bar-chart-licenses",
-            "visible": false
+            'data': 'license_score[<hr/>]',
+            'title': 'License Score',
+            'name': 'license_score',
+            'bar_chart_class': 'bar-chart-licenses',
+            'visible': false
         },
         {
-            "data": "license_short_name[<hr/>]",
-            "title": "License Short Name",
-            "name": "license_short_name",
-            "bar_chart_class": "bar-chart-licenses",
-            "visible": true
+            'data': 'license_short_name[<hr/>]',
+            'title': 'License Short Name',
+            'name': 'license_short_name',
+            'bar_chart_class': 'bar-chart-licenses',
+            'visible': true
         },
         {
-            "data": "license_category[<hr/>]",
-            "title": "License Category",
-            "name": "license_category",
-            "bar_chart_class": "bar-chart-licenses",
-            "visible": false
+            'data': 'license_category[<hr/>]',
+            'title': 'License Category',
+            'name': 'license_category',
+            'bar_chart_class': 'bar-chart-licenses',
+            'visible': false
         },
         {
-            "data": "license_owner[<hr/>]",
-            "title": "License Owner",
-            "name": "license_owner",
-            "bar_chart_class": "bar-chart-licenses",
-            "visible": false
+            'data': 'license_owner[<hr/>]',
+            'title': 'License Owner',
+            'name': 'license_owner',
+            'bar_chart_class': 'bar-chart-licenses',
+            'visible': false
         },
         {
-            "data": "license_homepage_url",
-            "title": "License Homepage URL",
-            "name": "license_homepage_url",
-            "render": hrefs => $.map(hrefs, Utils.anchorTag).join("<br>"),
-            "visible": false
+            'data': 'license_homepage_url',
+            'title': 'License Homepage URL',
+            'name': 'license_homepage_url',
+            'render': hrefs => $.map(hrefs, Utils.anchorTag).join('<br>'),
+            'visible': false
         },
         {
-            "data": "license_text_url",
-            "title": "License Text URL",
-            "name": "license_text_url",
-            "render": hrefs => $.map(hrefs, Utils.anchorTag).join("<br>"),
-            "visible": false
+            'data': 'license_text_url',
+            'title': 'License Text URL',
+            'name': 'license_text_url',
+            'render': hrefs => $.map(hrefs, Utils.anchorTag).join('<br>'),
+            'visible': false
         },
         {
-            "data": "license_reference_url",
-            "title": "License Reference URL",
-            "name": "license_reference_url",
-            "render": hrefs => $.map(hrefs, Utils.anchorTag).join("<br>"),
-            "visible": false
+            'data': 'license_reference_url',
+            'title': 'License Reference URL',
+            'name': 'license_reference_url',
+            'render': hrefs => $.map(hrefs, Utils.anchorTag).join('<br>'),
+            'visible': false
         },
         {
-            "data": "license_spdx_key[<hr/>]",
-            "title": "SPDX License Key",
-            "name": "license_spdx_key",
-            "bar_chart_class": "bar-chart-licenses",
-            "visible": false
+            'data': 'license_spdx_key[<hr/>]',
+            'title': 'SPDX License Key',
+            'name': 'license_spdx_key',
+            'bar_chart_class': 'bar-chart-licenses',
+            'visible': false
         },
         {
-            "data": "license_start_line[<hr/>]",
-            "title": "License Start Line",
-            "name": "license_start_line",
-            "visible": false
+            'data': 'license_start_line[<hr/>]',
+            'title': 'License Start Line',
+            'name': 'license_start_line',
+            'visible': false
         },
         {
-            "data": "license_end_line[<hr/>]",
-            "title": "License End Line",
-            "name": "license_end_line",
-            "visible": false
+            'data': 'license_end_line[<hr/>]',
+            'title': 'License End Line',
+            'name': 'license_end_line',
+            'visible': false
         }
     ];
 
 AboutCodeClueDataTable.EMAIL_COLUMNS =
     [
         {
-            "data": "email[<hr/>]",
-            "title": "Email",
-            "name": "email",
-            "bar_chart_class": "bar-chart-emails",
-            "visible": false
+            'data': 'email[<hr/>]',
+            'title': 'Email',
+            'name': 'email',
+            'bar_chart_class': 'bar-chart-emails',
+            'visible': false
         },
         {
-            "data": "email_start_line[<hr/>]",
-            "title": "Email Start Line",
-            "name": "email_start_line",
-            "visible": false
+            'data': 'email_start_line[<hr/>]',
+            'title': 'Email Start Line',
+            'name': 'email_start_line',
+            'visible': false
         },
         {
-            "data": "email_start_line[<hr/>]",
-            "title": "End Start Line",
-            "name": "email_start_line",
-            "visible": false
+            'data': 'email_start_line[<hr/>]',
+            'title': 'End Start Line',
+            'name': 'email_start_line',
+            'visible': false
         }
     ];
 
 AboutCodeClueDataTable.URL_COLUMNS =
     [
         {
-            "data": "url",
-            "title": "URL",
-            "name": "url",
-            "render": function (data) {
-                return $.map(data, Utils.anchorTag).join("<br>");
+            'data': 'url',
+            'title': 'URL',
+            'name': 'url',
+            'render': function (data) {
+                return $.map(data, Utils.anchorTag).join('<br>');
             },
-            "visible": false
+            'visible': false
         },
         {
-            "data": "url_start_line[<br>]",
-            "title": "URL Start Line",
-            "name": "url_start_line",
-            "visible": false
+            'data': 'url_start_line[<br>]',
+            'title': 'URL Start Line',
+            'name': 'url_start_line',
+            'visible': false
         },
         {
-            "data": "url_end_line[<br>]",
-            "title": "URL End Line",
-            "name": "url_end_line",
-            "visible": false
+            'data': 'url_end_line[<br>]',
+            'title': 'URL End Line',
+            'name': 'url_end_line',
+            'visible': false
         }
     ];
 
 AboutCodeClueDataTable.FILE_COLUMNS =
     [
         {
-            "data": "type",
-            "title": "Type",
-            "name": "type",
-            "bar_chart_class": "bar-chart-file-infos",
-            "visible": false
+            'data': 'type',
+            'title': 'Type',
+            'name': 'type',
+            'bar_chart_class': 'bar-chart-file-infos',
+            'visible': false
         },
         {
-            "data": "name",
-            "title": "File Name",
-            "name": "name",
-            "visible": true
+            'data': 'name',
+            'title': 'File Name',
+            'name': 'name',
+            'visible': true
         },
         {
-            "data": "extension",
-            "title": "File Extension",
-            "name": "extension",
-            "bar_chart_class": "bar-chart-file-infos",
-            "visible": false
+            'data': 'extension',
+            'title': 'File Extension',
+            'name': 'extension',
+            'bar_chart_class': 'bar-chart-file-infos',
+            'visible': false
         },
         {
-            "data": "date",
-            "title": "File Date",
-            "name": "date",
-            "visible": false
+            'data': 'date',
+            'title': 'File Date',
+            'name': 'date',
+            'visible': false
         },
         {
-            "data": "size",
-            "title": "File Size",
-            "name": "size",
-            "visible": true
+            'data': 'size',
+            'title': 'File Size',
+            'name': 'size',
+            'visible': true
         },
         {
-            "data": "sha1",
-            "title": "SHA1",
-            "name": "sha1",
-            "visible": true
+            'data': 'sha1',
+            'title': 'SHA1',
+            'name': 'sha1',
+            'visible': true
         },
         {
-            "data": "md5",
-            "title": "MD5",
-            "name": "md5",
-            "visible": false
+            'data': 'md5',
+            'title': 'MD5',
+            'name': 'md5',
+            'visible': false
         },
         {
-            "data": "file_count",
-            "title": "File Count",
-            "name": "file_count",
-            "visible": false
+            'data': 'file_count',
+            'title': 'File Count',
+            'name': 'file_count',
+            'visible': false
         },
         {
-            "data": "mime_type",
-            "title": "MIME Type",
-            "name": "mime_type",
-            "visible": false
+            'data': 'mime_type',
+            'title': 'MIME Type',
+            'name': 'mime_type',
+            'visible': false
         },
         {
-            "data": "file_type",
-            "title": "File Type",
-            "name": "file_type",
-            "bar_chart_class": "bar-chart-file-infos",
-            "visible": true
+            'data': 'file_type',
+            'title': 'File Type',
+            'name': 'file_type',
+            'bar_chart_class': 'bar-chart-file-infos',
+            'visible': true
         },
         {
-            "data": "programming_language",
-            "title": "Language",
-            "name": "programming_language",
-            "bar_chart_class": "bar-chart-file-infos",
-            "visible": false
+            'data': 'programming_language',
+            'title': 'Language',
+            'name': 'programming_language',
+            'bar_chart_class': 'bar-chart-file-infos',
+            'visible': false
         },
         {
-            "data": "is_binary",
-            "title": "Binary",
-            "name": "is_binary",
-            "bar_chart_class": "bar-chart-file-infos",
-            "visible": false
+            'data': 'is_binary',
+            'title': 'Binary',
+            'name': 'is_binary',
+            'bar_chart_class': 'bar-chart-file-infos',
+            'visible': false
         },
         {
-            "data": "is_text",
-            "title": "Text File",
-            "name": "is_text",
-            "bar_chart_class": "bar-chart-file-infos",
-            "visible": false
+            'data': 'is_text',
+            'title': 'Text File',
+            'name': 'is_text',
+            'bar_chart_class': 'bar-chart-file-infos',
+            'visible': false
         },
         {
-            "data": "is_archive",
-            "title": "Archive File",
-            "name": "is_archive",
-            "bar_chart_class": "bar-chart-file-infos",
-            "visible": false
+            'data': 'is_archive',
+            'title': 'Archive File',
+            'name': 'is_archive',
+            'bar_chart_class': 'bar-chart-file-infos',
+            'visible': false
         },
         {
-            "data": "is_media",
-            "title": "Media File",
-            "name": "is_media",
-            "bar_chart_class": "bar-chart-file-infos",
-            "visible": false
+            'data': 'is_media',
+            'title': 'Media File',
+            'name': 'is_media',
+            'bar_chart_class': 'bar-chart-file-infos',
+            'visible': false
         },
         {
-            "data": "is_source",
-            "title": "Source File",
-            "name": "is_source",
-            "bar_chart_class": "bar-chart-file-infos",
-            "visible": false
+            'data': 'is_source',
+            'title': 'Source File',
+            'name': 'is_source',
+            'bar_chart_class': 'bar-chart-file-infos',
+            'visible': false
         },
         {
-            "data": "is_script",
-            "title": "Script File",
-            "name": "is_script",
-            "bar_chart_class": "bar-chart-file-infos",
-            "visible": false
+            'data': 'is_script',
+            'title': 'Script File',
+            'name': 'is_script',
+            'bar_chart_class': 'bar-chart-file-infos',
+            'visible': false
         }
     ];
 
 AboutCodeClueDataTable.PACKAGE_COLUMNS =
     [
         {
-            "data": "packages_type",
-            "title": "Package Type",
-            "name": "packages_type",
-            "bar_chart_class": "bar-chart-package-infos",
-            "visible": false
+            'data': 'packages_type',
+            'title': 'Package Type',
+            'name': 'packages_type',
+            'bar_chart_class': 'bar-chart-package-infos',
+            'visible': false
         },
         {
-            "data": "packages_name",
-            "title": "Package Name",
-            "name": "packages_name",
-            "bar_chart_class": "bar-chart-package-infos",
-            "visible": false
+            'data': 'packages_name',
+            'title': 'Package Name',
+            'name': 'packages_name',
+            'bar_chart_class': 'bar-chart-package-infos',
+            'visible': false
         },
         {
-            "data": "packages_version",
-            "title": "Package Version",
-            "name": "packages_version",
-            "visible": false
+            'data': 'packages_version',
+            'title': 'Package Version',
+            'name': 'packages_version',
+            'visible': false
         },
         {
-            "data": "packages_asserted_licenses_license[<hr/>]",
-            "title": "Package Asserted License",
-            "name": "packages_asserted_licenses_license",
-            "bar_chart_class": "bar-chart-package-infos",
-            "visible": false
+            'data': 'packages_asserted_licenses_license[<hr/>]',
+            'title': 'Package Asserted License',
+            'name': 'packages_asserted_licenses_license',
+            'bar_chart_class': 'bar-chart-package-infos',
+            'visible': false
         },
         {
-            "data": "packages_primary_language",
-            "title": "Package Primary Language",
-            "name": "packages_primary_language",
-            "bar_chart_class": "bar-chart-package-infos",
-            "visible": false
+            'data': 'packages_primary_language',
+            'title': 'Package Primary Language',
+            'name': 'packages_primary_language',
+            'bar_chart_class': 'bar-chart-package-infos',
+            'visible': false
         },
         {
-            "data": "packages_authors_name[<hr/>]",
-            "title": "Package Authors Name",
-            "name": "packages_authors_name",
-            "bar_chart_class": "bar-chart-package-infos",
-            "visible": false
+            'data': 'packages_authors_name[<hr/>]',
+            'title': 'Package Authors Name',
+            'name': 'packages_authors_name',
+            'bar_chart_class': 'bar-chart-package-infos',
+            'visible': false
         },
         {
-            "data": "packages_homepage_url",
-            "title": "Package Homepage URL",
-            "name": "packages_homepage_url",
-            "visible": false
+            'data': 'packages_homepage_url',
+            'title': 'Package Homepage URL',
+            'name': 'packages_homepage_url',
+            'visible': false
         },
         {
-            "data": function (row) {
+            'data': function (row) {
                 return row.packages_download_urls.map(hrefs => {
-                    return hrefs.map(Utils.anchorTag).join("<br/>");
-                }).join("<hr/>");
+                    return hrefs.map(Utils.anchorTag).join('<br/>');
+                }).join('<hr/>');
             },
-            "title": "Package Download URLs",
-            "name": "packages_download_urls",
-            "visible": false
+            'title': 'Package Download URLs',
+            'name': 'packages_download_urls',
+            'visible': false
         },
     ];
 
 AboutCodeClueDataTable.ORIGIN_COLUMN_NAMES =
     [
-        "copyright_statements",
-        "license_short_name",
-        "license_category",
-        "email",
-        "url"
+        'copyright_statements',
+        'license_short_name',
+        'license_category',
+        'email',
+        'url'
     ];
 
 module.exports = AboutCodeClueDataTable;
