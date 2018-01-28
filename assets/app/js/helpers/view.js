@@ -21,89 +21,89 @@
  * @param aboutCodeDB The initial database used for the view
  */
 class View {
-    constructor(elementId, aboutCodeDB) {
-        this._id = elementId;
-        this._element = $(elementId);
-        this._aboutCodeDB = this.db(aboutCodeDB);
+  constructor(elementId, aboutCodeDB) {
+    this._id = elementId;
+    this._element = $(elementId);
+    this._aboutCodeDB = this.db(aboutCodeDB);
 
-        this._handlers = {};
+    this._handlers = {};
+  }
+
+  /**
+   * Returns the id of the HTML element
+   */
+  id() {
+    return this._id;
+  }
+
+  /**
+   * Returns the HTML element as a jQuery object
+   */
+  element() {
+    return this._element;
+  }
+
+  /**
+   * Sets a handler for an event.
+   *
+   * @param event the event name
+   * @param handler the function that handles the event
+   */
+  on(event, handler) {
+    this._handlers[event] = handler;
+    return this;
+  }
+
+  /**
+   * Returns the handler for the event
+   *
+   * @param event the event name
+   */
+  getHandler(event) {
+    return this._handlers[event] || (() => {});
+  }
+
+  /**
+   * Returns the AboutCodeDB for this view or sets the AboutCodeDB if passed
+   * in as a parameter
+   *
+   * @param aboutCodeDB the AboutCodeDB instance to set (optional)
+   */
+  db(aboutCodeDB) {
+    if (aboutCodeDB !== undefined) {
+      this._aboutCodeDB = aboutCodeDB;
+      this.needsReload(true);
     }
 
-    /**
-     * Returns the id of the HTML element
-     */
-    id() {
-        return this._id;
-    }
+    return this._aboutCodeDB;
+  }
 
-    /**
-     * Returns the HTML element as a jQuery object
-     */
-    element() {
-        return this._element;
+  /**
+   * Returns the selected file path associated with this view or sets the
+   * selected path if passed in as a parameter
+   *
+   * @param path the selected path to set
+   */
+  selectedPath(path) {
+    if (path !== undefined) {
+      this._selectedPath = path;
+      this.needsReload(true);
     }
+    return this._selectedPath;
+  }
 
-    /**
-     * Sets a handler for an event.
-     *
-     * @param event the event name
-     * @param handler the function that handles the event
-     */
-    on(event, handler) {
-        this._handlers[event] = handler;
-        return this;
+  /**
+   * Returns true if the view needs to be reloaded or sets the boolean if
+   * passed in as parameter
+   *
+   * @param value the boolean value to set the needs reload flag
+   */
+  needsReload(value) {
+    if (value !== undefined) {
+      this._needsReload = value;
     }
-
-    /**
-     * Returns the handler for the event
-     *
-     * @param event the event name
-     */
-    getHandler(event) {
-        return this._handlers[event] || (() => {});
-    }
-
-    /**
-     * Returns the AboutCodeDB for this view or sets the AboutCodeDB if passed
-     * in as a parameter
-     *
-     * @param aboutCodeDB the AboutCodeDB instance to set (optional)
-     */
-    db(aboutCodeDB) {
-        if (aboutCodeDB !== undefined) {
-            this._aboutCodeDB = aboutCodeDB;
-            this.needsReload(true);
-        }
-
-        return this._aboutCodeDB;
-    }
-
-    /**
-     * Returns the selected file path associated with this view or sets the
-     * selected path if passed in as a parameter
-     *
-     * @param path the selected path to set
-     */
-    selectedPath(path) {
-        if (path !== undefined) {
-            this._selectedPath = path;
-            this.needsReload(true);
-        }
-        return this._selectedPath;
-    }
-
-    /**
-     * Returns true if the view needs to be reloaded or sets the boolean if
-     * passed in as parameter
-     *
-     * @param value the boolean value to set the needs reload flag
-     */
-    needsReload(value) {
-        if (value !== undefined) {
-            this._needsReload = value;
-        }
-        return this._needsReload;
-    }
+    return this._needsReload;
+  }
 }
 
 module.exports = View;

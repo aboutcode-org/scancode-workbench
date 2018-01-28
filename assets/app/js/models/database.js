@@ -25,37 +25,37 @@ const componentModel = require('./component');
 const flatFileModel = require('./flatFile');
 
 module.exports = function(sequelize, DataTypes) {
-    // Define the models
-    this.Header = headerModel(sequelize, DataTypes);
-    this.File = fileModel(sequelize, DataTypes);
-    this.License = licenseModel(sequelize, DataTypes);
-    this.Copyright = copyrightModel(sequelize, DataTypes);
-    this.Package = packageModel(sequelize, DataTypes);
-    this.Email = emailModel(sequelize, DataTypes);
-    this.Url = urlModel(sequelize, DataTypes);
-    this.Component = componentModel(sequelize, DataTypes);
+  // Define the models
+  this.Header = headerModel(sequelize, DataTypes);
+  this.File = fileModel(sequelize, DataTypes);
+  this.License = licenseModel(sequelize, DataTypes);
+  this.Copyright = copyrightModel(sequelize, DataTypes);
+  this.Package = packageModel(sequelize, DataTypes);
+  this.Email = emailModel(sequelize, DataTypes);
+  this.Url = urlModel(sequelize, DataTypes);
+  this.Component = componentModel(sequelize, DataTypes);
 
-    this.FlatFile = flatFileModel(sequelize, DataTypes);
+  this.FlatFile = flatFileModel(sequelize, DataTypes);
 
-    // Define the relations
-    this.Header.hasMany(this.File);
-    this.File.hasMany(this.License);
-    this.File.hasMany(this.Copyright);
-    this.File.hasMany(this.Package);
-    this.File.hasMany(this.Email);
-    this.File.hasMany(this.Url);
-    this.File.hasOne(this.Component);
+  // Define the relations
+  this.Header.hasMany(this.File);
+  this.File.hasMany(this.License);
+  this.File.hasMany(this.Copyright);
+  this.File.hasMany(this.Package);
+  this.File.hasMany(this.Email);
+  this.File.hasMany(this.Url);
+  this.File.hasOne(this.Component);
 
-    // Include Array for queries
-    this.fileIncludes = [
-        { model: this.License, separate: true },
-        { model: this.Copyright, separate: true },
-        { model: this.Package, separate: true },
-        { model: this.Email, separate: true },
-        { model: this.Url, separate: true },
-        { model: this.Component }
-    ];
+  // Include Array for queries
+  this.fileIncludes = [
+    { model: this.License, separate: true },
+    { model: this.Copyright, separate: true },
+    { model: this.Package, separate: true },
+    { model: this.Email, separate: true },
+    { model: this.Url, separate: true },
+    { model: this.Component }
+  ];
 
-    return this;
+  return this;
 };
 

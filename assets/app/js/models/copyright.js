@@ -17,16 +17,16 @@
 const {jsonDataType} = require('./databaseUtils');
 
 module.exports = function(sequelize, DataTypes) {
-    return sequelize.define(
-        'copyrights',
-        {
-            start_line: DataTypes.INTEGER,
-            end_line: DataTypes.INTEGER,
-            holders: jsonDataType('holders'),
-            authors: jsonDataType('authors'),
-            statements: jsonDataType('statements')
-        },
-        {
-            timestamps: false
-        });
+  return sequelize.define(
+    'copyrights',
+    {
+      start_line: DataTypes.INTEGER,
+      end_line: DataTypes.INTEGER,
+      holders: jsonDataType('holders'),
+      authors: jsonDataType('authors'),
+      statements: jsonDataType('statements')
+    },
+    {
+      timestamps: false
+    });
 };

@@ -15,196 +15,196 @@
  */
 
 class BarChart {
-    constructor(chartData, chartOptions, chartSelector) {
+  constructor(chartData, chartOptions, chartSelector) {
 
-        $(chartSelector).empty();
+    $(chartSelector).empty();
 
-        let formattedData = BarChart.formatChartData(chartData);
+    let formattedData = BarChart.formatChartData(chartData);
 
-        this.chartSelector = chartSelector;
+    this.chartSelector = chartSelector;
 
-        this.margin = {
-            left: chartOptions.margin + this.maxNameWidth(formattedData),
-            top: chartOptions.margin,
-            right: chartOptions.margin + BarChart.maxValueWidth(formattedData),
-            bottom: chartOptions.margin
-        };
+    this.margin = {
+      left: chartOptions.margin + this.maxNameWidth(formattedData),
+      top: chartOptions.margin,
+      right: chartOptions.margin + BarChart.maxValueWidth(formattedData),
+      bottom: chartOptions.margin
+    };
 
-        // The chart height is bar height * the number of licenses in the data
-        const chartHeight = chartOptions.barHeight * formattedData.length;
+    // The chart height is bar height * the number of licenses in the data
+    const chartHeight = chartOptions.barHeight * formattedData.length;
 
-        // Build up the chart (Sum of chart + margin top + margin bottom)
-        const boundHeight = chartHeight + this.margin.top + this.margin.bottom;
+    // Build up the chart (Sum of chart + margin top + margin bottom)
+    const boundHeight = chartHeight + this.margin.top + this.margin.bottom;
 
-        // Create bounds of chart
-        const bounds = d3.select(chartSelector).attr('height', boundHeight);
+    // Create bounds of chart
+    const bounds = d3.select(chartSelector).attr('height', boundHeight);
 
-        // The chart sits within the bounds starting at (margin.left , margin.top)
-        const chart = bounds.append('g')
-            .attr('transform', 'translate('+ this.margin.left + ',' + this.margin.top + ')');
+    // The chart sits within the bounds starting at (margin.left , margin.top)
+    const chart = bounds.append('g')
+      .attr('transform', 'translate('+ this.margin.left + ',' + this.margin.top + ')');
 
-        // Create scaling for x that converts formattedData values to pixels
-        this.xScale = d3.scale.linear()
-            // Find the max val in formattedData
-            .domain([0, d3.max(formattedData, function(d) { return d.val; })]);
+    // Create scaling for x that converts formattedData values to pixels
+    this.xScale = d3.scale.linear()
+      // Find the max val in formattedData
+      .domain([0, d3.max(formattedData, function(d) { return d.val; })]);
 
-        // Create scaling for y that converts formattedData names to pixels
-        const yScale = d3.scale.ordinal()
-            .domain(formattedData.map(function(d) {return d.name; }))
-            .rangeRoundBands([0, chartHeight], 0.1 /* white space percentage */);
+    // Create scaling for y that converts formattedData names to pixels
+    const yScale = d3.scale.ordinal()
+      .domain(formattedData.map(function(d) {return d.name; }))
+      .rangeRoundBands([0, chartHeight], 0.1 /* white space percentage */);
 
-        // Creates a d3 axis given a scale (takes care of tick marks and labels)
-        d3.svg.axis()
-            .scale(this.xScale)
-            .orient('bottom');
+    // Creates a d3 axis given a scale (takes care of tick marks and labels)
+    d3.svg.axis()
+      .scale(this.xScale)
+      .orient('bottom');
 
-        // Creates a d3 axis given a scale (takes care of tick marks and labels)
-        const yAxis = d3.svg.axis()
-            .scale(yScale)
-            // Limit label length to 50 characters plus ellipses.
-            .tickFormat(BarChart.trimName)
-            .orient('left');
+    // Creates a d3 axis given a scale (takes care of tick marks and labels)
+    const yAxis = d3.svg.axis()
+      .scale(yScale)
+      // Limit label length to 50 characters plus ellipses.
+      .tickFormat(BarChart.trimName)
+      .orient('left');
 
-        // Creates a graphic tag (<g>) for each bar in the chart
-        const bars = chart.selectAll('g')
-            .data(formattedData)
-            .enter().append('g');
+    // Creates a graphic tag (<g>) for each bar in the chart
+    const bars = chart.selectAll('g')
+      .data(formattedData)
+      .enter().append('g');
 
-        // Clear tooltip div created when inadvertently triggered during dropdown selection.
-        $( '.toolTip' ).remove();
+    // Clear tooltip div created when inadvertently triggered during dropdown selection.
+    $( '.toolTip' ).remove();
 
-        const tooltip = d3.select('body').append('div').attr('class', 'toolTip');
+    const tooltip = d3.select('body').append('div').attr('class', 'toolTip');
 
-        this.rects = bars.append('rect')
-            .attr('y', function(d) { return yScale(d.name); })
-            .attr('height', yScale.rangeBand())
-            .attr('data-value', function (d) {
-                return d.name;
-            })
-            // Add a tooltip to the bar.
-            .on('mouseover', function () { tooltip.style('display', 'inline-block'); })
-            .on('mousemove', function (d) {
-                tooltip
-                    .style('left', d3.event.pageX - 50 + 'px')
-                    .style('top', d3.event.pageY - 70 + 'px')
-                    .text((d.name + ' (' + d.val + ')'));
-            })
-            .on('mouseout', function () { tooltip.style('display', 'none'); });
+    this.rects = bars.append('rect')
+      .attr('y', function(d) { return yScale(d.name); })
+      .attr('height', yScale.rangeBand())
+      .attr('data-value', function (d) {
+        return d.name;
+      })
+      // Add a tooltip to the bar.
+      .on('mouseover', function () { tooltip.style('display', 'inline-block'); })
+      .on('mousemove', function (d) {
+        tooltip
+          .style('left', d3.event.pageX - 50 + 'px')
+          .style('top', d3.event.pageY - 70 + 'px')
+          .text((d.name + ' (' + d.val + ')'));
+      })
+      .on('mouseout', function () { tooltip.style('display', 'none'); });
 
-        this.texts = bars.append('text')
-            .attr('y', function (d) { return yScale(d.name); })
-            .attr('dy', '1.2em')
-            .text(function (d) { return '(' + d.val + ')'; })
-            .style('text-anchor', 'start');
+    this.texts = bars.append('text')
+      .attr('y', function (d) { return yScale(d.name); })
+      .attr('dy', '1.2em')
+      .text(function (d) { return '(' + d.val + ')'; })
+      .style('text-anchor', 'start');
 
-        // Adds the y-axis to the chart if data exists
-        if (formattedData.length > 0) {
-            chart.append('g')
-                .attr('class', 'y axis')
-                .call(yAxis);
-        }
-
-        // Add a tooltip to the y-axis labels.
-        chart.selectAll('.y.axis .tick')
-            .on('mouseover', function () { tooltip.style('display', 'inline-block'); })
-            .on('mousemove', function (d) {
-                let result = $.grep(formattedData, function (e) { return e.name === d; });
-                let displayValue = ' (' + result[0].val + ')';
-                tooltip
-                    .style('left', d3.event.pageX - 50 + 'px')
-                    .style('top', d3.event.pageY - 70 + 'px')
-                    .text((d + displayValue));
-            })
-            .on('mouseout', function () { tooltip.style('display', 'none'); })
-            .attr('data-value', function(d) {
-                return d;
-            });
-
-        this.redraw();
+    // Adds the y-axis to the chart if data exists
+    if (formattedData.length > 0) {
+      chart.append('g')
+        .attr('class', 'y axis')
+        .call(yAxis);
     }
 
-    static trimName(name) {
-        return name.substring(0, 50) + (name.length > 50 ? ' ...' : '');
+    // Add a tooltip to the y-axis labels.
+    chart.selectAll('.y.axis .tick')
+      .on('mouseover', function () { tooltip.style('display', 'inline-block'); })
+      .on('mousemove', function (d) {
+        let result = $.grep(formattedData, function (e) { return e.name === d; });
+        let displayValue = ' (' + result[0].val + ')';
+        tooltip
+          .style('left', d3.event.pageX - 50 + 'px')
+          .style('top', d3.event.pageY - 70 + 'px')
+          .text((d + displayValue));
+      })
+      .on('mouseout', function () { tooltip.style('display', 'none'); })
+      .attr('data-value', function(d) {
+        return d;
+      });
+
+    this.redraw();
+  }
+
+  static trimName(name) {
+    return name.substring(0, 50) + (name.length > 50 ? ' ...' : '');
+  }
+
+  // Redraws chart and sets width based on available chart width.
+  // User needs to call this function whenever the width of the chart changes.
+  redraw() {
+    let boundWidth = $(this.chartSelector).width();
+
+    let chartWidth = boundWidth - this.margin.left - this.margin.right;
+
+    if (chartWidth > 0) {
+      this.xScale.range([0, chartWidth]);
+
+      const that = this;
+      this.rects.attr('width', function (d) {
+        return that.xScale(d.val);
+      });
+      this.texts.attr('x', function (d) {
+        return that.xScale(d.val) + 2;
+      });
     }
+  }
 
-    // Redraws chart and sets width based on available chart width.
-    // User needs to call this function whenever the width of the chart changes.
-    redraw() {
-        let boundWidth = $(this.chartSelector).width();
+  // Appends a span element with that name to the DOM. Gets the width in
+  // pixels. Removes the appended span element from the DOM and returns the
+  // width.
+  static strPixelWidth(str) {
+    let tmp = $('<span></span>').text(str);
+    $('body').append(tmp);
+    let width = tmp.width();
+    tmp.remove();
+    return width;
+  }
 
-        let chartWidth = boundWidth - this.margin.left - this.margin.right;
+  // Returns the pixel width of the string with the longest length
+  maxNameWidth(data) {
+    const names = data.map(function(d) { return d.trimmedName; });
 
-        if (chartWidth > 0) {
-            this.xScale.range([0, chartWidth]);
+    let maxStr = '';
+    $.each(names, function(i, name) {
+      if(name.length > maxStr.length){
+        maxStr = name;
+      }
+    });
 
-            const that = this;
-            this.rects.attr('width', function (d) {
-                return that.xScale(d.val);
-            });
-            this.texts.attr('x', function (d) {
-                return that.xScale(d.val) + 2;
-            });
-        }
-    }
+    return BarChart.strPixelWidth(maxStr);
+  }
 
-    // Appends a span element with that name to the DOM. Gets the width in
-    // pixels. Removes the appended span element from the DOM and returns the
-    // width.
-    static strPixelWidth(str) {
-        let tmp = $('<span></span>').text(str);
-        $('body').append(tmp);
-        let width = tmp.width();
-        tmp.remove();
-        return width;
-    }
+  // Returns the pixel width of the value with the longest length
+  static maxValueWidth(data) {
+    const maxValue = d3.max(data, function(d) { return d.val; });
+    return BarChart.strPixelWidth('(' + maxValue + ')');
+  }
 
-    // Returns the pixel width of the string with the longest length
-    maxNameWidth(data) {
-        const names = data.map(function(d) { return d.trimmedName; });
+  static formatChartData(names) {
 
-        let maxStr = '';
-        $.each(names, function(i, name) {
-            if(name.length > maxStr.length){
-                maxStr = name;
-            }
-        });
+    // Sum the total number of times the name appears
+    let count = {};
+    $.each(names, function(i, name){
+      count[name] = count[name] + 1 || 1;
+    });
 
-        return BarChart.strPixelWidth(maxStr);
-    }
+    // Transform license count into array of objects with license name & count
+    const chartData = $.map(count, function(val, key) {
+      return {
+        name: key,
+        trimmedName: BarChart.trimName(key),
+        val: val
+      };
+    });
 
-    // Returns the pixel width of the value with the longest length
-    static maxValueWidth(data) {
-        const maxValue = d3.max(data, function(d) { return d.val; });
-        return BarChart.strPixelWidth('(' + maxValue + ')');
-    }
-
-    static formatChartData(names) {
-
-        // Sum the total number of times the name appears
-        let count = {};
-        $.each(names, function(i, name){
-            count[name] = count[name] + 1 || 1;
-        });
-
-        // Transform license count into array of objects with license name & count
-        const chartData = $.map(count, function(val, key) {
-            return {
-                name: key,
-                trimmedName: BarChart.trimName(key),
-                val: val
-            };
-        });
-
-        // Sorts the data highest value to lowest value
-        chartData.sort(function(a,b){
-            if (a.val === b.val) {
-                return a.name.localeCompare(b.name);
-            } else {
-                return a.val > b.val ? -1 : 1;
-            }
-        });
-        return chartData;
-    }
+    // Sorts the data highest value to lowest value
+    chartData.sort(function(a,b){
+      if (a.val === b.val) {
+        return a.name.localeCompare(b.name);
+      } else {
+        return a.val > b.val ? -1 : 1;
+      }
+    });
+    return chartData;
+  }
 }
 
 module.exports = BarChart;

@@ -17,40 +17,40 @@
 const {jsonDataType} = require('./databaseUtils');
 
 module.exports = function(sequelize, DataTypes) {
-    return sequelize.define(
-        'components',
-        {
-            path: DataTypes.STRING,
-            review_status: DataTypes.STRING,
-            name: DataTypes.STRING,
-            version: DataTypes.STRING,
-            licenses: jsonDataType('licenses'),
-            copyrights: jsonDataType('copyrights'),
-            owner: DataTypes.STRING,
-            code_type: DataTypes.STRING,
-            is_modified: DataTypes.BOOLEAN,
-            is_deployed: DataTypes.BOOLEAN,
-            feature: DataTypes.STRING,
-            purpose: DataTypes.STRING,
-            homepage_url: DataTypes.STRING,
-            download_url: DataTypes.STRING,
-            license_url: DataTypes.STRING,
-            notice_url: DataTypes.STRING,
-            programming_language: DataTypes.STRING,
-            notes: DataTypes.STRING
+  return sequelize.define(
+    'components',
+    {
+      path: DataTypes.STRING,
+      review_status: DataTypes.STRING,
+      name: DataTypes.STRING,
+      version: DataTypes.STRING,
+      licenses: jsonDataType('licenses'),
+      copyrights: jsonDataType('copyrights'),
+      owner: DataTypes.STRING,
+      code_type: DataTypes.STRING,
+      is_modified: DataTypes.BOOLEAN,
+      is_deployed: DataTypes.BOOLEAN,
+      feature: DataTypes.STRING,
+      purpose: DataTypes.STRING,
+      homepage_url: DataTypes.STRING,
+      download_url: DataTypes.STRING,
+      license_url: DataTypes.STRING,
+      notice_url: DataTypes.STRING,
+      programming_language: DataTypes.STRING,
+      notes: DataTypes.STRING
+    },
+    {
+      getterMethods: {
+        license_expression: function()  {
+          return $.map(this.licenses, (license) => {
+            return license.key;
+          }).join(' AND ');
         },
-        {
-            getterMethods: {
-                license_expression: function()  {
-                    return $.map(this.licenses, (license) => {
-                       return license.key;
-                    }).join(' AND ');
-                },
-                copyright: function() {
-                    return $.map(this.copyrights, (copyright) => {
-                        return copyright.statements.join(' ');
-                    }).join('\n');
-                }
-            }
-        });
+        copyright: function() {
+          return $.map(this.copyrights, (copyright) => {
+            return copyright.statements.join(' ');
+          }).join('\n');
+        }
+      }
+    });
 };

@@ -15,14 +15,14 @@
  */
 
 module.exports = function(sequelize, DataTypes) {
-    return sequelize.define(
-        'urls',
-        {
-            url: DataTypes.STRING,
-            start_line: DataTypes.INTEGER,
-            end_line: DataTypes.INTEGER
-        },
-        {
-            timestamps: false
-        });
+  return sequelize.define(
+    'urls',
+    {
+      url: DataTypes.STRING,
+      start_line: DataTypes.INTEGER,
+      end_line: DataTypes.INTEGER
+    },
+    {
+      timestamps: false
+    });
 };

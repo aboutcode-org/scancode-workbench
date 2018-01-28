@@ -25,105 +25,105 @@ const View = require('./helpers/view');
  * Bar chart summary for AboutCode scan data
  */
 class AboutCodeBarChart extends View {
-    constructor(barChartId, aboutCodeDB) {
-        super(barChartId, aboutCodeDB);
+  constructor(barChartId, aboutCodeDB) {
+    super(barChartId, aboutCodeDB);
 
-        this.chartOptions = {
-            name: 'License Summary',
-            margin: 30,
-            barHeight: 25,
-            xAxisName: 'License Count',
-            yAxisName: 'License Name'
-        };
+    this.chartOptions = {
+      name: 'License Summary',
+      margin: 30,
+      barHeight: 25,
+      xAxisName: 'License Count',
+      yAxisName: 'License Name'
+    };
 
-        this.barChart = new BarChart([], this.chartOptions, this.id());
+    this.barChart = new BarChart([], this.chartOptions, this.id());
 
-        this.progressBar = new Progress('#barchart-view .svg-container', {size: 100});
+    this.progressBar = new Progress('#barchart-view .svg-container', {size: 100});
 
-        this.chartAttributesSelect = $('select#select-chart-attribute');
-        this.barChartTotalFiles = $('span.total-files');
+    this.chartAttributesSelect = $('select#select-chart-attribute');
+    this.barChartTotalFiles = $('span.total-files');
 
-        this.chartAttributesSelect.select2({ placeholder: 'Select an attribute' });
+    this.chartAttributesSelect.select2({ placeholder: 'Select an attribute' });
 
-        // Populate bar chart summary select box values
-        $.each(AboutCodeClueDataTable.TABLE_COLUMNS, (i, column) => {
-            if (column.bar_chart_class) {
-                this.chartAttributesSelect.append(
-                    `<option class="${column.bar_chart_class}" value="${column.name}">${column.title}</option>`);
-            }
+    // Populate bar chart summary select box values
+    $.each(AboutCodeClueDataTable.TABLE_COLUMNS, (i, column) => {
+      if (column.bar_chart_class) {
+        this.chartAttributesSelect.append(
+          `<option class="${column.bar_chart_class}" value="${column.name}">${column.title}</option>`);
+      }
+    });
+
+    $('.bar-chart-copyrights').wrapAll(`<optgroup label="Copyright Information"/>`);
+    $('.bar-chart-licenses').wrapAll(`<optgroup label="License Information"/>`);
+    $('.bar-chart-emails').wrapAll(`<optgroup label="Email Information"/>`);
+    $('.bar-chart-file-infos').wrapAll(`<optgroup label="File Information"/>`);
+    $('.bar-chart-package-infos').wrapAll(`<optgroup label="Package Information"/>`);
+
+    this.chartAttributesSelect.val([]);
+
+    this.chartAttributesSelect.on('change', () => {
+      this.needsReload(true);
+      this.redraw();
+    });
+  }
+
+  reload() {
+    this.needsReload(false);
+
+    this.db()
+      .getFileCount()
+      .then(value => this.barChartTotalFiles.text(value));
+
+    if (this.chartAttributesSelect.val()) {
+      const attribute = this.chartAttributesSelect.val();
+      let query = {
+        attributes: [Sequelize.fn('TRIM', Sequelize.col(attribute)), attribute],
+        where: { path: { $like: `${this.selectedPath()}%` } }
+      };
+
+      this.progressBar.showIndeterminate();
+      this.barChartData = this.db().sync
+        .then(db => db.FlatFile.findAll(query))
+        .then(values => Utils.getAttributeValues(values, attribute))
+        .then(values => {
+          this.progressBar.hide();
+          return values;
+        })
+        .catch(err => {
+          this.progressBar.hide();
+          throw err;
+        });
+    } else {
+      this.barChartData = Promise.resolve([]);
+    }
+  }
+
+  redraw() {
+    if (this.needsReload()) {
+      this.reload();
+    }
+
+    this.barChartData
+      .then(values => {
+        this.barChart = new BarChart(values, this.chartOptions, this.id());
+        const that = this;
+        const chartElement = $('#summary-bar-chart');
+        chartElement.find('rect').click(function () {
+          const attribute =  that.chartAttributesSelect.val();
+          const value = $(this).data('value');
+          that.getHandler('bar-clicked')(attribute, value);
+        });
+        chartElement.find('.y.axis .tick').click(function () {
+          const attribute =  that.chartAttributesSelect.val();
+          const value = $(this).data('value');
+          that.getHandler('bar-clicked')(attribute, value);
         });
 
-        $('.bar-chart-copyrights').wrapAll(`<optgroup label="Copyright Information"/>`);
-        $('.bar-chart-licenses').wrapAll(`<optgroup label="License Information"/>`);
-        $('.bar-chart-emails').wrapAll(`<optgroup label="Email Information"/>`);
-        $('.bar-chart-file-infos').wrapAll(`<optgroup label="File Information"/>`);
-        $('.bar-chart-package-infos').wrapAll(`<optgroup label="Package Information"/>`);
-
-        this.chartAttributesSelect.val([]);
-
-        this.chartAttributesSelect.on('change', () => {
-            this.needsReload(true);
-            this.redraw();
-        });
-    }
-
-    reload() {
-        this.needsReload(false);
-
-        this.db()
-            .getFileCount()
-            .then(value => this.barChartTotalFiles.text(value));
-
-        if (this.chartAttributesSelect.val()) {
-            const attribute = this.chartAttributesSelect.val();
-            let query = {
-                attributes: [Sequelize.fn('TRIM', Sequelize.col(attribute)), attribute],
-                where: { path: { $like: `${this.selectedPath()}%` } }
-            };
-
-            this.progressBar.showIndeterminate();
-            this.barChartData = this.db().sync
-                .then(db => db.FlatFile.findAll(query))
-                .then(values => Utils.getAttributeValues(values, attribute))
-                .then(values => {
-                    this.progressBar.hide();
-                    return values;
-                })
-                .catch(err => {
-                    this.progressBar.hide();
-                    throw err;
-                });
-        } else {
-            this.barChartData = Promise.resolve([]);
-        }
-    }
-
-    redraw() {
-        if (this.needsReload()) {
-            this.reload();
-        }
-
-        this.barChartData
-            .then(values => {
-                this.barChart = new BarChart(values, this.chartOptions, this.id());
-                const that = this;
-                const chartElement = $('#summary-bar-chart');
-                chartElement.find('rect').click(function () {
-                    const attribute =  that.chartAttributesSelect.val();
-                    const value = $(this).data('value');
-                    that.getHandler('bar-clicked')(attribute, value);
-                });
-                chartElement.find('.y.axis .tick').click(function () {
-                    const attribute =  that.chartAttributesSelect.val();
-                    const value = $(this).data('value');
-                    that.getHandler('bar-clicked')(attribute, value);
-                });
-
-                // This is needed to give the dom time to set the bounds of
-                // the barchart element.
-                setTimeout(() => this.barChart.redraw(), 0);
-            });
-    }
+        // This is needed to give the dom time to set the bounds of
+        // the barchart element.
+        setTimeout(() => this.barChart.redraw(), 0);
+      });
+  }
 }
 
 module.exports = AboutCodeBarChart;

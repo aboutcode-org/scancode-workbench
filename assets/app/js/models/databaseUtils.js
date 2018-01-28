@@ -18,19 +18,19 @@ const Sequelize = require('sequelize');
 
 // Stores an object as a json string internally, but as an object externally
 module.exports = {
-    jsonDataType: function(attributeName) {
-        return {
-            type: Sequelize.STRING,
-            get: function() {
-                return JSON.parse(this.getDataValue(attributeName));
-            },
-            set: function(val) {
-                return this.setDataValue(attributeName, JSON.stringify(val));
-            }
-        };
-    },
-    parentPath: function(path) {
-        let splits = path.split('/');
-        return splits.length === 1 ? '#' : splits.slice(0, -1).join('/');
-    }
+  jsonDataType: function(attributeName) {
+    return {
+      type: Sequelize.STRING,
+      get: function() {
+        return JSON.parse(this.getDataValue(attributeName));
+      },
+      set: function(val) {
+        return this.setDataValue(attributeName, JSON.stringify(val));
+      }
+    };
+  },
+  parentPath: function(path) {
+    let splits = path.split('/');
+    return splits.length === 1 ? '#' : splits.slice(0, -1).join('/');
+  }
 };

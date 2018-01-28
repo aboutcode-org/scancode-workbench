@@ -17,16 +17,16 @@
 const {jsonDataType} = require('./databaseUtils');
 
 module.exports = function(sequelize, DataTypes) {
-    return sequelize.define(
-        'headers',
-        {
-            // TODO: The notices and versions should be in their own table
-            // See https://github.com/nexB/aboutcode/issues/7
-            aboutcode_manager_version: DataTypes.STRING,
-            aboutcode_manager_notice: DataTypes.STRING,
-            scancode_notice: DataTypes.STRING,
-            scancode_version: DataTypes.STRING,
-            scancode_options: jsonDataType('scancode_options'),
-            files_count: DataTypes.INTEGER
-        });
+  return sequelize.define(
+    'headers',
+    {
+      // TODO: The notices and versions should be in their own table
+      // See https://github.com/nexB/aboutcode/issues/7
+      aboutcode_manager_version: DataTypes.STRING,
+      aboutcode_manager_notice: DataTypes.STRING,
+      scancode_notice: DataTypes.STRING,
+      scancode_version: DataTypes.STRING,
+      scancode_options: jsonDataType('scancode_options'),
+      files_count: DataTypes.INTEGER
+    });
 };

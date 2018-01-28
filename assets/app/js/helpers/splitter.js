@@ -15,44 +15,44 @@
  */
 
 class Splitter {
-    constructor(leftContainerId, rightContainerId) {
-        this.handlers = {};
+  constructor(leftContainerId, rightContainerId) {
+    this.handlers = {};
 
-        this.splitSizes = [20, 80];
-        this.splitter = Split(
-            [leftContainerId, rightContainerId],
-            {
-                sizes: this.splitSizes,
-                minSize: 200,
-                gutterSize: 5,
-                elementStyle: function (dimension, size, gutterSize) {
-                    const width = window.outerWidth * (size / 100);
-                    return {'flex-basis': `${width - gutterSize}px`};
-                },
-                gutterStyle: (dimension, gutterSize) => {
-                    return {'flex-basis': `${gutterSize}px`};
-                },
-                onDragEnd: () => {
-                    this.splitSizes = this.splitter.getSizes();
-                    this.handlers['drag-end']();
-                }
-            });
-    }
+    this.splitSizes = [20, 80];
+    this.splitter = Split(
+      [leftContainerId, rightContainerId],
+      {
+        sizes: this.splitSizes,
+        minSize: 200,
+        gutterSize: 5,
+        elementStyle: function (dimension, size, gutterSize) {
+          const width = window.outerWidth * (size / 100);
+          return {'flex-basis': `${width - gutterSize}px`};
+        },
+        gutterStyle: (dimension, gutterSize) => {
+          return {'flex-basis': `${gutterSize}px`};
+        },
+        onDragEnd: () => {
+          this.splitSizes = this.splitter.getSizes();
+          this.handlers['drag-end']();
+        }
+      });
+  }
 
-    show() {
-        this.splitter.setSizes(this.splitSizes);
-        $('.gutter-horizontal').removeClass('div-hide').addClass('div-show');
-    }
+  show() {
+    this.splitter.setSizes(this.splitSizes);
+    $('.gutter-horizontal').removeClass('div-hide').addClass('div-show');
+  }
 
-    hide() {
-        $('.gutter-horizontal').removeClass('div-show').addClass('div-hide');
-        this.splitter.collapse(0);
-    }
+  hide() {
+    $('.gutter-horizontal').removeClass('div-show').addClass('div-hide');
+    this.splitter.collapse(0);
+  }
 
-    on(event, handler) {
-        this.handlers[event] = handler;
-        return this;
-    }
+  on(event, handler) {
+    this.handlers[event] = handler;
+    return this;
+  }
 }
 
 module.exports = Splitter;

@@ -21,92 +21,92 @@ const View = require('./helpers/view');
  * ScanCode clue data
  */
 class AboutCodeJsTree extends View {
-    constructor(jsTreeId, aboutCodeDB) {
-        super(jsTreeId, aboutCodeDB);
+  constructor(jsTreeId, aboutCodeDB) {
+    super(jsTreeId, aboutCodeDB);
+  }
+
+  reload() {
+    this.needsReload(false);
+    this.jsTree().jstree(true).refresh(true);
+  }
+
+  redraw() {
+    if (this.needsReload()) {
+      this.reload();
+    }
+  }
+
+  getSelected() {
+    return this.jsTree().jstree('get_selected')[0];
+  }
+
+  jsTree() {
+    if (this._jsTree) {
+      return this._jsTree;
     }
 
-    reload() {
-        this.needsReload(false);
-        this.jsTree().jstree(true).refresh(true);
-    }
-
-    redraw() {
-        if (this.needsReload()) {
-            this.reload();
-        }
-    }
-
-    getSelected() {
-        return this.jsTree().jstree('get_selected')[0];
-    }
-
-    jsTree() {
-        if (this._jsTree) {
-            return this._jsTree;
-        }
-
-        const that = this;
-        this._jsTree = $(this.id()).jstree(
-            {
-                'core': {
-                    'data': function (currentDirectory, callback) {
-                        that.db()
-                            .findAllJSTree({
-                                where: {
-                                    parent: currentDirectory.id
-                                }
-                            })
-                            .then((children) => callback.call(this, children));
-                    },
-                    'animation': false
-                },
-                'types': {
-                    'directory': {
-                        'icon': 'fa fa-folder fa_custom'
-                    },
-                    'file': {
-                        'icon': 'fa fa-file-text-o'
-                    }
-                },
-                'plugins': ['types', 'sort', 'contextmenu', 'wholerow'],
-                'sort': function (a, b) {
-                    const a1 = this.get_node(a);
-                    const b1 = this.get_node(b);
-                    if (a1.type === b1.type) {
-                        return a1.text.localeCompare(b1.text, 'en-US-u-kf-upper');
-                    }
-                    else {
-                        return (a1.type === 'directory') ? -1 : 1;
-                    }
-                },
-                'contextmenu': {
-                    'items': (node) => {
-                        return {
-                            'edit_component': {
-                                'label': 'Edit Component',
-                                'action': () => this.getHandler('node-edit')(node)
-                            }
-                        };
-                    }
+    const that = this;
+    this._jsTree = $(this.id()).jstree(
+      {
+        'core': {
+          'data': function (currentDirectory, callback) {
+            that.db()
+              .findAllJSTree({
+                where: {
+                  parent: currentDirectory.id
                 }
-            })
-            .on('open_node.jstree', (evt, data) => {
-                data.instance.set_icon(data.node, 'fa fa-folder-open fa_custom');
-            })
-            .on('close_node.jstree', (evt, data) => {
-                data.instance.set_icon(data.node, 'fa fa-folder fa_custom');
-            })
-            // Select the root node when the tree is refreshed
-            .on('refresh.jstree', () => {
-                let rootNode = this.jsTree().jstree('get_node', '#').children;
-                this.jsTree().jstree('select_node', rootNode);
-            })
-            .on('select_node.jstree', (evt, data) => {
-                this.getHandler('node-selected')(data.node);
-            });
+              })
+              .then((children) => callback.call(this, children));
+          },
+          'animation': false
+        },
+        'types': {
+          'directory': {
+            'icon': 'fa fa-folder fa_custom'
+          },
+          'file': {
+            'icon': 'fa fa-file-text-o'
+          }
+        },
+        'plugins': ['types', 'sort', 'contextmenu', 'wholerow'],
+        'sort': function (a, b) {
+          const a1 = this.get_node(a);
+          const b1 = this.get_node(b);
+          if (a1.type === b1.type) {
+            return a1.text.localeCompare(b1.text, 'en-US-u-kf-upper');
+          }
+          else {
+            return (a1.type === 'directory') ? -1 : 1;
+          }
+        },
+        'contextmenu': {
+          'items': (node) => {
+            return {
+              'edit_component': {
+                'label': 'Edit Component',
+                'action': () => this.getHandler('node-edit')(node)
+              }
+            };
+          }
+        }
+      })
+      .on('open_node.jstree', (evt, data) => {
+        data.instance.set_icon(data.node, 'fa fa-folder-open fa_custom');
+      })
+      .on('close_node.jstree', (evt, data) => {
+        data.instance.set_icon(data.node, 'fa fa-folder fa_custom');
+      })
+      // Select the root node when the tree is refreshed
+      .on('refresh.jstree', () => {
+        let rootNode = this.jsTree().jstree('get_node', '#').children;
+        this.jsTree().jstree('select_node', rootNode);
+      })
+      .on('select_node.jstree', (evt, data) => {
+        this.getHandler('node-selected')(data.node);
+      });
 
-        return this._jsTree;
-    }
+    return this._jsTree;
+  }
 }
 
 module.exports = AboutCodeJsTree;
