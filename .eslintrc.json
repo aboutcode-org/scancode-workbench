@@ -63,6 +63,14 @@
             {
                 "before": true
             }
+        ],
+        "one-var": [
+            "error",
+            "never"
+        ],
+        "padded-blocks": [
+            "error",
+            "never"
         ]
     }
 }

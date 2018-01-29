@@ -16,7 +16,6 @@
 
 class BarChart {
   constructor(chartData, chartOptions, chartSelector) {
-
     $(chartSelector).empty();
 
     let formattedData = BarChart.formatChartData(chartData);
@@ -179,7 +178,6 @@ class BarChart {
   }
 
   static formatChartData(names) {
-
     // Sum the total number of times the name appears
     let count = {};
     $.each(names, function(i, name) {

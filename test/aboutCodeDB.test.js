@@ -33,7 +33,6 @@ const FLATTENED_FILE = __dirname + '/data/flattened-scancode-results.json';
 const DUPLICATE_PATH_FILE = __dirname + '/data/scancode-duplicate-path-values.json';
 
 describe('checkAboutCodeDB', function() {
-
   describe('addFromJsonFile', function() {
     it('should add rows to database', function () {
       let aboutCodeDB = new AboutCodeDB();

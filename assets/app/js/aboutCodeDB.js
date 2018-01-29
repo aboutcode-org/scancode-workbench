@@ -235,10 +235,8 @@ class AboutCodeDB {
                 if (currProgress > progress) {
                   progress = currProgress;
                   onProgressUpdate(progress);
-                  console.log('Progress: ' +
-                                        `${progress}% ` +
-                                        `(${index}/${files_count})`);
-
+                  console.log('Progress: ' + `${progress}% ` +
+                              `(${index}/${files_count})`);
                 }
               })
               .then(() => {
