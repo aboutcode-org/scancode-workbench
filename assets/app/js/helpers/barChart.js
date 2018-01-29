@@ -41,7 +41,7 @@ class BarChart {
 
     // The chart sits within the bounds starting at (margin.left , margin.top)
     const chart = bounds.append('g')
-      .attr('transform', 'translate('+ this.margin.left + ',' + this.margin.top + ')');
+      .attr('transform', 'translate(' + this.margin.left + ',' + this.margin.top + ')');
 
     // Create scaling for x that converts formattedData values to pixels
     this.xScale = d3.scale.linear()

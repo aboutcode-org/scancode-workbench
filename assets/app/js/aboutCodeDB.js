@@ -228,7 +228,7 @@ class AboutCodeDB {
             promiseChain = promiseChain
               .then(() => that._batchCreateFiles(files, headerId))
               .then(() => {
-                const currProgress = Math.round(index/files_count*100);
+                const currProgress = Math.round(index / files_count * 100);
                 if (currProgress > progress) {
                   progress = currProgress;
                   onProgressUpdate(progress);

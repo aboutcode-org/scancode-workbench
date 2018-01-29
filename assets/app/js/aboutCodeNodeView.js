@@ -321,7 +321,7 @@ class AboutCodeNodeView extends View {
         // Update rect size (has to be done after text is added)
         d3.select(this.parentNode).select('rect')
           .attr('y', function() {
-            return -this.parentNode.getBBox().height/2;
+            return -this.parentNode.getBBox().height / 2;
           })
           .attr('width', function() {
             return this.parentNode.getBBox().width;
@@ -341,7 +341,7 @@ class AboutCodeNodeView extends View {
       .each('end', function () {
         d3.select(this).style('opacity', 'inherit');
       })
-      .attr('transform', (d, i) => `translate(10, ${25*i})`);
+      .attr('transform', (d, i) => `translate(10, ${25 * i})`);
   }
 
   // Update removed clues

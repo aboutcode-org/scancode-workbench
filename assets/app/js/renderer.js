@@ -308,7 +308,7 @@ $(document).ready(function () {
           .then(() => aboutCodeDB.addFromJson(
             jsonFileName,
             aboutCodeVersion,
-            progress => progressbar.update(progress/100)))
+            progress => progressbar.update(progress / 100)))
           .then(() => progressbar.hide())
           .then(updateViews)
           .catch((err) => {
