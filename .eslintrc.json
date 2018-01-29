@@ -9,7 +9,9 @@
         "c3": false,
         "d3": false,
         "ProgressBar": false,
-        "Split": false
+        "Split": false,
+        "describe": false,
+        "it": false
     },
     "extends": "eslint:recommended",
     "parserOptions": {
