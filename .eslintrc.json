@@ -71,6 +71,10 @@
         "padded-blocks": [
             "error",
             "never"
+        ],
+        "space-in-parens": [
+            "error",
+            "never"
         ]
     }
 }

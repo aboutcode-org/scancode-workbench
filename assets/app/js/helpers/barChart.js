@@ -70,7 +70,7 @@ class BarChart {
       .enter().append('g');
 
     // Clear tooltip div created when inadvertently triggered during dropdown selection.
-    $( '.toolTip' ).remove();
+    $('.toolTip').remove();
 
     const tooltip = d3.select('body').append('div').attr('class', 'toolTip');
 

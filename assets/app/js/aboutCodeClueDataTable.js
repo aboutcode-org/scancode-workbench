@@ -323,13 +323,13 @@ class AboutCodeClueDataTable extends View {
                 select.append(`<option value="${HAS_A_VALUE}">Has a Value</option>`);
               }
 
-              $.each(filterValues, function ( i, filterValue ) {
+              $.each(filterValues, function (i, filterValue) {
                 select.append(`<option value="${filterValue}">${filterValue}</option>`);
               });
               select.val(val);
             });
         })
-        .on( 'change', function () {
+        .on('change', function () {
           // Get dropdown element selected value
           let val = $(this).val();
           column
