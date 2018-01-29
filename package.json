@@ -28,7 +28,7 @@
     "asar": "^0.11.0",
     "chai": "^3.5.0",
     "chai-subset": "^1.5.0",
-    "electron": "1.6.14",
+    "electron": "^1.6.16",
     "electron-packager": "^7.0.3",
     "electron-rebuild": "^1.5.7",
     "eslint": "^4.16.0",
