@@ -15,7 +15,6 @@
  */
 
 
-// Load Sequelize and create an in-memory database
 const Sequelize = require('sequelize');
 const fs = require('fs');
 const JSONStream = require('JSONStream');
@@ -25,6 +24,10 @@ const {parentPath} = require('./models/databaseUtils');
 /**
  * Manages the database created from a ScanCode JSON input.
  * The database contains tables for both flattened and unflattened data
+ *
+ * The config will load an existing database or will create a new, empty
+ * database if none exists. For a new database, the data is loaded from a JSON
+ * file by calling addFromJson(jsonFileName).
  *
  * @param config
  * @param config.dbName

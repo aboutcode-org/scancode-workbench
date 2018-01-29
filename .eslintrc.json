@@ -51,6 +51,18 @@
                 ]
             }
         ],
-        "space-infix-ops": ["error", {"int32Hint": false}]
+        "space-infix-ops": [
+            "error",
+            {
+                "int32Hint": false
+            }
+        ],
+        "space-before-blocks": "error",
+        "keyword-spacing": [
+            "error",
+            {
+                "before": true
+            }
+        ]
     }
 }

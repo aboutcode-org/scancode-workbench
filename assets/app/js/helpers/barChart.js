@@ -164,7 +164,7 @@ class BarChart {
 
     let maxStr = '';
     $.each(names, function(i, name) {
-      if(name.length > maxStr.length){
+      if (name.length > maxStr.length) {
         maxStr = name;
       }
     });
@@ -182,7 +182,7 @@ class BarChart {
 
     // Sum the total number of times the name appears
     let count = {};
-    $.each(names, function(i, name){
+    $.each(names, function(i, name) {
       count[name] = count[name] + 1 || 1;
     });
 
@@ -196,7 +196,7 @@ class BarChart {
     });
 
     // Sorts the data highest value to lowest value
-    chartData.sort(function(a,b){
+    chartData.sort(function(a,b) {
       if (a.val === b.val) {
         return a.name.localeCompare(b.name);
       } else {

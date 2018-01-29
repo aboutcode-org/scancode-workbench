@@ -259,7 +259,7 @@ class AboutCodeDashboard extends View {
   static formatData(names) {
     // Sum the total number of times the name appears
     let count = {};
-    $.each(names, function(i, name){
+    $.each(names, function(i, name) {
       count[name] = count[name] + 1 || 1;
     });
 

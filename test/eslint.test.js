@@ -36,7 +36,7 @@ const esLintResults = engine.executeOnFiles(files).results;
 // for each failure
 describe('ESLint', () => esLintResults.forEach(({ filePath, messages }) => {
   it(`validates ${filePath}`, () => {
-    if (messages) {
+    if (messages.length > 0) {
       assert.fail(false, true, messages.map(formatError).join('\n'));
     }
   });

@@ -23,7 +23,7 @@ class Utils {
     for (let i = 0; i < values.length; i++) {
       attributeValue = values[i][attribute];
 
-      if (!Array.isArray(attributeValue) || attributeValue.length === 0){
+      if (!Array.isArray(attributeValue) || attributeValue.length === 0) {
         attributeValue = [attributeValue];
       }
 
