@@ -72,7 +72,7 @@ class AboutCodeBarChart extends View {
 
     this.db()
       .getFileCount()
-      .then(value => this.barChartTotalFiles.text(value));
+      .then((value) => this.barChartTotalFiles.text(value));
 
     if (this.chartAttributesSelect.val()) {
       const attribute = this.chartAttributesSelect.val();
@@ -83,13 +83,13 @@ class AboutCodeBarChart extends View {
 
       this.progressBar.showIndeterminate();
       this.barChartData = this.db().sync
-        .then(db => db.FlatFile.findAll(query))
-        .then(values => Utils.getAttributeValues(values, attribute))
-        .then(values => {
+        .then((db) => db.FlatFile.findAll(query))
+        .then((values) => Utils.getAttributeValues(values, attribute))
+        .then((values) => {
           this.progressBar.hide();
           return values;
         })
-        .catch(err => {
+        .catch((err) => {
           this.progressBar.hide();
           throw err;
         });
@@ -104,7 +104,7 @@ class AboutCodeBarChart extends View {
     }
 
     this.barChartData
-      .then(values => {
+      .then((values) => {
         this.barChart = new BarChart(values, this.chartOptions, this.id());
         const that = this;
         const chartElement = $('#summary-bar-chart');

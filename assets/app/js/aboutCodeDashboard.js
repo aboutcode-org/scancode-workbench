@@ -117,29 +117,29 @@ class AboutCodeDashboard extends View {
     // Get total files scanned
     this.totalFilesProgressbar.showIndeterminate();
     this.db().sync
-      .then(db => db.Header.findOne({ attributes: ['files_count'] }))
-      .then(row => this.totalFilesScanned.text(row ? row.files_count : '0'))
+      .then((db) => db.Header.findOne({ attributes: ['files_count'] }))
+      .then((row) => this.totalFilesScanned.text(row ? row.files_count : '0'))
       .then(() => this.totalFilesProgressbar.hide());
 
     // Get total unique licenses detected
     this.uniqueLicensesProgressbar.showIndeterminate();
     this.db().sync
-      .then(db => db.License.aggregate('key', 'DISTINCT', {plain: false}))
-      .then(row => this.uniqueLicenses.text(row ? row.length : '0'))
+      .then((db) => db.License.aggregate('key', 'DISTINCT', {plain: false}))
+      .then((row) => this.uniqueLicenses.text(row ? row.length : '0'))
       .then(() => this.uniqueLicensesProgressbar.hide());
 
     // Get total unique copyright statements detected
     this.uniqueCopyrightsProgressbar.showIndeterminate();
     this.db().sync
-      .then(db => db.Copyright.aggregate('holders', 'DISTINCT', { plain: false }))
-      .then(row => this.uniqueCopyrights.text(row ? row.length : '0'))
+      .then((db) => db.Copyright.aggregate('holders', 'DISTINCT', { plain: false }))
+      .then((row) => this.uniqueCopyrights.text(row ? row.length : '0'))
       .then(() => this.uniqueCopyrightsProgressbar.hide());
 
     // Get total number of packages detected
     this.totalPackagesProgressbar.showIndeterminate();
     this.db().sync
-      .then(db => db.Package.count('type'))
-      .then(count => this.totalPackages.text(count ? count : '0'))
+      .then((db) => db.Package.count('type'))
+      .then((count) => this.totalPackages.text(count ? count : '0'))
       .then(() => this.totalPackagesProgressbar.hide());
 
     // Get unique programming languages detected
@@ -163,7 +163,7 @@ class AboutCodeDashboard extends View {
     // Get unique programming languages detected
     this.sourceLanguageChartProgressbar.showIndeterminate();
     this.sourceLanguageChartData
-      .then(data => this.sourceLanguageChart.load({
+      .then((data) => this.sourceLanguageChart.load({
         columns: data,
         unload: true,
         done: () => {
@@ -176,7 +176,7 @@ class AboutCodeDashboard extends View {
     // Get license categories detected
     this.licenseCategoryChartProgressbar.showIndeterminate();
     this.licenseCategoryChartData
-      .then(data => this.licenseCategoryChart.load({
+      .then((data) => this.licenseCategoryChart.load({
         columns: data,
         unload: true,
         done: () => {
@@ -189,7 +189,7 @@ class AboutCodeDashboard extends View {
     // Get license keys detected
     this.licenseKeyChartProgressbar.showIndeterminate();
     this.licenseKeyChartData
-      .then(data => this.licenseKeyChart.load({
+      .then((data) => this.licenseKeyChart.load({
         columns: data,
         unload:true,
         done: () => {
@@ -202,7 +202,7 @@ class AboutCodeDashboard extends View {
     // Get package types detected
     this.packagesTypeChartProgressbar.showIndeterminate();
     this.packagesTypeChartData
-      .then(data => this.packagesTypeChart.load({
+      .then((data) => this.packagesTypeChart.load({
         columns: data,
         unload: true,
         done: () => {
@@ -226,7 +226,7 @@ class AboutCodeDashboard extends View {
       where.path.$and.append({$like: `${parentPath}%`});
     }
 
-    return this.db().sync.then(db => {
+    return this.db().sync.then((db) => {
       return db.FlatFile
         .findAll({
           attributes: [
@@ -235,9 +235,9 @@ class AboutCodeDashboard extends View {
           ],
           where: where
         })
-        .then(data => Utils.getAttributeValues(data, attribute))
-        .then(data => AboutCodeDashboard.formatData(data))
-        .then(data => AboutCodeDashboard.limitData(data, LEGEND_LIMIT));
+        .then((data) => Utils.getAttributeValues(data, attribute))
+        .then((data) => AboutCodeDashboard.formatData(data))
+        .then((data) => AboutCodeDashboard.limitData(data, LEGEND_LIMIT));
     });
   }
 

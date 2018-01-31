@@ -60,13 +60,13 @@ $(document).ready(() => {
     });
 
   const componentDialog = new ComponentDialog('#componentDialog', aboutCodeDB)
-    .on('save', component => {
+    .on('save', (component) => {
       nodeView.nodeData()[component.path].component = component;
       componentsTable.needsReload(true);
       nodeView.needsReload(true);
       redrawCurrentView();
     })
-    .on('delete', component => {
+    .on('delete', (component) => {
       nodeView.nodeData()[component.path].component = null;
       componentsTable.needsReload(true);
       nodeView.needsReload(true);
@@ -77,11 +77,11 @@ $(document).ready(() => {
         new DejaCodeExportDialog('#componentExportModal', aboutCodeDB);
 
   const nodeView = new AboutCodeNodeView('#nodeview', aboutCodeDB)
-    .on('node-clicked', node => componentDialog.show(node.id));
+    .on('node-clicked', (node) => componentDialog.show(node.id));
 
   const cluesTable = new AboutCodeClueDataTable('#clues-table', aboutCodeDB);
   const componentsTable = new AboutCodeComponentDataTable('#components-table', aboutCodeDB)
-    .on('upload-clicked', components => {
+    .on('upload-clicked', (components) => {
       if (components.length > 0) {
         dejaCodeExportDialog.show();
       } else {
@@ -94,8 +94,8 @@ $(document).ready(() => {
     .on('export-json', exportJsonComponents);
 
   const jstree = new AboutCodeJsTree('#jstree', aboutCodeDB)
-    .on('node-edit', node => componentDialog.show(node.id))
-    .on('node-selected', node => {
+    .on('node-edit', (node) => componentDialog.show(node.id))
+    .on('node-selected', (node) => {
       // Set the search value for the first column (path) equal to the
       // Selected jstree path and redraw the table
       const searchTerm = node.id + (node.type === 'file' ? '' : '/');
@@ -214,7 +214,7 @@ $(document).ready(() => {
         // Reload the jstree, then trigger the current view to reload.
         jstree.redraw();
       })
-      .catch(reason => { throw reason; });
+      .catch((reason) => { throw reason; });
   }
 
   function redrawCurrentView() {
@@ -230,7 +230,7 @@ $(document).ready(() => {
         name: 'SQLite File',
         extensions: ['sqlite']
       }]
-    }, fileNames => {
+    }, (fileNames) => {
       if (fileNames && fileNames[0]) {
         loadDatabase(fileNames[0]);
       }
@@ -244,7 +244,7 @@ $(document).ready(() => {
       filters: [
         { name: 'SQLite File', extensions: ['sqlite'] }
       ]
-    }, newFileName => {
+    }, (newFileName) => {
       if (newFileName) {
         const oldFileName = aboutCodeDB.sequelize.options.storage;
         const reader = fs.createReadStream(oldFileName);
@@ -263,7 +263,7 @@ $(document).ready(() => {
         name: 'JSON File',
         extensions: ['json']
       }]
-    }, fileNames => {
+    }, (fileNames) => {
       if (fileNames === undefined) {
         return;
       }
@@ -277,7 +277,7 @@ $(document).ready(() => {
           name: 'SQLite File',
           extensions: ['sqlite']
         }]
-      }, sqliteFileName => {
+      }, (sqliteFileName) => {
         if (sqliteFileName === undefined) {
           return;
         }
@@ -308,7 +308,7 @@ $(document).ready(() => {
           .then(() => aboutCodeDB.addFromJson(
             jsonFileName,
             aboutCodeVersion,
-            progress => progressbar.update(progress / 100)))
+            (progress) => progressbar.update(progress / 100)))
           .then(() => progressbar.hide())
           .then(updateViews)
           .catch((err) => {
@@ -348,7 +348,7 @@ $(document).ready(() => {
         name: 'JSON File Type',
         extensions: ['json']
       }]
-    }, fileName => {
+    }, (fileName) => {
       if (fileName === undefined) {
         return;
       }
@@ -414,7 +414,7 @@ $(document).ready(() => {
         name: 'JSON File Type',
         extensions: ['json']
       }]
-    }, fileName => {
+    }, (fileName) => {
       if (fileName === undefined) {
         return;
       }

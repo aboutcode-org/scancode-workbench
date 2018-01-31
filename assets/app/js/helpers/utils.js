@@ -59,7 +59,7 @@ class Utils {
    */
   static showOpenDialog(dialog, config) {
     return new Promise((resolve) => {
-      dialog.showOpenDialog(config, fileNames => {
+      dialog.showOpenDialog(config, (fileNames) => {
         resolve(fileNames || fileNames[0]);
       });
     });
@@ -71,8 +71,8 @@ class Utils {
    * @returns Promise with the name of the file to save to.
    */
   static showSaveDialog(dialog, config) {
-    return new Promise(resolve => {
-      dialog.showSaveDialog(config, newFileName => {
+    return new Promise((resolve) => {
+      dialog.showSaveDialog(config, (newFileName) => {
         resolve(newFileName);
       });
     });

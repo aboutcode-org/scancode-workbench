@@ -51,7 +51,7 @@ class DejaCodeExportDialog extends View {
     this.progressBar.showIndeterminate();
     return this.db().sync
       .then(() => this.db().findAllComponents({}))
-      .then(components => {
+      .then((components) => {
         // Get product name and version
         const productName = this.productName.val();
         const productVersion = this.productVersion.val();
@@ -68,7 +68,7 @@ class DejaCodeExportDialog extends View {
 
         // Converts array of components from AboutCode Manager to
         // DejaCode component format
-        const dejaCodeComponents = $.map(components, component => {
+        const dejaCodeComponents = $.map(components, (component) => {
           return {
             name: component.name,
             version: component.version,
@@ -106,7 +106,7 @@ class DejaCodeExportDialog extends View {
     // Make individual requests to DejaCode to create each component
     const requests = $.map(components, (component) => {
       return this._createComponent(host, apiKey, component)
-        .catch(err => {
+        .catch((err) => {
           errors.push(JSON.stringify({
             component_name: component.name,
             error_status: `${err.status} (${err.statusText})`,
@@ -139,8 +139,8 @@ class DejaCodeExportDialog extends View {
         url: productComponentUrl,
         data: component,
       })
-        .done(data => resolve(data))
-        .fail(err => reject(err));
+        .done((data) => resolve(data))
+        .fail((err) => reject(err));
     });
   }
 }

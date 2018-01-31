@@ -174,7 +174,7 @@ class AboutCodeClueDataTable extends View {
   // For details on the parameters https://datatables.net/manual/server-side
   _query(dataTablesInput, dataTablesCallback) {
     // Sorting and Querying of data for DataTables
-    this.db().sync.then(db => {
+    this.db().sync.then((db) => {
       const columnIndex = dataTablesInput.order[0].column;
       const columnName = dataTablesInput.columns[columnIndex].name;
       const direction = dataTablesInput.order[0].dir === 'desc' ? 'DESC' : 'ASC';
@@ -255,7 +255,7 @@ class AboutCodeClueDataTable extends View {
 
       // Wait for all three of the Deferred objects to finish
       Promise.all([dFind, dCount, dFilteredCount])
-        .then(values => {
+        .then((values) => {
           const [rows, count, filteredCount] = values;
           dataTablesCallback({
             draw: dataTablesInput.draw,
@@ -291,7 +291,7 @@ class AboutCodeClueDataTable extends View {
 
           where[columnName] = {$ne: null};
 
-          that.db().sync.then(db => db.FlatFile.findAll({
+          that.db().sync.then((db) => db.FlatFile.findAll({
             attributes: [
               Sequelize.fn('TRIM',  Sequelize.col(columnName)),
               columnName
@@ -299,12 +299,12 @@ class AboutCodeClueDataTable extends View {
             group: [columnName],
             where: where,
           }))
-            .then(rows => {
+            .then((rows) => {
               let filterValues =
-                            // $.map is used to flatten array values.
-                            $.map(rows, row => row[columnName])
-                              .map(row => row.toString().trim())
-                              .filter(val => val.length > 0);
+                // $.map is used to flatten array values.
+                $.map(rows, (row) => row[columnName])
+                  .map((row) => row.toString().trim())
+                  .filter((val) => val.length > 0);
 
               filterValues = $.unique(filterValues).sort();
 
@@ -392,7 +392,7 @@ AboutCodeClueDataTable.COPYRIGHT_COLUMNS =
     [
       {
         'data': function (row) {
-          return row.copyright_statements.map(statements => {
+          return row.copyright_statements.map((statements) => {
             return statements.join('<br/>');
           }).join('<hr/>');
         },
@@ -403,7 +403,7 @@ AboutCodeClueDataTable.COPYRIGHT_COLUMNS =
       },
       {
         'data': function (row) {
-          return row.copyright_holders.map(holders => {
+          return row.copyright_holders.map((holders) => {
             return holders.join('<br/>');
           }).join('<hr/>');
         },
@@ -414,7 +414,7 @@ AboutCodeClueDataTable.COPYRIGHT_COLUMNS =
       },
       {
         'data': function (row) {
-          return row.copyright_authors.map(authors => {
+          return row.copyright_authors.map((authors) => {
             return authors.join('<br/>');
           }).join('<hr/>');
         },
@@ -478,21 +478,21 @@ AboutCodeClueDataTable.LICENSE_COLUMNS =
         'data': 'license_homepage_url',
         'title': 'License Homepage URL',
         'name': 'license_homepage_url',
-        'render': hrefs => $.map(hrefs, Utils.anchorTag).join('<br>'),
+        'render': (hrefs) => $.map(hrefs, Utils.anchorTag).join('<br>'),
         'visible': false
       },
       {
         'data': 'license_text_url',
         'title': 'License Text URL',
         'name': 'license_text_url',
-        'render': hrefs => $.map(hrefs, Utils.anchorTag).join('<br>'),
+        'render': (hrefs) => $.map(hrefs, Utils.anchorTag).join('<br>'),
         'visible': false
       },
       {
         'data': 'license_reference_url',
         'title': 'License Reference URL',
         'name': 'license_reference_url',
-        'render': hrefs => $.map(hrefs, Utils.anchorTag).join('<br>'),
+        'render': (hrefs) => $.map(hrefs, Utils.anchorTag).join('<br>'),
         'visible': false
       },
       {
@@ -731,7 +731,7 @@ AboutCodeClueDataTable.PACKAGE_COLUMNS =
       },
       {
         'data': function (row) {
-          return row.packages_download_urls.map(hrefs => {
+          return row.packages_download_urls.map((hrefs) => {
             return hrefs.map(Utils.anchorTag).join('<br/>');
           }).join('<hr/>');
         },

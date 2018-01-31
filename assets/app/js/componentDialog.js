@@ -79,19 +79,19 @@ class ComponentDialog extends View {
   _saveComponent() {
     const path = this.title.text();
     this._component(path)
-      .then(component => {
+      .then((component) => {
         return this.db().db.File
           .findOne({
             attributes: ['id'],
             where: { path: { $eq: path } }
           })
-          .then(row => {
+          .then((row) => {
             // Set the file id on the component.
             component.fileId = row.id;
             return component;
           });
       })
-      .then(component => {
+      .then((component) => {
         const modifiedValue = $('input[name=component-modified]:checked').val();
         const deployedValue = $('input[name=component-deployed]:checked').val();
 
@@ -100,10 +100,10 @@ class ComponentDialog extends View {
           fileId: component.fileId,
           review_status: this.status.val(),
           name: this.name.val(),
-          licenses: $.map(this.license.val() || [], license => {
+          licenses: $.map(this.license.val() || [], (license) => {
             return { key: license };
           }),
-          copyrights: $.map(this.copyright.val() || [], copyright => {
+          copyrights: $.map(this.copyright.val() || [], (copyright) => {
             return { statements: copyright.split('\n') };
           }),
           code_type: (this.codeType.val() || [null])[0],
@@ -121,8 +121,8 @@ class ComponentDialog extends View {
           notes: this.notes.val()
         };
       })
-      .then(component => this.db().setComponent(component))
-      .then(component => this.getHandler('save')(component));
+      .then((component) => this.db().setComponent(component))
+      .then((component) => this.getHandler('save')(component));
     this.dialog.modal('hide');
   }
 
@@ -130,7 +130,7 @@ class ComponentDialog extends View {
   _deleteComponent() {
     const id = this.title.text();
     this.db().findComponent({ where: { path: id }})
-      .then(component => {
+      .then((component) => {
         if (component !== null) {
           return component.destroy()
             .then(() => this.getHandler('delete')(component));
@@ -141,7 +141,7 @@ class ComponentDialog extends View {
   // Populate modal input fields with suggestions from ScanCode results
   show(path) {
     this._component(path)
-      .then(component => {
+      .then((component) => {
         this.title.text(path);
         return Promise.all([
           this._setupStatus(component),
@@ -177,7 +177,7 @@ class ComponentDialog extends View {
 
         this.dialog.modal('show');
       })
-      .catch(err => {
+      .catch((err) => {
         console.error(err);
         throw err;
       });
@@ -187,14 +187,14 @@ class ComponentDialog extends View {
     return this.db()
       .findComponent({ where: { path: path } })
     // if the component doesn't exist return an object with only the path
-      .then(component => component ? component : { path: path });
+      .then((component) => component ? component : { path: path });
   }
 
   _setupLicenses(component) {
-    const saved = (component.licenses || []).map(license => license.key);
+    const saved = (component.licenses || []).map((license) => license.key);
     return this._licenseQuery(component.path, 'key')
-      .then(license_keys => license_keys.concat(saved))
-      .then(license_keys => {
+      .then((license_keys) => license_keys.concat(saved))
+      .then((license_keys) => {
         this.license.html('').select2({
           data: $.unique(license_keys),
           multiple: true,
@@ -206,12 +206,12 @@ class ComponentDialog extends View {
   }
 
   _setupCopyrights(component) {
-    const saved = $.map((component.copyrights || []), copyright => {
+    const saved = $.map((component.copyrights || []), (copyright) => {
       return copyright.statements;
     });
     return this._copyrightQuery(component.path, 'statements')
-      .then(copyright_statements => copyright_statements.concat(saved))
-      .then(copyright_statements => {
+      .then((copyright_statements) => copyright_statements.concat(saved))
+      .then((copyright_statements) => {
         this.copyright.html('').select2({
           data: $.unique(copyright_statements),
           multiple: true,
@@ -225,8 +225,8 @@ class ComponentDialog extends View {
   _setupOwners(component) {
     const saved = component.owner || [];
     return this._copyrightQuery(component.path, 'holders')
-      .then(owners => owners.concat(saved))
-      .then(owners => {
+      .then((owners) => owners.concat(saved))
+      .then((owners) => {
         this.owner.html('').select2({
           data: $.unique(owners),
           multiple: true,
@@ -242,8 +242,8 @@ class ComponentDialog extends View {
     const saved = component.programming_language || [];
     return this.db()
       .findAllUnique(component.path, 'programming_language')
-      .then(languages => languages.concat(saved))
-      .then(languages => {
+      .then((languages) => languages.concat(saved))
+      .then((languages) => {
         this.language.html('').select2({
           data: $.unique(languages),
           multiple: true,
@@ -271,8 +271,8 @@ class ComponentDialog extends View {
   _setupHomepageUrl(component) {
     const saved = component.homepage_url || [];
     return this._urlQuery(component.path, 'url')
-      .then(homepage_urls => homepage_urls.concat(saved))
-      .then(homepage_urls => {
+      .then((homepage_urls) => homepage_urls.concat(saved))
+      .then((homepage_urls) => {
         this.homepageUrl.html('').select2({
           data: $.unique(homepage_urls),
           multiple: true,
@@ -290,9 +290,9 @@ class ComponentDialog extends View {
       this._urlQuery(component.path, 'url'),
       this._packageQuery(component.path, 'download_urls'),
     ])
-      .then(rows => $.map(rows, row => row))
-      .then(download_urls => download_urls.concat(saved))
-      .then(download_urls => {
+      .then((rows) => $.map(rows, (row) => row))
+      .then((download_urls) => download_urls.concat(saved))
+      .then((download_urls) => {
         this.downloadUrl.html('').select2({
           data: $.unique(download_urls),
           multiple: true,
@@ -312,9 +312,9 @@ class ComponentDialog extends View {
       this._licenseQuery(component.path, 'reference_url'),
       this._licenseQuery(component.path, 'spdx_url')
     ])
-      .then(rows => $.map(rows, row => row))
-      .then(licenese_urls => licenese_urls.concat(saved))
-      .then(licenese_urls => {
+      .then((rows) => $.map(rows, (row) => row))
+      .then((licenese_urls) => licenese_urls.concat(saved))
+      .then((licenese_urls) => {
         this.licenseUrl.html('').select2({
           data: $.unique(licenese_urls),
           multiple: true,
@@ -329,8 +329,8 @@ class ComponentDialog extends View {
   _setupNoticeUrl(component) {
     const saved = component.notice_url || [];
     return this._licenseQuery(component.path, 'text_url')
-      .then(notice_urls => notice_urls.concat(saved))
-      .then(notice_urls => {
+      .then((notice_urls) => notice_urls.concat(saved))
+      .then((notice_urls) => {
         this.noticeUrl.html('').select2({
           data: $.unique(notice_urls),
           multiple: true,

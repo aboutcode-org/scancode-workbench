@@ -76,7 +76,7 @@ describe('checkAboutCodeDB', () => {
         .then(() => aboutCodeDB.addFromJson(SCANCODE_FILE))
         .then(() => aboutCodeDB.findAll({}))
         .then((rows) => {
-          rows = rows.map(row => row.toJSON());
+          rows = rows.map((row) => row.toJSON());
           assert.containSubset(rows, results.files.splice(1,3));
         });
     });
@@ -129,7 +129,7 @@ describe('checkAboutCodeDB', () => {
       return aboutCodeDB.sync
         .then(() => aboutCodeDB.addFromJson(SCANCODE_FILE))
         .then(() => aboutCodeDB.findAllJSTree())
-        .then(results => assert.deepEqual(expectedJSTreeFormat, results));
+        .then((results) => assert.deepEqual(expectedJSTreeFormat, results));
     });
   });
 
@@ -193,7 +193,7 @@ describe('checkAboutCodeDB', () => {
         .then(() => aboutCodeDB.findComponent({
           where: { path: 'samples'}
         }))
-        .then(row => assert.containSubset(row.toJSON(), component))
+        .then((row) => assert.containSubset(row.toJSON(), component))
         .then(() => aboutCodeDB.setComponent(component2))
         .then(() => aboutCodeDB.db.Component.count())
         .then((rowCount) => assert.strictEqual(rowCount, 2));

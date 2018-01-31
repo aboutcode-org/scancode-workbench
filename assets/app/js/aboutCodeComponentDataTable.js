@@ -61,7 +61,7 @@ class AboutCodeComponentDataTable extends View {
           action: () => {
             this.db()
               .findAllComponents({})
-              .then(components =>
+              .then((components) =>
                 this.getHandler('upload-clicked')(components));
           },
         },

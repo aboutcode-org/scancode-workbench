@@ -50,7 +50,7 @@ class AboutCodeNodeView extends View {
 
     const selectedStatuses = ['Analyzed', 'Attention', 'Original', 'NR'];
 
-    $('.status-dropdown-menu a').on('click', event => {
+    $('.status-dropdown-menu a').on('click', (event) => {
       const target = $(event.currentTarget);
       const value = target.attr('data-value');
       const input = target.find('input');
@@ -79,7 +79,7 @@ class AboutCodeNodeView extends View {
   reload() {
     return this.db()
       .findOne({ where: { parent: '#' } })
-      .then(root => {
+      .then((root) => {
         if (root) {
           return this.setRoot(root.path);
         }
@@ -178,7 +178,7 @@ class AboutCodeNodeView extends View {
         // return `${d.name} (${d.files_count}, ${d.clues_count})`;
         return `${d.name} (${d.files_count})`;
       })
-      .on('click', node => this.getHandler('node-clicked')(node));
+      .on('click', (node) => this.getHandler('node-clicked')(node));
 
     // Setup file nodes
     nodes.filter((d) => d.type !== 'directory')
@@ -186,13 +186,13 @@ class AboutCodeNodeView extends View {
       .append('g')
       .attr('class', 'clues')
       .attr('x', 10)
-      .on('click', node => this.getHandler('node-clicked')(node));
+      .on('click', (node) => this.getHandler('node-clicked')(node));
   }
 
   // Update the nodes when data changes
   _updateNodes(nodes) {
     // Update circles
-    nodes.select('circle').attr('class', d => d.review_status);
+    nodes.select('circle').attr('class', (d) => d.review_status);
 
     // Get the selected values
     const selected = this.nodeDropdown.val();
@@ -201,7 +201,7 @@ class AboutCodeNodeView extends View {
       // Select all clue nodes
       const fileNodes = nodes.filter((d) => d.type !== 'directory');
       const clueGroup = fileNodes.selectAll('g.clues');
-      const clueNodes = clueGroup.selectAll('g').data(selected, d => d);
+      const clueNodes = clueGroup.selectAll('g').data(selected, (d) => d);
       AboutCodeNodeView._updateClueNodes(clueNodes);
       AboutCodeNodeView._addClueNodes(clueNodes.enter());
       AboutCodeNodeView._removeClueNodes(clueNodes.exit());

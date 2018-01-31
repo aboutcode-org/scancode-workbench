@@ -78,6 +78,10 @@
         ],
         "prefer-const": "error",
         "prefer-arrow-callback": "error",
-        "arrow-spacing": "error"
+        "arrow-spacing": "error",
+        "arrow-parens": [
+            "error",
+            "always"
+        ]
     }
 }

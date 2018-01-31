@@ -84,10 +84,10 @@ class NodeView {
     // _children will be undefined the first time the node is toggled
     if (this.nodeData[id]._children === undefined) {
       this.handlers['get-children'](id)
-        .then(children => {
+        .then((children) => {
           if (children !== undefined) {
             this.nodeData[id]._children = children;
-            children.forEach(child => {
+            children.forEach((child) => {
               this.nodeData[child.id] = child;
             });
             this.toggle(id);

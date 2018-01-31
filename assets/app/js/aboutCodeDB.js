@@ -57,7 +57,7 @@ class AboutCodeDB {
 
   // Get AboutCode Manager app information
   getAboutCodeInfo() {
-    return this.sync.then(db => db.Header.findOne({
+    return this.sync.then((db) => db.Header.findOne({
       attributes: [
         'aboutcode_manager_notice',
         'aboutcode_manager_version'
@@ -67,7 +67,7 @@ class AboutCodeDB {
 
   // Get ScanCode Toolkit information
   getScanCodeInfo() {
-    return this.sync.then(db => db.Header.findOne({
+    return this.sync.then((db) => db.Header.findOne({
       attributes: [
         'scancode_notice',
         'scancode_version',
@@ -78,24 +78,24 @@ class AboutCodeDB {
 
   getFileCount() {
     return this.sync
-      .then(db => db.Header.findOne({attributes: ['files_count']}))
-      .then(count => count ? count.files_count : 0);
+      .then((db) => db.Header.findOne({attributes: ['files_count']}))
+      .then((count) => count ? count.files_count : 0);
   }
 
   // Uses the components table to do a findAll query
   findAllComponents(query) {
-    return this.sync.then(db => db.Component.findAll(query));
+    return this.sync.then((db) => db.Component.findAll(query));
   }
 
   // Uses the components table to do a findOne query
   findComponent(query) {
-    return this.sync.then(db => db.Component.findOne(query));
+    return this.sync.then((db) => db.Component.findOne(query));
   }
 
   // Uses the components table to create or set a component
   setComponent(component) {
     return this.findComponent({ where: { path: component.path } })
-      .then(dbComponent => {
+      .then((dbComponent) => {
         if (dbComponent) {
           return dbComponent.update(component);
         }
@@ -108,18 +108,18 @@ class AboutCodeDB {
   // Uses the files table to do a findOne query
   findOne(query) {
     query = $.extend(query, { include: this.db.fileIncludes });
-    return this.sync.then(db => db.File.findOne(query));
+    return this.sync.then((db) => db.File.findOne(query));
   }
 
   // Uses the files table to do a findAll query
   findAll(query) {
     query = $.extend(query, { include: this.db.fileIncludes });
-    return this.sync.then(db => db.File.findAll(query));
+    return this.sync.then((db) => db.File.findAll(query));
   }
 
   findAllUnique(path, field, subTable) {
     return this.sync
-      .then(db => {
+      .then((db) => {
         if (!subTable) {
           return db.File
             .findAll({
@@ -133,7 +133,7 @@ class AboutCodeDB {
                 ]
               }
             })
-            .then(rows => $.map(rows, row => row[field]));
+            .then((rows) => $.map(rows, (row) => row[field]));
         }
         return db.File
           .findAll({
@@ -151,8 +151,8 @@ class AboutCodeDB {
               },
             }]
           })
-          .then(rows => $.map(rows, row => row[subTable.name]))
-          .then(values => $.map(values, value => value[field]));
+          .then((rows) => $.map(rows, (row) => row[subTable.name]))
+          .then((values) => $.map(values, (value) => value[field]));
       });
   }
 
@@ -162,8 +162,8 @@ class AboutCodeDB {
       attributes: ['path', 'parent', 'name', 'type']
     });
     return this.sync
-      .then(db => db.File.findAll(query))
-      .then(files => {
+      .then((db) => db.File.findAll(query))
+      .then((files) => {
         return files.map((file) => {
           return {
             id: file.path,
@@ -199,7 +199,7 @@ class AboutCodeDB {
       const that = this;
       stream
         .pipe(JSONStream.parse('files.*'))
-        .on('header', header => {
+        .on('header', (header) => {
           if ('header' in header) {
             header = header.header;
           }
@@ -210,7 +210,7 @@ class AboutCodeDB {
           files_count = header.files_count;
           promiseChain = promiseChain
             .then(() => this.db.Header.create(header))
-            .then(result => headerId = result.id);
+            .then((result) => headerId = result.id);
         })
         .on('data', function(file) {
           if (!rootPath) {
@@ -243,7 +243,7 @@ class AboutCodeDB {
                 files = [];
                 this.resume();
               })
-              .catch(e => reject(e));
+              .catch((e) => reject(e));
           }
         })
         .on('end', () => {
@@ -266,7 +266,7 @@ class AboutCodeDB {
               resolve();
             }).catch((e) => reject(e));
         })
-        .on('error', e => reject(e));
+        .on('error', (e) => reject(e));
     });
   }
 
@@ -277,7 +277,7 @@ class AboutCodeDB {
   }
 
   _addFlattenedFiles(files) {
-    files = $.map(files, file => this.db.FlatFile.flatten(file));
+    files = $.map(files, (file) => this.db.FlatFile.flatten(file));
     return this.db.FlatFile.bulkCreate(files, {logging: false});
   }
 
@@ -287,7 +287,7 @@ class AboutCodeDB {
       autocommit: false,
       isolationLevel: Sequelize.Transaction.ISOLATION_LEVELS.READ_COMMITTED
     };
-    return this.sequelize.transaction(transactionOptions, t => {
+    return this.sequelize.transaction(transactionOptions, (t) => {
       const options = {
         logging: () => {},
         transaction: t
@@ -302,7 +302,7 @@ class AboutCodeDB {
         .then(() => this.db.Package.bulkCreate(this._addFileIds(files, 'packages'), options))
         .then(() => this.db.Email.bulkCreate(this._addFileIds(files, 'emails'), options))
         .then(() => this.db.Url.bulkCreate(this._addFileIds(files, 'urls'), options))
-        .then(() => this.sequelize.Promise.each(files, file => {
+        .then(() => this.sequelize.Promise.each(files, (file) => {
           if (file.component) {
             return this.db.Component.create(file.component, options);
           }
@@ -311,8 +311,8 @@ class AboutCodeDB {
   }
 
   _addFileIds(files, attribute) {
-    return $.map(files, file => {
-      return $.map(file[attribute] || [], value => {
+    return $.map(files, (file) => {
+      return $.map(file[attribute] || [], (value) => {
         value.fileId = file.id;
         return value;
       });
