@@ -76,7 +76,7 @@ class AboutCodeBarChart extends View {
 
     if (this.chartAttributesSelect.val()) {
       const attribute = this.chartAttributesSelect.val();
-      let query = {
+      const query = {
         attributes: [Sequelize.fn('TRIM', Sequelize.col(attribute)), attribute],
         where: { path: { $like: `${this.selectedPath()}%` } }
       };

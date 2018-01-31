@@ -18,7 +18,7 @@ class BarChart {
   constructor(chartData, chartOptions, chartSelector) {
     $(chartSelector).empty();
 
-    let formattedData = BarChart.formatChartData(chartData);
+    const formattedData = BarChart.formatChartData(chartData);
 
     this.chartSelector = chartSelector;
 
@@ -107,8 +107,8 @@ class BarChart {
     chart.selectAll('.y.axis .tick')
       .on('mouseover', function () { tooltip.style('display', 'inline-block'); })
       .on('mousemove', function (d) {
-        let result = $.grep(formattedData, function (e) { return e.name === d; });
-        let displayValue = ' (' + result[0].val + ')';
+        const result = $.grep(formattedData, function (e) { return e.name === d; });
+        const displayValue = ' (' + result[0].val + ')';
         tooltip
           .style('left', d3.event.pageX - 50 + 'px')
           .style('top', d3.event.pageY - 70 + 'px')
@@ -129,9 +129,9 @@ class BarChart {
   // Redraws chart and sets width based on available chart width.
   // User needs to call this function whenever the width of the chart changes.
   redraw() {
-    let boundWidth = $(this.chartSelector).width();
+    const boundWidth = $(this.chartSelector).width();
 
-    let chartWidth = boundWidth - this.margin.left - this.margin.right;
+    const chartWidth = boundWidth - this.margin.left - this.margin.right;
 
     if (chartWidth > 0) {
       this.xScale.range([0, chartWidth]);
@@ -150,9 +150,9 @@ class BarChart {
   // pixels. Removes the appended span element from the DOM and returns the
   // width.
   static strPixelWidth(str) {
-    let tmp = $('<span></span>').text(str);
+    const tmp = $('<span></span>').text(str);
     $('body').append(tmp);
-    let width = tmp.width();
+    const width = tmp.width();
     tmp.remove();
     return width;
   }
@@ -179,7 +179,7 @@ class BarChart {
 
   static formatChartData(names) {
     // Sum the total number of times the name appears
-    let count = {};
+    const count = {};
     $.each(names, function(i, name) {
       count[name] = count[name] + 1 || 1;
     });

@@ -75,6 +75,7 @@
         "space-in-parens": [
             "error",
             "never"
-        ]
+        ],
+        "prefer-const": "error"
     }
 }

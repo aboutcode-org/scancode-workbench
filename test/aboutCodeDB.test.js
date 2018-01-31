@@ -35,7 +35,7 @@ const DUPLICATE_PATH_FILE = __dirname + '/data/scancode-duplicate-path-values.js
 describe('checkAboutCodeDB', function() {
   describe('addFromJsonFile', function() {
     it('should add rows to database', function () {
-      let aboutCodeDB = new AboutCodeDB();
+      const aboutCodeDB = new AboutCodeDB();
 
       return aboutCodeDB.sync
         .then(() => aboutCodeDB.db.File.count())
@@ -58,7 +58,7 @@ describe('checkAboutCodeDB', function() {
 
   describe('getDuplicatePaths', function() {
     it('should throw SequelizeUniqueConstraintError error for duplicate path', function() {
-      let aboutCodeDB = new AboutCodeDB();
+      const aboutCodeDB = new AboutCodeDB();
 
       return aboutCodeDB.sync
         .then(() => aboutCodeDB.addFromJson(DUPLICATE_PATH_FILE))
@@ -70,7 +70,7 @@ describe('checkAboutCodeDB', function() {
   describe('findAll', function() {
     const results = JSON.parse(fs.readFileSync(SCANCODE_FILE, 'utf8'));
     it('should return all rows', function() {
-      let aboutCodeDB = new AboutCodeDB();
+      const aboutCodeDB = new AboutCodeDB();
 
       return aboutCodeDB.sync
         .then(() => aboutCodeDB.addFromJson(SCANCODE_FILE))
@@ -85,7 +85,7 @@ describe('checkAboutCodeDB', function() {
   describe('findOne', function() {
     const results = JSON.parse(fs.readFileSync(SCANCODE_FILE, 'utf8'));
     it('should return one', function() {
-      let aboutCodeDB = new AboutCodeDB();
+      const aboutCodeDB = new AboutCodeDB();
 
       return aboutCodeDB.sync
         .then(() => aboutCodeDB.addFromJson(SCANCODE_FILE))
@@ -101,8 +101,8 @@ describe('checkAboutCodeDB', function() {
 
   describe('findAllJSTree', function() {
     it('should format ScanCode results to jsTree Format', function() {
-      let aboutCodeDB = new AboutCodeDB();
-      let expectedJSTreeFormat = [
+      const aboutCodeDB = new AboutCodeDB();
+      const expectedJSTreeFormat = [
         {
           id: 'samples/README',
           text: 'README',
@@ -135,8 +135,8 @@ describe('checkAboutCodeDB', function() {
 
   describe('setComponent', function() {
     it('should create a component in Component Table', function() {
-      let aboutCodeDB = new AboutCodeDB();
-      let component = {
+      const aboutCodeDB = new AboutCodeDB();
+      const component = {
         'license_expression': 'apache-1.1',
         'copyright': '(c) 2004 by Henrik Ravn',
         'licenses': [
@@ -161,7 +161,7 @@ describe('checkAboutCodeDB', function() {
         'notes': ''
       };
 
-      let component2 = {
+      const component2 = {
         'license_expression': 'zlib',
         'copyright': 'Copyright (c) 1995-2013 Jean-loup Gailly and Mark Adler',
         'licenses': [
@@ -203,7 +203,7 @@ describe('checkAboutCodeDB', function() {
   describe('addFlattenedRows', function() {
     const results = JSON.parse(fs.readFileSync(FLATTENED_FILE, 'utf8'));
     it('should add rows to the flattened files table', function() {
-      let aboutCodeDB = new AboutCodeDB();
+      const aboutCodeDB = new AboutCodeDB();
 
       return aboutCodeDB.sync
         .then(() => aboutCodeDB.db.FlatFile.count())
@@ -221,7 +221,7 @@ describe('checkAboutCodeDB', function() {
 
   describe('getFileCount', function() {
     it('should return the ScanCode files_count', function() {
-      let aboutCodeDB = new AboutCodeDB();
+      const aboutCodeDB = new AboutCodeDB();
 
       return aboutCodeDB.sync
         .then(() => aboutCodeDB.addFromJson(SCANCODE_FILE))

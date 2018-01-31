@@ -77,7 +77,7 @@ class ComponentDialog extends View {
   }
 
   _saveComponent() {
-    let path = this.title.text();
+    const path = this.title.text();
     this._component(path)
       .then(component => {
         return this.db().db.File
@@ -128,7 +128,7 @@ class ComponentDialog extends View {
 
   // Delete a created Component inside the Component Modal
   _deleteComponent() {
-    let id = this.title.text();
+    const id = this.title.text();
     this.db().findComponent({ where: { path: id }})
       .then(component => {
         if (component !== null) {
@@ -257,7 +257,7 @@ class ComponentDialog extends View {
 
   _setupCodeType(component) {
     const saved = component.code_type || [] ;
-    let codeTypes = ['Source', 'Binary', 'Mixed', 'Document'].concat(saved);
+    const codeTypes = ['Source', 'Binary', 'Mixed', 'Document'].concat(saved);
     this.codeType.html('').select2({
       data: $.unique(codeTypes),
       multiple: true,

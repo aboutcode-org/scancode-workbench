@@ -98,7 +98,7 @@ class AboutCodeJsTree extends View {
       })
       // Select the root node when the tree is refreshed
       .on('refresh.jstree', () => {
-        let rootNode = this.jsTree().jstree('get_node', '#').children;
+        const rootNode = this.jsTree().jstree('get_node', '#').children;
         this.jsTree().jstree('select_node', rootNode);
       })
       .on('select_node.jstree', (evt, data) => {

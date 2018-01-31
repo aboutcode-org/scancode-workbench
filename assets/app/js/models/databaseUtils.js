@@ -30,7 +30,7 @@ module.exports = {
     };
   },
   parentPath: function(path) {
-    let splits = path.split('/');
+    const splits = path.split('/');
     return splits.length === 1 ? '#' : splits.slice(0, -1).join('/');
   }
 };

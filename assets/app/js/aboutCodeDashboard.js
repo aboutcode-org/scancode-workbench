@@ -214,7 +214,7 @@ class AboutCodeDashboard extends View {
   }
 
   _loadData(attribute, parentPath) {
-    let where = {
+    const where = {
       $and: [{
         type: {
           $eq: 'file'
@@ -258,7 +258,7 @@ class AboutCodeDashboard extends View {
   // Formats data for c3: [[key1, count1], [key2, count2], ...]
   static formatData(names) {
     // Sum the total number of times the name appears
-    let count = {};
+    const count = {};
     $.each(names, function(i, name) {
       count[name] = count[name] + 1 || 1;
     });

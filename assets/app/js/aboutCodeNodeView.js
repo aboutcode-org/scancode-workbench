@@ -115,8 +115,8 @@ class AboutCodeNodeView extends View {
         if (rootId in this.nodeData()) {
           this.nodeView().setRoot(this.nodeData()[rootId]);
         } else if (rootId) {
-          let splits = rootId.split('/');
-          let rootIds = $.map(splits, (split, index) => {
+          const splits = rootId.split('/');
+          const rootIds = $.map(splits, (split, index) => {
             return { path: splits.slice(0, index + 1).join('/') };
           });
 

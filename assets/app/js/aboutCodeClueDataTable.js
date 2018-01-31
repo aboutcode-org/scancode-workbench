@@ -84,7 +84,7 @@ class AboutCodeClueDataTable extends View {
 
     // Adds a footer for each column. This needs to be done before creating
     // the DataTable
-    let cells = $.map(AboutCodeClueDataTable.TABLE_COLUMNS, () => '<td></td>').join('');
+    const cells = $.map(AboutCodeClueDataTable.TABLE_COLUMNS, () => '<td></td>').join('');
     $(this.id()).append('<tfoot><tr>' + cells + '</tr></tfoot>');
 
     this._dataTable = $(this.id()).DataTable({
@@ -175,9 +175,9 @@ class AboutCodeClueDataTable extends View {
   _query(dataTablesInput, dataTablesCallback) {
     // Sorting and Querying of data for DataTables
     this.db().sync.then(db => {
-      let columnIndex = dataTablesInput.order[0].column;
-      let columnName = dataTablesInput.columns[columnIndex].name;
-      let direction = dataTablesInput.order[0].dir === 'desc' ? 'DESC' : 'ASC';
+      const columnIndex = dataTablesInput.order[0].column;
+      const columnName = dataTablesInput.columns[columnIndex].name;
+      const direction = dataTablesInput.order[0].dir === 'desc' ? 'DESC' : 'ASC';
 
       // query = {
       //   where: {
@@ -191,7 +191,7 @@ class AboutCodeClueDataTable extends View {
       //     }
       //   }
       // }
-      let query = {
+      const query = {
         where: {
           $and: {}
         },
@@ -203,7 +203,7 @@ class AboutCodeClueDataTable extends View {
 
       // If a column search exists, add search for that column
       for (let i = 0; i < dataTablesInput.columns.length; i++) {
-        let columnSearch = dataTablesInput.columns[i].search.value;
+        const columnSearch = dataTablesInput.columns[i].search.value;
         if (columnSearch) {
           const columnName = dataTablesInput.columns[i].name;
           this.dataTable().column(`${columnName}:name`).visible(true);
@@ -232,11 +232,11 @@ class AboutCodeClueDataTable extends View {
       }
 
       // If a global search exists, add an $or search for each column
-      let globalSearch = dataTablesInput.search.value;
+      const globalSearch = dataTablesInput.search.value;
       if (globalSearch) {
         query.where.$and.$or = [];
         for (let i = 0; i < dataTablesInput.columns.length; i++) {
-          let orSearch = {};
+          const orSearch = {};
           orSearch[dataTablesInput.columns[i].name] = {
             $like: `%${globalSearch}%`
           };
@@ -245,13 +245,13 @@ class AboutCodeClueDataTable extends View {
       }
 
       // Execute the database find to get the rows of data
-      let dFind = db.FlatFile.findAll(query);
+      const dFind = db.FlatFile.findAll(query);
 
       // Execute the database count of all rows
-      let dCount = db.FlatFile.count({});
+      const dCount = db.FlatFile.count({});
 
       // Execute the database count of filtered query rows
-      let dFilteredCount = db.FlatFile.count(query);
+      const dFilteredCount = db.FlatFile.count(query);
 
       // Wait for all three of the Deferred objects to finish
       Promise.all([dFind, dCount, dFilteredCount])
@@ -287,7 +287,7 @@ class AboutCodeClueDataTable extends View {
         .appendTo(footer)
         .on('click', () => {
           const currPath = pathCol.search()[0];
-          let where = { path: { $like: `${currPath}%`} };
+          const where = { path: { $like: `${currPath}%`} };
 
           where[columnName] = {$ne: null};
 
@@ -331,7 +331,7 @@ class AboutCodeClueDataTable extends View {
         })
         .on('change', function () {
           // Get dropdown element selected value
-          let val = $(this).val();
+          const val = $(this).val();
           column
             .search(val, false, false)
             .draw();

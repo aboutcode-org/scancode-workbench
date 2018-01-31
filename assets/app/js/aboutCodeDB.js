@@ -39,10 +39,10 @@ class AboutCodeDB {
   constructor(config) {
     // Constructor returns an object which effectively represents a connection
     // to the db arguments (name of db, username for db, pw for that user)
-    let name = (config && config.dbName) ? config.dbName : 'tmp';
-    let user = (config && config.dbUser) ? config.dbUser : null;
-    let password = (config && config.dbPassword) ? config.dbPassword : null;
-    let storage = (config && config.dbStorage) ? config.dbStorage : ':memory:';
+    const name = (config && config.dbName) ? config.dbName : 'tmp';
+    const user = (config && config.dbUser) ? config.dbUser : null;
+    const password = (config && config.dbPassword) ? config.dbPassword : null;
+    const storage = (config && config.dbStorage) ? config.dbStorage : ':memory:';
 
     this.sequelize = new Sequelize(name, user, password, {
       dialect: 'sqlite',
@@ -196,7 +196,7 @@ class AboutCodeDB {
 
     console.time('Load Database');
     return new Promise((resolve, reject) => {
-      let that = this;
+      const that = this;
       stream
         .pipe(JSONStream.parse('files.*'))
         .on('header', header => {
@@ -282,13 +282,13 @@ class AboutCodeDB {
   }
 
   _addFiles(files, headerId) {
-    let transactionOptions = {
+    const transactionOptions = {
       logging: () => {},
       autocommit: false,
       isolationLevel: Sequelize.Transaction.ISOLATION_LEVELS.READ_COMMITTED
     };
     return this.sequelize.transaction(transactionOptions, t => {
-      let options = {
+      const options = {
         logging: () => {},
         transaction: t
       };

@@ -353,31 +353,31 @@ $(document).ready(function () {
         return;
       }
 
-      let scanCodeInfoPromise = aboutCodeDB.getScanCodeInfo({
+      const scanCodeInfoPromise = aboutCodeDB.getScanCodeInfo({
         attributes: {
           exclude: ['id', 'createdAt', 'updatedAt']
         }
       });
 
-      let aboutCodeInfoPromise = aboutCodeDB.getAboutCodeInfo({
+      const aboutCodeInfoPromise = aboutCodeDB.getAboutCodeInfo({
         attributes: {
           exclude: ['id', 'createdAt', 'updatedAt']
         }
       });
 
-      let clueFilesPromise = aboutCodeDB.findAll({
+      const clueFilesPromise = aboutCodeDB.findAll({
         attributes: {
           exclude: ['id', 'createdAt', 'updatedAt']
         }
       });
 
-      let componentsPromise = aboutCodeDB.findAllComponents({
+      const componentsPromise = aboutCodeDB.findAllComponents({
         attributes: {
           exclude: ['id', 'createdAt', 'updatedAt']
         }
       });
 
-      let filesCountPromise = aboutCodeDB.getFileCount({
+      const filesCountPromise = aboutCodeDB.getFileCount({
         attributes: {
           exclude: ['id', 'createdAt', 'updatedAt']
         }
@@ -386,7 +386,7 @@ $(document).ready(function () {
       Promise.all([scanCodeInfoPromise, aboutCodeInfoPromise,
         filesCountPromise, clueFilesPromise, componentsPromise])
         .then(([scanCodeInfo, aboutCodeInfo, filesCount, clueFiles, components]) => {
-          let json = {
+          const json = {
             aboutcode_manager_notice: aboutCodeInfo.aboutcode_manager_notice,
             aboutcode_manager_version: aboutCodeInfo.aboutcode_manager_version,
             scancode_version: scanCodeInfo.scancode_version,
@@ -419,13 +419,13 @@ $(document).ready(function () {
         return;
       }
 
-      let aboutCodeInfoPromise = aboutCodeDB.getAboutCodeInfo({
+      const aboutCodeInfoPromise = aboutCodeDB.getAboutCodeInfo({
         attributes: {
           exclude: ['id', 'createdAt', 'updatedAt']
         }
       });
 
-      let componentsPromise = aboutCodeDB.findAllComponents({
+      const componentsPromise = aboutCodeDB.findAllComponents({
         attributes: {
           exclude: ['id', 'createdAt', 'updatedAt']
         }
@@ -433,7 +433,7 @@ $(document).ready(function () {
 
       Promise.all([aboutCodeInfoPromise, componentsPromise])
         .then(([aboutCodeInfo, components]) => {
-          let json = {
+          const json = {
             aboutcode_manager_notice: aboutCodeInfo.aboutcode_manager_notice,
             aboutcode_manager_version: aboutCodeInfo.aboutcode_manager_version,
             components: components
