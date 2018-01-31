@@ -32,9 +32,9 @@ const SCANCODE_FILE = __dirname + '/data/scancode-results.json';
 const FLATTENED_FILE = __dirname + '/data/flattened-scancode-results.json';
 const DUPLICATE_PATH_FILE = __dirname + '/data/scancode-duplicate-path-values.json';
 
-describe('checkAboutCodeDB', function() {
-  describe('addFromJsonFile', function() {
-    it('should add rows to database', function () {
+describe('checkAboutCodeDB', () => {
+  describe('addFromJsonFile', () => {
+    it('should add rows to database', () => {
       const aboutCodeDB = new AboutCodeDB();
 
       return aboutCodeDB.sync
@@ -56,8 +56,8 @@ describe('checkAboutCodeDB', function() {
     });
   });
 
-  describe('getDuplicatePaths', function() {
-    it('should throw SequelizeUniqueConstraintError error for duplicate path', function() {
+  describe('getDuplicatePaths', () => {
+    it('should throw SequelizeUniqueConstraintError error for duplicate path', () => {
       const aboutCodeDB = new AboutCodeDB();
 
       return aboutCodeDB.sync
@@ -67,9 +67,9 @@ describe('checkAboutCodeDB', function() {
     });
   });
 
-  describe('findAll', function() {
+  describe('findAll', () => {
     const results = JSON.parse(fs.readFileSync(SCANCODE_FILE, 'utf8'));
-    it('should return all rows', function() {
+    it('should return all rows', () => {
       const aboutCodeDB = new AboutCodeDB();
 
       return aboutCodeDB.sync
@@ -82,9 +82,9 @@ describe('checkAboutCodeDB', function() {
     });
   });
 
-  describe('findOne', function() {
+  describe('findOne', () => {
     const results = JSON.parse(fs.readFileSync(SCANCODE_FILE, 'utf8'));
-    it('should return one', function() {
+    it('should return one', () => {
       const aboutCodeDB = new AboutCodeDB();
 
       return aboutCodeDB.sync
@@ -99,8 +99,8 @@ describe('checkAboutCodeDB', function() {
     });
   });
 
-  describe('findAllJSTree', function() {
-    it('should format ScanCode results to jsTree Format', function() {
+  describe('findAllJSTree', () => {
+    it('should format ScanCode results to jsTree Format', () => {
       const aboutCodeDB = new AboutCodeDB();
       const expectedJSTreeFormat = [
         {
@@ -133,8 +133,8 @@ describe('checkAboutCodeDB', function() {
     });
   });
 
-  describe('setComponent', function() {
-    it('should create a component in Component Table', function() {
+  describe('setComponent', () => {
+    it('should create a component in Component Table', () => {
       const aboutCodeDB = new AboutCodeDB();
       const component = {
         'license_expression': 'apache-1.1',
@@ -200,9 +200,9 @@ describe('checkAboutCodeDB', function() {
     });
   });
 
-  describe('addFlattenedRows', function() {
+  describe('addFlattenedRows', () => {
     const results = JSON.parse(fs.readFileSync(FLATTENED_FILE, 'utf8'));
-    it('should add rows to the flattened files table', function() {
+    it('should add rows to the flattened files table', () => {
       const aboutCodeDB = new AboutCodeDB();
 
       return aboutCodeDB.sync
@@ -219,8 +219,8 @@ describe('checkAboutCodeDB', function() {
     });
   });
 
-  describe('getFileCount', function() {
-    it('should return the ScanCode files_count', function() {
+  describe('getFileCount', () => {
+    it('should return the ScanCode files_count', () => {
       const aboutCodeDB = new AboutCodeDB();
 
       return aboutCodeDB.sync

@@ -259,12 +259,12 @@ class AboutCodeDashboard extends View {
   static formatData(names) {
     // Sum the total number of times the name appears
     const count = {};
-    $.each(names, function(i, name) {
+    $.each(names, (i, name) => {
       count[name] = count[name] + 1 || 1;
     });
 
     // Transform license count into array of objects with license name & count
-    return $.map(count, function(val, key) {
+    return $.map(count, (val, key) => {
       return [[key, val]];
     });
   }

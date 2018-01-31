@@ -173,7 +173,7 @@ class AboutCodeNodeView extends View {
       .append('text')
       .attr('x', 10)
       .attr('alignment-baseline', 'central')
-      .text(function (d) {
+      .text((d) => {
         // TODO: Calculate clue count from DB when loading node data.
         // return `${d.name} (${d.files_count}, ${d.clues_count})`;
         return `${d.name} (${d.files_count})`;

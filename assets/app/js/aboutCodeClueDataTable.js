@@ -323,7 +323,7 @@ class AboutCodeClueDataTable extends View {
                 select.append(`<option value="${HAS_A_VALUE}">Has a Value</option>`);
               }
 
-              $.each(filterValues, function (i, filterValue) {
+              $.each(filterValues, (i, filterValue) => {
                 select.append(`<option value="${filterValue}">${filterValue}</option>`);
               });
               select.val(val);
@@ -351,7 +351,7 @@ class AboutCodeClueDataTable extends View {
   }
 
   static get ORIGIN_COLUMNS() {
-    return $.grep(AboutCodeClueDataTable.TABLE_COLUMNS, function (column) {
+    return $.grep(AboutCodeClueDataTable.TABLE_COLUMNS, (column) => {
       return $.inArray(column.name, AboutCodeClueDataTable.ORIGIN_COLUMN_NAMES) >= 0;
     });
   }

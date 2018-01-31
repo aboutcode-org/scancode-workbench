@@ -76,6 +76,8 @@
             "error",
             "never"
         ],
-        "prefer-const": "error"
+        "prefer-const": "error",
+        "prefer-arrow-callback": "error",
+        "arrow-spacing": "error"
     }
 }

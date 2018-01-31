@@ -50,7 +50,7 @@ class NodeView {
     this.tree = d3.layout.tree()
       .nodeSize([this.config.nodeWidth, this.config.nodeHeight]);
 
-    this.diagonal = d3.svg.diagonal().projection((d)=> {
+    this.diagonal = d3.svg.diagonal().projection((d) => {
       return [this.x(d), this.y(d)];
     });
 

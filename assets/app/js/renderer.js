@@ -40,7 +40,7 @@ const aboutCodeVersion = require('../../../package.json').version;
  * This is the UI Controller for the application. It's responsible for
  * initializing and updating all of the views and handling user interaction
  */
-$(document).ready(function () {
+$(document).ready(() => {
   // Create default values for all of the data and ui classes
   let aboutCodeDB = new AboutCodeDB();
 

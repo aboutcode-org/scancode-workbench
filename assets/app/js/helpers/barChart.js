@@ -45,11 +45,11 @@ class BarChart {
     // Create scaling for x that converts formattedData values to pixels
     this.xScale = d3.scale.linear()
       // Find the max val in formattedData
-      .domain([0, d3.max(formattedData, function(d) { return d.val; })]);
+      .domain([0, d3.max(formattedData, (d) => { return d.val; })]);
 
     // Create scaling for y that converts formattedData names to pixels
     const yScale = d3.scale.ordinal()
-      .domain(formattedData.map(function(d) {return d.name; }))
+      .domain(formattedData.map((d) => {return d.name; }))
       .rangeRoundBands([0, chartHeight], 0.1 /* white space percentage */);
 
     // Creates a d3 axis given a scale (takes care of tick marks and labels)
@@ -75,25 +75,25 @@ class BarChart {
     const tooltip = d3.select('body').append('div').attr('class', 'toolTip');
 
     this.rects = bars.append('rect')
-      .attr('y', function(d) { return yScale(d.name); })
+      .attr('y', (d) => { return yScale(d.name); })
       .attr('height', yScale.rangeBand())
-      .attr('data-value', function (d) {
+      .attr('data-value', (d) => {
         return d.name;
       })
       // Add a tooltip to the bar.
-      .on('mouseover', function () { tooltip.style('display', 'inline-block'); })
-      .on('mousemove', function (d) {
+      .on('mouseover', () => { tooltip.style('display', 'inline-block'); })
+      .on('mousemove', (d) => {
         tooltip
           .style('left', d3.event.pageX - 50 + 'px')
           .style('top', d3.event.pageY - 70 + 'px')
           .text((d.name + ' (' + d.val + ')'));
       })
-      .on('mouseout', function () { tooltip.style('display', 'none'); });
+      .on('mouseout', () => { tooltip.style('display', 'none'); });
 
     this.texts = bars.append('text')
-      .attr('y', function (d) { return yScale(d.name); })
+      .attr('y', (d) => { return yScale(d.name); })
       .attr('dy', '1.2em')
-      .text(function (d) { return '(' + d.val + ')'; })
+      .text((d) => { return '(' + d.val + ')'; })
       .style('text-anchor', 'start');
 
     // Adds the y-axis to the chart if data exists
@@ -105,17 +105,17 @@ class BarChart {
 
     // Add a tooltip to the y-axis labels.
     chart.selectAll('.y.axis .tick')
-      .on('mouseover', function () { tooltip.style('display', 'inline-block'); })
-      .on('mousemove', function (d) {
-        const result = $.grep(formattedData, function (e) { return e.name === d; });
+      .on('mouseover', () => { tooltip.style('display', 'inline-block'); })
+      .on('mousemove', (d) => {
+        const result = $.grep(formattedData, (e) => { return e.name === d; });
         const displayValue = ' (' + result[0].val + ')';
         tooltip
           .style('left', d3.event.pageX - 50 + 'px')
           .style('top', d3.event.pageY - 70 + 'px')
           .text((d + displayValue));
       })
-      .on('mouseout', function () { tooltip.style('display', 'none'); })
-      .attr('data-value', function(d) {
+      .on('mouseout', () => { tooltip.style('display', 'none'); })
+      .attr('data-value', (d) => {
         return d;
       });
 
@@ -137,10 +137,10 @@ class BarChart {
       this.xScale.range([0, chartWidth]);
 
       const that = this;
-      this.rects.attr('width', function (d) {
+      this.rects.attr('width', (d) => {
         return that.xScale(d.val);
       });
-      this.texts.attr('x', function (d) {
+      this.texts.attr('x', (d) => {
         return that.xScale(d.val) + 2;
       });
     }
@@ -159,10 +159,10 @@ class BarChart {
 
   // Returns the pixel width of the string with the longest length
   maxNameWidth(data) {
-    const names = data.map(function(d) { return d.trimmedName; });
+    const names = data.map((d) => { return d.trimmedName; });
 
     let maxStr = '';
-    $.each(names, function(i, name) {
+    $.each(names, (i, name) => {
       if (name.length > maxStr.length) {
         maxStr = name;
       }
@@ -173,19 +173,19 @@ class BarChart {
 
   // Returns the pixel width of the value with the longest length
   static maxValueWidth(data) {
-    const maxValue = d3.max(data, function(d) { return d.val; });
+    const maxValue = d3.max(data, (d) => { return d.val; });
     return BarChart.strPixelWidth('(' + maxValue + ')');
   }
 
   static formatChartData(names) {
     // Sum the total number of times the name appears
     const count = {};
-    $.each(names, function(i, name) {
+    $.each(names, (i, name) => {
       count[name] = count[name] + 1 || 1;
     });
 
     // Transform license count into array of objects with license name & count
-    const chartData = $.map(count, function(val, key) {
+    const chartData = $.map(count, (val, key) => {
       return {
         name: key,
         trimmedName: BarChart.trimName(key),
@@ -194,7 +194,7 @@ class BarChart {
     });
 
     // Sorts the data highest value to lowest value
-    chartData.sort(function(a,b) {
+    chartData.sort((a,b) => {
       if (a.val === b.val) {
         return a.name.localeCompare(b.name);
       } else {
