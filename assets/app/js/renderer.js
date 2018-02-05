@@ -190,6 +190,18 @@ $(document).ready(() => {
       dbStorage: fileName
     });
 
+    // Check that the database has the correct header information.
+    aboutCodeDB.sync
+      .then((db) => db.Header.findAll())
+      .then((headers) => {
+        if (headers.length === 0) {
+          dialog.showErrorBox(
+            'Invalid SQLite file: ' + fileName,
+            'The SQLite file is invalid. Try re-importing the ScanCode JSON ' +
+            'file and creating a new SQLite file.');
+        }
+      });
+
     return updateViews();
   }
 
