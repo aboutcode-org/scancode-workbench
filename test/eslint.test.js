@@ -22,7 +22,8 @@ const { assert } = require('chai');
 // Runs over all of the ABCM JavaScript files
 const files = globby.sync([
   __dirname + '/../assets/app/js/**/*.js',
-  __dirname + '/**/*.js'
+  __dirname + '/**/*.js',
+  __dirname + '/../main.js'
 ]);
 
 const engine = new CLIEngine({
