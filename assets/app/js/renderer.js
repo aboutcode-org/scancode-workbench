@@ -96,10 +96,7 @@ $(document).ready(() => {
   const jstree = new AboutCodeJsTree('#jstree', aboutCodeDB)
     .on('node-edit', (node) => componentDialog.show(node.id))
     .on('node-selected', (node) => {
-      // Set the search value for the first column (path) equal to the
-      // Selected jstree path and redraw the table
-      const searchTerm = node.id + (node.type === 'file' ? '' : '/');
-      cluesTable.columns(0).search(searchTerm);
+      cluesTable.columns(0).search(node.id);
 
       // update all views with the new selected path.
       componentDialog.selectedPath(node.id);

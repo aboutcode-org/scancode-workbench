@@ -211,8 +211,13 @@ class AboutCodeClueDataTable extends View {
           if (i === 0) {
             // Column 0 is the "path", which should only match
             // wildcards at the end of the path.
-            query.where.$and[columnName] = {
-              $like: `${columnSearch}%`
+            query.where.$and.path = {
+              $or: [
+                // Matches a file.
+                { $like: `${columnSearch}` },
+                // Matches a directory and all its children.
+                { $like: `${columnSearch}/%`}
+              ]
             };
           } else if (columnSearch === HAS_A_VALUE) {
             // Return all non empty values
