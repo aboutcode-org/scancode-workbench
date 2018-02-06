@@ -20,14 +20,14 @@ const Utils = require('../helpers/utils');
 const Controller = require('./controller');
 
 const LEGEND_COLORS = [
-  '#A0D468',
-  '#FFCE54',
-  '#EC87C0',
-  '#48CFAD',
-  '#AC92EC',
-  '#4FC1E9',
+  '#B3F82F',
+  '#FFA330',
+  '#EC2D95',
+  '#2BE189',
+  '#9095F0',
+  '#2AD0D8',
   '#AAB2BD',
-  '#3D7AFC'
+  '#3499DB'
 ];
 
 const LEGEND_LIMIT = 8;
