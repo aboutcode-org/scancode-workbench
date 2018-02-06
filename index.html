@@ -117,8 +117,7 @@
 
             <!-- Clue DataTable Tab-->
             <div class="tab-pane container" id="tab-clues">
-                <table id="clues-table" class="display table table-striped table-bordered dataTable no-footer" cellspacing="0" width="100%" >
-                </table>
+                <table class="clues-table display table table-striped table-bordered dataTable no-footer" cellspacing="0" width="100%" ></table>
             </div>
 
             <!-- Dashboard Tab -->
@@ -211,8 +210,7 @@
             <!-- Component DataTable Tab -->
             <div class="tab-pane container" id="tab-component">
                 <div class="components-table-container">
-                    <table id="components-table" class="display table table-striped table-bordered dataTable no-footer" cellspacing="0" width="100%" >
-                    </table>
+                    <table class="components-table display table table-striped table-bordered dataTable no-footer" cellspacing="0" width="100%" ></table>
                 </div>
             </div>
 
@@ -245,7 +243,9 @@
                                 <a id="recenter" href="#" title="Center Node Tree"><i class="fa fa-refresh fa-refresh-scale" aria-hidden="true"></i></a>
                             </button>
                         </div>
-                        <div class="svg-container" id="nodeview"></div>
+                        <div class="svg-container">
+                            <svg class="nodeview"></svg>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -259,7 +259,7 @@
                     </div>
                     <div id="barchart-view">
                         <div class="svg-container">
-                            <svg class="bar-chart" id="summary-bar-chart"></svg>
+                            <svg class="barchart"></svg>
                         </div>
                     </div>
                 </div>

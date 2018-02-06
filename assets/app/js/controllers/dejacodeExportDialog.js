@@ -14,14 +14,14 @@
  #
  */
 
-const Progress = require('./helpers/progress');
-const View = require('./helpers/view');
+const Progress = require('../helpers/progress');
+const Controller = require('./controller');
 const dialog = require('electron').remote.dialog;
 
 /**
  * The view responsible for displaying the DejaCode Component Export dialog
  */
-class DejaCodeExportDialog extends View {
+class DejaCodeExportDialog extends Controller {
   constructor(dialogId, aboutCodeDB) {
     super(dialogId, aboutCodeDB);
 

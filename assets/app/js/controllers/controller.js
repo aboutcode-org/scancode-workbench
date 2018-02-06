@@ -15,12 +15,12 @@
  */
 
 /**
- * Handles basic logic for a view
+ * Handles basic logic for a controller
  *
  * @param elementId The id of the associated html element
  * @param aboutCodeDB The initial database used for the view
  */
-class View {
+class Controller {
   constructor(elementId, aboutCodeDB) {
     this._id = elementId;
     this._element = $(elementId);
@@ -106,4 +106,4 @@ class View {
   }
 }
 
-module.exports = View;
+module.exports = Controller;

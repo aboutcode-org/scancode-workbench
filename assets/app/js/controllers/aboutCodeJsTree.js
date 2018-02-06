@@ -14,13 +14,13 @@
  #
  */
 
-const View = require('./helpers/view');
+const Controller = require('./controller');
 
 /**
  * The view responsible for displaying the jsTree representing file paths in the
  * ScanCode clue data
  */
-class AboutCodeJsTree extends View {
+class AboutCodeJsTree extends Controller {
   constructor(jsTreeId, aboutCodeDB) {
     super(jsTreeId, aboutCodeDB);
   }

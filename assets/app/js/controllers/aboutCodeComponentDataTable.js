@@ -14,14 +14,17 @@
  #
  */
 
-const Utils = require('./helpers/utils');
-const View = require('./helpers/view');
+const Utils = require('../helpers/utils');
+const Controller = require('./controller');
+
+// There must be a table element within the container element with this class
+const COMPONENT_TABLE = 'table.components-table';
 
 /**
  * The view responsible for displaying the DataTable containing the concluded
  * data created for Components
  */
-class AboutCodeComponentDataTable extends View {
+class AboutCodeComponentDataTable extends Controller {
   constructor(tableID, aboutCodeDB) {
     super(tableID, aboutCodeDB);
   }
@@ -43,13 +46,17 @@ class AboutCodeComponentDataTable extends View {
     this.dataTable().draw();
   }
 
+  dataTableSelector() {
+    return `${this.id()} ${COMPONENT_TABLE}`;
+  }
+
   dataTable() {
     if (this._dataTable) {
       return this._dataTable;
     }
 
     $('<p class="lead">Component Summary</p>').prependTo($('#components-table_wrapper'));
-    this._dataTable = $(this.id()).DataTable({
+    this._dataTable = $(this.dataTableSelector()).DataTable({
       scrollX: true,
       scrollResize: true,
       columns: AboutCodeComponentDataTable.COLUMNS,

@@ -15,8 +15,11 @@
  */
 
 const Sequelize = require('sequelize');
-const Utils = require('./helpers/utils');
-const View = require('./helpers/view');
+const Utils = require('../helpers/utils');
+const Controller = require('./controller');
+
+// There must be a table element within the container element with this class
+const CLUES_TABLE = 'table.clues-table';
 
 const HAS_A_VALUE =  'about_code_data_table_has_a_value';
 
@@ -24,9 +27,9 @@ const HAS_A_VALUE =  'about_code_data_table_has_a_value';
  * The view responsible for displaying the DataTable containing the ScanCode
  * clue data
  */
-class AboutCodeClueDataTable extends View {
-  constructor(tableId, aboutCodeDB) {
-    super(tableId, aboutCodeDB);
+class AboutCodeClueDataTable extends Controller {
+  constructor(containerId, aboutCodeDB) {
+    super(containerId, aboutCodeDB);
   }
 
   draw() {
@@ -77,6 +80,10 @@ class AboutCodeClueDataTable extends View {
     select.val(value).change();
   }
 
+  dataTableSelector() {
+    return `${this.id()} ${CLUES_TABLE}`;
+  }
+
   dataTable() {
     if (this._dataTable) {
       return this._dataTable;
@@ -85,9 +92,9 @@ class AboutCodeClueDataTable extends View {
     // Adds a footer for each column. This needs to be done before creating
     // the DataTable
     const cells = $.map(AboutCodeClueDataTable.TABLE_COLUMNS, () => '<td></td>').join('');
-    $(this.id()).append('<tfoot><tr>' + cells + '</tr></tfoot>');
+    $(this.dataTableSelector()).append('<tfoot><tr>' + cells + '</tr></tfoot>');
 
-    this._dataTable = $(this.id()).DataTable({
+    this._dataTable = $(this.dataTableSelector()).DataTable({
       serverSide: true,
       processing: true,
       ajax: (dataTablesInput, dataTablesCallback) =>

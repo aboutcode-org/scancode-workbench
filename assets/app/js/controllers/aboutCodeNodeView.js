@@ -14,16 +14,19 @@
  #
  */
 
-const NodeView = require('./helpers/nodeview');
-const View = require('./helpers/view');
+const NodeView = require('../helpers/nodeview');
+const Controller = require('./controller');
+
+// There must be an svg element within the container element with this class
+const NODEVIEW = 'svg.nodeview';
 
 /**
  * The view responsible for displaying the ScanCode clue data as expandable
  * nodes (aka the node view).
  */
-class AboutCodeNodeView extends View {
-  constructor(nodeViewId, aboutCodeDB) {
-    super(nodeViewId, aboutCodeDB);
+class AboutCodeNodeView extends Controller {
+  constructor(containerId, aboutCodeDB) {
+    super(containerId, aboutCodeDB);
 
     // By default, do not prune any nodes
     this.isNodePruned = () => false;
@@ -74,6 +77,10 @@ class AboutCodeNodeView extends View {
       this.redraw();
       return false;
     });
+  }
+
+  nodeViewSelector() {
+    return `${this.id()} ${NODEVIEW}`;
   }
 
   reload() {
@@ -140,7 +147,7 @@ class AboutCodeNodeView extends View {
     }
 
     this._nodeView = new NodeView({
-      selector: this.id(),
+      selector: this.nodeViewSelector(),
       orientation: 'left-to-right',
       nodeWidth: 25,
       nodeHeight: 160,

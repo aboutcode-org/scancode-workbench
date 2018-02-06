@@ -30,15 +30,12 @@ class NodeView {
       .y(d3.scale.linear())
       .on('zoom', () => {
         this.container.attr('transform',
-          `translate(${d3.event.translate})` +
-                    `scale(${d3.event.scale})`
-        );
+          `translate(${d3.event.translate})scale(${d3.event.scale})`);
       });
 
     // Clear the selector DOM element in case something already exists.
     $(this.config.selector).empty();
     const svg = d3.select(this.config.selector)
-      .append('svg')
       .attr('preserveAspectRatio', 'xMinYMin meet')
       .attr('viewBox', '-150 -150 1000 1000')
       .classed('nodeview-content', true)

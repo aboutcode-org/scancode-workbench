@@ -163,7 +163,7 @@ body {
   stroke: #1d2e81;
 }
 
-.svg-container{
+.svg-container {
   border: 1px solid #ddd;
   border-radius: 4px;
   position: absolute;
@@ -436,11 +436,11 @@ div.dataTables_scrollHead th:first-child {
     overflow-y: scroll;
 }
 
-.bar-chart{ width: 100%; }
+.barchart{ width: 100%; }
 
-.bar-chart rect { fill: #3498db; }
+.barchart rect { fill: #3498db; }
 
-.bar-chart text {
+.barchart text {
   fill: black;
   font-size: 12px;
   font-family: 'Lato', Helvetica, sans-serif;

@@ -14,12 +14,12 @@
  #
  */
 
-const View = require('./helpers/view');
+const Controller = require('./controller');
 
 /**
  * The view responsible for displaying the Component modal dialog
  */
-class ComponentDialog extends View {
+class ComponentDialog extends Controller {
   constructor(dialogId, aboutCodeDB) {
     super(dialogId, aboutCodeDB);
 

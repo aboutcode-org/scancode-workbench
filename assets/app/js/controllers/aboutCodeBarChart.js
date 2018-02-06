@@ -15,18 +15,21 @@
  */
 
 const Sequelize = require('sequelize');
-const Progress = require('./helpers/progress');
-const BarChart = require('./helpers/barChart');
-const Utils = require('./helpers/utils');
+const Progress = require('../helpers/progress');
+const BarChart = require('../helpers/barChart');
+const Utils = require('../helpers/utils');
 const AboutCodeClueDataTable = require('./aboutCodeClueDataTable');
-const View = require('./helpers/view');
+const Controller = require('./controller');
+
+// There must be an svg element within the container element with this class
+const BARCHART = 'svg.barchart';
 
 /**
  * Bar chart summary for AboutCode scan data
  */
-class AboutCodeBarChart extends View {
-  constructor(barChartId, aboutCodeDB) {
-    super(barChartId, aboutCodeDB);
+class AboutCodeBarChart extends Controller {
+  constructor(containerId, aboutCodeDB) {
+    super(containerId, aboutCodeDB);
 
     this.chartOptions = {
       name: 'License Summary',
@@ -36,7 +39,7 @@ class AboutCodeBarChart extends View {
       yAxisName: 'License Name'
     };
 
-    this.barChart = new BarChart([], this.chartOptions, this.id());
+    this.barChart = new BarChart([], this.chartOptions, this.barchartSelector());
 
     this.progressBar = new Progress('#barchart-view .svg-container', {size: 100});
 
@@ -65,6 +68,10 @@ class AboutCodeBarChart extends View {
       this.needsReload(true);
       this.redraw();
     });
+  }
+
+  barchartSelector() {
+    return `${this.id()} ${BARCHART}`;
   }
 
   reload() {
@@ -105,9 +112,10 @@ class AboutCodeBarChart extends View {
 
     this.barChartData
       .then((values) => {
-        this.barChart = new BarChart(values, this.chartOptions, this.id());
+        this.barChart = new BarChart(
+          values, this.chartOptions, this.barchartSelector());
         const that = this;
-        const chartElement = $('#summary-bar-chart');
+        const chartElement = $(this.barchartSelector());
         chartElement.find('rect').click(function () {
           const attribute =  that.chartAttributesSelect.val();
           const value = $(this).data('value');

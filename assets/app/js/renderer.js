@@ -17,15 +17,15 @@
 const AboutCodeDB = require('./aboutCodeDB');
 const Splitter = require('./helpers/splitter');
 const Progress = require('./helpers/progress');
-const DejaCodeExportDialog = require('./dejacodeExportDialog');
-const ComponentDialog = require('./componentDialog');
 
-const AboutCodeDashboard = require('./aboutCodeDashboard');
-const AboutCodeBarChart = require('./aboutCodeBarChart');
-const AboutCodeJsTree = require('./aboutCodeJsTree');
-const AboutCodeNodeView = require('./aboutCodeNodeView');
-const AboutCodeClueDataTable = require('./aboutCodeClueDataTable');
-const AboutCodeComponentDataTable = require('./aboutCodeComponentDataTable');
+const DejaCodeExportDialog = require('./controllers/dejacodeExportDialog');
+const ComponentDialog = require('./controllers/componentDialog');
+const AboutCodeDashboard = require('./controllers/aboutCodeDashboard');
+const AboutCodeBarChart = require('./controllers/aboutCodeBarChart');
+const AboutCodeJsTree = require('./controllers/aboutCodeJsTree');
+const AboutCodeNodeView = require('./controllers/aboutCodeNodeView');
+const AboutCodeClueDataTable = require('./controllers/aboutCodeClueDataTable');
+const AboutCodeComponentDataTable = require('./controllers/aboutCodeComponentDataTable');
 
 const fs = require('fs');
 const shell = require('electron').shell;
@@ -44,9 +44,9 @@ $(document).ready(() => {
   // Create default values for all of the data and ui classes
   let aboutCodeDB = new AboutCodeDB();
 
-  const dashboard = new AboutCodeDashboard('#dashboard-container', aboutCodeDB);
+  const dashboard = new AboutCodeDashboard('#tab-dashboard', aboutCodeDB);
 
-  const barChart = new AboutCodeBarChart('#summary-bar-chart', aboutCodeDB)
+  const barChart = new AboutCodeBarChart('#tab-barchart', aboutCodeDB)
     .on('bar-clicked', (attribute, value) => {
       // Show files that contain attribute value selected by user in bar chart
       if (value !== 'No Value Detected') {
@@ -58,6 +58,24 @@ $(document).ready(() => {
         showClueButton.trigger('click');
       }
     });
+
+  const nodeView = new AboutCodeNodeView('#tab-nodeview', aboutCodeDB)
+    .on('node-clicked', (node) => componentDialog.show(node.id));
+
+  const cluesTable = new AboutCodeClueDataTable('#tab-clues', aboutCodeDB);
+
+  const componentsTable = new AboutCodeComponentDataTable('#tab-component', aboutCodeDB)
+    .on('upload-clicked', (components) => {
+      if (components.length > 0) {
+        dejaCodeExportDialog.show();
+      } else {
+        dialog.showErrorBox(
+          'No Components to Upload',
+          'You have no Components to upload.\n\n' +
+                    'Please create at least one Component and try again.');
+      }
+    })
+    .on('export-json', exportJsonComponents);
 
   const componentDialog = new ComponentDialog('#componentDialog', aboutCodeDB)
     .on('save', (component) => {
@@ -75,23 +93,6 @@ $(document).ready(() => {
 
   const dejaCodeExportDialog =
         new DejaCodeExportDialog('#componentExportModal', aboutCodeDB);
-
-  const nodeView = new AboutCodeNodeView('#nodeview', aboutCodeDB)
-    .on('node-clicked', (node) => componentDialog.show(node.id));
-
-  const cluesTable = new AboutCodeClueDataTable('#clues-table', aboutCodeDB);
-  const componentsTable = new AboutCodeComponentDataTable('#components-table', aboutCodeDB)
-    .on('upload-clicked', (components) => {
-      if (components.length > 0) {
-        dejaCodeExportDialog.show();
-      } else {
-        dialog.showErrorBox(
-          'No Components to Upload',
-          'You have no Components to upload.\n\n' +
-                    'Please create at least one Component and try again.');
-      }
-    })
-    .on('export-json', exportJsonComponents);
 
   const jstree = new AboutCodeJsTree('#jstree', aboutCodeDB)
     .on('node-edit', (node) => componentDialog.show(node.id))

@@ -15,9 +15,9 @@
  */
 
 const Sequelize = require('sequelize');
-const Progress = require('./helpers/progress');
-const Utils = require('./helpers/utils');
-const View = require('./helpers/view');
+const Progress = require('../helpers/progress');
+const Utils = require('../helpers/utils');
+const Controller = require('./controller');
 
 const LEGEND_COLORS = [
   '#A0D468',
@@ -36,7 +36,7 @@ const LEGEND_LIMIT = 8;
  * The view responsible for displaying the summary information from ScanCode
  * clue data
  */
-class AboutCodeDashboard extends View {
+class AboutCodeDashboard extends Controller {
   constructor(dashboardId, aboutCodeDB) {
     super(dashboardId, aboutCodeDB);
 
