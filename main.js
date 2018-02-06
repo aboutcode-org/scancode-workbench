@@ -43,8 +43,8 @@ app.on('activate', () => {
   }
 });
 
-/** Returns a 'lambda' that sends the event to the render process. */
-function sendEventToRender(event) {
+/** Returns a 'lambda' that sends the event to the renderer process. */
+function sendEventToRenderer(event) {
   return (menuItem, currentWindow) => currentWindow.webContents.send(event);
 }
 
@@ -57,27 +57,27 @@ function getTemplate() {
         {
           label: 'Open SQLite File',
           accelerator: 'CmdOrCtrl+O',
-          click: sendEventToRender('open-SQLite')
+          click: sendEventToRenderer('open-SQLite')
         },
         {
           label: 'Save As New SQLite File',
           accelerator: 'CmdOrCtrl+S',
-          click: sendEventToRender('save-SQLite')
+          click: sendEventToRenderer('save-SQLite')
         },
         {
           label: 'Import JSON File',
           accelerator: 'CmdOrCtrl+I',
-          click: sendEventToRender('import-JSON')
+          click: sendEventToRenderer('import-JSON')
         },
         {
           label: 'Export JSON File',
           accelerator: 'CmdOrCtrl+E',
-          click: sendEventToRender('export-JSON')
+          click: sendEventToRenderer('export-JSON')
         },
         {
           label: 'Export Components JSON File',
           accelerator: 'CmdOrCtrl+J',
-          click: sendEventToRender('export-JSON-components-only')
+          click: sendEventToRenderer('export-JSON-components-only')
         }
       ]
     },
@@ -125,22 +125,22 @@ function getTemplate() {
         {
           label: 'Table View',
           accelerator: 'CmdOrCtrl+T',
-          click: sendEventToRender('table-view')
+          click: sendEventToRenderer('table-view')
         },
         {
           label: 'Node View',
           accelerator: 'CmdOrCtrl+N',
-          click: sendEventToRender('node-view')
+          click: sendEventToRenderer('node-view')
         },
         {
           label: 'Chart Summary View',
           accelerator: 'Shift+CmdOrCtrl+D',
-          click: sendEventToRender('chart-summary-view')
+          click: sendEventToRenderer('chart-summary-view')
         },
         {
           label: 'Component Summary View',
           accelerator: 'Shift+CmdOrCtrl+C',
-          click: sendEventToRender('component-summary-view')
+          click: sendEventToRenderer('component-summary-view')
         },
         {
           type: 'separator'
