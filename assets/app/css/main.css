@@ -79,6 +79,7 @@ body {
   Node View
 -----------------------------------------*/
 
+
 #nodeview-container {
   display: flex;
   flex-direction: column;
@@ -215,6 +216,13 @@ body {
 
 .modal-header {
   word-wrap: break-word;
+}
+
+/*---------------------------------------
+  Componet Dialog
+-----------------------------------------*/
+.modal-backdrop {
+  background: none;
 }
 
 /*---------------------------------------
