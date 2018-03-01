@@ -1,0 +1,17 @@
+about_resource: sequelize-3.30.2.tgz
+checksum_md5: 832a1fe04b936af96289672da32df601
+checksum_sha1: 036daedc890d221825bad565ff314a4e25d3dc69
+copyright: Copyright (c) 2014-2016 Sequelize contributors
+description: Sequelize is a promise-based Node.js ORM for Postgres, MySQL, SQLite
+  and Microsoft SQL Server. It features solid transaction support, relations, read
+  replication and more.
+download_url: http://registry.npmjs.org/sequelize/-/sequelize-3.30.2.tgz
+homepage_url: https://github.com/sequelize/sequelize#readme
+license_expression: mit
+name: sequelize
+notice_file: LICENSE
+notice_url: https://github.com/sequelize/sequelize/blob/v3.30.2/LICENSE
+owner: Sequelize Project
+owner_url: https://github.com/sequelize
+vcs_repository: git+https://github.com/sequelize/sequelize.git
+version: 3.30.2

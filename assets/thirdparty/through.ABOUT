@@ -1,0 +1,16 @@
+about_resource: through-2.3.8.tgz
+checksum_md5: 615296782d4936bd53ebe4e5baa57db7
+checksum_sha1: 0dd4c9ffaabc357960b1b724115d7e0e86a2e1f5
+contact: dominic.tarr@gmail.com
+copyright: Copyright (c) 2011 Dominic Tarr
+description: simple way to create a ReadableWritable stream that works
+download_url: http://registry.npmjs.org/through/-/through-2.3.8.tgz
+homepage_url: https://github.com/dominictarr/through
+license_expression: mit
+name: through
+notice_file: LICENSE.MIT
+notice_url: https://github.com/dominictarr/through/blob/master/LICENSE.MIT
+owner: Dominic Tarr
+owner_url: https://github.com/dominictarr
+vcs_repository: https://github.com/dominictarr/through.git
+version: 2.3.8

@@ -1,0 +1,15 @@
+about_resource: sqlite3-3.1.10.tgz
+checksum_md5: b161176e7c0d128b0fe6046cd5253413
+checksum_sha1: b1f10dfc5d487b079fda2f34fbf60cbaf6d92ad3
+contact: https://www.mapbox.com/contact/
+copyright: Copyright (c) MapBox
+description: Asynchronous, non-blocking SQLite3 bindings for Node.js.
+download_url: https://registry.npmjs.org/sqlite3/-/sqlite3-3.1.10.tgz
+homepage_url: http://github.com/mapbox/node-sqlite3
+license_expression: bsd-new
+name: sqlite3
+notice_url: https://github.com/mapbox/node-sqlite3/blob/v3.1.10/LICENSE
+owner: Mapbox
+owner_url: https://www.mapbox.com/
+vcs_repository: git://github.com/mapbox/node-sqlite3.git
+version: 3.1.10

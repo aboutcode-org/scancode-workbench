@@ -1,0 +1,15 @@
+about_resource: sequelize-cli-2.5.1.tgz
+checksum_md5: 50a14a5839581e686d04d06b723fc3ce
+checksum_sha1: cea4c74fbbc069c3bad09fd0fdff7f6a8a24c1ef
+copyright: Copyright (c) 2014 sequelize
+description: The Sequelize Command Line Interface (CLI)
+download_url: http://registry.npmjs.org/sequelize-cli/-/sequelize-cli-2.5.1.tgz
+homepage_url: https://github.com/sequelize/cli
+license_expression: mit
+name: sequelize-cli
+notice_file: LICENSE
+notice_url: https://github.com/sequelize/cli/blob/master/LICENSE
+owner: Sequelize Project
+owner_url: https://github.com/sequelize
+vcs_repository: git://github.com/sequelize/cli.git
+version: 2.5.1
