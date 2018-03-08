@@ -8,6 +8,7 @@ const path = require('path');
 
 let mainWindow;
 
+
 function createWindow() {
   mainWindow = new BrowserWindow({
     width: 1200,
@@ -16,6 +17,11 @@ function createWindow() {
   });
   mainWindow.loadURL('file://' + __dirname + '/index.html');
   mainWindow.on('closed', () => mainWindow = null);
+  // open all URLs in default browser window
+  mainWindow.webContents.on('will-navigate', (event, url) => {
+    event.preventDefault();
+    shell.openExternal(url);
+  });
 }
 
 // This method will be called when Electron has finished
