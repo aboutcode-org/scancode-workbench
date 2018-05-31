@@ -87,11 +87,6 @@
                 </button>
             </li>
             <li>
-                <button class="btn btn-sidebar" id="show-tab-nodeview" data-toggle="tab" data-target="#tab-nodeview" data-placement="right" title="Node View">
-                    <i class="fa fa-code-fork" aria-hidden="true"></i>
-                </button>
-            </li>
-            <li>
                 <button class="btn btn-sidebar" id="show-tab-component" data-toggle="tab" data-target="#tab-component" data-placement="right" title="Component Summary View">
                     <i class="fa fa-list-ol" aria-hidden="true"></i>
                 </button>
@@ -214,42 +209,6 @@
                 </div>
             </div>
 
-            <!-- Node View Tab -->
-            <div class="tab-pane container" id="tab-nodeview">
-                <div id="nodeview-container">
-                    <div id="nodeview-options">
-                        <select id="node-drop-down" style="border-color: #eee; border-radius: 5px; padding: 5px;" multiple>
-                            <option value="filename" selected>File Name</option>
-                            <option value="license">License</option>
-                            <option value="copyright">Copyright</option>
-                        </select>
-                        <!-- Node status toggle -->
-                        <div class="dropdown component-status-dropdown">
-                            <button class="btn btn-default dropdown-toggle" type="button" id="nodeStatusDropDown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                                Node Visibility
-                                <span class="caret"></span>
-                            </button>
-                            <ul class="dropdown-menu status-dropdown-menu dropdown-menu-left" aria-labelledby="nodeStatusDropDown">
-                                <li><a href="#" class="small" data-value="Analyzed" tabIndex="-1"><input type="checkbox" checked/>&nbsp; Analyzed</a></li>
-                                <li><a href="#" class="small" data-value="Attention" tabIndex="-1"><input type="checkbox" checked/>&nbsp; Attention</a></li>
-                                <li><a href="#" class="small" data-value="Original" tabIndex="-1"><input type="checkbox" checked/>&nbsp; Original</a></li>
-                                <li><a href="#" class="small" data-value="NR" tabIndex="-1"><input type="checkbox" checked/>&nbsp; NR</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div id="nodeview-view">
-                        <div id="zoom-controls">
-                            <button class="btn btn-zoom" id="reset-zoom" type="button">
-                                <a id="recenter" href="#" title="Center Node Tree"><i class="fa fa-refresh fa-refresh-scale" aria-hidden="true"></i></a>
-                            </button>
-                        </div>
-                        <div class="svg-container">
-                            <svg class="nodeview"></svg>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
             <!-- Bar Chart Tab -->
             <div class="tab-pane container" id="tab-barchart">
                 <div id="barchart-container">
@@ -267,6 +226,7 @@
         </div>
     </div>
 
+    <!-- TODO: Change the name of this -->
     <!-- Node View Modal -->
     <div class="modal fade action-create" id="componentDialog" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
         <div class="modal-dialog" role="document">
