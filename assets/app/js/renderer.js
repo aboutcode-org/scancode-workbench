@@ -23,7 +23,6 @@ const ComponentDialog = require('./controllers/componentDialog');
 const AboutCodeDashboard = require('./controllers/aboutCodeDashboard');
 const AboutCodeBarChart = require('./controllers/aboutCodeBarChart');
 const AboutCodeJsTree = require('./controllers/aboutCodeJsTree');
-const AboutCodeNodeView = require('./controllers/aboutCodeNodeView');
 const AboutCodeClueDataTable = require('./controllers/aboutCodeClueDataTable');
 const AboutCodeComponentDataTable = require('./controllers/aboutCodeComponentDataTable');
 
@@ -59,9 +58,6 @@ $(document).ready(() => {
       }
     });
 
-  const nodeView = new AboutCodeNodeView('#tab-nodeview', aboutCodeDB)
-    .on('node-clicked', (node) => componentDialog.show(node.id));
-
   const cluesTable = new AboutCodeClueDataTable('#tab-clues', aboutCodeDB);
 
   const componentsTable = new AboutCodeComponentDataTable('#tab-component', aboutCodeDB)
@@ -78,16 +74,12 @@ $(document).ready(() => {
     .on('export-json', exportJsonComponents);
 
   const componentDialog = new ComponentDialog('#componentDialog', aboutCodeDB)
-    .on('save', (component) => {
-      nodeView.nodeData()[component.path].component = component;
+    .on('save', () => {
       componentsTable.needsReload(true);
-      nodeView.needsReload(true);
       redrawCurrentView();
     })
-    .on('delete', (component) => {
-      nodeView.nodeData()[component.path].component = null;
+    .on('delete', () => {
       componentsTable.needsReload(true);
-      nodeView.needsReload(true);
       redrawCurrentView();
     });
 
@@ -106,7 +98,6 @@ $(document).ready(() => {
       cluesTable.selectedPath(node.id);
       componentsTable.selectedPath(node.id);
       dashboard.selectedPath(node.id);
-      nodeView.selectedPath(node.id);
       barChart.selectedPath(node.id);
 
       redrawCurrentView();
@@ -122,7 +113,6 @@ $(document).ready(() => {
   const saveSQLiteFileButton = $('#save-file');
   const openSQLiteFileButton = $('#open-file');
   const showClueButton = $('#show-tab-clues');
-  const showNodeViewButton = $('#show-tab-nodeview');
   const showComponentButton = $('#show-tab-component');
   const showBarChartButton = $('#show-tab-barchart');
   const showDashboardButton = $('#show-tab-dashboard');
@@ -137,12 +127,6 @@ $(document).ready(() => {
   showClueButton.click(() => {
     splitter.show();
     cluesTable.redraw();
-  });
-
-  // Show node view. Hide clue and component table
-  showNodeViewButton.click(() => {
-    splitter.show();
-    nodeView.redraw();
   });
 
   // Show component summary table. Hide DataTable and node view
@@ -168,7 +152,6 @@ $(document).ready(() => {
   });
 
   ipcRenderer.on('table-view', () => showClueButton.trigger('click'));
-  ipcRenderer.on('node-view', () => showNodeViewButton.trigger('click'));
   ipcRenderer.on('component-summary-view', () => showComponentButton.trigger('click'));
   ipcRenderer.on('open-SQLite', () => openSQLiteFileButton.trigger('click'));
   ipcRenderer.on('chart-summary-view', () => showBarChartButton.trigger('click'));
@@ -218,7 +201,6 @@ $(document).ready(() => {
         cluesTable.db(aboutCodeDB);
         componentsTable.db(aboutCodeDB);
         dashboard.db(aboutCodeDB);
-        nodeView.db(aboutCodeDB);
         barChart.db(aboutCodeDB);
 
         // Reload the jstree, then trigger the current view to reload.

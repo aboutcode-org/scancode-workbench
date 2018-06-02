@@ -134,11 +134,6 @@ function getTemplate() {
           click: sendEventToRenderer('table-view')
         },
         {
-          label: 'Node View',
-          accelerator: 'CmdOrCtrl+N',
-          click: sendEventToRenderer('node-view')
-        },
-        {
           label: 'Chart Summary View',
           accelerator: 'Shift+CmdOrCtrl+D',
           click: sendEventToRenderer('chart-summary-view')
