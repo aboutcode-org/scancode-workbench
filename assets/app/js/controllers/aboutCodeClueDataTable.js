@@ -321,7 +321,8 @@ class AboutCodeClueDataTable extends Controller {
               filterValues = $.unique(filterValues).sort();
 
               const select = $(`select#clue-${columnName}`);
-              const val = select.find('option:selected');
+              // FIXME: This is kind of a hack to grab the selected option's text
+              const val = select.find('option:selected')[1].text;
 
               select
                 .empty()
@@ -338,7 +339,7 @@ class AboutCodeClueDataTable extends Controller {
               $.each(filterValues, (i, filterValue) => {
                 select.append(`<option value="${filterValue}">${filterValue}</option>`);
               });
-              select.val(val);
+              select.val(val).change();
             });
         })
         .on('change', function () {
