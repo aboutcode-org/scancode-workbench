@@ -339,7 +339,13 @@ class AboutCodeClueDataTable extends Controller {
               $.each(filterValues, (i, filterValue) => {
                 select.append(`<option value="${filterValue}">${filterValue}</option>`);
               });
-              select.val(val).change();
+
+              // FIXME: On Win/Linux, we have to handle "Has A Value" differently.
+              if (val === 'Has a Value') {
+                select.val(val);
+              } else {
+                select.val(val).change();
+              }
             });
         })
         .on('change', function () {
