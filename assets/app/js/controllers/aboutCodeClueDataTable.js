@@ -295,7 +295,7 @@ class AboutCodeClueDataTable extends Controller {
       const footer = $(column.footer());
       const columnName = columnInfo.name;
 
-      $(`<select id="clue-${columnName}"><option value=""></option></select>`)
+      $(`<select id="clue-${columnName}"><option value="">All</option></select>`)
         .appendTo(footer)
         .on('click', () => {
           const currPath = pathCol.search()[0];
@@ -326,7 +326,7 @@ class AboutCodeClueDataTable extends Controller {
 
               select
                 .empty()
-                .append(`<option value=""></option>`);
+                .append(`<option value="">All</option>`);
 
               /**
                          * Add Has a Value option to dropdown menu to show all rows
