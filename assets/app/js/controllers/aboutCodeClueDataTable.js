@@ -73,10 +73,6 @@ class AboutCodeClueDataTable extends Controller {
 
     // Get the column's filter select box
     const select = $(`select#clue-${columnName}`);
-    select.empty().append(`<option value=""></option>`);
-
-    // Add the chart value options and select it.
-    select.append(`<option value="${value}">${value}</option>`);
     select.val(value).change();
   }
 
@@ -295,65 +291,49 @@ class AboutCodeClueDataTable extends Controller {
       const footer = $(column.footer());
       const columnName = columnInfo.name;
 
-      $(`<select id="clue-${columnName}"><option value="">All</option></select>`)
+      const select = $(`<select id="clue-${columnName}"></select>`)
+        .empty()
         .appendTo(footer)
-        .on('click', () => {
-          const currPath = pathCol.search()[0];
-          const where = { path: { $like: `${currPath}%`} };
-
-          where[columnName] = {$ne: null};
-
-          that.db().sync.then((db) => db.FlatFile.findAll({
-            attributes: [
-              Sequelize.fn('TRIM',  Sequelize.col(columnName)),
-              columnName
-            ],
-            group: [columnName],
-            where: where,
-          }))
-            .then((rows) => {
-              let filterValues =
-                // $.map is used to flatten array values.
-                $.map(rows, (row) => row[columnName])
-                  .map((row) => row.toString().trim())
-                  .filter((val) => val.length > 0);
-
-              filterValues = $.unique(filterValues).sort();
-
-              const select = $(`select#clue-${columnName}`);
-              // FIXME: This is kind of a hack to grab the selected option's text
-              const val = select.find('option:selected')[1].text;
-
-              select
-                .empty()
-                .append(`<option value="">All</option>`);
-
-              /**
-                         * Add Has a Value option to dropdown menu to show all rows
-                         * that contain a detected ScanCode value.
-                         */
-              if (filterValues.length > 0) {
-                select.append(`<option value="${HAS_A_VALUE}">Has a Value</option>`);
-              }
-
-              $.each(filterValues, (i, filterValue) => {
-                select.append(`<option value="${filterValue}">${filterValue}</option>`);
-              });
-
-              // FIXME: On Win/Linux, we have to handle "Has A Value" differently.
-              if (val === 'Has a Value') {
-                select.val(val);
-              } else {
-                select.val(val).change();
-              }
-            });
-        })
         .on('change', function () {
           // Get dropdown element selected value
           const val = $(this).val();
           column
             .search(val, false, false)
             .draw();
+        });
+
+      // populate column filter values
+      const currPath = pathCol.search()[0];
+      const where = { path: { $like: `${currPath}%`} };
+
+      where[columnName] = {$ne: null};
+
+      that.db().sync.then((db) => db.FlatFile.findAll({
+        attributes: [
+          Sequelize.fn('TRIM',  Sequelize.col(columnName)),
+          columnName
+        ],
+        group: [columnName],
+        where: where,
+      }))
+        .then((rows) => {
+          let filterValues =
+            // $.map is used to flatten array values.
+            $.map(rows, (row) => row[columnName])
+              .map((row) => row.toString().trim())
+              .filter((val) => val.length > 0);
+
+          filterValues = $.unique(filterValues).sort();
+
+          select.append(`<option value="">All</option>`);
+
+          if (filterValues.length > 0) {
+            select.append(`<option value="${HAS_A_VALUE}">Has a Value</option>`);
+          }
+
+          $.each(filterValues, (i, filterValue) => {
+            select.append(`<option value="${filterValue}">${filterValue}</option>`);
+          });
         });
     });
   }
