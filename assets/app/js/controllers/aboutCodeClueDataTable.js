@@ -231,6 +231,10 @@ class AboutCodeClueDataTable extends Controller {
                 { $ne: '{}' }
               ]
             };
+          } else if (columnName === 'extension') {
+            query.where.$and[columnName] = {
+              $eq: columnSearch
+            };
           } else {
             query.where.$and[columnName] = {
               $like: `%${columnSearch}%`
