@@ -102,6 +102,7 @@ class AboutCodeClueDataTable extends Controller {
       scrollResize: true,
       deferRender: true,
       initComplete: () => this._initComplete(),
+      drawCallback: () => this._drawCallback(),
       buttons: [
         {   // Do not allow the first column to be hidden
           extend: 'colvis',
@@ -340,6 +341,10 @@ class AboutCodeClueDataTable extends Controller {
           });
         });
     });
+  }
+
+  _drawCallback() {
+    $('.dataTables_scrollBody').scrollTop(0);
   }
 
   // Define DataTable columns
