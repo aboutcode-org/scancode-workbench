@@ -90,6 +90,7 @@ $(document).ready(() => {
     .on('node-edit', (node) => componentDialog.show(node.id))
     .on('node-selected', (node) => {
       cluesTable.columns(0).search(node.id);
+      cluesTable.setColumnFilters();
 
       // update all views with the new selected path.
       componentDialog.selectedPath(node.id);
