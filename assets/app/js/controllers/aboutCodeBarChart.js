@@ -85,8 +85,12 @@ class AboutCodeBarChart extends Controller {
       const attribute = this.chartAttributesSelect.val();
       const query = {
         attributes: [Sequelize.fn('TRIM', Sequelize.col(attribute)), attribute],
-        where: { path: { $like: `${this.selectedPath()}%` } }
+        where: { 
+          path: { $like: `${this.selectedPath()}%` },
+          type: { $ne: 'directory' },
+        }
       };
+      
 
       this.progressBar.showIndeterminate();
       this.barChartData = this.db().sync
