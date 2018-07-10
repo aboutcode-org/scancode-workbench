@@ -101,7 +101,6 @@ class AboutCodeClueDataTable extends Controller {
       scrollX: true,
       scrollResize: true,
       deferRender: true,
-      initComplete: () => this._initComplete(),
       drawCallback: () => this._drawCallback(),
       buttons: [
         {   // Do not allow the first column to be hidden
@@ -280,7 +279,11 @@ class AboutCodeClueDataTable extends Controller {
     });
   }
 
-  _initComplete() {
+  _drawCallback() {
+    $('.dataTables_scrollBody').scrollTop(0);
+  }
+
+  setColumnFilters() {
     const that = this;
     const pathCol = this.dataTable().columns(0);
 
@@ -296,18 +299,17 @@ class AboutCodeClueDataTable extends Controller {
       const footer = $(column.footer());
       const columnName = columnInfo.name;
 
+      footer.empty();
       const select = $(`<select id="clue-${columnName}"></select>`)
         .empty()
         .appendTo(footer)
         .on('change', function () {
-          // Get dropdown element selected value
           const val = $(this).val();
           column
             .search(val, false, false)
             .draw();
         });
 
-      // populate column filter values
       const currPath = pathCol.search()[0];
       const where = { path: { $like: `${currPath}%`} };
 
@@ -341,10 +343,6 @@ class AboutCodeClueDataTable extends Controller {
           });
         });
     });
-  }
-
-  _drawCallback() {
-    $('.dataTables_scrollBody').scrollTop(0);
   }
 
   // Define DataTable columns
