@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-# Copyright (c) 2017 nexB Inc. http://www.nexb.com/ - All rights reserved.
+# Copyright (c) 2017 - 2018 nexB Inc. http://www.nexb.com/ - All rights reserved.
 
 
 """
@@ -27,7 +27,7 @@ import zipfile
 #######################
 APP_NAME = 'AboutCode-Manager'
 APP_BUNDLE_ID = 'com.electron.aboutcode-manager'
-VERSION = '2.4.0'
+VERSION = '2.4.1'
 ELECTRON_VERSION = '1.6.16'
 
 #######################
