@@ -89,20 +89,18 @@ $(document).ready(() => {
   const jstree = new AboutCodeJsTree('#jstree', aboutCodeDB)
     .on('node-edit', (node) => componentDialog.show(node.id))
     .on('node-selected', (node) => {
-      cluesTable.columns(0).search(node.id);
-      cluesTable.setColumnFilters();
-
-      // update all views with the new selected path.
-      componentDialog.selectedPath(node.id);
-      dejaCodeExportDialog.selectedPath(node.id);
-      jstree.selectedPath(node.id);
-      cluesTable.selectedPath(node.id);
-      componentsTable.selectedPath(node.id);
-      dashboard.selectedPath(node.id);
-      barChart.selectedPath(node.id);
-
-      redrawCurrentView();
+      updateViewsByPath(node.id);
     });
+
+  $(document).on('click', '#gen-filters-button', () => { 
+    cluesTable.genFilters(); 
+    updateViewsByPath(cluesTable._selectedPath);
+  });
+
+  $(document).on('click', '#clear-filters-button', () => { 
+    cluesTable.resetColumnFilters(); 
+    updateViewsByPath(cluesTable._selectedPath);
+  });
 
   const splitter = new Splitter('#leftCol', '#rightCol')
     .on('drag-end', () => redrawCurrentView());
@@ -163,6 +161,21 @@ $(document).ready(() => {
 
   // Opens the dashboard view when the app is first opened
   showDashboardButton.trigger('click');
+
+  function updateViewsByPath(path) {
+    // Update all the views with the given path string
+    cluesTable.columns(0).search(path);
+
+    componentDialog.selectedPath(path);
+    dejaCodeExportDialog.selectedPath(path);
+    jstree.selectedPath(path);
+    cluesTable.selectedPath(path);
+    componentsTable.selectedPath(path);
+    dashboard.selectedPath(path);
+    barChart.selectedPath(path);
+
+    redrawCurrentView();
+  }
 
   /** Creates the database and all View objects from a SQLite file */
   function loadDatabase(fileName) {

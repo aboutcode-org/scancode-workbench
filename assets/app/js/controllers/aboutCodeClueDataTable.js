@@ -73,6 +73,10 @@ class AboutCodeClueDataTable extends Controller {
 
     // Get the column's filter select box
     const select = $(`select#clue-${columnName}`);
+    select.empty().append(`<option value="">All</option>`);
+
+    // Add the chart value options and select it.
+    select.append(`<option value="${value}">${value}</option>`);
     select.val(value).change();
   }
 
@@ -101,6 +105,7 @@ class AboutCodeClueDataTable extends Controller {
       scrollX: true,
       scrollResize: true,
       deferRender: true,
+      initComplete: () => this._initComplete(),
       drawCallback: () => this._drawCallback(),
       buttons: [
         {   // Do not allow the first column to be hidden
@@ -279,15 +284,19 @@ class AboutCodeClueDataTable extends Controller {
     });
   }
 
-  _drawCallback() {
-    $('.dataTables_scrollBody').scrollTop(0);
-  }
-
-  setColumnFilters() {
-    const that = this;
+  _initComplete() {
     const pathCol = this.dataTable().columns(0);
 
-    // Add a select element to each column's footer
+    const footer = $(pathCol.footer());
+    // keep the buttons horizontally aligned
+    footer.css('white-space', 'nowrap');
+
+    const genFiltersButton = $(`<button id="gen-filters-button" type="button">Generate Filters</button>`);
+    const clearFiltersButton = $(`<button id="clear-filters-button" type="button">Clear Filters</button>`);
+
+    footer.append(genFiltersButton);
+    footer.append(clearFiltersButton);
+      
     this.dataTable().columns().every(function (columnIndex) {
       const columnInfo = AboutCodeClueDataTable.TABLE_COLUMNS[columnIndex];
 
@@ -299,10 +308,60 @@ class AboutCodeClueDataTable extends Controller {
       const footer = $(column.footer());
       const columnName = columnInfo.name;
 
-      footer.empty();
       const select = $(`<select id="clue-${columnName}"></select>`)
+        .on('change', function () {
+          const val = $(this).val();
+          column
+            .search(val, false, false)
+            .draw();
+        });
+        
+      footer.append(select);
+    });
+  }
+
+  _drawCallback() {
+    $('.dataTables_scrollBody').scrollTop(0);
+  }
+
+  resetColumnFilters() {
+    $.each(AboutCodeClueDataTable.TABLE_COLUMNS, (i, column) => {
+      const columnSelect = $(`select#clue-${column.name}`);
+      columnSelect.empty();
+      columnSelect.val('');
+      this.dataTable()
+        .column(`${column.name}:name`)
+        .search('', false, false);
+    });
+    // clear the global search box
+    this.dataTable().search('').columns().search('').draw();
+  }
+
+  genFilters() {
+    this.resetColumnFilters();
+    const that = this;
+
+    this.dataTable().columns().every(function (columnIndex) {
+      const columnInfo = AboutCodeClueDataTable.TABLE_COLUMNS[columnIndex];
+      const currentColumn = that.dataTable().columns(columnIndex);
+
+      if ('skipFilter' in columnInfo && columnInfo.skipFilter) {
+        return;
+      }
+
+      // skip columns that are not currently visible
+      if (currentColumn.visible()[0] === false) {
+        return;
+      }
+
+      const column = this;
+      const footer = $(column.footer());
+      const columnName = columnInfo.name;
+
+      footer.empty();
+
+      const select = $('#clue-' + columnName)
         .empty()
-        .appendTo(footer)
         .on('change', function () {
           const val = $(this).val();
           column
@@ -310,11 +369,9 @@ class AboutCodeClueDataTable extends Controller {
             .draw();
         });
 
-      const currPath = pathCol.search()[0];
+      const currPath = that._selectedPath;
       const where = { path: { $like: `${currPath}%`} };
-
-      where[columnName] = {$ne: null};
-
+      
       that.db().sync.then((db) => db.FlatFile.findAll({
         attributes: [
           Sequelize.fn('TRIM',  Sequelize.col(columnName)),
@@ -342,6 +399,7 @@ class AboutCodeClueDataTable extends Controller {
             select.append(`<option value="${filterValue}">${filterValue}</option>`);
           });
         });
+      footer.append(select);
     });
   }
 
