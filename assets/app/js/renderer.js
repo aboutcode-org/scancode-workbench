@@ -51,6 +51,8 @@ $(document).ready(() => {
       if (value !== 'No Value Detected') {
         cluesTable.clearColumnFilters();
         cluesTable.setColumnFilter(attribute, value);
+        
+        updateViewsByPath(cluesTable._selectedPath);
 
         // This needs to be done only when the column is visible.
         // So we do it last to try our best
