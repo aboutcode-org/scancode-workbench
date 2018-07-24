@@ -94,7 +94,7 @@ $(document).ready(() => {
       updateViewsByPath(node.id);
     });
 
-  $(document).on('click', '#gen-filters-button', () => { 
+  $(document).on('click', '#activate-filters-button', () => { 
     cluesTable.genFilters(); 
     updateViewsByPath(cluesTable._selectedPath);
   });

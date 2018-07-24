@@ -291,7 +291,7 @@ class AboutCodeClueDataTable extends Controller {
     // keep the buttons horizontally aligned
     footer.css('white-space', 'nowrap');
 
-    const genFiltersButton = $(`<button id="gen-filters-button" type="button">Generate Filters</button>`);
+    const genFiltersButton = $(`<button id="activate-filters-button" type="button">Activate Filters</button>`);
     const clearFiltersButton = $(`<button id="clear-filters-button" type="button">Clear Filters</button>`);
 
     footer.append(genFiltersButton);
