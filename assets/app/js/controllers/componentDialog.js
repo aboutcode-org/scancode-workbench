@@ -29,7 +29,7 @@ class ComponentDialog extends Controller {
     this.title = this.dialog.find('.modal-title');
     this.status = this.dialog.find('#component-status');
     this.name = this.dialog.find('#component-name');
-    this.license = this.dialog.find('#component-license');
+    this.license_expression = this.dialog.find('#component-license-expression');
     this.owner = this.dialog.find('#component-owner');
     this.copyright = this.dialog.find('#component-copyright');
     this.deployed = this.dialog.find('input[name=component-deployed]');
@@ -100,8 +100,8 @@ class ComponentDialog extends Controller {
           fileId: component.fileId,
           review_status: this.status.val(),
           name: this.name.val(),
-          licenses: $.map(this.license.val() || [], (license) => {
-            return { key: license };
+          license_expression: $.map(this.license_expression.val() || [], (license_expression) => {
+            return { license_expression: license_expression };
           }),
           copyrights: $.map(this.copyright.val() || [], (copyright) => {
             return { statements: copyright.split('\n') };
@@ -147,7 +147,7 @@ class ComponentDialog extends Controller {
           this._setupStatus(component),
           this._setupName(component),
           this._setupVersion(component),
-          this._setupLicenses(component),
+          this._setupLicenseExpression(component),
           this._setupCopyrights(component),
           this._setupOwners(component),
           this._setupLanguage(component),
@@ -190,18 +190,18 @@ class ComponentDialog extends Controller {
       .then((component) => component ? component : { path: path });
   }
 
-  _setupLicenses(component) {
-    const saved = (component.licenses || []).map((license) => license.key);
-    return this._licenseQuery(component.path, 'key')
-      .then((license_keys) => license_keys.concat(saved))
-      .then((license_keys) => {
-        this.license.html('').select2({
-          data: $.unique(license_keys),
+  _setupLicenseExpression(component) {
+    const saved = (component.license_expression || []).map((license_expression) => license_expression);
+    return this._licenseExpressionQuery(component.path, 'license_expression')
+      .then((license_expressions) => license_expressions.concat(saved))
+      .then((license_expressions) => {
+        this.license_expression.html('').select2({
+          data: $.unique(license_expressions),
           multiple: true,
-          placeholder: 'Enter license',
+          placeholder: 'Enter License Expression',
           tags: true
         }, true);
-        this.license.val(saved);
+        this.license_expression.val(saved);
       });
   }
 
@@ -400,6 +400,10 @@ class ComponentDialog extends Controller {
 
   _licenseQuery(path, field) {
     return this.db().findAllUnique(path, field, this.db().db.License);
+  }
+
+  _licenseExpressionQuery(path, field) {
+    return this.db().findAllUnique(path, field, this.db().db.LicenseExpression);
   }
 }
 

@@ -298,6 +298,7 @@ class AboutCodeDB {
       });
       return this.db.File.bulkCreate(files, options)
         .then(() => this.db.License.bulkCreate(this._addFileIds(files, 'licenses'), options))
+        .then(() => this.db.LicenseExpression.bulkCreate(this._addFileIdsExpressions(files, 'license_expressions'), options))
         .then(() => this.db.Copyright.bulkCreate(this._addFileIds(files, 'copyrights'), options))
         .then(() => this.db.Package.bulkCreate(this._addFileIds(files, 'packages'), options))
         .then(() => this.db.Email.bulkCreate(this._addFileIds(files, 'emails'), options))
@@ -315,6 +316,17 @@ class AboutCodeDB {
       return $.map(file[attribute] || [], (value) => {
         value.fileId = file.id;
         return value;
+      });
+    });
+  }
+
+  _addFileIdsExpressions(files, attribute) {
+    return $.map(files, (file) => {
+      return $.map(file[attribute] || [], (value) => {
+        return {
+          license_expression: value,
+          fileId: file.id
+        };
       });
     });
   }

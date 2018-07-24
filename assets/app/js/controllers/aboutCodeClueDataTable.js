@@ -504,6 +504,13 @@ AboutCodeClueDataTable.COPYRIGHT_COLUMNS =
 AboutCodeClueDataTable.LICENSE_COLUMNS =
     [
       {
+        'data': 'license_expressions[<hr/>]',
+        'title': 'License Expressions',
+        'name': 'license_expressions',
+        'bar_chart_class': 'bar-chart-licenses',
+        'visible': false
+      },
+      {
         'data': 'license_key[<hr/>]',
         'title': 'License Key',
         'name': 'license_key',

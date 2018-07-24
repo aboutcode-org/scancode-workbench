@@ -17,6 +17,7 @@
 const headerModel = require('./header');
 const fileModel = require('./file');
 const licenseModel = require('./license');
+const licenseExpressionModel = require('./licenseExpression');
 const copyrightModel = require('./copyright');
 const packageModel = require('./package');
 const emailModel = require('./email');
@@ -29,6 +30,7 @@ module.exports = function(sequelize, DataTypes) {
   this.Header = headerModel(sequelize, DataTypes);
   this.File = fileModel(sequelize, DataTypes);
   this.License = licenseModel(sequelize, DataTypes);
+  this.LicenseExpression = licenseExpressionModel(sequelize, DataTypes);
   this.Copyright = copyrightModel(sequelize, DataTypes);
   this.Package = packageModel(sequelize, DataTypes);
   this.Email = emailModel(sequelize, DataTypes);
@@ -40,6 +42,7 @@ module.exports = function(sequelize, DataTypes) {
   // Define the relations
   this.Header.hasMany(this.File);
   this.File.hasMany(this.License);
+  this.File.hasMany(this.LicenseExpression);
   this.File.hasMany(this.Copyright);
   this.File.hasMany(this.Package);
   this.File.hasMany(this.Email);
@@ -49,6 +52,7 @@ module.exports = function(sequelize, DataTypes) {
   // Include Array for queries
   this.fileIncludes = [
     { model: this.License, separate: true },
+    { model: this.LicenseExpression, separate: true },
     { model: this.Copyright, separate: true },
     { model: this.Package, separate: true },
     { model: this.Email, separate: true },

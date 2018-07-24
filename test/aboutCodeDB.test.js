@@ -139,11 +139,6 @@ describe('checkAboutCodeDB', () => {
       const component = {
         'license_expression': 'apache-1.1',
         'copyright': '(c) 2004 by Henrik Ravn',
-        'licenses': [
-          {
-            'key': 'apache-1.1'
-          }
-        ],
         'copyrights': [
           {
             'statements': [
@@ -164,11 +159,6 @@ describe('checkAboutCodeDB', () => {
       const component2 = {
         'license_expression': 'zlib',
         'copyright': 'Copyright (c) 1995-2013 Jean-loup Gailly and Mark Adler',
-        'licenses': [
-          {
-            'key': 'zlib'
-          }
-        ],
         'copyrights': [
           {
             'statements': [
