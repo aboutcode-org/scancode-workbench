@@ -132,8 +132,8 @@ class AboutCodeComponentDataTable extends Controller {
         name: 'owner'
       },
       {
-        data: 'licenses[<hr/>].key',
-        title: 'License',
+        data: 'license_expression[<hr/>].license_expression',
+        title: 'License Expression',
         name: 'license_expression'
       },
       {

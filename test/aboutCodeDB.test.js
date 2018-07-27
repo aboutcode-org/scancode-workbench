@@ -54,6 +54,121 @@ describe('checkAboutCodeDB', () => {
         .then(() => aboutCodeDB.db.Url.count())
         .then((urlCount) => assert.strictEqual(urlCount, 2));
     });
+    it('should load from a v2.2.1 scancode result file', () => {
+      const test_file = __dirname + '/data/aboutcodeDB/2.2.1-results.json';
+      const aboutCodeDB = new AboutCodeDB();
+
+      return aboutCodeDB.sync
+        .then(() => aboutCodeDB.db.File.count())
+        .then((rowCount) => assert.strictEqual(rowCount, 0))
+        .then(() => aboutCodeDB.addFromJson(test_file))
+        .then(() => aboutCodeDB.db.File.count())
+        .then((rowCount) => assert.strictEqual(rowCount, 44))
+        .then(() => aboutCodeDB.db.License.count())
+        .then((licenseCount) => assert.strictEqual(licenseCount, 27))
+        .then(() => aboutCodeDB.db.LicenseExpression.count())
+        .then((licenseExpressionCount) => assert.strictEqual(licenseExpressionCount, 0))
+        .then(() => aboutCodeDB.db.Copyright.count())
+        .then((copyrightCount) => assert.strictEqual(copyrightCount, 37))
+        .then(() => aboutCodeDB.db.Package.count())
+        .then((packageCount) => assert.strictEqual(packageCount, 1))
+        .then(() => aboutCodeDB.db.Email.count())
+        .then((emailCount) => assert.strictEqual(emailCount, 5))
+        .then(() => aboutCodeDB.db.Url.count())
+        .then((urlCount) => assert.strictEqual(urlCount, 30));
+    });
+    it('should load from a v2.9.0b1 scancode result file', () => {
+      const test_file = __dirname + '/data/aboutcodeDB/2.9.0b1-results.json';
+      const aboutCodeDB = new AboutCodeDB();
+
+      return aboutCodeDB.sync
+        .then(() => aboutCodeDB.db.File.count())
+        .then((rowCount) => assert.strictEqual(rowCount, 0))
+        .then(() => aboutCodeDB.addFromJson(test_file))
+        .then(() => aboutCodeDB.db.File.count())
+        .then((rowCount) => assert.strictEqual(rowCount, 44))
+        .then(() => aboutCodeDB.db.License.count())
+        .then((licenseCount) => assert.strictEqual(licenseCount, 28))
+        .then(() => aboutCodeDB.db.LicenseExpression.count())
+        .then((licenseExpressionCount) => assert.strictEqual(licenseExpressionCount, 0))
+        .then(() => aboutCodeDB.db.Copyright.count())
+        .then((copyrightCount) => assert.strictEqual(copyrightCount, 38))
+        .then(() => aboutCodeDB.db.Package.count())
+        .then((packageCount) => assert.strictEqual(packageCount, 1))
+        .then(() => aboutCodeDB.db.Email.count())
+        .then((emailCount) => assert.strictEqual(emailCount, 5))
+        .then(() => aboutCodeDB.db.Url.count())
+        .then((urlCount) => assert.strictEqual(urlCount, 30));
+    });
+    it('should load from a v2.9.1 scancode result file', () => {
+      const test_file = __dirname + '/data/aboutcodeDB/2.9.1-results.json';
+      const aboutCodeDB = new AboutCodeDB();
+
+      return aboutCodeDB.sync
+        .then(() => aboutCodeDB.db.File.count())
+        .then((rowCount) => assert.strictEqual(rowCount, 0))
+        .then(() => aboutCodeDB.addFromJson(test_file))
+        .then(() => aboutCodeDB.db.File.count())
+        .then((rowCount) => assert.strictEqual(rowCount, 44))
+        .then(() => aboutCodeDB.db.License.count())
+        .then((licenseCount) => assert.strictEqual(licenseCount, 28))
+        .then(() => aboutCodeDB.db.LicenseExpression.count())
+        .then((licenseExpressionCount) => assert.strictEqual(licenseExpressionCount, 0))
+        .then(() => aboutCodeDB.db.Copyright.count())
+        .then((copyrightCount) => assert.strictEqual(copyrightCount, 38))
+        .then(() => aboutCodeDB.db.Package.count())
+        .then((packageCount) => assert.strictEqual(packageCount, 1))
+        .then(() => aboutCodeDB.db.Email.count())
+        .then((emailCount) => assert.strictEqual(emailCount, 5))
+        .then(() => aboutCodeDB.db.Url.count())
+        .then((urlCount) => assert.strictEqual(urlCount, 30));
+    });
+    it('should load from a v2.9.2 scancode result file', () => {
+      const test_file = __dirname + '/data/aboutcodeDB/2.9.2-results.json';
+      const aboutCodeDB = new AboutCodeDB();
+
+      return aboutCodeDB.sync
+        .then(() => aboutCodeDB.db.File.count())
+        .then((rowCount) => assert.strictEqual(rowCount, 0))
+        .then(() => aboutCodeDB.addFromJson(test_file))
+        .then(() => aboutCodeDB.db.File.count())
+        .then((rowCount) => assert.strictEqual(rowCount, 44))
+        .then(() => aboutCodeDB.db.License.count())
+        .then((licenseCount) => assert.strictEqual(licenseCount, 29))
+        .then(() => aboutCodeDB.db.LicenseExpression.count())
+        .then((licenseExpressionCount) => assert.strictEqual(licenseExpressionCount, 0))
+        .then(() => aboutCodeDB.db.Copyright.count())
+        .then((copyrightCount) => assert.strictEqual(copyrightCount, 38))
+        .then(() => aboutCodeDB.db.Package.count())
+        .then((packageCount) => assert.strictEqual(packageCount, 1))
+        .then(() => aboutCodeDB.db.Email.count())
+        .then((emailCount) => assert.strictEqual(emailCount, 5))
+        .then(() => aboutCodeDB.db.Url.count())
+        .then((urlCount) => assert.strictEqual(urlCount, 30));
+    });
+    it('should load from a v2.9.2 license-expression scancode result file', () => {
+      const test_file = __dirname + '/data/aboutcodeDB/2.9.2-le-results.json';
+      const aboutCodeDB = new AboutCodeDB();
+
+      return aboutCodeDB.sync
+        .then(() => aboutCodeDB.db.File.count())
+        .then((rowCount) => assert.strictEqual(rowCount, 0))
+        .then(() => aboutCodeDB.addFromJson(test_file))
+        .then(() => aboutCodeDB.db.File.count())
+        .then((rowCount) => assert.strictEqual(rowCount, 44))
+        .then(() => aboutCodeDB.db.License.count())
+        .then((licenseCount) => assert.strictEqual(licenseCount, 29))
+        .then(() => aboutCodeDB.db.LicenseExpression.count())
+        .then((licenseExpressionCount) => assert.strictEqual(licenseExpressionCount, 29))
+        .then(() => aboutCodeDB.db.Copyright.count())
+        .then((copyrightCount) => assert.strictEqual(copyrightCount, 38))
+        .then(() => aboutCodeDB.db.Package.count())
+        .then((packageCount) => assert.strictEqual(packageCount, 1))
+        .then(() => aboutCodeDB.db.Email.count())
+        .then((emailCount) => assert.strictEqual(emailCount, 5))
+        .then(() => aboutCodeDB.db.Url.count())
+        .then((urlCount) => assert.strictEqual(urlCount, 30));
+    });
   });
 
   describe('getDuplicatePaths', () => {
@@ -139,11 +254,6 @@ describe('checkAboutCodeDB', () => {
       const component = {
         'license_expression': 'apache-1.1',
         'copyright': '(c) 2004 by Henrik Ravn',
-        'licenses': [
-          {
-            'key': 'apache-1.1'
-          }
-        ],
         'copyrights': [
           {
             'statements': [
@@ -164,11 +274,6 @@ describe('checkAboutCodeDB', () => {
       const component2 = {
         'license_expression': 'zlib',
         'copyright': 'Copyright (c) 1995-2013 Jean-loup Gailly and Mark Adler',
-        'licenses': [
-          {
-            'key': 'zlib'
-          }
-        ],
         'copyrights': [
           {
             'statements': [

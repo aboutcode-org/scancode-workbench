@@ -14,25 +14,11 @@
  #
  */
 
-const {jsonDataType} = require('./databaseUtils');
-
 module.exports = function(sequelize, DataTypes) {
   return sequelize.define(
-    'licenses',
+    'license_expressions',
     {
-      key: DataTypes.STRING,
-      score: DataTypes.INTEGER,
-      short_name: DataTypes.STRING,
-      category: DataTypes.STRING,
-      owner: DataTypes.STRING,
-      homepage_url: DataTypes.STRING,
-      text_url: DataTypes.STRING,
-      reference_url: DataTypes.STRING,
-      spdx_license_key: DataTypes.STRING,
-      spdx_url: DataTypes.STRING,
-      start_line: DataTypes.INTEGER,
-      end_line: DataTypes.INTEGER,
-      matched_rule: jsonDataType('matched_rule')
+      license_expression: DataTypes.STRING
     },
     {
       timestamps: false

@@ -24,7 +24,7 @@ module.exports = function(sequelize, DataTypes) {
       review_status: DataTypes.STRING,
       name: DataTypes.STRING,
       version: DataTypes.STRING,
-      licenses: jsonDataType('licenses'),
+      license_expression: jsonDataType('license_expression'),
       copyrights: jsonDataType('copyrights'),
       owner: DataTypes.STRING,
       code_type: DataTypes.STRING,
@@ -41,11 +41,6 @@ module.exports = function(sequelize, DataTypes) {
     },
     {
       getterMethods: {
-        license_expression: function()  {
-          return $.map(this.licenses, (license) => {
-            return license.key;
-          }).join(' AND ');
-        },
         copyright: function() {
           return $.map(this.copyrights, (copyright) => {
             return copyright.statements.join(' ');

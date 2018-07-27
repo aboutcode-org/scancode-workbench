@@ -90,7 +90,7 @@ targeted platform.
 
 ## Testing
 
-Test functionality using:
+Test ABCM functionality using:
 
 ```bash
 $ npm test
