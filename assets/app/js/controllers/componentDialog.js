@@ -198,7 +198,7 @@ class ComponentDialog extends Controller {
         this.license_expression.html('').select2({
           data: $.unique(license_expressions),
           multiple: true,
-          placeholder: 'Enter License Expression',
+          placeholder: 'Enter Expression',
           tags: true
         }, true);
         this.license_expression.val(saved);
