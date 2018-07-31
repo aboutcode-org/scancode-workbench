@@ -23,6 +23,8 @@ const CLUES_TABLE = 'table.clues-table';
 
 const HAS_A_VALUE =  'about_code_data_table_has_a_value';
 
+const HAS_NO_VALUE =  'about_code_data_table_has_no_value';
+
 /**
  * The view responsible for displaying the DataTable containing the ScanCode
  * clue data
@@ -236,6 +238,16 @@ class AboutCodeClueDataTable extends Controller {
                 { $ne: '{}' }
               ]
             };
+          } else if (columnSearch === HAS_NO_VALUE) {
+            // Return all empty values
+            query.where.$and[columnName] = {
+              $or: [
+                { $eq: '[]' },
+                { $eq: '' },
+                { $eq: '{}' },
+                { $eq: null }
+              ]
+            };
           } else if (columnName === 'extension') {
             query.where.$and[columnName] = {
               $eq: columnSearch
@@ -296,7 +308,7 @@ class AboutCodeClueDataTable extends Controller {
 
     footer.append(genFiltersButton);
     footer.append(clearFiltersButton);
-      
+
     this.dataTable().columns().every(function (columnIndex) {
       const columnInfo = AboutCodeClueDataTable.TABLE_COLUMNS[columnIndex];
 
@@ -315,7 +327,7 @@ class AboutCodeClueDataTable extends Controller {
             .search(val, false, false)
             .draw();
         });
-        
+
       footer.append(select);
     });
   }
@@ -371,7 +383,7 @@ class AboutCodeClueDataTable extends Controller {
 
       const currPath = that._selectedPath;
       const where = { path: { $like: `${currPath}%`} };
-      
+
       that.db().sync.then((db) => db.FlatFile.findAll({
         attributes: [
           Sequelize.fn('TRIM',  Sequelize.col(columnName)),
@@ -393,6 +405,7 @@ class AboutCodeClueDataTable extends Controller {
 
           if (filterValues.length > 0) {
             select.append(`<option value="${HAS_A_VALUE}">Has a Value</option>`);
+            select.append(`<option value="${HAS_NO_VALUE}">Has no Value</option>`);
           }
 
           $.each(filterValues, (i, filterValue) => {
