@@ -791,10 +791,9 @@ AboutCodeClueDataTable.PACKAGE_COLUMNS =
         'visible': false
       },
       {
-        'data': 'packages_asserted_licenses_license[<hr/>]',
-        'title': 'Package Asserted License',
-        'name': 'packages_asserted_licenses_license',
-        'bar_chart_class': 'bar-chart-package-infos',
+        'data': 'packages_declared_licensing[<hr/>]',
+        'title': 'Package Declared Licensing',
+        'name': 'packages_declared_licensing',
         'visible': false
       },
       {
@@ -804,13 +803,7 @@ AboutCodeClueDataTable.PACKAGE_COLUMNS =
         'bar_chart_class': 'bar-chart-package-infos',
         'visible': false
       },
-      {
-        'data': 'packages_authors_name[<hr/>]',
-        'title': 'Package Authors Name',
-        'name': 'packages_authors_name',
-        'bar_chart_class': 'bar-chart-package-infos',
-        'visible': false
-      },
+      // add package parties
       {
         'data': 'packages_homepage_url',
         'title': 'Package Homepage URL',
@@ -818,13 +811,9 @@ AboutCodeClueDataTable.PACKAGE_COLUMNS =
         'visible': false
       },
       {
-        'data': function (row) {
-          return row.packages_download_urls.map((hrefs) => {
-            return hrefs.map(Utils.anchorTag).join('<br/>');
-          }).join('<hr/>');
-        },
-        'title': 'Package Download URLs',
-        'name': 'packages_download_urls',
+        'data': 'packages_download_url',
+        'title': 'Package Download URL',
+        'name': 'packages_download_url',
         'visible': false
       },
     ];
