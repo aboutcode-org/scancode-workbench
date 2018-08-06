@@ -48,18 +48,18 @@ $(document).ready(() => {
   const barChart = new AboutCodeBarChart('#tab-barchart', aboutCodeDB)
     .on('bar-clicked', (attribute, value) => {
       // Show files that contain attribute value selected by user in bar chart
-        cluesTable.clearColumnFilters();
-        if (value !== 'No Value Detected') {
-          cluesTable.setColumnFilter(attribute, value);
-        } else {
-          cluesTable.setColumnFilter(attribute, 'about_code_data_table_no_value_detected');
-        }
+      cluesTable.clearColumnFilters();
+      if (value !== 'No Value Detected') {
+        cluesTable.setColumnFilter(attribute, value);
+      } else {
+        cluesTable.setColumnFilter(attribute, 'about_code_data_table_no_value_detected');
+      }
 
-        updateViewsByPath(cluesTable._selectedPath);
+      updateViewsByPath(cluesTable._selectedPath);
 
-        // This needs to be done only when the column is visible.
-        // So we do it last to try our best
-        showClueButton.trigger('click');
+      // This needs to be done only when the column is visible.
+      // So we do it last to try our best
+      showClueButton.trigger('click');
     });
 
   const cluesTable = new AboutCodeClueDataTable('#tab-clues', aboutCodeDB);

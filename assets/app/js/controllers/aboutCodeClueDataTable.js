@@ -80,7 +80,7 @@ class AboutCodeClueDataTable extends Controller {
     // Add the chart value options and select it.
     if (value === NO_VALUE_DETECTED) {
       select.append(`<option value="${value}">No Value Detected</option>`);
-    } else{
+    } else {
       select.append(`<option value="${value}">${value}</option>`);
     }
     select.val(value).change();
