@@ -23,7 +23,7 @@ const CLUES_TABLE = 'table.clues-table';
 
 const HAS_A_VALUE =  'about_code_data_table_has_a_value';
 
-const HAS_NO_VALUE =  'about_code_data_table_has_no_value';
+const NO_VALUE_DETECTED =  'about_code_data_table_no_value_detected';
 
 /**
  * The view responsible for displaying the DataTable containing the ScanCode
@@ -78,7 +78,11 @@ class AboutCodeClueDataTable extends Controller {
     select.empty().append(`<option value="">All</option>`);
 
     // Add the chart value options and select it.
-    select.append(`<option value="${value}">${value}</option>`);
+    if (value === NO_VALUE_DETECTED) {
+      select.append(`<option value="${value}">No Value Detected</option>`);
+    } else{
+      select.append(`<option value="${value}">${value}</option>`);
+    }
     select.val(value).change();
   }
 
@@ -238,7 +242,7 @@ class AboutCodeClueDataTable extends Controller {
                 { $ne: '{}' }
               ]
             };
-          } else if (columnSearch === HAS_NO_VALUE) {
+          } else if (columnSearch === NO_VALUE_DETECTED) {
             // Return all empty values
             query.where.$and[columnName] = {
               $or: [
@@ -405,7 +409,7 @@ class AboutCodeClueDataTable extends Controller {
 
           if (filterValues.length > 0) {
             select.append(`<option value="${HAS_A_VALUE}">Has a Value</option>`);
-            select.append(`<option value="${HAS_NO_VALUE}">Has no Value</option>`);
+            select.append(`<option value="${NO_VALUE_DETECTED}">No Value Detected</option>`);
           }
 
           $.each(filterValues, (i, filterValue) => {

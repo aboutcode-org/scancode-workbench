@@ -48,16 +48,18 @@ $(document).ready(() => {
   const barChart = new AboutCodeBarChart('#tab-barchart', aboutCodeDB)
     .on('bar-clicked', (attribute, value) => {
       // Show files that contain attribute value selected by user in bar chart
-      if (value !== 'No Value Detected') {
         cluesTable.clearColumnFilters();
-        cluesTable.setColumnFilter(attribute, value);
-        
+        if (value !== 'No Value Detected') {
+          cluesTable.setColumnFilter(attribute, value);
+        } else {
+          cluesTable.setColumnFilter(attribute, 'about_code_data_table_no_value_detected');
+        }
+
         updateViewsByPath(cluesTable._selectedPath);
 
         // This needs to be done only when the column is visible.
         // So we do it last to try our best
         showClueButton.trigger('click');
-      }
     });
 
   const cluesTable = new AboutCodeClueDataTable('#tab-clues', aboutCodeDB);
@@ -94,13 +96,13 @@ $(document).ready(() => {
       updateViewsByPath(node.id);
     });
 
-  $(document).on('click', '#activate-filters-button', () => { 
-    cluesTable.genFilters(); 
+  $(document).on('click', '#activate-filters-button', () => {
+    cluesTable.genFilters();
     updateViewsByPath(cluesTable._selectedPath);
   });
 
-  $(document).on('click', '#clear-filters-button', () => { 
-    cluesTable.resetColumnFilters(); 
+  $(document).on('click', '#clear-filters-button', () => {
+    cluesTable.resetColumnFilters();
     updateViewsByPath(cluesTable._selectedPath);
   });
 
