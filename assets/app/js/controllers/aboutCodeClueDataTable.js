@@ -271,7 +271,7 @@ class AboutCodeClueDataTable extends Controller {
         for (let i = 0; i < dataTablesInput.columns.length; i++) {
           const orSearch = {};
           orSearch[dataTablesInput.columns[i].name] = {
-            $like: `%${globalSearch}%`
+            $like: `%${globalSearch.trim()}%`
           };
           query.where.$and.$or.push(orSearch);
         }
