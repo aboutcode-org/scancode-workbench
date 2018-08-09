@@ -566,3 +566,13 @@ div.dataTables_scrollHead th:first-child {
 body .modal-scancode {
   width: 800px;
 }
+#scancode-info {
+  text-align: left;
+}
+#scancode-label {
+  text-align: left;
+  padding: 10px 0px 10px 0px;
+}
+#scancode-display {
+  display: block;
+}

@@ -210,8 +210,16 @@ $(document).ready(() => {
     return aboutCodeDB.sync
       .then((db) => db.Header.findById(1)
         .then((header) => {
-          const scancode_label = $('#scancode-label').find('#scancode-display');
-          scancode_label.text('ScanCode version: ' + header.scancode_version + '\n\nScanCode options: ' + JSON.stringify(header.scancode_options, null, 2));
+          const scancode_label = $('#scancode-info').find('#scancode-label');
+          const scancode_display = $('#scancode-info').find('#scancode-display');
+          if (header === null || header.scancode_version === null || header.scancode_options === null) {
+            scancode_label.text('Please import a ScanCode results file or an AboutCode Manager sqlite file to see the scan options.');
+            scancode_display.css('display', 'none');
+          } else {
+            scancode_label.text('This information has been extracted from your imported ScanCode JSON file:');
+            scancode_display.text('ScanCode version: ' + header.scancode_version + '\n\nScanCode options: ' + JSON.stringify(header.scancode_options, null, 2));
+            scancode_display.css('display', 'block');
+          }
         }))
       .then($('#myModal').modal('show'));
   }
