@@ -558,3 +558,11 @@ div.dataTables_scrollHead th:first-child {
 .select2-container .select2-search__field{
   width: 100% !important;
 }
+
+/*---------------------------------------
+  ScanCode modal custom
+-----------------------------------------*/
+
+body .modal-scancode {
+  width: 800px;
+}
