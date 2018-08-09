@@ -416,6 +416,27 @@
         </div>
     </div>
 
+    <!-- ScanCode info modal -->
+    <div class="modal fade" id="myModal" role="dialog" tabindex="-1">
+        <div class="modal-dialog modal-scancode">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">ScanCode Version and Options</h4>
+                </div>
+                <div class="modal-body">
+                    <div id="scancode-info">
+                        <div id="scancode-label"></div>
+                        <pre id="scancode-display"></pre>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
     <script>require('./assets/app/js/renderer.js');</script>
 </body>
 </html>

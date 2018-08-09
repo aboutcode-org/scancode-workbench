@@ -162,6 +162,7 @@ $(document).ready(() => {
   ipcRenderer.on('import-JSON', importJson);
   ipcRenderer.on('export-JSON', exportJson);
   ipcRenderer.on('export-JSON-components-only', exportJsonComponents);
+  ipcRenderer.on('get-ScanInfo', getScanInfo);
 
   // Opens the dashboard view when the app is first opened
   showDashboardButton.trigger('click');
@@ -202,6 +203,25 @@ $(document).ready(() => {
       });
 
     return updateViews();
+  }
+
+  // Get the ScanCode version and options data from the DB and populate and open the modal
+  function getScanInfo() {
+    return aboutCodeDB.sync
+      .then((db) => db.Header.findById(1)
+        .then((header) => {
+          const scancode_label = $('#scancode-info').find('#scancode-label');
+          const scancode_display = $('#scancode-info').find('#scancode-display');
+          if (header === null || header.scancode_version === null || header.scancode_options === null) {
+            scancode_label.text('Please import a ScanCode results file or an AboutCode Manager sqlite file to see the scan options.');
+            scancode_display.css('display', 'none');
+          } else {
+            scancode_label.text('This information has been extracted from your imported ScanCode JSON file:');
+            scancode_display.text('ScanCode version: ' + header.scancode_version + '\n\nScanCode options: ' + JSON.stringify(header.scancode_options, null, 2));
+            scancode_display.css('display', 'block');
+          }
+        }))
+      .then($('#myModal').modal('show'));
   }
 
   /** Loads data for all views based on the current data */

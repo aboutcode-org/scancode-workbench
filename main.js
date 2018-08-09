@@ -203,6 +203,11 @@ function getTemplate() {
           enabled: false
         },
         {
+          label: 'Get ScanCode Version and Options',
+          accelerator: 'CmdOrCtrl+G',
+          click: sendEventToRenderer('get-ScanInfo')
+        },
+        {
           type: 'separator'
         },
         {
