@@ -208,11 +208,12 @@ $(document).ready(() => {
   // Get the ScanCode version and options data from the DB and populate and open the modal
   function getScanInfo() {
     return aboutCodeDB.sync
-    .then((db) => db.Header.findById(1).then(header => {
-      scancode_label = $('#scancode-label').find('#scancode-display');
-      scancode_label.text('ScanCode version: ' + header.scancode_version + '\n\nScanCode options: ' + JSON.stringify(header.scancode_options, null, 2));
-    }))
-    .then($("#myModal").modal('show'));
+      .then((db) => db.Header.findById(1)
+        .then((header) => {
+          const scancode_label = $('#scancode-label').find('#scancode-display');
+          scancode_label.text('ScanCode version: ' + header.scancode_version + '\n\nScanCode options: ' + JSON.stringify(header.scancode_options, null, 2));
+        }))
+      .then($('#myModal').modal('show'));
   }
 
   /** Loads data for all views based on the current data */
