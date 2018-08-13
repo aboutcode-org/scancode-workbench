@@ -29,7 +29,6 @@ chai.use(chaiSubset);
 const AboutCodeDB = require('../assets/app/js/aboutCodeDB');
 
 const SCANCODE_FILE = __dirname + '/data/scancode-results.json';
-const FLATTENED_FILE = __dirname + '/data/flattened-scancode-results.json';
 const DUPLICATE_PATH_FILE = __dirname + '/data/scancode-duplicate-path-values.json';
 
 describe('checkAboutCodeDB', () => {
@@ -302,25 +301,6 @@ describe('checkAboutCodeDB', () => {
         .then(() => aboutCodeDB.setComponent(component2))
         .then(() => aboutCodeDB.db.Component.count())
         .then((rowCount) => assert.strictEqual(rowCount, 2));
-    });
-  });
-
-  describe('addFlattenedRows', () => {
-    const results = JSON.parse(fs.readFileSync(FLATTENED_FILE, 'utf8'));
-    it('should add rows to the flattened files table', () => {
-      const aboutCodeDB = new AboutCodeDB();
-
-      return aboutCodeDB.sync
-        .then(() => aboutCodeDB.db.FlatFile.count())
-        .then((rowCount) => assert.strictEqual(rowCount, 0))
-        .then(() => aboutCodeDB.addFromJson(SCANCODE_FILE))
-        .then(() => aboutCodeDB.db.FlatFile.count())
-        .then((rowCount) => assert.strictEqual(rowCount, 3))
-        .then(() => aboutCodeDB.db.FlatFile.findAll())
-        .then((rows) => {
-          rows = rows.map((row) => row.toJSON());
-          assert.containSubset(rows, results);
-        });
     });
   });
 
