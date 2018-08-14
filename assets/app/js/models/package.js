@@ -24,7 +24,7 @@ module.exports = function(sequelize, DataTypes) {
       namespace: DataTypes.STRING,
       name: DataTypes.STRING,
       version: DataTypes.STRING,
-      qualifiers: DataTypes.STRING,
+      qualifiers: jsonDataType('qualifiers'),
       subpath: DataTypes.STRING,
       primary_language: DataTypes.STRING,
       code_type: DataTypes.STRING,
