@@ -288,7 +288,7 @@ class ComponentDialog extends Controller {
     const saved = component.download_url || [];
     return Promise.all([
       this._urlQuery(component.path, 'url'),
-      this._packageQuery(component.path, 'download_urls'),
+      this._packageQuery(component.path, 'download_url'),
     ])
       .then((rows) => $.map(rows, (row) => row))
       .then((download_urls) => download_urls.concat(saved))
