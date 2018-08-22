@@ -14,7 +14,7 @@
  #
  */
 
-
+const PackageURL = require('packageurl-js');
 const Sequelize = require('sequelize');
 const fs = require('fs');
 const JSONStream = require('JSONStream');
@@ -297,12 +297,12 @@ class AboutCodeDB {
         file.headerId = headerId;
       });
       return this.db.File.bulkCreate(files, options)
-        .then(() => this.db.License.bulkCreate(this._addFileIds(files, 'licenses'), options))
-        .then(() => this.db.LicenseExpression.bulkCreate(this._addFileIdsExpressions(files, 'license_expressions'), options))
-        .then(() => this.db.Copyright.bulkCreate(this._addFileIds(files, 'copyrights'), options))
-        .then(() => this.db.Package.bulkCreate(this._addFileIds(files, 'packages'), options))
-        .then(() => this.db.Email.bulkCreate(this._addFileIds(files, 'emails'), options))
-        .then(() => this.db.Url.bulkCreate(this._addFileIds(files, 'urls'), options))
+        .then(() => this.db.License.bulkCreate(this._addExtraFields(files, 'licenses'), options))
+        .then(() => this.db.LicenseExpression.bulkCreate(this._addExtraFields(files, 'license_expressions'), options))
+        .then(() => this.db.Copyright.bulkCreate(this._addExtraFields(files, 'copyrights'), options))
+        .then(() => this.db.Package.bulkCreate(this._addExtraFields(files, 'packages'), options))
+        .then(() => this.db.Email.bulkCreate(this._addExtraFields(files, 'emails'), options))
+        .then(() => this.db.Url.bulkCreate(this._addExtraFields(files, 'urls'), options))
         .then(() => this.sequelize.Promise.each(files, (file) => {
           if (file.component) {
             return this.db.Component.create(file.component, options);
@@ -311,24 +311,36 @@ class AboutCodeDB {
     });
   }
 
-  _addFileIds(files, attribute) {
+  _addExtraFields(files, attribute) {
     return $.map(files, (file) => {
       return $.map(file[attribute] || [], (value) => {
+        if (attribute === 'packages') {
+          value.purl = this._addPackageURL(value);
+        } else if (attribute === 'license_expressions') {
+          return {
+            license_expression: value,
+            fileId: file.id
+          };
+        }
         value.fileId = file.id;
         return value;
       });
     });
   }
 
-  _addFileIdsExpressions(files, attribute) {
-    return $.map(files, (file) => {
-      return $.map(file[attribute] || [], (value) => {
-        return {
-          license_expression: value,
-          fileId: file.id
-        };
-      });
-    });
+  _addPackageURL(value) {
+    const type = value.type;
+    const namespace = value.namespace;
+    const name = value.name;
+    const version = value.version;
+    const qualifiers = value.qualifiers;
+    const subpath = value.subpath;
+
+    if (!type || !name) {
+      return null;
+    }
+
+    return new PackageURL(type, namespace, name, version, qualifiers, subpath).toString();
   }
 }
 
