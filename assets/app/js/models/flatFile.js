@@ -15,6 +15,7 @@
  */
 
 const {jsonDataType, parentPath} = require('./databaseUtils');
+const PackageURL = require('packageurl-js');
 
 module.exports = function(sequelize, DataTypes) {
   const Model = sequelize.define(
@@ -73,6 +74,7 @@ module.exports = function(sequelize, DataTypes) {
       packages_version: jsonDataType('packages_version'),
       packages_qualifiers: jsonDataType('packages_qualifiers'),
       packages_subpath: jsonDataType('packages_subpath'),
+      packages_purl: jsonDataType('packages_purl'),
       packages_primary_language: jsonDataType('packages_primary_language'),
       packages_code_type: jsonDataType('packages_code_type'),
       packages_description: jsonDataType('packages_description'),
@@ -176,6 +178,7 @@ module.exports = function(sequelize, DataTypes) {
       packages_version: getValues(file.packages, 'version'),
       packages_qualifiers: getValues(file.packages, 'qualifiers'),
       packages_subpath: getValues(file.packages, 'subpath'),
+      packages_purl: getPurls(file.packages),
       packages_primary_language: getValues(file.packages, 'primary_language'),
       packages_code_type: getValues(file.packages, 'code_type'),
       packages_description: getValues(file.packages, 'description'),
@@ -200,6 +203,32 @@ module.exports = function(sequelize, DataTypes) {
 
   return Model;
 };
+
+function getPurls(packages) {
+  // check if there is package scan info
+  if (!packages) {
+    return;
+  }
+  const purls = [];
+
+  packages.forEach((pkg) => {
+    const type = pkg.type;
+    const namespace = pkg.namespace;
+    const name = pkg.name;
+    const version = pkg.version;
+    const qualifiers = pkg.qualifiers;
+    const subpath = pkg.subpath;
+
+    if (!type || !name) {
+      return;
+    }
+
+    const purl = new PackageURL(type, namespace, name, version, qualifiers, subpath).toString();
+    purls.push(purl);
+  });
+
+  return purls;
+}
 
 // [{key: val0}, {key: val1}] => [val0, val1]
 function getValues(array, key) {
