@@ -816,6 +816,12 @@ AboutCodeClueDataTable.PACKAGE_COLUMNS =
         'name': 'packages_download_url',
         'visible': false
       },
+      {
+        'data': 'packages_purl',
+        'title': 'Package URL',
+        'name': 'packages_purl',
+        'visible': false
+      },
     ];
 
 AboutCodeClueDataTable.ORIGIN_COLUMN_NAMES =

@@ -6574,6 +6574,14 @@
         "semver": "5.4.1"
       }
     },
+    "packageurl-js": {
+      "version": "0.0.1",
+      "resolved": "https://registry.npmjs.org/packageurl-js/-/packageurl-js-0.0.1.tgz",
+      "integrity": "sha512-hjMzq6XuAxMMiV55UOIhf6byXKR9Fc046ybroGCpjGtJ5EI9QJG9g/ErYoPt0RGUaAr51C6x+pwUG9pXgLnaqg==",
+      "requires": {
+        "urijs": "^1.19.1"
+      }
+    },
     "parse-json": {
       "version": "2.2.0",
       "resolved": "https://registry.npmjs.org/parse-json/-/parse-json-2.2.0.tgz",
@@ -11245,6 +11253,11 @@
         "semver-diff": "2.1.0",
         "xdg-basedir": "3.0.0"
       }
+    },
+    "urijs": {
+      "version": "1.19.1",
+      "resolved": "https://registry.npmjs.org/urijs/-/urijs-1.19.1.tgz",
+      "integrity": "sha512-xVrGVi94ueCJNrBSTjWqjvtgvl3cyOTThp2zaMaFNGp3F542TR6sM3f2o8RqZl+AwteClSVmoCyt0ka4RjQOQg=="
     },
     "urix": {
       "version": "0.1.0",
