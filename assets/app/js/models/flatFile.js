@@ -131,9 +131,9 @@ module.exports = function(sequelize, DataTypes) {
     return {
       path: file.path,
       parent: parentPath(file.path),
-      copyright_statements: getValues(file.copyrights, 'statements'),
-      copyright_holders: getValues(file.copyrights, 'holders'),
-      copyright_authors: getValues(file.copyrights, 'authors'),
+      copyright_statements: getCopyrightValues(file.copyrights),
+      copyright_holders: getCopyrightValues(file.holders),
+      copyright_authors: getCopyrightValues(file.authors),
       copyright_start_line: getValues(file.copyrights, 'start_line'),
       copyright_end_line: getValues(file.copyrights, 'end_line'),
       license_expressions: file.license_expressions,
@@ -228,6 +228,18 @@ function getPurls(packages) {
   });
 
   return purls;
+}
+
+function getCopyrightValues(array) {
+  if (!array) {
+    array = [];
+  }
+  const vals = [];
+  array.forEach((val) => {
+    vals.push(val['value']);
+  });
+  // must wrap this in a list for datatables display; not sure why
+  return [vals];
 }
 
 // [{key: val0}, {key: val1}] => [val0, val1]
