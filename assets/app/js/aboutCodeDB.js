@@ -356,6 +356,9 @@ class AboutCodeDB {
     if (Array.isArray(statements)) {
       statements.forEach((statement) => {
         const value = statement['value'];
+        if (!value) {
+          return;
+        }
         newStatements.push(value);
 
         const line = {};
