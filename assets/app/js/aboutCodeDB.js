@@ -313,6 +313,9 @@ class AboutCodeDB {
 
   _addExtraFields(files, attribute) {
     return $.map(files, (file) => {
+      if (attribute === 'copyrights') {
+        return this._getNewCopyrights(file);
+      }
       return $.map(file[attribute] || [], (value) => {
         if (attribute === 'packages') {
           value.purl = this._addPackageURL(value);
@@ -341,6 +344,65 @@ class AboutCodeDB {
     }
 
     return new PackageURL(type, namespace, name, version, qualifiers, subpath).toString();
+  }
+
+  _getNewCopyrights(file) {
+    const statements = file.copyrights;
+    const holders = file.holders;
+    const authors = file.authors;
+    
+    const newLines = [];
+    const newStatements = [];
+    if (Array.isArray(statements)) {
+      statements.forEach((statement) => {
+        const value = statement['value'];
+        if (!value) {
+          return;
+        }
+        newStatements.push(value);
+
+        const line = {};
+        line.start_line = statement['start_line'];
+        line.end_line = statement['end_line'];
+        newLines.push(line);
+      });
+    }
+    
+    const newHolders = [];
+    if (Array.isArray(holders)) {
+      holders.forEach((holder) => {
+        const value = holder['value'];
+        newHolders.push(value);
+      });
+    }
+
+    const newAuthors = [];
+    if (Array.isArray(authors)) {
+      authors.forEach((author) => {
+        const value = author['value'];
+        newAuthors.push(value);
+      });
+    }
+
+    const newCopyrights = [];
+    for (let i = 0; i < newStatements.length; i++) {
+      const newCopyright = {};
+      newCopyright.statements = [newStatements[i]];
+      newCopyright.holders = [newHolders[i]];
+      // FIXME: this probably does not work correctly
+      if (!newAuthors) {
+        newCopyright.authors = [];
+      } else {
+        newCopyright.authors = newAuthors;
+      }
+      newCopyright.start_line = newLines[0].start_line;
+      newCopyright.end_line = newLines[0].end_line;
+
+      newCopyright.fileId = file.id;
+
+      newCopyrights.push(newCopyright);
+    }
+    return newCopyrights;
   }
 }
 
