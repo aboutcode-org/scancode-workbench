@@ -280,6 +280,9 @@ body {
 /*---------------------------------------
   DataTables custom
 -----------------------------------------*/
+.column-right-justify {
+  text-align: right;
+}
 
 .dataTable td select {
   word-wrap: break-word;
