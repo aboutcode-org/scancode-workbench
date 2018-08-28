@@ -113,6 +113,10 @@ class AboutCodeClueDataTable extends Controller {
       deferRender: true,
       initComplete: () => this._initComplete(),
       drawCallback: () => this._drawCallback(),
+      columnDefs: [{
+        targets: [4, 5, 8, 16, 17, 19, 20, 22, 23, 28, 31],
+        className: 'column-right-justify',
+      }],
       buttons: [
         {   // Do not allow the first column to be hidden
           extend: 'colvis',
