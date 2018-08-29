@@ -9,10 +9,10 @@ license and other notices identified by
 about the effective license(s) for a component.
 [ScanCode](https://github.com/nexB/scancode-toolkit/) detects licenses, copyrights 
 and other interesting information in your code. AboutCode Manager allows you to take the
-scan results from ScanCode and create components. By creating these components 
+scan results from ScanCode and create conclusions. By creating these conclusions 
 within your codebase, you are creating a software inventory of your product. 
 The conclusions (Concluded License, Concluded Owner, etc.) you make when 
-creating your component can be exported as a JSON file or saved as SQLite file.
+creating your conclusion can be exported as a JSON file or saved as SQLite file.
 
 AboutCode Manager is based on
 [Electron](https://electron.atom.io/) and will be the primary desktop/GUI tool 

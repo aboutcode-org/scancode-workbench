@@ -276,10 +276,10 @@ describe('checkAboutCodeDB', () => {
     });
   });
 
-  describe('setComponent', () => {
-    it('should create a component in Component Table', () => {
+  describe('setConclusion', () => {
+    it('should create a conclusion in Component Table', () => {
       const aboutCodeDB = new AboutCodeDB();
-      const component = {
+      const conclusion = {
         'license_expression': 'apache-1.1',
         'copyright': '(c) 2004 by Henrik Ravn',
         'copyrights': [
@@ -299,7 +299,7 @@ describe('checkAboutCodeDB', () => {
         'notes': ''
       };
 
-      const component2 = {
+      const conclusion2 = {
         'license_expression': 'zlib',
         'copyright': 'Copyright (c) 1995-2013 Jean-loup Gailly and Mark Adler',
         'copyrights': [
@@ -320,15 +320,15 @@ describe('checkAboutCodeDB', () => {
       };
 
       return aboutCodeDB.sync
-        .then(() => aboutCodeDB.setComponent(component))
-        .then(() => aboutCodeDB.db.Component.count())
+        .then(() => aboutCodeDB.setConclusion(conclusion))
+        .then(() => aboutCodeDB.db.Conclusion.count())
         .then((rowCount) => assert.strictEqual(rowCount, 1))
-        .then(() => aboutCodeDB.findComponent({
+        .then(() => aboutCodeDB.findConclusion({
           where: { path: 'samples'}
         }))
-        .then((row) => assert.containSubset(row.toJSON(), component))
-        .then(() => aboutCodeDB.setComponent(component2))
-        .then(() => aboutCodeDB.db.Component.count())
+        .then((row) => assert.containSubset(row.toJSON(), conclusion))
+        .then(() => aboutCodeDB.setConclusion(conclusion2))
+        .then(() => aboutCodeDB.db.Conclusion.count())
         .then((rowCount) => assert.strictEqual(rowCount, 2));
     });
   });

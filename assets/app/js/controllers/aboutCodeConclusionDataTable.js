@@ -18,23 +18,23 @@ const Utils = require('../helpers/utils');
 const Controller = require('./controller');
 
 // There must be a table element within the container element with this class
-const COMPONENT_TABLE = 'table.components-table';
+const CONCLUSION_TABLE = 'table.conclusions-table';
 
 /**
  * The view responsible for displaying the DataTable containing the concluded
- * data created for Components
+ * data created for Conclusions
  */
-class AboutCodeComponentDataTable extends Controller {
+class AboutCodeConclusionDataTable extends Controller {
   constructor(tableID, aboutCodeDB) {
     super(tableID, aboutCodeDB);
   }
 
   reload() {
     this.needsReload(false);
-    this.db().findAllComponents({})
-      .then((components) => {
+    this.db().findAllConclusions({})
+      .then((conclusions) => {
         this.dataTable().clear();
-        this.dataTable().rows.add(components);
+        this.dataTable().rows.add(conclusions);
         this.dataTable().draw();
       });
   }
@@ -47,7 +47,7 @@ class AboutCodeComponentDataTable extends Controller {
   }
 
   dataTableSelector() {
-    return `${this.id()} ${COMPONENT_TABLE}`;
+    return `${this.id()} ${CONCLUSION_TABLE}`;
   }
 
   dataTable() {
@@ -55,21 +55,21 @@ class AboutCodeComponentDataTable extends Controller {
       return this._dataTable;
     }
 
-    $('<p class="lead">Component Summary</p>').prependTo($('#components-table_wrapper'));
+    $('<p class="lead">Conclusions</p>').prependTo($('#conclusions-table_wrapper'));
     this._dataTable = $(this.dataTableSelector()).DataTable({
       scrollX: true,
       scrollResize: true,
-      columns: AboutCodeComponentDataTable.COLUMNS,
+      columns: AboutCodeConclusionDataTable.COLUMNS,
       buttons: [
         {
           name: 'uploadDeja',
-          text: '<i class=" fa fa-cloud-upload"></i> Upload Components',
-          titleAttr: 'Upload Components to DejaCode',
+          text: '<i class=" fa fa-cloud-upload"></i> Upload Conclusions',
+          titleAttr: 'Upload Conclusionss to DejaCode',
           action: () => {
             this.db()
-              .findAllComponents({})
-              .then((components) =>
-                this.getHandler('upload-clicked')(components));
+              .findAllConclusions({})
+              .then((conclusions) =>
+                this.getHandler('upload-clicked')(conclusions));
           },
         },
         {   // Do not allow the first 2 columns to be hidden
@@ -93,7 +93,7 @@ class AboutCodeComponentDataTable extends Controller {
         }
       ],
       language: {
-        'emptyTable': 'No Components created.'
+        'emptyTable': 'No Conclusions created.'
       },
       dom: // Needed to keep datatables buttons and search inline
                 "<'row'<'col-sm-9'B><'col-sm-3'f>>" +
@@ -204,4 +204,4 @@ class AboutCodeComponentDataTable extends Controller {
   }
 }
 
-module.exports = AboutCodeComponentDataTable;
+module.exports = AboutCodeConclusionDataTable;

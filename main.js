@@ -81,9 +81,9 @@ function getTemplate() {
           click: sendEventToRenderer('export-JSON')
         },
         {
-          label: 'Export Components JSON File',
+          label: 'Export Conclusions JSON File',
           accelerator: 'CmdOrCtrl+J',
-          click: sendEventToRenderer('export-JSON-components-only')
+          click: sendEventToRenderer('export-JSON-conclusions-only')
         }
       ]
     },
@@ -139,9 +139,9 @@ function getTemplate() {
           click: sendEventToRenderer('chart-summary-view')
         },
         {
-          label: 'Component Summary View',
+          label: 'Conclusion Summary View',
           accelerator: 'Shift+CmdOrCtrl+C',
-          click: sendEventToRenderer('component-summary-view')
+          click: sendEventToRenderer('conclusion-summary-view')
         },
         {
           type: 'separator'

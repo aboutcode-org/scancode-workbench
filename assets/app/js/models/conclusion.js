@@ -18,7 +18,7 @@ const {jsonDataType} = require('./databaseUtils');
 
 module.exports = function(sequelize, DataTypes) {
   return sequelize.define(
-    'components',
+    'conclusions',
     {
       path: DataTypes.STRING,
       review_status: DataTypes.STRING,

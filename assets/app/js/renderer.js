@@ -19,12 +19,12 @@ const Splitter = require('./helpers/splitter');
 const Progress = require('./helpers/progress');
 
 const DejaCodeExportDialog = require('./controllers/dejacodeExportDialog');
-const ComponentDialog = require('./controllers/componentDialog');
+const ConclusionDialog = require('./controllers/conclusionDialog');
 const AboutCodeDashboard = require('./controllers/aboutCodeDashboard');
 const AboutCodeBarChart = require('./controllers/aboutCodeBarChart');
 const AboutCodeJsTree = require('./controllers/aboutCodeJsTree');
 const AboutCodeScanDataDataTable = require('./controllers/aboutCodeScanDataDataTable');
-const AboutCodeComponentDataTable = require('./controllers/aboutCodeComponentDataTable');
+const AboutCodeConclusionDataTable = require('./controllers/aboutCodeConclusionDataTable');
 
 const fs = require('fs');
 const shell = require('electron').shell;
@@ -64,34 +64,34 @@ $(document).ready(() => {
 
   const scanDataTable = new AboutCodeScanDataDataTable('#tab-scandata', aboutCodeDB);
 
-  const componentsTable = new AboutCodeComponentDataTable('#tab-component', aboutCodeDB)
-    .on('upload-clicked', (components) => {
-      if (components.length > 0) {
+  const conclusionsTable = new AboutCodeConclusionDataTable('#tab-conclusion', aboutCodeDB)
+    .on('upload-clicked', (conclusions) => {
+      if (conclusions.length > 0) {
         dejaCodeExportDialog.show();
       } else {
         dialog.showErrorBox(
-          'No Components to Upload',
-          'You have no Components to upload.\n\n' +
-                    'Please create at least one Component and try again.');
+          'No Conclusions to Upload',
+          'You have no Conclusions to upload.\n\n' +
+                    'Please create at least one Conclusion and try again.');
       }
     })
-    .on('export-json', exportJsonComponents);
+    .on('export-json', exportJsonConclusions);
 
-  const componentDialog = new ComponentDialog('#componentDialog', aboutCodeDB)
+  const conclusionDialog = new ConclusionDialog('#conclusionDialog', aboutCodeDB)
     .on('save', () => {
-      componentsTable.needsReload(true);
+      conclusionsTable.needsReload(true);
       redrawCurrentView();
     })
     .on('delete', () => {
-      componentsTable.needsReload(true);
+      conclusionsTable.needsReload(true);
       redrawCurrentView();
     });
 
   const dejaCodeExportDialog =
-        new DejaCodeExportDialog('#componentExportModal', aboutCodeDB);
+        new DejaCodeExportDialog('#conclusionExportModal', aboutCodeDB);
 
   const jstree = new AboutCodeJsTree('#jstree', aboutCodeDB)
-    .on('node-edit', (node) => componentDialog.show(node.id))
+    .on('node-edit', (node) => conclusionDialog.show(node.id))
     .on('node-selected', (node) => {
       updateViewsByPath(node.id);
     });
@@ -116,7 +116,7 @@ $(document).ready(() => {
   const saveSQLiteFileButton = $('#save-file');
   const openSQLiteFileButton = $('#open-file');
   const showScanDataButton = $('#show-tab-scandata');
-  const showComponentButton = $('#show-tab-component');
+  const showConclusionButton = $('#show-tab-conclusion');
   const showBarChartButton = $('#show-tab-barchart');
   const showDashboardButton = $('#show-tab-dashboard');
 
@@ -126,16 +126,16 @@ $(document).ready(() => {
   // Save a SQLite Database file
   saveSQLiteFileButton.click(saveSQLite);
 
-  // Show ScanData DataTable. Hide node view and component summary table
+  // Show ScanData DataTable. Hide node view and conclusion summary table
   showScanDataButton.click(() => {
     splitter.show();
     scanDataTable.redraw();
   });
 
-  // Show component summary table. Hide DataTable and node view
-  showComponentButton.click(() => {
+  // Show conclusion summary table. Hide DataTable and node view
+  showConclusionButton.click(() => {
     splitter.hide();
-    componentsTable.redraw();
+    conclusionsTable.redraw();
   });
 
   showBarChartButton.click(() => {
@@ -155,13 +155,13 @@ $(document).ready(() => {
   });
 
   ipcRenderer.on('table-view', () => showScanDataButton.trigger('click'));
-  ipcRenderer.on('component-summary-view', () => showComponentButton.trigger('click'));
+  ipcRenderer.on('conclusion-summary-view', () => showConclusionButton.trigger('click'));
   ipcRenderer.on('open-SQLite', () => openSQLiteFileButton.trigger('click'));
   ipcRenderer.on('chart-summary-view', () => showBarChartButton.trigger('click'));
   ipcRenderer.on('save-SQLite', () => saveSQLiteFileButton.trigger('click'));
   ipcRenderer.on('import-JSON', importJson);
   ipcRenderer.on('export-JSON', exportJson);
-  ipcRenderer.on('export-JSON-components-only', exportJsonComponents);
+  ipcRenderer.on('export-JSON-conclusions-only', exportJsonConclusions);
   ipcRenderer.on('get-ScanInfo', getScanInfo);
 
   // Opens the dashboard view when the app is first opened
@@ -171,11 +171,11 @@ $(document).ready(() => {
     // Update all the views with the given path string
     scanDataTable.columns(0).search(path);
 
-    componentDialog.selectedPath(path);
+    conclusionDialog.selectedPath(path);
     dejaCodeExportDialog.selectedPath(path);
     jstree.selectedPath(path);
     scanDataTable.selectedPath(path);
-    componentsTable.selectedPath(path);
+    conclusionsTable.selectedPath(path);
     dashboard.selectedPath(path);
     barChart.selectedPath(path);
 
@@ -233,11 +233,11 @@ $(document).ready(() => {
         scanDataTable.clearColumnFilters();
 
         // update all views with the new database.
-        componentDialog.db(aboutCodeDB);
+        conclusionDialog.db(aboutCodeDB);
         dejaCodeExportDialog.db(aboutCodeDB);
         jstree.db(aboutCodeDB);
         scanDataTable.db(aboutCodeDB);
-        componentsTable.db(aboutCodeDB);
+        conclusionsTable.db(aboutCodeDB);
         dashboard.db(aboutCodeDB);
         barChart.db(aboutCodeDB);
 
@@ -369,7 +369,7 @@ $(document).ready(() => {
     });
   }
 
-  /** Export JSON file with original ScanCode data and components that have been created */
+  /** Export JSON file with original ScanCode data and conclusions that have been created */
   function exportJson() {
     dialog.showSaveDialog({
       properties: ['openFile'],
@@ -401,7 +401,7 @@ $(document).ready(() => {
         }
       });
 
-      const componentsPromise = aboutCodeDB.findAllComponents({
+      const conclusionsPromise = aboutCodeDB.findAllConclusions({
         attributes: {
           exclude: ['id', 'createdAt', 'updatedAt']
         }
@@ -414,8 +414,8 @@ $(document).ready(() => {
       });
 
       Promise.all([scanCodeInfoPromise, aboutCodeInfoPromise,
-        filesCountPromise, scanDataFilesPromise, componentsPromise])
-        .then(([scanCodeInfo, aboutCodeInfo, filesCount, scanDataFiles, components]) => {
+        filesCountPromise, scanDataFilesPromise, conclusionsPromise])
+        .then(([scanCodeInfo, aboutCodeInfo, filesCount, scanDataFiles, conclusions]) => {
           const json = {
             aboutcode_manager_notice: aboutCodeInfo.aboutcode_manager_notice,
             aboutcode_manager_version: aboutCodeInfo.aboutcode_manager_version,
@@ -423,7 +423,7 @@ $(document).ready(() => {
             scancode_options: scanCodeInfo.scancode_options,
             files_count: filesCount,
             files: scanDataFiles,
-            components: components
+            conclusions: conclusions
           };
 
           fs.writeFile(fileName, JSON.stringify(json), (err) => {
@@ -435,8 +435,8 @@ $(document).ready(() => {
     });
   }
 
-  /** Export JSON file with only components that have been created */
-  function exportJsonComponents() {
+  /** Export JSON file with only conclusions that have been created */
+  function exportJsonConclusions() {
     dialog.showSaveDialog({
       properties: ['openFile'],
       title: 'Save as JSON file',
@@ -455,18 +455,18 @@ $(document).ready(() => {
         }
       });
 
-      const componentsPromise = aboutCodeDB.findAllComponents({
+      const conclusionsPromise = aboutCodeDB.findAllConclusions({
         attributes: {
           exclude: ['id', 'createdAt', 'updatedAt']
         }
       });
 
-      Promise.all([aboutCodeInfoPromise, componentsPromise])
-        .then(([aboutCodeInfo, components]) => {
+      Promise.all([aboutCodeInfoPromise, conclusionsPromise])
+        .then(([aboutCodeInfo, conclusions]) => {
           const json = {
             aboutcode_manager_notice: aboutCodeInfo.aboutcode_manager_notice,
             aboutcode_manager_version: aboutCodeInfo.aboutcode_manager_version,
-            components: components
+            conclusions: conclusions
           };
 
           fs.writeFile(fileName, JSON.stringify(json), (err) => {

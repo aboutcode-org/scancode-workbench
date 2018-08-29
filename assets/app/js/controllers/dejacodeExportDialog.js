@@ -19,7 +19,7 @@ const Controller = require('./controller');
 const dialog = require('electron').remote.dialog;
 
 /**
- * The view responsible for displaying the DejaCode Component Export dialog
+ * The view responsible for displaying the DejaCode Conclusion Export dialog
  */
 class DejaCodeExportDialog extends Controller {
   constructor(dialogId, aboutCodeDB) {
@@ -31,11 +31,11 @@ class DejaCodeExportDialog extends Controller {
     this.productVersion = this.dialog.find('#product-version');
     this.apiUrl = this.dialog.find('#apiURLDejaCode');
     this.apiKey = this.dialog.find('#apiKey');
-    this.submitButton = this.dialog.find('button#componentSubmit');
-    this.submitButton.click(() => this._exportComponents());
-    this.progressBar = new Progress('#tab-component .components-table-container',
+    this.submitButton = this.dialog.find('button#conclusionSubmit');
+    this.submitButton.click(() => this._exportConclusions());
+    this.progressBar = new Progress('#tab-conclusion .conclusions-table-container',
       {
-        title: 'Uploading Components ... ',
+        title: 'Uploading Conclusions ... ',
         size: 100
       });
   }
@@ -44,14 +44,14 @@ class DejaCodeExportDialog extends Controller {
     this.dialog.modal('show');
   }
 
-  // Submit components to a DejaCode Product via ProductComponent API
+  // Submit conclusions to a DejaCode Product via ProductComponent API
   // TODO (@jdaguil): DejaCode doesn't require any field, but we probably
   // want to require name, version, and owner
-  _exportComponents() {
+  _exportConclusions() {
     this.progressBar.showIndeterminate();
     return this.db().sync
-      .then(() => this.db().findAllComponents({}))
-      .then((components) => {
+      .then(() => this.db().findAllConclusions({}))
+      .then((conclusions) => {
         // Get product name and version
         const productName = this.productName.val();
         const productVersion = this.productVersion.val();
@@ -66,31 +66,31 @@ class DejaCodeExportDialog extends Controller {
 
         this.dialog.modal('hide');
 
-        // Converts array of components from AboutCode Manager to
+        // Converts array of conclusions from AboutCode Manager to
         // DejaCode component format
-        const dejaCodeComponents = $.map(components, (component) => {
+        const dejaCodeComponents = $.map(conclusions, (conclusion) => {
           return {
-            name: component.name,
-            version: component.version,
-            owner: component.owner,
-            license_expression: component.license_expression,
-            copyright: component.copyright,
-            is_deployed: component.is_deployed,
-            is_modified: component.is_modified,
-            homepage_url: component.homepage_url,
-            primary_language: component.programming_language,
-            reference_notes: component.notes,
-            feature: component.feature,
-            purpose: component.purpose,
+            name: conclusion.name,
+            version: conclusion.version,
+            owner: conclusion.owner,
+            license_expression: conclusion.license_expression,
+            copyright: conclusion.copyright,
+            is_deployed: conclusion.is_deployed,
+            is_modified: conclusion.is_modified,
+            homepage_url: conclusion.homepage_url,
+            primary_language: conclusion.programming_language,
+            reference_notes: conclusion.notes,
+            feature: conclusion.feature,
+            purpose: conclusion.purpose,
             product: productNameVersion
           };
         });
-        return this._uploadComponents(apiUrl, apiKey, dejaCodeComponents);
+        return this._uploadConclusions(apiUrl, apiKey, dejaCodeComponents);
       })
       .then(() => this.progressBar.hide())
       // TODO: throw an exception and handle this in render with
       // dialog.showErrorBox
-      .then(() => alert('Components submitted to DejaCode'))
+      .then(() => alert('Conclusions submitted to DejaCode'))
       .catch((err) => {
         this.progressBar.hide();
         console.log(err);
@@ -100,7 +100,7 @@ class DejaCodeExportDialog extends Controller {
   }
 
   // Upload created Components to a Product in DejaCode using the API
-  _uploadComponents(host, apiKey, components) {
+  _uploadConclusions(host, apiKey, components) {
     const errors = [];
 
     // Make individual requests to DejaCode to create each component

@@ -82,8 +82,8 @@ class AboutCodeJsTree extends Controller {
         'contextmenu': {
           'items': (node) => {
             return {
-              'edit_component': {
-                'label': 'Edit Component',
+              'edit_conclusion': {
+                'label': 'Edit Conclusion',
                 'action': () => this.getHandler('node-edit')(node)
               }
             };
