@@ -23,7 +23,7 @@ const ComponentDialog = require('./controllers/componentDialog');
 const AboutCodeDashboard = require('./controllers/aboutCodeDashboard');
 const AboutCodeBarChart = require('./controllers/aboutCodeBarChart');
 const AboutCodeJsTree = require('./controllers/aboutCodeJsTree');
-const AboutCodeClueDataTable = require('./controllers/aboutCodeClueDataTable');
+const AboutCodeScanDataDataTable = require('./controllers/aboutCodeScanDataDataTable');
 const AboutCodeComponentDataTable = require('./controllers/aboutCodeComponentDataTable');
 
 const fs = require('fs');
@@ -48,21 +48,21 @@ $(document).ready(() => {
   const barChart = new AboutCodeBarChart('#tab-barchart', aboutCodeDB)
     .on('bar-clicked', (attribute, value) => {
       // Show files that contain attribute value selected by user in bar chart
-      cluesTable.clearColumnFilters();
+      scanDataTable.clearColumnFilters();
       if (value !== 'No Value Detected') {
-        cluesTable.setColumnFilter(attribute, value);
+        scanDataTable.setColumnFilter(attribute, value);
       } else {
-        cluesTable.setColumnFilter(attribute, 'about_code_data_table_no_value_detected');
+        scanDataTable.setColumnFilter(attribute, 'about_code_data_table_no_value_detected');
       }
 
-      updateViewsByPath(cluesTable._selectedPath);
+      updateViewsByPath(scanDataTable._selectedPath);
 
       // This needs to be done only when the column is visible.
       // So we do it last to try our best
-      showClueButton.trigger('click');
+      showScanDataButton.trigger('click');
     });
 
-  const cluesTable = new AboutCodeClueDataTable('#tab-clues', aboutCodeDB);
+  const scanDataTable = new AboutCodeScanDataDataTable('#tab-scandata', aboutCodeDB);
 
   const componentsTable = new AboutCodeComponentDataTable('#tab-component', aboutCodeDB)
     .on('upload-clicked', (components) => {
@@ -97,13 +97,13 @@ $(document).ready(() => {
     });
 
   $(document).on('click', '#activate-filters-button', () => {
-    cluesTable.genFilters();
-    updateViewsByPath(cluesTable._selectedPath);
+    scanDataTable.genFilters();
+    updateViewsByPath(scanDataTable._selectedPath);
   });
 
   $(document).on('click', '#clear-filters-button', () => {
-    cluesTable.resetColumnFilters();
-    updateViewsByPath(cluesTable._selectedPath);
+    scanDataTable.resetColumnFilters();
+    updateViewsByPath(scanDataTable._selectedPath);
   });
 
   const splitter = new Splitter('#leftCol', '#rightCol')
@@ -115,7 +115,7 @@ $(document).ready(() => {
   // Defines DOM element constants for sidebar buttons.
   const saveSQLiteFileButton = $('#save-file');
   const openSQLiteFileButton = $('#open-file');
-  const showClueButton = $('#show-tab-clues');
+  const showScanDataButton = $('#show-tab-scandata');
   const showComponentButton = $('#show-tab-component');
   const showBarChartButton = $('#show-tab-barchart');
   const showDashboardButton = $('#show-tab-dashboard');
@@ -126,10 +126,10 @@ $(document).ready(() => {
   // Save a SQLite Database file
   saveSQLiteFileButton.click(saveSQLite);
 
-  // Show clue DataTable. Hide node view and component summary table
-  showClueButton.click(() => {
+  // Show ScanData DataTable. Hide node view and component summary table
+  showScanDataButton.click(() => {
     splitter.show();
-    cluesTable.redraw();
+    scanDataTable.redraw();
   });
 
   // Show component summary table. Hide DataTable and node view
@@ -154,7 +154,7 @@ $(document).ready(() => {
     shell.openExternal(evt.target.href);
   });
 
-  ipcRenderer.on('table-view', () => showClueButton.trigger('click'));
+  ipcRenderer.on('table-view', () => showScanDataButton.trigger('click'));
   ipcRenderer.on('component-summary-view', () => showComponentButton.trigger('click'));
   ipcRenderer.on('open-SQLite', () => openSQLiteFileButton.trigger('click'));
   ipcRenderer.on('chart-summary-view', () => showBarChartButton.trigger('click'));
@@ -169,12 +169,12 @@ $(document).ready(() => {
 
   function updateViewsByPath(path) {
     // Update all the views with the given path string
-    cluesTable.columns(0).search(path);
+    scanDataTable.columns(0).search(path);
 
     componentDialog.selectedPath(path);
     dejaCodeExportDialog.selectedPath(path);
     jstree.selectedPath(path);
-    cluesTable.selectedPath(path);
+    scanDataTable.selectedPath(path);
     componentsTable.selectedPath(path);
     dashboard.selectedPath(path);
     barChart.selectedPath(path);
@@ -230,13 +230,13 @@ $(document).ready(() => {
       .then(() => {
         const currFile = aboutCodeDB.sequelize.options.storage;
         document.title = 'AboutCode Manager - ' + path.basename(currFile);
-        cluesTable.clearColumnFilters();
+        scanDataTable.clearColumnFilters();
 
         // update all views with the new database.
         componentDialog.db(aboutCodeDB);
         dejaCodeExportDialog.db(aboutCodeDB);
         jstree.db(aboutCodeDB);
-        cluesTable.db(aboutCodeDB);
+        scanDataTable.db(aboutCodeDB);
         componentsTable.db(aboutCodeDB);
         dashboard.db(aboutCodeDB);
         barChart.db(aboutCodeDB);
@@ -395,7 +395,7 @@ $(document).ready(() => {
         }
       });
 
-      const clueFilesPromise = aboutCodeDB.findAll({
+      const scanDataFilesPromise = aboutCodeDB.findAll({
         attributes: {
           exclude: ['id', 'createdAt', 'updatedAt']
         }
@@ -414,15 +414,15 @@ $(document).ready(() => {
       });
 
       Promise.all([scanCodeInfoPromise, aboutCodeInfoPromise,
-        filesCountPromise, clueFilesPromise, componentsPromise])
-        .then(([scanCodeInfo, aboutCodeInfo, filesCount, clueFiles, components]) => {
+        filesCountPromise, scanDataFilesPromise, componentsPromise])
+        .then(([scanCodeInfo, aboutCodeInfo, filesCount, scanDataFiles, components]) => {
           const json = {
             aboutcode_manager_notice: aboutCodeInfo.aboutcode_manager_notice,
             aboutcode_manager_version: aboutCodeInfo.aboutcode_manager_version,
             scancode_version: scanCodeInfo.scancode_version,
             scancode_options: scanCodeInfo.scancode_options,
             files_count: filesCount,
-            files: clueFiles,
+            files: scanDataFiles,
             components: components
           };
 

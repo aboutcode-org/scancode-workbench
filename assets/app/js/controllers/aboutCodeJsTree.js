@@ -18,7 +18,7 @@ const Controller = require('./controller');
 
 /**
  * The view responsible for displaying the jsTree representing file paths in the
- * ScanCode clue data
+ * ScanCode Scan data
  */
 class AboutCodeJsTree extends Controller {
   constructor(jsTreeId, aboutCodeDB) {

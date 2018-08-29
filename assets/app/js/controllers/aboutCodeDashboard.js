@@ -34,7 +34,7 @@ const LEGEND_LIMIT = 8;
 
 /**
  * The view responsible for displaying the summary information from ScanCode
- * clue data
+ * Scan data
  */
 class AboutCodeDashboard extends Controller {
   constructor(dashboardId, aboutCodeDB) {

@@ -19,7 +19,7 @@ const Utils = require('../helpers/utils');
 const Controller = require('./controller');
 
 // There must be a table element within the container element with this class
-const CLUES_TABLE = 'table.clues-table';
+const SCANDATA_TABLE = 'table.scandata-table';
 
 const HAS_A_VALUE =  'about_code_data_table_has_a_value';
 
@@ -27,9 +27,9 @@ const NO_VALUE_DETECTED =  'about_code_data_table_no_value_detected';
 
 /**
  * The view responsible for displaying the DataTable containing the ScanCode
- * clue data
+ * Scan data
  */
-class AboutCodeClueDataTable extends Controller {
+class AboutCodeScanDataDataTable extends Controller {
   constructor(containerId, aboutCodeDB) {
     super(containerId, aboutCodeDB);
   }
@@ -59,8 +59,8 @@ class AboutCodeClueDataTable extends Controller {
   }
 
   clearColumnFilters() {
-    $.each(AboutCodeClueDataTable.TABLE_COLUMNS, (i, column) => {
-      const columnSelect = $(`select#clue-${column.name}`);
+    $.each(AboutCodeScanDataDataTable.TABLE_COLUMNS, (i, column) => {
+      const columnSelect = $(`select#scandata-${column.name}`);
       columnSelect.val('');
       this.dataTable()
         .column(`${column.name}:name`)
@@ -69,12 +69,12 @@ class AboutCodeClueDataTable extends Controller {
   }
 
   setColumnFilter(columnName, value) {
-    // Get the clue table column and make sure it's visible
+    // Get the ScanData table column and make sure it's visible
     const column = this.dataTable().column(`${columnName}:name`);
     column.visible(true);
 
     // Get the column's filter select box
-    const select = $(`select#clue-${columnName}`);
+    const select = $(`select#scandata-${columnName}`);
     select.empty().append(`<option value="">All</option>`);
 
     // Add the chart value options and select it.
@@ -87,7 +87,7 @@ class AboutCodeClueDataTable extends Controller {
   }
 
   dataTableSelector() {
-    return `${this.id()} ${CLUES_TABLE}`;
+    return `${this.id()} ${SCANDATA_TABLE}`;
   }
 
   dataTable() {
@@ -97,7 +97,7 @@ class AboutCodeClueDataTable extends Controller {
 
     // Adds a footer for each column. This needs to be done before creating
     // the DataTable
-    const cells = $.map(AboutCodeClueDataTable.TABLE_COLUMNS, () => '<td></td>').join('');
+    const cells = $.map(AboutCodeScanDataDataTable.TABLE_COLUMNS, () => '<td></td>').join('');
     $(this.dataTableSelector()).append('<tfoot><tr>' + cells + '</tr></tfoot>');
 
     this._dataTable = $(this.dataTableSelector()).DataTable({
@@ -105,7 +105,7 @@ class AboutCodeClueDataTable extends Controller {
       processing: true,
       ajax: (dataTablesInput, dataTablesCallback) =>
         this._query(dataTablesInput, dataTablesCallback),
-      columns: AboutCodeClueDataTable.TABLE_COLUMNS,
+      columns: AboutCodeScanDataDataTable.TABLE_COLUMNS,
       fixedColumns: { leftColumns: 1 },
       colResize: true,
       scrollX: true,
@@ -132,50 +132,50 @@ class AboutCodeClueDataTable extends Controller {
           // Hide all columns except Path
           extend: 'colvisGroup',
           text: 'Hide all',
-          show: AboutCodeClueDataTable.LOCATION_COLUMN
+          show: AboutCodeScanDataDataTable.LOCATION_COLUMN
             .map((column) => `${column.name}:name`),
-          hide: AboutCodeClueDataTable.TABLE_COLUMNS
-            .filter((column) => AboutCodeClueDataTable.LOCATION_COLUMN.indexOf(column) < 0)
+          hide: AboutCodeScanDataDataTable.TABLE_COLUMNS
+            .filter((column) => AboutCodeScanDataDataTable.LOCATION_COLUMN.indexOf(column) < 0)
             .map((column) => `${column.name}:name`)
         },
         {
           // Show only origin columns
           extend: 'colvisGroup',
           text: 'Origin info',
-          show: AboutCodeClueDataTable.ORIGIN_GROUP
+          show: AboutCodeScanDataDataTable.ORIGIN_GROUP
             .map((column) => `${column.name}:name`),
-          hide: AboutCodeClueDataTable.TABLE_COLUMNS
-            .filter((column) => AboutCodeClueDataTable.ORIGIN_GROUP.indexOf(column) < 0)
+          hide: AboutCodeScanDataDataTable.TABLE_COLUMNS
+            .filter((column) => AboutCodeScanDataDataTable.ORIGIN_GROUP.indexOf(column) < 0)
             .map((column) => `${column.name}:name`)
         },
         {
           // Show only copyright columns
           extend: 'colvisGroup',
           text: 'Copyright info',
-          show: AboutCodeClueDataTable.COPYRIGHT_GROUP
+          show: AboutCodeScanDataDataTable.COPYRIGHT_GROUP
             .map((column) => `${column.name}:name`),
-          hide: AboutCodeClueDataTable.TABLE_COLUMNS
-            .filter((column) => AboutCodeClueDataTable.COPYRIGHT_GROUP.indexOf(column) < 0)
+          hide: AboutCodeScanDataDataTable.TABLE_COLUMNS
+            .filter((column) => AboutCodeScanDataDataTable.COPYRIGHT_GROUP.indexOf(column) < 0)
             .map((column) => `${column.name}:name`)
         },
         {
           // Show only license columns
           extend: 'colvisGroup',
           text: 'License info',
-          show: AboutCodeClueDataTable.LICENSE_GROUP
+          show: AboutCodeScanDataDataTable.LICENSE_GROUP
             .map((column) => `${column.name}:name`),
-          hide: AboutCodeClueDataTable.TABLE_COLUMNS
-            .filter((column) => AboutCodeClueDataTable.LICENSE_GROUP.indexOf(column) < 0)
+          hide: AboutCodeScanDataDataTable.TABLE_COLUMNS
+            .filter((column) => AboutCodeScanDataDataTable.LICENSE_GROUP.indexOf(column) < 0)
             .map((column) => `${column.name}:name`)
         },
         {
           // Show only package columns
           extend: 'colvisGroup',
           text: 'Package info',
-          show: AboutCodeClueDataTable.PACKAGE_GROUP
+          show: AboutCodeScanDataDataTable.PACKAGE_GROUP
             .map((column) => `${column.name}:name`),
-          hide: AboutCodeClueDataTable.TABLE_COLUMNS
-            .filter((column) => AboutCodeClueDataTable.PACKAGE_GROUP.indexOf(column) < 0)
+          hide: AboutCodeScanDataDataTable.TABLE_COLUMNS
+            .filter((column) => AboutCodeScanDataDataTable.PACKAGE_GROUP.indexOf(column) < 0)
             .map((column) => `${column.name}:name`)
         }
       ],
@@ -318,7 +318,7 @@ class AboutCodeClueDataTable extends Controller {
     footer.append(clearFiltersButton);
 
     this.dataTable().columns().every(function (columnIndex) {
-      const columnInfo = AboutCodeClueDataTable.TABLE_COLUMNS[columnIndex];
+      const columnInfo = AboutCodeScanDataDataTable.TABLE_COLUMNS[columnIndex];
 
       if ('skipFilter' in columnInfo && columnInfo.skipFilter) {
         return;
@@ -328,7 +328,7 @@ class AboutCodeClueDataTable extends Controller {
       const footer = $(column.footer());
       const columnName = columnInfo.name;
 
-      const select = $(`<select id="clue-${columnName}"></select>`)
+      const select = $(`<select id="scandata-${columnName}"></select>`)
         .on('change', function () {
           const val = $(this).val();
           column
@@ -345,8 +345,8 @@ class AboutCodeClueDataTable extends Controller {
   }
 
   resetColumnFilters() {
-    $.each(AboutCodeClueDataTable.TABLE_COLUMNS, (i, column) => {
-      const columnSelect = $(`select#clue-${column.name}`);
+    $.each(AboutCodeScanDataDataTable.TABLE_COLUMNS, (i, column) => {
+      const columnSelect = $(`select#scandata-${column.name}`);
       columnSelect.empty();
       columnSelect.val('');
       this.dataTable()
@@ -362,7 +362,7 @@ class AboutCodeClueDataTable extends Controller {
     const that = this;
 
     this.dataTable().columns().every(function (columnIndex) {
-      const columnInfo = AboutCodeClueDataTable.TABLE_COLUMNS[columnIndex];
+      const columnInfo = AboutCodeScanDataDataTable.TABLE_COLUMNS[columnIndex];
       const currentColumn = that.dataTable().columns(columnIndex);
 
       if ('skipFilter' in columnInfo && columnInfo.skipFilter) {
@@ -380,7 +380,7 @@ class AboutCodeClueDataTable extends Controller {
 
       footer.empty();
 
-      const select = $('#clue-' + columnName)
+      const select = $('#scandata-' + columnName)
         .empty()
         .on('change', function () {
           const val = $(this).val();
@@ -426,43 +426,43 @@ class AboutCodeClueDataTable extends Controller {
 
   // Define DataTable columns
   static get TABLE_COLUMNS() {
-    return AboutCodeClueDataTable.LOCATION_COLUMN.concat(
-      AboutCodeClueDataTable.COPYRIGHT_COLUMNS,
-      AboutCodeClueDataTable.LICENSE_COLUMNS,
-      AboutCodeClueDataTable.EMAIL_COLUMNS,
-      AboutCodeClueDataTable.URL_COLUMNS,
-      AboutCodeClueDataTable.FILE_COLUMNS,
-      AboutCodeClueDataTable.PACKAGE_COLUMNS);
+    return AboutCodeScanDataDataTable.LOCATION_COLUMN.concat(
+      AboutCodeScanDataDataTable.COPYRIGHT_COLUMNS,
+      AboutCodeScanDataDataTable.LICENSE_COLUMNS,
+      AboutCodeScanDataDataTable.EMAIL_COLUMNS,
+      AboutCodeScanDataDataTable.URL_COLUMNS,
+      AboutCodeScanDataDataTable.FILE_COLUMNS,
+      AboutCodeScanDataDataTable.PACKAGE_COLUMNS);
   }
 
   static get ORIGIN_COLUMNS() {
-    return $.grep(AboutCodeClueDataTable.TABLE_COLUMNS, (column) => {
-      return $.inArray(column.name, AboutCodeClueDataTable.ORIGIN_COLUMN_NAMES) >= 0;
+    return $.grep(AboutCodeScanDataDataTable.TABLE_COLUMNS, (column) => {
+      return $.inArray(column.name, AboutCodeScanDataDataTable.ORIGIN_COLUMN_NAMES) >= 0;
     });
   }
 
   static get LICENSE_GROUP() {
-    return AboutCodeClueDataTable.LOCATION_COLUMN
-      .concat(AboutCodeClueDataTable.LICENSE_COLUMNS);
+    return AboutCodeScanDataDataTable.LOCATION_COLUMN
+      .concat(AboutCodeScanDataDataTable.LICENSE_COLUMNS);
   }
 
   static get COPYRIGHT_GROUP() {
-    return AboutCodeClueDataTable.LOCATION_COLUMN
-      .concat(AboutCodeClueDataTable.COPYRIGHT_COLUMNS);
+    return AboutCodeScanDataDataTable.LOCATION_COLUMN
+      .concat(AboutCodeScanDataDataTable.COPYRIGHT_COLUMNS);
   }
 
   static get ORIGIN_GROUP() {
-    return AboutCodeClueDataTable.LOCATION_COLUMN
-      .concat(AboutCodeClueDataTable.ORIGIN_COLUMNS);
+    return AboutCodeScanDataDataTable.LOCATION_COLUMN
+      .concat(AboutCodeScanDataDataTable.ORIGIN_COLUMNS);
   }
 
   static get PACKAGE_GROUP() {
-    return AboutCodeClueDataTable.LOCATION_COLUMN
-      .concat(AboutCodeClueDataTable.PACKAGE_COLUMNS);
+    return AboutCodeScanDataDataTable.LOCATION_COLUMN
+      .concat(AboutCodeScanDataDataTable.PACKAGE_COLUMNS);
   }
 }
 
-AboutCodeClueDataTable.LOCATION_COLUMN =
+AboutCodeScanDataDataTable.LOCATION_COLUMN =
     [
       {
         'data': 'path',
@@ -473,7 +473,7 @@ AboutCodeClueDataTable.LOCATION_COLUMN =
       }
     ];
 
-AboutCodeClueDataTable.COPYRIGHT_COLUMNS =
+AboutCodeScanDataDataTable.COPYRIGHT_COLUMNS =
     [
       {
         'data': function (row) {
@@ -522,7 +522,7 @@ AboutCodeClueDataTable.COPYRIGHT_COLUMNS =
       }
     ];
 
-AboutCodeClueDataTable.LICENSE_COLUMNS =
+AboutCodeScanDataDataTable.LICENSE_COLUMNS =
     [
       {
         'data': 'license_expressions[<hr/>]',
@@ -608,7 +608,7 @@ AboutCodeClueDataTable.LICENSE_COLUMNS =
       }
     ];
 
-AboutCodeClueDataTable.EMAIL_COLUMNS =
+AboutCodeScanDataDataTable.EMAIL_COLUMNS =
     [
       {
         'data': 'email[<hr/>]',
@@ -631,7 +631,7 @@ AboutCodeClueDataTable.EMAIL_COLUMNS =
       }
     ];
 
-AboutCodeClueDataTable.URL_COLUMNS =
+AboutCodeScanDataDataTable.URL_COLUMNS =
     [
       {
         'data': 'url',
@@ -656,7 +656,7 @@ AboutCodeClueDataTable.URL_COLUMNS =
       }
     ];
 
-AboutCodeClueDataTable.FILE_COLUMNS =
+AboutCodeScanDataDataTable.FILE_COLUMNS =
     [
       {
         'data': 'type',
@@ -772,7 +772,7 @@ AboutCodeClueDataTable.FILE_COLUMNS =
       }
     ];
 
-AboutCodeClueDataTable.PACKAGE_COLUMNS =
+AboutCodeScanDataDataTable.PACKAGE_COLUMNS =
     [
       {
         'data': 'packages_type',
@@ -828,7 +828,7 @@ AboutCodeClueDataTable.PACKAGE_COLUMNS =
       },
     ];
 
-AboutCodeClueDataTable.ORIGIN_COLUMN_NAMES =
+AboutCodeScanDataDataTable.ORIGIN_COLUMN_NAMES =
     [
       'copyright_statements',
       'license_short_name',
@@ -837,4 +837,4 @@ AboutCodeClueDataTable.ORIGIN_COLUMN_NAMES =
       'url'
     ];
 
-module.exports = AboutCodeClueDataTable;
+module.exports = AboutCodeScanDataDataTable;
