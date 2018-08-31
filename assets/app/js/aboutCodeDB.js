@@ -82,25 +82,25 @@ class AboutCodeDB {
       .then((count) => count ? count.files_count : 0);
   }
 
-  // Uses the components table to do a findAll query
-  findAllComponents(query) {
-    return this.sync.then((db) => db.Component.findAll(query));
+  // Uses the conclusions table to do a findAll query
+  findAllConclusions(query) {
+    return this.sync.then((db) => db.Conclusion.findAll(query));
   }
 
-  // Uses the components table to do a findOne query
-  findComponent(query) {
-    return this.sync.then((db) => db.Component.findOne(query));
+  // Uses the conclusions table to do a findOne query
+  findConclusion(query) {
+    return this.sync.then((db) => db.Conclusion.findOne(query));
   }
 
-  // Uses the components table to create or set a component
-  setComponent(component) {
-    return this.findComponent({ where: { path: component.path } })
-      .then((dbComponent) => {
-        if (dbComponent) {
-          return dbComponent.update(component);
+  // Uses the conclusions table to create or set a conclusion
+  setConclusion(conclusion) {
+    return this.findConclusion({ where: { path: conclusion.path } })
+      .then((dbConclusion) => {
+        if (dbConclusion) {
+          return dbConclusion.update(conclusion);
         }
         else {
-          return this.db.Component.create(component);
+          return this.db.Conclusion.create(conclusion);
         }
       });
   }
@@ -304,8 +304,8 @@ class AboutCodeDB {
         .then(() => this.db.Email.bulkCreate(this._addExtraFields(files, 'emails'), options))
         .then(() => this.db.Url.bulkCreate(this._addExtraFields(files, 'urls'), options))
         .then(() => this.sequelize.Promise.each(files, (file) => {
-          if (file.component) {
-            return this.db.Component.create(file.component, options);
+          if (file.conclusion) {
+            return this.db.Conclusion.create(file.conclusion, options);
           }
         }));
     });

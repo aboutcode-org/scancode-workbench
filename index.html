@@ -82,12 +82,12 @@
                 </button>
             </li>
             <li>
-                <button class="btn btn-sidebar" id="show-tab-clues" data-toggle="tab" data-target="#tab-clues" data-placement="right" title="Table View">
+                <button class="btn btn-sidebar" id="show-tab-scandata" data-toggle="tab" data-target="#tab-scandata" data-placement="right" title="Table View">
                     <i class="fa fa-table" aria-hidden="true"></i>
                 </button>
             </li>
             <li>
-                <button class="btn btn-sidebar" id="show-tab-component" data-toggle="tab" data-target="#tab-component" data-placement="right" title="Component Summary View">
+                <button class="btn btn-sidebar" id="show-tab-conclusion" data-toggle="tab" data-target="#tab-conclusion" data-placement="right" title="Conclusion View">
                     <i class="fa fa-list-ol" aria-hidden="true"></i>
                 </button>
             </li>
@@ -110,9 +110,9 @@
         <!-- Tab Bar -->
         <div class="tab-content split split-flex" id="rightCol">
 
-            <!-- Clue DataTable Tab-->
-            <div class="tab-pane container" id="tab-clues">
-                <table class="clues-table display table table-striped table-bordered dataTable no-footer" cellspacing="0" width="100%" ></table>
+            <!-- ScanData DataTable Tab-->
+            <div class="tab-pane container" id="tab-scandata">
+                <table class="scandata-table display table table-striped table-bordered dataTable no-footer" cellspacing="0" width="100%" ></table>
             </div>
 
             <!-- Dashboard Tab -->
@@ -202,10 +202,10 @@
                 </div>
             </div>
 
-            <!-- Component DataTable Tab -->
-            <div class="tab-pane container" id="tab-component">
-                <div class="components-table-container">
-                    <table class="components-table display table table-striped table-bordered dataTable no-footer" cellspacing="0" width="100%" ></table>
+            <!-- Conclusion DataTable Tab -->
+            <div class="tab-pane container" id="tab-conclusion">
+                <div class="conclusions-table-container">
+                    <table class="conclusions-table display table table-striped table-bordered dataTable no-footer" cellspacing="0" width="100%" ></table>
                 </div>
             </div>
 
@@ -228,18 +228,18 @@
 
     <!-- TODO: Change the name of this -->
     <!-- Node View Modal -->
-    <div class="modal fade action-create" id="componentDialog" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal fade action-create" id="conclusionDialog" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" id="component-exit" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <button type="button" class="close" data-dismiss="modal" id="conclusion-exit" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                     <h3 class="modal-title">Modal title</h3>
                 </div>
                 <div class="modal-body">
                     <form>
                         <fieldset class="form-group">
-                            <label for="component-status" data-toggle="tooltip" data-placement="top" title="The status can be used to communicate the current stage of the review process and whether additional review is required.">Status</label>
-                            <select class="form-control status" id="component-status" name="component-status" type="text">
+                            <label for="conclusion-status" data-toggle="tooltip" data-placement="top" title="The status can be used to communicate the current stage of the review process and whether additional review is required.">Status</label>
+                            <select class="form-control status" id="conclusion-status" name="conclusion-status" type="text">
                                 <option value="Analyzed">Analyzed</option>
                                 <option value="Attention">Needs Attention</option>
                                 <option value="Original">Original Code</option>
@@ -247,100 +247,100 @@
                             </select>
                         </fieldset>
                         <fieldset class="form-group">
-                            <label for="component-name" data-toggle="tooltip" data-placement="top" title="Name by which the component or package is commonly referenced.">Name</label>
-                            <input type="text" class="form-control" id="component-name" name="component-name" placeholder="Enter component or package name">
+                            <label for="conclusion-name" data-toggle="tooltip" data-placement="top" title="Name by which the file or package is commonly referenced.">Name</label>
+                            <input type="text" class="form-control" id="conclusion-name" name="conclusion-name" placeholder="Enter conclusion name">
                         </fieldset>
                         <fieldset class="form-group">
-                            <label for="component-version" data-toggle="tooltip" data-placement="top" title="Identifies a specific version of a component. The combination of name + version uniquely identifies a component. If the version is (nv) or blank, it signifies an unstated/unknown version (or it indicates that version does not apply to the component), and it does not imply that the information in this component definition applies to any or all possible versions of the component.">Version</label>
-                            <input type="text" class="form-control" id="component-version" name="component-version" placeholder="Enter version">
+                            <label for="conclusion-version" data-toggle="tooltip" data-placement="top" title="Identifies a specific version of a conclusion. The combination of name + version uniquely identifies a conclusion. If the version is (nv) or blank, it signifies an unstated/unknown version (or it indicates that version does not apply to the conclusion), and it does not imply that the information in this conclusion definition applies to any or all possible versions of the conclusion.">Version</label>
+                            <input type="text" class="form-control" id="conclusion-version" name="conclusion-version" placeholder="Enter version">
                         </fieldset>
                         <fieldset class="form-group">
-                            <label for="component-license-expression" data-toggle="tooltip" data-placement="top" title="The license expression that applies to a component.">License Expression</label>
-                            <select data-hide-on-select="true" class="form-control " id="component-license-expression" name="component-license-expression" type="text"></select>
+                            <label for="conclusion-license-expression" data-toggle="tooltip" data-placement="top" title="The license expression that applies to a conclusion.">License Expression</label>
+                            <select data-hide-on-select="true" class="form-control " id="conclusion-license-expression" name="conclusion-license-expression" type="text"></select>
                         </fieldset>
                         <fieldset class="form-group">
-                            <label for="component-owner" data-toggle="tooltip" data-placement="top" title="The unique user-maintained name of the author, custodian, or provider of one or more software objects (licenses, components, products).">Owner</label>
-                            <select data-hide-on-select="true" class="form-control" id="component-owner" name="component-owner" type="text"></select>
+                            <label for="conclusion-owner" data-toggle="tooltip" data-placement="top" title="The unique user-maintained name of the author, custodian, or provider of one or more software objects (licenses, products).">Owner</label>
+                            <select data-hide-on-select="true" class="form-control" id="conclusion-owner" name="conclusion-owner" type="text"></select>
                         </fieldset>
                         <fieldset class="form-group">
-                            <label for="component-copyright" data-toggle="tooltip" data-placement="top" title="The copyright statement(s) that pertain to this component, as contained in the source or as specified in an associated file.">Copyright</label>
-                            <select data-hide-on-select="true" class="form-control" id="component-copyright" name="component-copyright" type="text"></select>
+                            <label for="conclusion-copyright" data-toggle="tooltip" data-placement="top" title="The copyright statement(s) that pertain to this conclusion, as contained in the source or as specified in an associated file.">Copyright</label>
+                            <select data-hide-on-select="true" class="form-control" id="conclusion-copyright" name="conclusion-copyright" type="text"></select>
                         </fieldset>
                         <fieldset>
-                            <label data-toggle="tooltip" data-placement="top" title="Indicates that the component is a copy of third-party code that has been modified by the product team.">Modified</label>
+                            <label data-toggle="tooltip" data-placement="top" title="Indicates that the conclusion is a copy of third-party code that has been modified by the product team.">Modified</label>
                             <div class="radio">
-                                <label for="component-modified-yes" class="radio-inline">
-                                    <input name="component-modified" type="radio" id="component-modified-yes" value="yes">Yes
+                                <label for="conclusion-modified-yes" class="radio-inline">
+                                    <input name="conclusion-modified" type="radio" id="conclusion-modified-yes" value="yes">Yes
                                 </label>
-                                <label for="component-modified-no" class="radio-inline">
-                                    <input name="component-modified" type="radio" id="component-modified-no" value="no">No
+                                <label for="conclusion-modified-no" class="radio-inline">
+                                    <input name="conclusion-modified" type="radio" id="conclusion-modified-no" value="no">No
                                 </label>
                             </div>
                         </fieldset>
                         <fieldset>
-                            <label data-toggle="tooltip" data-placement="top" title="Indicates if the component is deployed.">Deployed</label>
+                            <label data-toggle="tooltip" data-placement="top" title="Indicates if the conclusion is deployed.">Deployed</label>
                             <div class="radio">
-                                <label for="component-deployed-yes" class="radio-inline">
-                                    <input name="component-deployed" type="radio" id="component-deployed-yes" value="yes">Yes
+                                <label for="conclusion-deployed-yes" class="radio-inline">
+                                    <input name="conclusion-deployed" type="radio" id="conclusion-deployed-yes" value="yes">Yes
                                 </label>
-                                <label for="component-deployed-no" class="radio-inline">
-                                    <input name="component-deployed" type="radio" id="component-deployed-no" value="no">No
+                                <label for="conclusion-deployed-no" class="radio-inline">
+                                    <input name="conclusion-deployed" type="radio" id="conclusion-deployed-no" value="no">No
                                 </label>
                             </div>
                         </fieldset>
                         <fieldset class="form-group">
-                            <label for="component-code-type" data-toggle="tooltip" data-placement="top" title="Contents of the package (Source, Binary, Mixed, or Documentation).">Code Type</label>
-                            <select data-hide-on-select="true" class="form-control" id="component-code-type" name="component-code-type" type="text"></select>
+                            <label for="conclusion-code-type" data-toggle="tooltip" data-placement="top" title="Contents of the package (Source, Binary, Mixed, or Documentation).">Code Type</label>
+                            <select data-hide-on-select="true" class="form-control" id="conclusion-code-type" name="conclusion-code-type" type="text"></select>
                         </fieldset>
                         <fieldset class="form-group">
-                            <label for="component-notes" data-toggle="tooltip" data-placement="top" title="Comments that might provide additional insight into the findings, Remediation or options available.">Notes</label>
-                            <textarea class="form-control" id="component-notes" name="component-notes" rows="3"></textarea>
+                            <label for="conclusion-notes" data-toggle="tooltip" data-placement="top" title="Comments that might provide additional insight into the findings, Remediation or options available.">Notes</label>
+                            <textarea class="form-control" id="conclusion-notes" name="conclusion-notes" rows="3"></textarea>
                         </fieldset>
                         <fieldset class="form-group">
-                            <label for="component-feature" data-toggle="tooltip" data-placement="top" title="Identifies a feature or module within the codebase, such as UI or Application and used to group components for reporting within a software inventory or BOM.">Feature</label>
-                            <input type="text" class="form-control" id="component-feature" name="component-feature" placeholder="Enter feature">
+                            <label for="conclusion-feature" data-toggle="tooltip" data-placement="top" title="Identifies a feature or module within the codebase, such as UI or Application and used to group conclusions for reporting within a software inventory or BOM.">Feature</label>
+                            <input type="text" class="form-control" id="conclusion-feature" name="conclusion-feature" placeholder="Enter feature">
                         </fieldset>
                         <fieldset class="form-group">
-                            <label for="component-purpose" data-toggle="tooltip" data-placement="top" title="Identifies the purpose or usage of a component, such as Build, Test or Core.">Purpose</label>
-                            <input type="text" class="form-control" id="component-purpose" name="component-purpose" placeholder="Enter purpose">
+                            <label for="conclusion-purpose" data-toggle="tooltip" data-placement="top" title="Identifies the purpose or usage of a conclusion, such as Build, Test or Core.">Purpose</label>
+                            <input type="text" class="form-control" id="conclusion-purpose" name="conclusion-purpose" placeholder="Enter purpose">
                         </fieldset>
                         <fieldset class="form-group">
-                            <label for="component-language" data-toggle="tooltip" data-placement="top" title="The primary programming language associated with the component.">Programming Language</label>
-                            <select data-hide-on-select="true" class="form-control" id="component-language" name="component-language" type="text"></select>
+                            <label for="conclusion-language" data-toggle="tooltip" data-placement="top" title="The primary programming language associated with the conclusion.">Programming Language</label>
+                            <select data-hide-on-select="true" class="form-control" id="conclusion-language" name="conclusion-language" type="text"></select>
                         </fieldset>
                         <fieldset class="form-group">
-                            <label for="component-homepage-url" data-toggle="tooltip" data-placement="top" title="Homepage URL for the component.">Homepage URL</label>
-                            <select data-hide-on-select="true" class="form-control" id="component-homepage-url" name="component-homepage-url" type="text"></select>
+                            <label for="conclusion-homepage-url" data-toggle="tooltip" data-placement="top" title="Homepage URL for the conclusion.">Homepage URL</label>
+                            <select data-hide-on-select="true" class="form-control" id="conclusion-homepage-url" name="conclusion-homepage-url" type="text"></select>
                         </fieldset>
                         <fieldset class="form-group">
-                            <label for="component-download-url" data-toggle="tooltip" data-placement="top" title="The download URL for obtaining the package.">Download URL</label>
-                            <select data-hide-on-select="true" class="form-control" id="component-download-url" name="component-download-url" type="text"></select>
+                            <label for="conclusion-download-url" data-toggle="tooltip" data-placement="top" title="The download URL for obtaining the package.">Download URL</label>
+                            <select data-hide-on-select="true" class="form-control" id="conclusion-download-url" name="conclusion-download-url" type="text"></select>
                         </fieldset>
                         <fieldset class="form-group">
-                            <label for="component-license-url" data-toggle="tooltip" data-placement="top" title="Where available, the URL to the license text.">License URL</label>
-                            <select data-hide-on-select="true" class="form-control" id="component-license-url" name="component-license-url" type="text"></select>
+                            <label for="conclusion-license-url" data-toggle="tooltip" data-placement="top" title="Where available, the URL to the license text.">License URL</label>
+                            <select data-hide-on-select="true" class="form-control" id="conclusion-license-url" name="conclusion-license-url" type="text"></select>
                         </fieldset>
                         <fieldset class="form-group">
-                            <label for="component-notice-url" data-toggle="tooltip" data-placement="top" title="A URL that contains notice text for a component.">Notice URL</label>
-                            <select data-hide-on-select="true" class="form-control" id="component-notice-url" name="component-notice-url" type="text"></select>
+                            <label for="conclusion-notice-url" data-toggle="tooltip" data-placement="top" title="A URL that contains notice text for a conclusion.">Notice URL</label>
+                            <select data-hide-on-select="true" class="form-control" id="conclusion-notice-url" name="conclusion-notice-url" type="text"></select>
                         </fieldset>
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal" id="component-close">Close</button>
-                    <button type="button" class="btn btn-danger" data-dismiss="modal" id="component-delete">Delete Component</button>
-                    <button type="button" class="btn btn-primary" id="component-save">Save changes</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal" id="conclusion-close">Close</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal" id="conclusion-delete">Delete Conclusion</button>
+                    <button type="button" class="btn btn-primary" id="conclusion-save">Save changes</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <!--Component Modal -->
-    <div class="modal fade" id="componentExportModal" tabindex="-1" role="dialog" aria-labelledby="componentExportModalLabel">
+    <!--Conclusion Modal -->
+    <div class="modal fade" id="conclusionExportModal" tabindex="-1" role="dialog" aria-labelledby="conclusionExportModalLabel">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title" id="myModalLabel">Upload Components to DejaCode</h4>
+                    <h4 class="modal-title" id="myModalLabel">Upload Conclusions to DejaCode</h4>
                 </div>
                 <div class="modal-body">
                     <form class="horizontal">
@@ -366,7 +366,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary" id="componentSubmit">Submit</button>
+                    <button type="submit" class="btn btn-primary" id="conclusionSubmit">Submit</button>
                 </div>
             </div>
          </div>
@@ -383,10 +383,10 @@
                 <div class="modal-body">
                     <h2>Overview</h2>
                     <p>AboutCode Manager allows you take the scan results
-                        from the ScanCode and create a component-level
+                        from the ScanCode and create a conclusion-level
                         software inventory. The conclusions (Concluded License,
                         Concluded Owner, etc.) you make when creating your
-                        component can be exported as a JSON file or saved as
+                        conclusion can be exported as a JSON file or saved as
                         SQLite file. For more information, see our
                         <a href="https://github.com/nexB/aboutcode-manager/wiki">wiki</a>.
                     </p>

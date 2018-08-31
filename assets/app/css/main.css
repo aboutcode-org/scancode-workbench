@@ -140,7 +140,7 @@ body {
   fill: black;
 }
 
-.clues rect {
+.scandata rect {
   x: 0;
   y: -10;
   height: 20px;
@@ -149,17 +149,17 @@ body {
   stroke-width:3
 }
 
-.clue-filename rect {
+.scandata-filename rect {
   fill: gray;
   stroke: gray;
 }
 
-.clue-license rect {
+.scandata-license rect {
   fill: #3984b6;
   stroke: #3984b6;
 }
 
-.clue-copyright rect {
+.scandata-copyright rect {
   fill: #1d2e81;
   stroke: #1d2e81;
 }
@@ -173,7 +173,7 @@ body {
   overflow: hidden;
 }
 
-.component-status-dropdown { padding-left: 5px; }
+.conclusion-status-dropdown { padding-left: 5px; }
 
 .status-dropdown-menu { min-width: 110px; }
 
@@ -547,9 +547,9 @@ div.dataTables_scrollHead th:first-child {
 }
 
 /*---------------------------------------
-  Component DataTable
+  Conclusion DataTable
 -----------------------------------------*/
-.components-table-container {
+.conclusions-table-container {
   width: 100%;
   height: 100%;
 }

@@ -18,7 +18,7 @@ const Controller = require('./controller');
 
 /**
  * The view responsible for displaying the jsTree representing file paths in the
- * ScanCode clue data
+ * ScanCode Scan data
  */
 class AboutCodeJsTree extends Controller {
   constructor(jsTreeId, aboutCodeDB) {
@@ -82,8 +82,8 @@ class AboutCodeJsTree extends Controller {
         'contextmenu': {
           'items': (node) => {
             return {
-              'edit_component': {
-                'label': 'Edit Component',
+              'edit_conclusion': {
+                'label': 'Edit Conclusion',
                 'action': () => this.getHandler('node-edit')(node)
               }
             };

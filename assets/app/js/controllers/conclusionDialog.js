@@ -17,9 +17,9 @@
 const Controller = require('./controller');
 
 /**
- * The view responsible for displaying the Component modal dialog
+ * The view responsible for displaying the Conclusion modal dialog
  */
-class ComponentDialog extends Controller {
+class ConclusionDialog extends Controller {
   constructor(dialogId, aboutCodeDB) {
     super(dialogId, aboutCodeDB);
 
@@ -27,46 +27,46 @@ class ComponentDialog extends Controller {
     // TODO: Use nested ids to avoid collisions, e.g. #nodeModal .nodeModalLabel
     this.dialog = this.element();
     this.title = this.dialog.find('.modal-title');
-    this.status = this.dialog.find('#component-status');
-    this.name = this.dialog.find('#component-name');
-    this.license_expression = this.dialog.find('#component-license-expression');
-    this.owner = this.dialog.find('#component-owner');
-    this.copyright = this.dialog.find('#component-copyright');
-    this.deployed = this.dialog.find('input[name=component-deployed]');
-    this.modified = this.dialog.find('input[name=component-modified]');
-    this.codeType = this.dialog.find('#component-code-type');
-    this.notes = this.dialog.find('#component-notes');
-    this.feature = this.dialog.find('#component-feature');
-    this.purpose = this.dialog.find('#component-purpose');
-    this.language = this.dialog.find('#component-language');
-    this.version = this.dialog.find('#component-version');
-    this.homepageUrl = this.dialog.find('#component-homepage-url');
-    this.downloadUrl = this.dialog.find('#component-download-url');
-    this.licenseUrl = this.dialog.find('#component-license-url');
-    this.noticeUrl = this.dialog.find('#component-notice-url');
-    this.saveButton = this.dialog.find('button#component-save');
-    this.deleteButton = this.dialog.find('button#component-delete');
+    this.status = this.dialog.find('#conclusion-status');
+    this.name = this.dialog.find('#conclusion-name');
+    this.license_expression = this.dialog.find('#conclusion-license-expression');
+    this.owner = this.dialog.find('#conclusion-owner');
+    this.copyright = this.dialog.find('#conclusion-copyright');
+    this.deployed = this.dialog.find('input[name=conclusion-deployed]');
+    this.modified = this.dialog.find('input[name=conclusion-modified]');
+    this.codeType = this.dialog.find('#conclusion-code-type');
+    this.notes = this.dialog.find('#conclusion-notes');
+    this.feature = this.dialog.find('#conclusion-feature');
+    this.purpose = this.dialog.find('#conclusion-purpose');
+    this.language = this.dialog.find('#conclusion-language');
+    this.version = this.dialog.find('#conclusion-version');
+    this.homepageUrl = this.dialog.find('#conclusion-homepage-url');
+    this.downloadUrl = this.dialog.find('#conclusion-download-url');
+    this.licenseUrl = this.dialog.find('#conclusion-license-url');
+    this.noticeUrl = this.dialog.find('#conclusion-notice-url');
+    this.saveButton = this.dialog.find('button#conclusion-save');
+    this.deleteButton = this.dialog.find('button#conclusion-delete');
 
     // Define the buttons that can be used to close the dialog.
-    this.exitButton = this.dialog.find('button#component-exit');
-    this.closeButton = this.dialog.find('button#component-close');
+    this.exitButton = this.dialog.find('button#conclusion-exit');
+    this.closeButton = this.dialog.find('button#conclusion-close');
 
     // Make node view modal box draggable
     this.dialog.draggable({ handle: '.modal-header' });
     this.handlers = {};
-    this.saveButton.click(() => this._saveComponent());
-    this.deleteButton.click(() => this._deleteComponent());
+    this.saveButton.click(() => this._saveConclusion());
+    this.deleteButton.click(() => this._deleteConclusion());
 
     // Link each close button's click event to a method that checks for unsaved edits.
-    this.exitButton.click(() => this._closeComponent());
-    this.closeButton.click(() => this._closeComponent());
+    this.exitButton.click(() => this._closeConclusion());
+    this.closeButton.click(() => this._closeConclusion());
 
-    // Enables tooltips for component field labels
+    // Enables tooltips for conclusion field labels
     $('[data-toggle="tooltip"]').tooltip();
   }
 
   // Check whether the user has made any new edits.
-  _closeComponent() {
+  _closeConclusion() {
     // Retrieve the current form values, i.e., including edits not yet saved.
     this.currentSerialization = this.dialog.find('form').serialize();
 
@@ -76,28 +76,28 @@ class ComponentDialog extends Controller {
     }
   }
 
-  _saveComponent() {
+  _saveConclusion() {
     const path = this.title.text();
-    this._component(path)
-      .then((component) => {
+    this._conclusion(path)
+      .then((conclusion) => {
         return this.db().db.File
           .findOne({
             attributes: ['id'],
             where: { path: { $eq: path } }
           })
           .then((row) => {
-            // Set the file id on the component.
-            component.fileId = row.id;
-            return component;
+            // Set the file id on the conclusion.
+            conclusion.fileId = row.id;
+            return conclusion;
           });
       })
-      .then((component) => {
-        const modifiedValue = $('input[name=component-modified]:checked').val();
-        const deployedValue = $('input[name=component-deployed]:checked').val();
+      .then((conclusion) => {
+        const modifiedValue = $('input[name=conclusion-modified]:checked').val();
+        const deployedValue = $('input[name=conclusion-deployed]:checked').val();
 
         return {
           path: path,
-          fileId: component.fileId,
+          fileId: conclusion.fileId,
           review_status: this.status.val(),
           name: this.name.val(),
           license_expression: $.map(this.license_expression.val() || [], (license_expression) => {
@@ -121,46 +121,46 @@ class ComponentDialog extends Controller {
           notes: this.notes.val()
         };
       })
-      .then((component) => this.db().setComponent(component))
-      .then((component) => this.getHandler('save')(component));
+      .then((conclusion) => this.db().setConclusion(conclusion))
+      .then((conclusion) => this.getHandler('save')(conclusion));
     this.dialog.modal('hide');
   }
 
-  // Delete a created Component inside the Component Modal
-  _deleteComponent() {
+  // Delete a created Conclusion inside the Conclusion Modal
+  _deleteConclusion() {
     const id = this.title.text();
-    this.db().findComponent({ where: { path: id }})
-      .then((component) => {
-        if (component !== null) {
-          return component.destroy()
-            .then(() => this.getHandler('delete')(component));
+    this.db().findConclusion({ where: { path: id }})
+      .then((conclusion) => {
+        if (conclusion !== null) {
+          return conclusion.destroy()
+            .then(() => this.getHandler('delete')(conclusion));
         }
       });
   }
 
   // Populate modal input fields with suggestions from ScanCode results
   show(path) {
-    this._component(path)
-      .then((component) => {
+    this._conclusion(path)
+      .then((conclusion) => {
         this.title.text(path);
         return Promise.all([
-          this._setupStatus(component),
-          this._setupName(component),
-          this._setupVersion(component),
-          this._setupLicenseExpression(component),
-          this._setupCopyrights(component),
-          this._setupOwners(component),
-          this._setupLanguage(component),
-          this._setupHomepageUrl(component),
-          this._setupFeature(component),
-          this._setupPurpose(component),
-          this._setupCodeType(component),
-          this._setupModified(component),
-          this._setupDeployed(component),
-          this._setupDownloadUrl(component),
-          this._setupLicenseUrl(component),
-          this._setupNoticeUrl(component),
-          this._setupNotes(component)
+          this._setupStatus(conclusion),
+          this._setupName(conclusion),
+          this._setupVersion(conclusion),
+          this._setupLicenseExpression(conclusion),
+          this._setupCopyrights(conclusion),
+          this._setupOwners(conclusion),
+          this._setupLanguage(conclusion),
+          this._setupHomepageUrl(conclusion),
+          this._setupFeature(conclusion),
+          this._setupPurpose(conclusion),
+          this._setupCodeType(conclusion),
+          this._setupModified(conclusion),
+          this._setupDeployed(conclusion),
+          this._setupDownloadUrl(conclusion),
+          this._setupLicenseUrl(conclusion),
+          this._setupNoticeUrl(conclusion),
+          this._setupNotes(conclusion)
         ]);
       })
       .then(() => {
@@ -171,7 +171,7 @@ class ComponentDialog extends Controller {
         // the dialog or pressing the escape key.
         this.dialog.modal({ backdrop: 'static', keyboard: false });
 
-        // Retrieve any previously-saved values -- use below in _closeComponent()
+        // Retrieve any previously-saved values -- use below in _closeConclusion()
         // to compare with any new edits before closing the dialog.
         this.initialSerialization = this.dialog.find('form').serialize();
 
@@ -183,16 +183,16 @@ class ComponentDialog extends Controller {
       });
   }
 
-  _component(path) {
+  _conclusion(path) {
     return this.db()
-      .findComponent({ where: { path: path } })
-    // if the component doesn't exist return an object with only the path
-      .then((component) => component ? component : { path: path });
+      .findConclusion({ where: { path: path } })
+    // if the conclusion doesn't exist return an object with only the path
+      .then((conclusion) => conclusion ? conclusion : { path: path });
   }
 
-  _setupLicenseExpression(component) {
-    const saved = (component.license_expression || []).map((license_expression) => license_expression);
-    return this._licenseExpressionQuery(component.path, 'license_expression')
+  _setupLicenseExpression(conclusion) {
+    const saved = (conclusion.license_expression || []).map((license_expression) => license_expression);
+    return this._licenseExpressionQuery(conclusion.path, 'license_expression')
       .then((license_expressions) => license_expressions.concat(saved))
       .then((license_expressions) => {
         this.license_expression.html('').select2({
@@ -205,11 +205,11 @@ class ComponentDialog extends Controller {
       });
   }
 
-  _setupCopyrights(component) {
-    const saved = $.map((component.copyrights || []), (copyright) => {
+  _setupCopyrights(conclusion) {
+    const saved = $.map((conclusion.copyrights || []), (copyright) => {
       return copyright.statements;
     });
-    return this._copyrightQuery(component.path, 'statements')
+    return this._copyrightQuery(conclusion.path, 'statements')
       .then((copyright_statements) => copyright_statements.concat(saved))
       .then((copyright_statements) => {
         this.copyright.html('').select2({
@@ -222,9 +222,9 @@ class ComponentDialog extends Controller {
       });
   }
 
-  _setupOwners(component) {
-    const saved = component.owner || [];
-    return this._copyrightQuery(component.path, 'holders')
+  _setupOwners(conclusion) {
+    const saved = conclusion.owner || [];
+    return this._copyrightQuery(conclusion.path, 'holders')
       .then((owners) => owners.concat(saved))
       .then((owners) => {
         this.owner.html('').select2({
@@ -238,10 +238,10 @@ class ComponentDialog extends Controller {
       });
   }
 
-  _setupLanguage(component) {
-    const saved = component.programming_language || [];
+  _setupLanguage(conclusion) {
+    const saved = conclusion.programming_language || [];
     return this.db()
-      .findAllUnique(component.path, 'programming_language')
+      .findAllUnique(conclusion.path, 'programming_language')
       .then((languages) => languages.concat(saved))
       .then((languages) => {
         this.language.html('').select2({
@@ -255,8 +255,8 @@ class ComponentDialog extends Controller {
       });
   }
 
-  _setupCodeType(component) {
-    const saved = component.code_type || [] ;
+  _setupCodeType(conclusion) {
+    const saved = conclusion.code_type || [] ;
     const codeTypes = ['Source', 'Binary', 'Mixed', 'Document'].concat(saved);
     this.codeType.html('').select2({
       data: $.unique(codeTypes),
@@ -268,9 +268,9 @@ class ComponentDialog extends Controller {
     this.codeType.val(saved);
   }
 
-  _setupHomepageUrl(component) {
-    const saved = component.homepage_url || [];
-    return this._urlQuery(component.path, 'url')
+  _setupHomepageUrl(conclusion) {
+    const saved = conclusion.homepage_url || [];
+    return this._urlQuery(conclusion.path, 'url')
       .then((homepage_urls) => homepage_urls.concat(saved))
       .then((homepage_urls) => {
         this.homepageUrl.html('').select2({
@@ -284,11 +284,11 @@ class ComponentDialog extends Controller {
       });
   }
 
-  _setupDownloadUrl(component) {
-    const saved = component.download_url || [];
+  _setupDownloadUrl(conclusion) {
+    const saved = conclusion.download_url || [];
     return Promise.all([
-      this._urlQuery(component.path, 'url'),
-      this._packageQuery(component.path, 'download_url'),
+      this._urlQuery(conclusion.path, 'url'),
+      this._packageQuery(conclusion.path, 'download_url'),
     ])
       .then((rows) => $.map(rows, (row) => row))
       .then((download_urls) => download_urls.concat(saved))
@@ -304,13 +304,13 @@ class ComponentDialog extends Controller {
       });
   }
 
-  _setupLicenseUrl(component) {
-    const saved = component.license_url || [];
+  _setupLicenseUrl(conclusion) {
+    const saved = conclusion.license_url || [];
     return Promise.all([
-      this._licenseQuery(component.path, 'homepage_url'),
-      this._licenseQuery(component.path, 'text_url'),
-      this._licenseQuery(component.path, 'reference_url'),
-      this._licenseQuery(component.path, 'spdx_url')
+      this._licenseQuery(conclusion.path, 'homepage_url'),
+      this._licenseQuery(conclusion.path, 'text_url'),
+      this._licenseQuery(conclusion.path, 'reference_url'),
+      this._licenseQuery(conclusion.path, 'spdx_url')
     ])
       .then((rows) => $.map(rows, (row) => row))
       .then((licenese_urls) => licenese_urls.concat(saved))
@@ -326,9 +326,9 @@ class ComponentDialog extends Controller {
       });
   }
 
-  _setupNoticeUrl(component) {
-    const saved = component.notice_url || [];
-    return this._licenseQuery(component.path, 'text_url')
+  _setupNoticeUrl(conclusion) {
+    const saved = conclusion.notice_url || [];
+    return this._licenseQuery(conclusion.path, 'text_url')
       .then((notice_urls) => notice_urls.concat(saved))
       .then((notice_urls) => {
         this.noticeUrl.html('').select2({
@@ -342,48 +342,48 @@ class ComponentDialog extends Controller {
       });
   }
 
-  _setupModified(component) {
-    if (component.is_modified !== null && component.is_modified !== undefined) {
-      const modifiedValue = component.is_modified ? 'yes' : 'no';
-      $(`input[name=component-modified][value='${modifiedValue}']`)
+  _setupModified(conclusion) {
+    if (conclusion.is_modified !== null && conclusion.is_modified !== undefined) {
+      const modifiedValue = conclusion.is_modified ? 'yes' : 'no';
+      $(`input[name=conclusion-modified][value='${modifiedValue}']`)
         .prop('checked', true);
     } else {
       this.modified.prop('checked', false);
     }
   }
 
-  _setupDeployed(component) {
-    if (component.is_deployed !== null && component.is_deployed !== undefined) {
-      const deployedValue = component.is_deployed ? 'yes' : 'no';
-      $(`input[name=component-deployed][value='${deployedValue}']`)
+  _setupDeployed(conclusion) {
+    if (conclusion.is_deployed !== null && conclusion.is_deployed !== undefined) {
+      const deployedValue = conclusion.is_deployed ? 'yes' : 'no';
+      $(`input[name=conclusion-deployed][value='${deployedValue}']`)
         .prop('checked', true);
     } else {
       this.deployed.prop('checked', false);
     }
   }
 
-  _setupStatus(component) {
-    this.status.val(component.review_status || '');
+  _setupStatus(conclusion) {
+    this.status.val(conclusion.review_status || '');
   }
 
-  _setupName(component) {
-    this.name.val(component.name || '');
+  _setupName(conclusion) {
+    this.name.val(conclusion.name || '');
   }
 
-  _setupVersion(component) {
-    this.version.val(component.version || '');
+  _setupVersion(conclusion) {
+    this.version.val(conclusion.version || '');
   }
 
-  _setupFeature(component) {
-    this.feature.val(component.feature || '');
+  _setupFeature(conclusion) {
+    this.feature.val(conclusion.feature || '');
   }
 
-  _setupPurpose(component) {
-    this.purpose.val(component.purpose || '');
+  _setupPurpose(conclusion) {
+    this.purpose.val(conclusion.purpose || '');
   }
 
-  _setupNotes(component) {
-    this.notes.val(component.notes || '');
+  _setupNotes(conclusion) {
+    this.notes.val(conclusion.notes || '');
   }
 
   _copyrightQuery(path, field) {
@@ -407,4 +407,4 @@ class ComponentDialog extends Controller {
   }
 }
 
-module.exports = ComponentDialog;
+module.exports = ConclusionDialog;
