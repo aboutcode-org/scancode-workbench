@@ -23,7 +23,7 @@ const ConclusionDialog = require('./controllers/conclusionDialog');
 const AboutCodeDashboard = require('./controllers/aboutCodeDashboard');
 const AboutCodeBarChart = require('./controllers/aboutCodeBarChart');
 const AboutCodeJsTree = require('./controllers/aboutCodeJsTree');
-const AboutCodeScanDataDataTable = require('./controllers/aboutCodeScanDataDataTable');
+const AboutCodeScanDataTable = require('./controllers/aboutCodeScanDataTable');
 const AboutCodeConclusionDataTable = require('./controllers/aboutCodeConclusionDataTable');
 
 const fs = require('fs');
@@ -62,7 +62,7 @@ $(document).ready(() => {
       showScanDataButton.trigger('click');
     });
 
-  const scanDataTable = new AboutCodeScanDataDataTable('#tab-scandata', aboutCodeDB);
+  const scanDataTable = new AboutCodeScanDataTable('#tab-scandata', aboutCodeDB);
 
   const conclusionsTable = new AboutCodeConclusionDataTable('#tab-conclusion', aboutCodeDB)
     .on('upload-clicked', (conclusions) => {

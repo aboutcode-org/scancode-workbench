@@ -18,7 +18,7 @@ const Sequelize = require('sequelize');
 const Progress = require('../helpers/progress');
 const BarChart = require('../helpers/barChart');
 const Utils = require('../helpers/utils');
-const AboutCodeScanDataDataTable = require('./aboutCodeScanDataDataTable');
+const AboutCodeScanDataTable = require('./aboutCodeScanDataTable');
 const Controller = require('./controller');
 
 // There must be an svg element within the container element with this class
@@ -49,7 +49,7 @@ class AboutCodeBarChart extends Controller {
     this.chartAttributesSelect.select2({ placeholder: 'Select an attribute' });
 
     // Populate bar chart summary select box values
-    $.each(AboutCodeScanDataDataTable.TABLE_COLUMNS, (i, column) => {
+    $.each(AboutCodeScanDataTable.TABLE_COLUMNS, (i, column) => {
       if (column.bar_chart_class) {
         this.chartAttributesSelect.append(
           `<option class="${column.bar_chart_class}" value="${column.name}">${column.title}</option>`);

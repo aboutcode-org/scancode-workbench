@@ -29,7 +29,7 @@ const NO_VALUE_DETECTED =  'about_code_data_table_no_value_detected';
  * The view responsible for displaying the DataTable containing the ScanCode
  * Scan data
  */
-class AboutCodeScanDataDataTable extends Controller {
+class AboutCodeScanDataTable extends Controller {
   constructor(containerId, aboutCodeDB) {
     super(containerId, aboutCodeDB);
   }
@@ -59,7 +59,7 @@ class AboutCodeScanDataDataTable extends Controller {
   }
 
   clearColumnFilters() {
-    $.each(AboutCodeScanDataDataTable.TABLE_COLUMNS, (i, column) => {
+    $.each(AboutCodeScanDataTable.TABLE_COLUMNS, (i, column) => {
       const columnSelect = $(`select#scandata-${column.name}`);
       columnSelect.val('');
       this.dataTable()
@@ -97,7 +97,7 @@ class AboutCodeScanDataDataTable extends Controller {
 
     // Adds a footer for each column. This needs to be done before creating
     // the DataTable
-    const cells = $.map(AboutCodeScanDataDataTable.TABLE_COLUMNS, () => '<td></td>').join('');
+    const cells = $.map(AboutCodeScanDataTable.TABLE_COLUMNS, () => '<td></td>').join('');
     $(this.dataTableSelector()).append('<tfoot><tr>' + cells + '</tr></tfoot>');
 
     this._dataTable = $(this.dataTableSelector()).DataTable({
@@ -105,7 +105,7 @@ class AboutCodeScanDataDataTable extends Controller {
       processing: true,
       ajax: (dataTablesInput, dataTablesCallback) =>
         this._query(dataTablesInput, dataTablesCallback),
-      columns: AboutCodeScanDataDataTable.TABLE_COLUMNS,
+      columns: AboutCodeScanDataTable.TABLE_COLUMNS,
       fixedColumns: { leftColumns: 1 },
       colResize: true,
       scrollX: true,
@@ -132,50 +132,50 @@ class AboutCodeScanDataDataTable extends Controller {
           // Hide all columns except Path
           extend: 'colvisGroup',
           text: 'Hide all',
-          show: AboutCodeScanDataDataTable.LOCATION_COLUMN
+          show: AboutCodeScanDataTable.LOCATION_COLUMN
             .map((column) => `${column.name}:name`),
-          hide: AboutCodeScanDataDataTable.TABLE_COLUMNS
-            .filter((column) => AboutCodeScanDataDataTable.LOCATION_COLUMN.indexOf(column) < 0)
+          hide: AboutCodeScanDataTable.TABLE_COLUMNS
+            .filter((column) => AboutCodeScanDataTable.LOCATION_COLUMN.indexOf(column) < 0)
             .map((column) => `${column.name}:name`)
         },
         {
           // Show only origin columns
           extend: 'colvisGroup',
           text: 'Origin info',
-          show: AboutCodeScanDataDataTable.ORIGIN_GROUP
+          show: AboutCodeScanDataTable.ORIGIN_GROUP
             .map((column) => `${column.name}:name`),
-          hide: AboutCodeScanDataDataTable.TABLE_COLUMNS
-            .filter((column) => AboutCodeScanDataDataTable.ORIGIN_GROUP.indexOf(column) < 0)
+          hide: AboutCodeScanDataTable.TABLE_COLUMNS
+            .filter((column) => AboutCodeScanDataTable.ORIGIN_GROUP.indexOf(column) < 0)
             .map((column) => `${column.name}:name`)
         },
         {
           // Show only copyright columns
           extend: 'colvisGroup',
           text: 'Copyright info',
-          show: AboutCodeScanDataDataTable.COPYRIGHT_GROUP
+          show: AboutCodeScanDataTable.COPYRIGHT_GROUP
             .map((column) => `${column.name}:name`),
-          hide: AboutCodeScanDataDataTable.TABLE_COLUMNS
-            .filter((column) => AboutCodeScanDataDataTable.COPYRIGHT_GROUP.indexOf(column) < 0)
+          hide: AboutCodeScanDataTable.TABLE_COLUMNS
+            .filter((column) => AboutCodeScanDataTable.COPYRIGHT_GROUP.indexOf(column) < 0)
             .map((column) => `${column.name}:name`)
         },
         {
           // Show only license columns
           extend: 'colvisGroup',
           text: 'License info',
-          show: AboutCodeScanDataDataTable.LICENSE_GROUP
+          show: AboutCodeScanDataTable.LICENSE_GROUP
             .map((column) => `${column.name}:name`),
-          hide: AboutCodeScanDataDataTable.TABLE_COLUMNS
-            .filter((column) => AboutCodeScanDataDataTable.LICENSE_GROUP.indexOf(column) < 0)
+          hide: AboutCodeScanDataTable.TABLE_COLUMNS
+            .filter((column) => AboutCodeScanDataTable.LICENSE_GROUP.indexOf(column) < 0)
             .map((column) => `${column.name}:name`)
         },
         {
           // Show only package columns
           extend: 'colvisGroup',
           text: 'Package info',
-          show: AboutCodeScanDataDataTable.PACKAGE_GROUP
+          show: AboutCodeScanDataTable.PACKAGE_GROUP
             .map((column) => `${column.name}:name`),
-          hide: AboutCodeScanDataDataTable.TABLE_COLUMNS
-            .filter((column) => AboutCodeScanDataDataTable.PACKAGE_GROUP.indexOf(column) < 0)
+          hide: AboutCodeScanDataTable.TABLE_COLUMNS
+            .filter((column) => AboutCodeScanDataTable.PACKAGE_GROUP.indexOf(column) < 0)
             .map((column) => `${column.name}:name`)
         }
       ],
@@ -318,7 +318,7 @@ class AboutCodeScanDataDataTable extends Controller {
     footer.append(clearFiltersButton);
 
     this.dataTable().columns().every(function (columnIndex) {
-      const columnInfo = AboutCodeScanDataDataTable.TABLE_COLUMNS[columnIndex];
+      const columnInfo = AboutCodeScanDataTable.TABLE_COLUMNS[columnIndex];
 
       if ('skipFilter' in columnInfo && columnInfo.skipFilter) {
         return;
@@ -345,7 +345,7 @@ class AboutCodeScanDataDataTable extends Controller {
   }
 
   resetColumnFilters() {
-    $.each(AboutCodeScanDataDataTable.TABLE_COLUMNS, (i, column) => {
+    $.each(AboutCodeScanDataTable.TABLE_COLUMNS, (i, column) => {
       const columnSelect = $(`select#scandata-${column.name}`);
       columnSelect.empty();
       columnSelect.val('');
@@ -362,7 +362,7 @@ class AboutCodeScanDataDataTable extends Controller {
     const that = this;
 
     this.dataTable().columns().every(function (columnIndex) {
-      const columnInfo = AboutCodeScanDataDataTable.TABLE_COLUMNS[columnIndex];
+      const columnInfo = AboutCodeScanDataTable.TABLE_COLUMNS[columnIndex];
       const currentColumn = that.dataTable().columns(columnIndex);
 
       if ('skipFilter' in columnInfo && columnInfo.skipFilter) {
@@ -426,43 +426,43 @@ class AboutCodeScanDataDataTable extends Controller {
 
   // Define DataTable columns
   static get TABLE_COLUMNS() {
-    return AboutCodeScanDataDataTable.LOCATION_COLUMN.concat(
-      AboutCodeScanDataDataTable.COPYRIGHT_COLUMNS,
-      AboutCodeScanDataDataTable.LICENSE_COLUMNS,
-      AboutCodeScanDataDataTable.EMAIL_COLUMNS,
-      AboutCodeScanDataDataTable.URL_COLUMNS,
-      AboutCodeScanDataDataTable.FILE_COLUMNS,
-      AboutCodeScanDataDataTable.PACKAGE_COLUMNS);
+    return AboutCodeScanDataTable.LOCATION_COLUMN.concat(
+      AboutCodeScanDataTable.COPYRIGHT_COLUMNS,
+      AboutCodeScanDataTable.LICENSE_COLUMNS,
+      AboutCodeScanDataTable.EMAIL_COLUMNS,
+      AboutCodeScanDataTable.URL_COLUMNS,
+      AboutCodeScanDataTable.FILE_COLUMNS,
+      AboutCodeScanDataTable.PACKAGE_COLUMNS);
   }
 
   static get ORIGIN_COLUMNS() {
-    return $.grep(AboutCodeScanDataDataTable.TABLE_COLUMNS, (column) => {
-      return $.inArray(column.name, AboutCodeScanDataDataTable.ORIGIN_COLUMN_NAMES) >= 0;
+    return $.grep(AboutCodeScanDataTable.TABLE_COLUMNS, (column) => {
+      return $.inArray(column.name, AboutCodeScanDataTable.ORIGIN_COLUMN_NAMES) >= 0;
     });
   }
 
   static get LICENSE_GROUP() {
-    return AboutCodeScanDataDataTable.LOCATION_COLUMN
-      .concat(AboutCodeScanDataDataTable.LICENSE_COLUMNS);
+    return AboutCodeScanDataTable.LOCATION_COLUMN
+      .concat(AboutCodeScanDataTable.LICENSE_COLUMNS);
   }
 
   static get COPYRIGHT_GROUP() {
-    return AboutCodeScanDataDataTable.LOCATION_COLUMN
-      .concat(AboutCodeScanDataDataTable.COPYRIGHT_COLUMNS);
+    return AboutCodeScanDataTable.LOCATION_COLUMN
+      .concat(AboutCodeScanDataTable.COPYRIGHT_COLUMNS);
   }
 
   static get ORIGIN_GROUP() {
-    return AboutCodeScanDataDataTable.LOCATION_COLUMN
-      .concat(AboutCodeScanDataDataTable.ORIGIN_COLUMNS);
+    return AboutCodeScanDataTable.LOCATION_COLUMN
+      .concat(AboutCodeScanDataTable.ORIGIN_COLUMNS);
   }
 
   static get PACKAGE_GROUP() {
-    return AboutCodeScanDataDataTable.LOCATION_COLUMN
-      .concat(AboutCodeScanDataDataTable.PACKAGE_COLUMNS);
+    return AboutCodeScanDataTable.LOCATION_COLUMN
+      .concat(AboutCodeScanDataTable.PACKAGE_COLUMNS);
   }
 }
 
-AboutCodeScanDataDataTable.LOCATION_COLUMN =
+AboutCodeScanDataTable.LOCATION_COLUMN =
     [
       {
         'data': 'path',
@@ -473,7 +473,7 @@ AboutCodeScanDataDataTable.LOCATION_COLUMN =
       }
     ];
 
-AboutCodeScanDataDataTable.COPYRIGHT_COLUMNS =
+AboutCodeScanDataTable.COPYRIGHT_COLUMNS =
     [
       {
         'data': function (row) {
@@ -522,7 +522,7 @@ AboutCodeScanDataDataTable.COPYRIGHT_COLUMNS =
       }
     ];
 
-AboutCodeScanDataDataTable.LICENSE_COLUMNS =
+AboutCodeScanDataTable.LICENSE_COLUMNS =
     [
       {
         'data': 'license_expressions[<hr/>]',
@@ -608,7 +608,7 @@ AboutCodeScanDataDataTable.LICENSE_COLUMNS =
       }
     ];
 
-AboutCodeScanDataDataTable.EMAIL_COLUMNS =
+AboutCodeScanDataTable.EMAIL_COLUMNS =
     [
       {
         'data': 'email[<hr/>]',
@@ -631,7 +631,7 @@ AboutCodeScanDataDataTable.EMAIL_COLUMNS =
       }
     ];
 
-AboutCodeScanDataDataTable.URL_COLUMNS =
+AboutCodeScanDataTable.URL_COLUMNS =
     [
       {
         'data': 'url',
@@ -656,7 +656,7 @@ AboutCodeScanDataDataTable.URL_COLUMNS =
       }
     ];
 
-AboutCodeScanDataDataTable.FILE_COLUMNS =
+AboutCodeScanDataTable.FILE_COLUMNS =
     [
       {
         'data': 'type',
@@ -772,7 +772,7 @@ AboutCodeScanDataDataTable.FILE_COLUMNS =
       }
     ];
 
-AboutCodeScanDataDataTable.PACKAGE_COLUMNS =
+AboutCodeScanDataTable.PACKAGE_COLUMNS =
     [
       {
         'data': 'packages_type',
@@ -828,7 +828,7 @@ AboutCodeScanDataDataTable.PACKAGE_COLUMNS =
       },
     ];
 
-AboutCodeScanDataDataTable.ORIGIN_COLUMN_NAMES =
+AboutCodeScanDataTable.ORIGIN_COLUMN_NAMES =
     [
       'copyright_statements',
       'license_short_name',
@@ -837,4 +837,4 @@ AboutCodeScanDataDataTable.ORIGIN_COLUMN_NAMES =
       'url'
     ];
 
-module.exports = AboutCodeScanDataDataTable;
+module.exports = AboutCodeScanDataTable;
