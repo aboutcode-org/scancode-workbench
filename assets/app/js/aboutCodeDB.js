@@ -186,6 +186,7 @@ class AboutCodeDB {
     const version = aboutCodeVersion;
     let headerId = null;
     let files_count = null;
+    let dirs_count = null;
     let index = 0;
     let rootPath = null;
     let hasRootPath = false;
@@ -223,6 +224,11 @@ class AboutCodeDB {
           if (rootPath === file.path) {
             hasRootPath = true;
           }
+          // TODO: When/if scancode reports directories in its header, this needs
+          //       to be replaced.
+          if (index === 0) {
+            dirs_count = file.dirs_count;
+          }
           file.id = index++;
           files.push(file);
           if (files.length >= batchSize) {
@@ -231,12 +237,12 @@ class AboutCodeDB {
             promiseChain = promiseChain
               .then(() => that._batchCreateFiles(files, headerId))
               .then(() => {
-                const currProgress = Math.round(index / files_count * 100);
+                const currProgress = Math.round(index / (files_count + dirs_count) * 100);
                 if (currProgress > progress) {
                   progress = currProgress;
                   onProgressUpdate(progress);
                   console.log('Progress: ' + `${progress}% ` +
-                              `(${index}/${files_count})`);
+                              `(${index}/(${files_count}+${dirs_count}))`);
                 }
               })
               .then(() => {
