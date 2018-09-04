@@ -242,6 +242,7 @@ class AboutCodeScanDataTable extends Controller {
             query.where.$and[columnName] = {
               $and: [
                 { $ne: '[]' },
+                { $ne: '[[]]' },
                 { $ne: '' },
                 { $ne: '{}' }
               ]
@@ -251,6 +252,7 @@ class AboutCodeScanDataTable extends Controller {
             query.where.$and[columnName] = {
               $or: [
                 { $eq: '[]' },
+                { $eq: '[[]]' },
                 { $eq: '' },
                 { $eq: '{}' },
                 { $eq: null }
