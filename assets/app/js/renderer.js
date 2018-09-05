@@ -182,6 +182,17 @@ $(document).ready(() => {
     redrawCurrentView();
   }
 
+  function schemaChange(dbVersion, aboutCodeVersion) {
+    dbVersion = dbVersion.split('.');
+    aboutCodeVersion = aboutCodeVersion.split('.');
+
+    if (dbVersion[1] != aboutCodeVersion[1]) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   /** Creates the database and all View objects from a SQLite file */
   function loadDatabase(fileName) {
     // Create a new database when importing a json file
@@ -189,7 +200,21 @@ $(document).ready(() => {
       dbName: 'aboutcode_db',
       dbStorage: fileName
     });
-
+    
+    // Check that that the database schema matches current schema.
+    aboutCodeDB.sync
+      .then((db) => db.Header.findById(1)
+        .then((header) => {
+          const dbVersion = header.aboutcode_manager_version;
+          if (schemaChange(dbVersion, aboutCodeVersion)) { 
+            dialog.showErrorBox(
+              'Old SQLite schema found at file: ' + fileName,
+              'The SQLite schema has been updated since the last time you loaded this ' +
+              'file.\n\n' + 
+              'Some features may not work correctly until you re-import the original' +
+              'ScanCode JSON file to create an updated SQLite database.');
+          }
+        }));
     // Check that the database has the correct header information.
     aboutCodeDB.sync
       .then((db) => db.Header.findAll())
