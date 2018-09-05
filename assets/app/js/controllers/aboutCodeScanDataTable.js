@@ -221,7 +221,13 @@ class AboutCodeScanDataTable extends Controller {
 
       // If a column search exists, add search for that column
       for (let i = 0; i < dataTablesInput.columns.length; i++) {
-        const columnSearch = dataTablesInput.columns[i].search.value;
+        let columnSearch = dataTablesInput.columns[i].search.value;
+        // Handle 'binary' true/false column filters
+        if (columnSearch === 'true') {
+          columnSearch = 1;
+        } else if (columnSearch === 'false') {
+          columnSearch = 0;
+        }
         if (columnSearch) {
           const columnName = dataTablesInput.columns[i].name;
           this.dataTable().column(`${columnName}:name`).visible(true);
