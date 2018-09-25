@@ -77,9 +77,9 @@ class AboutCodeBarChart extends Controller {
   reload() {
     this.needsReload(false);
 
-    this.db()
-      .getFileCount()
-      .then((value) => this.barChartTotalFiles.text(value));
+    this.db().sync
+      .then((db) => db.File.findOne({where: {path: this.selectedPath()}}))
+      .then((file) => this.barChartTotalFiles.text(file.files_count));
 
     if (this.chartAttributesSelect.val()) {
       const attribute = this.chartAttributesSelect.val();
