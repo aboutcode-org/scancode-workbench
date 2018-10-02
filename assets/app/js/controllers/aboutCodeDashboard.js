@@ -114,45 +114,58 @@ class AboutCodeDashboard extends Controller {
   reload() {
     this.needsReload(false);
 
-    // Get total files scanned
+    // Get # files scanned at a certain path
     this.totalFilesProgressbar.showIndeterminate();
     this.db().sync
-      .then((db) => db.Header.findOne({ attributes: ['files_count'] }))
+      .then((db) => db.File.findOne({where: {path: this.selectedPath()}}))
       .then((row) => this.totalFilesScanned.text(row ? row.files_count : '0'))
       .then(() => this.totalFilesProgressbar.hide());
 
-    // Get total unique licenses detected
+    // Get total unique licenses detected at a certain path
     this.uniqueLicensesProgressbar.showIndeterminate();
     this.db().sync
-      .then((db) => db.License.aggregate('key', 'DISTINCT', {plain: false}))
-      .then((row) => this.uniqueLicenses.text(row ? row.length : '0'))
+      .then((db) => db.File.findAll({where: {path: {$like: `${this.selectedPath()}%`}}}))
+      .then((files) => files.map((val) => val.id))
+      .then((fileIds) => this.db().sync
+        .then((db) => db.License.findAll({where: {fileId: fileIds}}))
+        .then((licenses) => licenses.map((val) => val.key))
+        .then((keys) => this.uniqueLicenses.text(new Set(keys).size)))
       .then(() => this.uniqueLicensesProgressbar.hide());
 
-    // Get total unique copyright statements detected
+    // Get total unique copyright statements detected at a certain path
     this.uniqueCopyrightsProgressbar.showIndeterminate();
     this.db().sync
-      .then((db) => db.Copyright.aggregate('holders', 'DISTINCT', { plain: false }))
-      .then((row) => this.uniqueCopyrights.text(row ? row.length : '0'))
+      .then((db) => db.File.findAll({where: {path: {$like: `${this.selectedPath()}%`}}}))
+      .then((files) => files.map((val) => val.id))
+      .then((fileIds) => this.db().sync
+        .then((db) => db.Copyright.findAll({where: {fileId: fileIds}}))
+        .then((copyrights) => copyrights.map((val) => val.statements))
+        .then((statements) => statements.map((val) => val.pop()))
+        .then((statements) => this.uniqueCopyrights.text(new Set(statements).size)))
       .then(() => this.uniqueCopyrightsProgressbar.hide());
 
     // Get total number of packages detected
     this.totalPackagesProgressbar.showIndeterminate();
     this.db().sync
-      .then((db) => db.Package.count('type'))
-      .then((count) => this.totalPackages.text(count ? count : '0'))
+      .then((db) => db.File.findAll({where: {path: {$like: `${this.selectedPath()}%`}}}))
+      .then((files) => files.map((val) => val.id))
+      .then((fileIds) => this.db().sync
+        .then((db) => db.Package.findAll({where: {fileId: fileIds}}))
+        .then((packages) => packages.map((val) => val.type))
+        .then((types) => this.totalPackages.text(types.length)))
       .then(() => this.totalPackagesProgressbar.hide());
 
     // Get unique programming languages detected
-    this.sourceLanguageChartData = this._loadData('programming_language');
+    this.sourceLanguageChartData = this._loadChartData('programming_language', this.selectedPath());
 
     // Get license categories detected
-    this.licenseCategoryChartData = this._loadData('license_category');
+    this.licenseCategoryChartData = this._loadChartData('license_category', this.selectedPath());
 
     // Get license keys detected
-    this.licenseKeyChartData = this._loadData('license_key');
+    this.licenseKeyChartData = this._loadChartData('license_key', this.selectedPath());
 
     // Get package types detected
-    this.packagesTypeChartData = this._loadData('packages_type');
+    this.packagesTypeChartData = this._loadChartData('packages_type', this.selectedPath());
   }
 
   redraw() {
@@ -213,7 +226,7 @@ class AboutCodeDashboard extends Controller {
       }));
   }
 
-  _loadData(attribute, parentPath) {
+  _loadChartData(attribute, parentPath) {
     const where = {
       $and: [{
         type: {
@@ -221,9 +234,9 @@ class AboutCodeDashboard extends Controller {
         }
       }]
     };
-
+    
     if (parentPath) {
-      where.path.$and.append({$like: `${parentPath}%`});
+      where.$and.push({path: {$like: `${parentPath}%`}});
     }
 
     return this.db().sync.then((db) => {

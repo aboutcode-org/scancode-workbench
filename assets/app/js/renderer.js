@@ -134,7 +134,7 @@ $(document).ready(() => {
 
   // Show conclusion summary table. Hide DataTable and node view
   showConclusionButton.click(() => {
-    splitter.hide();
+    splitter.show();
     conclusionsTable.redraw();
   });
 
@@ -144,7 +144,7 @@ $(document).ready(() => {
   });
 
   showDashboardButton.click(() => {
-    splitter.hide();
+    splitter.show();
     dashboard.redraw();
   });
 

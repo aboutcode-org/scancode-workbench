@@ -31,7 +31,8 @@ class AboutCodeConclusionDataTable extends Controller {
 
   reload() {
     this.needsReload(false);
-    this.db().findAllConclusions({})
+    this.db().sync
+      .then((db) => db.Conclusion.findAll({where: {path: {$like: `${this.selectedPath()}%`}}}))
       .then((conclusions) => {
         this.dataTable().clear();
         this.dataTable().rows.add(conclusions);
