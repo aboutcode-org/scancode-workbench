@@ -221,7 +221,7 @@ def build(clean=True, app_name=APP_NAME,
         '--platform=' + platform,
         '--arch=' + arch,
         '--icon=assets/app/app-icon/' + icon,
-        '--version=' + electron_version,
+        '--electron-version=' + electron_version,
         '--out=' + build_dir,
         '--asar=' + asar,
         '--overwrite=true'
