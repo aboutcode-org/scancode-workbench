@@ -216,7 +216,7 @@ class AboutCodeScanDataTable extends Controller {
         // Only take the chunk of data DataTables needs
         limit: dataTablesInput.length,
         offset: dataTablesInput.start,
-        order: `${columnName} COLLATE NOCASE ${direction}`
+        order: [Sequelize.literal(`${columnName} COLLATE NOCASE ${direction}`)]
       };
 
       // If a column search exists, add search for that column
