@@ -28,7 +28,7 @@ import zipfile
 APP_NAME = 'AboutCode-Manager'
 APP_BUNDLE_ID = 'com.electron.aboutcode-manager'
 VERSION = '2.6.0'
-ELECTRON_VERSION = '1.6.16'
+ELECTRON_VERSION = '3.0.3'
 
 #######################
 ARCH = 'x64'
@@ -221,7 +221,7 @@ def build(clean=True, app_name=APP_NAME,
         '--platform=' + platform,
         '--arch=' + arch,
         '--icon=assets/app/app-icon/' + icon,
-        '--version=' + electron_version,
+        '--electron-version=' + electron_version,
         '--out=' + build_dir,
         '--asar=' + asar,
         '--overwrite=true'
