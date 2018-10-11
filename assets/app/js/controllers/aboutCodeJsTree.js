@@ -66,6 +66,12 @@ class AboutCodeJsTree extends Controller {
           },
           'file': {
             'icon': 'fa fa-file-text-o'
+          },
+          'packageDir': {
+            'icon': 'fa fa-folder fa_custom_package'
+          },
+          'packageFile': {
+            'icon': 'fa fa-file fa_custom_package'
           }
         },
         'plugins': ['types', 'sort', 'contextmenu', 'wholerow'],
@@ -91,10 +97,18 @@ class AboutCodeJsTree extends Controller {
         }
       })
       .on('open_node.jstree', (evt, data) => {
-        data.instance.set_icon(data.node, 'fa fa-folder-open fa_custom');
+        if (data.node.type === 'directory') {
+          data.instance.set_icon(data.node, 'fa fa-folder-open fa_custom');
+        } else if (data.node.type === 'packageDir') {
+          data.instance.set_icon(data.node, 'fa fa-folder-open fa_custom_package');
+        }
       })
       .on('close_node.jstree', (evt, data) => {
-        data.instance.set_icon(data.node, 'fa fa-folder fa_custom');
+        if (data.node.type === 'directory') {
+          data.instance.set_icon(data.node, 'fa fa-folder fa_custom');
+        } else if (data.node.type === 'packageDir') {
+          data.instance.set_icon(data.node, 'fa fa-folder fa_custom_package');
+        }
       })
       // Select the root node when the tree is refreshed
       .on('refresh.jstree', () => {

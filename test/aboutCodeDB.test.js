@@ -250,7 +250,7 @@ describe('checkAboutCodeDB', () => {
           id: 'samples/README',
           text: 'README',
           parent: 'samples',
-          type: 'file',
+          type: 'packageFile',
           children: false
         },
         {
