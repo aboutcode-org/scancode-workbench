@@ -159,21 +159,34 @@ class AboutCodeDB {
   // Uses findAll to return JSTree format from the File Table
   findAllJSTree(query) {
     query = $.extend(query, {
-      attributes: ['path', 'parent', 'name', 'type']
+      attributes: ['id', 'path', 'parent', 'name', 'type']
     });
     return this.sync
-      .then((db) => db.File.findAll(query))
-      .then((files) => {
-        return files.map((file) => {
-          return {
-            id: file.path,
-            text: file.name,
-            parent: file.parent,
-            type: file.type,
-            children: file.type === 'directory'
-          };
-        });
-      });
+      .then((db) => db.Package.findAll({attributes: ['fileId']}))
+      .then((pkgs) => pkgs.map((pkg) => pkg.fileId))
+      .then((fileIds) => this.sync
+        .then((db) => db.File.findAll(query))
+        .then((files) => {
+          return files.map((file) => {
+            let type;
+            if (fileIds.includes(file.id)) {
+              if (file.type === 'file') {
+                type = 'packageFile';
+              } else if (file.type === 'directory') {
+                type = 'packageDir';
+              }
+            } else {
+              type = file.type;
+            }
+            return {
+              id: file.path,
+              text: file.name,
+              parent: file.parent,
+              type: type,
+              children: file.type === 'directory'
+            };
+          });
+        }));
   }
 
   // Add rows to the flattened files table from a ScanCode json object
