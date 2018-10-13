@@ -156,37 +156,83 @@ class AboutCodeDB {
       });
   }
 
+
   // Uses findAll to return JSTree format from the File Table
   findAllJSTree(query) {
     query = $.extend(query, {
       attributes: ['id', 'path', 'parent', 'name', 'type']
     });
-    return this.sync
-      .then((db) => db.Package.findAll({attributes: ['fileId']}))
-      .then((pkgs) => pkgs.map((pkg) => pkg.fileId))
-      .then((fileIds) => this.sync
-        .then((db) => db.File.findAll(query))
-        .then((files) => {
-          return files.map((file) => {
-            let type;
-            if (fileIds.includes(file.id)) {
-              if (file.type === 'file') {
-                type = 'packageFile';
-              } else if (file.type === 'directory') {
-                type = 'packageDir';
-              }
-            } else {
-              type = file.type;
-            }
-            return {
-              id: file.path,
-              text: file.name,
-              parent: file.parent,
-              type: type,
-              children: file.type === 'directory'
-            };
-          });
-        }));
+
+    const analyzedPromise = this.db.Conclusion.findAll({where: {review_status: 'Analyzed'}, attributes: ['fileId']})
+      .then((concs) => concs.map((conc) => conc.fileId));
+    const NAPromise = this.db.Conclusion.findAll({where: {review_status: 'Attention'}, attributes: ['fileId']})
+      .then((concs) => concs.map((conc) => conc.fileId));
+    const OCPromise = this.db.Conclusion.findAll({where: {review_status: 'Original'}, attributes: ['fileId']})
+      .then((concs) => concs.map((conc) => conc.fileId));
+    const NRPromise = this.db.Conclusion.findAll({where: {review_status: 'NR'}, attributes: ['fileId']})
+      .then((concs) => concs.map((conc) => conc.fileId));
+    const pkgPromise = this.db.Package.findAll({attributes: ['fileId']})
+      .then((pkgs) => pkgs.map((pkg) => pkg.fileId));
+
+    return Promise.all([analyzedPromise, NAPromise, OCPromise, NRPromise,  pkgPromise]).then((promises) => this.sync
+      .then((db) => db.File.findAll(query))
+      .then((files) => {
+        return files.map((file) => {
+          return {
+            id: file.path,
+            text: file.name,
+            parent: file.parent,
+            type: this.determineJSTreeType(file, promises),
+            children: file.type === 'directory'
+          };
+        });
+      }));
+  }
+  
+  determineJSTreeType(file, promises) {
+    let type = '';
+
+    const analyzed = promises[0];
+    const na = promises[1];
+    const oc = promises[2];
+    const nr = promises[3];
+    const packages = promises[4];
+
+    if (analyzed.includes(file.id)) {
+      if (file.type === 'file') {
+        type = 'analyzedFile';
+      } else if (file.type === 'directory') {
+        type = 'analyzedDir'; 
+      }
+    } else if (na.includes(file.id)) {
+      if (file.type === 'file') {
+        type = 'naFile';
+      } else if (file.type === 'directory') {
+        type = 'naDir'; 
+      }
+    } else if (oc.includes(file.id)) {
+      if (file.type === 'file') {
+        type = 'ocFile';
+      } else if (file.type === 'directory') {
+        type = 'ocDir'; 
+      }
+    } else if (nr.includes(file.id)) {
+      if (file.type === 'file') {
+        type = 'nrFile';
+      } else if (file.type === 'directory') {
+        type = 'nrDir'; 
+      }
+    } else if (packages.includes(file.id)) {
+      if (file.type === 'file') {
+        type = 'packageFile';
+      } else if (file.type === 'directory') {
+        type = 'packageDir'; 
+      }
+    } else {
+      type = file.type;
+    }
+    
+    return type;
   }
 
   // Add rows to the flattened files table from a ScanCode json object

@@ -67,6 +67,30 @@ class AboutCodeJsTree extends Controller {
           'file': {
             'icon': 'fa fa-file-text-o'
           },
+          'analyzedDir': {
+            'icon': 'fa fa-folder fa_custom_analyzed'
+          },
+          'analyzedFile': {
+            'icon': 'fa fa-file fa_custom_analyzed'
+          }, 
+          'naDir': {
+            'icon': 'fa fa-folder fa_custom_na'
+          }, 
+          'naFile': {
+            'icon': 'fa fa-file fa_custom_na'
+          }, 
+          'ocDir': {
+            'icon': 'fa fa-folder fa_custom_oc'
+          }, 
+          'ocFile': {
+            'icon': 'fa fa-file fa_custom_oc'
+          }, 
+          'nrDir': {
+            'icon': 'fa fa-folder fa_custom_nr'
+          }, 
+          'nrFile': {
+            'icon': 'fa fa-file fa_custom_nr'
+          },
           'packageDir': {
             'icon': 'fa fa-folder fa_custom_package'
           },
@@ -75,14 +99,34 @@ class AboutCodeJsTree extends Controller {
           }
         },
         'plugins': ['types', 'sort', 'contextmenu', 'wholerow'],
+        // TODO: must fix sorting with these new types
         'sort': function (a, b) {
+          const dir_types = ['directory', 'analyzedDir', 'naDir', 'ocDir', 'nrDir', 'packageDir'];
+          const file_types = ['file', 'analyzedFile', 'naFile', 'ocFile', 'ocDir', 'pacakgeFile'];
+
           const a1 = this.get_node(a);
           const b1 = this.get_node(b);
-          if (a1.type === b1.type) {
+
+          let a1CompareType;
+          let b1CompareType;
+
+          if (dir_types.includes(a1.type)) {
+            a1CompareType = 'directory';
+          } else if (file_types.includes(a1.type)) {
+            a1CompareType = 'file';
+          }
+
+          if (dir_types.includes(b1.type)) {
+            b1CompareType = 'directory';
+          } else if (file_types.includes(b1.type)) {
+            b1CompareType = 'file';
+          }
+
+          if (a1CompareType === b1CompareType) {
             return a1.text.localeCompare(b1.text, 'en-US-u-kf-upper');
           }
           else {
-            return (a1.type === 'directory') ? -1 : 1;
+            return (a1CompareType === 'directory') ? -1 : 1;
           }
         },
         'contextmenu': {
@@ -99,6 +143,14 @@ class AboutCodeJsTree extends Controller {
       .on('open_node.jstree', (evt, data) => {
         if (data.node.type === 'directory') {
           data.instance.set_icon(data.node, 'fa fa-folder-open fa_custom');
+        } else if (data.node.type === 'analyzedDir') {
+          data.instance.set_icon(data.node, 'fa fa-folder-open fa_custom_analyzed');
+        } else if (data.node.type === 'naDir') {
+          data.instance.set_icon(data.node, 'fa fa-folder-open fa_custom_na');
+        } else if (data.node.type === 'ocDir') {
+          data.instance.set_icon(data.node, 'fa fa-folder-open fa_custom_oc');
+        } else if (data.node.type === 'nrDir') {
+          data.instance.set_icon(data.node, 'fa fa-folder-open fa_custom_nr');
         } else if (data.node.type === 'packageDir') {
           data.instance.set_icon(data.node, 'fa fa-folder-open fa_custom_package');
         }
@@ -106,12 +158,20 @@ class AboutCodeJsTree extends Controller {
       .on('close_node.jstree', (evt, data) => {
         if (data.node.type === 'directory') {
           data.instance.set_icon(data.node, 'fa fa-folder fa_custom');
+        } else if (data.node.type === 'analyzedDir') {
+          data.instance.set_icon(data.node, 'fa fa-folder fa_custom_analyzed');
+        } else if (data.node.type === 'naDir') {
+          data.instance.set_icon(data.node, 'fa fa-folder fa_custom_na');
+        } else if (data.node.type === 'ocDir') {
+          data.instance.set_icon(data.node, 'fa fa-folder fa_custom_oc');
+        } else if (data.node.type === 'nrDir') {
+          data.instance.set_icon(data.node, 'fa fa-folder fa_custom_nr');
         } else if (data.node.type === 'packageDir') {
           data.instance.set_icon(data.node, 'fa fa-folder fa_custom_package');
         }
       })
       // Select the root node when the tree is refreshed
-      .on('refresh.jstree', () => {
+      .on('loaded.jstree', () => {
         const rootNode = this.jsTree().jstree('get_node', '#').children;
         this.jsTree().jstree('select_node', rootNode);
       })
