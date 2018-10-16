@@ -328,6 +328,9 @@ $(document).ready(() => {
       // Immediately ask for a SQLite to save and create the database
       dialog.showSaveDialog({
         title: 'Save a SQLite Database File',
+        // FIXME: this is some ugly regex used to get filename with no extension.
+        // see: https://stackoverflow.com/questions/4250364/how-to-trim-a-file-extension-from-a-string-in-javascript
+        defaultPath: jsonFileName.replace(/^.*[\\/]/, '').replace(/\.[^/.]+$/, ''),
         filters: [{
           name: 'SQLite File',
           extensions: ['sqlite']
