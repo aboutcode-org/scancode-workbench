@@ -124,6 +124,7 @@ class ConclusionDialog extends Controller {
       .then((conclusion) => this.db().setConclusion(conclusion))
       .then((conclusion) => this.getHandler('save')(conclusion));
     this.dialog.modal('hide');
+    $('.jstree').jstree(true).refresh(true);
   }
 
   // Delete a created Conclusion inside the Conclusion Modal

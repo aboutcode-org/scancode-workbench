@@ -383,6 +383,22 @@ div.dataTables_scrollHead th:first-child {
 .fa_custom_package {
   color: #f6b735;
 }
+
+.fa_custom_analyzed {
+  color: #83ad45;
+}
+
+.fa_custom_na {
+  color: #f94848;
+}
+
+.fa_custom_oc {
+  color: #601697;
+}
+
+.fa_custom_nr {
+  color: #1697af;
+}
 /*---------------------------------------
   Split.js
 -----------------------------------------*/
