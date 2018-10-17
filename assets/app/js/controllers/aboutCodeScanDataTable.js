@@ -139,6 +139,16 @@ class AboutCodeScanDataTable extends Controller {
             .map((column) => `${column.name}:name`)
         },
         {
+          // Show only FileInfo columns
+          extend: 'colvisGroup',
+          text: 'File info',
+          show: AboutCodeScanDataTable.FILEINFO_GROUP
+            .map((column) => `${column.name}:name`),
+          hide: AboutCodeScanDataTable.TABLE_COLUMNS
+            .filter((column) => AboutCodeScanDataTable.FILEINFO_GROUP.indexOf(column) < 0)
+            .map((column) => `${column.name}:name`)
+        },
+        {
           // Show only origin columns
           extend: 'colvisGroup',
           text: 'Origin info',
@@ -443,20 +453,43 @@ class AboutCodeScanDataTable extends Controller {
       AboutCodeScanDataTable.PACKAGE_COLUMNS);
   }
 
+  static get FILEINFO_COLUMNS() {
+    return $.grep(AboutCodeScanDataTable.TABLE_COLUMNS, (column) => {
+      return $.inArray(column.name, AboutCodeScanDataTable.FILEINFO_COLUMN_NAMES) >= 0;
+    });
+  }
+
   static get ORIGIN_COLUMNS() {
     return $.grep(AboutCodeScanDataTable.TABLE_COLUMNS, (column) => {
       return $.inArray(column.name, AboutCodeScanDataTable.ORIGIN_COLUMN_NAMES) >= 0;
     });
   }
 
+  static get CUSTOM_LICENSE_COLUMNS() {
+    return $.grep(AboutCodeScanDataTable.TABLE_COLUMNS, (column) => {
+      return $.inArray(column.name, AboutCodeScanDataTable.LICENSE_COLUMN_NAMES) >= 0;
+    });
+  }
+
+  static get CUSTOM_PACKAGE_COLUMNS() {
+    return $.grep(AboutCodeScanDataTable.TABLE_COLUMNS, (column) => {
+      return $.inArray(column.name, AboutCodeScanDataTable.PACKAGE_COLUMN_NAMES) >= 0;
+    });
+  }
+
   static get LICENSE_GROUP() {
     return AboutCodeScanDataTable.LOCATION_COLUMN
-      .concat(AboutCodeScanDataTable.LICENSE_COLUMNS);
+      .concat(AboutCodeScanDataTable.CUSTOM_LICENSE_COLUMNS);
   }
 
   static get COPYRIGHT_GROUP() {
     return AboutCodeScanDataTable.LOCATION_COLUMN
       .concat(AboutCodeScanDataTable.COPYRIGHT_COLUMNS);
+  }
+
+  static get FILEINFO_GROUP() {
+    return AboutCodeScanDataTable.LOCATION_COLUMN
+      .concat(AboutCodeScanDataTable.FILEINFO_COLUMNS);
   }
 
   static get ORIGIN_GROUP() {
@@ -466,7 +499,7 @@ class AboutCodeScanDataTable extends Controller {
 
   static get PACKAGE_GROUP() {
     return AboutCodeScanDataTable.LOCATION_COLUMN
-      .concat(AboutCodeScanDataTable.PACKAGE_COLUMNS);
+      .concat(AboutCodeScanDataTable.CUSTOM_PACKAGE_COLUMNS);
   }
 }
 
@@ -492,7 +525,7 @@ AboutCodeScanDataTable.COPYRIGHT_COLUMNS =
         'title': 'Copyright Statements',
         'name': 'copyright_statements',
         'bar_chart_class': 'bar-chart-copyrights',
-        'visible': true
+        'visible': false
       },
       {
         'data': function (row) {
@@ -558,7 +591,7 @@ AboutCodeScanDataTable.LICENSE_COLUMNS =
         'title': 'License Short Name',
         'name': 'license_short_name',
         'bar_chart_class': 'bar-chart-licenses',
-        'visible': true
+        'visible': false
       },
       {
         'data': 'license_category[<hr/>]',
@@ -684,7 +717,7 @@ AboutCodeScanDataTable.FILE_COLUMNS =
         'title': 'File Extension',
         'name': 'extension',
         'bar_chart_class': 'bar-chart-file-infos',
-        'visible': false
+        'visible': true
       },
       {
         'data': 'date',
@@ -702,7 +735,7 @@ AboutCodeScanDataTable.FILE_COLUMNS =
         'data': 'sha1',
         'title': 'SHA1',
         'name': 'sha1',
-        'visible': true
+        'visible': false
       },
       {
         'data': 'md5',
@@ -720,7 +753,7 @@ AboutCodeScanDataTable.FILE_COLUMNS =
         'data': 'mime_type',
         'title': 'MIME Type',
         'name': 'mime_type',
-        'visible': false
+        'visible': true
       },
       {
         'data': 'file_type',
@@ -734,7 +767,7 @@ AboutCodeScanDataTable.FILE_COLUMNS =
         'title': 'Language',
         'name': 'programming_language',
         'bar_chart_class': 'bar-chart-file-infos',
-        'visible': false
+        'visible': true
       },
       {
         'data': 'is_binary',
@@ -836,13 +869,49 @@ AboutCodeScanDataTable.PACKAGE_COLUMNS =
       },
     ];
 
+AboutCodeScanDataTable.FILEINFO_COLUMN_NAMES = 
+  [
+    'name',
+    'extension',
+    'size',
+    'mime_type', 
+    'file_type',
+    'programming_language'
+  ];
+
 AboutCodeScanDataTable.ORIGIN_COLUMN_NAMES =
-    [
-      'copyright_statements',
-      'license_short_name',
-      'license_category',
-      'email',
-      'url'
-    ];
+  [
+    'copyright_statements',
+    'license_short_name',
+    'license_category',
+    'email',
+    'url',
+    'mime_type',
+    'file_type',
+    'programming_language'
+  ];
+
+AboutCodeScanDataTable.LICENSE_COLUMN_NAMES = 
+  [
+    'license_expressions',
+    'license_key',
+    'license_score',
+    'license_short_name', 
+    'license_category',
+    'license_owner',
+    'license_spdx_key',
+    'license_start_line',
+    'license_end_line'
+  ];
+
+AboutCodeScanDataTable.PACKAGE_COLUMN_NAMES = 
+  [
+    'packages_type',
+    'packages_name',
+    'packages_version',
+    'packages_declared_licensing',
+    'packages_primary_language',
+    'packages_purl'
+  ];
 
 module.exports = AboutCodeScanDataTable;
