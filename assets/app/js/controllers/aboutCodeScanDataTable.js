@@ -274,7 +274,8 @@ class AboutCodeScanDataTable extends Controller {
                 { $eq: null }
               ]
             };
-          } else if (columnName === 'extension') {
+          // FIXME: This should probalby be a list if any more vales are added
+          } else if (columnName === 'extension' || columnName === 'programming_language' || columnName === 'name') {
             query.where.$and[columnName] = {
               $eq: columnSearch
             };
