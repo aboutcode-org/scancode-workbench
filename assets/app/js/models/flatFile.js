@@ -193,7 +193,7 @@ module.exports = function(sequelize, DataTypes) {
       packages_vcs_tool: getValues(file.packages, 'vcs_tool'),
       packages_vcs_repository: getValues(file.packages, 'vcs_repository'),
       packages_vcs_revision: getValues(file.packages, 'vcs_revision'),
-      packages_declared_licensing: getValues(file.packages, 'declared_licensing'),
+      packages_declared_licensing: getValues(file.packages, 'declared_license'),
       packages_license_expression: getValues(file.packages, 'license_expression'),
       packages_notice_text: getValues(file.packages, 'notice_text'),
       packages_dependencies: getValues(file.packages, 'dependencies'),
