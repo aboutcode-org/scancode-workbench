@@ -260,8 +260,14 @@ class AboutCodeDB {
       stream
         .pipe(JSONStream.parse('files.*'))
         .on('header', (header) => {
-          if ('header' in header) {
-            header = header.header;
+          if ('headers' in header) {
+            // FIXME: This should be smarter
+            const header_data = header.headers[0];
+            header = {
+              scancode_notice: header_data.notice,
+              scancode_version: header_data.tool_version,
+              scancode_options: header_data.options
+            };
           }
           $.extend(header, {
             aboutcode_manager_version: version,
