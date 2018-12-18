@@ -197,6 +197,36 @@ describe('checkAboutCodeDB', () => {
         .then(() => aboutCodeDB.db.Url.count())
         .then((urlCount) => assert.strictEqual(urlCount, 30));
     });
+    it('should get header information from a legacy scan file', () => {
+      const test_file = __dirname + '/data/aboutcodeDB/legacy-header.json';
+      const aboutCodeDB = new AboutCodeDB();
+
+      return aboutCodeDB.sync
+        .then(() => aboutCodeDB.db.File.count())
+        .then((rowCount) => assert.strictEqual(rowCount, 0))
+        .then(() => aboutCodeDB.addFromJson(test_file))
+        .then(() => aboutCodeDB.db.Header.findOne({where: {id: 1}}))
+        .then((header) => {
+          assert.strictEqual(header.scancode_version, '2.9.2');
+          assert.isNotNull(header.scancode_notice);
+          assert.isNotNull(header.scancode_options);
+        });
+    });
+    it('should get header information from a v2.9.8 scan file', () => {
+      const test_file = __dirname + '/data/aboutcodeDB/2.9.8-header.json';
+      const aboutCodeDB = new AboutCodeDB();
+
+      return aboutCodeDB.sync
+        .then(() => aboutCodeDB.db.File.count())
+        .then((rowCount) => assert.strictEqual(rowCount, 0))
+        .then(() => aboutCodeDB.addFromJson(test_file))
+        .then(() => aboutCodeDB.db.Header.findOne({where: {id: 1}}))
+        .then((header) => {
+          assert.strictEqual(header.scancode_version, '2.9.8');
+          assert.isNotNull(header.scancode_notice);
+          assert.isNotNull(header.scancode_options);
+        });
+    });
   });
 
   describe('getDuplicatePaths', () => {
