@@ -27,7 +27,7 @@ import zipfile
 #######################
 APP_NAME = 'AboutCode-Manager'
 APP_BUNDLE_ID = 'com.electron.aboutcode-manager'
-VERSION = '2.6.0'
+VERSION = '2.6.1'
 ELECTRON_VERSION = '3.0.3'
 
 #######################
