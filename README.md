@@ -1,32 +1,32 @@
-# <img src="assets/app/images/aboutcode-logo.png" align="center" alt="AboutCode Manager">
+# <img src="assets/app/images/aboutcode-logo.png" align="center" alt="ScanCode Workbench">
 
-[![Travis Build Status](https://travis-ci.org/nexB/aboutcode-manager.svg?branch=develop)](https://travis-ci.org/nexB/aboutcode-manager) 
-[![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/nexB/aboutcode-manager)](https://ci.appveyor.com/project/nexB/aboutcode-manager)
+[![Travis Build Status](https://travis-ci.org/nexB/scancode-workbench.svg?branch=develop)](https://travis-ci.org/nexB/scancode-workbench) 
+[![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/nexB/scancode-workbench)](https://ci.appveyor.com/project/nexB/scancode-workbench)
 
-AboutCode Manager provides an advanced visual UI to help you quickly evaluate
+ScanCode Workbench provides an advanced visual UI to help you quickly evaluate
 license and other notices identified by 
 [ScanCode](https://github.com/nexB/scancode-toolkit/) and record your conclusion
 about the effective license(s) for a component.
 [ScanCode](https://github.com/nexB/scancode-toolkit/) detects licenses, copyrights 
-and other interesting information in your code. AboutCode Manager allows you to take the
+and other interesting information in your code. ScanCode Workbench allows you to take the
 scan results from ScanCode and create conclusions. By creating these conclusions 
 within your codebase, you are creating a software inventory of your product. 
 The conclusions (Concluded License, Concluded Owner, etc.) you make when 
 creating your conclusion can be exported as a JSON file or saved as SQLite file.
 
-AboutCode Manager is based on
+ScanCode Workbench is based on
 [Electron](https://electron.atom.io/) and will be the primary desktop/GUI tool 
 for using nexB’s [AboutCode tools](https://github.com/nexB/aboutcode). This app 
 works on Windows, OS X and Linux operating systems.
 
-![AboutCode Manager](https://github.com/nexB/aboutcode-manager/wiki/aboutcode-manager-chart-summary.gif)
+![ScanCode Workbench](https://github.com/nexB/scancode-workbench/wiki/scancode-workbench-chart-summary.gif)
 
 ## Using
 
-* You can [download the latest release](https://github.com/nexB/aboutcode-manager/releases) 
+* You can [download the latest release](https://github.com/nexB/scancode-workbench/releases) 
 for your operating system or build it yourself (see below). Once downloaded, you 
-can find `AboutCode-Manager` under `dist/AboutCode-Manager-<os>-x64-<version>`.
-* AboutCode Manager >= v2 is only compatible with scans from 
+can find `ScanCode-Workbench` under `dist/ScanCode-Workbench-<os>-x64-<version>`.
+* ScanCode Workbench >= v2 is only compatible with scans from 
 [ScanCode v2.0.0](https://github.com/nexB/scancode-toolkit/releases) and 
 above which are run with the ScanCode `-i` option. For a list of available ScanCode 
 options see [How To: Set what will be detected in a scan](https://github.com/nexB/scancode-toolkit/wiki/How-To:-Set-what-will-be-detected-in-a-scan)
@@ -36,28 +36,28 @@ options see [How To: Set what will be detected in a scan](https://github.com/nex
 ```
 
 * We have provided a set of sample scans that you can quickly review in 
-AboutCode Manager in order to get a sense of its functionality and the types of 
+ScanCode Workbench in order to get a sense of its functionality and the types of 
 information captured by a scan.  The samples are located at 
-[https://github.com/nexB/aboutcode-manager/tree/develop/samples](https://github.com/nexB/aboutcode-manager/tree/develop/samples).
+[https://github.com/nexB/scancode-workbench/tree/develop/samples](https://github.com/nexB/scancode-workbench/tree/develop/samples).
 * Import a ScanCode JSON file, and see what components are in your software! See 
-the [wiki](https://github.com/nexB/aboutcode-manager/wiki#tutorials) for more 
-documentation on how to use AboutCode Manager.
+the [wiki](https://github.com/nexB/scancode-workbench/wiki#tutorials) for more 
+documentation on how to use ScanCode Workbench.
 
-![Import a JSON file](https://github.com/nexB/aboutcode-manager/wiki/import-json-file.gif)
+![Import a JSON file](https://github.com/nexB/scancode-workbench/wiki/import-json-file.gif)
 
 ## Building
 
 You'll need [Node.js](https://nodejs.org) (which comes with [npm](http://npmjs.com)) 
 installed on your computer in order to build this app. For a list of platform 
-specific requirements, see the Building section of the [wiki](https://github.com/nexB/aboutcode-manager/wiki/Building).
+specific requirements, see the Building section of the [wiki](https://github.com/nexB/scancode-workbench/wiki/Building).
 Then, from your command line:
 
 ```bash
 # Clone this repository
-git clone https://github.com/nexB/aboutcode-manager.git
+git clone https://github.com/nexB/scancode-workbench.git
 
 # Go into the repository
-cd aboutcode-manager
+cd scancode-workbench
 
 # Install dependencies and run the app
 npm install
@@ -81,8 +81,8 @@ target platforms by running:
 $ python build.py
 ```
 
-After building is done, you can find `AboutCode-Manager` under 
-`dist/AboutCode-Manager-<os>-x64-<version>`. Archives (tar.gz and .zip) are 
+After building is done, you can find `ScanCode-Workbench` under 
+`dist/ScanCode-Workbench-<os>-x64-<version>`. Archives (tar.gz and .zip) are 
 also built.
 
 Note: A build for any of the three target platforms must be executed on the 

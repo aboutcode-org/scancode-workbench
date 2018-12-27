@@ -1,9 +1,9 @@
 /*
  #
  # Copyright (c) 2017 nexB Inc. and others. All rights reserved.
- # https://nexb.com and https://github.com/nexB/scancode-toolkit/
- # The ScanCode software is licensed under the Apache License version 2.0.
- # AboutCode is a trademark of nexB Inc.
+ # https://nexb.com and https://github.com/nexB/scancode-workbench/
+ # The ScanCode Workbench software is licensed under the Apache License version 2.0.
+ # ScanCode is a trademark of nexB Inc.
  #
  # You may not use this software except in compliance with the License.
  # You may obtain a copy of the License at: http://apache.org/licenses/LICENSE-2.0
@@ -18,18 +18,18 @@ const Sequelize = require('sequelize');
 const Progress = require('../helpers/progress');
 const BarChart = require('../helpers/barChart');
 const Utils = require('../helpers/utils');
-const AboutCodeScanDataTable = require('./aboutCodeScanDataTable');
+const ScanDataTable = require('./scanDataTable');
 const Controller = require('./controller');
 
 // There must be an svg element within the container element with this class
 const BARCHART = 'svg.barchart';
 
 /**
- * Bar chart summary for AboutCode scan data
+ * Bar chart summary for ScanCode scan data
  */
-class AboutCodeBarChart extends Controller {
-  constructor(containerId, aboutCodeDB) {
-    super(containerId, aboutCodeDB);
+class WorkbenchBarChart extends Controller {
+  constructor(containerId, workbenchDB) {
+    super(containerId, workbenchDB);
 
     this.chartOptions = {
       name: 'License Summary',
@@ -49,7 +49,7 @@ class AboutCodeBarChart extends Controller {
     this.chartAttributesSelect.select2({ placeholder: 'Select an attribute' });
 
     // Populate bar chart summary select box values
-    $.each(AboutCodeScanDataTable.TABLE_COLUMNS, (i, column) => {
+    $.each(ScanDataTable.TABLE_COLUMNS, (i, column) => {
       if (column.bar_chart_class) {
         this.chartAttributesSelect.append(
           `<option class="${column.bar_chart_class}" value="${column.name}">${column.title}</option>`);
@@ -138,4 +138,4 @@ class AboutCodeBarChart extends Controller {
   }
 }
 
-module.exports = AboutCodeBarChart;
+module.exports = WorkbenchBarChart;

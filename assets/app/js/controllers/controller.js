@@ -1,9 +1,9 @@
 /*
  #
  # Copyright (c) 2018 nexB Inc. and others. All rights reserved.
- # https://nexb.com and https://github.com/nexB/aboutcode-manager
- # The AboutCode Manager software is licensed under the Apache License version 2.0.
- # AboutCode is a trademark of nexB Inc.
+ # https://nexb.com and https://github.com/nexB/scancode-workbench/
+ # The ScanCode Workbench software is licensed under the Apache License version 2.0.
+ # ScanCode is a trademark of nexB Inc.
  #
  # You may not use this software except in compliance with the License.
  # You may obtain a copy of the License at: http://apache.org/licenses/LICENSE-2.0
@@ -18,13 +18,13 @@
  * Handles basic logic for a controller
  *
  * @param elementId The id of the associated html element
- * @param aboutCodeDB The initial database used for the view
+ * @param workbenchDB The initial database used for the view
  */
 class Controller {
-  constructor(elementId, aboutCodeDB) {
+  constructor(elementId, workbenchDB) {
     this._id = elementId;
     this._element = $(elementId);
-    this._aboutCodeDB = this.db(aboutCodeDB);
+    this._workbenchDB = this.db(workbenchDB);
 
     this._handlers = {};
   }
@@ -64,18 +64,18 @@ class Controller {
   }
 
   /**
-   * Returns the AboutCodeDB for this view or sets the AboutCodeDB if passed
+   * Returns the WorkbenchDB for this view or sets the WorkbenchDB if passed
    * in as a parameter
    *
-   * @param aboutCodeDB the AboutCodeDB instance to set (optional)
+   * @param workbenchDB the WorkbenchDB instance to set (optional)
    */
-  db(aboutCodeDB) {
-    if (aboutCodeDB !== undefined) {
-      this._aboutCodeDB = aboutCodeDB;
+  db(workbenchDB) {
+    if (workbenchDB !== undefined) {
+      this._workbenchDB = workbenchDB;
       this.needsReload(true);
     }
 
-    return this._aboutCodeDB;
+    return this._workbenchDB;
   }
 
   /**

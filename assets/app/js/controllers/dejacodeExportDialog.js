@@ -1,9 +1,9 @@
 /*
  #
  # Copyright (c) 2017 nexB Inc. and others. All rights reserved.
- # https://nexb.com and https://github.com/nexB/scancode-toolkit/
- # The ScanCode software is licensed under the Apache License version 2.0.
- # AboutCode is a trademark of nexB Inc.
+ # https://nexb.com and https://github.com/nexB/scancode-workbench/
+ # The ScanCode Workbench software is licensed under the Apache License version 2.0.
+ # ScanCode is a trademark of nexB Inc.
  #
  # You may not use this software except in compliance with the License.
  # You may obtain a copy of the License at: http://apache.org/licenses/LICENSE-2.0
@@ -22,8 +22,8 @@ const dialog = require('electron').remote.dialog;
  * The view responsible for displaying the DejaCode Conclusion Export dialog
  */
 class DejaCodeExportDialog extends Controller {
-  constructor(dialogId, aboutCodeDB) {
-    super(dialogId, aboutCodeDB);
+  constructor(dialogId, workbenchDB) {
+    super(dialogId, workbenchDB);
 
     // Get product name and version
     this.dialog = this.element();
@@ -66,7 +66,7 @@ class DejaCodeExportDialog extends Controller {
 
         this.dialog.modal('hide');
 
-        // Converts array of conclusions from AboutCode Manager to
+        // Converts array of conclusions from ScanCode Workbench to
         // DejaCode component format
         const dejaCodeComponents = $.map(conclusions, (conclusion) => {
           return {

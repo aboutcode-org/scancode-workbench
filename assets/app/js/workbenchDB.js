@@ -1,9 +1,9 @@
 /*
  #
  # Copyright (c) 2017 nexB Inc. and others. All rights reserved.
- # https://nexb.com and https://github.com/nexB/scancode-toolkit/
- # The ScanCode software is licensed under the Apache License version 2.0.
- # AboutCode is a trademark of nexB Inc.
+ # https://nexb.com and https://github.com/nexB/scancode-workbench/
+ # The ScanCode Workbench software is licensed under the Apache License version 2.0.
+ # ScanCode is a trademark of nexB Inc.
  #
  # You may not use this software except in compliance with the License.
  # You may obtain a copy of the License at: http://apache.org/licenses/LICENSE-2.0
@@ -34,7 +34,7 @@ const {parentPath} = require('./models/databaseUtils');
  * @param config.dbPassword
  * @param config.dbStorage
  */
-class AboutCodeDB {
+class WorkbenchDB {
   constructor(config) {
     // Constructor returns an object which effectively represents a connection
     // to the db arguments (name of db, username for db, pw for that user)
@@ -54,12 +54,12 @@ class AboutCodeDB {
     this.sync = this.sequelize.sync().then(() => this.db);
   }
 
-  // Get AboutCode Manager app information
-  getAboutCodeInfo() {
+  // Get ScanCode Workbench app information
+  getWorkbenchInfo() {
     return this.sync.then((db) => db.Header.findOne({
       attributes: [
-        'aboutcode_manager_notice',
-        'aboutcode_manager_version'
+        'workbench_notice',
+        'workbench_version'
       ]
     }));
   }
@@ -235,13 +235,13 @@ class AboutCodeDB {
   }
 
   // Add rows to the flattened files table from a ScanCode json object
-  addFromJson(jsonFileName, aboutCodeVersion, onProgressUpdate) {
+  addFromJson(jsonFileName, workbenchVersion, onProgressUpdate) {
     if (!jsonFileName) {
       throw new Error('Invalid json file name: ' + jsonFileName);
     }
 
     const stream = fs.createReadStream(jsonFileName, {encoding: 'utf8'});
-    const version = aboutCodeVersion;
+    const version = workbenchVersion;
     let headerId = null;
     let files_count = null;
     let dirs_count = null;
@@ -270,8 +270,8 @@ class AboutCodeDB {
             };
           }
           $.extend(header, {
-            aboutcode_manager_version: version,
-            aboutcode_manager_notice: 'Exported from AboutCode Manager and provided on an "AS IS" BASIS, WITHOUT WARRANTIES\\nOR CONDITIONS OF ANY KIND, either express or implied. No content created from\\nAboutCode Manager should be considered or used as legal advice. Consult an Attorney\\nfor any legal advice.\\nAboutCode Manager is a free software analysis application from nexB Inc. and others.\\nVisit https://github.com/nexB/aboutcode-manager/ for support and download."'
+            workbench_version: version,
+            workbench_notice: 'Exported from ScanCode Workbench and provided on an "AS IS" BASIS, WITHOUT WARRANTIES\\nOR CONDITIONS OF ANY KIND, either express or implied. No content created from\\nScanCode Workbench should be considered or used as legal advice. Consult an Attorney\\nfor any legal advice.\\nScanCode Workbench is a free software analysis application from nexB Inc. and others.\\nVisit https://github.com/nexB/scancode-workbench/ for support and download."'
           });
           files_count = header.files_count;
           promiseChain = promiseChain
@@ -283,7 +283,7 @@ class AboutCodeDB {
             rootPath = file.path.split('/')[0];
             // Show error for scans missing file type information
             if (file.type === undefined) {
-              reject(new AboutCodeDB.MissingFileInfoError());
+              reject(new WorkbenchDB.MissingFileInfoError());
             }
           }
           if (rootPath === file.path) {
@@ -460,6 +460,6 @@ class AboutCodeDB {
   }
 }
 
-AboutCodeDB.MissingFileInfoError = class MissingFileInfoError extends Error {};
+WorkbenchDB.MissingFileInfoError = class MissingFileInfoError extends Error {};
 
-module.exports = AboutCodeDB;
+module.exports = WorkbenchDB;

@@ -3,7 +3,7 @@
  # Copyright (c) 2017 nexB Inc. and others. All rights reserved.
  # https://nexb.com and https://github.com/nexB/scancode-toolkit/
  # The ScanCode software is licensed under the Apache License version 2.0.
- # AboutCode is a trademark of nexB Inc.
+ # ScanCode is a trademark of nexB Inc.
  #
  # You may not use this software except in compliance with the License.
  # You may obtain a copy of the License at: http://apache.org/licenses/LICENSE-2.0
@@ -20,8 +20,8 @@ const Controller = require('./controller');
  * The view responsible for displaying the Conclusion modal dialog
  */
 class ConclusionDialog extends Controller {
-  constructor(dialogId, aboutCodeDB) {
-    super(dialogId, aboutCodeDB);
+  constructor(dialogId, workbenchDB) {
+    super(dialogId, workbenchDB);
 
     // Define DOM element constants for the modal dialog.
     // TODO: Use nested ids to avoid collisions, e.g. #nodeModal .nodeModalLabel

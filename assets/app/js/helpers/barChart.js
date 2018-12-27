@@ -1,9 +1,9 @@
 /*
  #
  # Copyright (c) 2017 nexB Inc. and others. All rights reserved.
- # https://nexb.com and https://github.com/nexB/aboutcode-manager/
- # The ScanCode software is licensed under the Apache License version 2.0.
- # AboutCode is a trademark of nexB Inc.
+ # https://nexb.com and https://github.com/nexB/scancode-workbench/
+ # The ScanCode Workbench software is licensed under the Apache License version 2.0.
+ # ScanCode is a trademark of nexB Inc.
  #
  # You may not use this software except in compliance with the License.
  # You may obtain a copy of the License at: http://apache.org/licenses/LICENSE-2.0

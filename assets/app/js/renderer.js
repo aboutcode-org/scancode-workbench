@@ -1,9 +1,9 @@
 /*
  #
  # Copyright (c) 2017 nexB Inc. and others. All rights reserved.
- # https://nexb.com and https://github.com/nexB/aboutcode-manager/
- # The ScanCode software is licensed under the Apache License version 2.0.
- # AboutCode is a trademark of nexB Inc.
+ # https://nexb.com and https://github.com/nexB/scancode-workbench/
+ # The ScanCode Workbench software is licensed under the Apache License version 2.0.
+ # ScanCode is a trademark of nexB Inc.
  #
  # You may not use this software except in compliance with the License.
  # You may obtain a copy of the License at: http://apache.org/licenses/LICENSE-2.0
@@ -14,17 +14,17 @@
  #
  */
 
-const AboutCodeDB = require('./aboutCodeDB');
+const WorkbenchDB = require('./workbenchDB');
 const Splitter = require('./helpers/splitter');
 const Progress = require('./helpers/progress');
 
 const DejaCodeExportDialog = require('./controllers/dejacodeExportDialog');
 const ConclusionDialog = require('./controllers/conclusionDialog');
-const AboutCodeDashboard = require('./controllers/aboutCodeDashboard');
-const AboutCodeBarChart = require('./controllers/aboutCodeBarChart');
-const AboutCodeJsTree = require('./controllers/aboutCodeJsTree');
-const AboutCodeScanDataTable = require('./controllers/aboutCodeScanDataTable');
-const AboutCodeConclusionDataTable = require('./controllers/aboutCodeConclusionDataTable');
+const Dashboard = require('./controllers/dashboard');
+const BarChart = require('./controllers/barChart');
+const JsTree = require('./controllers/jsTree');
+const ScanDataTable = require('./controllers/scanDataTable');
+const ConclusionDataTable = require('./controllers/conclusionDataTable');
 
 const fs = require('fs');
 const shell = require('electron').shell;
@@ -33,7 +33,7 @@ const path = require('path');
 
 // The Electron module used to communicate asynchronously from a renderer process to the main process.
 const ipcRenderer = require('electron').ipcRenderer;
-const aboutCodeVersion = require('../../../package.json').version;
+const workbenchVersion = require('../../../package.json').version;
 
 /**
  * This is the UI Controller for the application. It's responsible for
@@ -41,18 +41,18 @@ const aboutCodeVersion = require('../../../package.json').version;
  */
 $(document).ready(() => {
   // Create default values for all of the data and ui classes
-  let aboutCodeDB = new AboutCodeDB();
+  let workbenchDB = new WorkbenchDB();
 
-  const dashboard = new AboutCodeDashboard('#tab-dashboard', aboutCodeDB);
+  const dashboard = new Dashboard('#tab-dashboard', workbenchDB);
 
-  const barChart = new AboutCodeBarChart('#tab-barchart', aboutCodeDB)
+  const barChart = new BarChart('#tab-barchart', workbenchDB)
     .on('bar-clicked', (attribute, value) => {
       // Show files that contain attribute value selected by user in bar chart
       scanDataTable.clearColumnFilters();
       if (value !== 'No Value Detected') {
         scanDataTable.setColumnFilter(attribute, value);
       } else {
-        scanDataTable.setColumnFilter(attribute, 'about_code_data_table_no_value_detected');
+        scanDataTable.setColumnFilter(attribute, 'workbench_data_table_no_value_detected');
       }
 
       updateViewsByPath(scanDataTable._selectedPath);
@@ -62,9 +62,9 @@ $(document).ready(() => {
       showScanDataButton.trigger('click');
     });
 
-  const scanDataTable = new AboutCodeScanDataTable('#tab-scandata', aboutCodeDB);
+  const scanDataTable = new ScanDataTable('#tab-scandata', workbenchDB);
 
-  const conclusionsTable = new AboutCodeConclusionDataTable('#tab-conclusion', aboutCodeDB)
+  const conclusionsTable = new ConclusionDataTable('#tab-conclusion', workbenchDB)
     .on('upload-clicked', (conclusions) => {
       if (conclusions.length > 0) {
         dejaCodeExportDialog.show();
@@ -77,7 +77,7 @@ $(document).ready(() => {
     })
     .on('export-json', exportJsonConclusions);
 
-  const conclusionDialog = new ConclusionDialog('#conclusionDialog', aboutCodeDB)
+  const conclusionDialog = new ConclusionDialog('#conclusionDialog', workbenchDB)
     .on('save', () => {
       conclusionsTable.needsReload(true);
       redrawCurrentView();
@@ -88,9 +88,9 @@ $(document).ready(() => {
     });
 
   const dejaCodeExportDialog =
-        new DejaCodeExportDialog('#conclusionExportModal', aboutCodeDB);
+        new DejaCodeExportDialog('#conclusionExportModal', workbenchDB);
 
-  const jstree = new AboutCodeJsTree('#jstree', aboutCodeDB)
+  const jstree = new JsTree('#jstree', workbenchDB)
     .on('node-edit', (node) => conclusionDialog.show(node.id))
     .on('node-selected', (node) => {
       updateViewsByPath(node.id);
@@ -182,11 +182,11 @@ $(document).ready(() => {
     redrawCurrentView();
   }
 
-  function schemaChange(dbVersion, aboutCodeVersion) {
+  function schemaChange(dbVersion, workbenchVersion) {
     dbVersion = dbVersion.split('.');
-    aboutCodeVersion = aboutCodeVersion.split('.');
+    workbenchVersion = workbenchVersion.split('.');
 
-    if (dbVersion[1] != aboutCodeVersion[1]) {
+    if (dbVersion[1] != workbenchVersion[1]) {
       return true;
     } else {
       return false;
@@ -196,17 +196,17 @@ $(document).ready(() => {
   /** Creates the database and all View objects from a SQLite file */
   function loadDatabase(fileName) {
     // Create a new database when importing a json file
-    aboutCodeDB = new AboutCodeDB({
-      dbName: 'aboutcode_db',
+    workbenchDB = new WorkbenchDB({
+      dbName: 'workbench_db',
       dbStorage: fileName
     });
     
     // Check that that the database schema matches current schema.
-    aboutCodeDB.sync
+    workbenchDB.sync
       .then((db) => db.Header.findById(1)
         .then((header) => {
-          const dbVersion = header.aboutcode_manager_version;
-          if (schemaChange(dbVersion, aboutCodeVersion)) { 
+          const dbVersion = header.workbench_version;
+          if (schemaChange(dbVersion, workbenchVersion)) { 
             dialog.showErrorBox(
               'Old SQLite schema found at file: ' + fileName,
               'The SQLite schema has been updated since the last time you loaded this ' +
@@ -216,7 +216,7 @@ $(document).ready(() => {
           }
         }));
     // Check that the database has the correct header information.
-    aboutCodeDB.sync
+    workbenchDB.sync
       .then((db) => db.Header.findAll())
       .then((headers) => {
         if (headers.length === 0) {
@@ -232,13 +232,13 @@ $(document).ready(() => {
 
   // Get the ScanCode version and options data from the DB and populate and open the modal
   function getScanInfo() {
-    return aboutCodeDB.sync
+    return workbenchDB.sync
       .then((db) => db.Header.findById(1)
         .then((header) => {
           const scancode_label = $('#scancode-info').find('#scancode-label');
           const scancode_display = $('#scancode-info').find('#scancode-display');
           if (header === null || header.scancode_version === null || header.scancode_options === null) {
-            scancode_label.text('Please import a ScanCode results file or an AboutCode Manager sqlite file to see the scan options.');
+            scancode_label.text('Please import a ScanCode results file or an ScanCode Workbench sqlite file to see the scan options.');
             scancode_display.css('display', 'none');
           } else {
             scancode_label.text('This information has been extracted from your imported ScanCode JSON file:');
@@ -251,20 +251,20 @@ $(document).ready(() => {
 
   /** Loads data for all views based on the current data */
   function updateViews() {
-    return aboutCodeDB.sync
+    return workbenchDB.sync
       .then(() => {
-        const currFile = aboutCodeDB.sequelize.options.storage;
-        document.title = 'AboutCode Manager - ' + path.basename(currFile);
+        const currFile = workbenchDB.sequelize.options.storage;
+        document.title = 'ScanCode Workbench - ' + path.basename(currFile);
         scanDataTable.clearColumnFilters();
 
         // update all views with the new database.
-        conclusionDialog.db(aboutCodeDB);
-        dejaCodeExportDialog.db(aboutCodeDB);
-        jstree.db(aboutCodeDB);
-        scanDataTable.db(aboutCodeDB);
-        conclusionsTable.db(aboutCodeDB);
-        dashboard.db(aboutCodeDB);
-        barChart.db(aboutCodeDB);
+        conclusionDialog.db(workbenchDB);
+        dejaCodeExportDialog.db(workbenchDB);
+        jstree.db(workbenchDB);
+        scanDataTable.db(workbenchDB);
+        conclusionsTable.db(workbenchDB);
+        dashboard.db(workbenchDB);
+        barChart.db(workbenchDB);
 
         // Reload the jstree, then trigger the current view to reload.
         jstree.redraw();
@@ -301,7 +301,7 @@ $(document).ready(() => {
       ]
     }, (newFileName) => {
       if (newFileName) {
-        const oldFileName = aboutCodeDB.sequelize.options.storage;
+        const oldFileName = workbenchDB.sequelize.options.storage;
         const reader = fs.createReadStream(oldFileName);
         const writer = fs.createWriteStream(newFileName);
         reader.pipe(writer);
@@ -351,7 +351,7 @@ $(document).ready(() => {
         }
 
         // Create a new database when importing a json file
-        aboutCodeDB = new AboutCodeDB({
+        workbenchDB = new WorkbenchDB({
           dbName: 'demo_schema',
           dbStorage: sqliteFileName,
         });
@@ -361,17 +361,17 @@ $(document).ready(() => {
           size: 100,
         });
 
-        aboutCodeDB.sync
+        workbenchDB.sync
           .then(() => progressbar.showDeterminate())
-          .then(() => aboutCodeDB.addFromJson(
+          .then(() => workbenchDB.addFromJson(
             jsonFileName,
-            aboutCodeVersion,
+            workbenchVersion,
             (progress) => progressbar.update(progress / 100)))
           .then(() => progressbar.hide())
           .then(updateViews)
           .catch((err) => {
             progressbar.hide();
-            if (err instanceof AboutCodeDB.MissingFileInfoError) {
+            if (err instanceof WorkbenchDB.MissingFileInfoError) {
               dialog.showErrorBox(
                 'Missing File Type Information',
                 'Missing file \'type\' information in the scanned data. ' +
@@ -411,42 +411,42 @@ $(document).ready(() => {
         return;
       }
 
-      const scanCodeInfoPromise = aboutCodeDB.getScanCodeInfo({
+      const scanCodeInfoPromise = workbenchDB.getScanCodeInfo({
         attributes: {
           exclude: ['id', 'createdAt', 'updatedAt']
         }
       });
 
-      const aboutCodeInfoPromise = aboutCodeDB.getAboutCodeInfo({
+      const workbenchInfoPromise = workbenchDB.getWorkbenchInfo({
         attributes: {
           exclude: ['id', 'createdAt', 'updatedAt']
         }
       });
 
-      const scanDataFilesPromise = aboutCodeDB.findAll({
+      const scanDataFilesPromise = workbenchDB.findAll({
         attributes: {
           exclude: ['id', 'createdAt', 'updatedAt']
         }
       });
 
-      const conclusionsPromise = aboutCodeDB.findAllConclusions({
+      const conclusionsPromise = workbenchDB.findAllConclusions({
         attributes: {
           exclude: ['id', 'createdAt', 'updatedAt']
         }
       });
 
-      const filesCountPromise = aboutCodeDB.getFileCount({
+      const filesCountPromise = workbenchDB.getFileCount({
         attributes: {
           exclude: ['id', 'createdAt', 'updatedAt']
         }
       });
 
-      Promise.all([scanCodeInfoPromise, aboutCodeInfoPromise,
+      Promise.all([scanCodeInfoPromise, workbenchInfoPromise,
         filesCountPromise, scanDataFilesPromise, conclusionsPromise])
-        .then(([scanCodeInfo, aboutCodeInfo, filesCount, scanDataFiles, conclusions]) => {
+        .then(([scanCodeInfo, workbenchInfo, filesCount, scanDataFiles, conclusions]) => {
           const json = {
-            aboutcode_manager_notice: aboutCodeInfo.aboutcode_manager_notice,
-            aboutcode_manager_version: aboutCodeInfo.aboutcode_manager_version,
+            workbench_notice: workbenchInfo.workbench_notice,
+            workbench_version: workbenchInfo.workbench_version,
             scancode_version: scanCodeInfo.scancode_version,
             scancode_options: scanCodeInfo.scancode_options,
             files_count: filesCount,
@@ -477,23 +477,23 @@ $(document).ready(() => {
         return;
       }
 
-      const aboutCodeInfoPromise = aboutCodeDB.getAboutCodeInfo({
+      const workbenchInfoPromise = workbenchDB.getWorkbenchInfo({
         attributes: {
           exclude: ['id', 'createdAt', 'updatedAt']
         }
       });
 
-      const conclusionsPromise = aboutCodeDB.findAllConclusions({
+      const conclusionsPromise = workbenchDB.findAllConclusions({
         attributes: {
           exclude: ['id', 'createdAt', 'updatedAt']
         }
       });
 
-      Promise.all([aboutCodeInfoPromise, conclusionsPromise])
-        .then(([aboutCodeInfo, conclusions]) => {
+      Promise.all([workbenchInfoPromise, conclusionsPromise])
+        .then(([workbenchInfo, conclusions]) => {
           const json = {
-            aboutcode_manager_notice: aboutCodeInfo.aboutcode_manager_notice,
-            aboutcode_manager_version: aboutCodeInfo.aboutcode_manager_version,
+            workbench_notice: workbenchInfo.workbench_notice,
+            workbench_version: workbenchInfo.workbench_version,
             conclusions: conclusions
           };
 
@@ -507,4 +507,4 @@ $(document).ready(() => {
   }
 });
 
-module.exports = aboutCodeVersion;
+module.exports = workbenchVersion;

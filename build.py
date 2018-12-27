@@ -4,7 +4,7 @@
 
 
 """
-Run this script to build AboutCode Manager. The script detects which OS
+Run this script to build ScanCode Workbench. The script detects which OS
 it is running on and produces a build archive only for this platform.
 It is meant to run primarily on a CI such as Travis and Appveyor.
 """
@@ -25,8 +25,8 @@ import zipfile
 
 # Build configuration
 #######################
-APP_NAME = 'AboutCode-Manager'
-APP_BUNDLE_ID = 'com.electron.aboutcode-manager'
+APP_NAME = 'ScanCode-Workbench'
+APP_BUNDLE_ID = 'com.electron.scancode-workbench'
 VERSION = '2.6.1'
 ELECTRON_VERSION = '3.0.3'
 
@@ -185,7 +185,7 @@ def build(clean=True, app_name=APP_NAME,
 
     print()
     print('#############################################################')
-    print('=> BUILDING AboutCode App release:', build_version)
+    print('=> BUILDING ScanCode Workbench App release:', build_version)
     print('platform:', std_platform.platform(), 'sys.platform:', sys_platform)
 
     # find the path to the NPM bin directory
@@ -262,7 +262,7 @@ def build(clean=True, app_name=APP_NAME,
 
     print()
     print('##################################################')
-    print('AboutCode App BUILD completed with these archives:')
+    print('ScanCode Workbench App BUILD completed with these archives:')
     for archive in os.listdir(build_dir):
         if archive.endswith(('zip', 'tar.gz')):
             print('   ', archive, 'size:', os.path.getsize(os.path.join(build_dir, archive)))
@@ -303,7 +303,7 @@ def build(clean=True, app_name=APP_NAME,
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(
-        description='Produces a build archive of AboutCode Manager for this '
+        description='Produces a build archive of ScanCode Workbench for this '
                     'platform.')
 
     parser.add_argument('--osx-sign',

@@ -1,5 +1,5 @@
 {
-  "name": "aboutcode-manager",
+  "name": "scancode-workbench",
   "version": "2.6.1",
   "description": "An application for viewing ScanCode results and concluding component origin and license",
   "main": "main.js",

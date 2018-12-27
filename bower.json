@@ -1,5 +1,5 @@
 {
-  "name": "aboutcode-manager",
+  "name": "scancode-workbench",
   "description": "An application for viewing ScanCode results and concluding component origin and license",
   "main": "main.js",
   "authors": [
@@ -8,7 +8,7 @@
   "license": "apache-2.0",
   "keywords": [
     "ScanCode",
-    "AboutCode Manager",
+    "ScanCode Workbench",
     "codebase",
     "open",
     "source",
@@ -17,7 +17,7 @@
     "source",
     "scanner"
   ],
-  "homepage": "https://github.com/nexB/aboutcode-manager",
+  "homepage": "https://github.com/nexB/scancode-workbench",
   "private": true,
   "ignore": [
     "**/.*",
