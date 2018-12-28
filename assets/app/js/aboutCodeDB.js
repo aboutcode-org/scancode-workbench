@@ -14,7 +14,6 @@
  #
  */
 
-const PackageURL = require('packageurl-js');
 const Sequelize = require('sequelize');
 const fs = require('fs');
 const JSONStream = require('JSONStream');
@@ -266,7 +265,8 @@ class AboutCodeDB {
             header = {
               scancode_notice: header_data.notice,
               scancode_version: header_data.tool_version,
-              scancode_options: header_data.options
+              scancode_options: header_data.options,
+              files_count: header_data.extra_data.files_count
             };
           }
           $.extend(header, {
@@ -388,9 +388,7 @@ class AboutCodeDB {
         return this._getNewCopyrights(file);
       }
       return $.map(file[attribute] || [], (value) => {
-        if (attribute === 'packages') {
-          value.purl = this._addPackageURL(value);
-        } else if (attribute === 'license_expressions') {
+        if (attribute === 'license_expressions') {
           return {
             license_expression: value,
             fileId: file.id
@@ -400,21 +398,6 @@ class AboutCodeDB {
         return value;
       });
     });
-  }
-
-  _addPackageURL(value) {
-    const type = value.type;
-    const namespace = value.namespace;
-    const name = value.name;
-    const version = value.version;
-    const qualifiers = value.qualifiers;
-    const subpath = value.subpath;
-
-    if (!type || !name) {
-      return null;
-    }
-
-    return new PackageURL(type, namespace, name, version, qualifiers, subpath).toString();
   }
 
   _getNewCopyrights(file) {
