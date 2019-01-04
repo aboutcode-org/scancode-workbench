@@ -199,7 +199,7 @@ function getTemplate() {
       role: 'help',
       submenu: [
         {
-          label: `AboutCode Manager Version ${packageJson.version}`,
+          label: `ScanCode Workbench Version ${packageJson.version}`,
           enabled: false
         },
         {
@@ -213,7 +213,7 @@ function getTemplate() {
         {
           label: 'Learn More',
           click: () => shell.openExternal(
-            'https://github.com/nexB/aboutcode-manager/wiki')
+            'https://github.com/nexB/scancode-workbench/wiki')
         },
         {
           label: 'Licensing Information',
@@ -228,12 +228,12 @@ function getTemplate() {
         {
           label: 'Documentation',
           click: () => shell.openExternal(
-            `https://github.com/nexB/aboutcode-manager/blob/v${packageJson.version}/README.md`)
+            `https://github.com/nexB/scancode-workbench/blob/v${packageJson.version}/README.md`)
         },
         {
           label: 'Search Issues',
           click: () => shell.openExternal(
-            'https://github.com/nexB/aboutcode-manager/issues')
+            'https://github.com/nexB/scancode-workbench/issues')
         }
       ]
     },
@@ -241,10 +241,10 @@ function getTemplate() {
 
   if (process.platform === 'darwin') {
     template.unshift({
-      label: 'AboutCode',
+      label: 'ScanCode Workbench',
       submenu: [
         {
-          label: 'About AboutCode Manager',
+          label: 'About ScanCode Workbench',
           click: () => {
             let win = new BrowserWindow({
               frame: true,

@@ -2,9 +2,9 @@ Software license
 ================
 
 Copyright (c) 2016 nexB Inc. and others. All rights reserved.
-https://nexb.com and https://github.com/nexB/scancode-toolkit/
-The AboutCode software is licensed under the Apache License version 2.0.
-AboutCode is a trademark of nexB Inc.
+https://nexb.com and https://github.com/nexB/scancode-workbench/
+The ScanCode Workbench software is licensed under the Apache License version 2.0.
+ScanCode is a trademark of nexB Inc.
 
 You may not use this software except in compliance with the License.
 You may obtain a copy of the License at: http://apache.org/licenses/LICENSE-2.0
@@ -17,18 +17,18 @@ specific language governing permissions and limitations under the License.
 Third-party software licenses
 =============================
 
-AboutCode embeds third-party free and open source software packages under various
+ScanCode Workbench embeds third-party free and open source software packages under various
 licenses including copyleft licenses. Some of the third-party software packages
 are delivered as pre-built binaries. The origin and license of these packages is
 documented by .ABOUT files.
 
 You may also contact us to request the source code by email at info@nexb.com or
 by postal mail at:
-  nexB Inc., AboutCode open source code request
+  nexB Inc., ScanCode Workbench open source code request
   735 Industrial Road, Suite #101, 94070 San Carlos, CA, USA
-Please indicate in your communication the AboutCode version for which you are
+Please indicate in your communication the ScanCode Workbench version for which you are
 requesting source code.
 
-AboutCode was built from electron-quickstart code that is dedicated
+ScanCode Workbench was built from electron-quickstart code that is dedicated
 to the Public Domain using the Creative Commons CC0 1.0 Universal (CC0 1.0)
 Public Domain Dedication: http://creativecommons.org/publicdomain/zero/1.0/

@@ -15,12 +15,12 @@ Tell us what happens instead
 What percentage of the time does it reproduce?
 
 ### Errors in the Developer Tools
-Include the error logged in the Console tab: https://github.com/nexB/aboutcode-manager/wiki/Check-for-Errors-in-the-Developer-Tools
+Include the error logged in the Console tab: https://github.com/nexB/scancode-workbench/wiki/Check-for-Errors-in-the-Developer-Tools
 
 ### System configuration
 **Operating System**:
 
-**AboutCode Manager Version**:
+**ScanCode Workbench Version**:
 
 **ScanCode Toolkit Version**:
 

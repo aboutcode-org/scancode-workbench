@@ -1,9 +1,9 @@
 /*
  #
  # Copyright (c) 2018 nexB Inc. and others. All rights reserved.
- # https://nexb.com and https://github.com/nexB/aboutcode-manager/
- # The AboutCode Manager software is licensed under the Apache License version 2.0.
- # AboutCode is a trademark of nexB Inc.
+ # https://nexb.com and https://github.com/nexB/scancode-workbench/
+ # The ScanCode Workbench software is licensed under the Apache License version 2.0.
+ # ScanCode is a trademark of nexB Inc.
  #
  # You may not use this software except in compliance with the License.
  # You may obtain a copy of the License at: http://apache.org/licenses/LICENSE-2.0
@@ -33,7 +33,7 @@ const engine = new CLIEngine({
 
 const esLintResults = engine.executeOnFiles(files).results;
 
-// Runs ESLint over all AboutCode Manager files and test files and outputs an
+// Runs ESLint over all ScanCode Workbench files and test files and outputs an
 // for each failure
 describe('ESLint', () => esLintResults.forEach(({ filePath, messages }) => {
   it(`validates ${filePath}`, () => {

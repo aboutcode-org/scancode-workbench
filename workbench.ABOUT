@@ -1,0 +1,10 @@
+about_resource: scancode-workbench
+name: ScanCode Workbench
+version: 2.6.1
+license: apache-2.0
+owner: nexB Inc.
+copyright: Copyright (c) 2018 nexB Inc.
+
+notice_file: NOTICE
+license_file: LICENSE
+notes: ScanCode Workbench is licensed under Apache 2.0. Some example code from electron-quickstart is used and is licensed under CC0-1.0.

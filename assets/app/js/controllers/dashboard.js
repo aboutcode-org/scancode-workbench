@@ -1,9 +1,9 @@
 /*
  #
  # Copyright (c) 2017 nexB Inc. and others. All rights reserved.
- # https://nexb.com and https://github.com/nexB/aboutcode-manager/
+ # https://nexb.com and https://github.com/nexB/scancode-workbench/
  # The ScanCode software is licensed under the Apache License version 2.0.
- # AboutCode is a trademark of nexB Inc.
+ # ScanCode is a trademark of nexB Inc.
  #
  # You may not use this software except in compliance with the License.
  # You may obtain a copy of the License at: http://apache.org/licenses/LICENSE-2.0
@@ -36,9 +36,9 @@ const LEGEND_LIMIT = 8;
  * The view responsible for displaying the summary information from ScanCode
  * Scan data
  */
-class AboutCodeDashboard extends Controller {
-  constructor(dashboardId, aboutCodeDB) {
-    super(dashboardId, aboutCodeDB);
+class Dashboard extends Controller {
+  constructor(dashboardId, workbenchDB) {
+    super(dashboardId, workbenchDB);
 
     this.totalFilesScanned = $('#total-files').find('.title');
     this.uniqueLicenses = $('#unique-licenses').find('.title');
@@ -249,8 +249,8 @@ class AboutCodeDashboard extends Controller {
           where: where
         })
         .then((data) => Utils.getAttributeValues(data, attribute))
-        .then((data) => AboutCodeDashboard.formatData(data))
-        .then((data) => AboutCodeDashboard.limitData(data, LEGEND_LIMIT));
+        .then((data) => Dashboard.formatData(data))
+        .then((data) => Dashboard.limitData(data, LEGEND_LIMIT));
     });
   }
 
@@ -283,4 +283,4 @@ class AboutCodeDashboard extends Controller {
   }
 }
 
-module.exports = AboutCodeDashboard;
+module.exports = Dashboard;

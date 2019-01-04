@@ -1,9 +1,9 @@
 /*
  #
  # Copyright (c) 2017 nexB Inc. and others. All rights reserved.
- # https://nexb.com and https://github.com/nexB/scancode-toolkit/
- # The ScanCode software is licensed under the Apache License version 2.0.
- # AboutCode is a trademark of nexB Inc.
+ # https://nexb.com and https://github.com/nexB/scancode-workbench/
+ # The ScanCode Workbench software is licensed under the Apache License version 2.0.
+ # ScanCode is a trademark of nexB Inc.
  #
  # You may not use this software except in compliance with the License.
  # You may obtain a copy of the License at: http://apache.org/licenses/LICENSE-2.0
@@ -24,9 +24,9 @@ const CONCLUSION_TABLE = 'table.conclusions-table';
  * The view responsible for displaying the DataTable containing the concluded
  * data created for Conclusions
  */
-class AboutCodeConclusionDataTable extends Controller {
-  constructor(tableID, aboutCodeDB) {
-    super(tableID, aboutCodeDB);
+class ConclusionDataTable extends Controller {
+  constructor(tableID, workbenchDB) {
+    super(tableID, workbenchDB);
   }
 
   reload() {
@@ -60,7 +60,7 @@ class AboutCodeConclusionDataTable extends Controller {
     this._dataTable = $(this.dataTableSelector()).DataTable({
       scrollX: true,
       scrollResize: true,
-      columns: AboutCodeConclusionDataTable.COLUMNS,
+      columns: ConclusionDataTable.COLUMNS,
       buttons: [
         {
           name: 'uploadDeja',
@@ -205,4 +205,4 @@ class AboutCodeConclusionDataTable extends Controller {
   }
 }
 
-module.exports = AboutCodeConclusionDataTable;
+module.exports = ConclusionDataTable;

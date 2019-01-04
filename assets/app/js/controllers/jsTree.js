@@ -1,9 +1,9 @@
 /*
  #
  # Copyright (c) 2017 nexB Inc. and others. All rights reserved.
- # https://nexb.com and https://github.com/nexB/scancode-toolkit/
- # The ScanCode software is licensed under the Apache License version 2.0.
- # AboutCode is a trademark of nexB Inc.
+ # https://nexb.com and https://github.com/nexB/scancode-workbench/
+ # The ScanCode Workbench software is licensed under the Apache License version 2.0.
+ # ScanCode is a trademark of nexB Inc.
  #
  # You may not use this software except in compliance with the License.
  # You may obtain a copy of the License at: http://apache.org/licenses/LICENSE-2.0
@@ -20,9 +20,9 @@ const Controller = require('./controller');
  * The view responsible for displaying the jsTree representing file paths in the
  * ScanCode Scan data
  */
-class AboutCodeJsTree extends Controller {
-  constructor(jsTreeId, aboutCodeDB) {
-    super(jsTreeId, aboutCodeDB);
+class JsTree extends Controller {
+  constructor(jsTreeId, workbenchDB) {
+    super(jsTreeId, workbenchDB);
   }
 
   reload() {
@@ -183,4 +183,4 @@ class AboutCodeJsTree extends Controller {
   }
 }
 
-module.exports = AboutCodeJsTree;
+module.exports = JsTree;
