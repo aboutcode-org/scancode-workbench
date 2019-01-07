@@ -63,9 +63,10 @@ class ScanDataTable extends Controller {
       const columnSelect = $(`select#scandata-${column.name}`);
       columnSelect.val('');
       this.dataTable()
-        .column(`${column.name}:name`)
-        .search('', false, false);
+        .column(`${column.name}:name`);
     });
+    // clear golbal serach box
+    this.dataTable().search('', false, false);
   }
 
   setColumnFilter(columnName, value) {
