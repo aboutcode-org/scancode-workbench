@@ -838,9 +838,9 @@ ScanDataTable.PACKAGE_COLUMNS =
         'visible': false
       },
       {
-        'data': 'packages_declared_licensing[<hr/>]',
-        'title': 'Package Declared Licensing',
-        'name': 'packages_declared_licensing',
+        'data': 'packages_license_expression[<hr/>]',
+        'title': 'Package License Expression',
+        'name': 'packages_license_expression',
         'visible': false
       },
       {
@@ -911,7 +911,7 @@ ScanDataTable.PACKAGE_COLUMN_NAMES =
     'packages_type',
     'packages_name',
     'packages_version',
-    'packages_declared_licensing',
+    'packages_license_expression',
     'packages_primary_language',
     'packages_purl'
   ];
