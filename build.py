@@ -27,7 +27,7 @@ import zipfile
 #######################
 APP_NAME = 'ScanCode-Workbench'
 APP_BUNDLE_ID = 'com.electron.scancode-workbench'
-VERSION = '2.6.1'
+VERSION = '3.0.0b1'
 ELECTRON_VERSION = '3.0.3'
 
 #######################

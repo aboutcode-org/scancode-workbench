@@ -1,6 +1,6 @@
 {
   "name": "scancode-workbench",
-  "version": "2.6.1",
+  "version": "3.0.0b1",
   "description": "An application for viewing ScanCode results and concluding component origin and license",
   "main": "main.js",
   "scripts": {
