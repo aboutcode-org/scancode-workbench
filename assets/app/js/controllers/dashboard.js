@@ -227,16 +227,21 @@ class Dashboard extends Controller {
   }
 
   _loadChartData(attribute, parentPath) {
-    const where = {
-      $and: [{
+    let where = {};
+    if (attribute === 'packages_type') {
+      where = {
         type: {
-          $eq: 'file'
+          $or: ['file', 'directory']
         }
-      }]
-    };
+      };
+    } else {
+      where = {
+        type: {$eq: 'file'}
+      };
+    }
     
     if (parentPath) {
-      where.$and.push({path: {$like: `${parentPath}%`}});
+      where.$and = [{path: {$like: `${parentPath}%`}}];
     }
 
     return this.db().sync.then((db) => {
@@ -244,7 +249,8 @@ class Dashboard extends Controller {
         .findAll({
           attributes: [
             Sequelize.fn('TRIM', Sequelize.col(attribute)),
-            attribute
+            attribute,
+            'type'
           ],
           where: where
         })
