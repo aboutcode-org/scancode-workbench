@@ -29,14 +29,14 @@ class Utils {
      
     for (let i = 0; i < values.length; i++) {
       attributeValue = values[i][attribute];
-      let fileType = values[i].type;
+      const fileType = values[i].type;
 
       if (!Array.isArray(attributeValue) || attributeValue.length === 0) {
         attributeValue = [attributeValue];
       }
 
       for (let j = 0; j < attributeValue.length; j++) {
-        let val = attributeValue[j];
+        const val = attributeValue[j];
         if (!Utils.isValid(val) && attribute === 'packages_type' && fileType === 'directory') {
           continue;
         }
