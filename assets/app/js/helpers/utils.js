@@ -26,18 +26,23 @@ class Utils {
   static getAttributeValues(values, attribute) {
     const validatedValues = [];
     let attributeValue = null;
-
+     
     for (let i = 0; i < values.length; i++) {
       attributeValue = values[i][attribute];
+      const fileType = values[i].type;
 
       if (!Array.isArray(attributeValue) || attributeValue.length === 0) {
         attributeValue = [attributeValue];
       }
 
       for (let j = 0; j < attributeValue.length; j++) {
+        const val = attributeValue[j];
+        if (!Utils.isValid(val) && attribute === 'packages_type' && fileType === 'directory') {
+          continue;
+        }
         validatedValues.push(
-          Utils.isValid(attributeValue[j]) ?
-            attributeValue[j] : 'No Value Detected');
+          Utils.isValid(val) ?
+            val : 'No Value Detected');
       }
     }
     return validatedValues;
