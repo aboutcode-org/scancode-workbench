@@ -171,7 +171,7 @@ class JsTree extends Controller {
         }
       })
       // Select the root node when the tree is refreshed
-      .on('loaded.jstree', () => {
+      .on('refresh.jstree', () => {
         const rootNode = this.jsTree().jstree('get_node', '#').children;
         this.jsTree().jstree('select_node', rootNode);
       })
