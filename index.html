@@ -62,13 +62,8 @@
     <div id="sidebar-wrapper">
         <ul class="sidebar-nav">
             <li>
-                <button class="btn btn-sidebar" id="open-file" data-toggle="tooltip" data-placement="right" title="Open SQLite File">
-                    <i class="fa fa-folder-open-o" aria-hidden="true"></i>
-                </button>
-            </li>
-            <li>
-                <button class="btn btn-sidebar" id="save-file" data-toggle="tooltip" data-placement="right" title="Save As New SQLite File">
-                    <i class="fa fa-floppy-o" aria-hidden="true"></i>
+                <button class="btn btn-sidebar" id="show-tab-welcomepage" data-toggle="tab" data-target="#tab-welcomepage" data-placement="right" title="Welcome Page">
+                    <i class="fa fa-barcode" aria-hidden="true"></i>
                 </button>
             </li>
             <li>
@@ -101,7 +96,7 @@
 
     <!-- Main Content -->
     <div id="content">
-
+	
         <!-- JsTree -->
         <div class="split split-flex" id="leftCol">
              <div id="jstree"></div>
@@ -109,6 +104,48 @@
 
         <!-- Tab Bar -->
         <div class="tab-content split split-flex" id="rightCol">
+
+            <!-- Welcome Page -->  
+            <div class="tab-pane container" id="tab-welcomepage">
+                <div id="welcomepage-container">
+                    <div id="wecomepage-title">
+                        <h1>Welcome to ScanCode Workbench</h1>
+                    </div>
+                    <div id="welcomepage-view">
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <h3>Start:</h3>
+                                <div class="btn-group-vertical" role="group" aria-label="...">
+                                    <button id="import-json" class="btn btn-lg btn-default"><i class="fa fa-cogs"></i> Import ScanCode JSON</button>
+                                    <button id="open-file" class="btn btn-lg btn-default"><i class="fa fa-folder"></i> Open SQLite File</button>
+                                    <button id="save-file" class="btn btn-lg btn-default"><i class="fa fa-floppy-o"></i> Save SQLite File</button>
+                                </div>
+                            </div>
+                            <div class="col-sm-8">
+                                <h3>Learn:</h3>
+                                <div class="btn-group-vertical" role="group" aria-label="...">
+                                    <a href="https://github.com/nexB/scancode-toolkit/wiki/How-To:-Run-a-scan" class="btn btn-lg btn-default">How to run a scan with ScanCode Toolkit</a>
+                                    <a href="https://github.com/nexB/scancode-workbench/wiki/ScanCode-Workbench-Views" class="btn btn-lg btn-default">About ScanCode Workbench's various views</a>
+                                    <a href="https://github.com/nexB/scancode-workbench/wiki/Creating-Conclusions" class="btn btn-lg btn-default">How to create Conclusions</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row" style="padding-top:50px">
+                            <div class="col-sm-6">
+                                <h4>Additional Help and Documentation:</h4>
+                                <ul>
+                                    <li><a href="https://github.com/nexB/scancode-workbench/wiki/">ScanCode Workbench Wiki</a></li>
+                                    <li><a href="https://github.com/nexB/scancode-workbench/issues/">ScanCode Workbench Issue Tracker</a></li>
+                                    <li><a href="https://github.com/nexB/scancode-workbench/wiki/Check-for-Errors-in-the-Developer-Tools">Checking for Errors</a></li>
+                                </ul>
+                            </div>
+                            <div class="col-sm-6">
+                                <!-- pass -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
             <!-- ScanData DataTable Tab-->
             <div class="tab-pane container" id="tab-scandata">

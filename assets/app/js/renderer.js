@@ -25,6 +25,7 @@ const BarChart = require('./controllers/barChart');
 const JsTree = require('./controllers/jsTree');
 const ScanDataTable = require('./controllers/scanDataTable');
 const ConclusionDataTable = require('./controllers/conclusionDataTable');
+const WelcomePage = require('./controllers/welcomePage');
 
 const fs = require('fs');
 const shell = require('electron').shell;
@@ -96,6 +97,8 @@ $(document).ready(() => {
       updateViewsByPath(node.id);
     });
 
+  const welcomePage = new WelcomePage('#tab-welcomepage', workbenchDB);
+
   $(document).on('click', '#activate-filters-button', () => {
     scanDataTable.genFilters();
     updateViewsByPath(scanDataTable._selectedPath);
@@ -113,12 +116,17 @@ $(document).ready(() => {
   const currentNavButtonId = '#sidebar-wrapper .sidebar-nav .active button';
 
   // Defines DOM element constants for sidebar buttons.
+  const importJsonButton = $('#import-json');
   const saveSQLiteFileButton = $('#save-file');
   const openSQLiteFileButton = $('#open-file');
   const showScanDataButton = $('#show-tab-scandata');
   const showConclusionButton = $('#show-tab-conclusion');
   const showBarChartButton = $('#show-tab-barchart');
   const showDashboardButton = $('#show-tab-dashboard');
+  const showWelcomePageButton = $('#show-tab-welcomepage');
+
+  // Import a ScanCode JSON resutls file
+  importJsonButton.click(importJson);
 
   // Open a SQLite Database File
   openSQLiteFileButton.click(openSQLite);
@@ -148,6 +156,11 @@ $(document).ready(() => {
     dashboard.redraw();
   });
 
+  showWelcomePageButton.click(() => {
+    splitter.hide();
+  });
+  
+
   // Open links in default browser
   $('.open-in-default').click((evt) => {
     evt.preventDefault();
@@ -165,7 +178,7 @@ $(document).ready(() => {
   ipcRenderer.on('get-ScanInfo', getScanInfo);
 
   // Opens the dashboard view when the app is first opened
-  showDashboardButton.trigger('click');
+  showWelcomePageButton.trigger('click');
 
   function updateViewsByPath(path) {
     // Update all the views with the given path string
@@ -288,6 +301,7 @@ $(document).ready(() => {
     }, (fileNames) => {
       if (fileNames && fileNames[0]) {
         loadDatabase(fileNames[0]);
+        showDashboardButton.trigger('click');
       }
     });
   }
@@ -369,6 +383,7 @@ $(document).ready(() => {
             (progress) => progressbar.update(progress / 100)))
           .then(() => progressbar.hide())
           .then(updateViews)
+          .then(showDashboardButton.trigger('click'))
           .catch((err) => {
             progressbar.hide();
             if (err instanceof WorkbenchDB.MissingFileInfoError) {
