@@ -130,17 +130,20 @@ function getTemplate() {
       submenu: [
         {
           label: 'Table View',
-          accelerator: 'CmdOrCtrl+T',
+          accelerator: process.platform === 'darwin' ?
+            'Cmd+Shift+T' : 'Ctrl+Shift+T',
           click: sendEventToRenderer('table-view')
         },
         {
           label: 'Chart Summary View',
-          accelerator: 'Shift+CmdOrCtrl+D',
+          accelerator: process.platform === 'darwin' ?
+            'Cmd+Shift+D' : 'Ctrl+Shift+D',
           click: sendEventToRenderer('chart-summary-view')
         },
         {
           label: 'Conclusion Summary View',
-          accelerator: 'Shift+CmdOrCtrl+C',
+          accelerator: process.platform === 'darwin' ?
+            'Cmd+Shift+C' : 'Ctrl+Shift+C',
           click: sendEventToRenderer('conclusion-summary-view')
         },
         {
@@ -148,7 +151,8 @@ function getTemplate() {
         },
         {
           label: 'Reload',
-          accelerator: 'CmdOrCtrl+R',
+          accelerator: process.platform === 'darwin' ?
+            'Cmd+R' : 'Ctrl+R',
           click: (item, focusedWindow) => {
             if (focusedWindow) {
               focusedWindow.reload();
@@ -169,7 +173,7 @@ function getTemplate() {
         {
           label: 'Toggle Developer Tools',
           accelerator: process.platform === 'darwin' ?
-            'Alt+Command+I' : 'Ctrl+Shift+I',
+            'Alt+Command+I' : 'Alt+Ctrl+I',
           click: (item, focusedWindow) => {
             if (focusedWindow) {
               focusedWindow.toggleDevTools();
