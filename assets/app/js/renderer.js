@@ -25,7 +25,6 @@ const BarChart = require('./controllers/barChart');
 const JsTree = require('./controllers/jsTree');
 const ScanDataTable = require('./controllers/scanDataTable');
 const ConclusionDataTable = require('./controllers/conclusionDataTable');
-const WelcomePage = require('./controllers/welcomePage');
 
 const fs = require('fs');
 const shell = require('electron').shell;
@@ -96,8 +95,6 @@ $(document).ready(() => {
     .on('node-selected', (node) => {
       updateViewsByPath(node.id);
     });
-
-  const welcomePage = new WelcomePage('#tab-welcomepage', workbenchDB);
 
   $(document).on('click', '#activate-filters-button', () => {
     scanDataTable.genFilters();
