@@ -265,6 +265,8 @@ $(document).ready(() => {
       .then(() => {
         const currFile = workbenchDB.sequelize.options.storage;
         document.title = 'ScanCode Workbench - ' + path.basename(currFile);
+        $('#dashboard-title-text').text('Dashboard - ' + path.basename(currFile));
+
         scanDataTable.clearColumnFilters();
 
         // update all views with the new database.
