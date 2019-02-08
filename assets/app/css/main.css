@@ -508,6 +508,14 @@ div.dataTables_scrollHead th:first-child {
   Dashboard
 -----------------------------------------*/
 
+#dashboard-title-text {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  text-align: left;
+  direction: rtl;
+}
+
 #dashboard-container {
   display: flex;
   flex-direction: column;
