@@ -30,6 +30,11 @@ class Utils {
     for (let i = 0; i < values.length; i++) {
       attributeValue = values[i][attribute];
       const fileType = values[i].type;
+      
+      // dedupe entries to prevent overcounting files. See https://github.com/nexB/scancode-workbench/issues/285
+      if (Array.isArray(attributeValue)) {
+        attributeValue = Array.from(new Set(attributeValue));
+      }  
 
       if (!Array.isArray(attributeValue) || attributeValue.length === 0) {
         attributeValue = [attributeValue];
