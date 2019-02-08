@@ -179,6 +179,7 @@ $(document).ready(() => {
 
   function updateViewsByPath(path) {
     // Update all the views with the given path string
+    $('#dashboard-title-text').text('Dashboard - ' + path);
     scanDataTable.columns(0).search(path);
 
     conclusionDialog.selectedPath(path);
@@ -265,7 +266,6 @@ $(document).ready(() => {
       .then(() => {
         const currFile = workbenchDB.sequelize.options.storage;
         document.title = 'ScanCode Workbench - ' + path.basename(currFile);
-        $('#dashboard-title-text').text('Dashboard - ' + path.basename(currFile));
 
         scanDataTable.clearColumnFilters();
 
