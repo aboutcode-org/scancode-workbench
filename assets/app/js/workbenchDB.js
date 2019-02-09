@@ -269,6 +269,12 @@ class WorkbenchDB {
               files_count: header_data.extra_data.files_count
             };
           }
+
+          // Show error for scans missing file type information
+          if (header.scancode_options['--info'] === undefined) {
+            reject(new WorkbenchDB.MissingFileInfoError());
+          }
+
           $.extend(header, {
             workbench_version: version,
             workbench_notice: 'Exported from ScanCode Workbench and provided on an "AS IS" BASIS, WITHOUT WARRANTIES\\nOR CONDITIONS OF ANY KIND, either express or implied. No content created from\\nScanCode Workbench should be considered or used as legal advice. Consult an Attorney\\nfor any legal advice.\\nScanCode Workbench is a free software analysis application from nexB Inc. and others.\\nVisit https://github.com/nexB/scancode-workbench/ for support and download."'
@@ -281,10 +287,6 @@ class WorkbenchDB {
         .on('data', function(file) {
           if (!rootPath) {
             rootPath = file.path.split('/')[0];
-            // Show error for scans missing file type information
-            if (file.type === undefined) {
-              reject(new WorkbenchDB.MissingFileInfoError());
-            }
           }
           if (rootPath === file.path) {
             hasRootPath = true;
