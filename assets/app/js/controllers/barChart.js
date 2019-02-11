@@ -83,12 +83,15 @@ class WorkbenchBarChart extends Controller {
 
     if (this.chartAttributesSelect.val()) {
       const attribute = this.chartAttributesSelect.val();
+      
+      const directoryAttributes = ['packages_type', 'packages_name', 'packages_primary_language'];
+      const where = directoryAttributes.includes(attribute) 
+        ? {path: {$like: `${this.selectedPath()}%`}}
+        : {path: {$like: `${this.selectedPath()}%`}, type: { $ne: 'directory' }};
+      
       const query = {
         attributes: [Sequelize.fn('TRIM', Sequelize.col(attribute)), attribute],
-        where: { 
-          path: { $like: `${this.selectedPath()}%` },
-          type: { $ne: 'directory' },
-        }
+        where: where
       };
       
 
