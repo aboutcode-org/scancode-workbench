@@ -118,8 +118,11 @@ class Dashboard extends Controller {
     this.totalFilesProgressbar.showIndeterminate();
     this.db().sync
       .then((db) => db.File.findOne({where: {path: this.selectedPath()}}))
-      .then((row) => this.totalFilesScanned.text(row ? row.files_count : '0'))
-      .then(() => this.totalFilesProgressbar.hide());
+      .then((row) => {
+        const files_count = row.type === 'directory' ? row.files_count : 1;
+        this.totalFilesScanned.text(files_count);
+        this.totalFilesProgressbar.hide();
+      });
 
     // Get total unique licenses detected at a certain path
     this.uniqueLicensesProgressbar.showIndeterminate();
