@@ -706,7 +706,7 @@ ScanDataTable.FILE_COLUMNS =
         'title': 'Type',
         'name': 'type',
         'bar_chart_class': 'bar-chart-file-infos',
-        'visible': false
+        'visible': true
       },
       {
         'data': 'name',
@@ -876,6 +876,7 @@ ScanDataTable.FILEINFO_COLUMN_NAMES =
     'name',
     'extension',
     'size',
+    'type',
     'mime_type', 
     'file_type',
     'programming_language'
