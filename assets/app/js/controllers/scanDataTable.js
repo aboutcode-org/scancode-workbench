@@ -242,6 +242,7 @@ class ScanDataTable extends Controller {
         if (columnSearch) {
           const columnName = dataTablesInput.columns[i].name;
           this.dataTable().column(`${columnName}:name`).visible(true);
+          const exactFilterColumnNames = ['extension', 'programming_language', 'name'];
 
           if (i === 0) {
             // Column 0 is the "path", which should only match
@@ -275,8 +276,7 @@ class ScanDataTable extends Controller {
                 { $eq: null }
               ]
             };
-          // FIXME: This should probalby be a list if any more vales are added
-          } else if (columnName === 'extension' || columnName === 'programming_language' || columnName === 'name') {
+          } else if (exactFilterColumnNames.includes(columnName)) {
             query.where.$and[columnName] = {
               $eq: columnSearch
             };
