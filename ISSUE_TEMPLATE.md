@@ -1,28 +1,10 @@
 ### Description
-
-### Steps to reproduce
-1. [First Step]
-2. [Second Step]
-3. [and so on ... ]
-
-**Expected behavior**
-Tell us what you expect to happen
-
-**Actual behavior**
-Tell us what happens instead
-
-**Reproduces how often:** 
-What percentage of the time does it reproduce?
-
-### Errors in the Developer Tools
-Include the error logged in the Console tab: https://github.com/nexB/scancode-workbench/wiki/Check-for-Errors-in-the-Developer-Tools
+* Please leave a brief discription of the bug or feature request
+  * if reporting a bug, tell us how to reproduce the issue.
+  * Check the Develop Console tab and copy any error text there might be: https://github.com/nexB/scancode-workbench/wiki/Check-for-Errors-in-the-Developer-Tools 
 
 ### System configuration
-**Operating System**:
-
-**ScanCode Workbench Version**:
-
-**ScanCode Toolkit Version**:
-
-### Additional Information
-Any additional information, configuration, or data that might be necessary to reproduce the issue. (i.e. screenshots and/or GIFs)
+For bug reports, it really helps us to know:
+* What OS are you running on? (Windows/MacOS/Linux)
+* What version of scancode-workbench are you running on?
+* What version of scancode-toolkit was used to generate the scan file?
