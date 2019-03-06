@@ -172,8 +172,16 @@ class WorkbenchDB {
       .then((concs) => concs.map((conc) => conc.fileId));
     const pkgPromise = this.db.Package.findAll({attributes: ['fileId']})
       .then((pkgs) => pkgs.map((pkg) => pkg.fileId));
+    const approvedPromise = this.db.LicensePolicy.findAll({where: {label: 'Approved License'}, attributes: ['fileId']})
+      .then((policies) => policies.map((policy) => policy.fileId));
+    const prohibitedPromise = this.db.LicensePolicy.findAll({where: {label: 'Prohibited License'}, attributes: ['fileId']})
+      .then((policies) => policies.map((policy) => policy.fileId));
+    const recommendedPromise = this.db.LicensePolicy.findAll({where: {label: 'Recommended License'}, attributes: ['fileId']})
+      .then((policies) => policies.map((policy) => policy.fileId));
+    const restrictedPromise = this.db.LicensePolicy.findAll({where: {label: 'Restricted License'}, attributes: ['fileId']})
+      .then((policies) => policies.map((policy) => policy.fileId));
 
-    return Promise.all([analyzedPromise, NAPromise, OCPromise, NRPromise,  pkgPromise]).then((promises) => this.sync
+    return Promise.all([analyzedPromise, NAPromise, OCPromise, NRPromise,  pkgPromise, approvedPromise, prohibitedPromise, recommendedPromise, restrictedPromise]).then((promises) => this.sync
       .then((db) => db.File.findAll(query))
       .then((files) => {
         return files.map((file) => {
@@ -196,6 +204,10 @@ class WorkbenchDB {
     const oc = promises[2];
     const nr = promises[3];
     const packages = promises[4];
+    const approvedPolicies = promises[5];
+    const prohibitedPolicies = promises[6];
+    const recommendedPolicies = promises[7];
+    const restrictedPolicies = promises[8];
 
     if (analyzed.includes(file.id)) {
       if (file.type === 'file') {
@@ -227,6 +239,14 @@ class WorkbenchDB {
       } else if (file.type === 'directory') {
         type = 'packageDir'; 
       }
+    } else if (approvedPolicies.includes(file.id)) {
+      type = 'approvedLicense';
+    } else if (prohibitedPolicies.includes(file.id)) {
+      type = 'prohibitedLicense';
+    } else if (recommendedPolicies.includes(file.id)) {
+      type = 'recommendedLicense';
+    } else if (restrictedPolicies.includes(file.id)) {
+      type = 'restrictedLicense';
     } else {
       type = file.type;
     }
@@ -372,6 +392,7 @@ class WorkbenchDB {
       return this.db.File.bulkCreate(files, options)
         .then(() => this.db.License.bulkCreate(this._addExtraFields(files, 'licenses'), options))
         .then(() => this.db.LicenseExpression.bulkCreate(this._addExtraFields(files, 'license_expressions'), options))
+        .then(() => this.db.LicensePolicy.bulkCreate(this._addExtraFields(files, 'license_policy'), options))
         .then(() => this.db.Copyright.bulkCreate(this._addExtraFields(files, 'copyrights'), options))
         .then(() => this.db.Package.bulkCreate(this._addExtraFields(files, 'packages'), options))
         .then(() => this.db.Email.bulkCreate(this._addExtraFields(files, 'emails'), options))
@@ -388,6 +409,8 @@ class WorkbenchDB {
     return $.map(files, (file) => {
       if (attribute === 'copyrights') {
         return this._getNewCopyrights(file);
+      } else if (attribute === 'license_policy') {
+        return this._getLicensePolicy(file);
       }
       return $.map(file[attribute] || [], (value) => {
         if (attribute === 'license_expressions') {
@@ -400,6 +423,15 @@ class WorkbenchDB {
         return value;
       });
     });
+  }
+
+  _getLicensePolicy(file) {
+    if ($.isEmptyObject(file.license_policy)) {
+      return;
+    }
+    const license_policy = file.license_policy;
+    license_policy.fileId = file.id;
+    return license_policy;
   }
 
   _getNewCopyrights(file) {

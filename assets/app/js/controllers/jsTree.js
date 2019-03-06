@@ -96,13 +96,25 @@ class JsTree extends Controller {
           },
           'packageFile': {
             'icon': 'fa fa-file fa_custom_package'
+          },
+          'approvedLicense': {
+            'icon': 'fa fa-check-circle fa_custom_approved'
+          },
+          'prohibitedLicense': {
+            'icon': 'fa fa-ban fa_custom_prohibited'
+          },
+          'recommendedLicense': {
+            'icon': 'fa fa-thumbs-up fa_custom_recommended'
+          },
+          'restrictedLicense': {
+            'icon': 'fa fa-exclamation-triangle fa_custom_restricted'
           }
         },
         'plugins': ['types', 'sort', 'contextmenu', 'wholerow'],
         // TODO: must fix sorting with these new types
         'sort': function (a, b) {
           const dir_types = ['directory', 'analyzedDir', 'naDir', 'ocDir', 'nrDir', 'packageDir'];
-          const file_types = ['file', 'analyzedFile', 'naFile', 'ocFile', 'ocDir', 'pacakgeFile'];
+          const file_types = ['file', 'analyzedFile', 'naFile', 'ocFile', 'ocDir', 'pacakgeFile', 'approvedLicense', 'prohibitedLicense', 'recommendedLicense', 'restrictedLicense'];
 
           const a1 = this.get_node(a);
           const b1 = this.get_node(b);
