@@ -180,6 +180,24 @@ function getTemplate() {
             }
           }
         },
+        {
+          type: 'separator'
+        },
+        {
+          label: 'Reset Zoom',
+          accelerator: 'CmdOrCtrl+0',
+          click: sendEventToRenderer('zoom-reset')
+        },
+        {
+          label: 'Zoom In',
+          accelerator: 'CmdOrCtrl+=',
+          click: sendEventToRenderer('zoom-in')
+        },
+        {
+          label: 'Zoom Out',
+          accelerator: 'CmdOrCtrl+-',
+          click: sendEventToRenderer('zoom-out')
+        },
       ]
     },
     {

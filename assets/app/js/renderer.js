@@ -34,6 +34,7 @@ const path = require('path');
 // The Electron module used to communicate asynchronously from a renderer process to the main process.
 const ipcRenderer = require('electron').ipcRenderer;
 const workbenchVersion = require('../../../package.json').version;
+const { webFrame } = require('electron');
 
 /**
  * This is the UI Controller for the application. It's responsible for
@@ -173,6 +174,9 @@ $(document).ready(() => {
   ipcRenderer.on('export-JSON', exportJson);
   ipcRenderer.on('export-JSON-conclusions-only', exportJsonConclusions);
   ipcRenderer.on('get-ScanInfo', getScanInfo);
+  ipcRenderer.on('zoom-reset', zoomReset);
+  ipcRenderer.on('zoom-in', zoomIn);
+  ipcRenderer.on('zoom-out', zoomOut);
 
   // Opens the dashboard view when the app is first opened
   showWelcomePageButton.trigger('click');
@@ -520,5 +524,17 @@ $(document).ready(() => {
     });
   }
 });
+
+function zoomReset() {
+  webFrame.setZoomLevel(0);
+}
+
+function zoomIn() {
+  webFrame.setZoomLevel(webFrame.getZoomLevel() + 1);
+}
+
+function zoomOut() {
+  webFrame.setZoomLevel(webFrame.getZoomLevel() - 1);
+}
 
 module.exports = workbenchVersion;
