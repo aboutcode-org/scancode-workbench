@@ -31,6 +31,7 @@ module.exports = function(sequelize, DataTypes) {
       copyright_authors: jsonDataType('copyright_authors'),
       copyright_start_line: jsonDataType('copyright_start_line'),
       copyright_end_line: jsonDataType('copyright_end_line'),
+      license_policy: jsonDataType('license_policy'),
       license_expressions: jsonDataType('license_expressions'),
       license_key: jsonDataType('license_key'),
       license_score: jsonDataType('license_score'),
@@ -135,6 +136,7 @@ module.exports = function(sequelize, DataTypes) {
       copyright_authors: getCopyrightValues(file.authors),
       copyright_start_line: getValues(file.holders, 'start_line'),
       copyright_end_line: getValues(file.holders, 'end_line'),
+      license_policy: getLicensePolicyLabel(file.license_policy),
       license_expressions: file.license_expressions,
       license_key: getValues(file.licenses, 'key'),
       license_score: getValues(file.licenses, 'score'),
@@ -202,6 +204,15 @@ module.exports = function(sequelize, DataTypes) {
 
   return Model;
 };
+
+function getLicensePolicyLabel(policy) {
+  if (!policy) {
+    return;
+  } else if (!policy['label']) {
+    return;
+  }
+  return [policy['label']];
+}
 
 function getCopyrightValues(array) {
   if (!array) {
