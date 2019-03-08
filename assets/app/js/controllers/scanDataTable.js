@@ -568,6 +568,13 @@ ScanDataTable.COPYRIGHT_COLUMNS =
 ScanDataTable.LICENSE_COLUMNS =
     [
       {
+        'data': 'license_policy[<hr/>]',
+        'title': 'License Policy',
+        'name': 'license_policy',
+        'bar_char_class': 'bar-chart-licenses',
+        'visible': false
+      },
+      {
         'data': 'license_expressions[<hr/>]',
         'title': 'License Expressions',
         'name': 'license_expressions',
@@ -886,6 +893,7 @@ ScanDataTable.ORIGIN_COLUMN_NAMES =
   [
     'copyright_statements',
     'license_short_name',
+    'license_policy',
     'license_category',
     'email',
     'url',
@@ -896,6 +904,7 @@ ScanDataTable.ORIGIN_COLUMN_NAMES =
 
 ScanDataTable.LICENSE_COLUMN_NAMES = 
   [
+    'license_policy',
     'license_expressions',
     'license_key',
     'license_score',
