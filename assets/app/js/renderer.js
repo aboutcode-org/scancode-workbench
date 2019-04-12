@@ -103,8 +103,13 @@ $(document).ready(() => {
     updateViewsByPath(scanDataTable._selectedPath);
   });
 
-  $(document).on('click', '#clear-filters-button', () => {
+  $(document).on('click', '#reset-filters-button', () => {
     scanDataTable.resetColumnFilters();
+    updateViewsByPath(scanDataTable._selectedPath);
+  });
+
+  $(document).on('click', '#clear-filters-button', () => {
+    scanDataTable.clearColumnFilters();
     updateViewsByPath(scanDataTable._selectedPath);
   });
 

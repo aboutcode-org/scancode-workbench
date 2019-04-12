@@ -61,12 +61,14 @@ class ScanDataTable extends Controller {
   clearColumnFilters() {
     $.each(ScanDataTable.TABLE_COLUMNS, (i, column) => {
       const columnSelect = $(`select#scandata-${column.name}`);
+      columnSelect.empty();
       columnSelect.val('');
       this.dataTable()
-        .column(`${column.name}:name`);
+        .column(`${column.name}:name`)
+        .search('', false, false);
     });
-    // clear golbal serach box
-    this.dataTable().search('', false, false);
+    // clear the global search box
+    this.dataTable().search('').columns().search('').draw();
   }
 
   setColumnFilter(columnName, value) {
@@ -332,9 +334,11 @@ class ScanDataTable extends Controller {
     footer.css('white-space', 'nowrap');
 
     const genFiltersButton = $(`<button id="activate-filters-button" type="button">Activate Filters</button>`);
+    const resetFiltersButton = $(`<button id="reset-filters-button" type"button">Reset Filters</button>`);
     const clearFiltersButton = $(`<button id="clear-filters-button" type="button">Clear Filters</button>`);
 
     footer.append(genFiltersButton);
+    footer.append(resetFiltersButton);
     footer.append(clearFiltersButton);
 
     this.dataTable().columns().every(function (columnIndex) {
@@ -364,10 +368,10 @@ class ScanDataTable extends Controller {
     $('.dataTables_scrollBody').scrollTop(0);
   }
 
+  // TODO: Generalize this instead of copying code from clearColumnFilters()
   resetColumnFilters() {
     $.each(ScanDataTable.TABLE_COLUMNS, (i, column) => {
       const columnSelect = $(`select#scandata-${column.name}`);
-      columnSelect.empty();
       columnSelect.val('');
       this.dataTable()
         .column(`${column.name}:name`)
