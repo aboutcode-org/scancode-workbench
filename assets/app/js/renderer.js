@@ -26,10 +26,11 @@ const JsTree = require('./controllers/jsTree');
 const ScanDataTable = require('./controllers/scanDataTable');
 const ConclusionDataTable = require('./controllers/conclusionDataTable');
 
-const fs = require('fs');
-const shell = require('electron').shell;
 const dialog = require('electron').remote.dialog;
+const fs = require('fs');
+const os = require('os');
 const path = require('path');
+const shell = require('electron').shell;
 
 // The Electron module used to communicate asynchronously from a renderer process to the main process.
 const ipcRenderer = require('electron').ipcRenderer;
@@ -340,14 +341,23 @@ $(document).ready(() => {
         return;
       }
 
-      const jsonFileName = fileNames[0];
+      const jsonFilePath = fileNames[0];
+      let defaultPath;
+
+      if (os.platform() === 'linux') {
+        // remove the .json (or other) extention of the path.
+        defaultPath = jsonFilePath.substring(0, jsonFilePath.lastIndexOf('.')) + '.sqlite';
+      } else {
+        // FIXME: this is some ugly regex used to get filename with no extension.
+        // see: https://stackoverflow.com/questions/4250364/how-to-trim-a-file-extension-from-a-string-in-javascript
+        defaultPath = jsonFilePath.replace(/^.*[\\/]/, '').replace(/\.[^/.]+$/, '');
+      }
+      
 
       // Immediately ask for a SQLite to save and create the database
       dialog.showSaveDialog({
         title: 'Save a SQLite Database File',
-        // FIXME: this is some ugly regex used to get filename with no extension.
-        // see: https://stackoverflow.com/questions/4250364/how-to-trim-a-file-extension-from-a-string-in-javascript
-        defaultPath: jsonFileName.replace(/^.*[\\/]/, '').replace(/\.[^/.]+$/, ''),
+        defaultPath: defaultPath,
         filters: [{
           name: 'SQLite File',
           extensions: ['sqlite']
@@ -381,7 +391,7 @@ $(document).ready(() => {
         workbenchDB.sync
           .then(() => progressbar.showDeterminate())
           .then(() => workbenchDB.addFromJson(
-            jsonFileName,
+            jsonFilePath,
             workbenchVersion,
             (progress) => progressbar.update(progress / 100)))
           .then(() => progressbar.hide())
