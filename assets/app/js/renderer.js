@@ -305,7 +305,7 @@ $(document).ready(() => {
     }, (fileNames) => {
       if (fileNames && fileNames[0]) {
         loadDatabase(fileNames[0]);
-        showDashboardButton.trigger('click');
+        showScanDataButton.trigger('click');
       }
     });
   }
@@ -396,7 +396,7 @@ $(document).ready(() => {
             (progress) => progressbar.update(progress / 100)))
           .then(() => progressbar.hide())
           .then(updateViews)
-          .then(showDashboardButton.trigger('click'))
+          .then(showScanDataButton.trigger('click'))
           .catch((err) => {
             progressbar.hide();
             if (err instanceof WorkbenchDB.MissingFileInfoError) {
