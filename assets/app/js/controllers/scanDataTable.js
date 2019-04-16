@@ -293,11 +293,13 @@ class ScanDataTable extends Controller {
       // If a global search exists, add an $or search for each column
       const globalSearch = dataTablesInput.search.value;
       if (globalSearch) {
+        // fixes issue #317
+        const escapedSearch = globalSearch.trim().replace(/(_|\\)/g, '\\$1');
         query.where.$and.$or = [];
         for (let i = 0; i < dataTablesInput.columns.length; i++) {
           const orSearch = {};
           orSearch[dataTablesInput.columns[i].name] = {
-            $like: `%${globalSearch.trim()}%`
+            $like: Sequelize.literal(`"%${escapedSearch}%" ESCAPE '\\'`)
           };
           query.where.$and.$or.push(orSearch);
         }
