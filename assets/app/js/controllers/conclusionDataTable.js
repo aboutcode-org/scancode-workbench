@@ -187,6 +187,12 @@ class ConclusionDataTable extends Controller {
         'render': Utils.anchorTag
       },
       {
+        'data': 'purl',
+        'title': 'Package URL',
+        'name': 'purl',
+        'render': Utils.anchorTag
+      },
+      {
         data: 'feature',
         title: 'Feature',
         name: 'feature'
