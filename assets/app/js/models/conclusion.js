@@ -37,7 +37,8 @@ module.exports = function(sequelize, DataTypes) {
       license_url: DataTypes.STRING,
       notice_url: DataTypes.STRING,
       programming_language: DataTypes.STRING,
-      notes: DataTypes.STRING
+      notes: DataTypes.STRING,
+      purl: DataTypes.STRING
     },
     {
       getterMethods: {

@@ -44,6 +44,7 @@ class ConclusionDialog extends Controller {
     this.downloadUrl = this.dialog.find('#conclusion-download-url');
     this.licenseUrl = this.dialog.find('#conclusion-license-url');
     this.noticeUrl = this.dialog.find('#conclusion-notice-url');
+    this.packageUrl = null;
     this.saveButton = this.dialog.find('button#conclusion-save');
     this.deleteButton = this.dialog.find('button#conclusion-delete');
 
@@ -117,6 +118,7 @@ class ConclusionDialog extends Controller {
           download_url: (this.downloadUrl.val() || [null])[0],
           license_url: (this.licenseUrl.val() || [null])[0],
           notice_url: (this.noticeUrl.val() || [null])[0],
+          purl: this.packageUrl,
           programming_language: (this.language.val() || [null])[0],
           notes: this.notes.val()
         };
@@ -161,6 +163,7 @@ class ConclusionDialog extends Controller {
           this._setupDownloadUrl(conclusion),
           this._setupLicenseUrl(conclusion),
           this._setupNoticeUrl(conclusion),
+          this._setupPackageUrl(conclusion),
           this._setupNotes(conclusion)
         ]);
       })
@@ -341,6 +344,18 @@ class ConclusionDialog extends Controller {
         }, true);
         this.noticeUrl.val(saved);
       });
+  }
+
+  _setupPackageUrl(conclusion) {
+    return this.db().sync
+      .then((db) => db.File.findOne({where: {path: conclusion.path}}))
+      .then((file) => this.db().sync
+        .then((db) => db.Package.findOne({where: {fileId: file.id}}))
+        .then((pkg) => {
+          if (pkg) {
+            this.packageUrl = pkg.purl;
+          }
+        }));
   }
 
   _setupModified(conclusion) {
