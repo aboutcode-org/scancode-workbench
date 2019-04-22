@@ -25,6 +25,7 @@ const emailModel = require('./email');
 const urlModel = require('./url');
 const conclusionModel = require('./conclusion');
 const flatFileModel = require('./flatFile');
+const scanErrorModel = require('./scanError');
 
 module.exports = function(sequelize, DataTypes) {
   // Define the models
@@ -38,6 +39,7 @@ module.exports = function(sequelize, DataTypes) {
   this.Email = emailModel(sequelize, DataTypes);
   this.Url = urlModel(sequelize, DataTypes);
   this.Conclusion = conclusionModel(sequelize, DataTypes);
+  this.ScanError = scanErrorModel(sequelize, DataTypes);
 
   this.FlatFile = flatFileModel(sequelize, DataTypes);
 
@@ -50,6 +52,7 @@ module.exports = function(sequelize, DataTypes) {
   this.File.hasMany(this.Package);
   this.File.hasMany(this.Email);
   this.File.hasMany(this.Url);
+  this.File.hasMany(this.ScanError);
   this.File.hasOne(this.Conclusion);
 
   // Include Array for queries
@@ -61,6 +64,7 @@ module.exports = function(sequelize, DataTypes) {
     { model: this.Package, separate: true },
     { model: this.Email, separate: true },
     { model: this.Url, separate: true },
+    { model: this.ScanError, separate: true },
     { model: this.Conclusion }
   ];
 

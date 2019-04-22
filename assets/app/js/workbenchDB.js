@@ -1,6 +1,6 @@
 /*
  #
- # Copyright (c) 2017 nexB Inc. and others. All rights reserved.
+ # Copyright (c) 2017 - 2019 nexB Inc. and others. All rights reserved.
  # https://nexb.com and https://github.com/nexB/scancode-workbench/
  # The ScanCode Workbench software is licensed under the Apache License version 2.0.
  # ScanCode is a trademark of nexB Inc.
@@ -397,6 +397,7 @@ class WorkbenchDB {
         .then(() => this.db.Package.bulkCreate(this._addExtraFields(files, 'packages'), options))
         .then(() => this.db.Email.bulkCreate(this._addExtraFields(files, 'emails'), options))
         .then(() => this.db.Url.bulkCreate(this._addExtraFields(files, 'urls'), options))
+        .then(() => this.db.ScanError.bulkCreate(this._addExtraFields(files, 'scan_errors'), options))
         .then(() => this.sequelize.Promise.each(files, (file) => {
           if (file.conclusion) {
             return this.db.Conclusion.create(file.conclusion, options);
@@ -416,6 +417,11 @@ class WorkbenchDB {
         if (attribute === 'license_expressions') {
           return {
             license_expression: value,
+            fileId: file.id
+          };
+        } else if (attribute === 'scan_errors') {
+          return {
+            scan_error: value,
             fileId: file.id
           };
         }
