@@ -831,7 +831,7 @@ ScanDataTable.FILE_COLUMNS =
         'title': 'Scan Errors',
         'name': 'scan_errors',
         'bar_chart_class': 'bar-chart-file-infos',
-        'visible': false
+        'visible': true
       }
     ];
 
