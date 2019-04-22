@@ -825,6 +825,13 @@ ScanDataTable.FILE_COLUMNS =
         'name': 'is_script',
         'bar_chart_class': 'bar-chart-file-infos',
         'visible': false
+      },
+      {
+        'data': 'scan_errors',
+        'title': 'Scan Errors',
+        'name': 'scan_errors',
+        'bar_chart_class': 'bar-chart-file-infos',
+        'visible': true
       }
     ];
 

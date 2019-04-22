@@ -33,6 +33,17 @@ const DUPLICATE_PATH_FILE = __dirname + '/data/scancode-duplicate-path-values.js
 
 describe('checkWorkbenchDB', () => {
   describe('addFromJsonFile', () => {
+    it('should collect scan errors from scan', () => {
+      const test_file = __dirname + '/data/workbenchDB/scan-errors.json';
+      const workbenchDB = new WorkbenchDB();
+
+      return workbenchDB.sync
+        .then(() => workbenchDB.addFromJson(test_file))
+        .then(() => workbenchDB.db.File.count())
+        .then((rowCount) => assert.strictEqual(rowCount, 44))
+        .then(() => workbenchDB.db.ScanError.count())
+        .then((errorCount) => assert.strictEqual(errorCount, 40));
+    });
     it('should add rows to database', () => {
       const workbenchDB = new WorkbenchDB();
 
