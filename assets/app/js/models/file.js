@@ -32,6 +32,7 @@ module.exports = function(sequelize, DataTypes) {
       sha1: DataTypes.STRING,
       md5: DataTypes.STRING,
       files_count: DataTypes.INTEGER,
+      dirs_count: DataTypes.INTEGER,
       mime_type: DataTypes.STRING,
       file_type: DataTypes.STRING,
       programming_language: DataTypes.STRING,
