@@ -73,7 +73,12 @@
             </li>
             <li>
                 <button class="btn btn-sidebar" id="show-tab-file-dashboard" data-toggle="tab" data-target="#tab-file-dashboard" data-placement="right" title="File Info Dashboard">
-                    <i class="fa fa-tachometer" aria-hidden="true"></i>
+                    <i class="fa fa-info-circle" aria-hidden="true"></i>
+                </button>
+            </li>
+            <li>
+                <button class="btn btn-sidebar" id="show-tab-package-dashboard" data-toggle="tab" data-target="#tab-package-dashboard" data-placement="right" title="Package Info Dashboard">
+                    <i class="fa fa-archive" aria-hidden="true"></i>
                 </button>
             </li>
             <li>
@@ -210,6 +215,61 @@
                                 <div class="card">
                                     <div class="header">
                                         <p class="category">Copyright Holders</p>
+                                    </div>
+                                    <div class="content">
+                                        <div class="chart"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Package Dashboard Tab -->
+            <div class="tab-pane container" id="tab-package-dashboard">
+                <div id="package-dashboard-container">
+                    <div id="package-dashboard-title">
+                        <h2 id="package-dashboard-title-text">Package Info Dashboard</h2>
+                    </div>
+                    <div id="package-dashboard-view">
+                        <div class="row">
+                            <div class="col-sm-4"></div>
+                            <div class="col-sm-4">
+                                <div class="card" id="total-packages">
+                                    <div class="header">
+                                        <h3 class="title">0</h3>
+                                        <p class="category">Total Number of Packages</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-4"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-4" id="package-type-chart">
+                                <div class="card">
+                                    <div class="header">
+                                        <p class="category">Package Types</p>
+                                    </div>
+                                    <div class="content">
+                                        <div class="chart"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-4" id="package-language-chart">
+                                <div class="card">
+                                    <div class="header">
+                                        <p class="category">Package Languages</p>
+                                    </div>
+                                    <div class="content">
+                                        <div class="chart"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-4" id="package-license-chart">
+                                <div class="card">
+                                    <div class="header">
+                                        <p class="category">Package Licenses</p>
                                     </div>
                                     <div class="content">
                                         <div class="chart"></div>

@@ -16,6 +16,7 @@
 
 const Progress = require('../helpers/progress');
 const Controller = require('./controller');
+const Utils = require('../helpers/utils');
 
 const LEGEND_COLORS = [
   '#B3F82F',
@@ -128,15 +129,15 @@ class FileDashboard extends Controller {
     this.sourceLanguageChartData = this.db().sync
       .then((db) => db.File.findAll({where: {path: {$like: `${this.selectedPath()}%`}}}))
       .then((files) => files.map((val) => val.programming_language ? val.programming_language : 'No Value Detected')) 
-      .then((langs) => FileDashboard.formatData(langs))
-      .then((langs) => FileDashboard.limitData(langs, LEGEND_LIMIT));
+      .then((langs) => Utils.formatChartData(langs))
+      .then((langs) => Utils.limitChartData(langs, LEGEND_LIMIT));
 
     // Get file (mime) type data
     this.fileTypeChartData = this.db().sync
       .then((db) => db.File.findAll({where: {path: {$like: `${this.selectedPath()}%`}}}))
       .then((files) => files.map((val) => val.mime_type ? val.mime_type : 'No Value Detected')) 
-      .then((types) => FileDashboard.formatData(types))
-      .then((types) => FileDashboard.limitData(types, LEGEND_LIMIT));
+      .then((types) => Utils.formatChartData(types))
+      .then((types) => Utils.limitChartData(types, LEGEND_LIMIT));
 
       
     this.holdersChartData = this.db().sync
@@ -145,8 +146,8 @@ class FileDashboard extends Controller {
       .then((fileIds) => this.db().sync
         .then((db) => db.Copyright.findAll({where: {fileId: fileIds}}))
         .then((copyrights) => copyrights.map((val) => val.holders ? val.holders : 'No Value Detected'))
-        .then((holders) => FileDashboard.formatData(holders))
-        .then((holders) => FileDashboard.limitData(holders, LEGEND_LIMIT)));
+        .then((holders) => Utils.formatChartData(holders))
+        .then((holders) => Utils.limitChartData(holders, LEGEND_LIMIT)));
   }
 
   redraw() {
@@ -192,34 +193,6 @@ class FileDashboard extends Controller {
           this.holdersChart.flush();
         }
       }));
-  }
-
-  static limitData(data, limit) {
-    // TODO: Use partitioning (like in quicksort) to find top "limit"
-    // more efficiently.
-    // Sort data by count
-    return data.sort((a,b) => (a[1] > b[1]) ? 1 : -1)
-      .map((dataPair, i) => {
-        if (data.length - i >= limit) {
-          return ['other', dataPair[1]];
-        } else {
-          return dataPair;
-        }
-      });
-  }
-
-  // Formats data for c3: [[key1, count1], [key2, count2], ...]
-  static formatData(names) {
-    // Sum the total number of times the name appears
-    const count = {};
-    $.each(names, (i, name) => {
-      count[name] = count[name] + 1 || 1;
-    });
-
-    // Transform license count into array of objects with license name & count
-    return $.map(count, (val, key) => {
-      return [[key, val]];
-    });
   }
 }
 

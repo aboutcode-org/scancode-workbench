@@ -21,6 +21,7 @@ const Progress = require('./helpers/progress');
 const DejaCodeExportDialog = require('./controllers/dejacodeExportDialog');
 const ConclusionDialog = require('./controllers/conclusionDialog');
 const FileDashboard = require('./controllers/fileDashboard');
+const PackageDashboard = require('./controllers/packageDashboard');
 const BarChart = require('./controllers/barChart');
 const JsTree = require('./controllers/jsTree');
 const ScanDataTable = require('./controllers/scanDataTable');
@@ -46,6 +47,7 @@ $(document).ready(() => {
   let workbenchDB = new WorkbenchDB();
 
   const fileDashboard = new FileDashboard('#tab-file-dashboard', workbenchDB);
+  const packageDashboard = new PackageDashboard('#tab-package-dashboard', workbenchDB);
 
   const barChart = new BarChart('#tab-barchart', workbenchDB)
     .on('bar-clicked', (attribute, value) => {
@@ -127,6 +129,7 @@ $(document).ready(() => {
   const showConclusionButton = $('#show-tab-conclusion');
   const showBarChartButton = $('#show-tab-barchart');
   const showFileDashboardButton = $('#show-tab-file-dashboard');
+  const showPackageDashboardButton = $('#show-tab-package-dashboard');
   const showWelcomePageButton = $('#show-tab-welcomepage');
 
   // Import a ScanCode JSON resutls file
@@ -159,6 +162,11 @@ $(document).ready(() => {
     splitter.show();
     fileDashboard.redraw();
   });
+  
+  showPackageDashboardButton.click(() => {
+    splitter.show();
+    packageDashboard.redraw();
+  });
 
   showWelcomePageButton.click(() => {
     splitter.hide();
@@ -190,6 +198,7 @@ $(document).ready(() => {
   function updateViewsByPath(path) {
     // Update all the views with the given path string
     $('#file-dashboard-title-text').text('File Info Dashboard - ' + path);
+    $('#package-dashboard-title-text').text('Package Info Dashboard - ' + path);
     scanDataTable.columns(0).search(path);
 
     conclusionDialog.selectedPath(path);
@@ -198,6 +207,7 @@ $(document).ready(() => {
     scanDataTable.selectedPath(path);
     conclusionsTable.selectedPath(path);
     fileDashboard.selectedPath(path);
+    packageDashboard.selectedPath(path);
     barChart.selectedPath(path);
 
     redrawCurrentView();
@@ -286,6 +296,7 @@ $(document).ready(() => {
         scanDataTable.db(workbenchDB);
         conclusionsTable.db(workbenchDB);
         fileDashboard.db(workbenchDB);
+        packageDashboard.db(workbenchDB);
         barChart.db(workbenchDB);
 
         // Reload the jstree, then trigger the current view to reload.
