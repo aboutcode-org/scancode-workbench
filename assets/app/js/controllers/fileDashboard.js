@@ -105,10 +105,10 @@ class FileDashboard extends Controller {
     this.db().sync
       .then((db) => db.File.findOne({where: {path: this.selectedPath()}}))
       .then((row) => {
-        const files_count = row.type === 'directory' ? row.files_count : 1;
-        const dirs_count = row.type === 'directory' ? row.dirs_count : 0;
-        this.totalFilesScanned.text(files_count);
-        this.totalDirsScanned.text(dirs_count);
+        const filesCount = row.type === 'directory' ? row.files_count : 1;
+        const dirsCount = row.type === 'directory' ? row.dirs_count : 0;
+        this.totalFilesScanned.text(filesCount);
+        this.totalDirsScanned.text(dirsCount);
         this.totalFilesProgressbar.hide();
         this.totalDirsProgressbar.hide();
       });
