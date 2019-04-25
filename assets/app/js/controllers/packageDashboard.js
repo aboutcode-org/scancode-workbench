@@ -140,7 +140,7 @@ class PackageDashboard extends Controller {
       this.reload();
     }
 
-    // Get package types detected
+    // Display package type chart
     this.packageTypeChartProgressbar.showIndeterminate();
     this.packageTypeChartData
       .then((data) => this.packageTypeChart.load({
@@ -153,7 +153,7 @@ class PackageDashboard extends Controller {
         }
       }));
 
-    // Get package languages detected
+    // Display package languages chart
     this.packageLanguageChartProgressbar.showIndeterminate();
     this.packageLanguageChartData
       .then((data) => this.packageLanguageChart.load({
@@ -166,7 +166,7 @@ class PackageDashboard extends Controller {
         }
       }));
 
-    // Get package license detected
+    // Display package license chart
     this.packageLicenseChartProgressbar.showIndeterminate();
     this.packageLicenseChartData
       .then((data) => this.packageLicenseChart.load({

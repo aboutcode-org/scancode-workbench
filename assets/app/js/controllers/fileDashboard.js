@@ -138,8 +138,8 @@ class FileDashboard extends Controller {
       .then((files) => files.map((val) => val.mime_type ? val.mime_type : 'No Value Detected')) 
       .then((types) => Utils.formatChartData(types))
       .then((types) => Utils.limitChartData(types, LEGEND_LIMIT));
-
-      
+    
+    // Get copyright holders data
     this.holdersChartData = this.db().sync
       .then((db) => db.File.findAll({where: {path: {$like: `${this.selectedPath()}%`}}}))
       .then((files) => files.map((val) => val.id))
@@ -155,7 +155,7 @@ class FileDashboard extends Controller {
       this.reload();
     }
 
-    // Get unique programming languages detected
+    // Display programming language chart
     this.sourceLanguageChartProgressbar.showIndeterminate();
     this.sourceLanguageChartData
       .then((data) => this.sourceLanguageChart.load({
@@ -168,7 +168,7 @@ class FileDashboard extends Controller {
         }
       }));
 
-    // Get license categories detected
+    // Display file/mime type chart
     this.fileTypeChartProgressbar.showIndeterminate();
     this.fileTypeChartData
       .then((data) => this.fileTypeChart.load({
@@ -181,12 +181,12 @@ class FileDashboard extends Controller {
         }
       }));
 
-    // Get license keys detected
+    // Display copyright holders chart
     this.holdersChartProgressbar.showIndeterminate();
     this.holdersChartData
       .then((data) => this.holdersChart.load({
         columns: data,
-        unload:true,
+        unload: true,
         done: () => {
           this.holdersChartProgressbar.hide();
           this.holdersChart.hide('No Value Detected');

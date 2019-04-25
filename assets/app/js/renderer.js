@@ -21,6 +21,7 @@ const Progress = require('./helpers/progress');
 const DejaCodeExportDialog = require('./controllers/dejacodeExportDialog');
 const ConclusionDialog = require('./controllers/conclusionDialog');
 const FileDashboard = require('./controllers/fileDashboard');
+const LicenseDashboard = require('./controllers/licenseDashboard');
 const PackageDashboard = require('./controllers/packageDashboard');
 const BarChart = require('./controllers/barChart');
 const JsTree = require('./controllers/jsTree');
@@ -47,6 +48,7 @@ $(document).ready(() => {
   let workbenchDB = new WorkbenchDB();
 
   const fileDashboard = new FileDashboard('#tab-file-dashboard', workbenchDB);
+  const licenseDashboard = new LicenseDashboard('#tab-license-dashboard', workbenchDB);
   const packageDashboard = new PackageDashboard('#tab-package-dashboard', workbenchDB);
 
   const barChart = new BarChart('#tab-barchart', workbenchDB)
@@ -129,6 +131,7 @@ $(document).ready(() => {
   const showConclusionButton = $('#show-tab-conclusion');
   const showBarChartButton = $('#show-tab-barchart');
   const showFileDashboardButton = $('#show-tab-file-dashboard');
+  const showLicenseDashboardButton = $('#show-tab-license-dashboard');
   const showPackageDashboardButton = $('#show-tab-package-dashboard');
   const showWelcomePageButton = $('#show-tab-welcomepage');
 
@@ -161,6 +164,11 @@ $(document).ready(() => {
   showFileDashboardButton.click(() => {
     splitter.show();
     fileDashboard.redraw();
+  });
+  
+  showLicenseDashboardButton.click(() => {
+    splitter.show();
+    licenseDashboard.redraw();
   });
   
   showPackageDashboardButton.click(() => {
@@ -198,6 +206,7 @@ $(document).ready(() => {
   function updateViewsByPath(path) {
     // Update all the views with the given path string
     $('#file-dashboard-title-text').text('File Info Dashboard - ' + path);
+    $('#license-dashboard-title-text').text('License Info Dashboard - ' + path);
     $('#package-dashboard-title-text').text('Package Info Dashboard - ' + path);
     scanDataTable.columns(0).search(path);
 
@@ -207,6 +216,7 @@ $(document).ready(() => {
     scanDataTable.selectedPath(path);
     conclusionsTable.selectedPath(path);
     fileDashboard.selectedPath(path);
+    licenseDashboard.selectedPath(path);
     packageDashboard.selectedPath(path);
     barChart.selectedPath(path);
 
@@ -296,6 +306,7 @@ $(document).ready(() => {
         scanDataTable.db(workbenchDB);
         conclusionsTable.db(workbenchDB);
         fileDashboard.db(workbenchDB);
+        licenseDashboard.db(workbenchDB);
         packageDashboard.db(workbenchDB);
         barChart.db(workbenchDB);
 
