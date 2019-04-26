@@ -87,6 +87,34 @@ class Utils {
       });
     });
   }
+  
+  static limitChartData(data, limit) {
+    // TODO: Use partitioning (like in quicksort) to find top "limit"
+    // more efficiently.
+    // Sort data by count
+    return data.sort((a,b) => (a[1] > b[1]) ? 1 : -1)
+      .map((dataPair, i) => {
+        if (data.length - i >= limit) {
+          return ['other', dataPair[1]];
+        } else {
+          return dataPair;
+        }
+      });
+  }
+
+  // Formats data for c3: [[key1, count1], [key2, count2], ...]
+  static formatChartData(names) {
+    // Sum the total number of times the name appears
+    const count = {};
+    $.each(names, (i, name) => {
+      count[name] = count[name] + 1 || 1;
+    });
+
+    // Transform license count into array of objects with license name & count
+    return $.map(count, (val, key) => {
+      return [[key, val]];
+    });
+  }
 }
 
 module.exports = Utils;

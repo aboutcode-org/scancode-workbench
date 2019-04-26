@@ -548,7 +548,15 @@ div.dataTables_scrollHead th:first-child {
   width: 100%;
 }
 
-#tab-dashboard{
+#tab-file-dashboard{
+  background-color: #FAFAFB;
+}
+
+#tab-license-dashboard{
+  background-color: #FAFAFB;
+}
+
+#tab-package-dashboard{
   background-color: #FAFAFB;
 }
 

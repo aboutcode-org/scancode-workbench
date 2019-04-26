@@ -72,8 +72,18 @@
                 </button>
             </li>
             <li>
-                <button class="btn btn-sidebar" id="show-tab-dashboard" data-toggle="tab" data-target="#tab-dashboard" data-placement="right" title="Dashboard View">
-                    <i class="fa fa-tachometer" aria-hidden="true"></i>
+                <button class="btn btn-sidebar" id="show-tab-file-dashboard" data-toggle="tab" data-target="#tab-file-dashboard" data-placement="right" title="File Info Dashboard">
+                    <i class="fa fa-info-circle" aria-hidden="true"></i>
+                </button>
+            </li>
+            <li>
+                <button class="btn btn-sidebar" id="show-tab-license-dashboard" data-toggle="tab" data-target="#tab-license-dashboard" data-placement="right" title="License Info Dashboard">
+                    <i class="fa fa-gavel" aria-hidden="true"></i>
+                </button>
+            </li>
+            <li>
+                <button class="btn btn-sidebar" id="show-tab-package-dashboard" data-toggle="tab" data-target="#tab-package-dashboard" data-placement="right" title="Package Info Dashboard">
+                    <i class="fa fa-archive" aria-hidden="true"></i>
                 </button>
             </li>
             <li>
@@ -152,49 +162,41 @@
                 <table class="scandata-table display table table-striped table-bordered dataTable no-footer" cellspacing="0" width="100%" ></table>
             </div>
 
-            <!-- Dashboard Tab -->
-            <div class="tab-pane container" id="tab-dashboard">
-                <div id="dashboard-container">
-                    <div id="dashboard-title">
-                        <h2 id="dashboard-title-text">Dashboard</h2>
+            <!-- File Dashboard Tab -->
+            <div class="tab-pane container" id="tab-file-dashboard">
+                <div id="file-dashboard-container">
+                    <div id="file-dashboard-title">
+                        <h2 id="file-dashboard-title-text">File Info Dashboard</h2>
                     </div>
-                    <div id="dashboard-view">
+                    <div id="file-dashboard-view">
                         <div class="row">
-                            <div class="col-lg-3 col-sm-6 col-xs-12">
+                            <div class="col-sm-4">
                                 <div class="card" id="total-files">
                                     <div class="header">
                                         <h3 class="title">0</h3>
-                                        <p class="category">Files Scanned</p>
+                                        <p class="category">Total Number of Files</p>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-lg-3 col-sm-6 col-xs-12">
-                                <div class="card" id="unique-licenses">
+                            <div class="col-sm-4">
+                                <div class="card" id="total-dirs">
                                     <div class="header">
                                         <h3 class="title">0</h3>
-                                        <p class="category">Unique Licenses Detected</p>
+                                        <p class="category">Total Number of Directories</p>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-lg-3 col-sm-6 col-xs-12">
-                                <div class="card" id="unique-copyrights">
+                            <div class="col-sm-4">
+                                <div class="card" id="unique-holders">
                                     <div class="header">
                                         <h3 class="title">0</h3>
-                                        <p class="category">Unique Copyrights Detected</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-3 col-sm-6 col-xs-12">
-                                <div class="card" id="total-packages">
-                                    <div class="header">
-                                        <h3 class="title">0</h3>
-                                        <p class="category">Packages Detected</p>
+                                        <p class="category">Unique Copyright Holders Detected</p>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-lg-3 col-sm-6 col-xs-12" id="source-chart">
+                            <div class="col-sm-4" id="source-chart">
                                 <div class="card">
                                     <div class="header">
                                         <p class="category">Programming Languages</p>
@@ -204,17 +206,76 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-lg-3 col-sm-6 col-xs-12" id="license-category-chart">
+                            <div class="col-sm-4" id="file-type-chart">
                                 <div class="card">
                                     <div class="header">
-                                        <p class="category">License Categories</p>
+                                        <p class="category">File Types</p>
                                     </div>
                                     <div class="content">
                                         <div class="chart"></div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-lg-3 col-sm-6 col-xs-12" id="license-key-chart">
+                            <div class="col-sm-4" id="holders-chart">
+                                <div class="card">
+                                    <div class="header">
+                                        <p class="category">Copyright Holders</p>
+                                    </div>
+                                    <div class="content">
+                                        <div class="chart"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- License Dashboard Tab -->
+            <div class="tab-pane container" id="tab-license-dashboard">
+                <div id="license-dashboard-container">
+                    <div id="license-dashboard-title">
+                        <h2 id="license-dashboard-title-text">License Info Dashboard</h2>
+                    </div>
+                    <div id="license-dashboard-view">
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <div class="card" id="total-licenses">
+                                    <div class="header">
+                                        <h3 class="title">0</h3>
+                                        <p class="category">Total Number of Licenses</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="card" id="total-files-with-license">
+                                    <div class="header">
+                                        <h3 class="title">0</h3>
+                                        <p class="category">Total Number of Files with Licenses</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="card" id="total-spdx">
+                                    <div class="header">
+                                        <h3 class="title">0</h3>
+                                        <p class="category">Total Number of SPDX Licenses</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-4" id="license-expression-chart">
+                                <div class="card">
+                                    <div class="header">
+                                        <p class="category">License Expressions</p>
+                                    </div>
+                                    <div class="content">
+                                        <div class="chart"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-4" id="license-key-chart">
                                 <div class="card">
                                     <div class="header">
                                         <p class="category">License Keys</p>
@@ -224,10 +285,65 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-lg-3 col-sm-6 col-xs-12" id="packages-type-chart">
+                            <div class="col-sm-4" id="license-policy-chart">
+                                <div class="card">
+                                    <div class="header">
+                                        <p class="category">License Policy</p>
+                                    </div>
+                                    <div class="content">
+                                        <div class="chart"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Package Dashboard Tab -->
+            <div class="tab-pane container" id="tab-package-dashboard">
+                <div id="package-dashboard-container">
+                    <div id="package-dashboard-title">
+                        <h2 id="package-dashboard-title-text">Package Info Dashboard</h2>
+                    </div>
+                    <div id="package-dashboard-view">
+                        <div class="row">
+                            <div class="col-sm-4"></div>
+                            <div class="col-sm-4">
+                                <div class="card" id="total-packages">
+                                    <div class="header">
+                                        <h3 class="title">0</h3>
+                                        <p class="category">Total Number of Packages</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-4"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-4" id="package-type-chart">
                                 <div class="card">
                                     <div class="header">
                                         <p class="category">Package Types</p>
+                                    </div>
+                                    <div class="content">
+                                        <div class="chart"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-4" id="package-language-chart">
+                                <div class="card">
+                                    <div class="header">
+                                        <p class="category">Package Languages</p>
+                                    </div>
+                                    <div class="content">
+                                        <div class="chart"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-4" id="package-license-chart">
+                                <div class="card">
+                                    <div class="header">
+                                        <p class="category">Package Licenses</p>
                                     </div>
                                     <div class="content">
                                         <div class="chart"></div>

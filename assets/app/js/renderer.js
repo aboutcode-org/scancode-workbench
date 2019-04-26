@@ -20,7 +20,9 @@ const Progress = require('./helpers/progress');
 
 const DejaCodeExportDialog = require('./controllers/dejacodeExportDialog');
 const ConclusionDialog = require('./controllers/conclusionDialog');
-const Dashboard = require('./controllers/dashboard');
+const FileDashboard = require('./controllers/fileDashboard');
+const LicenseDashboard = require('./controllers/licenseDashboard');
+const PackageDashboard = require('./controllers/packageDashboard');
 const BarChart = require('./controllers/barChart');
 const JsTree = require('./controllers/jsTree');
 const ScanDataTable = require('./controllers/scanDataTable');
@@ -45,7 +47,9 @@ $(document).ready(() => {
   // Create default values for all of the data and ui classes
   let workbenchDB = new WorkbenchDB();
 
-  const dashboard = new Dashboard('#tab-dashboard', workbenchDB);
+  const fileDashboard = new FileDashboard('#tab-file-dashboard', workbenchDB);
+  const licenseDashboard = new LicenseDashboard('#tab-license-dashboard', workbenchDB);
+  const packageDashboard = new PackageDashboard('#tab-package-dashboard', workbenchDB);
 
   const barChart = new BarChart('#tab-barchart', workbenchDB)
     .on('bar-clicked', (attribute, value) => {
@@ -126,7 +130,9 @@ $(document).ready(() => {
   const showScanDataButton = $('#show-tab-scandata');
   const showConclusionButton = $('#show-tab-conclusion');
   const showBarChartButton = $('#show-tab-barchart');
-  const showDashboardButton = $('#show-tab-dashboard');
+  const showFileDashboardButton = $('#show-tab-file-dashboard');
+  const showLicenseDashboardButton = $('#show-tab-license-dashboard');
+  const showPackageDashboardButton = $('#show-tab-package-dashboard');
   const showWelcomePageButton = $('#show-tab-welcomepage');
 
   // Import a ScanCode JSON resutls file
@@ -155,9 +161,19 @@ $(document).ready(() => {
     barChart.redraw();
   });
 
-  showDashboardButton.click(() => {
+  showFileDashboardButton.click(() => {
     splitter.show();
-    dashboard.redraw();
+    fileDashboard.redraw();
+  });
+  
+  showLicenseDashboardButton.click(() => {
+    splitter.show();
+    licenseDashboard.redraw();
+  });
+  
+  showPackageDashboardButton.click(() => {
+    splitter.show();
+    packageDashboard.redraw();
   });
 
   showWelcomePageButton.click(() => {
@@ -184,12 +200,14 @@ $(document).ready(() => {
   ipcRenderer.on('zoom-in', zoomIn);
   ipcRenderer.on('zoom-out', zoomOut);
 
-  // Opens the dashboard view when the app is first opened
+  // Opens the Welcome Page view when the app is first opened
   showWelcomePageButton.trigger('click');
 
   function updateViewsByPath(path) {
     // Update all the views with the given path string
-    $('#dashboard-title-text').text('Dashboard - ' + path);
+    $('#file-dashboard-title-text').text('File Info Dashboard - ' + path);
+    $('#license-dashboard-title-text').text('License Info Dashboard - ' + path);
+    $('#package-dashboard-title-text').text('Package Info Dashboard - ' + path);
     scanDataTable.columns(0).search(path);
 
     conclusionDialog.selectedPath(path);
@@ -197,7 +215,9 @@ $(document).ready(() => {
     jstree.selectedPath(path);
     scanDataTable.selectedPath(path);
     conclusionsTable.selectedPath(path);
-    dashboard.selectedPath(path);
+    fileDashboard.selectedPath(path);
+    licenseDashboard.selectedPath(path);
+    packageDashboard.selectedPath(path);
     barChart.selectedPath(path);
 
     redrawCurrentView();
@@ -285,7 +305,9 @@ $(document).ready(() => {
         jstree.db(workbenchDB);
         scanDataTable.db(workbenchDB);
         conclusionsTable.db(workbenchDB);
-        dashboard.db(workbenchDB);
+        fileDashboard.db(workbenchDB);
+        licenseDashboard.db(workbenchDB);
+        packageDashboard.db(workbenchDB);
         barChart.db(workbenchDB);
 
         // Reload the jstree, then trigger the current view to reload.
