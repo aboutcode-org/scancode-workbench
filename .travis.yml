@@ -40,4 +40,4 @@ addons:
 after_success:
   - openssl aes-256-cbc -K $encrypted_906d16ae5679_key -iv $encrypted_906d16ae5679_iv -in deploy_rsa.enc -out /tmp/deploy_rsa -d
   - chmod 600 /tmp/deploy_rsa
-  - scp -i /tmp/deploy_rsa dist/AboutCode*.tar.gz aboutcode-rel@web.sourceforge.net:/home/frs/project/aboutcode-manager/builds/
+  - scp -i /tmp/deploy_rsa dist/ScanCode*.tar.gz aboutcode-rel@web.sourceforge.net:/home/frs/project/aboutcode-manager/builds/
