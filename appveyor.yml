@@ -6,7 +6,7 @@ platform:
   - x64
 
 install:
-  - ps: Install-Product node 8 x64
+  - ps: Install-Product node 10 x64
   - node --version
   - npm --version
   - openssl version
