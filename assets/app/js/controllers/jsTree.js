@@ -182,8 +182,8 @@ class JsTree extends Controller {
           data.instance.set_icon(data.node, 'fa fa-folder fa_custom_package');
         }
       })
-      // Select the root node when the tree is refreshed
-      .on('refresh.jstree', () => {
+      // Select the root node when the tree is loaded
+      .on('loaded.jstree', () => {
         const rootNode = this.jsTree().jstree('get_node', '#').children;
         this.jsTree().jstree('select_node', rootNode);
       })
