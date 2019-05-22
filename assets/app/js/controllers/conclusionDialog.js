@@ -139,6 +139,7 @@ class ConclusionDialog extends Controller {
             .then(() => this.getHandler('delete')(conclusion));
         }
       });
+    $('.jstree').jstree(true).refresh(true);
   }
 
   // Populate modal input fields with suggestions from ScanCode results
