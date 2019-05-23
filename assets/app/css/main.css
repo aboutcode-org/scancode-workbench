@@ -1,4 +1,6 @@
 /*---------------------------------------
+    $('.jstree').jstree(true).refresh(true);
+    $('.jstree').jstree(true).refresh(true);
   Font source mapping
 -----------------------------------------*/
 @font-face {
@@ -284,8 +286,11 @@ body {
   text-align: right;
 }
 
+.dataTable tr td {
+  height: 10px;
+}
+
 .dataTable td select {
-  word-wrap: break-word;
   width: 100%;
 }
 
