@@ -64,7 +64,7 @@ npm install
 
 # Rebuild native Node.js modules against the app version of Node.js
 # MacOS, Linux and Git Bash on Windows
-$(npm bin)/electron-rebuild
+$ npm bin/electron-rebuild
 # Windows except for Git Bash
 .\node_modules\.bin\electron-rebuild.cmd
 
