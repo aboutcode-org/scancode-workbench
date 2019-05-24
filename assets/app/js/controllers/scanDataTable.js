@@ -211,13 +211,13 @@ class ScanDataTable extends Controller {
   _ellipsis(cutoff, wordbreak, escapeHtml) {
     var esc = function(t) {
       return t
-        .replace( /&/g, '&amp;' )
-        .replace( /</g, '&lt;' )
-        .replace( />/g, '&gt;' )
-        .replace( /"/g, '&quot;' );
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
     };
 
-    return function(d, type, row) {
+    return function(d, type) {
       if (type !== 'display') {
         return d;
       }
@@ -232,7 +232,7 @@ class ScanDataTable extends Controller {
         return d;
       }
 
-      var shortened = d.substr(0, cutoff-1);
+      var shortened = d.substr(0, cutoff - 1);
 
       if (wordbreak) {
         shortened = shortened.replace(/\s([^\s]*)$/, '');
@@ -242,7 +242,7 @@ class ScanDataTable extends Controller {
         shortened = esc(shortened);
       }
 
-      return '<span class="ellipsis" title="'+esc(d)+'">'+shortened+'&#8230;</span>';
+      return '<span class="ellipsis" title="' + esc(d) + '">' + shortened + '&#8230;</span>';
     };
   }
 
