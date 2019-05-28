@@ -110,20 +110,28 @@ class ScanDataTable extends Controller {
         this._query(dataTablesInput, dataTablesCallback),
       columns: ScanDataTable.TABLE_COLUMNS,
       fixedColumns: { leftColumns: 1 },
-      colResize: true,
+      colResize: false,
       scrollX: true,
       scrollResize: true,
       deferRender: true,
       initComplete: () => this._initComplete(),
       drawCallback: () => this._drawCallback(),
       columnDefs: [
+        // Handle Path column fixed width and ellipsis
+        {
+          targets: 0,
+          width: '500px',
+          render: this._mouseHover()
+        },
+        // Handle the rest columns fixed width
+        {
+          targets: '_all',
+          width: '95px',
+          render: this._mouseHover()
+        },
         {
           targets: [4, 5, 8, 16, 17, 19, 20, 22, 23, 28, 31],
           className: 'column-right-justify',
-        },
-        {
-          targets: '_all',
-          render: this._ellipsis(45, true)
         }
       ],
       buttons: [
@@ -208,7 +216,9 @@ class ScanDataTable extends Controller {
   }
 
   // Taken from https://datatables.net/plug-ins/dataRender/ellipsis
-  _ellipsis(cutoff, wordbreak, escapeHtml) {
+  // On mouse hover, show the whole string. Useful for when cell text overflows
+  // and you need to see the whole string
+  _mouseHover(cutoff, wordbreak, escapeHtml) {
     var esc = function(t) {
       return t
         .replace(/&/g, '&amp;')
@@ -232,7 +242,7 @@ class ScanDataTable extends Controller {
         return d;
       }
 
-      var shortened = d.substr(0, cutoff - 1);
+      var shortened = d;
 
       if (wordbreak) {
         shortened = shortened.replace(/\s([^\s]*)$/, '');
@@ -242,7 +252,7 @@ class ScanDataTable extends Controller {
         shortened = esc(shortened);
       }
 
-      return '<span class="ellipsis" title="' + esc(d) + '">' + shortened + '&#8230;</span>';
+      return '<span title="' + esc(d) + '">' + shortened + '</span>';
     };
   }
 
