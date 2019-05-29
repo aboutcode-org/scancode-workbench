@@ -163,7 +163,6 @@ class FileDashboard extends Controller {
         unload: true,
         done: () => {
           this.sourceLanguageChartProgressbar.hide();
-          this.sourceLanguageChart.hide('No Value Detected');
           this.sourceLanguageChart.flush();
         }
       }));
@@ -176,7 +175,6 @@ class FileDashboard extends Controller {
         unload: true,
         done: () => {
           this.fileTypeChartProgressbar.hide();
-          this.fileTypeChart.hide('No Value Detected');
           this.fileTypeChart.flush();
         }
       }));
@@ -189,7 +187,6 @@ class FileDashboard extends Controller {
         unload: true,
         done: () => {
           this.holdersChartProgressbar.hide();
-          this.holdersChart.hide('No Value Detected');
           this.holdersChart.flush();
         }
       }));
