@@ -370,6 +370,12 @@ class WorkbenchDB {
   }
 
   _addFlattenedFiles(files) {
+    // Fix for issue #232
+    $.each(files, (i, file) => {
+      if (file.type === 'directory' && file.hasOwnProperty('size_count')) {
+        file.size = file.size_count;
+      }
+    });
     files = $.map(files, (file) => this.db.FlatFile.flatten(file));
     return this.db.FlatFile.bulkCreate(files, {logging: false});
   }
@@ -386,6 +392,10 @@ class WorkbenchDB {
         transaction: t
       };
       $.each(files, (i, file) => {
+        // Fix for issue #232
+        if (file.type === 'directory' && file.hasOwnProperty('size_count')) {
+          file.size = file.size_count;
+        }
         file.parent = parentPath(file.path);
         file.headerId = headerId;
       });
