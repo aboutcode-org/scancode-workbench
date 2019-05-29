@@ -72,7 +72,7 @@ $ $(npm bin)/electron-rebuild
 $ npm start
 ```
 
-## Release instructions
+## Release Instructions
 
 You can build a `dist` directory containing executables for any one of three 
 target platforms by running:
