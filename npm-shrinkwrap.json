@@ -4762,10 +4762,56 @@
         "which": "1"
       },
       "dependencies": {
+        "minipass": {
+          "version": "2.3.5",
+          "resolved": "https://registry.npmjs.org/minipass/-/minipass-2.3.5.tgz",
+          "integrity": "sha512-Gi1W4k059gyRbyVUZQ4mEqLm0YIUiGYfvxhF6SIlk3ui1WVxMTGfGdQ2SInh3PDrRTVvPKgULkpJtT4RH10+VA==",
+          "dev": true,
+          "requires": {
+            "safe-buffer": "^5.1.2",
+            "yallist": "^3.0.0"
+          }
+        },
+        "minizlib": {
+          "version": "1.2.1",
+          "resolved": "https://registry.npmjs.org/minizlib/-/minizlib-1.2.1.tgz",
+          "integrity": "sha512-7+4oTUOWKg7AuL3vloEWekXY2/D20cevzsrNT2kGWm+39J9hGTCBv8VI5Pm5lXZ/o3/mdR4f8rflAPhnQb8mPA==",
+          "dev": true,
+          "requires": {
+            "minipass": "^2.2.1"
+          }
+        },
+        "safe-buffer": {
+          "version": "5.2.0",
+          "resolved": "https://registry.npmjs.org/safe-buffer/-/safe-buffer-5.2.0.tgz",
+          "integrity": "sha512-fZEwUGbVl7kouZs1jCdMLdt95hdIv0ZeHg6L7qPeciMZhZ+/gdesW4wgTARkrFWEpspjEATAzUGPG8N2jJiwbg==",
+          "dev": true
+        },
         "semver": {
           "version": "5.3.0",
           "resolved": "https://registry.npmjs.org/semver/-/semver-5.3.0.tgz",
           "integrity": "sha1-myzl094C0XxgEq0yaqa00M9U+U8=",
+          "dev": true
+        },
+        "tar": {
+          "version": "4.4.10",
+          "resolved": "https://registry.npmjs.org/tar/-/tar-4.4.10.tgz",
+          "integrity": "sha512-g2SVs5QIxvo6OLp0GudTqEf05maawKUxXru104iaayWA09551tFCTI8f1Asb4lPfkBr91k07iL4c11XO3/b0tA==",
+          "dev": true,
+          "requires": {
+            "chownr": "^1.1.1",
+            "fs-minipass": "^1.2.5",
+            "minipass": "^2.3.5",
+            "minizlib": "^1.2.1",
+            "mkdirp": "^0.5.0",
+            "safe-buffer": "^5.1.2",
+            "yallist": "^3.0.3"
+          }
+        },
+        "yallist": {
+          "version": "3.0.3",
+          "resolved": "https://registry.npmjs.org/yallist/-/yallist-3.0.3.tgz",
+          "integrity": "sha512-S+Zk8DEWE6oKpV+vI3qWkaK+jSbIK86pCwe2IF/xwIpQ8jEuxpw9NyaGjmp9+BoJv5FV2piqCDcoCtStppiq2A==",
           "dev": true
         }
       }
@@ -6670,54 +6716,6 @@
           "requires": {
             "ansi-regex": "^3.0.0"
           }
-        }
-      }
-    },
-    "tar": {
-      "version": "4.4.10",
-      "resolved": "https://registry.npmjs.org/tar/-/tar-4.4.10.tgz",
-      "integrity": "sha512-g2SVs5QIxvo6OLp0GudTqEf05maawKUxXru104iaayWA09551tFCTI8f1Asb4lPfkBr91k07iL4c11XO3/b0tA==",
-      "dev": true,
-      "requires": {
-        "chownr": "^1.1.1",
-        "fs-minipass": "^1.2.5",
-        "minipass": "^2.3.5",
-        "minizlib": "^1.2.1",
-        "mkdirp": "^0.5.0",
-        "safe-buffer": "^5.1.2",
-        "yallist": "^3.0.3"
-      },
-      "dependencies": {
-        "minipass": {
-          "version": "2.3.5",
-          "resolved": "https://registry.npmjs.org/minipass/-/minipass-2.3.5.tgz",
-          "integrity": "sha512-Gi1W4k059gyRbyVUZQ4mEqLm0YIUiGYfvxhF6SIlk3ui1WVxMTGfGdQ2SInh3PDrRTVvPKgULkpJtT4RH10+VA==",
-          "dev": true,
-          "requires": {
-            "safe-buffer": "^5.1.2",
-            "yallist": "^3.0.0"
-          }
-        },
-        "minizlib": {
-          "version": "1.2.1",
-          "resolved": "https://registry.npmjs.org/minizlib/-/minizlib-1.2.1.tgz",
-          "integrity": "sha512-7+4oTUOWKg7AuL3vloEWekXY2/D20cevzsrNT2kGWm+39J9hGTCBv8VI5Pm5lXZ/o3/mdR4f8rflAPhnQb8mPA==",
-          "dev": true,
-          "requires": {
-            "minipass": "^2.2.1"
-          }
-        },
-        "safe-buffer": {
-          "version": "5.2.0",
-          "resolved": "https://registry.npmjs.org/safe-buffer/-/safe-buffer-5.2.0.tgz",
-          "integrity": "sha512-fZEwUGbVl7kouZs1jCdMLdt95hdIv0ZeHg6L7qPeciMZhZ+/gdesW4wgTARkrFWEpspjEATAzUGPG8N2jJiwbg==",
-          "dev": true
-        },
-        "yallist": {
-          "version": "3.0.3",
-          "resolved": "https://registry.npmjs.org/yallist/-/yallist-3.0.3.tgz",
-          "integrity": "sha512-S+Zk8DEWE6oKpV+vI3qWkaK+jSbIK86pCwe2IF/xwIpQ8jEuxpw9NyaGjmp9+BoJv5FV2piqCDcoCtStppiq2A==",
-          "dev": true
         }
       }
     },
