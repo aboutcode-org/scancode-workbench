@@ -16,6 +16,7 @@
 
 const Sequelize = require('sequelize');
 const fs = require('fs');
+const path = require('path');
 const JSONStream = require('JSONStream');
 const Database = require('./models/database');
 const {parentPath} = require('./models/databaseUtils');
@@ -185,9 +186,15 @@ class WorkbenchDB {
       .then((db) => db.File.findAll(query))
       .then((files) => {
         return files.map((file) => {
+          let file_name;
+          if (!file.name) {
+            file_name = path.basename(file.path);
+          } else {
+            file_name = file.name;
+          }
           return {
             id: file.path,
-            text: file.name,
+            text: file_name,
             parent: file.parent,
             type: this.determineJSTreeType(file, promises),
             children: file.type === 'directory'
@@ -288,11 +295,6 @@ class WorkbenchDB {
               scancode_options: header_data.options,
               files_count: header_data.extra_data.files_count
             };
-          }
-
-          // Show error for scans missing file type information
-          if (header.scancode_options['--info'] === undefined) {
-            reject(new WorkbenchDB.MissingFileInfoError());
           }
 
           $.extend(header, {
@@ -509,7 +511,5 @@ class WorkbenchDB {
     return newCopyrights;
   }
 }
-
-WorkbenchDB.MissingFileInfoError = class MissingFileInfoError extends Error {};
 
 module.exports = WorkbenchDB;

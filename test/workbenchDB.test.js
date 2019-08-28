@@ -238,6 +238,17 @@ describe('checkWorkbenchDB', () => {
           assert.isNotNull(header.scancode_options);
         });
     });
+    it('should load scanfile without fileinfo', () => {
+      const test_file = __dirname + '/data/workbenchDB/without-fileinfo.json';
+      const workbenchDB = new WorkbenchDB();
+      
+      return workbenchDB.sync
+        .then(() => workbenchDB.db.File.count())
+        .then((rowCount) => assert.strictEqual(rowCount, 0))
+        .then(() => workbenchDB.addFromJson(test_file))
+        .then(() => workbenchDB.db.File.count())
+        .then((rowCount) => assert.strictEqual(rowCount, 44));
+    });
   });
 
   describe('getDuplicatePaths', () => {
