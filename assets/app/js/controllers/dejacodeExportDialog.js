@@ -1,6 +1,6 @@
 /*
  #
- # Copyright (c) 2017 nexB Inc. and others. All rights reserved.
+ # Copyright (c) 2019 nexB Inc. and others. All rights reserved.
  # https://nexb.com and https://github.com/nexB/scancode-workbench/
  # The ScanCode Workbench software is licensed under the Apache License version 2.0.
  # ScanCode is a trademark of nexB Inc.
@@ -57,10 +57,10 @@ class DejaCodeExportDialog extends Controller {
         const productVersion = this.productVersion.val();
         const productNameVersion = productName.concat(':', productVersion);
         const apiUrl = this.apiUrl.val();
-        const apiKey = this.apiKey.val();
+        const apiKey = this.apiKey.val().trim();
 
         // Test whether any form field is empty
-        if (productName === '' || productVersion === '' || apiUrl === '' || apiKey === '') {
+        if (productName === '' || apiUrl === '' || apiKey === '') {
           throw new Error('Please make sure you complete all fields in the upload form.');
         }
 

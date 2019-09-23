@@ -1,6 +1,6 @@
 /*
  #
- # Copyright (c) 2017 nexB Inc. and others. All rights reserved.
+ # Copyright (c) 2019 nexB Inc. and others. All rights reserved.
  # https://nexb.com and https://github.com/nexB/scancode-workbench/
  # The ScanCode Workbench software is licensed under the Apache License version 2.0.
  # ScanCode is a trademark of nexB Inc.
@@ -115,6 +115,12 @@ $(document).ready(() => {
   $(document).on('click', '#clear-filters-button', () => {
     scanDataTable.clearColumnFilters();
     updateViewsByPath(scanDataTable._selectedPath);
+  });
+
+  $(document).on('click', '#showApiKeyButton', () => {
+    // Toggle API key visibilty (See issue: #391)
+    const apiKeyInput = document.getElementById('apiKey');
+    apiKeyInput.type = (apiKeyInput.type === 'password') ? 'text' : 'password';
   });
 
   const splitter = new Splitter('#leftCol', '#rightCol')
