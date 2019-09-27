@@ -1,4 +1,6 @@
 /*---------------------------------------
+    $('.jstree').jstree(true).refresh(true);
+    $('.jstree').jstree(true).refresh(true);
   Font source mapping
 -----------------------------------------*/
 @font-face {
@@ -280,12 +282,22 @@ body {
 /*---------------------------------------
   DataTables custom
 -----------------------------------------*/
+.table {
+  table-layout: fixed;
+  word-wrap: break-word;
+}
+
+.dataTable td {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .column-right-justify {
   text-align: right;
 }
 
 .dataTable td select {
-  word-wrap: break-word;
   width: 100%;
 }
 

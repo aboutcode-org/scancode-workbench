@@ -110,16 +110,30 @@ class ScanDataTable extends Controller {
         this._query(dataTablesInput, dataTablesCallback),
       columns: ScanDataTable.TABLE_COLUMNS,
       fixedColumns: { leftColumns: 1 },
-      colResize: true,
+      colResize: false,
       scrollX: true,
       scrollResize: true,
       deferRender: true,
       initComplete: () => this._initComplete(),
       drawCallback: () => this._drawCallback(),
-      columnDefs: [{
-        targets: [4, 5, 8, 16, 17, 19, 20, 22, 23, 28, 31],
-        className: 'column-right-justify',
-      }],
+      columnDefs: [
+        // Handle Path column fixed width and ellipsis
+        {
+          targets: 0,
+          width: '500px',
+          render: this._mouseHover()
+        },
+        // Handle the rest columns fixed width
+        {
+          targets: '_all',
+          width: '95px',
+          render: this._mouseHover()
+        },
+        {
+          targets: [4, 5, 8, 16, 17, 19, 20, 22, 23, 28, 31],
+          className: 'column-right-justify',
+        }
+      ],
       buttons: [
         {   // Do not allow the first column to be hidden
           extend: 'colvis',
@@ -199,6 +213,47 @@ class ScanDataTable extends Controller {
     });
 
     return this._dataTable;
+  }
+
+  // Taken from https://datatables.net/plug-ins/dataRender/ellipsis
+  // On mouse hover, show the whole string. Useful for when cell text overflows
+  // and you need to see the whole string
+  _mouseHover(cutoff, wordbreak, escapeHtml) {
+    var esc = function(t) {
+      return t
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    };
+
+    return function(d, type) {
+      if (type !== 'display') {
+        return d;
+      }
+
+      if (typeof d !== 'number' && typeof d !== 'string') {
+        return d;
+      }
+
+      d = d.toString(); // cast numbers
+
+      if (d.length < cutoff) {
+        return d;
+      }
+
+      var shortened = d;
+
+      if (wordbreak) {
+        shortened = shortened.replace(/\s([^\s]*)$/, '');
+      }
+
+      if (escapeHtml) {
+        shortened = esc(shortened);
+      }
+
+      return '<span title="' + esc(d) + '">' + shortened + '</span>';
+    };
   }
 
   // This function is called every time DataTables needs to be redrawn.

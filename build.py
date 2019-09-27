@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-# Copyright (c) 2017 - 2018 nexB Inc. http://www.nexb.com/ - All rights reserved.
+# Copyright (c) 2017 - 2019 nexB Inc. http://www.nexb.com/ - All rights reserved.
 
 
 """
@@ -27,7 +27,7 @@ import zipfile
 #######################
 APP_NAME = 'ScanCode-Workbench'
 APP_BUNDLE_ID = 'com.electron.scancode-workbench'
-VERSION = '3.1.0'
+VERSION = '3.1.1'
 ELECTRON_VERSION = '3.1.11'
 
 #######################

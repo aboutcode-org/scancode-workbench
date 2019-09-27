@@ -148,7 +148,6 @@ class PackageDashboard extends Controller {
         unload: true,
         done: () => {
           this.packageTypeChartProgressbar.hide();
-          this.packageTypeChart.hide('No Value Detected');
           this.packageTypeChart.flush();
         }
       }));
@@ -161,7 +160,6 @@ class PackageDashboard extends Controller {
         unload: true,
         done: () => {
           this.packageLanguageChartProgressbar.hide();
-          this.packageLanguageChart.hide('No Value Detected');
           this.packageLanguageChart.flush();
         }
       }));
@@ -174,7 +172,6 @@ class PackageDashboard extends Controller {
         unload: true,
         done: () => {
           this.packageLicenseChartProgressbar.hide();
-          this.packageLicenseChart.hide('No Value Detected');
           this.packageLicenseChart.flush();
         }
       }));

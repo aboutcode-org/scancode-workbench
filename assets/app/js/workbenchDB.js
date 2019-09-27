@@ -16,6 +16,7 @@
 
 const Sequelize = require('sequelize');
 const fs = require('fs');
+const path = require('path');
 const JSONStream = require('JSONStream');
 const Database = require('./models/database');
 const {parentPath} = require('./models/databaseUtils');
@@ -185,9 +186,15 @@ class WorkbenchDB {
       .then((db) => db.File.findAll(query))
       .then((files) => {
         return files.map((file) => {
+          let file_name;
+          if (!file.name) {
+            file_name = path.basename(file.path);
+          } else {
+            file_name = file.name;
+          }
           return {
             id: file.path,
-            text: file.name,
+            text: file_name,
             parent: file.parent,
             type: this.determineJSTreeType(file, promises),
             children: file.type === 'directory'
@@ -290,11 +297,6 @@ class WorkbenchDB {
             };
           }
 
-          // Show error for scans missing file type information
-          if (header.scancode_options['--info'] === undefined) {
-            reject(new WorkbenchDB.MissingFileInfoError());
-          }
-
           $.extend(header, {
             workbench_version: version,
             workbench_notice: 'Exported from ScanCode Workbench and provided on an "AS IS" BASIS, WITHOUT WARRANTIES\\nOR CONDITIONS OF ANY KIND, either express or implied. No content created from\\nScanCode Workbench should be considered or used as legal advice. Consult an Attorney\\nfor any legal advice.\\nScanCode Workbench is a free software analysis application from nexB Inc. and others.\\nVisit https://github.com/nexB/scancode-workbench/ for support and download."'
@@ -370,6 +372,12 @@ class WorkbenchDB {
   }
 
   _addFlattenedFiles(files) {
+    // Fix for issue #232
+    $.each(files, (i, file) => {
+      if (file.type === 'directory' && file.hasOwnProperty('size_count')) {
+        file.size = file.size_count;
+      }
+    });
     files = $.map(files, (file) => this.db.FlatFile.flatten(file));
     return this.db.FlatFile.bulkCreate(files, {logging: false});
   }
@@ -386,6 +394,10 @@ class WorkbenchDB {
         transaction: t
       };
       $.each(files, (i, file) => {
+        // Fix for issue #232
+        if (file.type === 'directory' && file.hasOwnProperty('size_count')) {
+          file.size = file.size_count;
+        }
         file.parent = parentPath(file.path);
         file.headerId = headerId;
       });
@@ -499,7 +511,5 @@ class WorkbenchDB {
     return newCopyrights;
   }
 }
-
-WorkbenchDB.MissingFileInfoError = class MissingFileInfoError extends Error {};
 
 module.exports = WorkbenchDB;

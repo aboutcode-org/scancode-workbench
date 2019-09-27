@@ -164,7 +164,6 @@ class LicenseDashboard extends Controller {
         unload: true,
         done: () => {
           this.licenseExpressionChartProgressbar.hide();
-          this.licenseExpressionChart.hide('No Value Detected');
           this.licenseExpressionChart.flush();
         }
       }));
@@ -177,7 +176,6 @@ class LicenseDashboard extends Controller {
         unload: true,
         done: () => {
           this.licenseKeyChartProgressbar.hide();
-          this.licenseKeyChart.hide('No Value Detected');
           this.licenseKeyChart.flush();
         }
       }));
@@ -190,7 +188,6 @@ class LicenseDashboard extends Controller {
         unload: true,
         done: () => {
           this.licensePolicyChartProgressbar.hide();
-          this.licensePolicyChart.hide('No Value Detected');
           this.licensePolicyChart.flush();
         }
       }));

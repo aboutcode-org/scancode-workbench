@@ -54,25 +54,25 @@ Then, from your command line:
 
 ```bash
 # Clone this repository
-git clone https://github.com/nexB/scancode-workbench.git
+$ git clone https://github.com/nexB/scancode-workbench.git
 
 # Go into the repository
-cd scancode-workbench
+$ cd scancode-workbench
 
 # Install dependencies and run the app
-npm install
+$ npm install
 
 # Rebuild native Node.js modules against the app version of Node.js
 # MacOS, Linux and Git Bash on Windows
-$(npm bin)/electron-rebuild
+$ $(npm bin)/electron-rebuild
 # Windows except for Git Bash
-.\node_modules\.bin\electron-rebuild.cmd
+> .\node_modules\.bin\electron-rebuild.cmd
 
 # Run the app
-npm start
+$ npm start
 ```
 
-## Release instructions
+## Release Instructions
 
 You can build a `dist` directory containing executables for any one of three 
 target platforms by running:
