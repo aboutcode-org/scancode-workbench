@@ -13,10 +13,14 @@ install:
   - python --version
   - ssh -V
   - pip -V
+  - npm install
+  - ./node_modules/.bin/electron-rebuild
 
 build_script:
-  - npm install
   - python build.py
+
+test_script:
+  - npm test
 
 artifacts:
   - path: 'dist\*.zip'
@@ -24,5 +28,3 @@ artifacts:
 
 before_deploy:
   - ps: foreach($artifactName in $artifacts.keys) { $artifacts[$artifactName] }
-
-test: off
