@@ -225,9 +225,9 @@ function getTemplate() {
           enabled: false
         },
         {
-          label: 'Get ScanCode Version and Options',
+          label: 'Show ScanCode Header Information',
           accelerator: 'CmdOrCtrl+G',
-          click: sendEventToRenderer('get-ScanInfo')
+          click: sendEventToRenderer('get-ScanHeader')
         },
         {
           type: 'separator'
