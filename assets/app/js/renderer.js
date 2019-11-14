@@ -201,7 +201,7 @@ $(document).ready(() => {
   ipcRenderer.on('import-JSON', importJson);
   ipcRenderer.on('export-JSON', exportJson);
   ipcRenderer.on('export-JSON-conclusions-only', exportJsonConclusions);
-  ipcRenderer.on('get-ScanInfo', getScanInfo);
+  ipcRenderer.on('get-ScanHeader', getScanHeader);
   ipcRenderer.on('zoom-reset', zoomReset);
   ipcRenderer.on('zoom-in', zoomIn);
   ipcRenderer.on('zoom-out', zoomOut);
@@ -277,8 +277,8 @@ $(document).ready(() => {
     return updateViews();
   }
 
-  // Get the ScanCode version and options data from the DB and populate and open the modal
-  function getScanInfo() {
+  // Get the ScanCode header data from the DB and populate and open the modal
+  function getScanHeader() {
     return workbenchDB.sync
       .then((db) => db.Header.findById(1)
         .then((header) => {
@@ -289,7 +289,7 @@ $(document).ready(() => {
             scancode_display.css('display', 'none');
           } else {
             scancode_label.text('This information has been extracted from your imported ScanCode JSON file:');
-            scancode_display.text('ScanCode version: ' + header.scancode_version + '\n\nScanCode options: ' + JSON.stringify(header.scancode_options, null, 2));
+            scancode_display.text(header.header_content);
             scancode_display.css('display', 'block');
           }
         }))
