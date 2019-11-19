@@ -73,7 +73,8 @@ class DejaCodeExportDialog extends Controller {
             name: conclusion.name,
             version: conclusion.version,
             owner: conclusion.owner,
-            license_expression: conclusion.license_expression,
+            // Fix for #403. TODO: clean this up
+            license_expression: conclusion.license_expression.shift().license_expression,
             copyright: conclusion.copyright,
             is_deployed: conclusion.is_deployed,
             is_modified: conclusion.is_modified,
