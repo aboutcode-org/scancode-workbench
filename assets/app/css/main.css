@@ -339,11 +339,11 @@ div.dataTables_wrapper div.dataTables_processing {
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 200px;
-  margin-left: -100px;
-  /*The new/changed setting(s)*/
+  width: 400px;
+  margin-left: -200px;
   background-color: #e6f2ff;
   border: solid 1px #99ccff;
+  font-size: 16px;
 }
 
 /*---------------------------------------
