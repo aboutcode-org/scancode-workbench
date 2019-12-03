@@ -46,19 +46,19 @@ on_linux = on_windows = on_mac = False
 if 'linux' in sys_platform :
     PLATFORM_NAME = 'linux'
     PLATFORM = 'linux'
-    ICON = 'png/workbench_512x512.png'
+    ICON = 'png/scwb_blue_01.png'
     on_linux = True
 
 elif'win32' in sys_platform :
     PLATFORM_NAME = 'windows'
     PLATFORM = 'win32'
-    ICON = 'win/workbench_256x256.ico'
+    ICON = 'win/scwb_blue_01.ico'
     on_windows = True
 
 elif 'darwin' in sys_platform :
     PLATFORM_NAME = 'macos'
     PLATFORM = 'darwin'
-    ICON = 'mac/workbench.icns'
+    ICON = 'mac/scwb_blue_01.icns'
     on_mac = True
 
 else:
