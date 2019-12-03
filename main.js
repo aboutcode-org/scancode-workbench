@@ -13,7 +13,7 @@ function createWindow() {
   mainWindow = new BrowserWindow({
     width: 1200,
     height: 800,
-    icon: path.join(__dirname, '/assets/app/app-icon/png/workbench_512x512.png')
+    icon: path.join(__dirname, '/assets/app/app-icon/png/scwb_layered_01.png')
   });
   mainWindow.loadURL('file://' + __dirname + '/index.html');
   mainWindow.on('closed', () => mainWindow = null);
