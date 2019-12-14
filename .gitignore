@@ -16,6 +16,7 @@
 /local
 node_modules/
 bower_components/
+docs/build
 
 # Installer logs
 debug.log
@@ -31,6 +32,7 @@ npm-debug.log
 .*.sw[po]
 .build
 .ve
+.venv
 *.bak
 /.cache/
 
