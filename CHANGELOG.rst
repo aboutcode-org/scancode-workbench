@@ -5,6 +5,22 @@ All notable changes to this project will be documented in this file.
 The format is based on `Keep a                                                               
 Changelog <https://keepachangelog.com/en/1.0.0/>`__
 
+[Unreleased]
+------------
+New Features
+~~~~~~~~~~~~
+
+- Update in-app help links #412
+- Add source controlled documentation #411
+- Update app icon to a more visible one #382
+- Add color to DataTables "Progress..." pop-up #407
+- Update the display of scan headers #400
+
+Bug Fixes
+~~~~~~~~~
+
+- license_expression values now being uploaded correctly #403
+
 [v3.1.1] - 2019-9-27
 --------------------
 New Features
