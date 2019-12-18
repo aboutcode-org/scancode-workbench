@@ -233,9 +233,9 @@ function getTemplate() {
           type: 'separator'
         },
         {
-          label: 'Learn More',
+          label: 'GitHub Repoistory',
           click: () => shell.openExternal(
-            'https://github.com/nexB/scancode-workbench/wiki')
+            'https://github.com/nexB/scancode-workbench/')
         },
         {
           label: 'Licensing Information',
@@ -248,12 +248,13 @@ function getTemplate() {
           }
         },
         {
+          // TODO: make this version specific?
           label: 'Documentation',
           click: () => shell.openExternal(
-            `https://github.com/nexB/scancode-workbench/blob/v${packageJson.version}/README.md`)
+            `https://scancode-workbench.readthedocs.io`)
         },
         {
-          label: 'Search Issues',
+          label: 'Issue Tracker',
           click: () => shell.openExternal(
             'https://github.com/nexB/scancode-workbench/issues')
         }
