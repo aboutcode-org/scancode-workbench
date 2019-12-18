@@ -19,7 +19,7 @@ ScanCode Workbench is based on
 for using nexB’s [AboutCode tools](https://github.com/nexB/aboutcode). This app 
 works on Windows, OS X and Linux operating systems.
 
-![ScanCode Workbench](https://github.com/nexB/scancode-workbench/wiki/scancode-workbench-chart-summary.gif)
+![ScanCode Workbench](https://scancode-workbench.readthedocs.io/en/develop/_images/scancode-workbench-chart-summary.gif)
 
 ## Using
 
@@ -29,7 +29,7 @@ can find `ScanCode-Workbench` under `dist/ScanCode-Workbench-<os>-x64-<version>`
 * ScanCode Workbench >= v2 is only compatible with scans from 
 [ScanCode v2.0.0](https://github.com/nexB/scancode-toolkit/releases) and 
 above which are run with the ScanCode `-i` option. For a list of available ScanCode 
-options see [How To: Set what will be detected in a scan](https://github.com/nexB/scancode-toolkit/wiki/How-To:-Set-what-will-be-detected-in-a-scan)
+options see [How To: Set what will be detected in a scan](https://scancode-toolkit.readthedocs.io/en/latest/tutorials/how_to_set_what_will_be_detected_in_a_scan.html)
 
 ```bash
 ./scancode -clipeu <input> <output_file>
@@ -40,16 +40,16 @@ ScanCode Workbench in order to get a sense of its functionality and the types of
 information captured by a scan.  The samples are located at 
 [https://github.com/nexB/scancode-workbench/tree/develop/samples](https://github.com/nexB/scancode-workbench/tree/develop/samples).
 * Import a ScanCode JSON file, and see what components are in your software! See 
-the [wiki](https://github.com/nexB/scancode-workbench/wiki#tutorials) for more 
-documentation on how to use ScanCode Workbench.
+the [documentation](https://scancode-workbench.readthedocs.io) for more 
+information on how to use ScanCode Workbench.
 
-![Import a JSON file](https://github.com/nexB/scancode-workbench/wiki/import-json-file.gif)
+![Import a JSON file](https://scancode-workbench.readthedocs.io/en/develop/_images/import-json-file.gif)
 
 ## Building
 
 You'll need [Node.js](https://nodejs.org) (which comes with [npm](http://npmjs.com)) 
 installed on your computer in order to build this app. For a list of platform 
-specific requirements, see the Building section of the [wiki](https://github.com/nexB/scancode-workbench/wiki/Building).
+specific requirements, see the Building section of the [documentation](https://scancode-workbench.readthedocs.io/en/develop/basics/building.html).
 Then, from your command line:
 
 ```bash
