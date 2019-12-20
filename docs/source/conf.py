@@ -43,7 +43,8 @@ extensions = [
 master_doc = 'index'
 
 # license-policy links to scancode-toolkit sphinx docs, so we must map it here
-intersphinx_mapping = {'scancode-toolkit': ('https://scancode-toolkit.readthedocs.io/en/latest/', None)}
+intersphinx_mapping = {'scancode-toolkit': ('https://scancode-toolkit.readthedocs.io/en/latest/', None),
+                       'aboutcode': ('https://aboutcode.readthedocs.io/en/latest/', None),}
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = []
