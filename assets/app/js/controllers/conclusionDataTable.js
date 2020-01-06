@@ -62,17 +62,6 @@ class ConclusionDataTable extends Controller {
       scrollResize: true,
       columns: ConclusionDataTable.COLUMNS,
       buttons: [
-        {
-          name: 'uploadDeja',
-          text: '<i class=" fa fa-cloud-upload"></i> Upload Conclusions',
-          titleAttr: 'Upload Conclusionss to DejaCode',
-          action: () => {
-            this.db()
-              .findAllConclusions({})
-              .then((conclusions) =>
-                this.getHandler('upload-clicked')(conclusions));
-          },
-        },
         {   // Do not allow the first 2 columns to be hidden
           extend: 'colvis',
           columns: ':gt(1)',
