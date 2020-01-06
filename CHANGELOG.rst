@@ -10,6 +10,7 @@ Changelog <https://keepachangelog.com/en/1.0.0/>`__
 New Features
 ~~~~~~~~~~~~
 
+- Remove the ability to upload Conclusions to DejaCode #413
 - Update in-app help links #412
 - Add source controlled documentation #411
 - Update app icon to a more visible one #382
