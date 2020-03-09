@@ -88,17 +88,17 @@ $(document).ready(() => {
       updateViewsByPath(node.id);
     });
 
-  $(document).on('click', '#activate-filters-button', () => {
+  $(document).on('click', '.activate-filters-button', () => {
     scanDataTable.genFilters();
     updateViewsByPath(scanDataTable._selectedPath);
   });
 
-  $(document).on('click', '#reset-filters-button', () => {
+  $(document).on('click', '.reset-filters-button', () => {
     scanDataTable.resetColumnFilters();
     updateViewsByPath(scanDataTable._selectedPath);
   });
 
-  $(document).on('click', '#clear-filters-button', () => {
+  $(document).on('click', '.clear-filters-button', () => {
     scanDataTable.clearColumnFilters();
     updateViewsByPath(scanDataTable._selectedPath);
   });
