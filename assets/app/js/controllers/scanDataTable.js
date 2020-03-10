@@ -410,7 +410,7 @@ class ScanDataTable extends Controller {
             .draw();
         });
 
-      $(".sorting select").click(function(e) {
+      $('.sorting select').click((e) => {
         e.stopPropagation();
       });
       header.append(select);
