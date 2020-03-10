@@ -202,15 +202,15 @@ class ScanDataTable extends Controller {
         },
         {
           text: 'Activate Filters',
-          className: 'activate-filters-button'
+          className: 'btn-link activate-filters-button'
         },
         {
           text: 'Reset Filters',
-          className: 'reset-filters-button'
+          className: 'btn-link reset-filters-button'
         },
         {
           text: 'Clear Filters',
-          className: 'clear-filters-button'
+          className: 'btn-link clear-filters-button'
         }
       ],
       dom: // Needed to keep datatables buttons and search inline
