@@ -410,6 +410,9 @@ class ScanDataTable extends Controller {
             .draw();
         });
 
+      $(".sorting select").click(function(e) {
+        e.stopPropagation();
+      });
       header.append(select);
     });
   }
@@ -449,10 +452,8 @@ class ScanDataTable extends Controller {
       }
 
       const column = this;
-      const footer = $(column.footer());
+      const header = $(column.header());
       const columnName = columnInfo.name;
-
-      footer.empty();
 
       const select = $('#scandata-' + columnName)
         .empty()
@@ -494,7 +495,7 @@ class ScanDataTable extends Controller {
             select.append(`<option value="${filterValue}">${filterValue}</option>`);
           });
         });
-      footer.append(select);
+      header.append(select);
     });
   }
 
