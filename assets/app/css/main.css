@@ -310,6 +310,11 @@ body {
   margin: 0;
 }
 
+.filter-button {
+  all: unset;
+  line-height: 2.0;
+}
+
 /*For rounded table border*/
 div.dataTables_scrollHead table,
 div.dataTables_scrollHead th:first-child {

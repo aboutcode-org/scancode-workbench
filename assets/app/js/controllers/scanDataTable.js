@@ -201,16 +201,16 @@ class ScanDataTable extends Controller {
             .map((column) => `${column.name}:name`)
         },
         {
-          text: 'Activate Filters',
-          className: 'btn-link activate-filters-button'
+          text: '<button>Activate Filters</button>',
+          className: 'filter-button activate-filters-button'
         },
         {
-          text: 'Reset Filters',
-          className: 'btn-link reset-filters-button'
+          text: '<button>Reset Filters</button>',
+          className: 'filter-button reset-filters-button'
         },
         {
-          text: 'Clear Filters',
-          className: 'btn-link clear-filters-button'
+          text: '<button>Clear Filters</button>',
+          className: 'filter-button clear-filters-button'
         }
       ],
       dom: // Needed to keep datatables buttons and search inline
