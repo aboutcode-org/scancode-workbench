@@ -98,11 +98,6 @@ class ScanDataTable extends Controller {
       return this._dataTable;
     }
 
-    // Adds a footer for each column. This needs to be done before creating
-    // the DataTable
-    const cells = $.map(ScanDataTable.TABLE_COLUMNS, () => '<td></td>').join('');
-    $(this.dataTableSelector()).append('<tfoot><tr>' + cells + '</tr></tfoot>');
-
     this._dataTable = $(this.dataTableSelector()).DataTable({
       serverSide: true,
       processing: true,
@@ -204,6 +199,18 @@ class ScanDataTable extends Controller {
           hide: ScanDataTable.TABLE_COLUMNS
             .filter((column) => ScanDataTable.PACKAGE_GROUP.indexOf(column) < 0)
             .map((column) => `${column.name}:name`)
+        },
+        {
+          text: '<button>Activate Filters</button>',
+          className: 'filter-button activate-filters-button'
+        },
+        {
+          text: '<button>Reset Filters</button>',
+          className: 'filter-button reset-filters-button'
+        },
+        {
+          text: '<button>Clear Filters</button>',
+          className: 'filter-button clear-filters-button'
         }
       ],
       dom: // Needed to keep datatables buttons and search inline
@@ -384,20 +391,6 @@ class ScanDataTable extends Controller {
   }
 
   _initComplete() {
-    const pathCol = this.dataTable().columns(0);
-
-    const footer = $(pathCol.footer());
-    // keep the buttons horizontally aligned
-    footer.css('white-space', 'nowrap');
-
-    const genFiltersButton = $(`<button id="activate-filters-button" type="button">Activate Filters</button>`);
-    const resetFiltersButton = $(`<button id="reset-filters-button" type"button">Reset Filters</button>`);
-    const clearFiltersButton = $(`<button id="clear-filters-button" type="button">Clear Filters</button>`);
-
-    footer.append(genFiltersButton);
-    footer.append(resetFiltersButton);
-    footer.append(clearFiltersButton);
-
     this.dataTable().columns().every(function (columnIndex) {
       const columnInfo = ScanDataTable.TABLE_COLUMNS[columnIndex];
 
@@ -406,10 +399,10 @@ class ScanDataTable extends Controller {
       }
 
       const column = this;
-      const footer = $(column.footer());
+      const header = $(column.header());
       const columnName = columnInfo.name;
 
-      const select = $(`<select id="scandata-${columnName}"></select>`)
+      const select = $(`<tr><td><select style="font-weight:normal;width:95px" id="scandata-${columnName}"></select></td></tr>`)
         .on('change', function () {
           const val = $(this).val();
           column
@@ -417,7 +410,10 @@ class ScanDataTable extends Controller {
             .draw();
         });
 
-      footer.append(select);
+      $('.sorting select').click((e) => {
+        e.stopPropagation();
+      });
+      header.append(select);
     });
   }
 
@@ -456,10 +452,8 @@ class ScanDataTable extends Controller {
       }
 
       const column = this;
-      const footer = $(column.footer());
+      const header = $(column.header());
       const columnName = columnInfo.name;
-
-      footer.empty();
 
       const select = $('#scandata-' + columnName)
         .empty()
@@ -501,7 +495,7 @@ class ScanDataTable extends Controller {
             select.append(`<option value="${filterValue}">${filterValue}</option>`);
           });
         });
-      footer.append(select);
+      header.append(select);
     });
   }
 
