@@ -26,6 +26,7 @@ npm-debug.log
 .project
 .pydevproject
 .idea
+.vscode
 
 .DS_Store
 *~
