@@ -306,8 +306,6 @@ class ScanDataTable extends Controller {
         if (columnSearch) {
           const columnName = dataTablesInput.columns[i].name;
           this.dataTable().column(`${columnName}:name`).visible(true);
-          const exactFilterColumnNames = ['extension', 'programming_language', 'name'];
-
           if (i === 0) {
             // Column 0 is the "path", which should only match
             // wildcards at the end of the path.
@@ -340,15 +338,11 @@ class ScanDataTable extends Controller {
                 { $eq: null }
               ]
             };
-          } else if (exactFilterColumnNames.includes(columnName)) {
+          } else {
             query.where.$and[columnName] = {
               $eq: columnSearch
             };
-          } else {
-            query.where.$and[columnName] = {
-              $like: `%${columnSearch}%`
-            };
-          }
+          } 
         }
       }
 
