@@ -5,11 +5,9 @@ body {
 }
 
 .rst-content .guilabel {
-    border: 1px solid #7fbbe3;
-    border: 1px solid #e7f2fa;
-    border: 1px solid #ffff99;
-    background: #e7f2fa;
-    background: #ffffcc;
+    border: 1px solid #ccffff;
+    border: 0;
+    background: #e6ffff;
     font-size: 80%;
     font-size: 12px;
     font-size: 14px;
@@ -148,8 +146,3 @@ code, .rst-content tt, .rst-content code {
     margin-bottom: 0px;
     line-height: 24px;
 }
-
-/* h2 {
-    color: #cc0000;
-    color: #ff0000;
-} */

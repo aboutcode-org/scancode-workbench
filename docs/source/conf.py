@@ -17,7 +17,7 @@
 
 # -- Project information -----------------------------------------------------
 
-project = 'SCWB-Update'
+project = 'ScanCode Workbench Documentation'
 copyright = '2020 nexB Inc.'
 author = 'nexB Inc.'
 
