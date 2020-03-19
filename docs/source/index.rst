@@ -1,18 +1,21 @@
-**Scancode-Workbench Documentation**
-====================================
+=========================================
+Welcome to the SCWB-Update documentation.
+=========================================
 
-ScanCode Workbench allows you take the scan results from the ScanCode Toolkit and create a software
-inventory annotated with your summaries or conclusions (we call these Conclusions) at any levels of
-the codebase you choose.
+Welcome to the documentation for the ScanCode Workbench!
 
-The attributes you add (e.g., Name, Version, Owner, License Expression, Copyright) to your
-Conclusion about a single package or file -- or a higher-level group of packages and/or files --
-can then be exported to a JSON or SQLite file.
+----
 
-***Topics:***
-=============
 .. toctree::
    :maxdepth: 3
 
-   basics/index
-   tutorials/index
+   toc
+
+
+
+Indices and tables
+==================
+
+* :ref:`genindex`
+* :ref:`modindex`
+* :ref:`search`
