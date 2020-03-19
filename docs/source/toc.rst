@@ -2,6 +2,8 @@
 Table of Contents
 =================
 
+.. Note:: This is just a first cut at a cursory outline.  Comments, suggestions and contributions are welcome (and encouraged).
+
 1.  Are You New to ScanCode Workbench?
 ======================================
 
@@ -84,33 +86,36 @@ Conclusion View
 
 -----------------------------------------------------------------------
 
-4.  Basic Tutorials
-===================
+4.  How-To Guides
+=================
 
-.. Note:: [I think this subsumes "How-To Guides" -- what do you think?]
-
-Import and Export a JSON File
------------------------------
+How-To: Import and Export a JSON File
+-------------------------------------
 
    [to come]
 
-Open and Save a SQLite File
----------------------------
+How-To: Open and Save a SQLite File
+-----------------------------------
 
    [to come]
 
-Create Conclusions
-------------------
+How-To: Create Conclusions
+--------------------------
 
    [to come]
 
-License Policy Support in ScanCode Workbench
---------------------------------------------
+How-To: Use License Policies with ScanCode Workbench
+----------------------------------------------------
 
    [to come]
 
-Navigate the Chart Summary View
--------------------------------
+How-To: Navigate the Chart Summary View
+---------------------------------------
+
+   [to come]
+
+[more guides]
+-------------
 
    [to come]
 
