@@ -4,8 +4,6 @@ ScanCode Workbench Documentation
 
 Welcome to the documentation for ScanCode Workbench!
 
-----
-
 .. toctree::
    :maxdepth: 3
    :caption: Table of Contents
