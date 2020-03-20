@@ -7,16 +7,11 @@ body {
 .rst-content .guilabel {
     border: 0;
     background: #e6ffff;
-    /* background: #ffffcc; */
-    /* background: #ffffe6; */
     font-size: 80%;
-    font-size: 12px;
-    font-size: 14px;
     font-size: 16px;
     font-weight: 700;
     font-weight: normal;
     border-radius: 4px;
-    padding: 2.4px 6px;
     padding: 4px 6px;
     margin: auto 2px;
 
