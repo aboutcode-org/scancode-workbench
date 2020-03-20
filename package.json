@@ -25,7 +25,7 @@
   },
   "homepage": "",
   "devDependencies": {
-    "asar": "^0.11.0",
+    "asar": "^3.0.1",
     "chai": "^3.5.0",
     "chai-subset": "^1.5.0",
     "electron": "3.1.11",
@@ -33,11 +33,11 @@
     "electron-rebuild": "^1.8.5",
     "eslint": "^4.16.0",
     "globby": "^10.0.0",
-    "grunt": "^1.0.4",
+    "grunt": "^1.1.0",
     "jquery": "^3.4.0",
     "jsdom": "^9.4.1",
     "mocha": "^5.2.0",
-    "nodemon": "^1.18.7",
+    "nodemon": "^2.0.2",
     "sinon": "^1.17.4"
   },
   "dependencies": {
