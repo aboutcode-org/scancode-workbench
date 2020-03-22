@@ -17,7 +17,6 @@
 node_modules/
 bower_components/
 docs/build
-docs-update/build
 
 # Installer logs
 debug.log
