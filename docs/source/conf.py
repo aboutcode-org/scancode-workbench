@@ -35,6 +35,8 @@ extensions = [
     'sphinx.ext.intersphinx'
 ]
 
+master_doc = 'index'
+
 intersphinx_mapping = {
     'scancode-toolkit': ('https://scancode-toolkit.readthedocs.io/en/latest/', None),
 }
