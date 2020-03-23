@@ -57,7 +57,7 @@ class ScanDataTable extends Controller {
     }
     this.dataTable().draw();
   }
-
+  
   clearColumnFilters() {
     $.each(ScanDataTable.TABLE_COLUMNS, (i, column) => {
       const columnSelect = $(`select#scandata-${column.name}`);
@@ -69,6 +69,11 @@ class ScanDataTable extends Controller {
     });
     // clear the global search box
     this.dataTable().search('').columns().search('').draw();
+  }
+
+  getSearchPreference() {
+    //get the value of radio button
+    return $("input[name='search-preference']:checked").val();
   }
 
   setColumnFilter(columnName, value) {
@@ -345,7 +350,7 @@ class ScanDataTable extends Controller {
           } 
         }
       }
-
+ 
       // If a global search exists, add an $or search for each column
       const globalSearch = dataTablesInput.search.value;
       if (globalSearch) {
@@ -354,10 +359,20 @@ class ScanDataTable extends Controller {
         query.where.$and.$or = [];
         for (let i = 0; i < dataTablesInput.columns.length; i++) {
           const orSearch = {};
-          orSearch[dataTablesInput.columns[i].name] = {
-            $like: Sequelize.literal(`"%${escapedSearch}%" ESCAPE '\\'`)
-          };
-          query.where.$and.$or.push(orSearch);
+          const columnVisible = this.dataTable().columns(i);
+          if (this.getSearchPreference() === `selective-search`) {
+            if (columnVisible.visible()[0] === true) {
+              orSearch[dataTablesInput.columns[i].name] = {
+                $like: Sequelize.literal(`"%${escapedSearch}%" ESCAPE '\\'`)
+              };
+              query.where.$and.$or.push(orSearch);  
+            }
+          } else {
+            orSearch[dataTablesInput.columns[i].name] = {
+              $like: Sequelize.literal(`"%${escapedSearch}%" ESCAPE '\\'`)
+            };
+            query.where.$and.$or.push(orSearch);  
+          }
         }
       }
 

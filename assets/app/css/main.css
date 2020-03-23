@@ -297,6 +297,11 @@ body {
   text-align: right;
 }
 
+.radio-inline {
+  margin: 4px;
+  margin-top: 0;
+}
+
 .dataTable td select {
   width: 100%;
 }
