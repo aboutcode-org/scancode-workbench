@@ -9,7 +9,7 @@ Clone, Install, Build and Run
 
 You'll need `Node.js <https://nodejs.org/>`__ (which comes with `npm <http://npmjs.com/>`__) installed on your computer in order to build this app. (See below for a list of platform-specific requirements.) Then, from your command line:
 
-.. code-block::
+.. code-block:: none
 
    # Clone this repository
    $ git clone https://github.com/nexB/scancode-workbench.git
@@ -76,7 +76,7 @@ Release Instructions
 You can build a ``dist`` directory containing executables for any one of three target platforms
 by running:
 
-.. code-block::
+.. code-block:: none
 
    $ python build.py
 

@@ -4,7 +4,7 @@ Testing
 
 Test ABCM functionality using:
 
-.. code-block::
+.. code-block:: none
 
    $ npm test
 
