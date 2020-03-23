@@ -14,8 +14,8 @@ Import a ScanCode JSON File
 
 * To import a ScanCode JSON file:
 
-  * Open the :kbd:`File` menu and select :kbd:`Import JSON File` (keyboard shortcut: :kbd:`Ctrl+I` or
-    :kbd:`⌘+I`).
+  * Open the :kbd:`File` menu and select :kbd:`Import JSON File` (keyboard shortcut:
+    :kbd:`Ctrl+I` or :kbd:`⌘+I`).
   * In the dialog window that opens, navigate to the JSON file you want to import, select the
     file and click :kbd:`Open`.
   * You will then be prompted to choose a filename and location to save the JSON file as a SQLite
@@ -31,7 +31,7 @@ Export a JSON file
 
 * To export a JSON file:
 
-  * Select the :kbd:`File` menu and then select :kbd:`Export JSON File` (keyboard shortcut: :kbd:`Ctrl+E` or
-    :kbd:`⌘+E`).
+  * Select the :kbd:`File` menu and then select :kbd:`Export JSON File` (keyboard shortcut:
+    :kbd:`Ctrl+E` or :kbd:`⌘+E`).
   * In the dialog window that opens, add a name for the file, navigate to the directory in which
     you want to save the file and click :kbd:`Save`.

@@ -73,12 +73,15 @@ Windows
 Release Instructions
 ====================
 
-You can build a ``dist`` directory containing executables for any one of three target platforms by running:
+You can build a ``dist`` directory containing executables for any one of three target platforms
+by running:
 
 .. code-block::
 
    $ python build.py
 
-After building is done, you can find ScanCode-Workbench under ``dist/ScanCode-Workbench-<os>-x64-<version>``. Archives (``tar.gz`` and ``.zip``) are also built.
+After building is done, you can find ScanCode-Workbench under
+``dist/ScanCode-Workbench-<os>-x64-<version>``. Archives (``tar.gz`` and ``.zip``)
+are also built.
 
 .. Note:: A build for any of the three target platforms must be executed on the targeted platform.

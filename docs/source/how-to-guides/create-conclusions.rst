@@ -18,10 +18,11 @@ To create a Conclusion, begin by navigating to the ``ScanDataTable`` view.
 .. figure:: data/scandatatable-01.png
 
 In the directory tree on the left, choose the directory, package or file you want to annotate,
-right-click that node, and select :kbd:`Edit Conclusion` in the menu that appears. This will display a
-form with the path to that node displayed at the top of the form, and a series of attribute names
-(e.g., ``Status``, ``Name``, ``Version``, ``License Expression``, ``Owner``,
-``Copyright``) and associated textboxes, dropdowns or radio buttons to record your input.
+right-click that node, and select :kbd:`Edit Conclusion` in the menu that appears. This will
+display a form with the path to that node displayed at the top of the form, and a series of
+attribute names (e.g., ``Status``, ``Name``, ``Version``, ``License Expression``,
+``Owner``, ``Copyright``) and associated textboxes, dropdowns or radio buttons to record
+your input.
 
 .. figure:: data/conclusion-form-01.png
 
