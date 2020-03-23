@@ -7,8 +7,8 @@ Open a SQLite File
 
 * To open a SQLite File:
 
-  * Select the :kbd:`File` menu and then select :kbd:`Open SQLite File` (keyboard shortcut: :kbd:`Ctrl+O`
-    or :kbd:`⌘+O`).
+  * Select the :kbd:`File` menu and then select :kbd:`Open SQLite File` (keyboard shortcut:
+    :kbd:`Ctrl+O` or :kbd:`⌘+O`).
   * In the dialog window that opens, navigate to the SQLite file you want to open, select the file
     and click :kbd:`Open`.
 
