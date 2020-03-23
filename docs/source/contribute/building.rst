@@ -1,4 +1,33 @@
-.. _workbench_requirements:
+.. _building:
+
+========
+Building
+========
+
+Clone, Install, Build and Run
+=============================
+
+You'll need `Node.js <https://nodejs.org/>`__ (which comes with `npm <http://npmjs.com/>`__) installed on your computer in order to build this app. (See below for a list of platform-specific requirements.) Then, from your command line:
+
+.. code-block:: none
+
+   # Clone this repository
+   $ git clone https://github.com/nexB/scancode-workbench.git
+
+   # Go into the repository
+   $ cd scancode-workbench
+
+   # Install dependencies and run the app
+   $ npm install
+
+   # Rebuild native Node.js modules against the app version of Node.js
+   # MacOS, Linux and Git Bash on Windows
+   $ $(npm bin)/electron-rebuild
+   # Windows except for Git Bash
+   > .\node_modules\.bin\electron-rebuild.cmd
+
+   # Run the app
+   $ npm start
 
 Building Requirements
 =====================
@@ -40,3 +69,19 @@ Windows
 
   * Note: Windows 7 requires `.NET Framework 4.5.1 <http://www.microsoft.com/en-us/download/details.aspx?id=40773>`_
   * Launch cmd, ``npm config set msvs_version 2015``
+
+Release Instructions
+====================
+
+You can build a ``dist`` directory containing executables for any one of three target platforms
+by running:
+
+.. code-block:: none
+
+   $ python build.py
+
+After building is done, you can find ScanCode-Workbench under
+``dist/ScanCode-Workbench-<os>-x64-<version>``. Archives (``tar.gz`` and ``.zip``)
+are also built.
+
+.. Note:: A build for any of the three target platforms must be executed on the targeted platform.

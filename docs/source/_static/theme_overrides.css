@@ -1,0 +1,138 @@
+body {
+    color: #000000;
+    /* this is the font-family used in the SPATS wiki */
+    /* font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji; */
+}
+
+.rst-content .guilabel {
+    border: 0;
+    background: #e6ffff;
+    font-size: 16px;
+    font-weight: normal;
+    border-radius: 4px;
+    padding: 4px 6px;
+    margin: auto 2px;
+
+    vertical-align: middle;
+}
+
+.rst-content kbd {
+    -moz-border-radius:3px;
+    -moz-box-shadow:0 1px 0 rgba(0,0,0,0.2),0 0 0 2px #fff inset;
+    -webkit-border-radius:3px;
+    -webkit-box-shadow:0 1px 0 rgba(0,0,0,0.2),0 0 0 2px #fff inset;
+    background-color:#f7f7f7;
+    border:1px solid #ccc;
+    border-radius:3px;
+    box-shadow:0 1px 0 rgba(0,0,0,0.2),0 0 0 2px #fff inset;
+    color:#333;
+    display:inline-block;
+    font-family:Arial,Helvetica,sans-serif;
+    font-size: 13px;
+    line-height:1.4;
+    margin:0 .1em;
+    padding: 2px 3px 0px 3px;
+    text-shadow:0 1px 0 #fff;
+}
+
+.wy-nav-content-wrap a {
+    color: #0066cc;
+    text-decoration: none;
+}
+.wy-nav-content-wrap a:hover {
+    color: #0099cc;
+    text-decoration: underline;
+}
+
+.wy-nav-top a {
+    color: #ffffff;
+}
+
+/* Based on numerous similar approaches e.g., https://github.com/readthedocs/sphinx_rtd_theme/issues/117 and https://rackerlabs.github.io/docs-rackspace/tools/rtd-tables.html -- but remove form-factor limits to enable table wrap on full-size and smallest-size form factors */
+.wy-table-responsive table td {
+    white-space: normal !important;
+}
+
+.rst-content table.docutils td,
+.rst-content table.docutils th {
+    padding: 5px 10px 5px 10px;
+}
+.rst-content table.docutils td p,
+.rst-content table.docutils th p {
+    font-size: 14px;
+    margin-bottom: 0px;
+}
+.rst-content table.docutils td p cite,
+.rst-content table.docutils th p cite {
+    font-size: 14px;
+    background-color: transparent;
+}
+
+.colwidths-given th {
+    border: solid 1px #e8e8e8 !important;
+}
+
+/*handles single-tick inline code*/
+.wy-body-for-nav cite {
+    color: #000000;
+    background-color: transparent;
+    font-style: normal;
+    font-family: "Courier New";
+    font-size: 13px;
+    padding: 3px 3px 3px 3px;
+}
+
+.rst-content pre.literal-block, .rst-content div[class^="highlight"] pre, .rst-content .linenodiv pre {
+    font-family: SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",Courier,monospace;
+    font-size: 13px;
+    line-height: 1.5;
+    overflow: visible;
+    white-space: pre-wrap;
+}
+
+.rst-content pre.literal-block, .rst-content div[class^='highlight'] {
+    border: 0;
+    background-color: #f5f5f5;
+}
+
+/* This enables inline code to wrap. */
+code, .rst-content tt, .rst-content code {
+    white-space: pre-wrap;
+    padding: 2px 3px 1px;
+    border-radius: 3px;
+    font-size: 13px;
+}
+
+.wy-body-for-nav blockquote {
+    margin: 1em 0;
+    padding-left: 1em;
+    border-left: 4px solid #ddd;
+    color: #6a6a6a;
+}
+
+/* Fix the unwanted top and bottom padding inside a nested bulleted/numbered list */
+.rst-content .section ol p, .rst-content .section ul p {
+    margin-bottom: 0px;
+}
+
+/* add spacing between bullets for legibility */
+.rst-content .section ol li, .rst-content .section ul li {
+    margin-bottom: 5px;
+}
+
+.rst-content .section ol li:first-child, .rst-content .section ul li:first-child {
+    margin-top: 5px;
+}
+
+/* but exclude the toctree bullets */
+.rst-content .toctree-wrapper ul li, .rst-content .toctree-wrapper ul li:first-child {
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
+
+/* remove extra space at bottom of multine list-table cell */
+.rst-content .line-block {
+    margin-left: 0px;
+    margin-bottom: 0px;
+    line-height: 24px;
+}

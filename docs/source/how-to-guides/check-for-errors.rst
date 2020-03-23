@@ -1,5 +1,6 @@
-Check for Errors in the Developer Tools
-=======================================
+===============================================
+How-To: Check for Errors in the Developer Tools
+===============================================
 
 When an unexpected error occurs in ScanCode Workbench, you will normally see a dialog message which
 provides details about the error and allows you to create an issue.

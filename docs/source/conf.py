@@ -14,21 +14,16 @@
 # import sys
 # sys.path.insert(0, os.path.abspath('.'))
 
-# Adding Support for GIFs in Sphinx
-from sphinx.builders.html import StandaloneHTMLBuilder
-StandaloneHTMLBuilder.supported_image_types = [
-    'image/svg+xml',
-    'image/gif',
-    'image/png',
-    'image/jpeg'
-]
-
 
 # -- Project information -----------------------------------------------------
 
-project = 'ScanCode-Workbench'
-copyright = '(c) nexB Inc'
-author = 'nexB Inc'
+project = 'ScanCode Workbench Documentation'
+copyright = '2020 nexB Inc.'
+author = 'nexB Inc.'
+
+version = '0.0.1'
+# The full version, including alpha/beta/rc tags
+release = version
 
 
 # -- General configuration ---------------------------------------------------
@@ -42,17 +37,18 @@ extensions = [
 
 master_doc = 'index'
 
-# license-policy links to scancode-toolkit sphinx docs, so we must map it here
-intersphinx_mapping = {'scancode-toolkit': ('https://scancode-toolkit.readthedocs.io/en/latest/', None),
-                       'aboutcode': ('https://aboutcode.readthedocs.io/en/latest/', None),}
+intersphinx_mapping = {
+    'scancode-toolkit': ('https://scancode-toolkit.readthedocs.io/en/latest/', None),
+}
 
 # Add any paths that contain templates here, relative to this directory.
-templates_path = []
+templates_path = ['_templates']
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
 # This pattern also affects html_static_path and html_extra_path.
 exclude_patterns = []
+
 
 # -- Options for HTML output -------------------------------------------------
 
@@ -64,4 +60,18 @@ html_theme = 'sphinx_rtd_theme'
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
-html_static_path = []
+html_static_path = ['_static']
+
+html_context = {
+    'css_files': [
+        '_static/theme_overrides.css',  # override wide tables in RTD theme
+        ],
+    "display_github": True,
+    "github_user": "nexB",
+    "github_repo": "scancode-workbench",
+    "github_version": "develop",  # branch
+    "conf_py_path": "/docs/source/",  # path in the checkout to the docs root
+    }
+
+# If true, "Created using Sphinx" is shown in the HTML footer. Default is True.
+html_show_sphinx = False

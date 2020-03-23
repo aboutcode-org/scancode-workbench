@@ -1,24 +1,25 @@
-Navigating the Chart Summary View
-=================================
+=======================================
+How-To: Navigate the Chart Summary View
+=======================================
 
 Display the view
-----------------
+================
 
 Once you have a SQLite file loaded into ScanCode Workbench, displaying the Chart
 Summary View is easy:
 
 #. Select a file or directory in the Tree View on the left.
-#. Click the chart icon in the sidebar or open the ``View`` menu and select
-   ``Chart Summary View`` (keyboard shortcut: ``Ctrl+Shift+D`` or
-   ``⌘+Shift+D`` ).
+#. Click the chart icon in the sidebar or open the :kbd:`View` menu and select
+   :kbd:`Chart Summary View` (keyboard shortcut: :kbd:`Ctrl+Shift+D` or
+   :kbd:`⌘+Shift+D`).
 
 Select an attribute
--------------------
+===================
 
 .. figure:: data/scancode-workbench-chart-summary.gif
 
 Use the dropdown at the top of the view to select the attribute you want to
-examine (e.g., ``Copyright Statements``\ , ``License Key``\ ).  These attribute values
+examine (e.g., ``Copyright Statements``, ``License Key``).  These attribute values
 are detected from ScanCode, and can also be viewed in the Table View.
 
 When you select an attribute, the Chart Summary View will automatically refresh
@@ -29,7 +30,7 @@ particular entry in the bar chart in a tooltip that appears when you move your
 cursor over the text on the left or the bar on the right.
 
 Filter Chart Summary
---------------------
+====================
 
 .. figure:: data/scancode-workbench-chart-summary-filter.gif
 
