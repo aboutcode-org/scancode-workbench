@@ -1,3 +1,5 @@
+.. _ui-reference:
+
 ============
 UI Reference
 ============
