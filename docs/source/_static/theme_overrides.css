@@ -136,3 +136,7 @@ code, .rst-content tt, .rst-content code {
     margin-bottom: 0px;
     line-height: 24px;
 }
+
+.with-border {
+    border: solid 1px #cccccc;
+}
