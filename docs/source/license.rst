@@ -1,8 +1,8 @@
 .. _license:
 
-=======
-License
-=======
+================
+:index:`License`
+================
 
 -  Apache-2.0
 -  Multiple licenses (LGPL, MIT, BSD, etc.) for third-party components.

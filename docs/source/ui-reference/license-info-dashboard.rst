@@ -1,6 +1,6 @@
-======================
-License Info Dashboard
-======================
+===============================
+:index:`License Info Dashboard`
+===============================
 
 :guilabel:`[Intro to come.]`
 

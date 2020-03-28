@@ -1,6 +1,6 @@
-==================
-Chart Summary View
-==================
+===========================
+:index:`Chart Summary View`
+===========================
 
 :guilabel:`[Intro to come.]`
 

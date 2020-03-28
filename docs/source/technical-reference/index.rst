@@ -1,8 +1,8 @@
 .. _technical-reference:
 
-===================
-Technical Reference
-===================
+============================
+:index:`Technical Reference`
+============================
 
 Underlying Technology
 =====================

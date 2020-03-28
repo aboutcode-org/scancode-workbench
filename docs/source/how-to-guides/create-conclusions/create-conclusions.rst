@@ -1,8 +1,8 @@
 .. _workbench_components:
 
-==========================
-How-To: Create Conclusions
-==========================
+===================================
+:index:`How-To: Create Conclusions`
+===================================
 
 A Conclusion in ScanCode Workbench refers to the documentation of your analysis and conclusions
 about the name, version, owner, copyright, license expression and other attributes for a single

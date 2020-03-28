@@ -1,6 +1,6 @@
-====================================================
-How-To: Use License Policies with ScanCode Workbench
-====================================================
+=============================================================
+:index:`How-To: Use License Policies with ScanCode Workbench`
+=============================================================
 
 ScanCode Workbench now has basic support for tracking and viewing license policies that have been
 applied to a `ScanCode Toolkit <https://github.com/nexB/scancode-toolkit>`__ scan. In order for
