@@ -1,8 +1,8 @@
 .. _contribute:
 
-==========
-Contribute
-==========
+===================
+:index:`Contribute`
+===================
 
 :guilabel:`[Intro to come.]`
 
@@ -11,4 +11,6 @@ Contribute
 
    building
    testing
-   support
+   reporting-issues
+   contributing-code
+   community-channels

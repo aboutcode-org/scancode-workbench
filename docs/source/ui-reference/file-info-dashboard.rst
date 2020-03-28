@@ -1,6 +1,6 @@
-===================
-File Info Dashboard
-===================
+============================
+:index:`File Info Dashboard`
+============================
 
 :guilabel:`[Intro to come.]`
 

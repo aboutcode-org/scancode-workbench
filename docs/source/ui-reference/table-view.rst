@@ -1,6 +1,6 @@
-==========
-Table View
-==========
+===================
+:index:`Table View`
+===================
 
 :guilabel:`[Intro to come.]`
 

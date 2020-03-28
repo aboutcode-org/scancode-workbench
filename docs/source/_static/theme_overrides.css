@@ -140,3 +140,26 @@ code, .rst-content tt, .rst-content code {
 .with-border {
     border: solid 1px #cccccc;
 }
+
+/* this is used by the genindex added via layout.html (see source/_templates/) to sidebar toc */
+.reference.internal.toc-index {
+    color: #d9d9d9;
+}
+
+.reference.internal.toc-index.current {
+    background-color: #ffffff;
+    color: #000000;
+    font-weight: bold;
+}
+
+.toc-index-div {
+    border-top: solid 1px #666666;
+    margin-top: 10px;
+    padding-top: 10px;
+}
+
+/* This applies to a 'figure' -- an 'image' with 'caption' and optional 'legend' */
+/* See, e.g., https://docutils.sourceforge.io/docs/ref/rst/directives.html#figure */
+.legend p {
+    font-size: 14px;
+}

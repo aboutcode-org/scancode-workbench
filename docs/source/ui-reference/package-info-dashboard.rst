@@ -1,6 +1,6 @@
-======================
-Package Info Dashboard
-======================
+===============================
+:index:`Package Info Dashboard`
+===============================
 
 :guilabel:`[Intro to come.]`
 
