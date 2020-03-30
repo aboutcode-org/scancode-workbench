@@ -158,6 +158,15 @@ code, .rst-content tt, .rst-content code {
     padding-top: 10px;
 }
 
+/* The next 2 fix the poor vertical spacing in genindex.html (the alphabetized index) */
+.indextable.genindextable {
+    margin-bottom: 20px;
+}
+
+div.genindex-jumpbox {
+    margin-bottom: 20px;
+}
+
 /* This applies to a 'figure' -- an 'image' with 'caption' and optional 'legend' */
 /* See, e.g., https://docutils.sourceforge.io/docs/ref/rst/directives.html#figure */
 .legend p {
