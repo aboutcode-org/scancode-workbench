@@ -19,15 +19,19 @@ Organization of the Documentation
 
 This documentation is organized in six sections:
 
--  The :ref:`getting-started` section -- the suggested entry point for all new users -- will walk you through the process of downloading, installing and opening ScanCode Workbench and loading a ScanCode Toolkit scan.
+-  The :ref:`getting-started` section -- the suggested entry point for all new users -- will walk
+   you through the process of downloading, installing and opening ScanCode Workbench and loading a ScanCode Toolkit scan.
 
--  The :ref:`how-to-guides` section contains feature-specific guides and can be read in any order as the need arises.
+-  The :ref:`how-to-guides` section contains feature-specific guides and can be read in any order
+   as the need arises.
 
 -  The :ref:`ui-reference` section provides an overview of each of ScanCode Workbench's data views.
 
--  The :ref:`technical-reference` section summarizes ScanCode Workbench's underlying technology and platform support.
+-  The :ref:`technical-reference` section summarizes ScanCode Workbench's underlying technology
+   and platform support.
 
--  The :ref:`contribute` section is intended for advanced users and contributors to ScanCode Workbench development.
+-  The :ref:`contribute` section is intended for advanced users and contributors to ScanCode
+   Workbench development.
 
 -  The :ref:`license` section provides summary licensing information for ScanCode Workbench.
 

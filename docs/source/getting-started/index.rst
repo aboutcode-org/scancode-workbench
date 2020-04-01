@@ -7,9 +7,10 @@
 Download and Install
 =======================
 
--  You can download the latest ScanCode Workbench release for your Windows, OS X or Linux operating system from
-   the `ScanCode Workbench releases page <https://github.com/nexB/scancode-workbench/releases>`__.
-   Once downloaded, you'll find the ScanCode Workbench executable in the ``ScanCode-Workbench-<os>-x64-<version>`` folder.
+-  You can download the latest ScanCode Workbench release for your Windows, OS X or Linux
+   operating system from the `ScanCode Workbench releases page <https://github.com/nexB/scancode-workbench/releases>`__.
+   Once downloaded, you'll find the ScanCode Workbench executable in the
+   ``ScanCode-Workbench-<os>-x64-<version>`` folder.
    On Windows 10, for example, the executable will be named `ScanCode-Workbench.exe`.
 
 -  If you're interested in digging into the code, you can also use ScanCode Workbench by cloning
@@ -22,7 +23,8 @@ ScanCode Workbench-ScanCode Toolkit Compatibility
 -  ScanCode Workbench >= v3.1.1 is only compatible with scans from ScanCode v3.1.1 and above
    that have been run with the ScanCode Toolkit ``-i`` option.
 
-   -  A list of available ScanCode Toolkit options is available in the ScanCode Toolkit documentation:
+   -  A list of available ScanCode Toolkit options is available in the ScanCode Toolkit
+      documentation:
       :doc:`scancode-toolkit:tutorials/how_to_set_what_will_be_detected_in_a_scan`.
 
 Open ScanCode Workbench and Load a ScanCode Toolkit Scan
@@ -34,7 +36,8 @@ Open ScanCode Workbench and Load a ScanCode Toolkit Scan
 -  Import your JSON scan file and save it as a SQLite file (ScanCode Workbench works with the
    data in a SQLite database).
 
-   -  :kbd:`File` > :kbd:`Import JSON File` (:kbd:`Ctrl` + :kbd:`I`) ==> opens ``Open a JSON File`` window.
+   -  :kbd:`File` > :kbd:`Import JSON File` (:kbd:`Ctrl` + :kbd:`I`) ==> opens
+      ``Open a JSON File`` window.
 
    -  Select your JSON scan and click :kbd:`Open` ==> opens ``Save a SQLite Database File`` window.
 
