@@ -7,5 +7,3 @@
 
    import-json
    open-save-sqlite-file
-
-:guilabel:`[to come]`
