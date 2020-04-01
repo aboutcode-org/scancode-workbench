@@ -5,7 +5,7 @@
 Open a SQLite File
 ==================
 
-Once you've imported your JSON scan and saved it as SQLite, in most cases you'll continue your
+Once you've imported your JSON scan and saved it as SQLite, you'll continue your
 review and analysis work solely in the SQLite file.
 
 * To open a SQLite File:
