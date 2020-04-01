@@ -62,5 +62,3 @@ Try a Sample Scan
 We've also provided a set of `sample scans <https://github.com/nexB/scancode-workbench/tree/develop/samples>`__
 that you can  review in ScanCode Workbench in order to get a sense of its functionality and the
 types of information captured by a scan.
-
-:guilabel:`[The samples need to be updated from 2.9.2 to the current version of SCTK.]`
