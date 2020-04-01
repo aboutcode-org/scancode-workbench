@@ -5,7 +5,7 @@
 .. toctree::
    :maxdepth: 3
 
-   import-export-json
+   import-json
    open-save-sqlite-file
 
 :guilabel:`[to come]`
