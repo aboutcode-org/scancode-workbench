@@ -20,7 +20,8 @@ Organization of the Documentation
 This documentation is organized in six sections:
 
 -  The :ref:`getting-started` section -- the suggested entry point for all new users -- will walk
-   you through the process of downloading, installing and opening ScanCode Workbench and loading a ScanCode Toolkit scan.
+   you through the process of downloading, installing and opening ScanCode Workbench and
+   loading a ScanCode Toolkit scan.
 
 -  The :ref:`how-to-guides` section contains feature-specific guides and can be read in any order
    as the need arises.

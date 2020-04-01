@@ -46,14 +46,13 @@ Open ScanCode Workbench and Load a ScanCode Toolkit Scan
 -  You're now looking at your scan data displayed in the Table View -- the Table View itself is on
    the right, and the Directory Tree (which is visible in all views) is on the left.
 
-.. figure:: data/initial_load.png
-   :scale: 40 %
-   :class: with-border
-   :align: left
+   .. figure:: data/initial_load.png
+      :class: with-border
+      :width: 600px
 
-   ..
+      ..
 
-   Your first imported ScanCode Toolkit Scan.
+      Your first imported ScanCode Toolkit Scan.
 
 You can find additional details in the :ref:`how-to-guides` section below.
 
