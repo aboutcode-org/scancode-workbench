@@ -1,6 +1,8 @@
-============
-UI Reference
-============
+.. _ui-reference:
+
+=====================
+:index:`UI Reference`
+=====================
 
 :guilabel:`[Intro to come.]`
 

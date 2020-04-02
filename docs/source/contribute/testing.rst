@@ -1,6 +1,6 @@
-=======
-Testing
-=======
+================
+:index:`Testing`
+================
 
 Test ABCM functionality using:
 

@@ -1,6 +1,6 @@
-===============
-Conclusion View
-===============
+========================
+:index:`Conclusion View`
+========================
 
 :guilabel:`[Intro to come.]`
 

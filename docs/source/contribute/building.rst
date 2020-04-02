@@ -1,8 +1,8 @@
 .. _building:
 
-========
-Building
-========
+=================
+:index:`Building`
+=================
 
 Clone, Install, Build and Run
 =============================

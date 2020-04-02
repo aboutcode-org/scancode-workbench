@@ -8,18 +8,10 @@ Welcome to the documentation for ScanCode Workbench!
    :maxdepth: 3
    :caption: Table of Contents
 
-   new-to-scwb/index
+   overview/index
    getting-started/index
-   ui-reference/index
    how-to-guides/index
+   ui-reference/index
+   technical-reference/index
    contribute/index
    license
-
-
-
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`

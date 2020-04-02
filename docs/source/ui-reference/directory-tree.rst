@@ -1,6 +1,6 @@
-==============
-Directory Tree
-==============
+=======================
+:index:`Directory Tree`
+=======================
 
 :guilabel:`[Intro to come.]`
 
