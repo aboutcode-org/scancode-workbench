@@ -21,7 +21,7 @@ works on Windows, OS X and Linux operating systems.
 
 ![ScanCode Workbench](https://scancode-workbench.readthedocs.io/en/develop/_images/scancode-workbench-chart-summary.gif)
 
-## Using
+## Using this
 
 * You can [download the latest release](https://github.com/nexB/scancode-workbench/releases) 
 for your operating system or build it yourself (see below). Once downloaded, you 
