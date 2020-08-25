@@ -4,7 +4,7 @@
 [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/nexB/scancode-workbench)](https://ci.appveyor.com/project/nexB/scancode-workbench)
 
 ScanCode Workbench provides an advanced visual UI to help you quickly evaluate
-license and other notices identified by 
+the license and other notices identified by 
 [ScanCode](https://github.com/nexB/scancode-toolkit/) and record your conclusion
 about the effective license(s) for a component.
 [ScanCode](https://github.com/nexB/scancode-toolkit/) detects licenses, copyrights 
