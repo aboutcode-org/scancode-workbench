@@ -7,14 +7,14 @@
 Download and Install
 =======================
 
--  You can download the latest ScanCode Workbench release for your Windows, OS X or Linux
+-  You can download the latest ScanCode Workbench release for your Windows, OS X, or Linux
    operating system from the `ScanCode Workbench releases page <https://github.com/nexB/scancode-workbench/releases>`__.
    Once downloaded, you'll find the ScanCode Workbench executable in the
    ``ScanCode-Workbench-<os>-x64-<version>`` folder.
    On Windows 10, for example, the executable will be named `ScanCode-Workbench.exe`.
 
 -  If you're interested in digging into the code, you can also use ScanCode Workbench by cloning
-   the GitHub repository and building it yourself -- see the :ref:`Contribute/Building<building>`
+   the GitHub repository and build it yourself -- see the :ref:`Contribute/Building<building>`
    section for details.
 
 ScanCode Workbench-ScanCode Toolkit Compatibility

@@ -5,7 +5,7 @@
 ===================================
 
 A Conclusion in ScanCode Workbench refers to the documentation of your analysis and conclusions
-about the name, version, owner, copyright, license expression and other attributes for a single
+about the name, version, owner, copyright, license expression, and other attributes for a single
 software package or file or -- if you conclude these attributes are shared by a group of packages
 and/or files -- for that group of packages/files.
 
@@ -21,7 +21,7 @@ In the directory tree on the left, choose the directory, package or file you wan
 right-click that node, and select :kbd:`Edit Conclusion` in the menu that appears. This will
 display a form with the path to that node displayed at the top of the form, and a series of
 attribute names (e.g., ``Status``, ``Name``, ``Version``, ``License Expression``,
-``Owner``, ``Copyright``) and associated textboxes, dropdowns or radio buttons to record
+``Owner``, ``Copyright``) and associated textboxes, dropdowns, or radio buttons to record
 your input.
 
 .. figure:: data/conclusion-form-01.png
