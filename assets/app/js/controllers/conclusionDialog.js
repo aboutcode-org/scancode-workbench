@@ -204,7 +204,12 @@ class ConclusionDialog extends Controller {
           data: $.unique(license_expressions),
           multiple: true,
           placeholder: 'Enter Expression',
-          tags: true
+          tags: true,
+          language: {
+            'noResults': function () {
+              return ("SCWB did not find any license expressions in the scan that applies to the current path");
+            }
+          }
         }, true);
         this.license_expression.val(saved);
       });
@@ -221,7 +226,12 @@ class ConclusionDialog extends Controller {
           data: $.unique(copyright_statements),
           multiple: true,
           placeholder: 'Enter copyright',
-          tags: true
+          tags: true,
+          language: {
+            'noResults': function () {
+              return ("SCWB did not find any copyright statements in the scan pertaining to the current path");
+            }
+          }
         }, true);
         this.copyright.val(saved);
       });
@@ -237,7 +247,12 @@ class ConclusionDialog extends Controller {
           multiple: true,
           maximumSelectionLength: 1,
           placeholder: 'Enter owner',
-          tags: true
+          tags: true,
+          language: {
+            'noResults': function () {
+              return ("SCWB did not find any owners in the scan for the current path");
+            }
+          }
         }, true);
         this.owner.val(saved);
       });
@@ -254,7 +269,12 @@ class ConclusionDialog extends Controller {
           multiple: true,
           maximumSelectionLength: 1,
           placeholder: 'Enter language',
-          tags: true
+          tags: true,
+          language: {
+            'noResults': function () {
+              return ("SCWB did not find any primary programming languages in the scan associated with the current path");
+            }
+          }
         }, true);
         this.language.val(saved);
       });
@@ -283,7 +303,12 @@ class ConclusionDialog extends Controller {
           multiple: true,
           maximumSelectionLength: 1,
           placeholder: 'Enter Homepage URL',
-          tags: true
+          tags: true,
+          language: {
+            'noResults': function () {
+              return ("SCWB did not find any Homepage URL in the scan for the current path");
+            }
+          }
         }, true);
         this.homepageUrl.val(saved);
       });
@@ -303,7 +328,12 @@ class ConclusionDialog extends Controller {
           multiple: true,
           maximumSelectionLength: 1,
           placeholder: 'Enter Download URL',
-          tags: true
+          tags: true,
+          language: {
+            'noResults': function () {
+              return ("SCWB did not find any download URL in the scan for obtaining the current path");
+            }
+          }
         }, true);
         this.downloadUrl.val(saved);
       });
@@ -325,7 +355,12 @@ class ConclusionDialog extends Controller {
           multiple: true,
           maximumSelectionLength: 1,
           placeholder: 'Enter License URL',
-          tags: true
+          tags: true,
+          language: {
+            'noResults': function () {
+              return ("SCWB did not find any License url in the scan for the current path");
+            }
+          }
         }, true);
         this.licenseUrl.val(saved);
       });
@@ -341,7 +376,12 @@ class ConclusionDialog extends Controller {
           multiple: true,
           maximumSelectionLength: 1,
           placeholder: 'Enter Notice URL',
-          tags: true
+          tags: true,
+          language: {
+            'noResults': function () {
+              return ("SCWB did not find any Notice URL in the scan for the current path");
+            }
+          }
         }, true);
         this.noticeUrl.val(saved);
       });
