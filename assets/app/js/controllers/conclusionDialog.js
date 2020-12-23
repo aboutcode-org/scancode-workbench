@@ -148,27 +148,27 @@ class ConclusionDialog extends Controller {
       .then((conclusion) => {
         this.title.text(path);
         return Promise.all([
-            this._setupStatus(conclusion),
-            this._setupName(conclusion),
-            this._setupVersion(conclusion),
-            this._setupLicenseExpression(conclusion),
-            this._setupCopyrights(conclusion),
-            this._setupOwners(conclusion),
-            this._setupLanguage(conclusion),
-            this._setupHomepageUrl(conclusion),
-            this._setupFeature(conclusion),
-            this._setupPurpose(conclusion),
-            this._setupCodeType(conclusion),
-            this._setupModified(conclusion),
-            this._setupDeployed(conclusion),
-            this._setupDownloadUrl(conclusion),
-            this._setupLicenseUrl(conclusion),
-            this._setupNoticeUrl(conclusion),
-            this._setupPackageUrl(conclusion),
-            this._setupNotes(conclusion)
+          this._setupStatus(conclusion),
+          this._setupName(conclusion),
+          this._setupVersion(conclusion),
+          this._setupLicenseExpression(conclusion),
+          this._setupCopyrights(conclusion),
+          this._setupOwners(conclusion),
+          this._setupLanguage(conclusion),
+          this._setupHomepageUrl(conclusion),
+          this._setupFeature(conclusion),
+          this._setupPurpose(conclusion),
+          this._setupCodeType(conclusion),
+          this._setupModified(conclusion),
+          this._setupDeployed(conclusion),
+          this._setupDownloadUrl(conclusion),
+          this._setupLicenseUrl(conclusion),
+          this._setupNoticeUrl(conclusion),
+          this._setupPackageUrl(conclusion),
+          this._setupNotes(conclusion)
         ]);
-    })
-    .then(() => {
+      })
+      .then(() => {
         // Notify only select2 of changes
         $('select').trigger('change.select2');
 
@@ -181,11 +181,11 @@ class ConclusionDialog extends Controller {
         this.initialSerialization = this.dialog.find('form').serialize();
 
         this.dialog.modal('show');
-    })
-    .catch((err) => {
+      })
+      .catch((err) => {
         console.error(err);
         throw err;
-    });
+      });
   }
 
   _conclusion(path) {
