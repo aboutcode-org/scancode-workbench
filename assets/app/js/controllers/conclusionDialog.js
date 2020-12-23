@@ -143,49 +143,49 @@ class ConclusionDialog extends Controller {
   }
 
   // Populate modal input fields with suggestions from ScanCode results
-  show(path) {
-    this._conclusion(path)
-      .then((conclusion) => {
-        this.title.text(path);
-        return Promise.all([
-          this._setupStatus(conclusion),
-          this._setupName(conclusion),
-          this._setupVersion(conclusion),
-          this._setupLicenseExpression(conclusion),
-          this._setupCopyrights(conclusion),
-          this._setupOwners(conclusion),
-          this._setupLanguage(conclusion),
-          this._setupHomepageUrl(conclusion),
-          this._setupFeature(conclusion),
-          this._setupPurpose(conclusion),
-          this._setupCodeType(conclusion),
-          this._setupModified(conclusion),
-          this._setupDeployed(conclusion),
-          this._setupDownloadUrl(conclusion),
-          this._setupLicenseUrl(conclusion),
-          this._setupNoticeUrl(conclusion),
-          this._setupPackageUrl(conclusion),
-          this._setupNotes(conclusion)
-        ]);
-      })
-      .then(() => {
-        // Notify only select2 of changes
-        $('select').trigger('change.select2');
+    show(path) {
+        this._conclusion(path)
+            .then((conclusion) => {
+                this.title.text(path);
+                return Promise.all([
+                    this._setupStatus(conclusion),
+                    this._setupName(conclusion),
+                    this._setupVersion(conclusion),
+                    this._setupLicenseExpression(conclusion),
+                    this._setupCopyrights(conclusion),
+                    this._setupOwners(conclusion),
+                    this._setupLanguage(conclusion),
+                    this._setupHomepageUrl(conclusion),
+                    this._setupFeature(conclusion),
+                    this._setupPurpose(conclusion),
+                    this._setupCodeType(conclusion),
+                    this._setupModified(conclusion),
+                    this._setupDeployed(conclusion),
+                    this._setupDownloadUrl(conclusion),
+                    this._setupLicenseUrl(conclusion),
+                    this._setupNoticeUrl(conclusion),
+                    this._setupPackageUrl(conclusion),
+                    this._setupNotes(conclusion)
+                ]);
+            })
+            .then(() => {
+                // Notify only select2 of changes
+                $('select').trigger('change.select2');
 
-        // Disable the ability to close the dialog by clicking outside
-        // the dialog or pressing the escape key.
-        this.dialog.modal({ backdrop: 'static', keyboard: false });
+                // Disable the ability to close the dialog by clicking outside
+                // the dialog or pressing the escape key.
+                this.dialog.modal({ backdrop: 'static', keyboard: false });
 
-        // Retrieve any previously-saved values -- use below in _closeConclusion()
-        // to compare with any new edits before closing the dialog.
-        this.initialSerialization = this.dialog.find('form').serialize();
+                // Retrieve any previously-saved values -- use below in _closeConclusion()
+                // to compare with any new edits before closing the dialog.
+                this.initialSerialization = this.dialog.find('form').serialize();
 
-        this.dialog.modal('show');
-      })
-      .catch((err) => {
-        console.error(err);
-        throw err;
-      });
+                this.dialog.modal('show');
+            })
+            .catch((err) => {
+                console.error(err);
+                throw err;
+            });
   }
 
   _conclusion(path) {
@@ -204,7 +204,12 @@ class ConclusionDialog extends Controller {
           data: $.unique(license_expressions),
           multiple: true,
           placeholder: 'Enter Expression',
-          tags: true
+          tags: true,
+          language: {
+              "noResults": function () {
+                  return (`SCWB did not find any license expressions in the scan that applies to ${conclusion.path}`);
+              }
+          }
         }, true);
         this.license_expression.val(saved);
       });
@@ -221,7 +226,12 @@ class ConclusionDialog extends Controller {
           data: $.unique(copyright_statements),
           multiple: true,
           placeholder: 'Enter copyright',
-          tags: true
+          tags: true,
+          language: {
+              "noResults": function () {
+                  return (`SCWB did not find any copyright statements in the scan pertaining to ${conclusion.path}`);
+              }
+          }
         }, true);
         this.copyright.val(saved);
       });
@@ -237,7 +247,12 @@ class ConclusionDialog extends Controller {
           multiple: true,
           maximumSelectionLength: 1,
           placeholder: 'Enter owner',
-          tags: true
+          tags: true,
+          language: {
+                "noResults": function () {
+                    return (`SCWB did not find any owners in the scan for ${conclusion.path}`);
+                }
+           }
         }, true);
         this.owner.val(saved);
       });
@@ -254,7 +269,12 @@ class ConclusionDialog extends Controller {
           multiple: true,
           maximumSelectionLength: 1,
           placeholder: 'Enter language',
-          tags: true
+          tags: true,
+          language: {
+               "noResults": function () {
+                   return (`SCWB did not find any primary programming languages in the scan associated with ${conclusion.path}`);
+               }
+          }
         }, true);
         this.language.val(saved);
       });
@@ -283,7 +303,12 @@ class ConclusionDialog extends Controller {
           multiple: true,
           maximumSelectionLength: 1,
           placeholder: 'Enter Homepage URL',
-          tags: true
+          tags: true,
+          language: {
+              "noResults": function () {
+                  return (`SCWB did not find any Homepage URL in the scan for ${conclusion.path}`);
+              }
+          }
         }, true);
         this.homepageUrl.val(saved);
       });
@@ -303,7 +328,12 @@ class ConclusionDialog extends Controller {
           multiple: true,
           maximumSelectionLength: 1,
           placeholder: 'Enter Download URL',
-          tags: true
+          tags: true,
+          language: {
+              "noResults": function () {
+                  return (`SCWB did not find any download URL in the scan for obtaining ${conclusion.path}`);
+              }
+          }
         }, true);
         this.downloadUrl.val(saved);
       });
@@ -325,7 +355,12 @@ class ConclusionDialog extends Controller {
           multiple: true,
           maximumSelectionLength: 1,
           placeholder: 'Enter License URL',
-          tags: true
+          tags: true,
+          language: {
+              "noResults": function () {
+                  return (`SCWB did not find any License url in the scan for ${conclusion.path}`);
+              }
+          }
         }, true);
         this.licenseUrl.val(saved);
       });
@@ -341,7 +376,12 @@ class ConclusionDialog extends Controller {
           multiple: true,
           maximumSelectionLength: 1,
           placeholder: 'Enter Notice URL',
-          tags: true
+          tags: true,
+          language: {
+              "noResults": function () {
+                  return (`SCWB did not find any Notice URL in the scan for ${conclusion.path}`);
+              }
+          }
         }, true);
         this.noticeUrl.val(saved);
       });
