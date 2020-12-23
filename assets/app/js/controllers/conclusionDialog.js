@@ -143,49 +143,49 @@ class ConclusionDialog extends Controller {
   }
 
   // Populate modal input fields with suggestions from ScanCode results
-    show(path) {
-        this._conclusion(path)
-            .then((conclusion) => {
-                this.title.text(path);
-                return Promise.all([
-                    this._setupStatus(conclusion),
-                    this._setupName(conclusion),
-                    this._setupVersion(conclusion),
-                    this._setupLicenseExpression(conclusion),
-                    this._setupCopyrights(conclusion),
-                    this._setupOwners(conclusion),
-                    this._setupLanguage(conclusion),
-                    this._setupHomepageUrl(conclusion),
-                    this._setupFeature(conclusion),
-                    this._setupPurpose(conclusion),
-                    this._setupCodeType(conclusion),
-                    this._setupModified(conclusion),
-                    this._setupDeployed(conclusion),
-                    this._setupDownloadUrl(conclusion),
-                    this._setupLicenseUrl(conclusion),
-                    this._setupNoticeUrl(conclusion),
-                    this._setupPackageUrl(conclusion),
-                    this._setupNotes(conclusion)
-                ]);
-            })
-            .then(() => {
-                // Notify only select2 of changes
-                $('select').trigger('change.select2');
+  show(path) {
+    this._conclusion(path)
+      .then((conclusion) => {
+        this.title.text(path);
+        return Promise.all([
+            this._setupStatus(conclusion),
+            this._setupName(conclusion),
+            this._setupVersion(conclusion),
+            this._setupLicenseExpression(conclusion),
+            this._setupCopyrights(conclusion),
+            this._setupOwners(conclusion),
+            this._setupLanguage(conclusion),
+            this._setupHomepageUrl(conclusion),
+            this._setupFeature(conclusion),
+            this._setupPurpose(conclusion),
+            this._setupCodeType(conclusion),
+            this._setupModified(conclusion),
+            this._setupDeployed(conclusion),
+            this._setupDownloadUrl(conclusion),
+            this._setupLicenseUrl(conclusion),
+            this._setupNoticeUrl(conclusion),
+            this._setupPackageUrl(conclusion),
+            this._setupNotes(conclusion)
+        ]);
+    })
+    .then(() => {
+        // Notify only select2 of changes
+        $('select').trigger('change.select2');
 
-                // Disable the ability to close the dialog by clicking outside
-                // the dialog or pressing the escape key.
-                this.dialog.modal({ backdrop: 'static', keyboard: false });
+        // Disable the ability to close the dialog by clicking outside
+        // the dialog or pressing the escape key.
+        this.dialog.modal({ backdrop: 'static', keyboard: false });
 
-                // Retrieve any previously-saved values -- use below in _closeConclusion()
-                // to compare with any new edits before closing the dialog.
-                this.initialSerialization = this.dialog.find('form').serialize();
+        // Retrieve any previously-saved values -- use below in _closeConclusion()
+        // to compare with any new edits before closing the dialog.
+        this.initialSerialization = this.dialog.find('form').serialize();
 
-                this.dialog.modal('show');
-            })
-            .catch((err) => {
-                console.error(err);
-                throw err;
-            });
+        this.dialog.modal('show');
+    })
+    .catch((err) => {
+        console.error(err);
+        throw err;
+    });
   }
 
   _conclusion(path) {
