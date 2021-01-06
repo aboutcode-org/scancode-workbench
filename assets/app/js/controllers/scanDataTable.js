@@ -579,7 +579,7 @@ ScanDataTable.COPYRIGHT_COLUMNS =
             return statements.join('<br/>');
           }).join('<hr/>');
         },
-        'title': 'Copyright Statements',
+        'title': 'Copyright Statement',
         'name': 'copyright_statements',
         'bar_chart_class': 'bar-chart-copyrights',
         'visible': false
@@ -590,7 +590,7 @@ ScanDataTable.COPYRIGHT_COLUMNS =
             return holders.join('<br/>');
           }).join('<hr/>');
         },
-        'title': 'Copyright Holders',
+        'title': 'Copyright Holder',
         'name': 'copyright_holders',
         'bar_chart_class': 'bar-chart-copyrights',
         'visible': false
@@ -601,7 +601,7 @@ ScanDataTable.COPYRIGHT_COLUMNS =
             return authors.join('<br/>');
           }).join('<hr/>');
         },
-        'title': 'Copyright Authors',
+        'title': 'Copyright Author',
         'name': 'copyright_authors',
         'bar_chart_class': 'bar-chart-copyrights',
         'visible': false
@@ -631,7 +631,7 @@ ScanDataTable.LICENSE_COLUMNS =
       },
       {
         'data': 'license_expressions[<hr/>]',
-        'title': 'License Expressions',
+        'title': 'License Expression',
         'name': 'license_expressions',
         'bar_chart_class': 'bar-chart-licenses',
         'visible': false
@@ -877,7 +877,7 @@ ScanDataTable.FILE_COLUMNS =
       },
       {
         'data': 'scan_errors',
-        'title': 'Scan Errors',
+        'title': 'Scan Error',
         'name': 'scan_errors',
         'bar_chart_class': 'bar-chart-file-infos',
         'visible': true
