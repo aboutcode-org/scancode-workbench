@@ -27,7 +27,8 @@ ScanCode Workbench-ScanCode Toolkit Compatibility
       documentation:
       :doc:`scancode-toolkit:tutorials/how_to_set_what_will_be_detected_in_a_scan`.
 
-- You would typically create your scan with the following command: ``./scancode -clipeu <input> <output_file>``
+- You would typically create your scan with the following command:
+  ``./scancode -clipeu <input> <output_file>``
 
 Open ScanCode Workbench and Load a ScanCode Toolkit Scan
 ========================================================

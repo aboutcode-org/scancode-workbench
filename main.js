@@ -233,7 +233,7 @@ function getTemplate() {
           type: 'separator'
         },
         {
-          label: 'GitHub Repoistory',
+          label: 'GitHub Repository',
           click: () => shell.openExternal(
             'https://github.com/nexB/scancode-workbench/')
         },
