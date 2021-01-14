@@ -4,48 +4,48 @@
   Font source mapping
 -----------------------------------------*/
 @font-face {
-  font-family: 'Raleway';
+  font-family: "Raleway";
   font-style: normal;
   font-weight: 400;
-  src: url('../../thirdparty/fonts/Raleway-Regular.ttf');
-  src: local('?'),
-          url('../../thirdparty/fonts/Raleway-Regular.ttf') format('truetype');
+  src: url("../../thirdparty/fonts/Raleway-Regular.ttf");
+  src: local("?"),
+    url("../../thirdparty/fonts/Raleway-Regular.ttf") format("truetype");
 }
 
 @font-face {
-  font-family: 'Raleway Black';
+  font-family: "Raleway Black";
   font-style: normal;
   font-weight: 800;
-  src: url('../../thirdparty/fonts/Raleway-Black.ttf');
-  src: local('?'),
-          url('../../thirdparty/fonts/Raleway-Black.ttf') format('truetype');
+  src: url("../../thirdparty/fonts/Raleway-Black.ttf");
+  src: local("?"),
+    url("../../thirdparty/fonts/Raleway-Black.ttf") format("truetype");
 }
 
 @font-face {
-  font-family: 'Lato';
+  font-family: "Lato";
   font-style: normal;
   font-weight: 400;
-  src: url('../../thirdparty/fonts/Lato-Regular.ttf');
-  src: local('?'),
-          url('../../thirdparty/fonts/Lato-Regular.ttf') format('truetype');
+  src: url("../../thirdparty/fonts/Lato-Regular.ttf");
+  src: local("?"),
+    url("../../thirdparty/fonts/Lato-Regular.ttf") format("truetype");
 }
 /*---------------------------------------
   General
 -----------------------------------------*/
 body {
-  font-family: 'Lato', Helvetica, sans-serif;
+  font-family: "Lato", Helvetica, sans-serif;
   height: 100%;
   width: 100%;
   position: absolute;
 }
 
 .logo {
-  font-family: 'Raleway', Helvetica, san-serif;
+  font-family: "Raleway", Helvetica, san-serif;
   color: #0064cd;
 }
 
 .strong-logo {
-  font-family: 'Raleway Black', Helvetica, san-serif;
+  font-family: "Raleway Black", Helvetica, san-serif;
 }
 
 /*---------------------------------------
@@ -80,7 +80,6 @@ body {
 /*---------------------------------------
   Node View
 -----------------------------------------*/
-
 
 #nodeview-container {
   display: flex;
@@ -147,8 +146,8 @@ body {
   y: -10;
   height: 20px;
   rx: 4;
-  ry:4;
-  stroke-width:3
+  ry: 4;
+  stroke-width: 3;
 }
 
 .scandata-filename rect {
@@ -175,9 +174,13 @@ body {
   overflow: hidden;
 }
 
-.conclusion-status-dropdown { padding-left: 5px; }
+.conclusion-status-dropdown {
+  padding-left: 5px;
+}
 
-.status-dropdown-menu { min-width: 110px; }
+.status-dropdown-menu {
+  min-width: 110px;
+}
 
 #zoom-controls {
   top: 15px;
@@ -187,7 +190,9 @@ body {
   position: absolute;
 }
 
-#recenter { color: #fff; }
+#recenter {
+  color: #fff;
+}
 
 .btn-zoom {
   color: #fff;
@@ -196,7 +201,7 @@ body {
 
 .btn-zoom:hover {
   color: #fff;
-  background-color: rgba(52,152,219, 0.9);
+  background-color: rgba(52, 152, 219, 0.9);
   border-color: #269abc;
 }
 
@@ -239,7 +244,7 @@ body {
 }
 
 .jstree-default .jstree-clicked {
-    background: rgba(158,158,158, 0.50);
+  background: rgba(158, 158, 158, 0.5);
 }
 
 /*---------------------------------------
@@ -253,30 +258,30 @@ body {
 }
 
 .sidebar-nav li .btn-sidebar {
-    line-height: 40px;
+  line-height: 40px;
 }
 
 .sidebar-nav li .btn-sidebar {
-    display: block;
-    text-decoration: none;
-    color: #fff;
+  display: block;
+  text-decoration: none;
+  color: #fff;
 }
 
 .sidebar-nav li .btn-sidebar:hover {
-    text-decoration: none;
-    color: #fff;
-    background: rgba(255, 255, 255, 0.25);
+  text-decoration: none;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.25);
 }
 
 .sidebar-nav li .btn-sidebar:active,
 .sidebar-nav li .btn-sidebar:focus {
-    text-decoration: none;
-    outline: none;
+  text-decoration: none;
+  outline: none;
 }
 
 .sidebar-nav li.active .btn-sidebar {
-    color: #fff;
-    background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+  background: rgba(255, 255, 255, 0.12);
 }
 
 /*---------------------------------------
@@ -307,7 +312,7 @@ body {
 
 .filter-button {
   all: unset;
-  line-height: 2.0;
+  line-height: 2;
 }
 
 /*For rounded table border*/
@@ -327,7 +332,7 @@ div.dataTables_scrollHead th:first-child {
   padding-left: 10px;
 }
 
-.dropdown-menu > .active > a{
+.dropdown-menu > .active > a {
   color: #000;
   background-color: rgba(0, 0, 0, 0.2);
 }
@@ -365,19 +370,19 @@ div.dataTables_wrapper div.dataTables_processing {
 -----------------------------------------*/
 /* Center the progress indicator */
 .progress {
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 50%;
-    transform: translate(0, 25%);
-    z-index: 1;
-    width: auto;
-    height: auto;
-    border: none;
-    background-color: transparent;
-    -webkit-box-shadow: none;
-    -moz-box-shadow: none;
-    box-shadow: none;
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 50%;
+  transform: translate(0, 25%);
+  z-index: 1;
+  width: auto;
+  height: auto;
+  border: none;
+  background-color: transparent;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
 }
 
 .progress .title {
@@ -392,15 +397,19 @@ div.dataTables_wrapper div.dataTables_processing {
 }
 
 .progress .indeterminate {
-  border: 6px solid #B4DDF8;
+  border: 6px solid #b4ddf8;
   border-radius: 50%;
   border-top: 6px solid #3498db;
   animation: spin 1s linear infinite;
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 /*---------------------------------------
@@ -439,11 +448,11 @@ div.dataTables_wrapper div.dataTables_processing {
 }
 
 .fa_custom_recommended {
-  color: #002FFF;
+  color: #002fff;
 }
 
 .fa_custom_restricted {
-  color: #FFcc33;
+  color: #ffcc33;
 }
 /*---------------------------------------
   Split.js
@@ -510,25 +519,29 @@ div.dataTables_wrapper div.dataTables_processing {
 }
 
 #barchart-view .svg-container {
-    overflow-y: scroll;
+  overflow-y: scroll;
 }
 
-.barchart{ width: 100%; }
+.barchart {
+  width: 100%;
+}
 
-.barchart rect { fill: #3498db; }
+.barchart rect {
+  fill: #3498db;
+}
 
 .barchart text {
   fill: black;
   font-size: 12px;
-  font-family: 'Lato', Helvetica, sans-serif;
+  font-family: "Lato", Helvetica, sans-serif;
   text-anchor: end;
 }
 
 .axis path,
 .axis line {
-    fill: none;
-    stroke: #000;
-    shape-rendering: crispEdges;
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
 }
 
 /* Remove focus from Bar Chart dropdown after selection is made. */
@@ -578,26 +591,26 @@ div.dataTables_wrapper div.dataTables_processing {
   width: 100%;
 }
 
-#tab-file-dashboard{
-  background-color: #FAFAFB;
+#tab-file-dashboard {
+  background-color: #fafafb;
 }
 
-#tab-license-dashboard{
-  background-color: #FAFAFB;
+#tab-license-dashboard {
+  background-color: #fafafb;
 }
 
-#tab-package-dashboard{
-  background-color: #FAFAFB;
+#tab-package-dashboard {
+  background-color: #fafafb;
 }
 
-.dashboard-lead{
+.dashboard-lead {
   padding: 0 0 15px 15px;
 }
 
 .card {
   border-radius: 2px;
   box-shadow: 1px 0 8px -3px #b1b1b1;
-  background-color: #FFFFFF;
+  background-color: #ffffff;
   margin-bottom: 30px;
 }
 
@@ -625,7 +638,7 @@ div.dataTables_wrapper div.dataTables_processing {
 }
 
 .c3 svg {
-  font-family: 'Lato', Helvetica, san-serif;
+  font-family: "Lato", Helvetica, san-serif;
 }
 
 /*---------------------------------------
@@ -640,7 +653,7 @@ div.dataTables_wrapper div.dataTables_processing {
   Select2 custom
 -----------------------------------------*/
 
-.select2-container .select2-search__field{
+.select2-container .select2-search__field {
   width: 100% !important;
 }
 
@@ -660,4 +673,9 @@ body .modal-scancode {
 }
 #scancode-display {
   display: block;
+}
+
+/* This is for removing unwanted scrollbar on clicking the Hide all button */
+.DTFC_LeftWrapper {
+  overflow: hidden;
 }
