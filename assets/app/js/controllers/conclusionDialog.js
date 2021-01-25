@@ -207,7 +207,7 @@ class ConclusionDialog extends Controller {
           tags: true,
           language: {
             'noResults': function () {
-              return ("SCWB did not find any license expressions in the scan that applies to the current path");
+              return ('SCWB did not find any license expressions in the scan that applies to the current path');
             }
           }
         }, true);
@@ -229,7 +229,7 @@ class ConclusionDialog extends Controller {
           tags: true,
           language: {
             'noResults': function () {
-              return ("SCWB did not find any copyright statements in the scan pertaining to the current path");
+              return ('SCWB did not find any copyright statements in the scan pertaining to the current path');
             }
           }
         }, true);
@@ -250,7 +250,7 @@ class ConclusionDialog extends Controller {
           tags: true,
           language: {
             'noResults': function () {
-              return ("SCWB did not find any owners in the scan for the current path");
+              return ('SCWB did not find any owners in the scan for the current path');
             }
           }
         }, true);
@@ -272,7 +272,7 @@ class ConclusionDialog extends Controller {
           tags: true,
           language: {
             'noResults': function () {
-              return ("SCWB did not find any primary programming languages in the scan associated with the current path");
+              return ('SCWB did not find any primary programming languages in the scan associated with the current path');
             }
           }
         }, true);
@@ -306,7 +306,7 @@ class ConclusionDialog extends Controller {
           tags: true,
           language: {
             'noResults': function () {
-              return ("SCWB did not find any Homepage URL in the scan for the current path");
+              return ('SCWB did not find any Homepage URL in the scan for the current path');
             }
           }
         }, true);
@@ -331,7 +331,7 @@ class ConclusionDialog extends Controller {
           tags: true,
           language: {
             'noResults': function () {
-              return ("SCWB did not find any download URL in the scan for obtaining the current path");
+              return ('SCWB did not find any download URL in the scan for obtaining the current path');
             }
           }
         }, true);
@@ -358,7 +358,7 @@ class ConclusionDialog extends Controller {
           tags: true,
           language: {
             'noResults': function () {
-              return ("SCWB did not find any License url in the scan for the current path");
+              return ('SCWB did not find any License url in the scan for the current path');
             }
           }
         }, true);
@@ -379,7 +379,7 @@ class ConclusionDialog extends Controller {
           tags: true,
           language: {
             'noResults': function () {
-              return ("SCWB did not find any Notice URL in the scan for the current path");
+              return ('SCWB did not find any Notice URL in the scan for the current path');
             }
           }
         }, true);

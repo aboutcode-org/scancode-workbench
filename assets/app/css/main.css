@@ -280,6 +280,41 @@ body {
 }
 
 /*---------------------------------------
+  Welcome Page
+-----------------------------------------*/
+
+#import-json, #open-file, #save-file{
+  border: 2px dashed skyblue;
+  display: inline-block;
+  width: 25%;
+  text-align: center;
+  margin: 6rem 3rem;
+  padding: 1rem;
+  cursor: pointer;
+}
+
+#welcomepage-view i{
+  font-size: 10rem;
+}
+
+#welcomepage-title , .icons{
+  text-align: center;
+}
+
+.quicklinks h3{
+  padding-left:7rem;
+}
+
+.btn-group-horizontal{
+  text-align:center;
+}
+
+.btn-group-horizontal a{
+  margin: 1rem;
+  border:2px solid rgb(74, 176, 199) !important;
+}
+
+/*---------------------------------------
   DataTables custom
 -----------------------------------------*/
 .table {
