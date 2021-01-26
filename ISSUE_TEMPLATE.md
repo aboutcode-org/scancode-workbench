@@ -1,7 +1,7 @@
 ### Description
 Please leave a brief discription of the bug or feature request:
 * if reporting a bug, tell us how to reproduce the issue.
-* Check the Develop Console tab and copy any error text there might be: https://github.com/nexB/scancode-workbench/wiki/Check-for-Errors-in-the-Developer-Tools 
+* Check the Develop Console tab and copy any error text there might be: https://scancode-workbench.readthedocs.io/en/develop/basics/check_for_errors_in_the_developer_tools.html
 
 ### System configuration
 For bug reports, it really helps us to know:

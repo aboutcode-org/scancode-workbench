@@ -218,9 +218,10 @@ describe('checkWorkbenchDB', () => {
         .then(() => workbenchDB.addFromJson(test_file))
         .then(() => workbenchDB.db.Header.findOne({where: {id: 1}}))
         .then((header) => {
-          assert.strictEqual(header.scancode_version, '2.9.2');
-          assert.isNotNull(header.scancode_notice);
-          assert.isNotNull(header.scancode_options);
+          const content = JSON.parse(header.header_content);
+          assert.strictEqual(content.scancode_version, '2.9.2');
+          assert.isNotNull(content.scancode_notice);
+          assert.isNotNull(content.scancode_options);
         });
     });
     it('should get header information from a v2.9.8 scan file', () => {
@@ -233,9 +234,11 @@ describe('checkWorkbenchDB', () => {
         .then(() => workbenchDB.addFromJson(test_file))
         .then(() => workbenchDB.db.Header.findOne({where: {id: 1}}))
         .then((header) => {
-          assert.strictEqual(header.scancode_version, '2.9.8');
-          assert.isNotNull(header.scancode_notice);
-          assert.isNotNull(header.scancode_options);
+          const content = JSON.parse(header.header_content);
+          assert.strictEqual(content.tool_name, 'scancode-toolkit');
+          assert.strictEqual(content.tool_version, '2.9.8');
+          assert.isNotNull(content.notice);
+          assert.isNotNull(content.options);
         });
     });
     it('should load scanfile without fileinfo', () => {

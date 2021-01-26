@@ -118,39 +118,30 @@
             <!-- Welcome Page -->  
             <div class="tab-pane container" id="tab-welcomepage">
                 <div id="welcomepage-container">
-                    <div id="wecomepage-title">
+                    <div id="welcomepage-title">
                         <h1>Welcome to ScanCode Workbench</h1>
                     </div>
                     <div id="welcomepage-view">
-                        <div class="row">
-                            <div class="col-sm-4">
-                                <h3>Start:</h3>
-                                <div class="btn-group-vertical" role="group" aria-label="...">
-                                    <button id="import-json" class="btn btn-lg btn-default"><i class="fa fa-cogs"></i> Import ScanCode JSON</button>
-                                    <button id="open-file" class="btn btn-lg btn-default"><i class="fa fa-folder"></i> Open SQLite File</button>
-                                    <button id="save-file" class="btn btn-lg btn-default"><i class="fa fa-floppy-o"></i> Save SQLite File</button>
-                                </div>
+                        <div class="icons">
+                            <div id="import-json">
+                                <i class="fa fa-cogs"></i> 
+                                <h4>Import ScanCode JSON</h4>
                             </div>
-                            <div class="col-sm-8">
-                                <h3>Learn:</h3>
-                                <div class="btn-group-vertical" role="group" aria-label="...">
-                                    <a href="https://github.com/nexB/scancode-toolkit/wiki/How-To:-Run-a-scan" class="btn btn-lg btn-default">How to run a scan with ScanCode Toolkit</a>
-                                    <a href="https://github.com/nexB/scancode-workbench/wiki/ScanCode-Workbench-Views" class="btn btn-lg btn-default">About ScanCode Workbench's various views</a>
-                                    <a href="https://github.com/nexB/scancode-workbench/wiki/Creating-Conclusions" class="btn btn-lg btn-default">How to create Conclusions</a>
-                                </div>
+                            <div id="open-file">
+                                <i class="fa fa-folder"></i> 
+                                <h4>Open SQLite File</h4>
+                            </div>
+                            <div id="save-file">
+                                <i class="fa fa-floppy-o"></i> 
+                                <h4>Save SQLite File</h4>
                             </div>
                         </div>
-                        <div class="row" style="padding-top:50px">
-                            <div class="col-sm-6">
-                                <h4>Additional Help and Documentation:</h4>
-                                <ul>
-                                    <li><a href="https://github.com/nexB/scancode-workbench/wiki/">ScanCode Workbench Wiki</a></li>
-                                    <li><a href="https://github.com/nexB/scancode-workbench/issues/">ScanCode Workbench Issue Tracker</a></li>
-                                    <li><a href="https://github.com/nexB/scancode-workbench/wiki/Check-for-Errors-in-the-Developer-Tools">Checking for Errors</a></li>
-                                </ul>
-                            </div>
-                            <div class="col-sm-6">
-                                <!-- pass -->
+                        <div class="quicklinks">
+                            <h3>Quick Links: </h3>
+                            <div class="btn-group-horizontal" role="group" aria-label="...">
+                                <a href="https://github.com/nexB/scancode-workbench/" class="btn btn-lg btn-default">GitHub Repository</a>
+                                <a href="https://scancode-workbench.readthedocs.io/" class="btn btn-lg btn-default">Getting Started with Scancode Workbench</a>
+                                <a href="https://github.com/nexB/scancode-workbench/issues" class="btn btn-lg btn-default">Report a Bug or Request a Feature</a>
                             </div>
                         </div>
                     </div>
@@ -379,8 +370,7 @@
         </div>
     </div>
 
-    <!-- TODO: Change the name of this -->
-    <!-- Node View Modal -->
+    <!-- Conclusion Modal -->
     <div class="modal fade action-create" id="conclusionDialog" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -408,15 +398,15 @@
                             <input type="text" class="form-control" id="conclusion-version" name="conclusion-version" placeholder="Enter version">
                         </fieldset>
                         <fieldset class="form-group">
-                            <label for="conclusion-license-expression" data-toggle="tooltip" data-placement="top" title="The license expression that applies to a conclusion.">License Expression</label>
+                            <label for="conclusion-license-expression" data-toggle="tooltip" data-placement="top" title="The license expression that applies to a conclusion. SCWB will present possible values from the scan.">License Expression<i class="fa fa-check-circle" aria-hidden="true" title="scan-based"></i></label>
                             <select data-hide-on-select="true" class="form-control " id="conclusion-license-expression" name="conclusion-license-expression" type="text"></select>
                         </fieldset>
                         <fieldset class="form-group">
-                            <label for="conclusion-owner" data-toggle="tooltip" data-placement="top" title="The unique user-maintained name of the author, custodian, or provider of one or more software objects (licenses, products).">Owner</label>
+                            <label for="conclusion-owner" data-toggle="tooltip" data-placement="top" title="The unique user-maintained name of the author, custodian, or provider of one or more software objects (licenses, products). SCWB will present possible values from the scan.">Owner<i class="fa fa-check-circle" aria-hidden="true" title="scan-based"></i></label>
                             <select data-hide-on-select="true" class="form-control" id="conclusion-owner" name="conclusion-owner" type="text"></select>
                         </fieldset>
                         <fieldset class="form-group">
-                            <label for="conclusion-copyright" data-toggle="tooltip" data-placement="top" title="The copyright statement(s) that pertain to this conclusion, as contained in the source or as specified in an associated file.">Copyright</label>
+                            <label for="conclusion-copyright" data-toggle="tooltip" data-placement="top" title="The copyright statement(s) that pertain to this conclusion, as contained in the source or as specified in an associated file. SCWB will present possible values from the scan.">Copyright<i class="fa fa-check-circle" aria-hidden="true" title="scan-based"></i></label>
                             <select data-hide-on-select="true" class="form-control" id="conclusion-copyright" name="conclusion-copyright" type="text"></select>
                         </fieldset>
                         <fieldset>
@@ -458,23 +448,23 @@
                             <input type="text" class="form-control" id="conclusion-purpose" name="conclusion-purpose" placeholder="Enter purpose">
                         </fieldset>
                         <fieldset class="form-group">
-                            <label for="conclusion-language" data-toggle="tooltip" data-placement="top" title="The primary programming language associated with the conclusion.">Programming Language</label>
+                            <label for="conclusion-language" data-toggle="tooltip" data-placement="top" title="The primary programming language associated with the conclusion. SCWB will present possible values from the scan.">Programming Language<i class="fa fa-check-circle" aria-hidden="true" title="scan-based"></i></label>
                             <select data-hide-on-select="true" class="form-control" id="conclusion-language" name="conclusion-language" type="text"></select>
                         </fieldset>
                         <fieldset class="form-group">
-                            <label for="conclusion-homepage-url" data-toggle="tooltip" data-placement="top" title="Homepage URL for the conclusion.">Homepage URL</label>
+                            <label for="conclusion-homepage-url" data-toggle="tooltip" data-placement="top" title="Homepage URL for the conclusion. SCWB will present possible values from the scan.">Homepage URL<i class="fa fa-check-circle" aria-hidden="true" title="scan-based"></i></label>
                             <select data-hide-on-select="true" class="form-control" id="conclusion-homepage-url" name="conclusion-homepage-url" type="text"></select>
                         </fieldset>
                         <fieldset class="form-group">
-                            <label for="conclusion-download-url" data-toggle="tooltip" data-placement="top" title="The download URL for obtaining the package.">Download URL</label>
+                            <label for="conclusion-download-url" data-toggle="tooltip" data-placement="top" title="The download URL for obtaining the package. SCWB will present possible values from the scan.">Download URL<i class="fa fa-check-circle" aria-hidden="true" title="scan-based"></i></label>
                             <select data-hide-on-select="true" class="form-control" id="conclusion-download-url" name="conclusion-download-url" type="text"></select>
                         </fieldset>
                         <fieldset class="form-group">
-                            <label for="conclusion-license-url" data-toggle="tooltip" data-placement="top" title="Where available, the URL to the license text.">License URL</label>
+                            <label for="conclusion-license-url" data-toggle="tooltip" data-placement="top" title="Where available, the URL to the license text. SCWB will present possible values from the scan.">License URL<i class="fa fa-check-circle" aria-hidden="true" title="scan-based"></i></label>
                             <select data-hide-on-select="true" class="form-control" id="conclusion-license-url" name="conclusion-license-url" type="text"></select>
                         </fieldset>
                         <fieldset class="form-group">
-                            <label for="conclusion-notice-url" data-toggle="tooltip" data-placement="top" title="A URL that contains notice text for a conclusion.">Notice URL</label>
+                            <label for="conclusion-notice-url" data-toggle="tooltip" data-placement="top" title="A URL that contains notice text for a conclusion. SCWB will present possible values from the scan.">Notice URL<i class="fa fa-check-circle" aria-hidden="true" title="scan-based"></i></label>
                             <select data-hide-on-select="true" class="form-control" id="conclusion-notice-url" name="conclusion-notice-url" type="text"></select>
                         </fieldset>
                     </form>
@@ -488,44 +478,6 @@
         </div>
     </div>
 
-    <!--Conclusion Modal -->
-    <div class="modal fade" id="conclusionExportModal" tabindex="-1" role="dialog" aria-labelledby="conclusionExportModalLabel">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title" id="myModalLabel">Upload Conclusions to DejaCode</h4>
-                </div>
-                <div class="modal-body">
-                    <form class="horizontal">
-                        <div class="form-group" id="prod">
-                            <label for="product-name">Product Name </label>
-                            <input type="text" class="form-control" id="product-name" name="product" placeholder="Ex: Starship Widget Framework" required="Product Name is required">
-                        </div>
-                        <div class="form-group" id="prodVersion">
-                            <label for="product-version">Product Version</label>
-                            <input type="text" class="form-control" id="product-version" name="version" placeholder="Product Version" required>
-                        </div>
-                        <div class="form-group" id="apiURL">
-                            <label for="apiURLDejaCode">DejaCode API URL</label>
-                            <input type="text" class="form-control" id="apiURLDejaCode" name="version" placeholder="DejaCode API URL" required>
-                            <small><em>Enter the Product Component API URL (For example, https://enterprise.dejacode.com/api/v2/product_components/).</em></small>
-                        </div>
-                        <div class="form-group" id="api">
-                            <label for="apiKey">DejaCode API Key</label>
-                            <input type="password" class="form-control" id="apiKey" name="api" placeholder="DejaCode API Key" required>
-                            <small><em>Your API key can be found in your DejaCode Profile Settings</em></small>
-                        </div>
-                    </form>
-                    <button id="showApiKeyButton">Show/Hide API Key</button>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary" id="conclusionSubmit">Submit</button>
-                </div>
-            </div>
-         </div>
-    </div>
-
     <!-- Help Modal -->
     <div class="modal fade" id="helpModal" tabindex="-1" role="dialog" aria-labelledby="helpModalLabel">
         <div class="modal-dialog modal-lg" role="document">
@@ -535,33 +487,29 @@
                     <h2 class="modal-title" id="helpModalLabel">ScanCode Workbench Help</h2>
                 </div>
                 <div class="modal-body">
-                    <h2>Overview</h2>
-                    <p>ScanCode Workbench allows you take the scan results
+                    <h3>Overview</h3>
+                    <p>
+                        ScanCode Workbench allows you take the scan results
                         from the ScanCode and create a conclusion-level
                         software inventory. The conclusions (Concluded License,
                         Concluded Owner, etc.) you make when creating your
                         conclusion can be exported as a JSON file or saved as
                         SQLite file. For more information, see our
-                        <a href="https://github.com/nexB/scancode-workbench/wiki">wiki</a>.
                     </p>
-                    <h3>Basics</h3>
-                    <ul>
-                        <li><a class="open-in-default" href="https://github.com/nexB/scancode-workbench/wiki/ScanCode-Workbench-Views">ScanCode Workbench</a></li>
-                        <li><a class="open-in-default" href="https://github.com/nexB/scancode-workbench/wiki/Building">Building</a></li>
-                        <li><a class="open-in-default" href="https://github.com/nexB/scancode-workbench/wiki/Platform-Support">Platform Support</a></li>
-                    </ul>
-                    <h3>Tutorials</h3>
-                    <ul>
-                        <li><a class="open-in-default" href="https://github.com/nexB/scancode-workbench/wiki/Import-JSON-and-Export-JSON">Import JSON and Export JSON</a></li>
-                        <li><a class="open-in-default" href="https://github.com/nexB/scancode-workbench/wiki/Open-and-Save-a-SQLite-File">Open and Save a SQLite File</a></li>
-                        <li><a class="open-in-default" href="https://github.com/nexB/scancode-workbench/wiki/Creating-Components">Creating Components</a></li>
-                        <li><a class="open-in-default" href="https://github.com/nexB/scancode-workbench/wiki/Navigating-the-Chart-Summary-View">Navigating the Chart Summary View</a></li>
-                        <li><a class="open-in-default" href="https://github.com/nexB/scancode-workbench/wiki/Navigating-the-Node-View">Navigating the Node View</a></li>
-                    </ul>
-                    <h3>Debugging</h3>
-                    <ul>
-                        <li><a class="open-in-default" href="https://github.com/nexB/scancode-workbench/wiki/Check-for-Errors-in-the-Developer-Tools">Check for Errors in the Developer Tools</a></li>
-                    </ul>
+                    <p>
+                        For more details, see our
+                        <a href="https://github.com/nexB/scancode-workbench/">GitHub Repository</a>.
+                    </p>
+                    <h3>Learn More:</h3>
+                    <p>
+                        Check out the ScanCode-Workbench
+                        <a href="https://scancode-workbench.readthedocs.io">Documentation</a>.
+                    </p>
+                    <h3>Having Trouble?</h3>
+                    <p>
+                        Report a bug or request a feature on the ScanCode-Workbench
+                        <a href="https://github.com/nexB/scancode-workbench/issues">Issues Page</a>.
+                    </p>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -576,7 +524,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">ScanCode Version and Options</h4>
+                    <h4 class="modal-title">ScanCode Header Information</h4>
                 </div>
                 <div class="modal-body">
                     <div id="scancode-info">

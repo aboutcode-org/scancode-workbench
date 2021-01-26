@@ -18,7 +18,6 @@ const WorkbenchDB = require('./workbenchDB');
 const Splitter = require('./helpers/splitter');
 const Progress = require('./helpers/progress');
 
-const DejaCodeExportDialog = require('./controllers/dejacodeExportDialog');
 const ConclusionDialog = require('./controllers/conclusionDialog');
 const FileDashboard = require('./controllers/fileDashboard');
 const LicenseDashboard = require('./controllers/licenseDashboard');
@@ -71,16 +70,6 @@ $(document).ready(() => {
   const scanDataTable = new ScanDataTable('#tab-scandata', workbenchDB);
 
   const conclusionsTable = new ConclusionDataTable('#tab-conclusion', workbenchDB)
-    .on('upload-clicked', (conclusions) => {
-      if (conclusions.length > 0) {
-        dejaCodeExportDialog.show();
-      } else {
-        dialog.showErrorBox(
-          'No Conclusions to Upload',
-          'You have no Conclusions to upload.\n\n' +
-                    'Please create at least one Conclusion and try again.');
-      }
-    })
     .on('export-json', exportJsonConclusions);
 
   const conclusionDialog = new ConclusionDialog('#conclusionDialog', workbenchDB)
@@ -93,26 +82,23 @@ $(document).ready(() => {
       redrawCurrentView();
     });
 
-  const dejaCodeExportDialog =
-        new DejaCodeExportDialog('#conclusionExportModal', workbenchDB);
-
   const jstree = new JsTree('#jstree', workbenchDB)
     .on('node-edit', (node) => conclusionDialog.show(node.id))
     .on('node-selected', (node) => {
       updateViewsByPath(node.id);
     });
 
-  $(document).on('click', '#activate-filters-button', () => {
+  $(document).on('click', '.activate-filters-button', () => {
     scanDataTable.genFilters();
     updateViewsByPath(scanDataTable._selectedPath);
   });
 
-  $(document).on('click', '#reset-filters-button', () => {
+  $(document).on('click', '.reset-filters-button', () => {
     scanDataTable.resetColumnFilters();
     updateViewsByPath(scanDataTable._selectedPath);
   });
 
-  $(document).on('click', '#clear-filters-button', () => {
+  $(document).on('click', '.clear-filters-button', () => {
     scanDataTable.clearColumnFilters();
     updateViewsByPath(scanDataTable._selectedPath);
   });
@@ -201,7 +187,7 @@ $(document).ready(() => {
   ipcRenderer.on('import-JSON', importJson);
   ipcRenderer.on('export-JSON', exportJson);
   ipcRenderer.on('export-JSON-conclusions-only', exportJsonConclusions);
-  ipcRenderer.on('get-ScanInfo', getScanInfo);
+  ipcRenderer.on('get-ScanHeader', getScanHeader);
   ipcRenderer.on('zoom-reset', zoomReset);
   ipcRenderer.on('zoom-in', zoomIn);
   ipcRenderer.on('zoom-out', zoomOut);
@@ -217,7 +203,6 @@ $(document).ready(() => {
     scanDataTable.columns(0).search(path);
 
     conclusionDialog.selectedPath(path);
-    dejaCodeExportDialog.selectedPath(path);
     jstree.selectedPath(path);
     scanDataTable.selectedPath(path);
     conclusionsTable.selectedPath(path);
@@ -277,8 +262,8 @@ $(document).ready(() => {
     return updateViews();
   }
 
-  // Get the ScanCode version and options data from the DB and populate and open the modal
-  function getScanInfo() {
+  // Get the ScanCode header data from the DB and populate and open the modal
+  function getScanHeader() {
     return workbenchDB.sync
       .then((db) => db.Header.findById(1)
         .then((header) => {
@@ -289,7 +274,7 @@ $(document).ready(() => {
             scancode_display.css('display', 'none');
           } else {
             scancode_label.text('This information has been extracted from your imported ScanCode JSON file:');
-            scancode_display.text('ScanCode version: ' + header.scancode_version + '\n\nScanCode options: ' + JSON.stringify(header.scancode_options, null, 2));
+            scancode_display.text(header.header_content);
             scancode_display.css('display', 'block');
           }
         }))
@@ -307,7 +292,6 @@ $(document).ready(() => {
 
         // update all views with the new database.
         conclusionDialog.db(workbenchDB);
-        dejaCodeExportDialog.db(workbenchDB);
         jstree.db(workbenchDB);
         scanDataTable.db(workbenchDB);
         conclusionsTable.db(workbenchDB);

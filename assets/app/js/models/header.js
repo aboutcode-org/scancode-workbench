@@ -14,8 +14,6 @@
  #
  */
 
-const {jsonDataType} = require('./databaseUtils');
-
 module.exports = function(sequelize, DataTypes) {
   return sequelize.define(
     'headers',
@@ -24,9 +22,7 @@ module.exports = function(sequelize, DataTypes) {
       // See https://github.com/nexB/aboutcode/issues/7
       workbench_version: DataTypes.STRING,
       workbench_notice: DataTypes.STRING,
-      scancode_notice: DataTypes.STRING,
-      scancode_version: DataTypes.STRING,
-      scancode_options: jsonDataType('scancode_options'),
+      header_content: DataTypes.STRING,
       files_count: DataTypes.INTEGER
     });
 };

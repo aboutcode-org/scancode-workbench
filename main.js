@@ -13,7 +13,7 @@ function createWindow() {
   mainWindow = new BrowserWindow({
     width: 1200,
     height: 800,
-    icon: path.join(__dirname, '/assets/app/app-icon/png/aboutcode_512x512.png')
+    icon: path.join(__dirname, '/assets/app/app-icon/png/scwb_layered_01.png')
   });
   mainWindow.loadURL('file://' + __dirname + '/index.html');
   mainWindow.on('closed', () => mainWindow = null);
@@ -225,17 +225,17 @@ function getTemplate() {
           enabled: false
         },
         {
-          label: 'Get ScanCode Version and Options',
+          label: 'Show ScanCode Header Information',
           accelerator: 'CmdOrCtrl+G',
-          click: sendEventToRenderer('get-ScanInfo')
+          click: sendEventToRenderer('get-ScanHeader')
         },
         {
           type: 'separator'
         },
         {
-          label: 'Learn More',
+          label: 'GitHub Repository',
           click: () => shell.openExternal(
-            'https://github.com/nexB/scancode-workbench/wiki')
+            'https://github.com/nexB/scancode-workbench/')
         },
         {
           label: 'Licensing Information',
@@ -248,12 +248,13 @@ function getTemplate() {
           }
         },
         {
+          // TODO: make this version specific?
           label: 'Documentation',
           click: () => shell.openExternal(
-            `https://github.com/nexB/scancode-workbench/blob/v${packageJson.version}/README.md`)
+            `https://scancode-workbench.readthedocs.io`)
         },
         {
-          label: 'Search Issues',
+          label: 'Issue Tracker',
           click: () => shell.openExternal(
             'https://github.com/nexB/scancode-workbench/issues')
         }

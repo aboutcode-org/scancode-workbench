@@ -16,6 +16,7 @@
 /local
 node_modules/
 bower_components/
+docs/build
 
 # Installer logs
 debug.log
@@ -25,12 +26,14 @@ npm-debug.log
 .project
 .pydevproject
 .idea
+.vscode
 
 .DS_Store
 *~
 .*.sw[po]
 .build
 .ve
+.venv
 *.bak
 /.cache/
 

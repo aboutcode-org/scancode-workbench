@@ -82,6 +82,7 @@ table.dataTable thead .sorting_asc_disabled,
 table.dataTable thead .sorting_desc_disabled {
   cursor: pointer;
   position: relative;
+  vertical-align: middle;
 }
 table.dataTable thead .sorting:after,
 table.dataTable thead .sorting_asc:after,
@@ -89,7 +90,7 @@ table.dataTable thead .sorting_desc:after,
 table.dataTable thead .sorting_asc_disabled:after,
 table.dataTable thead .sorting_desc_disabled:after {
   position: absolute;
-  bottom: 8px;
+  bottom: 20px;
   right: 8px;
   display: block;
   font-family: 'Glyphicons Halflings';

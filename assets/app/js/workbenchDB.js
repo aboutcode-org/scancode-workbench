@@ -290,10 +290,13 @@ class WorkbenchDB {
             // FIXME: This should be smarter
             const header_data = header.headers[0];
             header = {
-              scancode_notice: header_data.notice,
-              scancode_version: header_data.tool_version,
-              scancode_options: header_data.options,
+              header_content: JSON.stringify(header_data, undefined, 2),
               files_count: header_data.extra_data.files_count
+            };
+          } else {
+            header = {
+              header_content: JSON.stringify(header, undefined, 2),
+              files_count: header.files_count
             };
           }
 

@@ -280,6 +280,41 @@ body {
 }
 
 /*---------------------------------------
+  Welcome Page
+-----------------------------------------*/
+
+#import-json, #open-file, #save-file{
+  border: 2px dashed skyblue;
+  display: inline-block;
+  width: 25%;
+  text-align: center;
+  margin: 6rem 3rem;
+  padding: 1rem;
+  cursor: pointer;
+}
+
+#welcomepage-view i{
+  font-size: 10rem;
+}
+
+#welcomepage-title , .icons{
+  text-align: center;
+}
+
+.quicklinks h3{
+  padding-left:7rem;
+}
+
+.btn-group-horizontal{
+  text-align:center;
+}
+
+.btn-group-horizontal a{
+  margin: 1rem;
+  border:2px solid rgb(74, 176, 199) !important;
+}
+
+/*---------------------------------------
   DataTables custom
 -----------------------------------------*/
 .table {
@@ -303,6 +338,11 @@ body {
 
 .dataTable td hr {
   margin: 0;
+}
+
+.filter-button {
+  all: unset;
+  line-height: 2.0;
 }
 
 /*For rounded table border*/
@@ -331,6 +371,19 @@ div.dataTables_scrollHead th:first-child {
   color: #000;
   background-color: rgba(0, 0, 0, 0.2);
   outline: 0;
+}
+
+/*Add background color to "processing" message*/
+/*The base instance of this setting is here: assets/thirdparty/DataTables/datatables.css*/
+div.dataTables_wrapper div.dataTables_processing {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 400px;
+  margin-left: -200px;
+  background-color: #e6f2ff;
+  border: solid 1px #99ccff;
+  font-size: 16px;
 }
 
 /*---------------------------------------
