@@ -19,6 +19,7 @@
     position: fixed;
     left: 50px;
     width: 50px;
+    color: #fff;
     height: 100%;
     margin-left: -50px;
     overflow-y: auto;
@@ -47,7 +48,7 @@
 }
 
 .sidebar-nav li {
-    text-indent: 10px;
+    cursor: pointer;
     line-height: 40px;
 }
 

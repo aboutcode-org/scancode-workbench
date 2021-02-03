@@ -61,47 +61,58 @@
     <!-- Sidebar -->
     <div id="sidebar-wrapper">
         <ul class="sidebar-nav">
-            <li>
-                <button class="btn btn-sidebar" id="show-tab-welcomepage" data-toggle="tab" data-target="#tab-welcomepage" data-placement="right" title="Welcome Page">
+            <li id="show-tab-welcomepage" data-toggle="tab" data-target="#tab-welcomepage" data-placement="right" title="Welcome Page">
+                <button class="btn btn-sidebar">
                     <i class="fa fa-home" aria-hidden="true"></i>
                 </button>
+                <p class="sidebar-nav-p">Welcome Page</p>
             </li>
-            <li>
-                <button class="btn btn-sidebar" id="show-tab-scandata" data-toggle="tab" data-target="#tab-scandata" data-placement="right" title="Table View">
+            <li id="show-tab-scandata" data-toggle="tab" data-target="#tab-scandata" data-placement="right" title="Table View">
+                <button class="btn btn-sidebar">
                     <i class="fa fa-table" aria-hidden="true"></i>
                 </button>
+                <p class="sidebar-nav-p">Table View</p>
             </li>
-            <li>
-                <button class="btn btn-sidebar" id="show-tab-file-dashboard" data-toggle="tab" data-target="#tab-file-dashboard" data-placement="right" title="File Info Dashboard">
+            <li id="show-tab-file-dashboard" data-toggle="tab" data-target="#tab-file-dashboard" data-placement="right" title="File Info Dashboard">
+                <button class="btn btn-sidebar">
                     <i class="fa fa-info-circle" aria-hidden="true"></i>
                 </button>
+                <p class="sidebar-nav-p">File Info Dashboard</p>
             </li>
-            <li>
-                <button class="btn btn-sidebar" id="show-tab-license-dashboard" data-toggle="tab" data-target="#tab-license-dashboard" data-placement="right" title="License Info Dashboard">
+            <li id="show-tab-license-dashboard" data-toggle="tab" data-target="#tab-license-dashboard" data-placement="right" title="License Info Dashboard">
+                <button class="btn btn-sidebar">
                     <i class="fa fa-gavel" aria-hidden="true"></i>
                 </button>
+                <p class="sidebar-nav-p">License Info Dashboard</p>
             </li>
-            <li>
-                <button class="btn btn-sidebar" id="show-tab-package-dashboard" data-toggle="tab" data-target="#tab-package-dashboard" data-placement="right" title="Package Info Dashboard">
+            <li id="show-tab-package-dashboard" data-toggle="tab" data-target="#tab-package-dashboard" data-placement="right" title="Package Info Dashboard">
+                <button class="btn btn-sidebar">
                     <i class="fa fa-archive" aria-hidden="true"></i>
                 </button>
+                <p class="sidebar-nav-p">Package Info Dashboard</p>
             </li>
-            <li>
-                <button class="btn btn-sidebar" id="show-tab-barchart" data-toggle="tab" data-target="#tab-barchart" data-placement="right" title="Chart Summary View">
+            <li id="show-tab-barchart" data-toggle="tab" data-target="#tab-barchart" data-placement="right" title="Chart Summary View">
+                <button class="btn btn-sidebar">
                     <i class="fa fa-bar-chart" aria-hidden="true"></i>
                 </button>
+                <p class="sidebar-nav-p">Chart Summary View</p>
             </li>
-            <li>
-                <button class="btn btn-sidebar" id="show-tab-conclusion" data-toggle="tab" data-target="#tab-conclusion" data-placement="right" title="Conclusion View">
+            <li id="show-tab-conclusion" data-toggle="tab" data-target="#tab-conclusion" data-placement="right" title="Conclusion View">
+                <button class="btn btn-sidebar">
                     <i class="fa fa-list-ol" aria-hidden="true"></i>
                 </button>
+                <p class="sidebar-nav-p">Conclusion View</p>
             </li>
-            <li>
-                <button class="btn btn-sidebar" id="show-help" data-toggle="modal" data-placement="right" title="Help with Application" data-target="#helpModal">
+            <li id="show-help" data-toggle="modal" data-placement="right" title="Help with Application" data-target="#helpModal">
+                <button class="btn btn-sidebar">
                     <i class="fa fa-question" aria-hidden="true"></i>
                 </button>
+                <p class="sidebar-nav-p">Help with Application</p>
             </li>
         </ul>
+        <button class="btn btn-sidebar" id="toggle-btn">
+            <i class="fa fa-bars" aria-hidden="true"></i>
+        </button>
     </div>
 
     <!-- Main Content -->
@@ -540,5 +551,6 @@
     </div><!-- /.modal -->
 
     <script>require('./assets/app/js/renderer.js');</script>
+    <script src="assets/app/js/controllers/toggleBtn.js"></script>
 </body>
 </html>

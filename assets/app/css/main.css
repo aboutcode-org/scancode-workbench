@@ -250,22 +250,25 @@ body {
   background-color: #21252b;
   padding: 0;
   width: 50px;
+  display: inline-block;
+  text-decoration: none;
+  color: #fff;
+  line-height: 40px;
 }
 
-.sidebar-nav li .btn-sidebar {
-    line-height: 40px;
-}
-
-.sidebar-nav li .btn-sidebar {
-    display: block;
+.sidebar-nav li .btn-sidebar:active, .sidebar-nav li .btn-sidebar:focus {
     text-decoration: none;
-    color: #fff;
+    outline: none;
+}	
+
+.sidebar-nav li:hover, .sidebar-nav li:hover .btn-sidebar{
+  color: #fff;
+  background: rgba(255, 255, 255, 0.25);
 }
 
-.sidebar-nav li .btn-sidebar:hover {
-    text-decoration: none;
-    color: #fff;
-    background: rgba(255, 255, 255, 0.25);
+.sidebar-nav li.active, .sidebar-nav li.active .btn-sidebar{
+  color: #fff;
+  background: rgba(255, 255, 255, 0.12);	
 }
 
 .sidebar-nav li .btn-sidebar:active,
@@ -274,9 +277,25 @@ body {
     outline: none;
 }
 
-.sidebar-nav li.active .btn-sidebar {
-    color: #fff;
-    background: rgba(255, 255, 255, 0.12);
+#toggle-btn{
+  position: absolute;
+  bottom: 5px;
+  color: white;
+  font-size: 16px;
+  text-decoration: none;
+  outline: none;
+}
+
+#toggle-btn:hover{
+  background: rgba(255, 255, 255, 0.25);
+}
+
+.sidebar-nav-p{
+  display: none;
+  padding-left: 5px;
+  width: 195px;
+  border-bottom: 1px solid rgb(53, 50, 50);
+  margin: 0;
 }
 
 /*---------------------------------------
