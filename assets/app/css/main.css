@@ -48,6 +48,11 @@ body {
   font-family: 'Raleway Black', Helvetica, san-serif;
 }
 
+/* This is for removing unwanted double scrollbar */
+.DTFC_LeftWrapper {
+  overflow: hidden;
+}
+
 /*---------------------------------------
   Layout
 -----------------------------------------*/
