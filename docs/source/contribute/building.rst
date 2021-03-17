@@ -46,7 +46,7 @@ MacOS
 - `Node.js <https://nodejs.org/en/>`_ >=6.x or later but <=8.9.4
 - npm 3.10.x or later but <= 5.2.0 (run ``npm install npm@5.2.0 -g``)
 - Command Line Tools for `Xcode <https://developer.apple.com/xcode/downloads/>`_
-  (run ``xcode-select --install to install``)
+  (run ``xcode-select --install`` to install)
 
 Windows
 -------
