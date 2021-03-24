@@ -1,20 +1,12 @@
 ---
-name: Feature request
+name: '🚀 Feature request'
 about: Suggest an idea for this project
-title: Feature
-labels: enhancement
-assignees: ''
-
----
-
----
-name: "\U0001F680Feature Request"
-about: Suggest an improvement or new feature
 title: ''
 labels: enhancement
 assignees: ''
 
 ---
+
 
 ---
 
