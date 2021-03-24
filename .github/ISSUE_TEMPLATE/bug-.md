@@ -1,15 +1,6 @@
 ---
-name: 'Bug '
-about: Report  a Bug
-title: BUG
-labels: bug
-assignees: ''
-
----
-
----
-name: "\U0001F41B Bugs"
-about: " Report bugs in d2go"
+name: '🐛 Bug '
+about: Report  a Bug 
 title: ''
 labels: bug
 assignees: ''
