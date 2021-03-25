@@ -8,21 +8,26 @@ assignees: ''
 ---
 
 ## Instructions To Reproduce the 🐛 Bug:
-1. Full runnable code or full changes you made:
-```
-If making changes to the project itself, please use output of the following command:
-git rev-parse HEAD; git diff
+1. Describe the bug <br>
+    A clear and concise description of what the bug is.
+    
+2. Steps to reproduce the behavior<br>
+      Go to '...'<br>
+      Click on '....'<br>
+      Scroll down to '....'<br>
+      See error
 
-<put code or diff here>
-```
-2. What exact command you run:
-3. __Full logs__ or other relevant observations:
-```
-<put logs here>
-```
-4. please simplify the steps as much as possible so they do not require additional resources to run, 
+3.Expected behavior<br>
+       A clear and concise description of what you expected to happen.
 
-## Expected behavior:
-
-If there are no obvious error in "what you observed" provided above,
-please tell us the expected behavior.
+4.Actual behavior<br>
+       A clear and concise description of what actually happened.  
+           
+5.Screenshots<br>
+       Add screenshots to help explain your problem, if applicable.
+    
+6.OS and Vesrion <br>
+      About your system operating system and version
+      
+7.Additional context<br>
+Add any other context about the problem here.
