@@ -3,7 +3,7 @@
 [![Travis Build Status](https://travis-ci.org/nexB/scancode-workbench.svg?branch=develop)](https://travis-ci.org/nexB/scancode-workbench) 
 [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/nexB/scancode-workbench)](https://ci.appveyor.com/project/nexB/scancode-workbench)
 
-ScanCode Workbench provides an advanced visual UI to help you quickly evaluate
+ScanCode Workbench provides an advanced visual UI to quickly evaluate
 license and other notices identified by 
 [ScanCode](https://github.com/nexB/scancode-toolkit/) and record your conclusion
 about the effective license(s) for a component.
@@ -43,7 +43,6 @@ information captured by a scan.  The samples are located at
 the [documentation](https://scancode-workbench.readthedocs.io) for more 
 information on how to use ScanCode Workbench.
 
-![Import a JSON file](https://scancode-workbench.readthedocs.io/en/develop/_images/import-json-file.gif)
 
 ## Building
 
@@ -105,8 +104,8 @@ See the NOTICE file for more details.
 
 ## Support
 
-If you have a question, a suggestion or find a bug, enter an issue.
+If you have any question, a suggestion or any bug, enter your issue at:
 
 [![Gitter chat](https://badges.gitter.im/aboutcode-org/gitter.png)](https://gitter.im/aboutcode-org/discuss)
 
-For questions and chats, you can join the Gitter channel at https://gitter.im/aboutcode-org/discuss
+To chat with the community, you can join the Gitter channel at https://gitter.im/aboutcode-org/discuss
