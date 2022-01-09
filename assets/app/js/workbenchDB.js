@@ -14,6 +14,7 @@
  #
  */
 
+const sqlite3 = require('sqlite3');
 const Sequelize = require('sequelize');
 const fs = require('fs');
 const path = require('path');
@@ -46,6 +47,7 @@ class WorkbenchDB {
 
     this.sequelize = new Sequelize(name, user, password, {
       dialect: 'sqlite',
+      dialectModule: sqlite3,
       storage: storage
     });
 

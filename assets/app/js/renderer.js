@@ -27,7 +27,7 @@ const JsTree = require('./controllers/jsTree');
 const ScanDataTable = require('./controllers/scanDataTable');
 const ConclusionDataTable = require('./controllers/conclusionDataTable');
 
-const dialog = require('electron').remote.dialog;
+const dialog = require('@electron/remote').dialog;
 const fs = require('fs');
 const os = require('os');
 const path = require('path');
