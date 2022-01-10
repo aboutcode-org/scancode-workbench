@@ -30,7 +30,7 @@
     "asar": "^3.1.0",
     "chai": "^4.3.4",
     "chai-subset": "^1.6.0",
-    "electron": "^16.0.6",
+    "electron": "^13.0.0",
     "electron-packager": "^15.4.0",
     "electron-rebuild": "^3.2.5",
     "eslint": "^8.6.0",
@@ -46,7 +46,7 @@
     "@electron/remote": "^2.0.1",
     "JSONStream": "^1.3.5",
     "packageurl-js": "^0.0.5",
-    "sequelize": "6.12.5",
+    "sequelize": "^4.44.3",
     "sequelize-cli": "6.3.0",
     "sqlite3": "^4.2.0"
   }

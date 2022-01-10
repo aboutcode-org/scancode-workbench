@@ -36,15 +36,10 @@ function createWindow() {
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.on('ready', () => {
-  app.allowRendererProcessReuse = false;
   createWindow();
   Menu.setApplicationMenu(Menu.buildFromTemplate(getTemplate()));
 });
 
-// Make the following changes in main.js
-app.whenReady(() => {
-  app.allowRendererProcessReuse = false;
-});
 
 // Quit when all windows are closed.
 app.on('window-all-closed', () => {
