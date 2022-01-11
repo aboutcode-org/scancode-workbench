@@ -54,7 +54,7 @@ class WorkbenchDB {
 
     this.db = Database(this.sequelize, Sequelize);
 
-    // A promise that will return when the db and tables have been created\
+    // A promise that will return when the db and tables have been created
     this.sync = this.sequelize.sync().then(() => this.db);
   }
 
@@ -416,7 +416,7 @@ class WorkbenchDB {
         .then(() => this.db.Email.bulkCreate(this._addExtraFields(files, 'emails'), options))
         .then(() => this.db.Url.bulkCreate(this._addExtraFields(files, 'urls'), options))
         .then(() => this.db.ScanError.bulkCreate(this._addExtraFields(files, 'scan_errors'), options))
-        .then(() =>  this.sequelize.Promise.each(files, (file) => {
+        .then(() => this.sequelize.Promise.each(files, (file) => {
           if (file.conclusion) {
             return this.db.Conclusion.create(file.conclusion, options);
           }
