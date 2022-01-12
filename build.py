@@ -134,17 +134,17 @@ def get_git_version():
     # this may fail with exceptions
     cmd = 'git', 'describe', '--tags', '--long', '--dirty',
     version = subprocess.check_output(cmd, stderr=subprocess.STDOUT).strip()
-    dirty = version.endswith('-dirty')
+    dirty = version.endswith(b'-dirty')
     if dirty:
-        version, _, _ = version.rpartition('-')
+        version, _, _ = version.rpartition(b'-')
 
-    version, _, commit = version.rpartition('-')
-    tag, _, distance = version.rpartition('-')
+    version, _, commit = version.rpartition(b'-')
+    tag, _, distance = version.rpartition(b'-')
 
     # lower tag and strip V prefix in tags
-    tag = tag.lower().lstrip('v').strip()
+    tag = tag.lower().lstrip(b'v').strip()
     # strip leading g from git describe commit
-    commit = commit.lstrip('g').strip()
+    commit = commit.lstrip(b'g').strip()
     return tag, int(distance), commit, dirty
 
 
@@ -203,7 +203,7 @@ def build(clean=True, app_name=APP_NAME,
             os.makedirs(build_dir)
 
     # run rebuild
-    electron_rebuild = os.path.join(npm_bin, 'electron-rebuild')
+    electron_rebuild = os.path.join(npm_bin.decode(), 'electron-rebuild')
     print('Running electron-rebuild...')
     call([electron_rebuild])
 
@@ -240,7 +240,7 @@ def build(clean=True, app_name=APP_NAME,
         ]
 
     # run the build with electron_packager
-    electron_packager = os.path.join(npm_bin, 'electron-packager')
+    electron_packager = os.path.join(npm_bin.decode(), 'electron-packager')
     cmd = [electron_packager] + electron_args
     print('Running electron-packager...')
     call(cmd)
