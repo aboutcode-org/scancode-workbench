@@ -441,7 +441,7 @@ $(document).ready(() => {
     });
   }
 
-  /** Export JSON file with original ScanCode data and conclusions that have been created *
+  /** Export JSON file with original ScanCode data and conclusions that have been created */
   function exportJson() {
     dialog.showSaveDialog({
       properties: ['openFile'],
