@@ -14,6 +14,7 @@
  #
  */
 
+const sqlite3 = require('sqlite3');
 const Sequelize = require('sequelize');
 const fs = require('fs');
 const path = require('path');
@@ -46,7 +47,9 @@ class WorkbenchDB {
 
     this.sequelize = new Sequelize(name, user, password, {
       dialect: 'sqlite',
-      storage: storage
+      dialectModule: sqlite3,
+      storage: storage,
+      logging: false
     });
 
     this.db = Database(this.sequelize, Sequelize);
@@ -377,7 +380,7 @@ class WorkbenchDB {
   _addFlattenedFiles(files) {
     // Fix for issue #232
     $.each(files, (i, file) => {
-      if (file.type === 'directory' && file.hasOwnProperty('size_count')) {
+      if (file.type === 'directory' && Object.prototype.hasOwnProperty.call(file, 'size_count')) {
         file.size = file.size_count;
       }
     });
@@ -398,7 +401,7 @@ class WorkbenchDB {
       };
       $.each(files, (i, file) => {
         // Fix for issue #232
-        if (file.type === 'directory' && file.hasOwnProperty('size_count')) {
+        if (file.type === 'directory' && Object.prototype.hasOwnProperty.call(file, 'size_count')) {
           file.size = file.size_count;
         }
         file.parent = parentPath(file.path);

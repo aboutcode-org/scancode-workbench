@@ -1,5 +1,8 @@
 const electron = require('electron');
+const remoteMain = require('@electron/remote/main');
+remoteMain.initialize();
 const app = electron.app;
+app.allowRendererProcessReuse = false;
 const BrowserWindow = electron.BrowserWindow;
 const shell = electron.shell;
 const Menu = electron.Menu;
@@ -8,13 +11,18 @@ const path = require('path');
 
 let mainWindow;
 
-
 function createWindow() {
   mainWindow = new BrowserWindow({
     width: 1200,
     height: 800,
-    icon: path.join(__dirname, '/assets/app/app-icon/png/scwb_layered_01.png')
+    icon: path.join(__dirname, '/assets/app/app-icon/png/scwb_layered_01.png'),
+    webPreferences: {
+      nodeIntegration: true,
+      contextIsolation: false,
+      enableRemoteModule: true,
+    }
   });
+  remoteMain.enable(mainWindow.webContents);
   mainWindow.loadURL('file://' + __dirname + '/index.html');
   mainWindow.on('closed', () => mainWindow = null);
   // open all URLs in default browser window
@@ -31,6 +39,7 @@ app.on('ready', () => {
   createWindow();
   Menu.setApplicationMenu(Menu.buildFromTemplate(getTemplate()));
 });
+
 
 // Quit when all windows are closed.
 app.on('window-all-closed', () => {

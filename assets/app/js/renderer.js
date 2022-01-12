@@ -27,7 +27,7 @@ const JsTree = require('./controllers/jsTree');
 const ScanDataTable = require('./controllers/scanDataTable');
 const ConclusionDataTable = require('./controllers/conclusionDataTable');
 
-const dialog = require('electron').remote.dialog;
+const dialog = require('@electron/remote').dialog;
 const fs = require('fs');
 const os = require('os');
 const path = require('path');
@@ -319,9 +319,9 @@ $(document).ready(() => {
         name: 'SQLite File',
         extensions: ['sqlite']
       }]
-    }, (fileNames) => {
-      if (fileNames && fileNames[0]) {
-        loadDatabase(fileNames[0]);
+    }).then(({filePaths}) => {
+      if (filePaths && filePaths[0]) {
+        loadDatabase(filePaths[0]);
         showScanDataButton.trigger('click');
       }
     });
@@ -334,7 +334,8 @@ $(document).ready(() => {
       filters: [
         { name: 'SQLite File', extensions: ['sqlite'] }
       ]
-    }, (newFileName) => {
+    }).then((file) => {
+      const newFileName = file.filePath;
       if (newFileName) {
         const oldFileName = workbenchDB.sequelize.options.storage;
         const reader = fs.createReadStream(oldFileName);
@@ -353,12 +354,11 @@ $(document).ready(() => {
         name: 'JSON File',
         extensions: ['json']
       }]
-    }, (fileNames) => {
-      if (fileNames === undefined) {
+    }).then(({filePaths}) => {
+      if (filePaths === undefined) {
         return;
       }
-
-      const jsonFilePath = fileNames[0];
+      const jsonFilePath = filePaths[0];
       let defaultPath;
 
       if (os.platform() === 'linux') {
@@ -370,7 +370,6 @@ $(document).ready(() => {
         defaultPath = jsonFilePath.replace(/^.*[\\/]/, '').replace(/\.[^/.]+$/, '');
       }
       
-
       // Immediately ask for a SQLite to save and create the database
       dialog.showSaveDialog({
         title: 'Save a SQLite Database File',
@@ -379,25 +378,25 @@ $(document).ready(() => {
           name: 'SQLite File',
           extensions: ['sqlite']
         }]
-      }, (sqliteFileName) => {
-        if (sqliteFileName === undefined) {
+      }).then((sqliteFile) => {
+        const sqliteFilePath = sqliteFile.filePath;
+        if (sqliteFilePath === undefined) {
           return;
         }
 
         // Overwrite existing sqlite file
-        if (fs.existsSync(sqliteFileName)) {
-          fs.unlink(sqliteFileName, (err) => {
+        if (fs.existsSync(sqliteFilePath)) {
+          fs.unlink(sqliteFilePath, (err) => {
             if (err) {
               throw err;
             }
-            console.info(`Deleted ${sqliteFileName}`);
+            console.info(`Deleted ${sqliteFilePath}`);
           });
         }
-
         // Create a new database when importing a json file
         workbenchDB = new WorkbenchDB({
           dbName: 'demo_schema',
-          dbStorage: sqliteFileName,
+          dbStorage: sqliteFilePath,
         });
 
         const progressbar = new Progress('#content', {
@@ -413,7 +412,7 @@ $(document).ready(() => {
             (progress) => progressbar.update(progress / 100)))
           .then(() => progressbar.hide())
           .then(updateViews)
-          .then(showScanDataButton.trigger('click'))
+          .then(() => showScanDataButton.trigger('click'))
           .catch((err) => {
             progressbar.hide();
             if (err instanceof WorkbenchDB.MissingFileInfoError) {
@@ -451,7 +450,7 @@ $(document).ready(() => {
         name: 'JSON File Type',
         extensions: ['json']
       }]
-    }, (fileName) => {
+    }).then((fileName) => {
       if (fileName === undefined) {
         return;
       }
@@ -517,7 +516,7 @@ $(document).ready(() => {
         name: 'JSON File Type',
         extensions: ['json']
       }]
-    }, (fileName) => {
+    }).then((fileName) => {
       if (fileName === undefined) {
         return;
       }
