@@ -35,14 +35,14 @@ Building Requirements
 Linux
 -----
 
-- Python 2.7
+- Python 3.7
 - `Node.js version <https://nodejs.org/en/download/package-manager/>`_ 6.x or later
 - npm 3.10.x or later but <= 5.2.0 (run ``npm install npm@5.2.0 -g``)
 
 MacOS
 -----
 
-- Python 2.7
+- Python 3.7
 - `Node.js <https://nodejs.org/en/>`_ >=6.x or later but <=8.9.4
 - npm 3.10.x or later but <= 5.2.0 (run ``npm install npm@5.2.0 -g``)
 - Command Line Tools for `Xcode <https://developer.apple.com/xcode/downloads/>`_
@@ -53,7 +53,7 @@ Windows
 
 - `Node.js <https://nodejs.org/en/>`_ 6.x or later
 - npm 3.10.x or later but <= 5.2.0 (``run npm install npm@5.2.0 -g``)
-- Python v2.7.x
+- Python v3.7.x
 
   * Make sure your Python path is set. To verify, open a command prompt and type
     ``python --version``. Then, the version of python will be displayed.
