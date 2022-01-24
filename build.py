@@ -134,17 +134,18 @@ def get_git_version():
     # this may fail with exceptions
     cmd = 'git', 'describe', '--tags', '--long', '--dirty',
     version = subprocess.check_output(cmd, stderr=subprocess.STDOUT).strip()
-    dirty = version.endswith(b'-dirty')
+    version = version.decode('utf-8')
+    dirty = version.endswith('-dirty')
     if dirty:
-        version, _, _ = version.rpartition(b'-')
+        version, _, _ = version.rpartition('-')
 
-    version, _, commit = version.rpartition(b'-')
-    tag, _, distance = version.rpartition(b'-')
+    version, _, commit = version.rpartition('-')
+    tag, _, distance = version.rpartition('-')
 
     # lower tag and strip V prefix in tags
-    tag = tag.lower().lstrip(b'v').strip()
+    tag = tag.lower().lstrip('v').strip()
     # strip leading g from git describe commit
-    commit = commit.lstrip(b'g').strip()
+    commit = commit.lstrip('g').strip()
     return tag, int(distance), commit, dirty
 
 
@@ -193,6 +194,7 @@ def build(clean=True, app_name=APP_NAME,
         npm_bin = subprocess.check_output(['npm', 'bin'], stderr=subprocess.STDOUT, shell=True)
     else:
         npm_bin = subprocess.check_output(['npm', 'bin'], stderr=subprocess.STDOUT,)
+    npm_bin = npm_bin.decode('utf-8')
     npm_bin = npm_bin.strip()
     print('using NPM bin at:', npm_bin)
 
@@ -203,7 +205,7 @@ def build(clean=True, app_name=APP_NAME,
             os.makedirs(build_dir)
 
     # run rebuild
-    electron_rebuild = os.path.join(npm_bin.decode(), 'electron-rebuild')
+    electron_rebuild = os.path.join(npm_bin, 'electron-rebuild')
     print('Running electron-rebuild...')
     call([electron_rebuild])
 
@@ -240,7 +242,7 @@ def build(clean=True, app_name=APP_NAME,
         ]
 
     # run the build with electron_packager
-    electron_packager = os.path.join(npm_bin.decode(), 'electron-packager')
+    electron_packager = os.path.join(npm_bin, 'electron-packager')
     cmd = [electron_packager] + electron_args
     print('Running electron-packager...')
     call(cmd)
