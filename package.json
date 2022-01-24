@@ -30,7 +30,7 @@
     "asar": "^3.1.0",
     "chai": "^4.3.4",
     "chai-subset": "^1.6.0",
-    "electron": "13.0.0",
+    "electron": "13.3.0",
     "electron-packager": "^15.4.0",
     "electron-rebuild": "^3.2.5",
     "eslint": "^8.6.0",
