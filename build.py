@@ -134,6 +134,7 @@ def get_git_version():
     # this may fail with exceptions
     cmd = 'git', 'describe', '--tags', '--long', '--dirty',
     version = subprocess.check_output(cmd, stderr=subprocess.STDOUT).strip()
+    version = version.decode('utf-8')
     dirty = version.endswith('-dirty')
     if dirty:
         version, _, _ = version.rpartition('-')
@@ -193,6 +194,7 @@ def build(clean=True, app_name=APP_NAME,
         npm_bin = subprocess.check_output(['npm', 'bin'], stderr=subprocess.STDOUT, shell=True)
     else:
         npm_bin = subprocess.check_output(['npm', 'bin'], stderr=subprocess.STDOUT,)
+    npm_bin = npm_bin.decode('utf-8')
     npm_bin = npm_bin.strip()
     print('using NPM bin at:', npm_bin)
 
