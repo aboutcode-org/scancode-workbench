@@ -86,7 +86,7 @@ class BarChart {
         tooltip
           .style('left', d3.event.pageX - 50 + 'px')
           .style('top', d3.event.pageY - 70 + 'px')
-          .text((d.name + ' (' + d.val + ')'));
+          .text((BarChart.trimName(d.name) + ' (' + d.val + ')'));
       })
       .on('mouseout', () => { tooltip.style('display', 'none'); });
 
@@ -112,7 +112,7 @@ class BarChart {
         tooltip
           .style('left', d3.event.pageX - 50 + 'px')
           .style('top', d3.event.pageY - 70 + 'px')
-          .text((d + displayValue));
+          .text(BarChart.trimName(d) + displayValue);
       })
       .on('mouseout', () => { tooltip.style('display', 'none'); })
       .attr('data-value', (d) => {
