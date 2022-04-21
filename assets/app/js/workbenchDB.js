@@ -85,28 +85,8 @@ class WorkbenchDB {
       .then((count) => count ? count.files_count : 0);
   }
 
-  // Uses the conclusions table to do a findAll query
-  findAllConclusions(query) {
-    return this.sync.then((db) => db.Conclusion.findAll(query));
-  }
 
-  // Uses the conclusions table to do a findOne query
-  findConclusion(query) {
-    return this.sync.then((db) => db.Conclusion.findOne(query));
-  }
 
-  // Uses the conclusions table to create or set a conclusion
-  setConclusion(conclusion) {
-    return this.findConclusion({ where: { path: conclusion.path } })
-      .then((dbConclusion) => {
-        if (dbConclusion) {
-          return dbConclusion.update(conclusion);
-        }
-        else {
-          return this.db.Conclusion.create(conclusion);
-        }
-      });
-  }
 
   // Uses the files table to do a findOne query
   findOne(query) {
@@ -166,14 +146,6 @@ class WorkbenchDB {
       attributes: ['id', 'path', 'parent', 'name', 'type']
     });
 
-    const analyzedPromise = this.db.Conclusion.findAll({where: {review_status: 'Analyzed'}, attributes: ['fileId']})
-      .then((concs) => concs.map((conc) => conc.fileId));
-    const NAPromise = this.db.Conclusion.findAll({where: {review_status: 'Attention'}, attributes: ['fileId']})
-      .then((concs) => concs.map((conc) => conc.fileId));
-    const OCPromise = this.db.Conclusion.findAll({where: {review_status: 'Original'}, attributes: ['fileId']})
-      .then((concs) => concs.map((conc) => conc.fileId));
-    const NRPromise = this.db.Conclusion.findAll({where: {review_status: 'NR'}, attributes: ['fileId']})
-      .then((concs) => concs.map((conc) => conc.fileId));
     const pkgPromise = this.db.Package.findAll({attributes: ['fileId']})
       .then((pkgs) => pkgs.map((pkg) => pkg.fileId));
     const approvedPromise = this.db.LicensePolicy.findAll({where: {label: 'Approved License'}, attributes: ['fileId']})
@@ -185,7 +157,7 @@ class WorkbenchDB {
     const restrictedPromise = this.db.LicensePolicy.findAll({where: {label: 'Restricted License'}, attributes: ['fileId']})
       .then((policies) => policies.map((policy) => policy.fileId));
 
-    return Promise.all([analyzedPromise, NAPromise, OCPromise, NRPromise,  pkgPromise, approvedPromise, prohibitedPromise, recommendedPromise, restrictedPromise]).then((promises) => this.sync
+    return Promise.all([pkgPromise, approvedPromise, prohibitedPromise, recommendedPromise, restrictedPromise]).then((promises) => this.sync
       .then((db) => db.File.findAll(query))
       .then((files) => {
         return files.map((file) => {
@@ -209,41 +181,12 @@ class WorkbenchDB {
   determineJSTreeType(file, promises) {
     let type = '';
 
-    const analyzed = promises[0];
-    const na = promises[1];
-    const oc = promises[2];
-    const nr = promises[3];
-    const packages = promises[4];
-    const approvedPolicies = promises[5];
-    const prohibitedPolicies = promises[6];
-    const recommendedPolicies = promises[7];
-    const restrictedPolicies = promises[8];
-
-    if (analyzed.includes(file.id)) {
-      if (file.type === 'file') {
-        type = 'analyzedFile';
-      } else if (file.type === 'directory') {
-        type = 'analyzedDir'; 
-      }
-    } else if (na.includes(file.id)) {
-      if (file.type === 'file') {
-        type = 'naFile';
-      } else if (file.type === 'directory') {
-        type = 'naDir'; 
-      }
-    } else if (oc.includes(file.id)) {
-      if (file.type === 'file') {
-        type = 'ocFile';
-      } else if (file.type === 'directory') {
-        type = 'ocDir'; 
-      }
-    } else if (nr.includes(file.id)) {
-      if (file.type === 'file') {
-        type = 'nrFile';
-      } else if (file.type === 'directory') {
-        type = 'nrDir'; 
-      }
-    } else if (packages.includes(file.id)) {
+    const packages = promises[0];
+    const approvedPolicies = promises[1];
+    const prohibitedPolicies = promises[2];
+    const recommendedPolicies = promises[3];
+    const restrictedPolicies = promises[4];
+    if (packages.includes(file.id)) {
       if (file.type === 'file') {
         type = 'packageFile';
       } else if (file.type === 'directory') {
@@ -415,12 +358,7 @@ class WorkbenchDB {
         .then(() => this.db.Package.bulkCreate(this._addExtraFields(files, 'packages'), options))
         .then(() => this.db.Email.bulkCreate(this._addExtraFields(files, 'emails'), options))
         .then(() => this.db.Url.bulkCreate(this._addExtraFields(files, 'urls'), options))
-        .then(() => this.db.ScanError.bulkCreate(this._addExtraFields(files, 'scan_errors'), options))
-        .then(() => this.sequelize.Promise.each(files, (file) => {
-          if (file.conclusion) {
-            return this.db.Conclusion.create(file.conclusion, options);
-          }
-        }));
+        .then(() => this.db.ScanError.bulkCreate(this._addExtraFields(files, 'scan_errors'), options));
     });
   }
 

@@ -378,9 +378,6 @@ describe('checkWorkbenchDB', () => {
         .then(() => workbenchDB.setConclusion(conclusion))
         .then(() => workbenchDB.db.Conclusion.count())
         .then((rowCount) => assert.strictEqual(rowCount, 1))
-        .then(() => workbenchDB.findConclusion({
-          where: { path: 'samples'}
-        }))
         .then((row) => assert.containSubset(row.toJSON(), conclusion))
         .then(() => workbenchDB.setConclusion(conclusion2))
         .then(() => workbenchDB.db.Conclusion.count())
