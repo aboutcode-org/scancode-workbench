@@ -35,7 +35,7 @@
     "electron-rebuild": "^3.2.5",
     "eslint": "^8.6.0",
     "globby": "^12.0.2",
-    "grunt": "^1.4.1",
+    "grunt": "^1.5.2",
     "jquery": "^3.6.0",
     "jsdom": "^19.0.0",
     "mocha": "^9.1.3",
