@@ -121,7 +121,7 @@ $(document).ready(() => {
   // Save a SQLite Database file
   saveSQLiteFileButton.click(saveSQLite);
 
-  // Show ScanData DataTable. Hide node view and conclusion summary table
+  // Show ScanData DataTable. Hide node view
   showScanDataButton.click(() => {
     splitter.show();
     scanDataTable.redraw();
@@ -414,7 +414,7 @@ $(document).ready(() => {
     });
   }
 
-  /** Export JSON file with original ScanCode data and conclusions that have been created */
+  /** Export JSON file with original ScanCode data */
   function exportJson() {
     dialog.showSaveDialog({
       properties: ['openFile'],
@@ -455,15 +455,14 @@ $(document).ready(() => {
 
       Promise.all([scanCodeInfoPromise, workbenchInfoPromise,
         filesCountPromise, scanDataFilesPromise])
-        .then(([scanCodeInfo, workbenchInfo, filesCount, scanDataFiles, conclusions]) => {
+        .then(([scanCodeInfo, workbenchInfo, filesCount, scanDataFiles]) => {
           const json = {
             workbench_notice: workbenchInfo.workbench_notice,
             workbench_version: workbenchInfo.workbench_version,
             scancode_version: scanCodeInfo.scancode_version,
             scancode_options: scanCodeInfo.scancode_options,
             files_count: filesCount,
-            files: scanDataFiles,
-            conclusions: conclusions
+            files: scanDataFiles
           };
 
           fs.writeFile(fileName, JSON.stringify(json), (err) => {

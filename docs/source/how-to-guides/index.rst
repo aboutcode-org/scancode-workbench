@@ -18,7 +18,6 @@ a ``-clipeu`` scan of ``e2fsprogs-1.45.6.tar.gz``.
    load-your-data/index
    lookup-scan-version/index
    explore-your-data/index
-   create-conclusions/index
    export-json-records/index
    troubleshooting/index
    special-topics/index

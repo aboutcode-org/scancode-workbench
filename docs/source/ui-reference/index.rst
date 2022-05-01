@@ -15,4 +15,3 @@
    license-info-dashboard
    package-info-dashboard
    chart-summary-view
-   conclusion-view
