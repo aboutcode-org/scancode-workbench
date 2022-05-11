@@ -49,7 +49,7 @@ information on how to use ScanCode Workbench.
 
 You'll need [Node.js](https://nodejs.org) (which comes with [npm](http://npmjs.com)) 
 installed on your computer in order to build this app. For a list of platform 
-specific requirements, see the Building section of the [documentation](https://scancode-workbench.readthedocs.io/en/develop/basics/building.html).
+specific requirements, see the Building section of the [documentation](https://scancode-workbench.readthedocs.io/en/develop/contribute/building.html).
 Then, from your command line:
 
 ```bash
