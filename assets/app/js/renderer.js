@@ -415,7 +415,7 @@ $(document).ready(() => {
           .then(() => showScanDataButton.trigger('click'))
           .catch((err) => {
             progressbar.hide();
-            if (err instanceof WorkbenchDB.MissingFileInfoError) {
+            if (WorkbenchDB.MissingFileInfoError && err instanceof WorkbenchDB.MissingFileInfoError) {
               dialog.showErrorBox(
                 'Missing File Type Information',
                 'Missing file \'type\' information in the scanned data. ' +
