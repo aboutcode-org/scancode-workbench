@@ -89,11 +89,6 @@ function getTemplate() {
           accelerator: 'CmdOrCtrl+E',
           click: sendEventToRenderer('export-JSON')
         },
-        {
-          label: 'Export Conclusions JSON File',
-          accelerator: 'CmdOrCtrl+J',
-          click: sendEventToRenderer('export-JSON-conclusions-only')
-        }
       ]
     },
     {
@@ -148,12 +143,6 @@ function getTemplate() {
           accelerator: process.platform === 'darwin' ?
             'Cmd+Shift+D' : 'Ctrl+Shift+D',
           click: sendEventToRenderer('chart-summary-view')
-        },
-        {
-          label: 'Conclusion Summary View',
-          accelerator: process.platform === 'darwin' ?
-            'Cmd+Shift+C' : 'Ctrl+Shift+C',
-          click: sendEventToRenderer('conclusion-summary-view')
         },
         {
           type: 'separator'

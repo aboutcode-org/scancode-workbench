@@ -331,63 +331,6 @@ describe('checkWorkbenchDB', () => {
     });
   });
 
-  describe('setConclusion', () => {
-    it('should create a conclusion in Component Table', () => {
-      const workbenchDB = new WorkbenchDB();
-      const conclusion = {
-        'license_expression': 'apache-1.1',
-        'copyright': '(c) 2004 by Henrik Ravn',
-        'copyrights': [
-          {
-            'statements': [
-              '(c) 2004 by Henrik Ravn'
-            ]
-          }
-        ],
-        'path': 'samples',
-        'review_status': 'attention',
-        'name': 'samples',
-        'version': '1.0',
-        'owner': 'Jean-loup Gailly, Brian Raiter',
-        'homepage_url': 'http://www.jboss.org/',
-        'programming_language': 'C',
-        'notes': ''
-      };
-
-      const conclusion2 = {
-        'license_expression': 'zlib',
-        'copyright': 'Copyright (c) 1995-2013 Jean-loup Gailly and Mark Adler',
-        'copyrights': [
-          {
-            'statements': [
-              'Copyright (c) 1995-2013 Jean-loup Gailly and Mark Adler'
-            ]
-          }
-        ],
-        'path': 'samples/zlib',
-        'review_status': 'analyzed',
-        'name': 'zlib',
-        'version': '1.0',
-        'owner': 'Jean-loup Gailly and Mark Adler',
-        'homepage_url': 'http://www.zlib.net/',
-        'programming_language': 'C#',
-        'notes': ''
-      };
-
-      return workbenchDB.sync
-        .then(() => workbenchDB.setConclusion(conclusion))
-        .then(() => workbenchDB.db.Conclusion.count())
-        .then((rowCount) => assert.strictEqual(rowCount, 1))
-        .then(() => workbenchDB.findConclusion({
-          where: { path: 'samples'}
-        }))
-        .then((row) => assert.containSubset(row.toJSON(), conclusion))
-        .then(() => workbenchDB.setConclusion(conclusion2))
-        .then(() => workbenchDB.db.Conclusion.count())
-        .then((rowCount) => assert.strictEqual(rowCount, 2));
-    });
-  });
-
   describe('getFileCount', () => {
     it('should return the ScanCode files_count', () => {
       const workbenchDB = new WorkbenchDB();

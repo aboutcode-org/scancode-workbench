@@ -18,14 +18,12 @@ const WorkbenchDB = require('./workbenchDB');
 const Splitter = require('./helpers/splitter');
 const Progress = require('./helpers/progress');
 
-const ConclusionDialog = require('./controllers/conclusionDialog');
 const FileDashboard = require('./controllers/fileDashboard');
 const LicenseDashboard = require('./controllers/licenseDashboard');
 const PackageDashboard = require('./controllers/packageDashboard');
 const BarChart = require('./controllers/barChart');
 const JsTree = require('./controllers/jsTree');
 const ScanDataTable = require('./controllers/scanDataTable');
-const ConclusionDataTable = require('./controllers/conclusionDataTable');
 
 const dialog = require('@electron/remote').dialog;
 const fs = require('fs');
@@ -69,21 +67,9 @@ $(document).ready(() => {
 
   const scanDataTable = new ScanDataTable('#tab-scandata', workbenchDB);
 
-  const conclusionsTable = new ConclusionDataTable('#tab-conclusion', workbenchDB)
-    .on('export-json', exportJsonConclusions);
 
-  const conclusionDialog = new ConclusionDialog('#conclusionDialog', workbenchDB)
-    .on('save', () => {
-      conclusionsTable.needsReload(true);
-      redrawCurrentView();
-    })
-    .on('delete', () => {
-      conclusionsTable.needsReload(true);
-      redrawCurrentView();
-    });
 
   const jstree = new JsTree('#jstree', workbenchDB)
-    .on('node-edit', (node) => conclusionDialog.show(node.id))
     .on('node-selected', (node) => {
       updateViewsByPath(node.id);
     });
@@ -120,7 +106,6 @@ $(document).ready(() => {
   const saveSQLiteFileButton = $('#save-file');
   const openSQLiteFileButton = $('#open-file');
   const showScanDataButton = $('#show-tab-scandata');
-  const showConclusionButton = $('#show-tab-conclusion');
   const showBarChartButton = $('#show-tab-barchart');
   const showFileDashboardButton = $('#show-tab-file-dashboard');
   const showLicenseDashboardButton = $('#show-tab-license-dashboard');
@@ -136,16 +121,10 @@ $(document).ready(() => {
   // Save a SQLite Database file
   saveSQLiteFileButton.click(saveSQLite);
 
-  // Show ScanData DataTable. Hide node view and conclusion summary table
+  // Show ScanData DataTable. Hide node view
   showScanDataButton.click(() => {
     splitter.show();
     scanDataTable.redraw();
-  });
-
-  // Show conclusion summary table. Hide DataTable and node view
-  showConclusionButton.click(() => {
-    splitter.show();
-    conclusionsTable.redraw();
   });
 
   showBarChartButton.click(() => {
@@ -180,13 +159,11 @@ $(document).ready(() => {
   });
 
   ipcRenderer.on('table-view', () => showScanDataButton.trigger('click'));
-  ipcRenderer.on('conclusion-summary-view', () => showConclusionButton.trigger('click'));
   ipcRenderer.on('open-SQLite', () => openSQLiteFileButton.trigger('click'));
   ipcRenderer.on('chart-summary-view', () => showBarChartButton.trigger('click'));
   ipcRenderer.on('save-SQLite', () => saveSQLiteFileButton.trigger('click'));
   ipcRenderer.on('import-JSON', importJson);
   ipcRenderer.on('export-JSON', exportJson);
-  ipcRenderer.on('export-JSON-conclusions-only', exportJsonConclusions);
   ipcRenderer.on('get-ScanHeader', getScanHeader);
   ipcRenderer.on('zoom-reset', zoomReset);
   ipcRenderer.on('zoom-in', zoomIn);
@@ -202,10 +179,8 @@ $(document).ready(() => {
     $('#package-dashboard-title-text').text('Package Info Dashboard - ' + path);
     scanDataTable.columns(0).search(path);
 
-    conclusionDialog.selectedPath(path);
     jstree.selectedPath(path);
     scanDataTable.selectedPath(path);
-    conclusionsTable.selectedPath(path);
     fileDashboard.selectedPath(path);
     licenseDashboard.selectedPath(path);
     packageDashboard.selectedPath(path);
@@ -291,10 +266,8 @@ $(document).ready(() => {
         scanDataTable.clearColumnFilters();
 
         // update all views with the new database.
-        conclusionDialog.db(workbenchDB);
         jstree.db(workbenchDB);
         scanDataTable.db(workbenchDB);
-        conclusionsTable.db(workbenchDB);
         fileDashboard.db(workbenchDB);
         licenseDashboard.db(workbenchDB);
         packageDashboard.db(workbenchDB);
@@ -441,7 +414,7 @@ $(document).ready(() => {
     });
   }
 
-  /** Export JSON file with original ScanCode data and conclusions that have been created */
+  /** Export JSON file with original ScanCode data */
   function exportJson() {
     dialog.showSaveDialog({
       properties: ['openFile'],
@@ -473,11 +446,6 @@ $(document).ready(() => {
         }
       });
 
-      const conclusionsPromise = workbenchDB.findAllConclusions({
-        attributes: {
-          exclude: ['id', 'createdAt', 'updatedAt']
-        }
-      });
 
       const filesCountPromise = workbenchDB.getFileCount({
         attributes: {
@@ -486,59 +454,15 @@ $(document).ready(() => {
       });
 
       Promise.all([scanCodeInfoPromise, workbenchInfoPromise,
-        filesCountPromise, scanDataFilesPromise, conclusionsPromise])
-        .then(([scanCodeInfo, workbenchInfo, filesCount, scanDataFiles, conclusions]) => {
+        filesCountPromise, scanDataFilesPromise])
+        .then(([scanCodeInfo, workbenchInfo, filesCount, scanDataFiles]) => {
           const json = {
             workbench_notice: workbenchInfo.workbench_notice,
             workbench_version: workbenchInfo.workbench_version,
             scancode_version: scanCodeInfo.scancode_version,
             scancode_options: scanCodeInfo.scancode_options,
             files_count: filesCount,
-            files: scanDataFiles,
-            conclusions: conclusions
-          };
-
-          fs.writeFile(fileName, JSON.stringify(json), (err) => {
-            if (err) {
-              throw err;
-            }
-          });
-        });
-    });
-  }
-
-  /** Export JSON file with only conclusions that have been created */
-  function exportJsonConclusions() {
-    dialog.showSaveDialog({
-      properties: ['openFile'],
-      title: 'Save as JSON file',
-      filters: [{
-        name: 'JSON File Type',
-        extensions: ['json']
-      }]
-    }).then((fileName) => {
-      if (fileName === undefined) {
-        return;
-      }
-
-      const workbenchInfoPromise = workbenchDB.getWorkbenchInfo({
-        attributes: {
-          exclude: ['id', 'createdAt', 'updatedAt']
-        }
-      });
-
-      const conclusionsPromise = workbenchDB.findAllConclusions({
-        attributes: {
-          exclude: ['id', 'createdAt', 'updatedAt']
-        }
-      });
-
-      Promise.all([workbenchInfoPromise, conclusionsPromise])
-        .then(([workbenchInfo, conclusions]) => {
-          const json = {
-            workbench_notice: workbenchInfo.workbench_notice,
-            workbench_version: workbenchInfo.workbench_version,
-            conclusions: conclusions
+            files: scanDataFiles
           };
 
           fs.writeFile(fileName, JSON.stringify(json), (err) => {

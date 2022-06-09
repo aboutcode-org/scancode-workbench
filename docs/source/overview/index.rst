@@ -11,8 +11,6 @@ scans.  With ScanCode Workbench, you can:
 -  Load a `ScanCode Toolkit <https://github.com/nexB/scancode-toolkit>`__ ``.json`` scan of
    your codebase.
 -  Use an advanced visual UI to analyze license and other notices identified by ScanCode Toolkit.
--  Record your conclusions about the effective license(s) for a component or package.
--  Easily export your conclusions as a ``.json`` file.
 
 Organization of the Documentation
 =================================

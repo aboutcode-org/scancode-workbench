@@ -5,14 +5,9 @@
 
 ScanCode Workbench provides an advanced visual UI to help you quickly evaluate
 license and other notices identified by 
-[ScanCode](https://github.com/nexB/scancode-toolkit/) and record your conclusion
-about the effective license(s) for a component.
+[ScanCode](https://github.com/nexB/scancode-toolkit/).
 [ScanCode](https://github.com/nexB/scancode-toolkit/) detects licenses, copyrights 
-and other interesting information in your code. ScanCode Workbench allows you to take the
-scan results from ScanCode and create conclusions. By creating these conclusions 
-within your codebase, you are creating a software inventory of your product. 
-The conclusions (Concluded License, Concluded Owner, etc.) you make when 
-creating your conclusion can be exported as a JSON file or saved as SQLite file.
+and other interesting information in your code.
 
 ScanCode Workbench is based on
 [Electron](https://electron.atom.io/) and will be the primary desktop/GUI tool 

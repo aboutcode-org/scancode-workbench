@@ -142,13 +142,8 @@ class JsTree extends Controller {
           }
         },
         'contextmenu': {
-          'items': (node) => {
-            return {
-              'edit_conclusion': {
-                'label': 'Edit Conclusion',
-                'action': () => this.getHandler('node-edit')(node)
-              }
-            };
+          'items': () => {
+            return {};
           }
         }
       })

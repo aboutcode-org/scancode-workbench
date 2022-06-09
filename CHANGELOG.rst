@@ -16,6 +16,7 @@ New Features
 - Update app icon to a more visible one #382
 - Add color to DataTables "Progress..." pop-up #407
 - Update the display of scan headers #400
+- Remove ability to edit conclusions & remove conclusions view
 
 Bug Fixes
 ~~~~~~~~~
