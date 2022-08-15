@@ -1,0 +1,31 @@
+.navbar-wrapper {
+  float: left;
+  position: fixed;
+  margin: 0;
+  height: 100vh;
+}
+.pro-sidebar-footer {
+  border: 0 !important;
+}
+
+#toggle-btn:hover,  #toggle-btn:active,  #toggle-btn:active{
+  outline: none;
+  box-shadow: none;
+}
+
+#toggle-btn {
+  width: 99%;
+  margin: auto;
+}
+.collapsed #toggle-btn {
+  width: 99%;
+  margin: auto;
+}
+.pro-icon-wrapper {
+  color: #fff;
+}
+.dummy-sidebar {
+  width: 80px;
+  min-width: 80px;
+  min-height: 100vh;
+}

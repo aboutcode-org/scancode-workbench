@@ -1,0 +1,21 @@
+.import-fallback {
+  text-align: center;
+}
+.import-fallback a {
+  text-decoration: none;
+}
+.import-fallback img {
+  width: 90%;
+  max-width: 700px;
+  user-select: none;
+  -moz-user-select: none;
+  -webkit-user-drag: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+}
+.import-fallback .credits {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  margin: 15px;
+}

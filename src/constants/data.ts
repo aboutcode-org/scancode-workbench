@@ -1,0 +1,1 @@
+export const LEGEND_LIMIT = 8;

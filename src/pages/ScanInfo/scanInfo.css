@@ -1,0 +1,17 @@
+.scan-info {
+  padding: 10px;
+}
+.scan-info table {
+  max-width: 100%;
+  border: 1px solid black;
+  border-collapse: collapse;
+}
+.scan-info table td {
+  border: 1px solid black;
+  border-collapse: collapse;
+  padding: 15px;
+}
+.react-json-view {
+  max-height: 400px;
+  overflow: scroll;
+}

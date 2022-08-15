@@ -1,87 +1,16 @@
 {
-    "env": {
-        "browser": true,
-        "es6": true,
-        "node": true,
-        "jquery": true
-    },
-    "globals": {
-        "c3": false,
-        "d3": false,
-        "ProgressBar": false,
-        "Split": false,
-        "describe": false,
-        "it": false
-    },
-    "extends": "eslint:recommended",
-    "parserOptions": {
-        "sourceType": "module"
-    },
-    "rules": {
-        "indent": [
-            "error",
-            2
-        ],
-        "linebreak-style": [
-            "error",
-            "unix"
-        ],
-        "quotes": [
-            "error",
-            "single",
-            {
-                "avoidEscape": true,
-                "allowTemplateLiterals": true
-            }
-        ],
-        "semi": [
-            "error",
-            "always"
-        ],
-        "no-console": [
-            "error",
-            {
-                "allow": [
-                    "warn",
-                    "error",
-                    "info",
-                    "time",
-                    "log",
-                    "timeEnd"
-                ]
-            }
-        ],
-        "space-infix-ops": [
-            "error",
-            {
-                "int32Hint": false
-            }
-        ],
-        "space-before-blocks": "error",
-        "keyword-spacing": [
-            "error",
-            {
-                "before": true
-            }
-        ],
-        "one-var": [
-            "error",
-            "never"
-        ],
-        "padded-blocks": [
-            "error",
-            "never"
-        ],
-        "space-in-parens": [
-            "error",
-            "never"
-        ],
-        "prefer-const": "error",
-        "prefer-arrow-callback": "error",
-        "arrow-spacing": "error",
-        "arrow-parens": [
-            "error",
-            "always"
-        ]
-    }
+  "env": {
+    "browser": true,
+    "es6": true,
+    "node": true
+  },
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/eslint-recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:import/recommended",
+    "plugin:import/electron",
+    "plugin:import/typescript"
+  ],
+  "parser": "@typescript-eslint/parser"
 }

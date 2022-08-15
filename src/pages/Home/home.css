@@ -1,0 +1,87 @@
+/* .home-page {
+
+} */
+#welcomepage-title{
+  text-align: center;
+}
+#welcomepage-title .logo {
+  font-family: 'Raleway', Helvetica, san-serif;
+  color: #0064cd;
+}
+#welcomepage-title .strong-logo {
+  font-weight: bolder;
+  font-family: 'Raleway Black', Helvetica, san-serif;
+}
+
+.quickActions{
+  text-align: center;
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  /* margin: 3rem 2rem; */
+  margin-bottom: 1rem;
+  /* padding: 1rem; */
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+}
+
+.quickActions svg{
+  margin-bottom: 15px;
+}
+
+.quickActions div:hover {
+  /* background-color: #f3f9ff; */
+  background-color: #f9fafb;
+}
+
+.quickActions div {
+  border: 2px dashed #0685b9;
+  display: inline-block;
+  width: 25%;
+  text-align: center;
+  cursor: pointer;
+  min-width: 200px;
+  padding: 1rem;
+  margin-top: 2rem;
+  margin-left: 20px;
+  margin-right: 20px;
+}
+
+.quickActionIcon{
+  font-size: 60px;
+  /* margin-bottom: 20px; */
+}
+
+/* .history h5 {
+  margin-left: 25px;
+} */
+
+.quicklinks, .history {
+  margin-top: 32px;
+  padding-left: 2rem;
+}
+.history table{
+  min-width: 80%;
+  max-width: 95%;
+}
+.history table tr .file-path{
+  min-width: 400px;
+  max-width: 60vw;
+  word-wrap: break-word;
+  padding-right: 10px;
+}
+.history button {
+  margin: 5px;
+  margin-left: 0px;
+  margin-right: 20px;
+}
+
+/* .btn-group-horizontal{
+
+} */
+
+.btn-group-horizontal a{
+  margin: 0px;
+  margin-top: .5rem;
+  margin-right: 1rem;
+}

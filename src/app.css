@@ -1,0 +1,78 @@
+/*---------------------------------------
+  General
+-----------------------------------------*/
+body {
+  font-family: 'Lato', Helvetica, sans-serif;
+  height: 100%;
+  width: 100%;
+  position: absolute;
+}
+
+
+/*---------------------------------------
+  Font source mapping
+-----------------------------------------*/
+@font-face {
+  font-family: 'Raleway';
+  font-style: normal;
+  font-weight: 400;
+  src: url('./lib/css/fonts/Raleway-Regular.ttf');
+  src: local('?'),
+          url('./lib/css/fonts/Raleway-Regular.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Raleway Black';
+  font-style: normal;
+  font-weight: 800;
+  src: url('./lib/css/fonts/Raleway-Black.ttf');
+  src: local('?'),
+          url('./lib/css/fonts/Raleway-Black.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Lato';
+  font-style: normal;
+  font-weight: 400;
+  src: url('./lib/css/fonts/Lato-Regular.ttf');
+  src: local('?'),
+          url('./lib/css/fonts/Lato-Regular.ttf') format('truetype');
+}
+
+
+/* Pie chart pages */
+.card {
+  border-radius: 2px;
+  box-shadow: 1px 0 8px -3px #b1b1b1;
+  background-color: #FFFFFF;
+  margin-bottom: 30px;
+}
+
+.card .content {
+  text-align: center;
+  padding: 15px 15px 0;
+}
+
+.card .header {
+  text-align: center;
+  padding: 15px 15px;
+}
+
+.card .value {
+  margin: 0;
+  margin-left: auto;
+  margin-right: auto;
+  color: #3898fc;
+  font-weight: 500;
+  padding-bottom: 15px;
+}
+
+.card .category {
+  font-size: 17px;
+  font-weight: 400;
+  color: #555;
+}
+
+.c3 svg {
+  font-family: 'Lato', Helvetica, san-serif;
+}

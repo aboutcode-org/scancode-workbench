@@ -1,0 +1,45 @@
+.navbar-wrapper {
+  float: left;
+  position: fixed;
+  margin: 0;
+  height: 100vh;
+  padding: 0;
+}
+.pro-sidebar.collapsed, .dummy-sidebar {
+  width: 55px;
+  min-width: 45px;
+  min-height: 100vh;
+}
+.pro-sidebar .pro-menu {
+  padding: 0;
+}
+.pro-sidebar .pro-menu .pro-menu-item > .pro-inner-item {
+  padding: 8px 10px;
+  cursor: pointer;
+}
+.pro-sidebar .pro-menu.shaped .pro-menu-item > .pro-inner-item > .pro-icon-wrapper {
+  background: none;
+}
+.pro-sidebar .pro-menu .pro-menu-item.active{
+  background-color: #2b2b2b;
+}
+.pro-sidebar-footer {
+  border: 0 !important;
+}
+
+#toggle-btn:hover,  #toggle-btn:active,  #toggle-btn:active{
+  outline: none;
+  box-shadow: none;
+}
+
+#toggle-btn {
+  width: 99%;
+  margin: auto;
+}
+.collapsed #toggle-btn {
+  width: 99%;
+  margin: auto;
+}
+.pro-icon-wrapper {
+  color: #fff;
+}

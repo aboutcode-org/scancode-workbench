@@ -1,0 +1,24 @@
+.dash-cards {
+  justify-content: space-around;
+}
+.dash-cards .card {
+  background-color: #fff;
+  padding: 15px;
+  /* box-shadow: 1px 0 8px -3px #b1b1b1; */
+}
+
+.info-card {
+  min-height: 100px;
+}
+.chart-card {
+  min-height: 450px;
+}
+@media only screen and (max-width: 1200px){
+  .info-card {
+    min-height: 140px;
+  }
+}
+
+/* .info-card .title{
+
+} */
