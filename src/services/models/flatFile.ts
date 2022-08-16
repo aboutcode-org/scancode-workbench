@@ -62,6 +62,7 @@ export interface FlatFileAttributes {
   mime_type: DataTypes.StringDataType,
   file_type: DataTypes.StringDataType,
   programming_language: DataTypes.StringDataType,
+  for_packages: CustomJSONType,
   is_binary: boolean,
   is_text: boolean,
   is_archive: boolean,
@@ -154,6 +155,7 @@ export default function flatFileModel(sequelize: Sequelize) {
       mime_type: {type: DataTypes.STRING, defaultValue: ''},
       file_type: {type: DataTypes.STRING, defaultValue: ''},
       programming_language: {type: DataTypes.STRING, defaultValue: ''},
+      for_packages: jsonDataType('for_packages'),
       is_binary: DataTypes.BOOLEAN,
       is_text: DataTypes.BOOLEAN,
       is_archive: DataTypes.BOOLEAN,
@@ -228,9 +230,9 @@ export function flattenFile(file: any) {
   return {
     path: file.path,
     parent: parentPath(file.path),
-    copyright_statements: getCopyrightValues(file.copyrights),
-    copyright_holders: getCopyrightValues(file.holders),
-    copyright_authors: getCopyrightValues(file.authors),
+    copyright_statements: getCopyrightValues(file.copyrights, 'copyright'),
+    copyright_holders: getCopyrightValues(file.holders, 'holder'),
+    copyright_authors: getCopyrightValues(file.authors, 'author'),
     copyright_start_line: getValues(file.holders, 'start_line'),
     copyright_end_line: getValues(file.holders, 'end_line'),
     license_policy: getLicensePolicyLabel(file.license_policy),
@@ -265,6 +267,7 @@ export function flattenFile(file: any) {
     mime_type: file.mime_type,
     file_type: file.file_type,
     programming_language: file.programming_language,
+    for_packages: file.for_packages,
     is_binary: file.is_binary,
     is_text: file.is_text,
     is_archive: file.is_archive,
@@ -310,11 +313,11 @@ function getLicensePolicyLabel(policy: any) {
   return [policy['label']];
 }
 
-function getCopyrightValues(array: any) {
-  if (!array) {
+function getCopyrightValues(array: any, field: | 'copyright' | 'holder' | 'author') {
+  if (!array || !Array.isArray(array)) {
     array = [];
   }
-  const values = array.map((val: any) => val['value']);
+  const values = array.map((val: any) => val[field]);
   // must wrap this in a list for datatables display; not sure why
   return [values];
 }

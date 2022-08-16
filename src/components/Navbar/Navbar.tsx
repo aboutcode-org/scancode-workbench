@@ -5,9 +5,10 @@ import { ProSidebar, Menu, MenuItem, SidebarFooter, SidebarContent } from 'react
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArchive, faBars, faChartColumn, faGavel, faHome, faInfoCircle, faFileCode, faTable, faFileLines } from '@fortawesome/free-solid-svg-icons';
 
+import { ROUTES } from '../../constants/routes';
+
 import 'react-pro-sidebar/dist/css/styles.css';
 import './navbar.css';
-import { ROUTES } from '../../constants/routes';
 
 const MENU_ITEMS = [
     {

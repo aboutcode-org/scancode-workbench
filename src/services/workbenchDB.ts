@@ -526,8 +526,6 @@ export class WorkbenchDB {
 
       const fileAttr = file[attribute] || [];
 
-      DebugLogger("add file", "Add extra field for attr:", attribute);
-      
       return $.map(fileAttr, (value) => {
         if (attribute === 'license_expressions') {
           return {
@@ -564,11 +562,11 @@ export class WorkbenchDB {
     const holders = file.holders;
     const authors = file.authors;
     
-    const newLines: any[] = [];
-    const newStatements: any[] = [];
+    const newLines: { start_line: string, end_line: string }[] = [];
+    const newStatements: string[] = [];
     if (Array.isArray(statements)) {
       statements.forEach((statement) => {
-        const value = statement['value'];
+        const value = statement['copyright'];
         if (!value) {
           return;
         }
@@ -582,20 +580,14 @@ export class WorkbenchDB {
       });
     }
     
-    const newHolders: any = [];
+    let newHolders: string[] = [];
     if (Array.isArray(holders)) {
-      holders.forEach((holder) => {
-        const value = holder['value'];
-        newHolders.push(value);
-      });
+      newHolders = holders.map(holder => holder['holder']);
     }
 
-    const newAuthors: any = [];
+    let newAuthors: string[] = [];
     if (Array.isArray(authors)) {
-      authors.forEach((author) => {
-        const value = author['value'];
-        newAuthors.push(value);
-      });
+      newAuthors = authors.map((author) => author['author']);
     }
 
     const newCopyrights = [];

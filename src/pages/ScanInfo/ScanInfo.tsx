@@ -10,7 +10,6 @@ import './scanInfo.css';
 interface ScanInfo {
   workbench_version: string,
   workbench_notice: string,
-  header_content: string,
   files_count: number,
   output_format_version: string,
   spdx_license_list_version: string,
@@ -19,6 +18,7 @@ interface ScanInfo {
   platform: string,
   platform_version: string,
   python_version: string,
+  raw_header_content: string,
 }
 
 function parseIfValidJson(str: unknown){
@@ -53,7 +53,6 @@ const ScanInfo = () => {
             setParsedScanInfo({
               workbench_version: rawInfo.getDataValue('workbench_version')?.toString({}) || "",
               workbench_notice: rawInfo.getDataValue('workbench_notice')?.toString({}) || "",
-              header_content: rawInfo.getDataValue('header_content')?.toString({}) || "",
               files_count: Number(rawInfo.getDataValue('files_count')),
               output_format_version: rawInfo.getDataValue('output_format_version')?.toString({}) || "",
               spdx_license_list_version: rawInfo.getDataValue('spdx_license_list_version')?.toString({}) || "",
@@ -62,6 +61,7 @@ const ScanInfo = () => {
               platform: rawInfo.getDataValue('platform')?.toString({}) || "",
               platform_version: rawInfo.getDataValue('platform_version')?.toString({}) || "",
               python_version: rawInfo.getDataValue('python_version')?.toString({}) || "",
+              raw_header_content: rawInfo.getDataValue('header_content')?.toString({}) || "",
             })
           })
       });

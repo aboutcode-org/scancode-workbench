@@ -10,15 +10,7 @@ module.exports = {
   module: {
     rules: require('./webpack.rules'),
   },
-  // target: 'electron-renderer',
-  plugins: [
-    // // Copier experiment
-    // new CopyWebpackPlugin({
-    //   patterns: [
-    //     "node_modules/sqlite3/build/Release/node_sqlite3.node",
-    //   ]
-    // }),
-  ],
+  plugins: [],
   resolve: {
     extensions: ['.js', '.ts', '.jsx', '.tsx', '.css', '.json'],
   },

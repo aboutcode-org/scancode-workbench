@@ -4,7 +4,7 @@ import {
   ListCellRenderer,
   UrlListCellRenderer,
   EmailListCellRenderer,
-} from './CustomCellComponents';
+} from './CustomCellRenderers';
 
 
 enum CustomComponentKeys {
@@ -33,9 +33,9 @@ interface COLUMNS_LIST {
   name: ColDef,
   extension: ColDef,
   size: ColDef,
-  programming_language: ColDef,
   mime_type: ColDef,
   file_type: ColDef,
+  programming_language: ColDef,
   is_binary: ColDef,
   is_text: ColDef,
   is_archive: ColDef,
@@ -56,6 +56,7 @@ interface COLUMNS_LIST {
   license_short_name: ColDef,
   license_category: ColDef,
   license_owner: ColDef,
+  license_is_unknown: ColDef,
   // license_homepage_url: ColDef,
   // license_text_url: ColDef,
   // license_reference_url: ColDef,
@@ -71,6 +72,7 @@ interface COLUMNS_LIST {
   package_data_version: ColDef,
   package_data_license_expression: ColDef,
   package_data_primary_language: ColDef,
+  for_packages: ColDef,
   // package_data_homepage_url: ColDef,
   // package_data_download_url: ColDef,
   package_data_purl: ColDef,
@@ -104,11 +106,6 @@ export const ALL_COLUMNS: COLUMNS_LIST = {
     headerName: "File Size",
     width: 110,
   },
-  programming_language: {
-    field: "programming_language",
-    headerName: "Programming Language",
-    width: 150,
-  },
   mime_type: {
     field: "mime_type",
     headerName: "Mime Type",
@@ -118,6 +115,11 @@ export const ALL_COLUMNS: COLUMNS_LIST = {
     field: "file_type",
     headerName: "File Type",
     width: 200,
+  },
+  programming_language: {
+    field: "programming_language",
+    headerName: "Programming Language",
+    width: 150,
   },
   is_binary: {
     field: 'is_binary',
@@ -229,6 +231,12 @@ export const ALL_COLUMNS: COLUMNS_LIST = {
     cellRenderer: CustomComponentKeys.ListCellRenderer,
     width: 290,
   },
+  license_is_unknown: {
+    field: 'license_is_unknown',
+    headerName: 'Unknown license',
+    valueFormatter: BooleanValueFormatter,
+    width: 120,
+  },
   // license_homepage_url: {
   //   field: 'license_homepage_url',
   //   headerName: 'License Homepage URL',
@@ -304,6 +312,12 @@ export const ALL_COLUMNS: COLUMNS_LIST = {
     headerName: 'Package Primary Language',
     cellRenderer: CustomComponentKeys.ListCellRenderer,
     width: 150,
+  },
+  for_packages: {
+    field: 'for_packages',
+    headerName: 'For packages',
+    cellRenderer: CustomComponentKeys.ListCellRenderer,
+    width: 320,
   },
   // package_data_homepage_url: {
   //   field: 'package_data_homepage_url',

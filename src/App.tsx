@@ -10,11 +10,11 @@ import { ROUTES } from './constants/routes';
 import { WorkbenchDBProvider } from './contexts/workbenchContext';
 
 import Layout from './components/Layout/Layout';
-import TemporaryPage from './pages/TemporaryPage';
 
 import About from './pages/About/About';
 import Home from './pages/Home/Home'
 import ScanInfo from './pages/ScanInfo/ScanInfo';
+import PageNotFound from './pages/PageNotFound';
 import TableView from './pages/TableView/TableView';
 import ChartView from './pages/ChartView/ChartView';
 import FileInfoDash from './pages/FileInfoDash/FileInfoDash';
@@ -25,7 +25,6 @@ import './fontawesome';
 import 'rc-tree/assets/index.css';
 import 'react-toastify/dist/ReactToastify.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import 'startbootstrap-simple-sidebar/dist/css/styles.css';
 
 import './app.css';
 import './dashStyles.css';
@@ -47,8 +46,8 @@ const App = () => {
               <Route path={ROUTES.PACKAGE_DASHBOARD} element={<PackageInfoDash />} />
               <Route path={ROUTES.CHART_SUMMARY} element={<ChartView />} />
               <Route path={ROUTES.SCAN_INFO} element={<ScanInfo />} />
-              <Route element={<TemporaryPage text='4 0 4 ¯\_(ツ)_/¯' />} />
             </Route>
+            <Route path="*" element={<PageNotFound />} />
           </Routes>
         </Layout>
 

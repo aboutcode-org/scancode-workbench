@@ -1,0 +1,8 @@
+Not sure what to do with 
+Top-level/Codebase-level changes:
+A new codebase level attribute 'packages' has been added.
+A new codebase level attribute 'dependencies' has been added.
+
+Resource-level changes:
+There is a new resource-level attribute 'for_packages'.
+^^ Confusion, whether to have it as column group or something else

@@ -34,7 +34,7 @@ export interface LicenseAttributes {
   spdx_url: DataTypes.StringDataType,
   start_line: DataTypes.IntegerDataType,
   end_line: DataTypes.IntegerDataType,
-  matched_rule: DataTypes.StringDataType
+  matched_rule: DataTypes.DataType
 }
 
 export default function licenseModel(sequelize: Sequelize) {

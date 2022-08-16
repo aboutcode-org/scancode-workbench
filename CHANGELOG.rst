@@ -5,11 +5,22 @@ All notable changes to this project will be documented in this file.
 The format is based on `Keep a                                                               
 Changelog <https://keepachangelog.com/en/1.0.0/>`__
 
-[Unreleased]
+[Unreleased (v4.0.0)]
+-------
+
+**This ScanCode-Workbench release contains schema changes: scans will have to be re-imported**
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+------------
+Refactoring
+~~~~~~~~~~~~
+Entire source code is refactored to TypeScript + React
+
 ------------
 New Features
 ~~~~~~~~~~~~
 
+- Added History records
 - Remove the ability to upload Conclusions to DejaCode #413
 - Update in-app help links #412
 - Add source controlled documentation #411

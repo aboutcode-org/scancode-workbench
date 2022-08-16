@@ -37,15 +37,6 @@ function getTemplate() {
           accelerator: 'CmdOrCtrl+I',
           click: (_: MenuItem, currentWindow: BrowserWindow) => importJsonFile(currentWindow),
         },
-        {
-          label: 'Export JSON File',
-          accelerator: 'CmdOrCtrl+E',
-          // @TODO
-          click: () => showErrorDialog({
-            title: "Not implemented",
-            message: "This feature is yet to be discussed"
-          })
-        },
         // @TODO-discuss This is duplicated in App's menu tab, is it necessary under file tab also ??
         // ...(
         //   isMac ? [

@@ -4,10 +4,4 @@ const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 
 module.exports = [
   new ForkTsCheckerWebpackPlugin(),
-  
-  // // Copier experiment
-  // new NormalModuleReplacementPlugin(
-  //   /^bindings$/,
-  //   `${__dirname}/src/bindings`
-  // ),
 ];

@@ -9,23 +9,6 @@ rules.push({
   use: [{ loader: 'style-loader' }, { loader: 'css-loader' }],
 });
 
-// rules.push(
-//    // Add support for native node modules
-//   {
-//     test: /\.node$/,
-//     use: 'node-loader',
-//   },
-//   // {
-//   //   test: /\.(m?js|node)$/,
-//   //   parser: { amd: false },
-//   //   use: {
-//   //     loader: '@marshallofsound/webpack-asset-relocator-loader',
-//   //     options: {
-//   //       outputAssetBase: 'native_modules',
-//   //     },
-//   //   },
-//   // },
-// )
 
 module.exports = {
   module: {
@@ -48,24 +31,7 @@ module.exports = {
     zlib: 'commonjs2 zlib',
     constants: 'commonjs2 constants',
   },
-  plugins: plugins,
-  // externals: [
-  //   // 'commonjs2 electron',
-  //   // 'commonjs2 sqlite3',
-  //   (function () {
-  //     const IGNORES = [
-  //       'electron'
-  //     ];
-  //     return function (context, request, callback) {
-  //       if (IGNORES.indexOf(request) >= 0) {
-  //         return callback(null, "require('" + request + "')");
-  //       }
-  //       return callback();
-  //     };
-  //   })()
-  // ],
-  // target: ['node', 'web'],
-
+  plugins,
   resolve: {
     extensions: ['.js', '.ts', '.jsx', '.tsx', '.css'],
   },
