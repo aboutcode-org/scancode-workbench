@@ -29,14 +29,14 @@ const Layout = (props: React.PropsWithChildren) => {
       <Allotment className='pane-container'>
         <Allotment.Pane
           visible={showFileTree && initialized}
-          minSize={120}
-          maxSize={400}
-          className="file-tree-pane overflow-scroll"
+          minSize={10}
+          maxSize={600}
+          className="file-tree-pane"
           preferredSize="20%"
         >
           <FileTree style={{ minHeight: "100vh" }} />
         </Allotment.Pane>
-        <Allotment.Pane className='overflow-scroll content-pane'>
+        <Allotment.Pane className='content-pane'>
           <div className='content-container'>
             { isImportFallbackRoute && !initialized ?<ImportFallback /> : props.children }
           </div>

@@ -1,15 +1,16 @@
 import c3 from 'c3';
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef } from 'react';
 
 import { FormattedEntry } from '../../utils/pie';
 import { LEGEND_COLORS } from '../../constants/colors';
+
+import './piechart.css';
 
 interface ChartProps {
   chartData: FormattedEntry[] | null,
 }
 
 const PieChart = (props: ChartProps) => {
-
   const { chartData } = props;
   const chartRef = useRef<HTMLDivElement | null>(null);
 
@@ -28,10 +29,19 @@ const PieChart = (props: ChartProps) => {
       }
     });
   }, [chartData]);
+
+  // useEffect(() => {
+  //   const intervalID = setInterval(() => {
+  //     console.log("Resizing pie chart as per dom");
+  //     if(c3Chart)
+  //       c3Chart.resize();
+  //   }, 1000);
+  //   () => {
+  //     clearInterval(intervalID);
+  //   }
+  // }, [c3Chart]);
   
-  return (
-    <div ref={chartRef} />
-  )
+  return <div ref={chartRef} />
 }
 
 export default PieChart

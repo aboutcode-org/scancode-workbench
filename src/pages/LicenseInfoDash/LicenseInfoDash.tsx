@@ -1,5 +1,5 @@
 import { Op } from 'sequelize';
-import { Row, Col } from 'react-bootstrap';
+import { Row, Col, Card } from 'react-bootstrap';
 import React, { useEffect, useState } from 'react'
 
 import { formatChartData } from '../../utils/pie';
@@ -106,15 +106,15 @@ const LicenseInfoDash = () => {
   }, [workbenchDB]);
 
   return (
-    <div className='text-center'>
+    <div className='text-center pieInfoDash'>
       <br/>
-        <h3>
-          License info - { workbenchDB.currentPath || ""}
-        </h3>
+      <h3>
+        License info - { workbenchDB.currentPath || ""}
+      </h3>
       <br/><br/>
       <Row className="dash-cards">
         <Col sm={4}>
-          <div className='card info-card'>
+          <Card className='info-card'>
             {
               scanData.totalLicenses === null ?
                 <EllipticLoader />
@@ -126,10 +126,10 @@ const LicenseInfoDash = () => {
             <h5 className='title'>
               Total licenses
             </h5>
-          </div>
+          </Card>
         </Col>
         <Col sm={4}>
-          <div className='card info-card'>
+          <Card className='info-card'>
             {
               scanData.totalLicenseFiles === null ?
                 <EllipticLoader />
@@ -141,10 +141,10 @@ const LicenseInfoDash = () => {
             <h5 className='title'>
               Total files with licenses
             </h5>
-          </div>
+          </Card>
         </Col>
         <Col sm={4} >
-          <div className='card info-card'>
+          <Card className='info-card'>
             {
               scanData.totalSPDXLicenses === null ?
                 <EllipticLoader />
@@ -156,34 +156,34 @@ const LicenseInfoDash = () => {
             <h5 className='title'>
               Total SPDX licenses
             </h5>
-          </div>
+          </Card>
         </Col>
       </Row>
       <br/><br/>
       <Row className="dash-cards">
         <Col sm={6} md={4}>
-          <div className='card chart-card'>
+          <Card className='chart-card'>
             <h5 className='title'>
               License expression
             </h5>
             <PieChart chartData={licenseExpressionData} />
-          </div>
+          </Card>
         </Col>
         <Col sm={6} md={4}>
-          <div className='card chart-card'>
+          <Card className='chart-card'>
             <h5 className='title'>
               License keys
             </h5>
             <PieChart chartData={licenseKeyData} />
-          </div>
+          </Card>
         </Col>
         <Col sm={6} md={4}>
-          <div className='card chart-card'>
+          <Card className='chart-card'>
             <h5 className='title'>
               License policy
             </h5>
             <PieChart chartData={licensePolicyData} />
-          </div>
+          </Card>
         </Col>
       </Row>
       <br/><br/>

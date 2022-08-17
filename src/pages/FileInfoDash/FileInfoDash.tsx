@@ -1,5 +1,5 @@
 import { Op } from 'sequelize';
-import { Row, Col } from 'react-bootstrap';
+import { Row, Col, Card } from 'react-bootstrap';
 import React, { useEffect, useState } from 'react'
 
 import { formatChartData } from '../../utils/pie';
@@ -39,9 +39,9 @@ const FileInfoDash = () => {
       .then(root => {
         // Prepare aggregate data
         const filesCount =
-          root.getDataValue('type').toString({}) === 'directory' ? root.getDataValue('files_count') : 1;
+          root.getDataValue('type').toString({}) === 'directory' ? root.getDataValue('files_count') || 0 : 1;
         const dirsCount =
-          root.getDataValue('type').toString({}) === 'directory' ? root.getDataValue('dirs_count') : 0;
+          root.getDataValue('type').toString({}) === 'directory' ? root.getDataValue('dirs_count') || 0 : 0;
         
         setScanData(oldScanData => ({
           ...oldScanData,
@@ -102,7 +102,7 @@ const FileInfoDash = () => {
   }, [workbenchDB]);
 
   return (
-    <div className='text-center'>
+    <div className='text-center pieInfoDash'>
       <br/>
         <h3>
           File info - { workbenchDB.currentPath || ""}
@@ -110,7 +110,7 @@ const FileInfoDash = () => {
       <br/><br/>
       <Row className="dash-cards">
         <Col sm={4}>
-          <div className='card info-card'>
+          <Card className='info-card'>
             {
               scanData.totalFiles === null ?
                 <EllipticLoader />
@@ -122,10 +122,10 @@ const FileInfoDash = () => {
             <h5 className='title'>
               Total Number of Files
             </h5>
-          </div>
+          </Card>
         </Col>
         <Col sm={4}>
-          <div className='card info-card'>
+          <Card className='info-card'>
             {
               scanData.totalDirectories === null ?
                 <EllipticLoader />
@@ -137,10 +137,10 @@ const FileInfoDash = () => {
             <h5 className='title'>
               Total Number of Directories
             </h5>
-          </div>
+          </Card>
         </Col>
         <Col sm={6} md={4}>
-          <div className='card info-card'>
+          <Card className='info-card'>
             {
               scanData.totalUniqueCopyrightHolders === null ?
                 <EllipticLoader />
@@ -152,34 +152,34 @@ const FileInfoDash = () => {
             <h5 className='title'>
               Unique Copyright Holders Detected
             </h5>
-          </div>
+          </Card>
         </Col>
       </Row>
       <br/><br/>
       <Row className="dash-cards">
         <Col sm={6} md={4}>
-          <div className='card chart-card'>
+          <Card className='chart-card'>
             <h5 className='title'>
               Programming languages
             </h5>
             <PieChart chartData={progLangsData} />
-          </div>
+          </Card>
         </Col>
         <Col sm={6} md={4}>
-          <div className='card chart-card'>
+          <Card className='chart-card'>
             <h5 className='title'>
               File types
             </h5>
             <PieChart chartData={fileTypesData} />
-          </div>
+          </Card>
         </Col>
         <Col sm={6} md={4}>
-          <div className='card chart-card'>
+          <Card className='chart-card'>
             <h5 className='title'>
               Copyright holders
             </h5>
             <PieChart chartData={copyrightHoldersData} />
-          </div>
+          </Card>
         </Col>
       </Row>
       <br/><br/>

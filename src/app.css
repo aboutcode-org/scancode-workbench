@@ -41,6 +41,10 @@ body {
 
 
 /* Pie chart pages */
+.pieInfoDash {
+  padding: 5px;
+  padding-right: 18px;
+}
 .card {
   border-radius: 2px;
   box-shadow: 1px 0 8px -3px #b1b1b1;
@@ -48,17 +52,17 @@ body {
   margin-bottom: 30px;
 }
 
-.card .content {
+.card > .content {
   text-align: center;
   padding: 15px 15px 0;
 }
 
-.card .header {
+.card > .header {
   text-align: center;
   padding: 15px 15px;
 }
 
-.card .value {
+.card > .value {
   margin: 0;
   margin-left: auto;
   margin-right: auto;

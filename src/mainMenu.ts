@@ -1,7 +1,7 @@
 import { GENERAL_ACTIONS, NAVIGATION_CHANNEL } from './constants/IpcConnection';
 import packageJson from '../package.json';
 import { app, BrowserWindow, MenuItem, shell } from 'electron';
-import { importJsonFile, openSqliteFile, saveSqliteFile, showErrorDialog } from './mainActions';
+import { importJsonFile, openSqliteFile, saveSqliteFile } from './mainActions';
 import { ROUTES } from './constants/routes';
 
 /** Returns a 'lambda' that sends the event to the renderer process. */

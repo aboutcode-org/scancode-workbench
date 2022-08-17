@@ -1,5 +1,5 @@
 import isDev from 'electron-is-dev';
-import { app, BrowserWindow, Menu, shell } from 'electron';
+import { app, BrowserWindow, ipcMain, Menu, shell } from 'electron';
 
 import getTemplate from './mainMenu';
 import { setUpIpcListeners } from './mainActions';
@@ -63,7 +63,7 @@ const createWindow = (): void => {
       shell.openExternal(url);
     });
   }
-  
+  ipcMain.removeAllListeners();
   setUpIpcListeners(mainWindow);
 };
 
