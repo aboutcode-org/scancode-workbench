@@ -1,4 +1,5 @@
-# <img src="https://user-images.githubusercontent.com/48476025/185112524-7cb79a0b-5d16-4148-bcf6-c08daeec2b05.png" align="center" alt="ScanCode Workbench"> ScanCode Workbench
+# <p align="center"><img src="src/assets/images/scancode-workbench-logo.png" align="center" alt="ScanCode Workbench">
+</p>
 
 [![Travis Build Status](https://travis-ci.org/nexB/scancode-workbench.svg?branch=develop)](https://travis-ci.org/nexB/scancode-workbench) 
 [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/nexB/scancode-workbench)](https://ci.appveyor.com/project/nexB/scancode-workbench)

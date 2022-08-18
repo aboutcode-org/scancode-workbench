@@ -9,7 +9,7 @@ import React, { useMemo, useState } from 'react'
 // import remoteMain from '@electron/remote/main'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCogs, faFileImport, faFloppyDisk, faFolder } from '@fortawesome/free-solid-svg-icons'
+import { faCogs, faDatabase, faFileCode, faFloppyDisk, faFolder } from '@fortawesome/free-solid-svg-icons'
 
 import { useWorkbenchDB } from '../../contexts/workbenchContext'
 import CoreButton from '../../components/CoreButton/CoreButton';
@@ -129,11 +129,13 @@ const Home = () => {
                 <tbody>
                 {
                   history.map((historyItem, idx) => (
-                    <tr key={historyItem.json_path + idx}>
+                    <tr key={historyItem.json_path || historyItem.sqlite_path + idx}>
                       <td>
                         <CoreButton onClick={() => historyItemParser(historyItem)}>
-                          Import
-                          <FontAwesomeIcon icon={faFileImport} />
+                          { historyItem.json_path ? 'Import' : 'Open  ' }
+                          <FontAwesomeIcon
+                            icon={historyItem.json_path ? faFileCode : faDatabase}
+                          />
                         </CoreButton>
                       </td>
 

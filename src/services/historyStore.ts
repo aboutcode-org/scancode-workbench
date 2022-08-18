@@ -18,12 +18,12 @@ export const AddEntry = (entry: HistoryItem) => {
 	// console.log(prevEntries, prevEntries.length);
 
 	const existingEntryIndex = history.findIndex(
-		existingEntry => entry.json_path === existingEntry.json_path
+		existingEntry => entry.json_path ? entry.json_path === existingEntry.json_path : entry.sqlite_path === existingEntry.sqlite_path
 	)
 	const existingEntry: HistoryItem | undefined = history[existingEntryIndex];
 
 	if(existingEntry){
-		// console.log("Updating existing entry:", entry);
+		// console.log("Updating existing entry:", existingEntry);
 		existingEntry.opened_at = entry.opened_at;
 		existingEntry.sqlite_path = entry.sqlite_path;
 		history.sort(function(a, b){

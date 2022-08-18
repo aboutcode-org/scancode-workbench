@@ -47,6 +47,9 @@
   max-height: 300px;
   overflow-y: overlay;
 }
+.ag-cell-wrap-text {
+  word-break: break-word;
+}
 
 .filterComponent {
   margin: auto;
