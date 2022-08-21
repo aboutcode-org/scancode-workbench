@@ -6,21 +6,10 @@ module.exports = [
     test: /native_modules\/.+\.node$/,
     use: 'node-loader',
   },
-  // {
-  //   test: /\.node$/,
-  //   loader: "native-ext-loader"
-  // },
-
-  // {
-  //   test: /\.(m?js|node)$/,
-  //   parser: { amd: false },
-  //   use: {
-  //     loader: "@timfish/webpack-asset-relocator-loader",
-  //     options: {
-  //       outputAssetBase: "native_modules",
-  //     },
-  //   },
-  // },
+  {
+    test: /\.node$/,
+    loader: "node-loader",
+  },
 
   // {
   //   test: /\.(m?js|node)$/,

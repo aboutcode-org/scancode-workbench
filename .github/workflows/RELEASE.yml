@@ -1,0 +1,60 @@
+# name of your github action
+name: Release CD
+
+# this will help you specify when & which branch to run deployment
+on:
+  push:
+    tags:
+      - v*
+
+jobs:
+  create_release:
+    name: Create Release
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      # - name: Exit if tag not is not pointing to a commit in master branch
+      #   if: endsWith(github.ref, 'master') == false
+      #   run: exit -1
+      - name: Get release tag
+        id: tag
+        uses: dawidd6/action-get-tag@v1
+        with:
+          strip_v: false
+      - name: Create Release
+        id: create_release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{steps.tag.outputs.tag}}
+          name: Release ${{steps.tag.outputs.tag}}
+          body_path: ./Release.md
+          draft: false
+          prerelease: false
+          generate_release_notes: false
+
+  build:
+    needs: create_release
+    name: Build Release archives
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@master
+      - uses: actions/setup-python@v4
+        with:
+          python-version: 3.9
+      - uses: actions/setup-node@master
+        with:
+          node-version: 16.13.0
+      - name: Install dependencies
+        run: npm install
+      - name: Build Workbench & create archive for ${{ matrix.os }}
+        run: npm run publish
+      - name: Verify Generated archive in dist/
+        run: ls ./dist
+      - name: Upload release assets
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ github.ref_name }}
+          files: dist/*

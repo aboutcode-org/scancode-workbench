@@ -31,7 +31,7 @@ const createWindow = (): void => {
 
   // Create the browser window.
   const mainWindow = new BrowserWindow({
-    title: "Scancode workbench Prototype",
+    title: "Scancode workbench",
     width: 1200,
     height: 800,
     icon: 'assets/app-icon/png/scwb_layered_01.png',

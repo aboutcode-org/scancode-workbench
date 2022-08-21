@@ -1,17 +1,31 @@
 {
-  "name": "workbench-prototype",
-  "productName": "workbench-prototype",
+  "name": "scancode-workbench",
+  "productName": "scancode-workbench",
   "version": "4.0.0",
-  "description": "My Electron application description",
+  "description": "An application for viewing ScanCode results and concluding component origin and license",
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "author": "nexB",
+  "keywords": [
+    "ScanCode",
+    "scan codebase",
+    "open source scanning",
+    "open source scanner"
+  ],
+  "license": "Apache-2.0",
+  "bugs": {},
+  "homepage": "",
   "main": ".webpack/main",
   "scripts": {
     "start": "ELECTRON_IS_DEV=1 electron-forge start",
     "postinstall": "electron-builder install-app-deps",
-    "package": "electron-forge package && electron-packager . --overwrite --icon=src/assets/app-icon/icon --prune=true --out=out --ignore=\"(src*|dist*|samples*)\" && npm run package-tar",
+    "package": "electron-forge package && electron-packager . --overwrite --icon=src/assets/app-icon/icon --prune=true --out=out --ignore=\"(src*|dist*|samples*)\" && npm run create-archive",
     "package-asar": "electron-forge package && electron-packager . --overwrite --asar --icon=src/assets/app-icon/icon --prune=true --out=out --ignore=\"(src*|dist*|samples*)\"",
     "note": "^^if we change out dir above, change electron-forge out directory too",
-    "package-tar": "mkdir -p dist && tar -czf dist/scancode_workbench.tar.gz -C out .",
-    "publish": "electron-forge package && electron-packager . --overwrite --icon=src/assets/app-icon/icon --prune=true --out=out --ignore=\"(src*|dist*|samples*)\" && npm run package-tar",
+    "create-archive": "python tar_builder.py",
+    "publish": "electron-forge package && electron-packager . --overwrite --icon=src/assets/app-icon/icon --prune=true --out=out --ignore=\"(src*|dist*|samples*)\" && npm run create-archive",
     "make": "electron-forge make",
     "publish-forge": "electron-forge publish",
     "lint": "eslint --ext .ts,.tsx .",
@@ -27,12 +41,6 @@
     "package-alt2": "electron-packager . --overwrite --asar --icon=src/assets/app-icon/icon --prune=true --out=release-builds-test",
     "package-alternate": "electron-packager . --overwrite --icon=src/assets/app-icon/icon --prune=true --out=release-builds-alternate"
   },
-  "keywords": [],
-  "author": {
-    "name": "Omkar Phansopkar",
-    "email": "omkarphansopkar@gmail.com"
-  },
-  "license": "MIT",
   "devDependencies": {
     "@electron-forge/cli": "^6.0.0-beta.64",
     "@electron-forge/maker-deb": "^6.0.0-beta.64",
@@ -61,7 +69,7 @@
     "copy-webpack-plugin": "^11.0.0",
     "css-loader": "^6.7.1",
     "electron": "^19.0.4",
-    "electron-builder": "^23.0.3",
+    "electron-builder": "^23.3.3",
     "electron-packager": "^15.5.1",
     "electron-rebuild": "^3.2.8",
     "eslint": "^8.18.0",
@@ -121,7 +129,7 @@
         {
           "name": "@electron-forge/maker-squirrel",
           "config": {
-            "name": "workbench_prototype"
+            "name": "scancode-workbench"
           }
         },
         {
