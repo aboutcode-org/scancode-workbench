@@ -61,8 +61,8 @@ os.system(ensure_archive_directory)
 
 # Prepare .zip file for windows
 if on_windows:
-  zip_command = f"Compress-Archive {PACKAGE_DIR}/* {ARCHIVE_DIR}/{archive_file_name}.zip"
-  print("Executing zip command:", zip_command)
+  zip_command = f"powershell Compress-Archive {PACKAGE_DIR}/* {ARCHIVE_DIR}/{archive_file_name}.zip"
+  print("Executing zip command on powershell:", zip_command)
   os.system(zip_command)
   print(f"Zip file ready in {ARCHIVE_DIR}/ !!")
 
