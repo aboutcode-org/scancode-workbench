@@ -16,9 +16,11 @@ import {
   JSON_IMPORT_REPLY_FORMAT,
   NAVIGATION_CHANNEL,
   NAVIGATION_CHANNEL_MESSAGE,
+  OPEN_DIALOG_CHANNEL,
   OPEN_ERROR_DIALOG_CHANNEL,
   SAVE_REPLY_CHANNEL,
   SQLITE_IMPORT_REPLY_FORMAT,
+  SQLITE_PATH_FOR_JSON_REQUEST_FORMAT,
   SQLITE_SAVE_REPLY_FORMAT,
 } from "../constants/IpcConnection";
 
@@ -38,6 +40,7 @@ interface WorkbenchContextProperties extends BasicValueState {
   columnDefs: ColDef[],
   sqliteParser: (sqliteFilePath: string, preventNavigation?: boolean) => void,
   jsonParser: (jsonFilePath: string, sqliteFilePath: string, preventNavigation?: boolean) => void,
+  importJsonFile: (jsonFilePath: string) => void,
   updateLoadingStatus: React.Dispatch<React.SetStateAction<number | null>>,
   setColumnDefs: React.Dispatch<React.SetStateAction<ColDef[]>>,
   updateCurrentPath: (newPath: string) => void,
@@ -53,6 +56,7 @@ export const defaultWorkbenchContextValue: WorkbenchContextProperties = {
   currentPath: null,
   jsonParser: () => null,
   sqliteParser: () => null,
+  importJsonFile: () => null,
   updateLoadingStatus: () => null,
   setColumnDefs: () => null,
   startImport: () => null,
@@ -272,6 +276,11 @@ export const WorkbenchDBProvider = (props: React.PropsWithChildren<Record<string
       });
   }
 
+  function importJsonFile(jsonFilePath: string){
+    const payload: SQLITE_PATH_FOR_JSON_REQUEST_FORMAT = { jsonFilePath }
+    ipcRenderer.send(OPEN_DIALOG_CHANNEL.SQLITE_PATH_FOR_JSON, payload);
+  }
+
   function removeIpcListeners(){
     ipcRenderer.removeAllListeners(IMPORT_REPLY_CHANNEL.JSON);
     ipcRenderer.removeAllListeners(IMPORT_REPLY_CHANNEL.SQLITE);
@@ -331,6 +340,7 @@ export const WorkbenchDBProvider = (props: React.PropsWithChildren<Record<string
         currentPath,
         jsonParser,
         sqliteParser,
+        importJsonFile,
         startImport,
         abortImport,
         updateCurrentPath,

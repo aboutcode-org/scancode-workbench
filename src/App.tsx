@@ -10,6 +10,7 @@ import { ROUTES } from './constants/routes';
 import { WorkbenchDBProvider } from './contexts/workbenchContext';
 
 import Layout from './components/Layout/Layout';
+import DropZone from './components/DropZone/DropZone';
 
 import About from './pages/About/About';
 import Home from './pages/Home/Home'
@@ -35,6 +36,7 @@ const App = () => {
   return (
     <HashRouter>
       <WorkbenchDBProvider>
+        <DropZone>
         <Layout>
           <Routes>
             <Route path={ROUTES.HOME}>
@@ -60,6 +62,7 @@ const App = () => {
           autoClose={2000}
           position='bottom-center'
         />
+        </DropZone>
       </WorkbenchDBProvider>
     </HashRouter>
   )

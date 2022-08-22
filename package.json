@@ -1,7 +1,7 @@
 {
   "name": "scancode-workbench",
   "productName": "scancode-workbench",
-  "version": "4.0.0",
+  "version": "4.0.0beta",
   "description": "An application for viewing ScanCode results and concluding component origin and license",
   "repository": {
     "type": "git",
@@ -24,22 +24,17 @@
     "package": "electron-forge package && electron-packager . --overwrite --icon=src/assets/app-icon/icon --prune=true --out=out --ignore=\"(src*|dist*|samples*)\" && npm run create-archive",
     "package-asar": "electron-forge package && electron-packager . --overwrite --asar --icon=src/assets/app-icon/icon --prune=true --out=out --ignore=\"(src*|dist*|samples*)\"",
     "note": "^^if we change out dir above, change electron-forge out directory too",
-    "create-archive": "python tar_builder.py",
+    "create-archive": "python archive_builder.py",
     "publish": "electron-forge package && electron-packager . --overwrite --icon=src/assets/app-icon/icon --prune=true --out=out --ignore=\"(src*|dist*|samples*)\" && npm run create-archive",
     "make": "electron-forge make",
     "publish-forge": "electron-forge publish",
     "lint": "eslint --ext .ts,.tsx .",
     "dependencyBuild": "$(npm bin)/electron-rebuild",
     "dependencyBuild-windows": ".\\node_modules\\.bin\\electron-rebuild.cmd",
-    "test": "echo 'Going good'",
-    "just trial commands below": "--------------------------------------------------------",
+    "test": "echo 'No tests yet :)'",
     "forge-package": "electron-forge package",
     "rebuild-sqlite3": "electron-rebuild -f -w sqlite3",
-    "build": "react-scripts build",
-    "sqlite3-from-source": "npm i sqlite3 --runtime=electron --target=19.0.4 --dist-url=https://electronjs.org/headers",
-    "package-alt": "electron-packager . --overwrite --icon=src/assets/app-icon/icon --prune=true --out=release-builds-test",
-    "package-alt2": "electron-packager . --overwrite --asar --icon=src/assets/app-icon/icon --prune=true --out=release-builds-test",
-    "package-alternate": "electron-packager . --overwrite --icon=src/assets/app-icon/icon --prune=true --out=release-builds-alternate"
+    "build": "react-scripts build"
   },
   "devDependencies": {
     "@electron-forge/cli": "^6.0.0-beta.64",

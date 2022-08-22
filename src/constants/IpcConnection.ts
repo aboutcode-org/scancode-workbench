@@ -6,6 +6,7 @@ export interface ErrorInfo {
 
 export const OPEN_DIALOG_CHANNEL = {
   JSON: 'open-json-file',
+  SQLITE_PATH_FOR_JSON: 'choose-sqlite-path-for-json-file',
   SQLITE: 'open-sqlite-file',
   SAVE_SQLITE: 'save-sqlite-file',
 }
@@ -28,6 +29,9 @@ export const GENERAL_ACTIONS = {
   ZOOM_RESET: 'zoom_reset',
 }
 
+export interface SQLITE_PATH_FOR_JSON_REQUEST_FORMAT {
+  jsonFilePath: string;
+}
 export interface JSON_IMPORT_REPLY_FORMAT {
   jsonFilePath: string;
   sqliteFilePath: string;
