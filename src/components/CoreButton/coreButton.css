@@ -1,7 +1,7 @@
 .core-button {
   margin: 1rem;
   background-color: transparent !important;
-  border: 2px solid #0685b9 !important;
+  border: 2px solid var(--accentColor) !important;
 }
 .core-button svg {
   margin-left: 10px;

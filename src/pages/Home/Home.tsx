@@ -5,21 +5,19 @@ import * as electronFs from "fs"
 import * as electronOs from "os"
 import { toast } from 'react-toastify'
 import React, { useMemo, useState } from 'react'
-// import remote from '@electron/remote'
-// import remoteMain from '@electron/remote/main'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCogs, faDatabase, faFileCode, faFloppyDisk, faFolder } from '@fortawesome/free-solid-svg-icons'
+import { faCogs, faDatabase, faFileCode, faFloppyDisk, faFolder, faTrash } from '@fortawesome/free-solid-svg-icons'
 
 import { useWorkbenchDB } from '../../contexts/workbenchContext'
 import CoreButton from '../../components/CoreButton/CoreButton';
+import ProgressLoader from '../../components/ProgressLoader/ProgressLoader'
 
 import { GetHistory, HistoryItem, RemoveEntry } from '../../services/historyStore'
 
 import { OPEN_DIALOG_CHANNEL } from '../../constants/IpcConnection';
 
 import './home.css'
-import ProgressLoader from '../../components/ProgressLoader/ProgressLoader'
 
 const { ipcRenderer } = electron;
 
@@ -56,21 +54,26 @@ const Home = () => {
   const refreshHistory = () => setRefreshToken(Math.random());
   const history = useMemo(GetHistory, [importedSqliteFilePath, db, historyRefreshToken]);
 
-  function ReportInvalidEntry(entry: HistoryItem, entryType: string){
-    toast(`Selected ${entryType} file doesn't exist`, { type: 'error' });
+  function deleteEntry(entry: HistoryItem, showToast=true){
     RemoveEntry(entry);
     refreshHistory();
+    if(showToast)
+      toast('Removed item', { type: 'success' });
+  }
+  function reportInvalidEntry(entry: HistoryItem, entryType: string){
+    toast(`Selected ${entryType} file doesn't exist`, { type: 'error' });
+    deleteEntry(entry, false);
   }
 
   function historyItemParser(historyItem: HistoryItem){
     if(historyItem.json_path){
       if (!electronFs.existsSync(historyItem.json_path)) {
-        return ReportInvalidEntry(historyItem, "JSON");
+        return reportInvalidEntry(historyItem, "JSON");
       }
       jsonParser(historyItem.json_path, historyItem.sqlite_path);
     } else {
       if (!electronFs.existsSync(historyItem.sqlite_path)) {
-        return ReportInvalidEntry(historyItem, "SQLite");
+        return reportInvalidEntry(historyItem, "SQLite");
       }
       sqliteParser(historyItem.sqlite_path)
     }
@@ -122,6 +125,11 @@ const Home = () => {
                 <h5>Save SQLite File</h5>
               </div>
             </div>
+            <div className='drop-instruction'>
+              <h5>
+                OR Simply drop your json / sqlite file anywhere in the app !!
+              </h5>
+            </div>
             <div className="history">
               <br/>
               <h4>Recent files </h4>
@@ -130,7 +138,7 @@ const Home = () => {
                 {
                   history.map((historyItem, idx) => (
                     <tr key={historyItem.json_path || historyItem.sqlite_path + idx}>
-                      <td>
+                      <td className='import-column'>
                         <CoreButton onClick={() => historyItemParser(historyItem)}>
                           { historyItem.json_path ? 'Import' : 'Open  ' }
                           <FontAwesomeIcon
@@ -146,6 +154,12 @@ const Home = () => {
                       <td>
                         <span style={{ marginLeft: 20 }}>
                           {moment(historyItem.opened_at).fromNow()}
+                        </span>
+                      </td>
+
+                      <td className='delete-col'>
+                        <span data-tip="Remove this item?" className='delete-action'>
+                          <FontAwesomeIcon icon={faTrash} onClick={() => deleteEntry(historyItem)} />
                         </span>
                       </td>
                     </tr>

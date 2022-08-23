@@ -8,7 +8,7 @@ import React, { createContext, useContext, useEffect, useState } from "react";
 
 import packageJson from '../../package.json';
 import { ROUTES } from "../constants/routes";
-import { AddEntry } from "../services/historyStore";
+import { AddEntry, GetHistory, RemoveEntry } from "../services/historyStore";
 import { isSchemaChanged } from "../utils/checks";
 import { WorkbenchDB } from '../services/workbenchDB';
 import {
@@ -174,41 +174,58 @@ export const WorkbenchDBProvider = (props: React.PropsWithChildren<Record<string
           return;
         }
 
-        AddEntry({
-          sqlite_path: sqliteFilePath,
-          opened_at: moment().format(),
-        });
-
         updateLoadingStatus(75);
 
         newWorkbenchDB.sync
-        .then(db => db.File.findOne({ where: { parent: '#' }}))
-        .then(root => {
-          if(!root){
-            console.error("Root directory not found !!!!");
-            console.error("Root:", root);
-            return;
-          }
+          .then(db => db.File.findOne({ where: { parent: '#' }}))
+          .then(root => {
+            if(!root){
+              console.error("Root directory not found !!!!");
+              console.error("Root:", root);
+              return;
+            }
 
-          console.log("Root dir", root);
-          const defaultPath = root.getDataValue('path');
+            console.log("Root dir", root);
+            const defaultPath = root.getDataValue('path');
 
-          updateWorkbenchDB(newWorkbenchDB, sqliteFilePath)
+            AddEntry({
+              sqlite_path: sqliteFilePath,
+              opened_at: moment().format(),
+            });
 
-          if(defaultPath)
-            updateCurrentPath(defaultPath);
-          
-          if(!preventNavigation)
-            navigate(ROUTES.TABLE_VIEW);
-        });
+            updateWorkbenchDB(newWorkbenchDB, sqliteFilePath)
+
+            if(defaultPath)
+              updateCurrentPath(defaultPath);
+            
+            if(!preventNavigation)
+              navigate(ROUTES.TABLE_VIEW);
+          })
+          .catch(err => {
+            const foundInvalidHistoryItem = GetHistory().find(historyItem => historyItem.sqlite_path === sqliteFilePath);
+            if(foundInvalidHistoryItem){
+              RemoveEntry(foundInvalidHistoryItem);
+            }
+            console.error("Err trying to import sqlite:");
+            console.error(err);
+            toast(`Unexpected error while importing json \nPlease check console for more info`, {
+              type: 'error'
+            });
+            abortImport();
+          });
       })
       .catch(err => {
-        console.error("Err trying to import sqlite:", err);
+        const foundInvalidHistoryItem = GetHistory().find(historyItem => historyItem.sqlite_path === sqliteFilePath);
+        if(foundInvalidHistoryItem){
+          RemoveEntry(foundInvalidHistoryItem);
+        }
+        console.error("Err trying to import sqlite:");
+        console.error(err);
         toast(`Unexpected error while importing json \nPlease check console for more info`, {
           type: 'error'
         });
         abortImport();
-      })
+      });
   }
 
   function jsonParser(jsonFilePath: string, sqliteFilePath: string, preventNavigation?: boolean){

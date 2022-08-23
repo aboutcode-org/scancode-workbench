@@ -3,6 +3,7 @@
 } */
 #welcomepage-title{
   text-align: center;
+  margin-top: 10px;
 }
 #welcomepage-title .logo {
   font-family: 'Raleway', Helvetica, san-serif;
@@ -30,19 +31,18 @@
 }
 
 .quickActions div:hover {
-  /* background-color: #f3f9ff; */
-  background-color: #f9fafb;
+  background-color: var(--accentHoverColor);
 }
 
 .quickActions div {
-  border: 2px dashed #0685b9;
+  border: 2px dashed var(--accentColor);
   display: inline-block;
   width: 25%;
   text-align: center;
   cursor: pointer;
   min-width: 200px;
   padding: 1rem;
-  margin-top: 2rem;
+  margin-top: 1rem;
   margin-left: 20px;
   margin-right: 20px;
 }
@@ -52,23 +52,47 @@
   /* margin-bottom: 20px; */
 }
 
+.drop-instruction {
+  text-align: center;
+  width: 100%;
+  margin-top: 50px;
+  color: var(--lightTextColor);
+}
+
 /* .history h5 {
   margin-left: 25px;
 } */
 
 .quicklinks, .history {
-  margin-top: 32px;
+  margin-top: 15px;
   padding-left: 2rem;
 }
 .history table{
   min-width: 80%;
   max-width: 95%;
 }
-.history table tr .file-path{
+.history .import-column {
+  width: 130px;
+  word-wrap: break-word;
+}
+.history table .file-path {
   min-width: 400px;
   max-width: 60vw;
   word-wrap: break-word;
   padding-right: 10px;
+}
+.history table .delete-col {
+  min-width: 50px;
+}
+.history table .delete-action {
+  color: rgba(53, 0, 0, 0.933);
+  padding-left: 25px;
+  cursor: pointer;
+  font-size: 18px;
+}
+.history table .delete-action:hover {
+  color: rgba(25, 0, 0, 0.933);
+  font-size: 20px;
 }
 .history button {
   margin: 5px;
@@ -76,9 +100,6 @@
   margin-right: 20px;
 }
 
-/* .btn-group-horizontal{
-
-} */
 
 .btn-group-horizontal a{
   margin: 0px;

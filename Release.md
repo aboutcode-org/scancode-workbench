@@ -1,5 +1,6 @@
 ## Major changes
 - Ported to React + Typescript variant !!
+  Under GSoC by @OmkarPh 
 - Updated dependencies
 - Updated Tableview library
 - Maintain history of imports

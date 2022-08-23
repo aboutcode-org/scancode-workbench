@@ -22,13 +22,13 @@ const DropZone = (props: React.PropsWithChildren) => {
   function DragOverHandler(e: DragEvent){
     e.preventDefault();
     e.stopPropagation();
-    // CustomLogger("Drag detected", e.dataTransfer.files);
+    CustomLogger("Drag detected", e, e.dataTransfer.files);
   }
   function DragStartHandler(e: DragEvent){
-    CustomLogger("Drag started:", e, e.dataTransfer.files);
+    console.log("Drag started:", e, e.dataTransfer.files);
   }
   function DragEndHandler(e: DragEvent){
-    CustomLogger("Drag ended", e, e.dataTransfer.files);
+    console.log("Drag ended", e, e.dataTransfer.files);
   }
   function DropHandler(e: DragEvent){
     e.preventDefault();
@@ -77,10 +77,8 @@ const DropZone = (props: React.PropsWithChildren) => {
     <div
       onDragEnter={DragStartHandler}
       onDragLeave={DragEndHandler}
-      // onDragOverCapture={DragHandler}
       onDragOver={DragOverHandler}
       onDrop={DropHandler}
-      onDropCapture={DropHandler}
     >
       { props.children }
     </div>

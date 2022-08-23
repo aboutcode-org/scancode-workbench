@@ -5,15 +5,18 @@ import { ColDef, GridApi } from 'ag-grid-community';
 import AgDataTable from './AgDataTable';
 import CoreButton from '../../components/CoreButton/CoreButton';
 import CustomFilterComponent from './CustomFilterComponent';
+
 import { ALL_COLUMNS } from './columnDefs';
 import { COLUMN_GROUPS, DEFAULT_EMPTY_VALUES, SET_FILTERED_COLUMNS } from './columnGroups';
 
-import { useWorkbenchDB } from '../../contexts/workbenchContext';
+import { calculateCellWidth } from '../../utils/cells';
 import { FlatFileAttributes } from '../../services/models/flatFile';
+import { useWorkbenchDB } from '../../contexts/workbenchContext';
 
-import './TableView.css';
 import CustomColumnSelector from './CustomColumnSelector';
 import { FormControl } from 'react-bootstrap';
+
+import './TableView.css';
 
 const TableView = () => {
   const { db, initialized, currentPath, columnDefs, setColumnDefs } = useWorkbenchDB();
@@ -62,10 +65,20 @@ const TableView = () => {
             ]
           }
         },
-        raw: true,
+        // raw: true,   // TOIMPROVE: Maybe we can get better performance with this
       }))
-      .then((files) =>{
+      .then(files =>{
         setTableData(files);
+        let longestPathLength = 20;
+        files.forEach(file => {
+          const len = file.getDataValue('path').length;
+          if(len > longestPathLength){
+            longestPathLength = len;
+          }
+        });
+        const calculatedColumnWidth = calculateCellWidth(longestPathLength)
+        ALL_COLUMNS.path.width = calculatedColumnWidth;
+        
         setColumnDefs(prevColDefs => {
           if(prevColDefs.length > 0)
             return prevColDefs;   // Don't mutate cols, if already set
@@ -112,7 +125,9 @@ const TableView = () => {
             // );
 
             columnDef.floatingFilter = true;
-            columnDef.filterParams = { options: parsedUniqueValues };
+            if(!columnDef.filterParams)
+              columnDef.filterParams = {};
+            columnDef.filterParams.options = parsedUniqueValues;
             columnDef.floatingFilterComponent = CustomFilterComponent;
 
             return columnDef;

@@ -1,3 +1,8 @@
+.app-version {
+  font-size: 22px;
+  margin-left: 15px;
+  color: var(--lightTextColor);
+}
 .help {
   padding: 15px;
 }

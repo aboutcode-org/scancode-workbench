@@ -107,7 +107,6 @@ export class WorkbenchDB {
 
     // A promise that will return when the db and tables have been created
     this.sync = this.sequelize.sync().then(() => {
-      console.log("Workbench DB initialized",);
       return this.db
     });
   }
@@ -469,7 +468,7 @@ export class WorkbenchDB {
     };
     return this.sequelize.transaction(transactionOptions, (t) => {
       const options: BulkCreateOptions = {
-        // logging: () => DebugLogger("add file", "AddFiles transaction done !"),
+        // logging: () => DebugLogger("add file", "AddFiles transaction executed !"),
         transaction: t
       };
       $.each(files, (_, file) => {

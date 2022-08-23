@@ -1,4 +1,4 @@
-import { ColDef, ValueFormatterParams } from "ag-grid-community";
+import { ColDef, IFilterOptionDef, ValueFormatterParams } from "ag-grid-community";
 
 import {
   ListCellRenderer,
@@ -18,6 +18,32 @@ export const frameworkComponents = {
   [CustomComponentKeys.UrlListCellRenderer]: UrlListCellRenderer,
   [CustomComponentKeys.EmailListCellRenderer]: EmailListCellRenderer,
 };
+
+export type ISimpleFilterModelType = 
+  'empty' 
+  | 'equals' 
+  | 'notEqual' 
+  | 'lessThan' 
+  | 'lessThanOrEqual' 
+  | 'greaterThan' 
+  | 'greaterThanOrEqual' 
+  | 'inRange' 
+  | 'contains' 
+  | 'notContains' 
+  | 'startsWith' 
+  | 'endsWith' 
+  | 'blank' 
+  | 'notBlank';
+
+export interface FilterOptionsMap {
+  LIST_FILTERS: (IFilterOptionDef | ISimpleFilterModelType)[],
+}
+export const FILTER_OPTIONS: FilterOptionsMap = {
+  LIST_FILTERS: [
+    'contains',
+    'notContains',
+  ],
+}
 
 const BooleanValueFormatter = (cell: ValueFormatterParams) => cell.value ? "Yes" : "No";
 
@@ -84,7 +110,7 @@ export const ALL_COLUMNS: COLUMNS_LIST = {
   path: {
     field: "path",
     headerName: "Path",
-    width: 500,
+    width: 400,
   },
   type: {
     field: "type",
@@ -162,6 +188,9 @@ export const ALL_COLUMNS: COLUMNS_LIST = {
     field: 'copyright_statements',
     headerName: 'Copyright Statements',
     cellRenderer: CustomComponentKeys.ListCellRenderer,
+    filterParams: {
+      filterOptions: FILTER_OPTIONS.LIST_FILTERS
+    },
     width: 450,
   },
   copyright_holders: {
@@ -169,23 +198,35 @@ export const ALL_COLUMNS: COLUMNS_LIST = {
     headerName: 'Copyright Holder',
     width: 320,
     cellRenderer: CustomComponentKeys.ListCellRenderer,
+    filterParams: {
+      filterOptions: FILTER_OPTIONS.LIST_FILTERS
+    },
   },
   copyright_authors: {
     field: 'copyright_authors',
     headerName: 'Copyright Author',
     cellRenderer: CustomComponentKeys.ListCellRenderer,
+    filterParams: {
+      filterOptions: FILTER_OPTIONS.LIST_FILTERS
+    },
     width: 320,
   },
   copyright_start_line: {
     field: 'copyright_start_line',
     headerName: 'Copyright Start Line',
     cellRenderer: CustomComponentKeys.ListCellRenderer,
+    filterParams: {
+      filterOptions: FILTER_OPTIONS.LIST_FILTERS
+    },
     width: 125,
   },
   copyright_end_line: {
     field: 'copyright_end_line',
     headerName: 'Copyright End Line',
     cellRenderer: CustomComponentKeys.ListCellRenderer,
+    filterParams: {
+      filterOptions: FILTER_OPTIONS.LIST_FILTERS
+    },
     width: 125,
   },
 
@@ -194,41 +235,62 @@ export const ALL_COLUMNS: COLUMNS_LIST = {
     field: 'license_policy',
     headerName: 'License Policy',
     cellRenderer: CustomComponentKeys.ListCellRenderer,
+    filterParams: {
+      filterOptions: FILTER_OPTIONS.LIST_FILTERS
+    },
   },
   license_expressions: {
     field: 'license_expressions',
     headerName: 'License Expression',
     cellRenderer: CustomComponentKeys.ListCellRenderer,
+    filterParams: {
+      filterOptions: FILTER_OPTIONS.LIST_FILTERS
+    },
     width: 320,
   },
   license_key: {
     field: 'license_key',
     headerName: 'License Key',
     cellRenderer: CustomComponentKeys.ListCellRenderer,
+    filterParams: {
+      filterOptions: FILTER_OPTIONS.LIST_FILTERS
+    },
     width: 320,
   },
   license_score: {
     field: 'license_score',
     headerName: 'License Score',
     cellRenderer: CustomComponentKeys.ListCellRenderer,
+    filterParams: {
+      filterOptions: FILTER_OPTIONS.LIST_FILTERS
+    },
     width: 150,
   },
   license_short_name: {
     field: 'license_short_name',
     headerName: 'License Short Name',
     cellRenderer: CustomComponentKeys.ListCellRenderer,
+    filterParams: {
+      filterOptions: FILTER_OPTIONS.LIST_FILTERS
+    },
     width: 240,
   },
   license_category: {
     field: 'license_category',
     headerName: 'License Category',
     cellRenderer: CustomComponentKeys.ListCellRenderer,
+    filterParams: {
+      filterOptions: FILTER_OPTIONS.LIST_FILTERS
+    },
     width: 225,
   },
   license_owner: {
     field: 'license_owner',
     headerName: 'License Owner',
     cellRenderer: CustomComponentKeys.ListCellRenderer,
+    filterParams: {
+      filterOptions: FILTER_OPTIONS.LIST_FILTERS
+    },
     width: 290,
   },
   license_is_unknown: {
@@ -253,18 +315,27 @@ export const ALL_COLUMNS: COLUMNS_LIST = {
     field: 'license_spdx_key',
     headerName: 'SPDX License Key',
     cellRenderer: CustomComponentKeys.ListCellRenderer,
+    filterParams: {
+      filterOptions: FILTER_OPTIONS.LIST_FILTERS
+    },
     width: 200,
   },
   license_start_line: {
     field: 'license_start_line',
     headerName: 'License Start Line',
     cellRenderer: CustomComponentKeys.ListCellRenderer,
+    filterParams: {
+      filterOptions: FILTER_OPTIONS.LIST_FILTERS
+    },
     width: 125,
   },
   license_end_line: {
     field: 'license_end_line',
     headerName: 'License End Line',
     cellRenderer: CustomComponentKeys.ListCellRenderer,
+    filterParams: {
+      filterOptions: FILTER_OPTIONS.LIST_FILTERS
+    },
     width: 125,
   },
 
@@ -273,12 +344,18 @@ export const ALL_COLUMNS: COLUMNS_LIST = {
     field: 'email',
     headerName: 'Email',
     cellRenderer: CustomComponentKeys.EmailListCellRenderer,
+    filterParams: {
+      filterOptions: FILTER_OPTIONS.LIST_FILTERS
+    },
     width: 250,
   },
   url: {
     field: 'url',
     headerName: 'URL',
     cellRenderer: CustomComponentKeys.UrlListCellRenderer,
+    filterParams: {
+      filterOptions: FILTER_OPTIONS.LIST_FILTERS
+    },
     width: 250,
   },
 
@@ -287,36 +364,54 @@ export const ALL_COLUMNS: COLUMNS_LIST = {
     field: 'package_data_type',
     headerName: 'Package Type',
     cellRenderer: CustomComponentKeys.ListCellRenderer,
+    filterParams: {
+      filterOptions: FILTER_OPTIONS.LIST_FILTERS
+    },
     width: 125,
   },
   package_data_name: {
     field: 'package_data_name',
     headerName: 'Package Name',
     cellRenderer: CustomComponentKeys.ListCellRenderer,
+    filterParams: {
+      filterOptions: FILTER_OPTIONS.LIST_FILTERS
+    },
     width: 200,
   },
   package_data_version: {
     field: 'package_data_version',
     headerName: 'Package Version',
     cellRenderer: CustomComponentKeys.ListCellRenderer,
+    filterParams: {
+      filterOptions: FILTER_OPTIONS.LIST_FILTERS
+    },
     width: 125,
   },
   package_data_license_expression: {
     field: 'package_data_license_expression',
     headerName: 'Package License Expression',
     cellRenderer: CustomComponentKeys.ListCellRenderer,
+    filterParams: {
+      filterOptions: FILTER_OPTIONS.LIST_FILTERS
+    },
     width: 300,
   },
   package_data_primary_language: {
     field: 'package_data_primary_language',
     headerName: 'Package Primary Language',
     cellRenderer: CustomComponentKeys.ListCellRenderer,
+    filterParams: {
+      filterOptions: FILTER_OPTIONS.LIST_FILTERS
+    },
     width: 150,
   },
   for_packages: {
     field: 'for_packages',
     headerName: 'For packages',
     cellRenderer: CustomComponentKeys.ListCellRenderer,
+    filterParams: {
+      filterOptions: FILTER_OPTIONS.LIST_FILTERS
+    },
     width: 320,
   },
   // package_data_homepage_url: {
@@ -331,12 +426,18 @@ export const ALL_COLUMNS: COLUMNS_LIST = {
     field: 'package_data_purl',
     headerName: 'Package URL',
     cellRenderer: CustomComponentKeys.ListCellRenderer,
+    filterParams: {
+      filterOptions: FILTER_OPTIONS.LIST_FILTERS
+    },
     width: 300,
   },
   
   scan_error: {
     field: "scan_error",
     headerName: "Scan Error",
+    filterParams: {
+      filterOptions: FILTER_OPTIONS.LIST_FILTERS
+    },
     width: 130,
   },
 };
