@@ -1,0 +1,35 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
+const packager = require('electron-packager')
+
+const ignoreDir = [
+  'src', 'dist', 'samples', 'test-old',
+  '.github', 'docs',
+  ''  // Required as the last element !!
+].join('*|');
+const ignoreFilesOrExtensions = [
+  'rst', 'py', 'md', 'txt', 'enc',
+  'ABOUT', 'LICENSE', 'NOTICE',
+  '.gitignore', '.eslintrc.json',
+  'package-lock.json', 'electron-builder.json', 'tsconfig.json',
+].join('|')
+
+packager({
+  dir: ".",
+  out: 'out',
+  overwrite: true,
+  icon: "src/assets/app-icon/icon",
+  prune: true,
+  ignore: new RegExp(`(${ignoreDir}^.*.(${ignoreFilesOrExtensions})$)`),
+  // osxSign: true,
+  // osxSign: {
+  //   identity: 'Developer ID Application: Felix Rieseberg (LT94ZKYDCJ)',
+  //   'hardened-runtime': true,
+  //   entitlements: 'entitlements.plist',
+  //   'entitlements-inherit': 'entitlements.plist',
+  //   'signature-flags': 'library'
+  // },
+  // osxNotarize: {
+  //   appleId: 'felix@felix.fun',
+  //   appleIdPassword: 'my-apple-id-password'
+  // },
+})

@@ -1,5 +1,5 @@
 import isDev from 'electron-is-dev';
-import { app, BrowserWindow, ipcMain, Menu, shell } from 'electron';
+import { app, BrowserWindow, nativeImage, ipcMain, Menu, shell } from 'electron';
 
 import getTemplate from './mainMenu';
 import { setUpIpcListeners } from './mainActions';
@@ -19,6 +19,10 @@ if (require('electron-squirrel-startup')) {
 }
 // app.allowRendererProcessReuse = false;
 
+const APP_ICON_NATIVE_IMAGE = nativeImage.createFromPath(
+  app.getAppPath() + "/src/assets/app-icon/icon.png"
+);
+
 const createWindow = (): void => {
   // ipcMain.handle('dialog', (event, method, params) => {
   //   dialog[method](params);
@@ -27,14 +31,13 @@ const createWindow = (): void => {
   //   openDialog: (method, config) => ipcRenderer.invoke('dialog', method, config),
   //   // dialog: dialog
   // });
-  // app.allowRendererProcessReuse = false;
 
   // Create the browser window.
   const mainWindow = new BrowserWindow({
     title: "Scancode workbench",
     width: 1200,
     height: 800,
-    icon: 'assets/app-icon/png/scwb_layered_01.png',
+    icon: APP_ICON_NATIVE_IMAGE,
     webPreferences: {
       nodeIntegration: true,
       nodeIntegrationInWorker: true,
@@ -48,10 +51,8 @@ const createWindow = (): void => {
   Menu.setApplicationMenu(Menu.buildFromTemplate(getTemplate()));
 
   console.log();
-  console.log( isDev ? "In Dev mode" : "");
-  console.log("Loading html:", MAIN_WINDOW_WEBPACK_ENTRY);
+  console.log( isDev ? "In Dev mode" : "In Prod mode");
   
-
   // and load the index.html of the app.
   mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY);
 
@@ -70,7 +71,10 @@ const createWindow = (): void => {
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
-app.on('ready', createWindow);
+app.on('ready', () => {
+  createWindow();
+  app.dock.setIcon(APP_ICON_NATIVE_IMAGE)
+});
 
 // @TOIMPROVE
 // Quit when all windows are closed, except on macOS. There, it's common

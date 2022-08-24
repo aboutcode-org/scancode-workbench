@@ -316,10 +316,14 @@ export class WorkbenchDB {
 
       stream
         .pipe(JSONStream.parse('files.*'))
-        .on('header', (obtainedHeader: any) => {
+        .on('header', (topLevelData: any) => {
+          const header = topLevelData.headers[0];
+          const packages = topLevelData.packages || [];
+          const dependencies = topLevelData.dependencies || [];
+          
           interface ParsedJsonHeader {
-            workbench_version?: DataTypes.StringDataType,
-            workbench_notice?: DataTypes.StringDataType,
+            workbench_version: DataTypes.StringDataType,
+            workbench_notice: DataTypes.StringDataType,
             header_content: DataTypes.StringDataType,
             files_count: IntegerDataType,
             output_format_version: DataTypes.StringDataType,        // Query -Justify need for this
@@ -330,50 +334,27 @@ export class WorkbenchDB {
             platform_version: DataTypes.StringDataType,
             python_version: DataTypes.StringDataType,
           }
-          let header: ParsedJsonHeader;
+          const parsedHeader: ParsedJsonHeader = {
+            header_content: JSON.stringify(header, undefined, 2) as unknown as DataTypes.StringDataType,   // FIXME
+            files_count: header.extra_data.files_count,
+            output_format_version: header.output_format_version,
+            spdx_license_list_version: header.extra_data?.spdx_license_list_version,
+            operating_system: header.extra_data?.system_environment?.operating_system,
+            cpu_architecture: header.extra_data?.system_environment?.cpu_architecture,
+            platform: header.extra_data?.system_environment?.platform,
+            platform_version: header.extra_data?.system_environment?.platform_version,
+            python_version: header.extra_data?.system_environment?.python_version,
+            workbench_version: version as unknown as DataTypes.StringDataType,
+            workbench_notice: 'Exported from ScanCode Workbench and provided on an "AS IS" BASIS, WITHOUT WARRANTIES\\nOR CONDITIONS OF ANY KIND, either express or implied. No content created from\\nScanCode Workbench should be considered or used as legal advice. Consult an Attorney\\nfor any legal advice.\\nScanCode Workbench is a free software analysis application from nexB Inc. and others.\\nVisit https://github.com/nexB/scancode-workbench/ for support and download.' as unknown as DataTypes.StringDataType,
+          };
 
-          // Query - Why is this 'headers' in header check
-          if ('headers' in obtainedHeader) {
-            // FIXME: This should be smarter
-            const header_data = obtainedHeader.headers[0];
-            // console.log(header_data);
-            
-            header = {
-              header_content: JSON.stringify(header_data, undefined, 2) as unknown as DataTypes.StringDataType,   // FIXME
-              files_count: header_data.extra_data.files_count,
-              output_format_version: header_data.output_format_version,
-              spdx_license_list_version: header_data.extra_data?.spdx_license_list_version,
-              operating_system: header_data.extra_data?.system_environment?.operating_system,
-              cpu_architecture: header_data.extra_data?.system_environment?.cpu_architecture,
-              platform: header_data.extra_data?.system_environment?.platform,
-              platform_version: header_data.extra_data?.system_environment?.platform_version,
-              python_version: header_data.extra_data?.system_environment?.python_version,
-            };
-          } else {
-            header = {
-              header_content: JSON.stringify(obtainedHeader, undefined, 2) as unknown as DataTypes.StringDataType,  // FIXME
-              files_count: obtainedHeader.files_count,
-              output_format_version: obtainedHeader.output_format_version,
-              spdx_license_list_version: obtainedHeader.spdx_license_list_version,
-              operating_system: obtainedHeader.extra_data?.system_environment?.operating_system,
-              cpu_architecture: obtainedHeader.extra_data?.system_environment?.cpu_architecture,
-              platform: obtainedHeader.extra_data?.system_environment?.platform,
-              platform_version: obtainedHeader.extra_data?.system_environment?.platform_version,
-              python_version: obtainedHeader.extra_data?.system_environment?.python_version,
-            };
-          }
-
-          console.log("Scan header info:", header);
+          console.log("Scan header info:", parsedHeader);
           
-
-          $.extend(header, {
-            workbench_version: version,
-            workbench_notice: 'Exported from ScanCode Workbench and provided on an "AS IS" BASIS, WITHOUT WARRANTIES\\nOR CONDITIONS OF ANY KIND, either express or implied. No content created from\\nScanCode Workbench should be considered or used as legal advice. Consult an Attorney\\nfor any legal advice.\\nScanCode Workbench is a free software analysis application from nexB Inc. and others.\\nVisit https://github.com/nexB/scancode-workbench/ for support and download."'
-          });
-          
-          files_count = Number(header.files_count);
+          files_count = Number(parsedHeader.files_count);
           promiseChain = promiseChain
-            .then(() => this.db.Header.create(header))
+            .then(() => this.db.Packages.bulkCreate(packages))
+            .then(() => this.db.Dependencies.bulkCreate(dependencies))
+            .then(() => this.db.Header.create(parsedHeader))
             .then(header => headerId = Number(header.getDataValue('id')));
         })
         .on('data', function(file: any) {

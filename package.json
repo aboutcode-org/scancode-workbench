@@ -21,11 +21,9 @@
   "scripts": {
     "start": "ELECTRON_IS_DEV=1 electron-forge start",
     "postinstall": "electron-builder install-app-deps",
-    "package": "electron-forge package && electron-packager . --overwrite --icon=src/assets/app-icon/icon --prune=true --out=out --ignore=\"(src*|dist*|samples*)\" && npm run create-archive",
-    "package-asar": "electron-forge package && electron-packager . --overwrite --asar --icon=src/assets/app-icon/icon --prune=true --out=out --ignore=\"(src*|dist*|samples*)\"",
+    "publish": "electron-forge package && node packager.js && npm run create-archive",
     "note": "^^if we change out dir above, change electron-forge out directory too",
     "create-archive": "python archive_builder.py",
-    "publish": "electron-forge package && electron-packager . --overwrite --icon=src/assets/app-icon/icon --prune=true --out=out --ignore=\"(src*|dist*|samples*)\" && npm run create-archive",
     "make": "electron-forge make",
     "publish-forge": "electron-forge publish",
     "lint": "eslint --ext .ts,.tsx .",

@@ -27,6 +27,8 @@ import emailModel, { EmailAttributes } from './email';
 import urlModel, { UrlAttributes } from './url';
 import flatFileModel, { FlatFileAttributes } from './flatFile';
 import scanErrorModel, { ScanErrorAttributes } from './scanError';
+import packagesModel, { PackagesAttributes } from './packages';
+import dependenciesModel, { DependenciesAttributes } from './dependencies';
 
 
 // let Header;
@@ -42,7 +44,11 @@ import scanErrorModel, { ScanErrorAttributes } from './scanError';
 // type SupportedModels = <Model<HeaderAttributes, HeaderAttributes>>;
 
 export interface DatabaseStructure{
+  // Top level entities
   Header: ModelStatic<Model<HeaderAttributes, HeaderAttributes>>,
+  Packages: ModelStatic<Model<PackagesAttributes, PackagesAttributes>>,
+  Dependencies: ModelStatic<Model<DependenciesAttributes, DependenciesAttributes>>,
+
   File: ModelStatic<Model<FileAttributes>>,
   License: ModelStatic<Model<LicenseAttributes>>,
   LicenseExpression: ModelStatic<Model<LicenseExpressionAttributes, OptionalLicenseExpressionAttributes>>,
@@ -61,7 +67,11 @@ export interface DatabaseStructure{
 export function newDatabase(sequelize: Sequelize): DatabaseStructure {
   // Define the models
   const result = {
+    // Top  level entities
     Header: headerModel(sequelize),
+    Packages: packagesModel(sequelize),
+    Dependencies: dependenciesModel(sequelize),
+
     File: fileModel(sequelize),
     License: licenseModel(sequelize),
     LicenseExpression: licenseExpressionModel(sequelize),

@@ -85,7 +85,7 @@
   min-width: 50px;
 }
 .history table .delete-action {
-  color: rgba(53, 0, 0, 0.933);
+  color: #0a417f;
   padding-left: 25px;
   cursor: pointer;
   font-size: 18px;
