@@ -1,11 +1,9 @@
-Google Summer of Code 2022 Final Report
+Google Summer of Code 2022
 ============================================
 
-Organization - `AboutCode <https://www.aboutcode.org>`_
-------------------------------------------------------------------------------------------
-
-| By, `Omkar Phansopkar <https://github.com/OmkarPh>`_
-| Project: `Scancode-Workbench <https://github.com/nexB/scancode-workbench>`_
+| **By**, `Omkar Phansopkar <https://github.com/OmkarPh>`_
+| **Project**: `Scancode-Workbench <https://github.com/nexB/scancode-workbench>`_
+| **Organization -** `AboutCode <https://www.aboutcode.org>`_
 
 Overview
 ---------------
@@ -19,7 +17,7 @@ The GSoC project's goal was to refactor ScanCode Workbench to a React + Typescri
 Plus, the workbench wasn't updated for a long time, to support the latest scans from scancode-toolkit, hence the schema and UI had to be changed accordingly.
 
 Goals achieved
-^^^^^^^^^^^^^^^^^
+-------------------
 
 * Refactor Workbench from vanilla javascript to React + Typescript implementation
 * Update Workbench to support the latest scancode-toolkit output format. (currently supports outputs from scancode-toolkit v31.1.1)
@@ -28,18 +26,18 @@ Goals achieved
 * Add new sections for Scan Info, package info, etc
 
 
-Here’s a quick look at the application:
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Quick look
+-------------------
 .. image:: https://user-images.githubusercontent.com/48476025/185114433-7340ee70-57cd-4586-b7e7-964fe736451a.gif
 
 
 Links
-^^^^^^^^^^^
-* Download ScanCode Workbench - https://github.com/nexB/scancode-workbench/releases/latest
-* GSoC Project Details - https://summerofcode.withgoogle.com/programs/2022/projects/UHXR7kXp
-* Proposal - https://docs.google.com/document/d/1RFEtP5Aub5kAGkEMB1HYnqNa4b66-CDIFp4xQRzuiBg/edit?usp=sharing
-* ScanCode Workbench - https://github.com/nexB/scancode-workbench
-* ScanCode Toolkit - https://github.com/nexB/scancode-toolkit
+---------------
+* `Download ScanCode Workbench - <https://github.com/nexB/scancode-workbench/releases/latest>`_
+* `GSoC Project Details - <https://summerofcode.withgoogle.com/programs/2022/projects/UHXR7kXp>`_
+* `Proposal - <https://docs.google.com/document/d/1RFEtP5Aub5kAGkEMB1HYnqNa4b66-CDIFp4xQRzuiBg/edit?usp=sharing>`_
+* `ScanCode Workbench - <https://github.com/nexB/scancode-workbench>`_
+* `ScanCode Toolkit - <https://github.com/nexB/scancode-toolkit>`_
 
 
 Post GSoC - Future Plans
