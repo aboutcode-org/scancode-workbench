@@ -42,7 +42,7 @@ Links
 * ScanCode Toolkit - https://github.com/nexB/scancode-toolkit
 
 
-Post GSoC - Future Plans and what's left
+Post GSoC - Future Plans
 -------------------------------------------
 I wish to carry on with the development of Scancode-workbench and implement the
 ideas suggested by my mentors. Workbench isn't yet utilising all the scan data it imports, I wish to propose best ways to express this data.
