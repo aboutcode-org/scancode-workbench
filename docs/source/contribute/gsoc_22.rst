@@ -23,7 +23,8 @@ Goals achieved
 * Update Workbench to support the latest scancode-toolkit output format. (currently supports outputs from scancode-toolkit v31.1.1)
 * Improve User experience in Tableview, Home page, etc
 * Add convenience features like Drop files, History records, etc.
-* Add new sections for Scan Info, package info, etc
+* Add new sections for Scan Info, packages-dependencies info, etc
+* Automated releases using github actions (except for apple-silicon builds)
 
 
 Quick look
@@ -33,7 +34,8 @@ Quick look
 
 Links
 ---------------
-* `Download ScanCode Workbench <https://github.com/nexB/scancode-workbench/releases/latest>`_
+* `Download ScanCode Workbench beta <https://github.com/OmkarPh/scancode-workbench/releases/latest>`_
+* `Download latest ScanCode Workbench <https://github.com/nexB/scancode-workbench/releases/latest>`_
 * `GSoC Project Details <https://summerofcode.withgoogle.com/programs/2022/projects/UHXR7kXp>`_
 * `Proposal <https://docs.google.com/document/d/1RFEtP5Aub5kAGkEMB1HYnqNa4b66-CDIFp4xQRzuiBg/edit?usp=sharing>`_
 * `ScanCode Workbench <https://github.com/nexB/scancode-workbench>`_
