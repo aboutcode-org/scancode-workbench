@@ -14,3 +14,4 @@
    reporting-issues
    contributing-code
    community-channels
+   gsoc_22
