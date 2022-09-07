@@ -33,11 +33,11 @@ Quick look
 
 Links
 ---------------
-* `Download ScanCode Workbench - <https://github.com/nexB/scancode-workbench/releases/latest>`_
-* `GSoC Project Details - <https://summerofcode.withgoogle.com/programs/2022/projects/UHXR7kXp>`_
-* `Proposal - <https://docs.google.com/document/d/1RFEtP5Aub5kAGkEMB1HYnqNa4b66-CDIFp4xQRzuiBg/edit?usp=sharing>`_
-* `ScanCode Workbench - <https://github.com/nexB/scancode-workbench>`_
-* `ScanCode Toolkit - <https://github.com/nexB/scancode-toolkit>`_
+* `Download ScanCode Workbench <https://github.com/nexB/scancode-workbench/releases/latest>`_
+* `GSoC Project Details <https://summerofcode.withgoogle.com/programs/2022/projects/UHXR7kXp>`_
+* `Proposal <https://docs.google.com/document/d/1RFEtP5Aub5kAGkEMB1HYnqNa4b66-CDIFp4xQRzuiBg/edit?usp=sharing>`_
+* `ScanCode Workbench <https://github.com/nexB/scancode-workbench>`_
+* `ScanCode Toolkit <https://github.com/nexB/scancode-toolkit>`_
 
 
 Post GSoC - Future Plans
