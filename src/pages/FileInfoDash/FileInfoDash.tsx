@@ -37,7 +37,6 @@ const FileInfoDash = () => {
     db.sync
       .then(db => db.File.findOne({ where: { path: currentPath }}))
       .then(root => {
-        // Prepare aggregate data
         const filesCount =
           root.getDataValue('type').toString({}) === 'directory' ? root.getDataValue('files_count') || 0 : 1;
         const dirsCount =
@@ -58,12 +57,10 @@ const FileInfoDash = () => {
               ]
             }
           },
-          // attributes: ['id', 'mime_type', 'programming_language', ],
+          attributes: ['id', 'mime_type', 'programming_language'],
         }))
       })
       .then(files => {
-        // console.log("all files", files);
-
         // Prepare chart for file types
         const fileTypes = files.map(file => file.getDataValue('mime_type') || 'No Value Detected');
         const { chartData: fileTypesChartData } = formatChartData(fileTypes, 'file-types');
@@ -78,16 +75,14 @@ const FileInfoDash = () => {
       })
       .then((files) =>{
         const fileIDs = files.map(file => file.getDataValue('id'));
-        // console.log("FileIDs to work on: ", fileIDs);
 
-        // Query and prepare chart for copyright holders
+        // Query data for copyright holders chart
         db.sync
           .then((db) => db.Copyright.findAll({where: { fileId: fileIDs }}))
           .then(copyrights => copyrights.map(
             copyright => copyright.getDataValue('holders') || 'No Value Detected'
           ))
           .then(copyrightHolders => {
-            // console.log("Copyright holders", copyrightHolders);
             setScanData(oldScanData => ({
               ...oldScanData,
               totalUniqueCopyrightHolders: new Set(copyrightHolders).size
@@ -95,7 +90,7 @@ const FileInfoDash = () => {
             
             // Prepare chart for copyright holders
             const { chartData: copyrightHoldersChartData } = formatChartData(copyrightHolders, 'policy');
-            // console.log("Copyright formatted", copyrightHoldersChartData);
+            console.log("Pie chart data", copyrightHoldersChartData);
             setCopyrightHoldersData(copyrightHoldersChartData);
           });
       });

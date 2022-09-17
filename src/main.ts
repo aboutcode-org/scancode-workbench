@@ -73,7 +73,9 @@ const createWindow = (): void => {
 // Some APIs can only be used after this event occurs.
 app.on('ready', () => {
   createWindow();
-  app.dock.setIcon(APP_ICON_NATIVE_IMAGE)
+  if(app.dock){
+    app.dock.setIcon(APP_ICON_NATIVE_IMAGE)
+  }
 });
 
 // @TOIMPROVE

@@ -21,6 +21,7 @@ import ChartView from './pages/ChartView/ChartView';
 import FileInfoDash from './pages/FileInfoDash/FileInfoDash';
 import LicenseInfoDash from './pages/LicenseInfoDash/LicenseInfoDash';
 import PackageInfoDash from './pages/PackageInfoDash/PackageInfoDash';
+import Packages from './pages/Packages/Packages';
 
 import './fontawesome';
 import 'rc-tree/assets/index.css';
@@ -46,6 +47,7 @@ const App = () => {
               <Route path={ROUTES.FILE_DASHBOARD} element={<FileInfoDash />} />
               <Route path={ROUTES.LICENSE_DASHBOARD} element={<LicenseInfoDash />} />
               <Route path={ROUTES.PACKAGE_DASHBOARD} element={<PackageInfoDash />} />
+              <Route path={ROUTES.PACKAGES} element={<Packages />} />
               <Route path={ROUTES.CHART_SUMMARY} element={<ChartView />} />
               <Route path={ROUTES.SCAN_INFO} element={<ScanInfo />} />
             </Route>

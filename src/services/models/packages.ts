@@ -20,7 +20,7 @@ import { jsonDataType } from './databaseUtils';
 export interface PackagesAttributes {
   id: DataTypes.IntegerDataType;
   type: DataTypes.StringDataType,
-  namespace: DataTypes.StringDataType,
+  namespace: DataTypes.StringDataType | null,
   name: DataTypes.StringDataType,
   version: DataTypes.StringDataType | null,
   qualifiers: AbstractDataType,
@@ -42,17 +42,17 @@ export interface PackagesAttributes {
   vcs_url: DataTypes.StringDataType | null,
   copyright: DataTypes.StringDataType | null,
   license_expression: DataTypes.StringDataType | null,
-  declared_license: DataTypes.StringDataType | null,
+  declared_license: AbstractDataType | null,
   notice_text: DataTypes.StringDataType | null,
   source_packages: AbstractDataType,
   extra_data: AbstractDataType,
   repository_homepage_url: DataTypes.StringDataType | null,
   repository_download_url: DataTypes.StringDataType | null,
   api_data_url: DataTypes.StringDataType | null,
-  package_uid: DataTypes.StringDataType | null,
+  package_uid: DataTypes.StringDataType,
   datafile_paths: AbstractDataType,
   datasource_ids: AbstractDataType,
-  purl: DataTypes.StringDataType | null,
+  purl: DataTypes.StringDataType,
 }
 
 export default function packagesModel(sequelize: Sequelize) {
@@ -66,7 +66,10 @@ export default function packagesModel(sequelize: Sequelize) {
         type: DataTypes.INTEGER,
       },
       type: DataTypes.STRING,
-      namespace: DataTypes.STRING,
+      namespace: {
+        allowNull: true,
+        type: DataTypes.STRING,
+      },
       name: DataTypes.STRING,
       version: {
         allowNull: true,
@@ -139,10 +142,7 @@ export default function packagesModel(sequelize: Sequelize) {
         allowNull: true,
         type: DataTypes.STRING,
       },
-      declared_license: {
-        allowNull: true,
-        type: DataTypes.STRING,
-      },
+      declared_license: jsonDataType('declared_license'),
       notice_text: {
         allowNull: true,
         type: DataTypes.STRING,
@@ -161,10 +161,7 @@ export default function packagesModel(sequelize: Sequelize) {
         allowNull: true,
         type: DataTypes.STRING,
       },
-      package_uid: {
-        allowNull: true,
-        type: DataTypes.STRING,
-      },
+      package_uid: DataTypes.STRING,
       datafile_paths: jsonDataType('datafile_paths'),
       datasource_ids: jsonDataType('datasource_ids'),
       purl: {

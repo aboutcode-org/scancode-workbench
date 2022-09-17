@@ -11,7 +11,7 @@
   min-height: 100px;
 }
 .chart-card {
-  min-height: 450px;
+  min-height: 410px;
 }
 @media only screen and (max-width: 1200px){
   .info-card {

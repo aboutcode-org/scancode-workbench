@@ -136,10 +136,18 @@ export class WorkbenchDB {
     return this.sync.then(db => db.Header.findOne());
   }
 
-  getFileCount() {
+  getFileCount(){
     return this.sync
       .then(db => db.Header.findOne({attributes: ['files_count']}))
       .then((count) => count ? count.getDataValue('files_count') : 0);
+  }
+
+  getAllPackages(){
+    return this.sync.then(db => db.Packages.findAll());
+  }
+
+  getAllDependencies(){
+    return this.sync.then(db => db.Dependencies.findAll());
   }
 
   // Uses the files table to do a findOne query

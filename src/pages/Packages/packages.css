@@ -1,0 +1,103 @@
+.page-title {
+  text-align: center;
+  width: 100%;
+}
+.packages-loader {
+  display: flex;
+  margin: auto;
+  margin-top: calc(45vh - 150px);
+  margin-top: 200px;
+  justify-content: center;
+}
+.packages-main-container {
+  padding: 10px;
+}
+.packages-container {
+  min-height: 90vh;
+  height: 93vh;
+}
+.packages-panes {
+  padding-right: 15px;
+  overflow: overlay !important;
+}
+.details-pane {
+  padding: 10px;
+}
+
+.package-group-list {
+  border: 0 !important;
+  padding: 0 !important;
+  padding-bottom: 25px !important;
+}
+
+.entity {
+  width: 100%;
+  overflow-x: clip;
+  padding: 0 !important;
+}
+.packages-list {
+  border: 0 !important;
+}
+.collapsed-body {
+  padding-left: 22px;
+}
+.dependency-list > .collapsed-body .entity {
+  border: 0 !important;
+}
+.dependency-list > .collapsed-body .entity-info {
+  padding-left: 20px;
+}
+
+.entity-info {
+  width: 100%;
+  padding: 5px;
+  margin: 0 !important;
+  display: table;
+  align-items: center;
+}
+.entity-type-badge {
+  float: right;
+  margin-right: 0;
+}
+.entity-info .entity-name{
+  padding-left: 2px;
+  padding-right: 2px;
+  line-height: 2.5;
+}
+.entity-info .entity-name .badge{
+  margin-left: 10px;
+}
+.entity-info > div {
+  padding: 2px;
+  display: table-cell;
+}
+.entity-info > div > div {
+  padding: 3px;
+  display: table-cell !important;
+}
+.expand-package {
+  display: inline-block;
+  border-radius: 50%;
+}
+.expand-package .expanded-icon{
+  transform: rotate(90deg);
+}
+.expand-package svg{
+  transition: transform 300ms ease-in;
+}
+.expand-package:active, .expand-package:hover {
+  font-size: 14px;
+}
+.entity-info > .total-deps {
+  padding-top: 7px;
+  padding-right: 7px;
+}
+.entity-info > .total-deps > * {
+  float: right;
+}
+.entity-info:hover{
+  background-color: rgb(242, 242, 242);
+}
+.selected-entity > .entity-info {
+  background-color: #dedede;
+}

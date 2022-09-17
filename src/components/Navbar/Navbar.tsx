@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import { ProSidebar, Menu, MenuItem, SidebarFooter, SidebarContent } from 'react-pro-sidebar';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArchive, faBars, faChartColumn, faGavel, faHome, faInfoCircle, faFileCode, faTable, faFileLines } from '@fortawesome/free-solid-svg-icons';
+import { faArchive, faBars, faChartColumn, faGavel, faHome, faInfoCircle, faFileCode, faTable, faFileLines, faList } from '@fortawesome/free-solid-svg-icons';
 
 import { ROUTES } from '../../constants/routes';
 
@@ -35,6 +35,11 @@ const MENU_ITEMS = [
         title: "Package Info Dashboard",
         route: "/" + ROUTES.PACKAGE_DASHBOARD,
         icon: faArchive,
+    },
+    {
+        title: "Packages Explorer",
+        route: "/" + ROUTES.PACKAGES,
+        icon: faList,
     },
     {
         title: "Chart Summary View",

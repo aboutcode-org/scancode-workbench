@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 import React, { createContext, useContext, useEffect, useState } from "react";
 
 import packageJson from '../../package.json';
-import { ROUTES } from "../constants/routes";
+import { DEFAULT_ROUTE_ON_IMPORT } from "../constants/routes";
 import { AddEntry, GetHistory, RemoveEntry } from "../services/historyStore";
 import { isSchemaChanged } from "../utils/checks";
 import { WorkbenchDB } from '../services/workbenchDB';
@@ -199,7 +199,7 @@ export const WorkbenchDBProvider = (props: React.PropsWithChildren<Record<string
               updateCurrentPath(defaultPath);
             
             if(!preventNavigation)
-              navigate(ROUTES.TABLE_VIEW);
+              navigate(DEFAULT_ROUTE_ON_IMPORT);
           })
           .catch(err => {
             const foundInvalidHistoryItem = GetHistory().find(historyItem => historyItem.sqlite_path === sqliteFilePath);
@@ -288,7 +288,7 @@ export const WorkbenchDBProvider = (props: React.PropsWithChildren<Record<string
               updateCurrentPath(defaultPath);
 
             if(!preventNavigation)
-              navigate(ROUTES.TABLE_VIEW);
+              navigate(DEFAULT_ROUTE_ON_IMPORT);
         });
       });
   }

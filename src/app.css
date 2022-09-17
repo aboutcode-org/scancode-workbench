@@ -7,6 +7,14 @@ body {
   width: 100%;
   position: absolute;
 }
+a:not([href]), a:not([href]):not([class]) {
+  color: #0d6efd;
+  cursor: pointer;
+  text-decoration: none;
+}
+a:not([href]):hover, a:not([href]):not([class]):hover {
+  color: #0a58ca;
+}
 
 
 /*---------------------------------------
@@ -50,6 +58,9 @@ body {
   box-shadow: 1px 0 8px -3px #b1b1b1;
   background-color: #FFFFFF;
   margin-bottom: 30px;
+}
+img {
+  -webkit-user-drag: none;
 }
 
 .card > .content {

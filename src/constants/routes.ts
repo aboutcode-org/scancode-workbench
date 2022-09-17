@@ -5,6 +5,7 @@ export const ROUTES = {
   FILE_DASHBOARD: "file-dashboard",
   LICENSE_DASHBOARD: "license-dashboard",
   PACKAGE_DASHBOARD: "package-dashboard",
+  PACKAGES: "packages",
   CHART_SUMMARY: "chart-summary",
   SCAN_INFO: "scan-info",
 };
@@ -21,7 +22,10 @@ export const IMPORT_FALLBACK_ROUTES = [
   ROUTES.TABLE_VIEW,
   ROUTES.FILE_DASHBOARD,
   ROUTES.LICENSE_DASHBOARD,
+  ROUTES.PACKAGES,
   ROUTES.PACKAGE_DASHBOARD,
   ROUTES.CHART_SUMMARY,
   ROUTES.SCAN_INFO,
-]
+];
+
+export const DEFAULT_ROUTE_ON_IMPORT = ROUTES.TABLE_VIEW;
