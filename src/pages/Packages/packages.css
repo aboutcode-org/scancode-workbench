@@ -62,18 +62,19 @@
 .entity-info .entity-name{
   padding-left: 2px;
   padding-right: 2px;
-  line-height: 2.5;
 }
 .entity-info .entity-name .badge{
   margin-left: 10px;
 }
 .entity-info > div {
   padding: 2px;
+  padding-right: 4px;
   display: table-cell;
 }
 .entity-info > div > div {
   padding: 3px;
   display: table-cell !important;
+  word-break: break-word;
 }
 .expand-package {
   display: inline-block;

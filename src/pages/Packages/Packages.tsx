@@ -309,8 +309,12 @@ const Packages = () => {
                                     onClick={() => activateDependency(dependency)}
                                   >
                                     <div className='entity-info'>
-                                      { dependency.purl.replace('pkg:', '') }
-                                      { !dependency.is_runtime && "#dev" }
+                                      <div>
+                                        <div>
+                                          { dependency.purl.replace('pkg:', '') }
+                                          { !dependency.is_runtime }
+                                        </div>
+                                      </div>
                                       <div className='entity-type-badge'>
                                         <Badge
                                           pill

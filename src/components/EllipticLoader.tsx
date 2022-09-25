@@ -2,21 +2,21 @@ import React from 'react'
 import { ThreeDots } from  'react-loader-spinner'
 
 interface EllipticLoaderProps {
-  height?: number,
-  width?: number,
   color?: string,
+  width?: number,
   radius?: number,
+  height?: number,
+  ariaLabel?: string,
+  wrapperClass?: string,
 }
 const EllipticLoader = (props: EllipticLoaderProps) => {
   return (
     <ThreeDots
-      height="28"
-      width="40" 
-      radius="12"
-      color="#3898fc" 
-      ariaLabel="loading-data"
-      wrapperClass="value"
-      visible={true}
+      height={28}
+      width={40}
+      radius={12}
+      color="#3898fc"
+      ariaLabel="loading data..."
       {...props}
     />
   )

@@ -25,7 +25,6 @@ const Layout = (props: React.PropsWithChildren) => {
   return (
     <div className='d-flex flex-row'>
       <Navbar />
-
       <Allotment className='pane-container'>
         <Allotment.Pane
           visible={showFileTree && initialized}

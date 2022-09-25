@@ -99,7 +99,7 @@ const PackageInfoDash = () => {
           <Card className='info-card'>
             {
               scanData.totalPackages === null ?
-                <EllipticLoader />
+                <EllipticLoader wrapperClass='value' />
               :
               <h4 className='value'>
                 { scanData.totalPackages }

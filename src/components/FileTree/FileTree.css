@@ -5,7 +5,16 @@
   min-height: 80vh!important;
   /* border-right: 2px solid black; */
 }
-
+.file-tree-loader {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+.file-tree-loader .loader {
+  justify-content: center;
+}
 
 .rc-tree-child-tree {
   display: block;

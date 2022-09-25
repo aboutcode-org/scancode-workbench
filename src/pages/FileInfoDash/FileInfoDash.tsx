@@ -108,7 +108,7 @@ const FileInfoDash = () => {
           <Card className='info-card'>
             {
               scanData.totalFiles === null ?
-                <EllipticLoader />
+                <EllipticLoader wrapperClass='value' />
               :
               <h4 className='value'>
                 { scanData.totalFiles }
@@ -123,7 +123,7 @@ const FileInfoDash = () => {
           <Card className='info-card'>
             {
               scanData.totalDirectories === null ?
-                <EllipticLoader />
+                <EllipticLoader wrapperClass='value' />
               :
               <h4 className='value'>
                 { scanData.totalDirectories }
@@ -138,7 +138,7 @@ const FileInfoDash = () => {
           <Card className='info-card'>
             {
               scanData.totalUniqueCopyrightHolders === null ?
-                <EllipticLoader />
+                <EllipticLoader wrapperClass='value' />
               :
               <h4 className='value'>
                 { scanData.totalUniqueCopyrightHolders }

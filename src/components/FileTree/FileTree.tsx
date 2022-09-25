@@ -1,10 +1,11 @@
 import RcTree from 'rc-tree';
 import { DataNode } from 'rc-tree/lib/interface';
 import React, { useEffect, useState } from 'react';
+
+import EllipticLoader from '../EllipticLoader';
 import { useWorkbenchDB } from '../../contexts/workbenchContext';
 
 import SwitcherIcon from './SwitcherIcon';
-import defaultTreeData from './dummyTreeData';
 
 import './FileTree.css';
 
@@ -12,7 +13,7 @@ const FileTree = (props: React.HTMLProps<HTMLDivElement>) => {
   const workbenchDB = useWorkbenchDB();
   const { db, initialized, importedSqliteFilePath, updateCurrentPath } = workbenchDB;
 
-  const [treeData, setTreeData] = useState<DataNode[]>(defaultTreeData);
+  const [treeData, setTreeData] = useState<DataNode[] | null>(null);
 
   useEffect(() => {
     if(!initialized || !db || !importedSqliteFilePath)
@@ -32,6 +33,21 @@ const FileTree = (props: React.HTMLProps<HTMLDivElement>) => {
       return;
     // console.log("selected path:", path);
     updateCurrentPath(path);
+  }
+
+  if(!treeData){
+    return (
+      <div className='file-tree-loader'>
+        <div>
+          Processing File Tree
+          <br/>
+          <EllipticLoader
+            radius={1}
+            wrapperClass="loader"
+          />
+        </div>
+      </div>
+    );
   }
 
   return (

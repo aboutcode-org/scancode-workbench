@@ -7,43 +7,43 @@ interface SCOPE_INFO {
   text: string,
 }
 export const DependencyScopeMapping: Record<DEPENDENCY_SCOPES, SCOPE_INFO> = {
-  compile: { 
+  compile: {
     icon: faTerminal,
     text: "Compile",
   },
-  test: { 
+  test: {
     icon: faListCheck,
     text: "Test",
   },
-  dependencies: { 
+  dependencies: {
     icon: faGears,
     text: "Dependencies",
   },
-  dependencymanagement: { 
+  dependencymanagement: {
     icon: faTerminal,
     text: "Dependency Mgmt.",
   },
-  devDependencies: { 
+  devDependencies: {
     icon: faCode,
     text: "Dev",
   },
-  development: { 
+  development: {
     icon: faCode,
     text: "Development",
   },
-  import: { 
+  import: {
     icon: faCode,
     text: "Import",
   },
-  provided: { 
+  provided: {
     icon: faCode,
     text: "Provided",
   },
-  require: { 
+  require: {
     icon: faCode,
     text: "Require",
   },
-  runtime: { 
+  runtime: {
     icon: faGears,
     text: "Runtime",
   },

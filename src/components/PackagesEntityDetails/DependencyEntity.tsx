@@ -42,12 +42,10 @@ const DependencyEntity = (props: DependencyEntityProps) => {
             {
               DependencyScopeMapping[activeDependency.scope] ?
               <>
-                <FontAwesomeIcon
-                  icon={DependencyScopeMapping[activeDependency.scope].icon}
-                />
+                <FontAwesomeIcon icon={DependencyScopeMapping[activeDependency.scope].icon} />
                 { " " } { DependencyScopeMapping[activeDependency.scope].text}
               </>
-              : "Optional"
+              : activeDependency.scope || "Optional"
             }
           </Badge>
         : ""

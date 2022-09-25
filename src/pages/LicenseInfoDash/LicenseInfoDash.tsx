@@ -117,7 +117,7 @@ const LicenseInfoDash = () => {
           <Card className='info-card'>
             {
               scanData.totalLicenses === null ?
-                <EllipticLoader />
+                <EllipticLoader wrapperClass='value' />
               :
               <h4 className='value'>
                 { scanData.totalLicenses }
@@ -132,7 +132,7 @@ const LicenseInfoDash = () => {
           <Card className='info-card'>
             {
               scanData.totalLicenseFiles === null ?
-                <EllipticLoader />
+                <EllipticLoader wrapperClass='value' />
               :
               <h4 className='value'>
                 { scanData.totalLicenseFiles }
@@ -147,7 +147,7 @@ const LicenseInfoDash = () => {
           <Card className='info-card'>
             {
               scanData.totalSPDXLicenses === null ?
-                <EllipticLoader />
+                <EllipticLoader wrapperClass='value' />
               :
               <h4 className='value'>
                 { scanData.totalSPDXLicenses }
