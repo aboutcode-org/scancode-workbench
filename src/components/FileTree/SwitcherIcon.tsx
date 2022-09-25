@@ -11,15 +11,10 @@ const SwitcherIcon = (obj: unknown) => {
   const node = obj as DataNode & { expanded: boolean };
   
   if (node.isLeaf) {
-    // const customNode = node;
-    // if(customNode.title === "configure" || customNode.title === "configure.ac")
-    //   console.log("Leaf node:", node);
-
     // return <i></i>
     // return false;
     return (
       <FontAwesomeIcon
-        // icon={faCaretRight}
         icon={faFileLines}
         style={{
           ...FontAwesomeTreeNodeStyles,
@@ -37,12 +32,6 @@ const SwitcherIcon = (obj: unknown) => {
           ...FontAwesomeTreeNodeStyles,
           color: 'rgba(50,152,219,255)',
         }}
-
-        // icon={faCaretDown}
-        // style={{
-        //   ...FontAwesomeTreeNodeStyles,
-        //   transform: 'rotate(315deg)',
-        // }}
       />
     );
     // return getTreeNodeIconCustomComponent(DownArrow);
@@ -55,9 +44,6 @@ const SwitcherIcon = (obj: unknown) => {
 
   return (
     <FontAwesomeIcon
-      // icon={faCaretRight}
-      // style={FontAwesomeTreeNodeStyles}
-
       icon={faFolder}
       style={{
         ...FontAwesomeTreeNodeStyles,

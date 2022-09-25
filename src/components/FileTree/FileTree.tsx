@@ -31,7 +31,7 @@ const FileTree = (props: React.HTMLProps<HTMLDivElement>) => {
   function selectPath(path: string){
     if(!initialized)
       return;
-    // console.log("selected path:", path);
+    // console.log("FileTree: selected path:", path);
     updateCurrentPath(path);
   }
 

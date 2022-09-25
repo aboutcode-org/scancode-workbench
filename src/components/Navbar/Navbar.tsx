@@ -101,8 +101,7 @@ const Navbar = () => {
             </SidebarFooter>
         </ProSidebar>
         {/* Dummy sidebar to occupy space in dom */}
-        <div className='dummy-sidebar'>
-        </div>
+        <div className='dummy-sidebar' />
         </>
     )
 }

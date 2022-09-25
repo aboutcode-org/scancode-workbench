@@ -49,7 +49,7 @@ const ScanInfo = () => {
       .then(() => {
         db.getScanInfo()
           .then(rawInfo => {
-            // console.log(info);
+            // console.log("Raw scan info:", info);
             setParsedScanInfo({
               workbench_version: rawInfo.getDataValue('workbench_version')?.toString({}) || "",
               workbench_notice: rawInfo.getDataValue('workbench_notice')?.toString({}) || "",

@@ -15,7 +15,6 @@ export const GetHistory = () => {
 
 export const AddEntry = (entry: HistoryItem) => {
 	const history = GetHistory();
-	// console.log(prevEntries, prevEntries.length);
 
 	const existingEntryIndex = history.findIndex(
 		existingEntry => entry.json_path ? entry.json_path === existingEntry.json_path : entry.sqlite_path === existingEntry.sqlite_path
@@ -30,14 +29,13 @@ export const AddEntry = (entry: HistoryItem) => {
 			return Number(moment(b.opened_at).format('X')) - Number(moment(a.opened_at).format('X'));
 		});
 	} else {
-		console.log("Adding:", entry);
+		console.log("Adding new history entry:", entry);
 		history.unshift(entry);
 	}
 
 	if(history.length > 5)
 		history.length = 5;
 
-	// console.log("Result", prevEntries, prevEntries.length);
 	window.localStorage.setItem(HISTORY_STORE_KEY, JSON.stringify(history));
 }
 
@@ -49,7 +47,7 @@ export const RemoveEntry = (entry: HistoryItem) => {
 	)
 	
 	if(existingEntryIndex > -1){
-		// console.log(`Removing history entry:`, existingEntryIndex);
+		console.log(`Removing history entry:`, existingEntryIndex);
 		history.splice(existingEntryIndex, 1);
 		if(history.length > 5)
 			history.length = 5;

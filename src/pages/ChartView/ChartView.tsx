@@ -66,10 +66,6 @@ const ChartView = () => {
     
     db.sync
       .then(db => db.FlatFile.findAll(query))
-      // .then((values) => {
-      //   console.log('flat file values', values);
-      //   return values;
-      // })
       .then(values => getAttributeValues(values, selectedAttribute))
       .then(values => {
         const parsedData = formatBarchartData(values);

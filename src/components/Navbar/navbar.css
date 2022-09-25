@@ -7,7 +7,7 @@
 }
 .pro-sidebar.collapsed, .dummy-sidebar {
   width: 55px;
-  min-width: 45px;
+  min-width: 55px;
   min-height: 100vh;
 }
 .pro-sidebar .pro-menu {

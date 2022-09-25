@@ -45,8 +45,6 @@ const PackageInfoDash = () => {
     }))
       .then((files) =>{
         const fileIDs = files.map(file => file.getDataValue('id'));
-        // console.log("Files to work on: ", files.map(file => file.get({ plain: true })));
-        // console.log("Files ids to work on: ", fileIDs);
         
         // Query and prepare chart for package types
         db.sync

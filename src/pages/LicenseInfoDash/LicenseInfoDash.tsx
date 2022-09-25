@@ -46,7 +46,6 @@ const LicenseInfoDash = () => {
     }))
       .then((files) =>{
         const fileIDs = files.map(file => file.getDataValue('id'));
-        // console.log("FileIDs to work on: ", fileIDs);
 
         // Query and prepare chart for license expression
         db.sync

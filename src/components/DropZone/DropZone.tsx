@@ -24,12 +24,6 @@ const DropZone = (props: React.PropsWithChildren) => {
     e.stopPropagation();
     CustomLogger("Drag detected", e, e.dataTransfer.files);
   }
-  function DragStartHandler(e: DragEvent){
-    console.log("Drag started:", e, e.dataTransfer.files);
-  }
-  function DragEndHandler(e: DragEvent){
-    console.log("Drag ended", e, e.dataTransfer.files);
-  }
   function DropHandler(e: DragEvent){
     e.preventDefault();
     e.stopPropagation();
@@ -39,13 +33,13 @@ const DropZone = (props: React.PropsWithChildren) => {
       sqlite: /\.(sqlite)+$/i,
     }
 
-    console.log("Dropped files:", e, e.dataTransfer.files);
     const validFiles =
       Array.from(e.dataTransfer.files)
       .filter(file => file.name.match(regex.json) || file.name.match(regex.sqlite))
       .filter(file => file !== null);
     const fileToImport = validFiles[0];
     
+    console.log("Dropped files:", e, e.dataTransfer.files);
     console.log("Valid files:", validFiles);
 
     if(!validFiles.length){
@@ -74,12 +68,7 @@ const DropZone = (props: React.PropsWithChildren) => {
   }
 
   return (
-    <div
-      onDragEnter={DragStartHandler}
-      onDragLeave={DragEndHandler}
-      onDragOver={DragOverHandler}
-      onDrop={DropHandler}
-    >
+    <div onDragOver={DragOverHandler} onDrop={DropHandler}>
       { props.children }
     </div>
   )

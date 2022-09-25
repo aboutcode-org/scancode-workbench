@@ -48,10 +48,7 @@ export function formatChartData(
   });
 
   const chartData = Array.from(count.entries());
-
-  // console.log(`Untrimmed ${chartKey || ""} chart data:`, chartData);
   const untrimmedLength = chartData.length;
-  
   const chartDataLimit = limit || LEGEND_LIMIT;
 
   return {

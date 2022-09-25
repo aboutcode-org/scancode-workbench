@@ -14,7 +14,7 @@ import {
 } from './constants/IpcConnection';
 
 export function chooseSqlitePathForJsonImport(mainWindow: BrowserWindow, jsonFilePath: string){
-  console.log("Prompt to choose Sqlite path for JSON file prompt");
+  console.log("Prompt to choose Sqlite path for JSON file");
 
   let defaultPath;
   if (electronOs.platform() === 'linux') {
@@ -25,8 +25,6 @@ export function chooseSqlitePathForJsonImport(mainWindow: BrowserWindow, jsonFil
     // see: https://stackoverflow.com/questions/4250364/how-to-trim-a-file-extension-from-a-string-in-javascript
     defaultPath = jsonFilePath.replace(/^.*[\\/]/, '').replace(/\.[^/.]+$/, '');
   }
-  console.log("jsonFilePath", jsonFilePath);
-  console.log("defaultPath", defaultPath);
 
   // Immediately ask for a path to create & save the SQLite database
   dialog.showSaveDialog(mainWindow, {

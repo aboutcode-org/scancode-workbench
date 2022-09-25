@@ -14,7 +14,6 @@ import { FILE_TREE_ROUTES, IMPORT_FALLBACK_ROUTES } from '../../constants/routes
 import './layout.css';
 import "allotment/dist/style.css";
 
-
 const Layout = (props: React.PropsWithChildren) => {
   const { pathname } = useLocation();
   const { initialized } = useWorkbenchDB();
@@ -37,7 +36,7 @@ const Layout = (props: React.PropsWithChildren) => {
         </Allotment.Pane>
         <Allotment.Pane className='content-pane'>
           <div className='content-container'>
-            { isImportFallbackRoute && !initialized ?<ImportFallback /> : props.children }
+            { isImportFallbackRoute && !initialized ? <ImportFallback /> : props.children }
           </div>
         </Allotment.Pane>
       </Allotment>

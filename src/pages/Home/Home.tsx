@@ -21,7 +21,7 @@ import './home.css'
 
 const { ipcRenderer } = electron;
 
-console.log("Deps:", {
+console.log("Renderer Deps:", {
   electron,
   electronFs,
   electronOs,
@@ -38,7 +38,6 @@ console.log("Deps:", {
 // const sqlite3Window = window.require('sqlite3');
 // console.log("Sqlite 3 required", sqlite3Window);
 // console.log("Sqlite 3 imported === required", sqlite3Window === sqlite3);
-
 
 const Home = () => {
   const {

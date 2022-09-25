@@ -16,8 +16,6 @@ const CustomColumnSelector = (props: ColumnSelectorProps) => {
   const { show, columnDefs, hide, setColumnDefs } = props;
 
   function selectAllChanged(checked: boolean){
-    console.log("Checked", checked);
-    
     if(checked)
       setColumnDefs([...COLUMN_GROUPS.ALL]);
     else
