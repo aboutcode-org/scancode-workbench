@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-const packager = require('electron-packager')
+const packager = require('electron-packager');
 
 const ignoreDir = [
   'src', 'dist', 'samples', 'test-old',
@@ -11,14 +11,15 @@ const ignoreFilesOrExtensions = [
   'ABOUT', 'LICENSE', 'NOTICE',
   '.gitignore', '.eslintrc.json',
   'package-lock.json', 'electron-builder.json', 'tsconfig.json',
-].join('|')
+].join('|');
 
 packager({
   dir: ".",
-  out: 'out',
+  out: 'out',     // @NOTE - If 'out' dir is changed here, change PACKAGE_DIR in archive_builder too,
   overwrite: true,
   icon: "src/assets/app-icon/icon",
   prune: true,
+  name: "ScanCode Workbench",
   ignore: new RegExp(`(${ignoreDir}^.*.(${ignoreFilesOrExtensions})$)`),
   // osxSign: true,
   // osxSign: {
@@ -32,4 +33,4 @@ packager({
   //   appleId: 'felix@felix.fun',
   //   appleIdPassword: 'my-apple-id-password'
   // },
-})
+});

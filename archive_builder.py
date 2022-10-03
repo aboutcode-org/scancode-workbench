@@ -20,7 +20,7 @@ import platform
 APP_NAME = 'ScanCode-Workbench'
 APP_BUNDLE_ID = 'com.nexb.scancode-workbench'
 ARCHIVE_DIR = 'dist'
-PACKAGE_DIR = 'out'
+PACKAGE_DIR = 'out'   # @NOTE - PACKAGE_DIR must be same as 'out' property in packager.js
 
 # Get scancode workbench version from package.json
 with open('package.json') as json_file:
