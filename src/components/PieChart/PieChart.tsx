@@ -1,6 +1,6 @@
-import c3 from 'c3';
+import c3, { ChartAPI } from 'c3';
 import { TailSpin } from 'react-loader-spinner';
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 import { FormattedEntry } from '../../utils/pie';
 import { LEGEND_COLORS } from '../../constants/colors';
@@ -15,12 +15,14 @@ interface ChartProps {
 const PieChart = (props: ChartProps) => {
   const { chartData } = props;
   const chartRef = useRef<HTMLDivElement | null>(null);
-  
+  const chartContainerRef = useRef<HTMLDivElement | null>(null);
+  const [c3Chart, setC3Chart] = useState<ChartAPI | null>(null);
+
   useEffect(() => {
     if(!chartData || !chartRef.current)
       return;
     
-    c3.generate({
+    const newChart = c3.generate({
       bindto: chartRef.current,
       data: {
         columns: chartData,
@@ -30,18 +32,30 @@ const PieChart = (props: ChartProps) => {
         pattern: LEGEND_COLORS,
       }
     });
+    setC3Chart(newChart);
   }, [chartData]);
 
-  // useEffect(() => {
-  //   const intervalID = setInterval(() => {
-  //     console.log("Resizing pie chart as per dom");
-  //     if(c3Chart)
-  //       c3Chart.resize();
-  //   }, 1000);
-  //   () => {
-  //     clearInterval(intervalID);
-  //   }
-  // }, [c3Chart]);
+  useEffect(() => {
+    if(!chartContainerRef.current || !c3Chart)
+      return;
+
+    const resizeChart = () => c3Chart.resize();
+
+    let resizeTimeout = setTimeout(null, 100);
+    const resizeActionHandler = () => {
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(resizeChart, 100);
+    };
+
+    const chartContainerObserver = new ResizeObserver(resizeActionHandler);
+    chartContainerObserver.observe(chartContainerRef.current);
+    
+    return () => {
+      clearTimeout(resizeTimeout);
+      chartContainerObserver.disconnect();
+    }
+  }, [c3Chart]);
+
 
   if(!chartData || !chartData.length){
     return (
@@ -61,8 +75,9 @@ const PieChart = (props: ChartProps) => {
       </div>
     )
   }
+
   return (
-    <div className='pie-chart-container'>
+    <div className='pie-chart-container' ref={chartContainerRef}>
       <div ref={chartRef} className='pie-chart' />
     </div>
   )
