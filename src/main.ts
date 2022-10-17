@@ -47,7 +47,7 @@ const createWindow = (): void => {
   }); 
   Menu.setApplicationMenu(Menu.buildFromTemplate(getTemplate()));
 
-  console.log("\n", isDev ? "In Dev mode" : "In Prod mode");
+  console.log("\n", isDev ? "Dev mode" : "Prod mode");
   
   // and load the index.html of the app.
   mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY);

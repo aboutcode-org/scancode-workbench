@@ -116,7 +116,12 @@ const PackageInfoDash = () => {
             <h5 className='title'>
               Package Types
             </h5>
-            <PieChart chartData={packageTypeData} />
+            <PieChart
+              chartData={packageTypeData}
+              // @TODO-CONTENT
+              noDataText='Use --package CLI option for package types'
+              noDataLink='https://scancode-toolkit.readthedocs.io/en/stable/cli-reference/basic-options.html#all-basic-scan-options'
+            />
           </Card>
         </Col>
         <Col sm={6} md={4}>
@@ -124,7 +129,12 @@ const PackageInfoDash = () => {
             <h5 className='title'>
               Package languages
             </h5>
-            <PieChart chartData={packageLangData} />
+            <PieChart
+              chartData={packageLangData}
+              // @TODO-CONTENT
+              noDataText='Use --package CLI option for package languages'
+              noDataLink='https://scancode-toolkit.readthedocs.io/en/stable/cli-reference/basic-options.html#all-basic-scan-options'
+            />
           </Card>
         </Col>
         <Col sm={6} md={4}>
@@ -132,7 +142,12 @@ const PackageInfoDash = () => {
             <h5 className='title'>
               Package Licenses
             </h5>
-            <PieChart chartData={packageLicenseData} />
+            <PieChart
+              chartData={packageLicenseData}
+              // @TODO-CONTENT
+              noDataText='Use --package CLI option for package licenses'
+              noDataLink='https://scancode-toolkit.readthedocs.io/en/stable/cli-reference/basic-options.html#all-basic-scan-options'
+            />
           </Card>
         </Col>
       </Row>

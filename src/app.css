@@ -7,12 +7,12 @@ body {
   width: 100%;
   position: absolute;
 }
-a:not([href]), a:not([href]):not([class]) {
+a, a:not([href]), a:not([href]):not([class]) {
   color: #0d6efd;
   cursor: pointer;
   text-decoration: none;
 }
-a:not([href]):hover, a:not([href]):not([class]):hover {
+a:hover, a:not([href]):hover, a:not([href]):not([class]):hover {
   color: #0a58ca;
 }
 

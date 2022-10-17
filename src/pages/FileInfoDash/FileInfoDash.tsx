@@ -157,7 +157,12 @@ const FileInfoDash = () => {
             <h5 className='title'>
               Programming languages
             </h5>
-            <PieChart chartData={progLangsData} />
+            <PieChart
+              chartData={progLangsData}
+              // @TODO-CONTENT
+              noDataText='Use --info CLI option for programming languages'
+              noDataLink='https://scancode-toolkit.readthedocs.io/en/stable/cli-reference/basic-options.html#all-basic-scan-options'
+            />
           </Card>
         </Col>
         <Col sm={6} md={4}>
@@ -165,7 +170,12 @@ const FileInfoDash = () => {
             <h5 className='title'>
               File types
             </h5>
-            <PieChart chartData={fileTypesData} />
+            <PieChart
+              chartData={fileTypesData}
+              // @TODO-CONTENT
+              noDataText='Use --info CLI option for file types'
+              noDataLink='https://scancode-toolkit.readthedocs.io/en/stable/cli-reference/basic-options.html#all-basic-scan-options'
+            />
           </Card>
         </Col>
         <Col sm={6} md={4}>
@@ -173,7 +183,12 @@ const FileInfoDash = () => {
             <h5 className='title'>
               Copyright holders
             </h5>
-            <PieChart chartData={copyrightHoldersData} />
+            <PieChart
+              chartData={copyrightHoldersData}
+              // @TODO-CONTENT
+              noDataText='Use --copyright CLI option for copyright data'
+              noDataLink='https://scancode-toolkit.readthedocs.io/en/stable/cli-reference/basic-options.html#all-basic-scan-options'
+            />
           </Card>
         </Col>
       </Row>

@@ -37,8 +37,6 @@ export function getAttributeValues(values: any[], attribute: any) {
 }
 
 export function formatBarchartData(data: unknown[]){
-  // console.log("Formatting barchart data", data);
-  
   const counterMapping = new Map<string, number>();
   let existingCount = 0;
   data.forEach((entry: string | string[]) => {

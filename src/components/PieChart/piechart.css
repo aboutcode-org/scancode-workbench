@@ -1,11 +1,10 @@
 .fallback-container {
   padding: 20px;
-  padding-top: 40px;
+  padding-top: 35%;
   display: flex;
   vertical-align: middle;
   align-items: center;
   justify-content: center;
-  text-align: center;
 }
 .fallback-container img {
   max-height: 200px;

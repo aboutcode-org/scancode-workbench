@@ -17,7 +17,6 @@ export function renderReactApp() {
     const root = createRoot(container);
     root.render(<App />);
   } else {
-    console.log("Container for react app not found :(");
-    console.log("Container:", container);
+    console.log("Container for react app not found :(", container);
   }
 }

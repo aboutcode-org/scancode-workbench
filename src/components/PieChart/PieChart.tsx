@@ -1,23 +1,24 @@
 import c3, { ChartAPI } from 'c3';
-import { TailSpin } from 'react-loader-spinner';
 import React, { useEffect, useRef, useState } from 'react';
+
+import { PieChartFallback, PieChartFallbackProps } from './PieChartFallback';
 
 import { FormattedEntry } from '../../utils/pie';
 import { LEGEND_COLORS } from '../../constants/colors';
 
-import NoDataImage from '../../assets/images/no-data.png';
 import './piechart.css';
 
-interface ChartProps {
+interface PieChartProps extends PieChartFallbackProps {
   chartData: FormattedEntry[] | null,
 }
 
-const PieChart = (props: ChartProps) => {
+const PieChart = (props: PieChartProps) => {
   const { chartData } = props;
   const chartRef = useRef<HTMLDivElement | null>(null);
   const chartContainerRef = useRef<HTMLDivElement | null>(null);
   const [c3Chart, setC3Chart] = useState<ChartAPI | null>(null);
 
+  // Redraw chart on data change
   useEffect(() => {
     if(!chartData || !chartRef.current)
       return;
@@ -35,16 +36,18 @@ const PieChart = (props: ChartProps) => {
     setC3Chart(newChart);
   }, [chartData]);
 
+  // Suppress continuous resize calls that may cause stutter and bad UX
   useEffect(() => {
     if(!chartContainerRef.current || !c3Chart)
       return;
 
     const resizeChart = () => c3Chart.resize();
 
-    let resizeTimeout = setTimeout(null, 100);
+    const TIMEOUT_DURATION = 20;
+    let resizeTimeout = setTimeout(null, TIMEOUT_DURATION);
     const resizeActionHandler = () => {
       clearTimeout(resizeTimeout);
-      resizeTimeout = setTimeout(resizeChart, 100);
+      resizeTimeout = setTimeout(resizeChart, TIMEOUT_DURATION);
     };
 
     const chartContainerObserver = new ResizeObserver(resizeActionHandler);
@@ -58,22 +61,7 @@ const PieChart = (props: ChartProps) => {
 
 
   if(!chartData || !chartData.length){
-    return (
-      <div className='fallback-container'>
-        {
-          !chartData ?
-          <TailSpin
-            radius={5}
-            height={100}
-            width={100}
-            color="#3898fc" 
-            ariaLabel="loading-chart"
-          />
-          :
-          <img src={NoDataImage} />
-        }
-      </div>
-    )
+    return <PieChartFallback {...props} loading={!chartData} />
   }
 
   return (

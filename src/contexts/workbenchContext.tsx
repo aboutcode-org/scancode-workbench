@@ -180,12 +180,10 @@ export const WorkbenchDBProvider = (props: React.PropsWithChildren<Record<string
           .then(db => db.File.findOne({ where: { parent: '#' }}))
           .then(root => {
             if(!root){
-              console.error("Root directory not found !!!!");
-              console.error("Root:", root);
+              console.error("Root directory not found !!!!", root);
               return;
             }
 
-            console.log("Root dir", root);
             const defaultPath = root.getDataValue('path');
 
             AddEntry({
