@@ -167,9 +167,8 @@ const LicenseInfoDash = () => {
             </h5>
             <PieChart
               chartData={licenseExpressionData}
-              // @TODO-CONTENT
               noDataText='Use --license CLI option for License expressions'
-              noDataLink='https://scancode-toolkit.readthedocs.io/en/stable/cli-reference/basic-options.html#all-basic-scan-options'
+              noDataLink='https://scancode-toolkit.readthedocs.io/cli-reference/basic-options.html#license-option'
             />
           </Card>
         </Col>
@@ -180,9 +179,8 @@ const LicenseInfoDash = () => {
             </h5>
             <PieChart
               chartData={licenseKeyData}
-              // @TODO-CONTENT
               noDataText='Use --license CLI option for License keys'
-              noDataLink='https://scancode-toolkit.readthedocs.io/en/stable/cli-reference/basic-options.html#all-basic-scan-options'
+              noDataLink='https://scancode-toolkit.readthedocs.io/cli-reference/basic-options.html#license-option'
             />
           </Card>
         </Col>
@@ -193,9 +191,8 @@ const LicenseInfoDash = () => {
             </h5>
             <PieChart
               chartData={licensePolicyData}
-              // @TODO-CONTENT
               noDataText='Use --license-policy CLI option for policy data'
-              noDataLink='https://scancode-toolkit.readthedocs.io/en/stable/plugins/licence_policy_plugin.html#using-the-plugin'
+              noDataLink='https://scancode-toolkit.readthedocs.io/plugins/licence_policy_plugin.html#using-the-plugin'
             />
           </Card>
         </Col>
