@@ -29,6 +29,7 @@ by postal mail at:
 Please indicate in your communication the ScanCode Workbench version for which you are
 requesting source code.
 
-ScanCode Workbench was built from electron-quickstart code that is dedicated
-to the Public Domain using the Creative Commons CC0 1.0 Universal (CC0 1.0)
+ScanCode Workbench was built from Webpack + Typescript template officially provided by
+electronforge code that is dedicated to the Public Domain using the
+Creative Commons CC0 1.0 Universal (CC0 1.0)
 Public Domain Dedication: http://creativecommons.org/publicdomain/zero/1.0/

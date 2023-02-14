@@ -23,13 +23,8 @@
     "postinstall": "electron-builder install-app-deps",
     "publish": "electron-forge package && node packager.js && npm run create-archive",
     "create-archive": "python archive_builder.py",
-    "make": "electron-forge make",
-    "publish-forge": "electron-forge publish",
     "lint": "eslint --ext .ts,.tsx .",
-    "test": "echo 'No tests yet :)'",
-    "forge-package": "electron-forge package",
-    "rebuild-sqlite3": "electron-rebuild -f -w sqlite3",
-    "package": "electron-forge package"
+    "test": "echo 'No tests yet :)'"
   },
   "devDependencies": {
     "@electron-forge/cli": "^6.0.0-beta.66",

@@ -119,7 +119,7 @@ const PackageInfoDash = () => {
             <PieChart
               chartData={packageTypeData}
               noDataText='Use --package CLI option for package types'
-              noDataLink='https://scancode-toolkit.readthedocs.io/cli-reference/basic-options.html#package-option'
+              noDataLink='https://scancode-toolkit.readthedocs.io/en/latest/cli-reference/basic-options.html#package-option'
             />
           </Card>
         </Col>
@@ -131,7 +131,7 @@ const PackageInfoDash = () => {
             <PieChart
               chartData={packageLangData}
               noDataText='Use --package CLI option for package languages'
-              noDataLink='https://scancode-toolkit.readthedocs.io/cli-reference/basic-options.html#package-option'
+              noDataLink='https://scancode-toolkit.readthedocs.io/en/latest/cli-reference/basic-options.html#package-option'
             />
           </Card>
         </Col>
@@ -143,7 +143,7 @@ const PackageInfoDash = () => {
             <PieChart
               chartData={packageLicenseData}
               noDataText='Use --package CLI option for package licenses'
-              noDataLink='https://scancode-toolkit.readthedocs.io/cli-reference/basic-options.html#package-option'
+              noDataLink='https://scancode-toolkit.readthedocs.io/en/latest/cli-reference/basic-options.html#package-option'
             />
           </Card>
         </Col>
