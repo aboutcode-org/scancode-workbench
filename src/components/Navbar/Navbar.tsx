@@ -37,6 +37,11 @@ const MENU_ITEMS = [
         icon: faArchive,
     },
     {
+        title: "License detections Explorer",
+        route: "/" + ROUTES.LICENSE_DETECTIONS,
+        icon: faList,
+    },
+    {
         title: "Packages Explorer",
         route: "/" + ROUTES.PACKAGES,
         icon: faList,

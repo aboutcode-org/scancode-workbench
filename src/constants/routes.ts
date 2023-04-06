@@ -5,6 +5,7 @@ export const ROUTES = {
   FILE_DASHBOARD: "file-dashboard",
   LICENSE_DASHBOARD: "license-dashboard",
   PACKAGE_DASHBOARD: "package-dashboard",
+  LICENSE_DETECTIONS: "license-detections",
   PACKAGES: "packages",
   CHART_SUMMARY: "chart-summary",
   SCAN_INFO: "scan-info",
@@ -24,6 +25,7 @@ export const IMPORT_FALLBACK_ROUTES = [
   ROUTES.LICENSE_DASHBOARD,
   ROUTES.PACKAGES,
   ROUTES.PACKAGE_DASHBOARD,
+  ROUTES.LICENSE_DETECTIONS,
   ROUTES.CHART_SUMMARY,
   ROUTES.SCAN_INFO,
 ];

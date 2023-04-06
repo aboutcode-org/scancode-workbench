@@ -18,7 +18,6 @@ import { Model, ModelStatic, Sequelize } from 'sequelize';
 
 import headerModel, { HeaderAttributes } from './header';
 import fileModel, { FileAttributes } from './file';
-import licenseModel, { LicenseAttributes } from './license';
 import licenseExpressionModel, { LicenseExpressionAttributes, OptionalLicenseExpressionAttributes } from './licenseExpression';
 import licensePolicyModel, { LicensePolicyAttributes } from './licensePolicy';
 import copyrightModel, { CopyrightAttributes } from './copyright';
@@ -29,6 +28,7 @@ import flatFileModel, { FlatFileAttributes } from './flatFile';
 import scanErrorModel, { ScanErrorAttributes } from './scanError';
 import packagesModel, { PackagesAttributes } from './packages';
 import dependenciesModel, { DependenciesAttributes } from './dependencies';
+import licenseDetectionModel, { LicenseDetectionAttributes } from './licenseDetections';
 
 
 // let Header;
@@ -48,9 +48,9 @@ export interface DatabaseStructure{
   Header: ModelStatic<Model<HeaderAttributes, HeaderAttributes>>,
   Packages: ModelStatic<Model<PackagesAttributes, PackagesAttributes>>,
   Dependencies: ModelStatic<Model<DependenciesAttributes, DependenciesAttributes>>,
+  LicenseDetections: ModelStatic<Model<LicenseDetectionAttributes, LicenseDetectionAttributes>>,
 
   File: ModelStatic<Model<FileAttributes>>,
-  License: ModelStatic<Model<LicenseAttributes>>,
   LicenseExpression: ModelStatic<Model<LicenseExpressionAttributes, OptionalLicenseExpressionAttributes>>,
   LicensePolicy: ModelStatic<Model<LicensePolicyAttributes>>,
   Copyright: ModelStatic<Model<CopyrightAttributes>>,
@@ -71,9 +71,9 @@ export function newDatabase(sequelize: Sequelize): DatabaseStructure {
     Header: headerModel(sequelize),
     Packages: packagesModel(sequelize),
     Dependencies: dependenciesModel(sequelize),
+    LicenseDetections: licenseDetectionModel(sequelize),
 
     File: fileModel(sequelize),
-    License: licenseModel(sequelize),
     LicenseExpression: licenseExpressionModel(sequelize),
     LicensePolicy: licensePolicyModel(sequelize),
     Copyright: copyrightModel(sequelize),
@@ -86,7 +86,6 @@ export function newDatabase(sequelize: Sequelize): DatabaseStructure {
 
   // Define the relations
   result.Header.hasMany(result.File);
-  result.File.hasMany(result.License);
   result.File.hasMany(result.LicenseExpression);
   result.File.hasMany(result.LicensePolicy);
   result.File.hasMany(result.Copyright);
@@ -97,7 +96,6 @@ export function newDatabase(sequelize: Sequelize): DatabaseStructure {
 
   // Include Array for queries
   const fileIncludes = [
-    { model: result.License, separate: true },
     { model: result.LicenseExpression, separate: true },
     { model: result.LicensePolicy, separate: true },
     { model: result.Copyright, separate: true },

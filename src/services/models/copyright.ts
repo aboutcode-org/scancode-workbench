@@ -14,17 +14,17 @@
  #
  */
 
-import { Sequelize, DataTypes, Model } from 'sequelize';
+import { Sequelize, DataTypes, IntegerDataType, StringDataType, Model } from 'sequelize';
 import { jsonDataType } from "./databaseUtils";
 
 export interface CopyrightAttributes {
-  id: DataTypes.IntegerDataType,
-  fileId: DataTypes.IntegerDataType,
-  start_line: DataTypes.IntegerDataType,
-  end_line: DataTypes.IntegerDataType,
-  holders: DataTypes.StringDataType,
-  authors: DataTypes.StringDataType,
-  statements: DataTypes.StringDataType,
+  id: IntegerDataType,
+  fileId: IntegerDataType,
+  start_line: IntegerDataType,
+  end_line: IntegerDataType,
+  holders: StringDataType,
+  authors: StringDataType,
+  statements: StringDataType,
 }
 
 export default function copyrightModel(sequelize: Sequelize) {

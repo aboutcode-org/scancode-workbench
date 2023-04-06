@@ -28,6 +28,14 @@ const About = () => {
           <a href="https://scancode-workbench.readthedocs.io">Documentation</a>.
       </p>
       <br/>
+      <h3>Workbench notice:</h3>
+      <p>
+        Provided on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. <br/>
+        No content created from ScanCode Workbench should be considered or used as legal advice. Consult an Attorney for any legal advice. <br />
+        ScanCode Workbench is a free software analysis application from nexB Inc. and others. <br/>
+        Visit<a href='https://github.com/nexB/scancode-workbench'>https://github.com/nexB/scancode-workbench</a> for support and download.
+      </p>
+      <br/>
       <h3>Having Trouble?</h3>
       <p>
           Report a bug or request a feature on the ScanCode-Workbench.

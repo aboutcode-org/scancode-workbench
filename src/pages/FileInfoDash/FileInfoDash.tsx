@@ -14,6 +14,7 @@ interface ScanData {
 }
 
 import "./FileInfoDash.css";
+import { NO_VALUE_DETECTED_LABEL } from '../../constants/data';
 
 const FileInfoDash = () => {
 
@@ -50,9 +51,12 @@ const FileInfoDash = () => {
 
         return db.sync.then(db => db.File.findAll({
           where: {
+            type: {
+              [Op.eq]: 'file'
+            },
             path: {
               [Op.or]: [
-                { [Op.like]: `${currentPath}`},      // Matches a file / directory.
+                { [Op.like]: `${currentPath}` },     // Matches self
                 { [Op.like]: `${currentPath}/%`}  // Matches all its children (if any).
               ]
             }
@@ -62,12 +66,12 @@ const FileInfoDash = () => {
       })
       .then(files => {
         // Prepare chart for file types
-        const fileTypes = files.map(file => file.getDataValue('mime_type') || 'No Value Detected');
-        const { chartData: fileTypesChartData } = formatChartData(fileTypes, 'file-types');
+        const fileMimeTypes = files.map(file => file.getDataValue('mime_type') || NO_VALUE_DETECTED_LABEL)
+        const { chartData: fileTypesChartData } = formatChartData(fileMimeTypes, 'file-types');
         setFileTypesData(fileTypesChartData);
 
         // Prepare chart for programming languages
-        const langs = files.map(file => file.getDataValue('programming_language') || 'No Value Detected')
+        const langs = files.map(file => file.getDataValue('programming_language') || NO_VALUE_DETECTED_LABEL)
         const { chartData: langsChartData } = formatChartData(langs, 'programming-langs');
         setProgLangsData(langsChartData);
 
@@ -80,7 +84,7 @@ const FileInfoDash = () => {
         db.sync
           .then((db) => db.Copyright.findAll({where: { fileId: fileIDs }}))
           .then(copyrights => copyrights.map(
-            copyright => copyright.getDataValue('holders') || 'No Value Detected'
+            copyright => copyright.getDataValue('holders') || NO_VALUE_DETECTED_LABEL
           ))
           .then(copyrightHolders => {
             setScanData(oldScanData => ({
@@ -90,7 +94,6 @@ const FileInfoDash = () => {
             
             // Prepare chart for copyright holders
             const { chartData: copyrightHoldersChartData } = formatChartData(copyrightHolders, 'policy');
-            console.log("Pie chart data", copyrightHoldersChartData);
             setCopyrightHoldersData(copyrightHoldersChartData);
           });
       });

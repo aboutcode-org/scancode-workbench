@@ -1,5 +1,7 @@
 .page-title {
   text-align: center;
+  margin: 15px;
+  margin-top: 5px;
   width: 100%;
 }
 .packages-loader {
@@ -10,11 +12,10 @@
   justify-content: center;
 }
 .packages-main-container {
-  padding: 10px;
+  padding-top: 5px;
 }
 .packages-container {
-  min-height: 90vh;
-  height: 93vh;
+  height: 90vh;
 }
 .packages-panes {
   padding-right: 15px;

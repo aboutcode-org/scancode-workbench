@@ -1,8 +1,11 @@
 import ReactJson from '@microlink/react-json-view';
-import React from 'react'
+import React, { useEffect } from 'react'
+// import { useNavigate } from 'react-router-dom';
+// import { ROUTES } from '../../constants/routes';
+// import { useWorkbenchDB } from '../../contexts/workbenchContext';
 import { DependencyDetails, PackageDetails } from '../../pages/Packages/packageDefinitions'
 
-import './entityCommonStyles.css'
+import '../../styles/entityCommonStyles.css';
 import './packageEntity.css'
 
 interface PackageEntityProps {
@@ -11,7 +14,18 @@ interface PackageEntityProps {
 }
 const PackageEntity = (props: PackageEntityProps) => {
   const { goToDependency, package: activePackage} = props;
+  // const navigate = useNavigate();
+  // const { updateCurrentPath } = useWorkbenchDB();
+  
+  useEffect(() => {
+    console.log("Active package", activePackage);
+  }, [activePackage])
 
+  // function goToFile(path: string){
+  //   // updateCurrentPath(path, 'file'); // Not two-way yet
+  //   navigate(ROUTES.TABLE_VIEW);
+  // }
+  
   if(!activePackage){
     return (
       <div>
@@ -39,14 +53,19 @@ const PackageEntity = (props: PackageEntityProps) => {
               </>,
               ""
             ],
-            [ "Type:", activePackage.type || "NA" ],
-            [ "Namespace:", activePackage.namespace || "NA" ],
-            [ "Name:", activePackage.name || "NA" ],
-            [ "Version:", activePackage.version || "NA" ],
-            [ "Subpath:", activePackage.subpath || "NA" ],
-            [ "Primary Language:", activePackage.primary_language || "NA" ],
-            [ "Homepage URL:", activePackage.homepage_url || "NA" ],
-          ].map(entry => (
+            [ "Type:", activePackage.type || null ],
+            [ "Namespace:", activePackage.namespace || null ],
+            [ "Name:", activePackage.name || null ],
+            [ "Version:", activePackage.version || null ],
+            [ "Subpath:", activePackage.subpath || null ],
+            [ "Primary Language:", activePackage.primary_language || null ],
+            [ "Homepage URL:", activePackage.homepage_url || null ],
+            [ "Extracted license statement: ", activePackage.extracted_license_statement || null ],
+            [ "Declared license expression", activePackage.declared_license_expression || null ],
+            [ "Declared license expression SPDX", activePackage.declared_license_expression_spdx || null ],
+            [ "Other license expression", activePackage.other_license_expression || null ],
+            [ "Other license expression SPDX", activePackage.other_license_expression_spdx || null ],
+          ].map(entry => entry[1] && (
             <React.Fragment key={entry[0].toString()}>
               <span className='property'>
                 { entry[0] || "" }
@@ -56,6 +75,29 @@ const PackageEntity = (props: PackageEntityProps) => {
               </span>
               <br/>
             </React.Fragment>
+          ))
+        }
+      </div>
+      <br/>
+      <b>
+        {
+          activePackage.datafile_paths.length === 0 ? "No data files !"
+          : `Data file paths:`
+        } 
+      </b>
+      <br/>
+      <div className='deps-list'>
+        {
+          activePackage.datafile_paths.map(datafile_path => (
+            // <a
+            //   className='deps-link'
+            //   key={datafile_path}
+            //   onClick={() => goToFile(datafile_path)}
+            // >
+            <React.Fragment key={datafile_path}>
+              { datafile_path }
+            </React.Fragment>
+            // </a>
           ))
         }
       </div>

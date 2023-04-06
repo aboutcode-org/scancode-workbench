@@ -9,6 +9,7 @@ interface EllipticLoaderProps {
   ariaLabel?: string,
   wrapperClass?: string,
 }
+
 const EllipticLoader = (props: EllipticLoaderProps) => {
   return (
     <ThreeDots

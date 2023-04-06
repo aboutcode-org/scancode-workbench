@@ -2,6 +2,7 @@ import React, { useEffect } from 'react'
 import { AgGridReact } from 'ag-grid-react';
 import {
   ColDef,
+  ColumnMovedEvent,
   GridApi,
   GridReadyEvent,
 } from 'ag-grid-community';
@@ -29,13 +30,14 @@ interface AgDataTableProps {
   tableData: unknown[],
   columnDefs: ColDef[],
   gridApi: GridApi | null,
+  onColumnMoved: (event: ColumnMovedEvent<any>) => void,
   updateGridApi: (value: React.SetStateAction<GridApi>) => void,
 }
 
 const AgDataTable = (props: AgDataTableProps) => {
   const {
     tableData, columnDefs,
-    gridApi, updateGridApi,
+    gridApi, updateGridApi, onColumnMoved,
   } = props;
 
   const onGridReady = (params: GridReadyEvent) => updateGridApi(params.api);
@@ -67,6 +69,7 @@ const AgDataTable = (props: AgDataTableProps) => {
       <AgGridReact
         rowData={tableData}
         onGridReady={onGridReady}
+        onColumnMoved={onColumnMoved}
         components={frameworkComponents}
         className="ag-theme-alpine ag-grid-customClass"
 

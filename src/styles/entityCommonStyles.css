@@ -10,7 +10,9 @@
 .package-entity .badge, .dependency-entity .badge {
   margin-right: 5px;
 }
-.package-entity .react-json-view, .dependency-entity .react-json-view {
+.package-entity .react-json-view,
+.dependency-entity .react-json-view,
+.license-detecion-entity .react-json-view{
   max-height: 75vh;
   overflow: scroll;
 }

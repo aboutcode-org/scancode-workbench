@@ -14,40 +14,41 @@
  #
  */
 
-import { Sequelize, DataTypes, Model } from 'sequelize';
-import { jsonDataType } from './databaseUtils';
+import { Sequelize, DataTypes, IntegerDataType, StringDataType, Model } from 'sequelize';
+import { jsonDataType, JSON_Type } from './databaseUtils';
 
 export interface PackageDataAttributes {
-  id: DataTypes.IntegerDataType,
-  fileId: DataTypes.IntegerDataType,
-  type: DataTypes.StringDataType,
-  namespace: DataTypes.StringDataType,
-  name: DataTypes.StringDataType,
-  version: DataTypes.StringDataType,
-  qualifiers: DataTypes.AbstractDataType,
-  subpath: DataTypes.StringDataType,
-  purl: DataTypes.StringDataType,
-  primary_language: DataTypes.StringDataType,
-  code_type: DataTypes.StringDataType,
-  description: DataTypes.StringDataType,
-  size: DataTypes.IntegerDataType,
-  release_date: DataTypes.StringDataType,
-  parties: DataTypes.AbstractDataType,
-  keywords: DataTypes.AbstractDataType,
-  homepage_url: DataTypes.StringDataType,
-  download_url: DataTypes.StringDataType,
-  download_checksums: DataTypes.AbstractDataType,
-  bug_tracking_url: DataTypes.StringDataType,
-  code_view_url: DataTypes.StringDataType,
-  vcs_tool: DataTypes.StringDataType,
-  vcs_repository: DataTypes.StringDataType,
-  vcs_revision: DataTypes.StringDataType,
-  copyright: DataTypes.StringDataType,
-  license_expression: DataTypes.StringDataType,
-  declared_licensing: DataTypes.StringDataType,
-  notice_text: DataTypes.StringDataType,
-  dependencies: DataTypes.AbstractDataType,
-  related_packages: DataTypes.AbstractDataType,
+  id: IntegerDataType,
+  fileId: IntegerDataType,
+  type: StringDataType,
+  namespace: StringDataType,
+  name: StringDataType,
+  version: StringDataType,
+  qualifiers: JSON_Type,
+  subpath: StringDataType,
+  purl: StringDataType,
+  primary_language: StringDataType,
+  code_type: StringDataType,  // @QUERY - Does exist ?
+  description: StringDataType,
+  size: IntegerDataType,
+  release_date: StringDataType,
+  parties: JSON_Type,
+  keywords: JSON_Type,
+  homepage_url: StringDataType,
+  download_url: StringDataType,
+  download_checksums: JSON_Type,
+  bug_tracking_url: StringDataType,
+  code_view_url: StringDataType,
+  vcs_tool: StringDataType,
+  vcs_repository: StringDataType,
+  vcs_revision: StringDataType,
+  copyright: StringDataType,
+  declared_license_expression: StringDataType,
+  declared_license_expression_spdx: StringDataType,
+  extracted_license_statement: StringDataType,
+  notice_text: StringDataType,
+  dependencies: JSON_Type,
+  related_packages: JSON_Type,  // @QUERY - Does exist ?
 }
 
 export default function packageDataModel(sequelize: Sequelize) {
@@ -84,11 +85,12 @@ export default function packageDataModel(sequelize: Sequelize) {
       vcs_repository: DataTypes.STRING,
       vcs_revision: DataTypes.STRING,
       copyright: DataTypes.STRING,
-      license_expression: DataTypes.STRING,
-      declared_licensing: DataTypes.STRING,
+      declared_license_expression: DataTypes.STRING,
+      declared_license_expression_spdx: DataTypes.STRING,
+      extracted_license_statement: DataTypes.STRING,
       notice_text: DataTypes.STRING,
       dependencies: jsonDataType('dependencies'),
-      related_packages: jsonDataType('related_packages')
+      related_packages: jsonDataType('related_packages')    // @QUERY - Does exist ?
     },
     {
       timestamps: false

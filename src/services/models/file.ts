@@ -14,27 +14,26 @@
  #
  */
 
-import { Sequelize, DataTypes, Model } from 'sequelize';
-import { jsonDataType } from './databaseUtils';
+import { Sequelize, DataTypes, IntegerDataType, StringDataType, Model } from 'sequelize';
+import { jsonDataType, JSON_Type } from './databaseUtils';
 
 export interface FileAttributes {
-  id: DataTypes.IntegerDataType,
+  id: IntegerDataType,
   path: string;
-  fileId: DataTypes.IntegerDataType,
-  parent: DataTypes.StringDataType,
-  type: DataTypes.StringDataType,
-  name: DataTypes.StringDataType,
-  extension: DataTypes.StringDataType,
-  date: DataTypes.StringDataType,
-  size: DataTypes.IntegerDataType,
-  sha1: DataTypes.StringDataType,
-  md5: DataTypes.StringDataType,
-  files_count: DataTypes.IntegerDataType,
-  dirs_count: DataTypes.IntegerDataType,
-  mime_type: DataTypes.StringDataType,
-  file_type: DataTypes.StringDataType,
-  programming_language: DataTypes.StringDataType,
-  for_packages: DataTypes.AbstractDataType,
+  parent: StringDataType,
+  type: StringDataType,
+  name: StringDataType,
+  extension: StringDataType,
+  date: StringDataType,
+  size: IntegerDataType,
+  sha1: StringDataType,
+  md5: StringDataType,
+  files_count: IntegerDataType,
+  dirs_count: IntegerDataType,
+  mime_type: StringDataType,
+  file_type: StringDataType,
+  programming_language: StringDataType,
+  for_packages: JSON_Type,
   is_binary: boolean,
   is_text: boolean,
   is_archive: boolean,
@@ -63,7 +62,6 @@ export default function fileModel(sequelize: Sequelize) {
         primaryKey: true,
         type: DataTypes.INTEGER,
       },
-      fileId: DataTypes.INTEGER,
       parent: DataTypes.STRING,
       type: DataTypes.STRING,
       name: DataTypes.STRING,

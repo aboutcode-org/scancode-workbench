@@ -1,5 +1,5 @@
 import * as $ from 'jquery';
-import { DataTypes } from "sequelize";
+import { StringDataType } from "sequelize";
 import { LEGEND_LIMIT } from "../constants/data";
 
 
@@ -33,7 +33,7 @@ function limitChartData(data: FormattedEntry[], limit: number) {
 
 // Formats data suitable for Pie chart
 export function formatChartData(
-  names: (string | DataTypes.StringDataType)[],
+  names: (string | StringDataType)[],
   chartKey?: string,
   limit?: number,
 ): {

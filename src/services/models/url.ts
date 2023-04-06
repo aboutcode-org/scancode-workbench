@@ -15,14 +15,14 @@ import { Model } from 'sequelize';
  #
  */
 
-import { Sequelize, DataTypes } from 'sequelize';
+import { Sequelize, StringDataType, IntegerDataType, DataTypes } from 'sequelize';
 
 export interface UrlAttributes {
-  id: DataTypes.IntegerDataType,
-  fileId: DataTypes.IntegerDataType,
-  url: DataTypes.StringDataType,
-  start_line: DataTypes.IntegerDataType,
-  end_line: DataTypes.IntegerDataType,
+  id: IntegerDataType,
+  fileId: IntegerDataType,
+  url: StringDataType,
+  start_line: IntegerDataType,
+  end_line: IntegerDataType,
 }
 
 export default function urlModel(sequelize: Sequelize) {

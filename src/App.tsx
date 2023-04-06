@@ -27,10 +27,12 @@ import './fontawesome';
 import 'rc-tree/assets/index.css';
 import 'react-toastify/dist/ReactToastify.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import 'react-tooltip/dist/react-tooltip.css'
 
 import './app.css';
 import './dashStyles.css';
 import './customFaColors.css';
+import LicenseDetections from './pages/LicenseDetections/LicenseDetections';
 
 const App = () => {
   return (
@@ -46,6 +48,7 @@ const App = () => {
                 <Route path={ROUTES.FILE_DASHBOARD} element={<FileInfoDash />} />
                 <Route path={ROUTES.LICENSE_DASHBOARD} element={<LicenseInfoDash />} />
                 <Route path={ROUTES.PACKAGE_DASHBOARD} element={<PackageInfoDash />} />
+                <Route path={ROUTES.LICENSE_DETECTIONS} element={<LicenseDetections />} />
                 <Route path={ROUTES.PACKAGES} element={<Packages />} />
                 <Route path={ROUTES.CHART_SUMMARY} element={<ChartView />} />
                 <Route path={ROUTES.SCAN_INFO} element={<ScanInfo />} />

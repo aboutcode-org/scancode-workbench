@@ -1,4 +1,3 @@
-import { Model } from 'sequelize';
 /*
  #
  # Copyright (c) 2018 nexB Inc. and others. All rights reserved.
@@ -15,14 +14,14 @@ import { Model } from 'sequelize';
  #
  */
 
-import { Sequelize, DataTypes } from 'sequelize';
+import { Model, Sequelize, DataTypes, IntegerDataType, StringDataType } from 'sequelize';
 
 export interface EmailAttributes {
-  id: DataTypes.IntegerDataType,
-  email: DataTypes.StringDataType,
-  fileId: DataTypes.IntegerDataType,
-  start_line: DataTypes.IntegerDataType,
-  end_line: DataTypes.IntegerDataType
+  id: IntegerDataType,
+  email: StringDataType,
+  fileId: IntegerDataType,
+  start_line: IntegerDataType,
+  end_line: IntegerDataType
 }
 
 export default function emailModel(sequelize: Sequelize) {

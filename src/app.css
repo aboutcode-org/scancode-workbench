@@ -15,6 +15,12 @@ a, a:not([href]), a:not([href]):not([class]) {
 a:hover, a:not([href]):hover, a:not([href]):not([class]):hover {
   color: #0a58ca;
 }
+img {
+	-webkit-user-select: none;
+	-webkit-user-drag: none;
+	-webkit-app-region: no-drag;
+  user-select: none;
+}
 
 
 /*---------------------------------------

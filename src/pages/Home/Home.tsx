@@ -4,7 +4,9 @@ import electron from 'electron'
 import * as electronFs from "fs"
 import * as electronOs from "os"
 import { toast } from 'react-toastify'
-import React, { useMemo, useState } from 'react'
+import isDev from 'electron-is-dev';
+import { useNavigate } from 'react-router-dom'
+import React, { useEffect, useMemo, useState } from 'react'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCogs, faDatabase, faFileCode, faFloppyDisk, faFolder, faTrash } from '@fortawesome/free-solid-svg-icons'
@@ -18,26 +20,36 @@ import { GetHistory, HistoryItem, RemoveEntry } from '../../services/historyStor
 import { OPEN_DIALOG_CHANNEL } from '../../constants/IpcConnection';
 
 import './home.css'
+import { DEFAULT_ROUTE_ON_IMPORT, ROUTES } from '../../constants/routes'
 
 const { ipcRenderer } = electron;
 
-console.log("Renderer Deps:", {
-  electron,
-  electronFs,
-  electronOs,
-  ipcRenderer,
-  platform: electronOs.platform(),
-  // remote,
-  // sqlite3,
-  // remoteMain,
-});
+// console.log("Renderer Deps:", {
+//   electron,
+//   electronFs,
+//   electronOs,
+//   ipcRenderer,
+//   platform: electronOs.platform(),
+//   // remote,
+//   // sqlite3,
+//   // remoteMain,
+// });
 
+// // Debugging for native modules
 // const electronDialog = electron.dialog;
 // console.log('electron.dialog', electronDialog);
-
 // const sqlite3Window = window.require('sqlite3');
 // console.log("Sqlite 3 required", sqlite3Window);
 // console.log("Sqlite 3 imported === required", sqlite3Window === sqlite3);
+
+/**
+ * Developer options
+ */
+
+const DEV_CONFIG = {
+  AUTO_IMPORT_IN_DEV: false,
+  GO_TO_ROUTE_ON_IMPORT: ROUTES.LICENSE_DETECTIONS,
+}
 
 const Home = () => {
   const {
@@ -49,6 +61,7 @@ const Home = () => {
     importedSqliteFilePath,
   } = useWorkbenchDB();
   
+  const navigate = useNavigate();
   const [historyRefreshToken, setRefreshToken] = useState(0);
   const refreshHistory = () => setRefreshToken(Math.random());
   const history = useMemo(GetHistory, [importedSqliteFilePath, db, historyRefreshToken]);
@@ -87,6 +100,15 @@ const Home = () => {
   // Copy already created/imported sqlite file to new sqlite file, and
   // update path of workbench DB to new sqlite DB
   const saveSqliteFile = () => ipcRenderer.send(OPEN_DIALOG_CHANNEL.SAVE_SQLITE);
+
+  // Will cause inaccessible Home page, set AUTO_IMPORT_IN_DEV to false
+  useEffect(() => {
+    if(isDev && DEV_CONFIG.AUTO_IMPORT_IN_DEV && history[0]){
+      historyItemParser(history[0]);
+      setTimeout(() => navigate(DEV_CONFIG.GO_TO_ROUTE_ON_IMPORT), 200);
+    }
+  }, []);
+  
 
   if(!initialized && loadingStatus !== null){
     return <ProgressLoader progress={loadingStatus} />

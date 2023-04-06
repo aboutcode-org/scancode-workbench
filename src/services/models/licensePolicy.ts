@@ -14,15 +14,15 @@
  #
  */
 
-import { Sequelize, DataTypes, Model } from 'sequelize';
+import { Sequelize, DataTypes, IntegerDataType, StringDataType, Model } from 'sequelize';
 
 export interface LicensePolicyAttributes {
-  id: DataTypes.IntegerDataType,
-  fileId: DataTypes.IntegerDataType,
-  license_key: DataTypes.StringDataType,
-  label: DataTypes.StringDataType,
-  color_code: DataTypes.StringDataType,
-  icon: DataTypes.StringDataType,
+  id: IntegerDataType,
+  fileId: IntegerDataType,
+  license_key: StringDataType,
+  label: StringDataType,
+  color_code: StringDataType,
+  icon: StringDataType,
 }
 
 export default function licensePolicyModel(sequelize: Sequelize) {

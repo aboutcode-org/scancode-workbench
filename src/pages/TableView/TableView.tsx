@@ -1,6 +1,6 @@
 import { Op } from 'sequelize';
 import React, { useEffect, useState } from 'react'
-import { ColDef, GridApi } from 'ag-grid-community';
+import { ColDef, ColumnMovedEvent, GridApi } from 'ag-grid-community';
 
 import AgDataTable from './AgDataTable';
 import CoreButton from '../../components/CoreButton/CoreButton';
@@ -107,7 +107,17 @@ const TableView = () => {
         const filterPromise = db.FlatFile.aggregate(
           columnKey as (keyof FlatFileAttributes),
           'DISTINCT',
-          { plain: false },
+          {
+            plain: false,
+            where: {
+              path: {
+                [Op.or]: [
+                  { [Op.like]: `${currentPath}`},      // Matches a file / directory.
+                  { [Op.like]: `${currentPath}/%`}  // Matches all its children (if any).
+                ]
+              }
+            },
+          },
         )
           .then((uniqueValues: { DISTINCT: string }[]) => {
             const parsedUniqueValues = uniqueValues.map((val) => val.DISTINCT);
@@ -136,11 +146,11 @@ const TableView = () => {
       });
 
       Promise.all(filterPromises)
-        .then((generatedColDefs) => {
-          console.log(
-            "Completed generation of unique set filters:",
-            generatedColDefs.map(coldef => coldef.filterParams.options)
-          );
+        .then(() => {
+          // console.log(
+          //   "Generated unique set filters:",
+          //   columnDefs.map(coldef => coldef.filterParams)
+          // );
           setColumnDefs(prevColDefs => {
             if(prevColDefs.length)
               return [...prevColDefs];
@@ -149,9 +159,13 @@ const TableView = () => {
           // setDefaultColumnGroup();
         });
     });
+  }, [db, currentPath]);
 
-
-  }, [db]);
+  useEffect(() => {
+    if(gridApi){
+      gridApi.refreshHeader();
+    }
+  }, [columnDefs]);
 
   return (
     <div style={{ height: "100%", minHeight: "90vh" }}>
@@ -213,6 +227,11 @@ const TableView = () => {
       <AgDataTable
         gridApi={gridApi}
         updateGridApi={setGridApi}
+        onColumnMoved={(event: ColumnMovedEvent<any>) => {
+          // @TODO
+          // console.log("Column moved", event);
+          
+        }}
         columnDefs={columnDefs}
         tableData={tableData}
       />

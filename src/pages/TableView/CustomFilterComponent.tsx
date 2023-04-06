@@ -68,10 +68,10 @@ const CustomFilterComponent = forwardRef((props: CustomParams, ref) => {
       onChange={e => selectionChanged(e.target.value)}
     >
       {
-        optionValues.map(optionValue => {
+        optionValues.map((optionValue, idx) => {
           const parsedOptionValue = parseProbableStringifiedArray(optionValue);
           return (
-            <option value={optionValue} key={optionValue}>
+            <option value={optionValue} key={optionValue+idx}>
               {
                 DEFAULT_EMPTY_VALUES.has(optionValue) ? "All"
                 : parsedOptionValue

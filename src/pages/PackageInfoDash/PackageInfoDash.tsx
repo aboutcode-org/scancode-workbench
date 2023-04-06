@@ -13,6 +13,7 @@ interface ScanData {
 
 import "./PackageInfoDash.css";
 import { FileAttributes } from '../../services/models/file';
+import { NO_VALUE_DETECTED_LABEL } from '../../constants/data';
 
 const PackageInfoDash = () => {
 
@@ -58,7 +59,7 @@ const PackageInfoDash = () => {
           .then(packageData => {
             // Prepare chart for package types
             const packageTypes = packageData.map(
-              packageEntry => packageEntry.getDataValue('type') || 'No Value Detected'
+              packageEntry => packageEntry.getDataValue('type') || NO_VALUE_DETECTED_LABEL
             );
             const { chartData: packageTypesChartData } = formatChartData(packageTypes, 'package types');
             // console.log("Result packages types:", packageTypesChartData);
@@ -66,7 +67,7 @@ const PackageInfoDash = () => {
 
             // Prepare chart for package languages
             const packageLangs = packageData.map(
-              packageEntry => packageEntry.getDataValue('primary_language') || 'No Value Detected'
+              packageEntry => packageEntry.getDataValue('primary_language') || NO_VALUE_DETECTED_LABEL
             );
             const { chartData: packageLangsChartData } = formatChartData(packageLangs, 'package langs');
             // console.log("Result packages languages:", packageLangsChartData);
@@ -74,7 +75,7 @@ const PackageInfoDash = () => {
 
             // Prepare chart for package license expression
             const packageLicenseExp = packageData.map(
-              packageEntry => packageEntry.getDataValue('license_expression') || 'No Value Detected'
+              packageEntry => packageEntry.getDataValue('declared_license_expression') || NO_VALUE_DETECTED_LABEL
             );
             const { chartData: packageLicenseExpChartData } = 
               formatChartData(packageLicenseExp, 'package license exp');

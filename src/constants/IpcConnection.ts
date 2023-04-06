@@ -20,6 +20,10 @@ export const SAVE_REPLY_CHANNEL = {
   SQLITE: 'save-sqlite-reply',
 }
 
+export const UTIL_CHANNEL = {
+  SET_CURRENT_FILE_TITLE: 'set-current-file-title',
+}
+
 export const NAVIGATION_CHANNEL = 'NAVIGATE_TO';
 export type NAVIGATION_CHANNEL_MESSAGE = string;
 

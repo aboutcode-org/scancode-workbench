@@ -15,10 +15,10 @@ import { Model } from 'sequelize';
  #
  */
 
-import { Sequelize, DataTypes } from 'sequelize';
+import { Sequelize, StringDataType, DataTypes } from 'sequelize';
 
 export interface ScanErrorAttributes {
-  scan_error: DataTypes.StringDataType
+  scan_error: StringDataType
 }
 
 export default function scanErrorModel(sequelize: Sequelize) {

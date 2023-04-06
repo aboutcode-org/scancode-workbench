@@ -14,22 +14,22 @@
  #
  */
 
- import { Sequelize, DataTypes, Model, AbstractDataType } from 'sequelize';
-import { jsonDataType } from './databaseUtils';
+ import { Sequelize, StringDataType, IntegerDataType, DataTypes, Model } from 'sequelize';
+import { jsonDataType, JSON_Type } from './databaseUtils';
 
  export interface DependenciesAttributes {
-  id: DataTypes.IntegerDataType,
-  purl: DataTypes.StringDataType,
-  extracted_requirement: DataTypes.StringDataType,
-  scope: DataTypes.StringDataType,
+  id: IntegerDataType,
+  purl: StringDataType,
+  extracted_requirement: StringDataType,
+  scope: StringDataType,
   is_runtime: boolean,
   is_optional: boolean,
   is_resolved: boolean,
-  resolved_package: AbstractDataType,
-  dependency_uid: DataTypes.StringDataType,
-  for_package_uid: DataTypes.StringDataType,
-  datafile_path: DataTypes.StringDataType,
-  datasource_id: DataTypes.StringDataType,
+  resolved_package: JSON_Type,
+  dependency_uid: StringDataType,
+  for_package_uid: StringDataType,
+  datafile_path: StringDataType,
+  datasource_id: StringDataType,
  }
 
  export enum DEPENDENCY_SCOPES {

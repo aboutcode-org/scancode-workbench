@@ -10,7 +10,7 @@ const ImportFallback = () => {
   return (
     <div className='import-fallback'>
       <Link to={ROUTES.HOME}>
-        <img src={AddFileImage} draggable={false} />
+        <img src={AddFileImage} draggable={false} onDragStart={() => false} />
       </Link>
       <br/>
       <h2>

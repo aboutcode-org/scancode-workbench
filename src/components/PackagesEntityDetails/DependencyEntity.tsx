@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Badge } from 'react-bootstrap';
 import ReactJson from '@microlink/react-json-view';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -7,7 +7,7 @@ import { faCheck, faCogs } from '@fortawesome/free-solid-svg-icons';
 import { DependencyDetails } from '../../pages/Packages/packageDefinitions'
 import { DependencyScopeMapping } from './dependencyScopeMapper';
 
-import './entityCommonStyles.css'
+import '../../styles/entityCommonStyles.css';
 import './dependencyEntity.css'
 
 interface DependencyEntityProps {
@@ -15,9 +15,13 @@ interface DependencyEntityProps {
   goToPackageByUID: (package_uid: string) => void,
 }
 const DependencyEntity = (props: DependencyEntityProps) => {
-  const { goToPackageByUID, dependency: activeDependency} = props;
+  const { goToPackageByUID, dependency: dependency} = props;
 
-  if(!activeDependency){
+  useEffect(() => {
+    console.log("Active dep", dependency);
+  }, [dependency])
+
+  if(!dependency){
     return (
       <div>
         <h5>
@@ -29,29 +33,29 @@ const DependencyEntity = (props: DependencyEntityProps) => {
   return (
     <div className='dependency-entity'>
       <h5>
-        { activeDependency.purl }
+        { dependency.purl }
       </h5>
       {
-        activeDependency.is_runtime ?
+        dependency.is_runtime ?
           <Badge pill bg="primary">
             <FontAwesomeIcon icon={faCogs} />
             { ' ' } Runtime
           </Badge>
-        : activeDependency.is_optional ?
+        : dependency.is_optional ?
           <Badge pill bg="dark">
             {
-              DependencyScopeMapping[activeDependency.scope] ?
+              DependencyScopeMapping[dependency.scope] ?
               <>
-                <FontAwesomeIcon icon={DependencyScopeMapping[activeDependency.scope].icon} />
-                { " " } { DependencyScopeMapping[activeDependency.scope].text}
+                <FontAwesomeIcon icon={DependencyScopeMapping[dependency.scope].icon} />
+                { " " } { DependencyScopeMapping[dependency.scope].text}
               </>
-              : activeDependency.scope || "Optional"
+              : dependency.scope || "Optional"
             }
           </Badge>
         : ""
       }
       {
-        activeDependency.is_resolved && 
+        dependency.is_resolved && 
         <Badge pill bg="success">
           <FontAwesomeIcon icon={faCheck} />
           { ' ' } Resolved
@@ -64,14 +68,16 @@ const DependencyEntity = (props: DependencyEntityProps) => {
           [
             [
               "For:", 
-              <a onClick={() => goToPackageByUID(activeDependency.for_package_uid)}>
-                { activeDependency.for_package_uid || "NA" }
+              dependency.for_package_uid ?
+              <a onClick={() => goToPackageByUID(dependency.for_package_uid)}>
+                { dependency.for_package_uid || "NA" }
               </a>
+              : <>NA</>
             ],
-            [ "Scope:", activeDependency.scope || "NA" ],
-            [ "Extracted requirement:", activeDependency.extracted_requirement || "NA" ],
-            [ "Data file:", activeDependency.datafile_path || "NA" ],
-            [ "Data source ID", activeDependency.datasource_id || "NA" ],
+            [ "Scope:", dependency.scope || "NA" ],
+            [ "Extracted requirement:", dependency.extracted_requirement || "NA" ],
+            [ "Data file:", dependency.datafile_path || "NA" ],
+            [ "Data source ID", dependency.datasource_id || "NA" ],
           ].map(entry => (
             <React.Fragment key={entry[0].toString()}>
               <span className='property'>
@@ -87,11 +93,11 @@ const DependencyEntity = (props: DependencyEntityProps) => {
       </div>
       <br/>
       {
-        activeDependency.is_resolved && activeDependency.resolved_package &&
+        dependency.is_resolved && dependency.resolved_package &&
         <div>
           Resolved package:
           <ReactJson
-            src={activeDependency.resolved_package as Record<string, unknown>}
+            src={dependency.resolved_package as Record<string, unknown>}
             enableClipboard={false}
             displayDataTypes={false}
             collapsed={0}
@@ -101,7 +107,7 @@ const DependencyEntity = (props: DependencyEntityProps) => {
       <br/>
       Raw package:
       <ReactJson
-        src={activeDependency || {}}
+        src={dependency || {}}
         enableClipboard={false}
         displayDataTypes={false}
         collapsed={0}

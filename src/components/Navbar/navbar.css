@@ -17,6 +17,9 @@
   padding: 8px 10px;
   cursor: pointer;
 }
+.pro-sidebar > .pro-sidebar-inner > .pro-sidebar-layout {
+  overflow: clip;
+}
 .pro-sidebar .pro-menu.shaped .pro-menu-item > .pro-inner-item > .pro-icon-wrapper {
   background: none;
 }

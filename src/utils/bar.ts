@@ -1,3 +1,5 @@
+import { NO_VALUE_DETECTED_LABEL } from "../constants/data";
+
 export function isValid(value: unknown): boolean {
   if (Array.isArray(value)) {
     return value.length > 0 && value.every((element) => isValid(element));
@@ -30,7 +32,7 @@ export function getAttributeValues(values: any[], attribute: any) {
       }
       validatedValues.push(
         isValid(val) ?
-          val : 'No Value Detected');
+          val : NO_VALUE_DETECTED_LABEL);
     }
   }
   return validatedValues;
@@ -48,10 +50,19 @@ export function formatBarchartData(data: unknown[]){
       counterMapping.set(entryString, 1);
   });
 
+
+  if(counterMapping.has('')){
+    counterMapping.set(
+      NO_VALUE_DETECTED_LABEL,
+      (counterMapping.get(NO_VALUE_DETECTED_LABEL) || 0) + counterMapping.get('')
+    );
+    counterMapping.delete('');
+  }
+
   const formattedList = Array.from(counterMapping, entry => ({
     label: entry[0],
     value: entry[1],
-  })).sort((a, b) => b.value - a.value);
+  })).sort((a, b) => b.value - a.value);  
 
   return formattedList;
 }

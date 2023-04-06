@@ -14,45 +14,48 @@
  #
  */
 
-import { Sequelize, DataTypes, Model, AbstractDataType } from 'sequelize';
-import { jsonDataType } from './databaseUtils';
+import { Sequelize, StringDataType, IntegerDataType, DataTypes, Model } from 'sequelize';
+import { jsonDataType, JSON_Type } from './databaseUtils';
 
 export interface PackagesAttributes {
-  id: DataTypes.IntegerDataType;
-  type: DataTypes.StringDataType,
-  namespace: DataTypes.StringDataType | null,
-  name: DataTypes.StringDataType,
-  version: DataTypes.StringDataType | null,
-  qualifiers: AbstractDataType,
-  subpath: DataTypes.StringDataType | null,
-  primary_language: DataTypes.StringDataType | null,
-  description: DataTypes.StringDataType | null,
-  release_date: DataTypes.StringDataType | null,
-  parties: AbstractDataType,
-  keywords: AbstractDataType,
-  homepage_url: DataTypes.StringDataType | null,
-  download_url: DataTypes.StringDataType | null,
-  size: DataTypes.StringDataType | null,
-  sha1: DataTypes.StringDataType | null,
-  md5: DataTypes.StringDataType | null,
-  sha256: DataTypes.StringDataType | null,
-  sha512: DataTypes.StringDataType | null,
-  bug_tracking_url: DataTypes.StringDataType | null,
-  code_view_url: DataTypes.StringDataType | null,
-  vcs_url: DataTypes.StringDataType | null,
-  copyright: DataTypes.StringDataType | null,
-  license_expression: DataTypes.StringDataType | null,
-  declared_license: AbstractDataType | null,
-  notice_text: DataTypes.StringDataType | null,
-  source_packages: AbstractDataType,
-  extra_data: AbstractDataType,
-  repository_homepage_url: DataTypes.StringDataType | null,
-  repository_download_url: DataTypes.StringDataType | null,
-  api_data_url: DataTypes.StringDataType | null,
-  package_uid: DataTypes.StringDataType,
-  datafile_paths: AbstractDataType,
-  datasource_ids: AbstractDataType,
-  purl: DataTypes.StringDataType,
+  id: IntegerDataType;
+  type: StringDataType,
+  namespace: StringDataType | null,
+  name: StringDataType,
+  version: StringDataType | null,
+  qualifiers: JSON_Type,
+  subpath: StringDataType | null,
+  primary_language: StringDataType | null,
+  description: StringDataType | null,
+  release_date: StringDataType | null,
+  parties: JSON_Type,
+  keywords: JSON_Type,
+  homepage_url: StringDataType | null,
+  download_url: StringDataType | null,
+  size: StringDataType | null,
+  sha1: StringDataType | null,
+  md5: StringDataType | null,
+  sha256: StringDataType | null,
+  sha512: StringDataType | null,
+  bug_tracking_url: StringDataType | null,
+  code_view_url: StringDataType | null,
+  vcs_url: StringDataType | null,
+  copyright: StringDataType | null,
+  declared_license_expression: StringDataType | null,
+  declared_license_expression_spdx: StringDataType | null,
+  other_license_expression: StringDataType | null,
+  other_license_expression_spdx: StringDataType | null,
+  extracted_license_statement: JSON_Type | null,
+  notice_text: StringDataType | null,
+  source_packages: JSON_Type,
+  extra_data: JSON_Type,
+  repository_homepage_url: StringDataType | null,
+  repository_download_url: StringDataType | null,
+  api_data_url: StringDataType | null,
+  package_uid: StringDataType,
+  datafile_paths: JSON_Type,
+  datasource_ids: JSON_Type,
+  purl: StringDataType,
 }
 
 export default function packagesModel(sequelize: Sequelize) {
@@ -138,11 +141,23 @@ export default function packagesModel(sequelize: Sequelize) {
         allowNull: true,
         type: DataTypes.STRING,
       },
-      license_expression: {
+      declared_license_expression: {
         allowNull: true,
         type: DataTypes.STRING,
       },
-      declared_license: jsonDataType('declared_license'),
+      declared_license_expression_spdx: {
+        allowNull: true,
+        type: DataTypes.STRING,
+      },
+      other_license_expression: {
+        allowNull: true,
+        type: DataTypes.STRING,
+      },
+      other_license_expression_spdx: {
+        allowNull: true,
+        type: DataTypes.STRING,
+      },
+      extracted_license_statement: jsonDataType('extracted_license_statement'),
       notice_text: {
         allowNull: true,
         type: DataTypes.STRING,

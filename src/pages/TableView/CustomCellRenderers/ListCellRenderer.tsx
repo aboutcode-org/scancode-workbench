@@ -7,18 +7,21 @@ interface ListCellRendererProps {
 const ListCellRenderer = (props: ListCellRendererProps) => {
 
   const parsedValue: string[][] | string[] | string = useMemo(() => {
+    if(Array.isArray(props.value))
+      return props.value;
+
     try {
       const parsed = JSON.parse(props.value)
       return parsed
     } catch(err) {
-      console.log("Err parsing list cell");
+      console.log("Err parsing list cell, showing value as it is:", props.value);
       return props.value
     }
   }, [props.value]);
   
 
   if(!parsedValue)
-    return props.value;
+    return <></>;
   
   if(!Array.isArray(parsedValue))
     return props.value;

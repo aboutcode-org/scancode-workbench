@@ -3,6 +3,7 @@ import packageJson from '../package.json';
 import { app, BrowserWindow, MenuItem, shell } from 'electron';
 import { importJsonFile, openSqliteFile, saveSqliteFile } from './mainActions';
 import { ROUTES } from './constants/routes';
+import { createWindow } from './main';
 
 /** Returns a 'lambda' that sends the event to the renderer process. */
 export function sendNavEventToRenderer(route: string) {
@@ -22,6 +23,11 @@ function getTemplate() {
     {
       label: '&File',
       submenu: [
+        {
+          label: 'New Window',
+          accelerator: 'CmdOrCtrl+N',
+          click: () => createWindow(),
+        },
         {
           label: 'Open SQLite File',
           accelerator: 'CmdOrCtrl+O',

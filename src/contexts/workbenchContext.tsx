@@ -22,11 +22,13 @@ import {
   SQLITE_IMPORT_REPLY_FORMAT,
   SQLITE_PATH_FOR_JSON_REQUEST_FORMAT,
   SQLITE_SAVE_REPLY_FORMAT,
+  UTIL_CHANNEL,
 } from "../constants/IpcConnection";
 
 const { version: workbenchVersion } = packageJson;
 const { ipcRenderer } = electron;
 
+export type PathType = 'file' | 'directory';
 interface BasicValueState {
   db: WorkbenchDB | null,
   initialized: boolean,
@@ -34,6 +36,7 @@ interface BasicValueState {
 }
 interface WorkbenchContextProperties extends BasicValueState {
   currentPath: string | null,
+  currentPathType: PathType,
   startImport: () => void,
   abortImport: () => void,
   loadingStatus: null | number,
@@ -43,7 +46,7 @@ interface WorkbenchContextProperties extends BasicValueState {
   importJsonFile: (jsonFilePath: string) => void,
   updateLoadingStatus: React.Dispatch<React.SetStateAction<number | null>>,
   setColumnDefs: React.Dispatch<React.SetStateAction<ColDef[]>>,
-  updateCurrentPath: (newPath: string) => void,
+  updateCurrentPath: (newPath: string, type: PathType) => void,
   updateWorkbenchDB: (db: WorkbenchDB, sqliteFilePath: string) => void,
 }
 
@@ -54,6 +57,7 @@ export const defaultWorkbenchContextValue: WorkbenchContextProperties = {
   importedSqliteFilePath: null,
   loadingStatus: null,
   currentPath: null,
+  currentPathType: 'directory',
   jsonParser: () => null,
   sqliteParser: () => null,
   importJsonFile: () => null,
@@ -78,7 +82,13 @@ export const WorkbenchDBProvider = (props: React.PropsWithChildren<Record<string
     initialized: false,
     importedSqliteFilePath: null,
   });
-  const [currentPath, updateCurrentPath] = useState<string | null>(null);
+  const [currentPath, setCurrentPath] = useState<string | null>(null);
+  const [currentPathType, setCurrentPathType] = useState<PathType>('directory');
+
+  function updateCurrentPath(path: string, pathType: PathType){
+    setCurrentPath(path);
+    setCurrentPathType(pathType);
+  }
 
   const startImport = () => {
     updateLoadingStatus(0);
@@ -180,7 +190,7 @@ export const WorkbenchDBProvider = (props: React.PropsWithChildren<Record<string
           .then(db => db.File.findOne({ where: { parent: '#' }}))
           .then(root => {
             if(!root){
-              console.error("Root directory not found !!!!", root);
+              console.error("Root path not found !!!!", root);
               return;
             }
 
@@ -194,7 +204,11 @@ export const WorkbenchDBProvider = (props: React.PropsWithChildren<Record<string
             updateWorkbenchDB(newWorkbenchDB, sqliteFilePath)
 
             if(defaultPath)
-              updateCurrentPath(defaultPath);
+              updateCurrentPath(defaultPath, root.getDataValue('type').toString({}) as PathType);
+
+            // Update window title
+            const newlyImportedFileName = sqliteFilePath.split('\\').pop().split('/').pop();
+            ipcRenderer.send(UTIL_CHANNEL.SET_CURRENT_FILE_TITLE, newlyImportedFileName);
             
             if(!preventNavigation)
               navigate(DEFAULT_ROUTE_ON_IMPORT);
@@ -219,7 +233,7 @@ export const WorkbenchDBProvider = (props: React.PropsWithChildren<Record<string
         }
         console.error("Err trying to import sqlite:");
         console.error(err);
-        toast(`Unexpected error while importing json \nPlease check console for more info`, {
+        toast(`Unexpected error while finalising json import \nPlease check console for more info`, {
           type: 'error'
         });
         abortImport();
@@ -272,18 +286,21 @@ export const WorkbenchDBProvider = (props: React.PropsWithChildren<Record<string
           .then(db => db.File.findOne({ where: { parent: '#' }}))
           .then(root => {
             if(!root){
-              console.error("Root directory not found !!!!");
+              console.error("Root path not found !!!!");
               console.error("Root:", root);
               abortImport();
               return;
             }
             const defaultPath = root.getDataValue('path');
-            console.log("Root dir", defaultPath);
 
             updateWorkbenchDB(newWorkbenchDB, sqliteFilePath)
 
             if(defaultPath)
-              updateCurrentPath(defaultPath);
+              updateCurrentPath(defaultPath, root.getDataValue('type').toString({}) as PathType);
+
+            // Update window title
+            const newlyImportedFileName = jsonFilePath.split('\\').pop().split('/').pop();
+            ipcRenderer.send(UTIL_CHANNEL.SET_CURRENT_FILE_TITLE, newlyImportedFileName);
 
             if(!preventNavigation)
               navigate(DEFAULT_ROUTE_ON_IMPORT);
@@ -308,10 +325,26 @@ export const WorkbenchDBProvider = (props: React.PropsWithChildren<Record<string
 
     ipcRenderer.on(NAVIGATION_CHANNEL, (_, message: NAVIGATION_CHANNEL_MESSAGE) => navigate(message));
     ipcRenderer.on(IMPORT_REPLY_CHANNEL.JSON, (_, message: JSON_IMPORT_REPLY_FORMAT) => {
-      jsonParser(message.jsonFilePath, message.sqliteFilePath);
+      try{
+        jsonParser(message.jsonFilePath, message.sqliteFilePath);
+      } catch (err) {
+        console.log(`some error importing json - ${message.jsonFilePath}`, err);
+        abortImport();
+        toast(`Unexpected error while importing json \nPlease check console for more info`, {
+          type: 'error'
+        });
+      }
     });
     ipcRenderer.on(IMPORT_REPLY_CHANNEL.SQLITE, (_, message: SQLITE_IMPORT_REPLY_FORMAT) => {
-      sqliteParser(message.sqliteFilePath);
+      try{
+        sqliteParser(message.sqliteFilePath);
+      } catch (err) {
+        console.log(`some error importing sqlite - ${message.sqliteFilePath}`, err);
+        abortImport();
+        toast(`Unexpected error while importing sqlite \nPlease check console for more info`, {
+          type: 'error'
+        });
+      }
     });
     ipcRenderer.on(SAVE_REPLY_CHANNEL.SQLITE, (_, message: SQLITE_SAVE_REPLY_FORMAT) => {
       if(!value.db || !value.initialized){
@@ -353,6 +386,7 @@ export const WorkbenchDBProvider = (props: React.PropsWithChildren<Record<string
         updateLoadingStatus,
         setColumnDefs,
         currentPath,
+        currentPathType,
         jsonParser,
         sqliteParser,
         importJsonFile,

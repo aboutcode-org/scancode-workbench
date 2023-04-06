@@ -1,9 +1,13 @@
+import FileLicenseDetectionsRenderer from './LicenseDetections/FileLicenseDetectionsRenderer';
+import MatchLicenseExpressionRenderer from './LicenseDetections/MatchLicenseExpressionRenderer';
 import ListCellRenderer from './ListCellRenderer';
 import UrlListCellRenderer from './UrlListCellRenderer';
-import EmailListCellRenderer from './EmailListCellRenderer';
+import UrlRenderer from './UrlRenderer';
 
 export {
+  UrlRenderer,
   ListCellRenderer,
   UrlListCellRenderer,
-  EmailListCellRenderer,
+  MatchLicenseExpressionRenderer,
+  FileLicenseDetectionsRenderer,
 }

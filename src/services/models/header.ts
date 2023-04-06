@@ -14,21 +14,28 @@
  #
  */
 
-import { Sequelize, DataTypes, Model } from 'sequelize';
+import { Sequelize, DataTypes, IntegerDataType, StringDataType, Model } from 'sequelize';
+import { JSON_Type, jsonDataType } from './databaseUtils';
 
 export interface HeaderAttributes {
-  id: DataTypes.IntegerDataType,
-  workbench_version: DataTypes.StringDataType,
-  workbench_notice: DataTypes.StringDataType,
-  header_content: DataTypes.StringDataType,
-  files_count: DataTypes.IntegerDataType,
-  output_format_version: DataTypes.StringDataType,
-  spdx_license_list_version: DataTypes.StringDataType,
-  operating_system: DataTypes.StringDataType,
-  cpu_architecture: DataTypes.StringDataType,
-  platform: DataTypes.StringDataType,
-  platform_version: DataTypes.StringDataType,
-  python_version: DataTypes.StringDataType,
+  id: IntegerDataType,
+  tool_name: StringDataType,
+  tool_version: StringDataType,
+  notice: StringDataType,
+  duration: DataTypes.DoubleDataType,
+  header_content: StringDataType,
+  options: JSON_Type,
+  input: JSON_Type,
+  files_count: IntegerDataType,
+  output_format_version: StringDataType,
+  spdx_license_list_version: StringDataType,
+  operating_system: StringDataType,
+  cpu_architecture: StringDataType,
+  platform: StringDataType,
+  platform_version: StringDataType,
+  python_version: StringDataType,
+  workbench_version: StringDataType,
+  workbench_notice: StringDataType,
 }
 
 export default function headerModel(sequelize: Sequelize) {
@@ -37,17 +44,19 @@ export default function headerModel(sequelize: Sequelize) {
     {
       // @TODO: The notices and versions should be in their own table
       // See https://github.com/nexB/aboutcode/issues/7
+
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: DataTypes.INTEGER,
       },
-      workbench_version: DataTypes.STRING,
-      workbench_notice: {
-        type: DataTypes.STRING,
-        defaultValue: 'None',
-      },
+      tool_name: DataTypes.STRING,
+      tool_version: DataTypes.STRING,
+      notice: DataTypes.STRING,
+      duration: DataTypes.DOUBLE,
+      options: jsonDataType('options'),
+      input: jsonDataType('input'),
       header_content: DataTypes.STRING,
       files_count: DataTypes.INTEGER,
       output_format_version: {
@@ -60,23 +69,28 @@ export default function headerModel(sequelize: Sequelize) {
       },
       operating_system: {
         type: DataTypes.STRING,
-        defaultValue: 'Not included in the scan',
+        defaultValue: null,
       },
       cpu_architecture: {
         type: DataTypes.STRING,
-        defaultValue: 'Not included in the scan',
+        defaultValue: null,
       },
       platform: {
         type: DataTypes.STRING,
-        defaultValue: 'Not included in the scan',
+        defaultValue: null,
       },
       platform_version: {
         type: DataTypes.STRING,
-        defaultValue: 'Not included in the scan',
+        defaultValue: null,
       },
       python_version: {
         type: DataTypes.STRING,
-        defaultValue: 'Not included in the scan',
+        defaultValue: null,
+      },
+      workbench_version: DataTypes.STRING,
+      workbench_notice: {
+        type: DataTypes.STRING,
+        defaultValue: 'None',
       },
     });
 }

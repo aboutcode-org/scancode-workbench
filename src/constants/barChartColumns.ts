@@ -12,13 +12,7 @@ export const COPYRIGHT_COLUMNS: ColDef[] = [
 ];
 
 export const LICENSE_COLUMNS: ColDef[] = [
-  ALL_COLUMNS.license_expressions,
-  ALL_COLUMNS.license_key,
-  ALL_COLUMNS.license_score,
-  ALL_COLUMNS.license_short_name,
-  ALL_COLUMNS.license_category,
-  ALL_COLUMNS.license_owner,
-  ALL_COLUMNS.license_spdx_key,
+  ALL_COLUMNS.detected_license_expression,
 ];
 
 export const EMAIL_COLUMNS: ColDef[] = [
@@ -48,6 +42,8 @@ export const PACKAGE_COLUMNS: ColDef[] = [
   ALL_COLUMNS.package_data_type,
   ALL_COLUMNS.package_data_name,
   ALL_COLUMNS.package_data_primary_language,
+  ALL_COLUMNS.package_data_declared_license_expression,
+  ALL_COLUMNS.package_data_declared_license_expression_spdx,
 ];
 
 interface BAR_CHART_GROUP {
