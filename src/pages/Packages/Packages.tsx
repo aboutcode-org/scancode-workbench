@@ -179,7 +179,7 @@ const Packages = () => {
           })
         });
         const parsedPackageWithDeps = Array.from(packageMapping.values());
-        // @TODO
+        // @TODO - What are qualifiers ?
         parsedPackageWithDeps.forEach(pkg => {
           if(Object.keys(pkg.qualifiers).length)
             console.log("Qualifying:", pkg);

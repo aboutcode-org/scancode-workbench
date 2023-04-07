@@ -1,7 +1,8 @@
 import React, { useMemo } from "react";
 import { LICENSE_EXPRESSIONS_CONJUNCTIONS, parseTokensFromExpression } from "../../../../services/models/databaseUtils";
 
-// @TODO - Create SPDXLicenseExpressionParser too !!
+const DEBUG_URLS = false;
+
 interface LicenseExpressionRendererProps {
   value: string;
   spdxLicense?: boolean;
@@ -24,8 +25,6 @@ interface ParsedTokens {
   value: string;
   href?: string;
 }
-
-const DEBUG_URLS = false;
 
 const MatchLicenseExpressionRenderer = (
   props: LicenseExpressionRendererProps

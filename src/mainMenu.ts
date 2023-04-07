@@ -196,11 +196,6 @@ function getTemplate() {
         },
         {
           label: 'Licensing Information',
-          // // @TODO
-          // click: () => showErrorDialog({
-          //   title: "Not implemented",
-          //   message: "This feature is yet to be discussed"
-          // })
           click: () => {
           // @TODO - make react route instead
             let win = new BrowserWindow({frame: true});

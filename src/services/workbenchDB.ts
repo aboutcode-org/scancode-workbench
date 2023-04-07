@@ -28,8 +28,11 @@ import {
 } from "sequelize";
 import fs from "fs";
 import path from "path";
+import { toast } from "react-toastify";
 import JSONStream from "jsonstream";
+import { DataNode } from "rc-tree/lib/interface";
 import { DatabaseStructure, newDatabase } from "./models/database";
+
 import {
   filterSpdxKeys,
   JSON_Type,
@@ -39,9 +42,8 @@ import {
 } from "./models/databaseUtils";
 import { DebugLogger } from "../utils/logger";
 import { FileAttributes } from "./models/file";
-import { DataNode } from "rc-tree/lib/interface";
 import { flattenFile } from "./models/flatFile";
-import { toast } from "react-toastify";
+import { UNKNOWN_EXPRESSION, UNKNOWN_EXPRESSION_SPDX } from "../constants/data";
 
 /**
  * Manages the database created from a ScanCode JSON input.
@@ -91,26 +93,18 @@ export class WorkbenchDB {
     const password = config && config.dbPassword ? config.dbPassword : null;
     const storage = config && config.dbStorage ? config.dbStorage : ":memory:";
 
-    console.log("Sequelize DB details", {
-      name,
-      user,
-      password,
-      storage,
-    });
+    // console.log("Sequelize DB details", {
+    //   name,
+    //   user,
+    //   password,
+    //   storage,
+    // });
 
     this.sequelize = new Sequelize(name, user, password, {
       dialect: "sqlite",
       // dialectModule: { Database },
       // dialectOptions: {
       //   sqlite3: Database,
-      // },
-      // dialectModule: BetterSqlite3,
-      // dialectOptions: {
-      //   sqlite3: BetterSqlite3,
-      // },
-      // dialectModule: sqlite3,
-      // dialectOptions: {
-      //   sqlite3
       // },
       storage: storage,
       logging: false,
@@ -262,15 +256,12 @@ export class WorkbenchDB {
     let rootPath: string | null = null;
     let hasRootPath = false;
     const batchSize = 1000;
-    let files: unknown[] = []; // @TODO
+    let files: unknown[] = []; // @TODO - Define proper type for this
     let progress = 0;
     let promiseChain: Promise<void | DatabaseStructure | number> = this.sync;
 
     console.log("JSON parse started (step 1)");
     console.time("json-parse-time");
-    // @TODO - Remove this in next commit
-    const DEBUG_MODE_MATCHES = true;
-    const DEBUG_MATCH_FILE_NAME = "node_modules/rc/package.json";
 
     return new Promise((resolve, reject) => {
       // eslint-disable-next-line @typescript-eslint/no-this-alias
@@ -371,25 +362,17 @@ export class WorkbenchDB {
           const file_license_expressions_spdx_components = parseSubExpressions(
             file.detected_license_expression_spdx
           );
-          const UNKNOWN_EXPRESSION = "unknown-license-reference";
-          const UNKNOWN_EXPRESSION_SPDX =
-            "LicenseRef-scancode-unknown-license-reference";
-
-          if (DEBUG_MODE_MATCHES && file.path.includes(DEBUG_MATCH_FILE_NAME))
-            console.log("Sub", {
-              detected: file.detected_license_expression,
-              detectedspdx: file.detected_license_expression_spdx,
-              detected_sub_license_expressions:
-                file_license_expressions_components,
-              detected_sub_license_expressions_spdx:
-                file_license_expressions_spdx_components,
-            });
+          // Handle absence of detection.identifier in matches at file level in prev toolkit versions
+          // upto v32.0.0rc2
+          const for_license_detections: string[] = file.for_license_detections || [];
 
           file?.license_detections?.forEach(
             (detection: any, detectionIdx: number) => {
-              const targetLicenseDetection: any =
-                TopLevelData.license_detections_map.get(detection.identifier);
+              const detectionIdentifier = detection.identifier || for_license_detections[detectionIdx];
 
+              const targetLicenseDetection: any =
+                TopLevelData.license_detections_map.get(detectionIdentifier);
+              
               if (!targetLicenseDetection) return;
               if (!targetLicenseDetection.file_regions)
                 targetLicenseDetection.file_regions = [];
@@ -428,25 +411,6 @@ export class WorkbenchDB {
                   parseSubExpressions(
                     correspondingFileLicenseExpressionSpdxComponent
                   );
-
-                if (
-                  DEBUG_MODE_MATCHES &&
-                  file.path.includes(DEBUG_MATCH_FILE_NAME)
-                )
-                  console.log(`Detection #${detectionIdx} in ${file.path}, `, {
-                    jsonDetection: detection,
-                    targetLicenseDetection,
-                    detection_le: detection.license_expression,
-                    detection_lespdx:
-                      file_license_expressions_spdx_components[
-                        file_license_expressions_components.findIndex(
-                          (val) => val === detection.license_expression
-                        )
-                      ],
-                    detectionComponents: detectionLicenseExpressionComponents,
-                    detectionSpdxComponents:
-                      detectionSpdxLicenseExpressionComponents,
-                  });
 
                 let min_start_line = detection.matches[0].start_line;
                 let max_end_line = detection.matches[0].end_line;
@@ -495,33 +459,6 @@ export class WorkbenchDB {
                   const parsedSpdxLicenseKeys = parseSubExpressions(
                     match.license_expression_spdx
                   );
-                  if (
-                    DEBUG_MODE_MATCHES &&
-                    file.path.includes(DEBUG_MATCH_FILE_NAME)
-                  )
-                    console.log(
-                      `Match details ${matchIdx}. ${match.license_expression}`,
-                      {
-                        license_expression: match.license_expression,
-                        license_expression_spdx: match.license_expression_spdx,
-                        parsedLicenseKeys,
-                        parsedLicenseSpdxKeys: parsedSpdxLicenseKeys,
-                        foundItemInLE: file_license_expressions_components.find(
-                          (val) => val === match.license_expression
-                        ),
-                        foundItemInLEIdx:
-                          file_license_expressions_components.findIndex(
-                            (val) => val === match.license_expression
-                          ),
-                        corresponding:
-                          file_license_expressions_spdx_components[
-                            file_license_expressions_components.findIndex(
-                              (val) => val === match.license_expression
-                            )
-                          ],
-                      }
-                    );
-                  // console.log("Debug for match expression", match.license_expression_keys, match.license_expression_spdx_keys);
 
                   parsedLicenseKeys.forEach((key) => {
                     const license_reference: any =
@@ -552,31 +489,9 @@ export class WorkbenchDB {
                   start_line: min_start_line,
                   end_line: max_end_line,
                 });
-                if (
-                  DEBUG_MODE_MATCHES &&
-                  file.path.includes(DEBUG_MATCH_FILE_NAME)
-                )
-                  console.log(
-                    `(Matches: ${targetLicenseDetection.matches.length}) Prepared detection in ${file.path}`,
-                    detection,
-                    targetLicenseDetection
-                  );
               }
 
               delete detection.matches; // Not required, adds extra memory usage
-
-              if (
-                DEBUG_MODE_MATCHES &&
-                file.path.includes(DEBUG_MATCH_FILE_NAME)
-              ) {
-                console.log(
-                  "Final top level detection",
-                  targetLicenseDetection
-                );
-                console.log(
-                  "\n----------------------------------------------------------------\n"
-                );
-              }
             }
           );
 
@@ -731,12 +646,6 @@ export class WorkbenchDB {
     });
 
     const flattenedFiles = files.map((file: unknown) => flattenFile(file));
-
-    // @DEBUG
-    // flattenedFiles.forEach(file => {
-    //   if(file.path == 'samples/JGroups/EULA')
-    //     console.log("Flat File: ", file);
-    // });
 
     return this.db.FlatFile.bulkCreate(flattenedFiles as any, {
       logging: false,

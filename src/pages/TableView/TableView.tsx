@@ -228,9 +228,8 @@ const TableView = () => {
         gridApi={gridApi}
         updateGridApi={setGridApi}
         onColumnMoved={(event: ColumnMovedEvent<any>) => {
-          // @TODO
+          // @TODO - Save order of columns when moved
           // console.log("Column moved", event);
-          
         }}
         columnDefs={columnDefs}
         tableData={tableData}
