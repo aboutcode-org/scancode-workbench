@@ -40,7 +40,6 @@
     "@types/c3": "^0.7.8",
     "@types/d3": "^7.4.0",
     "@types/jquery": "^3.5.14",
-    "@types/jsonstream": "^0.8.30",
     "@types/node": "^18.8.0",
     "@types/react": "^18.0.21",
     "@types/react-dom": "^18.0.6",

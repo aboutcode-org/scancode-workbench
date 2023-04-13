@@ -29,7 +29,7 @@ import {
 import fs from "fs";
 import path from "path";
 import { toast } from "react-toastify";
-import JSONStream from "jsonstream";
+import JSONStream from "JSONStream";
 import { DataNode } from "rc-tree/lib/interface";
 import { DatabaseStructure, newDatabase } from "./models/database";
 
