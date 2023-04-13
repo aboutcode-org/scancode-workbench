@@ -1,0 +1,42 @@
+/*---------------------------------------
+  Icons
+-----------------------------------------*/
+.fa_custom {
+  color: #3498db;
+}
+
+.fa_custom_package {
+  color: #f6b735;
+}
+
+.fa_custom_analyzed {
+  color: #83ad45;
+}
+
+.fa_custom_na {
+  color: #f94848;
+}
+
+.fa_custom_oc {
+  color: #601697;
+}
+
+.fa_custom_nr {
+  color: #1697af;
+}
+
+.fa_custom_approved {
+  color: #008000;
+}
+
+.fa_custom_prohibited {
+  color: #c83025;
+}
+
+.fa_custom_recommended {
+  color: #002FFF;
+}
+
+.fa_custom_restricted {
+  color: #FFcc33;
+}

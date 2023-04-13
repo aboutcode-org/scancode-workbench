@@ -1,9 +1,0 @@
-about_resource: app-icon
-name: ScanCode Workbench Icons
-version: 1.0.0
-license: apache-2.0
-owner: nexB Inc.
-copyright: Copyright (c) 2016 nexB Inc.
-
-notice_file: ../../NOTICE
-license_file: ../../apache-2.0.LICENSE

@@ -5,11 +5,27 @@ All notable changes to this project will be documented in this file.
 The format is based on `Keep a                                                               
 Changelog <https://keepachangelog.com/en/1.0.0/>`__
 
-[Unreleased]
+[Unreleased (v4.0.0)]
+--------------------------
+
+**This ScanCode-Workbench release contains schema changes: scans will have to be re-imported**
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
 ------------
+Refactoring
+~~~~~~~~~~~~
+Entire source code is refactored to TypeScript + React
+
+--------------------
 New Features
 ~~~~~~~~~~~~
 
+- AMaintain history of imports
+- Updated dependencies
+- Support for top level packages-deps obtained in latest scans
+- Scan Info page to present header info
+- Support Drag & drop JSON/SQLite files
+- Github actions to create automated releases
 - Remove the ability to upload Conclusions to DejaCode #413
 - Update in-app help links #412
 - Add source controlled documentation #411
@@ -21,6 +37,9 @@ New Features
 Bug Fixes
 ~~~~~~~~~
 
+- Fixed table column inconsistencies
+- Fixed UI anomalies
+- Invalid path query fix (Data for files with similar prefix were colliding)
 - license_expression values now being uploaded correctly #403
 
 [v3.1.1] - 2019-9-27

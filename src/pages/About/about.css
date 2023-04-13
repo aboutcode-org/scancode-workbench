@@ -1,0 +1,20 @@
+.app-version {
+  font-size: 22px;
+  margin-left: 15px;
+  color: var(--lightTextColor);
+}
+.help {
+  padding: 15px;
+}
+.help h1{
+  text-align: center;
+  margin-bottom: 15px;
+}
+.help p{
+  margin-top: 10px;
+  font-size: 18px;
+}
+.help a{
+  margin-left: 5px;
+  text-decoration: none;
+}

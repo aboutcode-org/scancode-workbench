@@ -1,0 +1,12 @@
+.deps-list {
+  max-height: 207px;
+  overflow: scroll;
+  width: fit-content;
+  max-width: 95%;
+  padding: 5px;
+  padding-left: 0px;
+  padding-right: 25px;
+}
+.deps-list .deps-link {
+  display: block;
+}

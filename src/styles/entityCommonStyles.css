@@ -1,0 +1,18 @@
+.entity-properties {
+  font-size: 15px;
+}
+.entity-properties .property {
+  font-weight: 500;
+}
+.entity-properties .value {
+  padding-left: 5px;
+}
+.package-entity .badge, .dependency-entity .badge {
+  margin-right: 5px;
+}
+.package-entity .react-json-view,
+.dependency-entity .react-json-view,
+.license-detecion-entity .react-json-view{
+  max-height: 75vh;
+  overflow: scroll;
+}

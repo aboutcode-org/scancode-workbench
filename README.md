@@ -1,4 +1,5 @@
-# <img src="assets/app/images/scancode-workbench-logo.png" align="center" alt="ScanCode Workbench">
+# <p align="center"><img src="src/assets/images/scancode-workbench-logo.png" align="center" alt="ScanCode Workbench">
+</p>
 
 [![Travis Build Status](https://travis-ci.org/nexB/scancode-workbench.svg?branch=develop)](https://travis-ci.org/nexB/scancode-workbench) 
 [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/nexB/scancode-workbench)](https://ci.appveyor.com/project/nexB/scancode-workbench)
@@ -14,7 +15,8 @@ ScanCode Workbench is based on
 for using nexB’s [AboutCode tools](https://github.com/nexB/aboutcode). This app 
 works on Windows, OS X and Linux operating systems.
 
-![ScanCode Workbench](https://scancode-workbench.readthedocs.io/en/develop/_images/scancode-workbench-chart-summary.gif)
+![ScanCode Workbench](https://user-images.githubusercontent.com/48476025/185114433-7340ee70-57cd-4586-b7e7-964fe736451a.gif)
+
 
 ## Using
 
@@ -56,12 +58,6 @@ $ cd scancode-workbench
 
 # Install dependencies and run the app
 $ npm install
-
-# Rebuild native Node.js modules against the app version of Node.js
-# MacOS, Linux and Git Bash on Windows
-$ $(npm bin)/electron-rebuild
-# Windows except for Git Bash
-> .\node_modules\.bin\electron-rebuild.cmd
 
 # Run the app
 $ npm start

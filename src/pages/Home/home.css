@@ -1,0 +1,97 @@
+#welcomepage-title{
+  text-align: center;
+  margin-top: 10px;
+}
+#welcomepage-title .logo {
+  font-family: 'Raleway', Helvetica, san-serif;
+  color: #0064cd;
+}
+#welcomepage-title .strong-logo {
+  font-weight: bolder;
+  font-family: 'Raleway Black', Helvetica, san-serif;
+}
+
+.quickActions{
+  text-align: center;
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+}
+
+.quickActions svg{
+  margin-bottom: 15px;
+}
+
+.quickActions div:hover {
+  background-color: var(--accentHoverColor);
+}
+
+.quickActions div {
+  border: 2px dashed var(--accentColor);
+  display: inline-block;
+  width: 25%;
+  text-align: center;
+  cursor: pointer;
+  min-width: 200px;
+  padding: 1rem;
+  margin-top: 1rem;
+  margin-left: 20px;
+  margin-right: 20px;
+}
+
+.quickActionIcon{
+  font-size: 60px;
+}
+
+.drop-instruction {
+  text-align: center;
+  width: 100%;
+  margin-top: 50px;
+  color: var(--lightTextColor);
+}
+
+.quicklinks, .history {
+  margin-top: 15px;
+  padding-left: 2rem;
+}
+.history table{
+  min-width: 80%;
+  max-width: 95%;
+}
+.history .import-column {
+  width: 130px;
+  word-wrap: break-word;
+}
+.history table .file-path {
+  min-width: 400px;
+  max-width: 60vw;
+  word-wrap: break-word;
+  padding-right: 10px;
+}
+.history table .delete-col {
+  min-width: 50px;
+}
+.history table .delete-action {
+  color: #0e5bb2;
+  padding-left: 25px;
+  cursor: pointer;
+  font-size: 18px;
+}
+.history table .delete-action:hover {
+  color: rgba(25, 0, 0, 0.933);
+}
+.history button {
+  margin: 5px;
+  margin-left: 0px;
+  margin-right: 20px;
+}
+
+
+.btn-group-horizontal a{
+  margin: 0px;
+  margin-top: .5rem;
+  margin-right: 1rem;
+}

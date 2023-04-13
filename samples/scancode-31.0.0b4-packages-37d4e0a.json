@@ -1,0 +1,861 @@
+{
+  "headers": [
+    {
+      "tool_name": "scancode-toolkit",
+      "tool_version": "31.0.0b4",
+      "options": {
+        "--package": true
+      },
+      "notice": "Generated with ScanCode and provided on an \"AS IS\" BASIS, WITHOUT WARRANTIES\nOR CONDITIONS OF ANY KIND, either express or implied. No content created from\nScanCode should be considered or used as legal advice. Consult an Attorney\nfor any legal advice.\nScanCode is a free software code scanning tool from nexB Inc. and others.\nVisit https://github.com/nexB/scancode-toolkit/ for support and download.",
+      "output_format_version": "2.0.0",
+      "duration": 1.3074486255645752,
+      "message": null,
+      "errors": [],
+      "warnings": [],
+      "extra_data": {
+        "system_environment": {
+          "operating_system": "linux",
+          "cpu_architecture": "64",
+          "platform": "Linux-5.14.0-1032-oem-x86_64-with-glibc2.29",
+          "platform_version": "#35-Ubuntu SMP Thu Mar 31 12:49:29 UTC 2022",
+          "python_version": "3.8.10 (default, Mar 15 2022, 12:22:08) \n[GCC 9.4.0]"
+        },
+        "spdx_license_list_version": "3.16",
+        "files_count": 12
+      }
+    }
+  ],
+  "dependencies": [
+    {
+      "purl": "pkg:pypi/aboutcode-toolkit@6.0.0",
+      "extracted_requirement": "==6.0.0",
+      "scope": "development",
+      "is_runtime": false,
+      "is_optional": true,
+      "is_resolved": true,
+      "resolved_package": {},
+      "dependency_uid": "pkg:pypi/aboutcode-toolkit@6.0.0?uuid=4a0a0670-ceba-4ba5-acc4-299e384a53fa",
+      "for_package_uid": null,
+      "datafile_path": "python-sample/requirements-dev.txt",
+      "datasource_id": "pip_requirements"
+    },
+    {
+      "purl": "pkg:pypi/py@1.10.0",
+      "extracted_requirement": "==1.10.0",
+      "scope": "development",
+      "is_runtime": false,
+      "is_optional": true,
+      "is_resolved": true,
+      "resolved_package": {},
+      "dependency_uid": "pkg:pypi/py@1.10.0?uuid=e2836a6f-b630-483e-8d0a-03e9fd0491ea",
+      "for_package_uid": null,
+      "datafile_path": "python-sample/requirements-dev.txt",
+      "datasource_id": "pip_requirements"
+    },
+    {
+      "purl": "pkg:pypi/pytest@6.2.4",
+      "extracted_requirement": "==6.2.4",
+      "scope": "development",
+      "is_runtime": false,
+      "is_optional": true,
+      "is_resolved": true,
+      "resolved_package": {},
+      "dependency_uid": "pkg:pypi/pytest@6.2.4?uuid=5da35db0-bc1a-4552-bcce-2d5d1163711c",
+      "for_package_uid": null,
+      "datafile_path": "python-sample/requirements-dev.txt",
+      "datasource_id": "pip_requirements"
+    },
+    {
+      "purl": "pkg:pypi/commoncode@30.0.0",
+      "extracted_requirement": "==30.0.0",
+      "scope": "install",
+      "is_runtime": true,
+      "is_optional": false,
+      "is_resolved": true,
+      "resolved_package": {},
+      "dependency_uid": "pkg:pypi/commoncode@30.0.0?uuid=9a74538a-0a00-4c1a-adbe-18bec72d80cd",
+      "for_package_uid": null,
+      "datafile_path": "python-sample/requirements.txt",
+      "datasource_id": "pip_requirements"
+    },
+    {
+      "purl": "pkg:pypi/extractcode@21.7.23",
+      "extracted_requirement": "==21.7.23",
+      "scope": "install",
+      "is_runtime": true,
+      "is_optional": false,
+      "is_resolved": true,
+      "resolved_package": {},
+      "dependency_uid": "pkg:pypi/extractcode@21.7.23?uuid=71acfaa0-78aa-46af-a216-45a574233a6f",
+      "for_package_uid": null,
+      "datafile_path": "python-sample/requirements.txt",
+      "datasource_id": "pip_requirements"
+    },
+    {
+      "purl": "pkg:pypi/license-expression@21.6.14",
+      "extracted_requirement": "==21.6.14",
+      "scope": "install",
+      "is_runtime": true,
+      "is_optional": false,
+      "is_resolved": true,
+      "resolved_package": {},
+      "dependency_uid": "pkg:pypi/license-expression@21.6.14?uuid=1d4ba82d-eb31-4ca7-aafd-8a27be545f4f",
+      "for_package_uid": null,
+      "datafile_path": "python-sample/requirements.txt",
+      "datasource_id": "pip_requirements"
+    },
+    {
+      "purl": "pkg:pypi/plugincode@21.1.21",
+      "extracted_requirement": "==21.1.21",
+      "scope": "install",
+      "is_runtime": true,
+      "is_optional": false,
+      "is_resolved": true,
+      "resolved_package": {},
+      "dependency_uid": "pkg:pypi/plugincode@21.1.21?uuid=0e5659ee-8f8e-49ab-b284-9ba87f4fbf36",
+      "for_package_uid": null,
+      "datafile_path": "python-sample/requirements.txt",
+      "datasource_id": "pip_requirements"
+    },
+    {
+      "purl": "pkg:pypi/typecode@21.6.1",
+      "extracted_requirement": "==21.6.1",
+      "scope": "install",
+      "is_runtime": true,
+      "is_optional": false,
+      "is_resolved": true,
+      "resolved_package": {},
+      "dependency_uid": "pkg:pypi/typecode@21.6.1?uuid=9e762641-3eb8-41ba-b48c-13da61695a80",
+      "for_package_uid": null,
+      "datafile_path": "python-sample/requirements.txt",
+      "datasource_id": "pip_requirements"
+    },
+    {
+      "purl": "pkg:pypi/commoncode",
+      "extracted_requirement": ">=30.0.0",
+      "scope": "install",
+      "is_runtime": true,
+      "is_optional": false,
+      "is_resolved": false,
+      "resolved_package": {},
+      "dependency_uid": "pkg:pypi/commoncode?uuid=9a3c7ec9-6ada-4fd6-aeb8-bcc04242506f",
+      "for_package_uid": "pkg:pypi/scancode-toolkit@30.1.0?uuid=c46ea0bc-d02a-4ea5-8cdd-8aee9365503d",
+      "datafile_path": "python-sample/setup.cfg",
+      "datasource_id": "pypi_setup_cfg"
+    },
+    {
+      "purl": "pkg:pypi/plugincode",
+      "extracted_requirement": ">=21.1.21",
+      "scope": "install",
+      "is_runtime": true,
+      "is_optional": false,
+      "is_resolved": false,
+      "resolved_package": {},
+      "dependency_uid": "pkg:pypi/plugincode?uuid=c209c0a1-40de-4373-a3dd-9bc4ad01147a",
+      "for_package_uid": "pkg:pypi/scancode-toolkit@30.1.0?uuid=c46ea0bc-d02a-4ea5-8cdd-8aee9365503d",
+      "datafile_path": "python-sample/setup.cfg",
+      "datasource_id": "pypi_setup_cfg"
+    },
+    {
+      "purl": "pkg:pypi/typecode",
+      "extracted_requirement": ">=21.6.1",
+      "scope": "install",
+      "is_runtime": true,
+      "is_optional": false,
+      "is_resolved": false,
+      "resolved_package": {},
+      "dependency_uid": "pkg:pypi/typecode?uuid=44b4224a-45c6-47e1-9571-45ff81ebdde7",
+      "for_package_uid": "pkg:pypi/scancode-toolkit@30.1.0?uuid=c46ea0bc-d02a-4ea5-8cdd-8aee9365503d",
+      "datafile_path": "python-sample/setup.cfg",
+      "datasource_id": "pypi_setup_cfg"
+    },
+    {
+      "purl": "pkg:pypi/extractcode",
+      "extracted_requirement": ">=21.7.23",
+      "scope": "install",
+      "is_runtime": true,
+      "is_optional": false,
+      "is_resolved": false,
+      "resolved_package": {},
+      "dependency_uid": "pkg:pypi/extractcode?uuid=a48de9bd-ea04-403a-ab70-5790eae7a1c8",
+      "for_package_uid": "pkg:pypi/scancode-toolkit@30.1.0?uuid=c46ea0bc-d02a-4ea5-8cdd-8aee9365503d",
+      "datafile_path": "python-sample/setup.cfg",
+      "datasource_id": "pypi_setup_cfg"
+    },
+    {
+      "purl": "pkg:pypi/rpm-inspector-rpm",
+      "extracted_requirement": ">=4.16.1.3",
+      "scope": "install",
+      "is_runtime": true,
+      "is_optional": false,
+      "is_resolved": false,
+      "resolved_package": {},
+      "dependency_uid": "pkg:pypi/rpm-inspector-rpm?uuid=a9bef8a5-c2d3-49aa-9815-73d1ba1f2107",
+      "for_package_uid": "pkg:pypi/scancode-toolkit@30.1.0?uuid=c46ea0bc-d02a-4ea5-8cdd-8aee9365503d",
+      "datafile_path": "python-sample/setup.cfg",
+      "datasource_id": "pypi_setup_cfg"
+    },
+    {
+      "purl": "pkg:pypi/regipy",
+      "extracted_requirement": ">=2.0.0",
+      "scope": "install",
+      "is_runtime": true,
+      "is_optional": false,
+      "is_resolved": false,
+      "resolved_package": {},
+      "dependency_uid": "pkg:pypi/regipy?uuid=ae98c173-6cb7-4289-9e72-70c22bef2e28",
+      "for_package_uid": "pkg:pypi/scancode-toolkit@30.1.0?uuid=c46ea0bc-d02a-4ea5-8cdd-8aee9365503d",
+      "datafile_path": "python-sample/setup.cfg",
+      "datasource_id": "pypi_setup_cfg"
+    },
+    {
+      "purl": "pkg:pypi/packagedcode-msitools",
+      "extracted_requirement": ">=0.101.210706",
+      "scope": "install",
+      "is_runtime": true,
+      "is_optional": false,
+      "is_resolved": false,
+      "resolved_package": {},
+      "dependency_uid": "pkg:pypi/packagedcode-msitools?uuid=70041d69-b034-427c-92b4-239b2318a985",
+      "for_package_uid": "pkg:pypi/scancode-toolkit@30.1.0?uuid=c46ea0bc-d02a-4ea5-8cdd-8aee9365503d",
+      "datafile_path": "python-sample/setup.cfg",
+      "datasource_id": "pypi_setup_cfg"
+    },
+    {
+      "purl": "pkg:pypi/pytest",
+      "extracted_requirement": "pytest",
+      "scope": "install",
+      "is_runtime": true,
+      "is_optional": false,
+      "is_resolved": false,
+      "resolved_package": {},
+      "dependency_uid": "pkg:pypi/pytest?uuid=6f58c064-9e85-4ba4-b953-ff597deb859d",
+      "for_package_uid": "pkg:pypi/scancode-toolkit@30.1.0?uuid=c46ea0bc-d02a-4ea5-8cdd-8aee9365503d",
+      "datafile_path": "python-sample/setup.cfg",
+      "datasource_id": "pypi_setup_cfg"
+    }
+  ],
+  "packages": [
+    {
+      "type": "about",
+      "namespace": null,
+      "name": "scancode-toolkit",
+      "version": null,
+      "qualifiers": {},
+      "subpath": null,
+      "primary_language": null,
+      "description": null,
+      "release_date": null,
+      "parties": [
+        {
+          "type": "person",
+          "role": "owner",
+          "name": "None",
+          "email": null,
+          "url": null
+        }
+      ],
+      "keywords": [],
+      "homepage_url": "https://www.aboutcode.org/",
+      "download_url": null,
+      "size": null,
+      "sha1": null,
+      "md5": null,
+      "sha256": null,
+      "sha512": null,
+      "bug_tracking_url": null,
+      "code_view_url": null,
+      "vcs_url": null,
+      "copyright": "Copyright (c) nexB Inc. and others.",
+      "license_expression": "apache-2.0 AND cc-by-4.0 AND other-permissive AND other-copyleft",
+      "declared_license": "apache-2.0 AND cc-by-4.0 AND other-permissive AND other-copyleft",
+      "notice_text": null,
+      "source_packages": [],
+      "extra_data": {
+        "missing_file_references": [
+          {
+            "path": ".",
+            "size": 0,
+            "sha1": null,
+            "md5": null,
+            "sha256": null,
+            "sha512": null,
+            "extra_data": {}
+          }
+        ]
+      },
+      "repository_homepage_url": null,
+      "repository_download_url": null,
+      "api_data_url": null,
+      "package_uid": "pkg:about/scancode-toolkit?uuid=f2148990-9f00-4d56-b388-58e9c8e3c8e0",
+      "datafile_paths": [
+        "python-sample/scancode-toolkit.ABOUT"
+      ],
+      "datasource_ids": [
+        "about_file"
+      ],
+      "purl": "pkg:about/scancode-toolkit"
+    },
+    {
+      "type": "pypi",
+      "namespace": null,
+      "name": "scancode-toolkit",
+      "version": "30.1.0",
+      "qualifiers": {},
+      "subpath": null,
+      "primary_language": "Python",
+      "description": null,
+      "release_date": null,
+      "parties": [
+        {
+          "type": "person",
+          "role": "author",
+          "name": "ScanCode",
+          "email": "info@aboutcode.org",
+          "url": null
+        }
+      ],
+      "keywords": [],
+      "homepage_url": "https://github.com/nexB/scancode-toolkit",
+      "download_url": null,
+      "size": null,
+      "sha1": null,
+      "md5": null,
+      "sha256": null,
+      "sha512": null,
+      "bug_tracking_url": null,
+      "code_view_url": null,
+      "vcs_url": null,
+      "copyright": null,
+      "license_expression": null,
+      "declared_license": null,
+      "notice_text": null,
+      "source_packages": [],
+      "extra_data": {},
+      "repository_homepage_url": null,
+      "repository_download_url": null,
+      "api_data_url": null,
+      "package_uid": "pkg:pypi/scancode-toolkit@30.1.0?uuid=c46ea0bc-d02a-4ea5-8cdd-8aee9365503d",
+      "datafile_paths": [
+        "python-sample/setup.cfg"
+      ],
+      "datasource_ids": [
+        "pypi_setup_cfg"
+      ],
+      "purl": "pkg:pypi/scancode-toolkit@30.1.0"
+    }
+  ],
+  "files": [
+    {
+      "path": "python-sample",
+      "type": "directory",
+      "package_data": [],
+      "for_packages": [],
+      "scan_errors": []
+    },
+    {
+      "path": "python-sample/apache-2.0.LICENSE",
+      "type": "file",
+      "package_data": [],
+      "for_packages": [
+        "pkg:pypi/scancode-toolkit@30.1.0?uuid=c46ea0bc-d02a-4ea5-8cdd-8aee9365503d"
+      ],
+      "scan_errors": []
+    },
+    {
+      "path": "python-sample/cc-by-4.0.LICENSE",
+      "type": "file",
+      "package_data": [],
+      "for_packages": [
+        "pkg:pypi/scancode-toolkit@30.1.0?uuid=c46ea0bc-d02a-4ea5-8cdd-8aee9365503d"
+      ],
+      "scan_errors": []
+    },
+    {
+      "path": "python-sample/MANIFEST.in",
+      "type": "file",
+      "package_data": [],
+      "for_packages": [
+        "pkg:pypi/scancode-toolkit@30.1.0?uuid=c46ea0bc-d02a-4ea5-8cdd-8aee9365503d"
+      ],
+      "scan_errors": []
+    },
+    {
+      "path": "python-sample/NOTICE",
+      "type": "file",
+      "package_data": [],
+      "for_packages": [
+        "pkg:pypi/scancode-toolkit@30.1.0?uuid=c46ea0bc-d02a-4ea5-8cdd-8aee9365503d"
+      ],
+      "scan_errors": []
+    },
+    {
+      "path": "python-sample/pyproject.toml",
+      "type": "file",
+      "package_data": [
+        {
+          "type": "pypi",
+          "namespace": null,
+          "name": null,
+          "version": null,
+          "qualifiers": {},
+          "subpath": null,
+          "primary_language": "Python",
+          "description": null,
+          "release_date": null,
+          "parties": [],
+          "keywords": [],
+          "homepage_url": null,
+          "download_url": null,
+          "size": null,
+          "sha1": null,
+          "md5": null,
+          "sha256": null,
+          "sha512": null,
+          "bug_tracking_url": null,
+          "code_view_url": null,
+          "vcs_url": null,
+          "copyright": null,
+          "license_expression": null,
+          "declared_license": null,
+          "notice_text": null,
+          "source_packages": [],
+          "file_references": [],
+          "extra_data": {},
+          "dependencies": [],
+          "repository_homepage_url": null,
+          "repository_download_url": null,
+          "api_data_url": null,
+          "datasource_id": "pypi_pyproject_toml",
+          "purl": null
+        }
+      ],
+      "for_packages": [
+        "pkg:pypi/scancode-toolkit@30.1.0?uuid=c46ea0bc-d02a-4ea5-8cdd-8aee9365503d"
+      ],
+      "scan_errors": []
+    },
+    {
+      "path": "python-sample/README.rst",
+      "type": "file",
+      "package_data": [],
+      "for_packages": [
+        "pkg:pypi/scancode-toolkit@30.1.0?uuid=c46ea0bc-d02a-4ea5-8cdd-8aee9365503d"
+      ],
+      "scan_errors": []
+    },
+    {
+      "path": "python-sample/requirements-dev.txt",
+      "type": "file",
+      "package_data": [
+        {
+          "type": "pypi",
+          "namespace": null,
+          "name": null,
+          "version": null,
+          "qualifiers": {},
+          "subpath": null,
+          "primary_language": "Python",
+          "description": null,
+          "release_date": null,
+          "parties": [],
+          "keywords": [],
+          "homepage_url": null,
+          "download_url": null,
+          "size": null,
+          "sha1": null,
+          "md5": null,
+          "sha256": null,
+          "sha512": null,
+          "bug_tracking_url": null,
+          "code_view_url": null,
+          "vcs_url": null,
+          "copyright": null,
+          "license_expression": null,
+          "declared_license": null,
+          "notice_text": null,
+          "source_packages": [],
+          "file_references": [],
+          "extra_data": {},
+          "dependencies": [
+            {
+              "purl": "pkg:pypi/aboutcode-toolkit@6.0.0",
+              "extracted_requirement": "==6.0.0",
+              "scope": "development",
+              "is_runtime": false,
+              "is_optional": true,
+              "is_resolved": true,
+              "resolved_package": {}
+            },
+            {
+              "purl": "pkg:pypi/py@1.10.0",
+              "extracted_requirement": "==1.10.0",
+              "scope": "development",
+              "is_runtime": false,
+              "is_optional": true,
+              "is_resolved": true,
+              "resolved_package": {}
+            },
+            {
+              "purl": "pkg:pypi/pytest@6.2.4",
+              "extracted_requirement": "==6.2.4",
+              "scope": "development",
+              "is_runtime": false,
+              "is_optional": true,
+              "is_resolved": true,
+              "resolved_package": {}
+            }
+          ],
+          "repository_homepage_url": null,
+          "repository_download_url": null,
+          "api_data_url": null,
+          "datasource_id": "pip_requirements",
+          "purl": null
+        }
+      ],
+      "for_packages": [
+        "pkg:pypi/scancode-toolkit@30.1.0?uuid=c46ea0bc-d02a-4ea5-8cdd-8aee9365503d"
+      ],
+      "scan_errors": []
+    },
+    {
+      "path": "python-sample/requirements.txt",
+      "type": "file",
+      "package_data": [
+        {
+          "type": "pypi",
+          "namespace": null,
+          "name": null,
+          "version": null,
+          "qualifiers": {},
+          "subpath": null,
+          "primary_language": "Python",
+          "description": null,
+          "release_date": null,
+          "parties": [],
+          "keywords": [],
+          "homepage_url": null,
+          "download_url": null,
+          "size": null,
+          "sha1": null,
+          "md5": null,
+          "sha256": null,
+          "sha512": null,
+          "bug_tracking_url": null,
+          "code_view_url": null,
+          "vcs_url": null,
+          "copyright": null,
+          "license_expression": null,
+          "declared_license": null,
+          "notice_text": null,
+          "source_packages": [],
+          "file_references": [],
+          "extra_data": {},
+          "dependencies": [
+            {
+              "purl": "pkg:pypi/commoncode@30.0.0",
+              "extracted_requirement": "==30.0.0",
+              "scope": "install",
+              "is_runtime": true,
+              "is_optional": false,
+              "is_resolved": true,
+              "resolved_package": {}
+            },
+            {
+              "purl": "pkg:pypi/extractcode@21.7.23",
+              "extracted_requirement": "==21.7.23",
+              "scope": "install",
+              "is_runtime": true,
+              "is_optional": false,
+              "is_resolved": true,
+              "resolved_package": {}
+            },
+            {
+              "purl": "pkg:pypi/license-expression@21.6.14",
+              "extracted_requirement": "==21.6.14",
+              "scope": "install",
+              "is_runtime": true,
+              "is_optional": false,
+              "is_resolved": true,
+              "resolved_package": {}
+            },
+            {
+              "purl": "pkg:pypi/plugincode@21.1.21",
+              "extracted_requirement": "==21.1.21",
+              "scope": "install",
+              "is_runtime": true,
+              "is_optional": false,
+              "is_resolved": true,
+              "resolved_package": {}
+            },
+            {
+              "purl": "pkg:pypi/typecode@21.6.1",
+              "extracted_requirement": "==21.6.1",
+              "scope": "install",
+              "is_runtime": true,
+              "is_optional": false,
+              "is_resolved": true,
+              "resolved_package": {}
+            }
+          ],
+          "repository_homepage_url": null,
+          "repository_download_url": null,
+          "api_data_url": null,
+          "datasource_id": "pip_requirements",
+          "purl": null
+        }
+      ],
+      "for_packages": [
+        "pkg:pypi/scancode-toolkit@30.1.0?uuid=c46ea0bc-d02a-4ea5-8cdd-8aee9365503d"
+      ],
+      "scan_errors": []
+    },
+    {
+      "path": "python-sample/scancode-toolkit.ABOUT",
+      "type": "file",
+      "package_data": [
+        {
+          "type": "about",
+          "namespace": null,
+          "name": "scancode-toolkit",
+          "version": null,
+          "qualifiers": {},
+          "subpath": null,
+          "primary_language": null,
+          "description": null,
+          "release_date": null,
+          "parties": [
+            {
+              "type": "person",
+              "role": "owner",
+              "name": "None",
+              "email": null,
+              "url": null
+            }
+          ],
+          "keywords": [],
+          "homepage_url": "https://www.aboutcode.org/",
+          "download_url": null,
+          "size": null,
+          "sha1": null,
+          "md5": null,
+          "sha256": null,
+          "sha512": null,
+          "bug_tracking_url": null,
+          "code_view_url": null,
+          "vcs_url": null,
+          "copyright": "Copyright (c) nexB Inc. and others.",
+          "license_expression": "apache-2.0 AND cc-by-4.0 AND other-permissive AND other-copyleft",
+          "declared_license": "apache-2.0 AND cc-by-4.0 AND other-permissive AND other-copyleft",
+          "notice_text": null,
+          "source_packages": [],
+          "file_references": [
+            {
+              "path": ".",
+              "size": 0,
+              "sha1": null,
+              "md5": null,
+              "sha256": null,
+              "sha512": null,
+              "extra_data": {}
+            }
+          ],
+          "extra_data": {},
+          "dependencies": [],
+          "repository_homepage_url": null,
+          "repository_download_url": null,
+          "api_data_url": null,
+          "datasource_id": "about_file",
+          "purl": "pkg:about/scancode-toolkit"
+        }
+      ],
+      "for_packages": [
+        "pkg:about/scancode-toolkit?uuid=f2148990-9f00-4d56-b388-58e9c8e3c8e0",
+        "pkg:pypi/scancode-toolkit@30.1.0?uuid=c46ea0bc-d02a-4ea5-8cdd-8aee9365503d"
+      ],
+      "scan_errors": []
+    },
+    {
+      "path": "python-sample/setup-mini.cfg",
+      "type": "file",
+      "package_data": [],
+      "for_packages": [
+        "pkg:pypi/scancode-toolkit@30.1.0?uuid=c46ea0bc-d02a-4ea5-8cdd-8aee9365503d"
+      ],
+      "scan_errors": []
+    },
+    {
+      "path": "python-sample/setup.cfg",
+      "type": "file",
+      "package_data": [
+        {
+          "type": "pypi",
+          "namespace": null,
+          "name": "scancode-toolkit",
+          "version": "30.1.0",
+          "qualifiers": {},
+          "subpath": null,
+          "primary_language": "Python",
+          "description": null,
+          "release_date": null,
+          "parties": [
+            {
+              "type": "person",
+              "role": "author",
+              "name": "ScanCode",
+              "email": "info@aboutcode.org",
+              "url": null
+            }
+          ],
+          "keywords": [],
+          "homepage_url": "https://github.com/nexB/scancode-toolkit",
+          "download_url": null,
+          "size": null,
+          "sha1": null,
+          "md5": null,
+          "sha256": null,
+          "sha512": null,
+          "bug_tracking_url": null,
+          "code_view_url": null,
+          "vcs_url": null,
+          "copyright": null,
+          "license_expression": null,
+          "declared_license": null,
+          "notice_text": null,
+          "source_packages": [],
+          "file_references": [],
+          "extra_data": {},
+          "dependencies": [
+            {
+              "purl": "pkg:pypi/commoncode",
+              "extracted_requirement": ">=30.0.0",
+              "scope": "install",
+              "is_runtime": true,
+              "is_optional": false,
+              "is_resolved": false,
+              "resolved_package": {}
+            },
+            {
+              "purl": "pkg:pypi/plugincode",
+              "extracted_requirement": ">=21.1.21",
+              "scope": "install",
+              "is_runtime": true,
+              "is_optional": false,
+              "is_resolved": false,
+              "resolved_package": {}
+            },
+            {
+              "purl": "pkg:pypi/typecode",
+              "extracted_requirement": ">=21.6.1",
+              "scope": "install",
+              "is_runtime": true,
+              "is_optional": false,
+              "is_resolved": false,
+              "resolved_package": {}
+            },
+            {
+              "purl": "pkg:pypi/extractcode",
+              "extracted_requirement": ">=21.7.23",
+              "scope": "install",
+              "is_runtime": true,
+              "is_optional": false,
+              "is_resolved": false,
+              "resolved_package": {}
+            },
+            {
+              "purl": "pkg:pypi/rpm-inspector-rpm",
+              "extracted_requirement": ">=4.16.1.3",
+              "scope": "install",
+              "is_runtime": true,
+              "is_optional": false,
+              "is_resolved": false,
+              "resolved_package": {}
+            },
+            {
+              "purl": "pkg:pypi/regipy",
+              "extracted_requirement": ">=2.0.0",
+              "scope": "install",
+              "is_runtime": true,
+              "is_optional": false,
+              "is_resolved": false,
+              "resolved_package": {}
+            },
+            {
+              "purl": "pkg:pypi/packagedcode-msitools",
+              "extracted_requirement": ">=0.101.210706",
+              "scope": "install",
+              "is_runtime": true,
+              "is_optional": false,
+              "is_resolved": false,
+              "resolved_package": {}
+            },
+            {
+              "purl": "pkg:pypi/pytest",
+              "extracted_requirement": "pytest",
+              "scope": "install",
+              "is_runtime": true,
+              "is_optional": false,
+              "is_resolved": false,
+              "resolved_package": {}
+            }
+          ],
+          "repository_homepage_url": null,
+          "repository_download_url": null,
+          "api_data_url": null,
+          "datasource_id": "pypi_setup_cfg",
+          "purl": "pkg:pypi/scancode-toolkit@30.1.0"
+        }
+      ],
+      "for_packages": [
+        "pkg:pypi/scancode-toolkit@30.1.0?uuid=c46ea0bc-d02a-4ea5-8cdd-8aee9365503d"
+      ],
+      "scan_errors": []
+    },
+    {
+      "path": "python-sample/setup.py",
+      "type": "file",
+      "package_data": [
+        {
+          "type": "pypi",
+          "namespace": null,
+          "name": null,
+          "version": null,
+          "qualifiers": {},
+          "subpath": null,
+          "primary_language": "Python",
+          "description": "",
+          "release_date": null,
+          "parties": [],
+          "keywords": [],
+          "homepage_url": null,
+          "download_url": null,
+          "size": null,
+          "sha1": null,
+          "md5": null,
+          "sha256": null,
+          "sha512": null,
+          "bug_tracking_url": null,
+          "code_view_url": null,
+          "vcs_url": null,
+          "copyright": null,
+          "license_expression": null,
+          "declared_license": {},
+          "notice_text": null,
+          "source_packages": [],
+          "file_references": [],
+          "extra_data": {},
+          "dependencies": [],
+          "repository_homepage_url": null,
+          "repository_download_url": null,
+          "api_data_url": null,
+          "datasource_id": "pypi_setup_py",
+          "purl": null
+        }
+      ],
+      "for_packages": [
+        "pkg:pypi/scancode-toolkit@30.1.0?uuid=c46ea0bc-d02a-4ea5-8cdd-8aee9365503d"
+      ],
+      "scan_errors": []
+    }
+  ]
+}

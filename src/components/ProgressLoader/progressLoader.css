@@ -1,0 +1,17 @@
+.progress-loader {
+  text-align: center;
+  margin-top: 130px;
+}
+
+.progress-loader .spinner {
+  display: flex;
+  margin-bottom: 80px;
+  justify-content: center;
+}
+
+.progress-loader .progress {
+  height: 15px;
+  max-width: 400px;
+  margin: auto;
+  margin-top: 20px;
+}
