@@ -2,11 +2,9 @@
 import moment from 'moment'
 import electron from 'electron'
 import * as electronFs from "fs"
-import * as electronOs from "os"
 import { toast } from 'react-toastify'
-import isDev from 'electron-is-dev';
 import { useNavigate } from 'react-router-dom'
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useMemo, useState } from 'react'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCogs, faDatabase, faFileCode, faFloppyDisk, faFolder, faTrash } from '@fortawesome/free-solid-svg-icons'
@@ -15,12 +13,12 @@ import { useWorkbenchDB } from '../../contexts/workbenchContext'
 import CoreButton from '../../components/CoreButton/CoreButton';
 import ProgressLoader from '../../components/ProgressLoader/ProgressLoader'
 
+import { ROUTES } from '../../constants/routes'
 import { GetHistory, HistoryItem, RemoveEntry } from '../../services/historyStore'
 
 import { OPEN_DIALOG_CHANNEL } from '../../constants/IpcConnection';
 
 import './home.css'
-import { DEFAULT_ROUTE_ON_IMPORT, ROUTES } from '../../constants/routes'
 
 const { ipcRenderer } = electron;
 
@@ -100,14 +98,6 @@ const Home = () => {
   // Copy already created/imported sqlite file to new sqlite file, and
   // update path of workbench DB to new sqlite DB
   const saveSqliteFile = () => ipcRenderer.send(OPEN_DIALOG_CHANNEL.SAVE_SQLITE);
-
-  // Will cause inaccessible Home page, set AUTO_IMPORT_IN_DEV to false
-  useEffect(() => {
-    if(isDev && DEV_CONFIG.AUTO_IMPORT_IN_DEV && history[0]){
-      historyItemParser(history[0]);
-      setTimeout(() => navigate(DEV_CONFIG.GO_TO_ROUTE_ON_IMPORT), 200);
-    }
-  }, []);
   
 
   if(!initialized && loadingStatus !== null){
