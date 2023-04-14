@@ -45,7 +45,6 @@ import { FileAttributes } from "./models/file";
 import { flattenFile } from "./models/flatFile";
 import { UNKNOWN_EXPRESSION, UNKNOWN_EXPRESSION_SPDX } from "../constants/data";
 
-
 /**
  * Manages the database created from a ScanCode JSON input.
  * The database contains tables for both flattened and unflattened data

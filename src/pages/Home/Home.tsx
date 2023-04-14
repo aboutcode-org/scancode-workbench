@@ -16,7 +16,6 @@ import ProgressLoader from '../../components/ProgressLoader/ProgressLoader'
 import { OPEN_DIALOG_CHANNEL } from '../../constants/IpcConnection';
 import { GetHistory, HistoryItem, RemoveEntry } from '../../services/historyStore'
 
-import '../../utils/ensureRendererDeps';
 import './home.css'
 
 const { ipcRenderer } = electron;

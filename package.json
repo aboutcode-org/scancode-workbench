@@ -19,7 +19,7 @@
   "homepage": "",
   "main": ".webpack/main",
   "scripts": {
-    "start": "ELECTRON_IS_DEV=1 electron-forge start",
+    "start": "electron-forge start",
     "postinstall": "electron-builder install-app-deps",
     "publish": "electron-forge package && node packager.js && npm run create-archive",
     "create-archive": "python archive_builder.py",
@@ -81,7 +81,6 @@
     "allotment": "^1.17.0",
     "bootstrap": "^5.2.1",
     "c3": "^0.7.20",
-    "electron-is-dev": "^2.0.0",
     "electron-packager": "^16.0.0",
     "electron-squirrel-startup": "^1.0.0",
     "file-loader": "^6.2.0",
