@@ -1,4 +1,4 @@
-import isDev from 'electron-is-dev';
+import sqlite3 from 'sqlite3'
 import { app, BrowserWindow, nativeImage, ipcMain, Menu, shell } from 'electron';
 
 import getTemplate from './mainMenu';
@@ -8,6 +8,11 @@ import { setUpGlobalIpcListeners, setUpWindowListeners } from './mainActions';
 // plugin that tells the Electron app where to look for the Webpack-bundled app code (depending on
 // whether you're running in development or production).
 declare const MAIN_WINDOW_WEBPACK_ENTRY: string;
+// declare const MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY: string;
+
+const isDev = !app.isPackaged;
+
+console.log("Using Sqlite3 ", sqlite3.VERSION);
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
@@ -58,7 +63,9 @@ export const createWindow = (): void => {
   }); 
   Menu.setApplicationMenu(Menu.buildFromTemplate(getTemplate()));
 
-  console.log("\n", isDev ? "Dev mode" : "Prod mode");
+  console.log("\n" + isDev ? "Dev mode" : "Prod mode");
+  // console.log("Preload URL: ", MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY);
+  console.log("Load URL: ", MAIN_WINDOW_WEBPACK_ENTRY);
   
   // and load the index.html of the app.
   mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY);

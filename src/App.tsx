@@ -18,10 +18,13 @@ import FileInfoDash from './pages/FileInfoDash/FileInfoDash';
 import LicenseInfoDash from './pages/LicenseInfoDash/LicenseInfoDash';
 import PackageInfoDash from './pages/PackageInfoDash/PackageInfoDash';
 import Packages from './pages/Packages/Packages';
+import LicenseDetections from './pages/LicenseDetections/LicenseDetections';
 import ChartView from './pages/ChartView/ChartView';
 import ScanInfo from './pages/ScanInfo/ScanInfo';
 import About from './pages/About/About';
 import PageNotFound from './pages/PageNotFound';
+
+import './utils/ensureRendererDeps';
 
 import './fontawesome';
 import 'rc-tree/assets/index.css';
@@ -32,7 +35,6 @@ import 'react-tooltip/dist/react-tooltip.css'
 import './app.css';
 import './dashStyles.css';
 import './customFaColors.css';
-import LicenseDetections from './pages/LicenseDetections/LicenseDetections';
 
 const App = () => {
   return (

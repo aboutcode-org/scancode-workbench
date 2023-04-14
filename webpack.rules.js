@@ -7,22 +7,6 @@ module.exports = [
     use: 'node-loader',
   },
   {
-    test: /\.node$/,
-    loader: "node-loader",
-  },
-
-  // {
-  //   test: /\.(m?js|node)$/,
-  //   parser: { amd: false },
-  //   use: {
-  //       loader: '@vercel/webpack-asset-relocator-loader',
-  //       // options: {
-  //       //   outputAssetBase: 'native_modules',
-  //       //   // emitDirnameAll: true,
-  //       // },
-  //   }
-  // },
-  {
     test: /\.(png|jpg|jpeg|eps|gif)$/i,
     use: [
       {
