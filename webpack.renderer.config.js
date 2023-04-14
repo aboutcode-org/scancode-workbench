@@ -29,18 +29,6 @@ module.exports = {
     timers: "commonjs2 timers",
     zlib: "commonjs2 zlib",
     constants: "commonjs2 constants",
-
-    // "aws-sdk": "aws-sdk",
-    // pg: "pg",
-    // "pg-query-stream": "pg-query-stream",
-    // mssql: "mssql",
-    // "mssql/lib/base": "mssql/lib/base",
-    // "mssql/package.json": "mssql/package.json",
-    // mysql: "mysql",
-    // mysql2: "mysql2",
-    // oracle: "oracle",
-    // oracledb: "oracledb",
-    // tedious: "tedious",
   },
   plugins,
   resolve: {

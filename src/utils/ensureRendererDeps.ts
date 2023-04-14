@@ -21,3 +21,11 @@ console.log("Renderer Deps:", {
   sqlite3Version,
   // remoteMain,
 });
+
+
+// // Debugging for native modules
+// const electronDialog = electron.dialog;
+// console.log('electron.dialog', electronDialog);
+// const sqlite3Window = window.require('sqlite3');
+// console.log("Sqlite 3 required", sqlite3Window);
+// console.log("Sqlite 3 imported === required", sqlite3Window === sqlite3);

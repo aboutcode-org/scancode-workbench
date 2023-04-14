@@ -36,7 +36,6 @@
     "@electron-forge/plugin-webpack": "^6.1.1",
     "@fortawesome/fontawesome-free": "^6.2.0",
     "@svgr/webpack": "^6.4.0",
-    "@types/better-sqlite3": "^7.6.0",
     "@types/c3": "^0.7.8",
     "@types/d3": "^7.4.0",
     "@types/jquery": "^3.5.14",

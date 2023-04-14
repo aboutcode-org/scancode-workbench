@@ -63,7 +63,7 @@ export const createWindow = (): void => {
   }); 
   Menu.setApplicationMenu(Menu.buildFromTemplate(getTemplate()));
 
-  console.log("\n", isDev ? "Dev mode" : "Prod mode");
+  console.log("\n" + isDev ? "Dev mode" : "Prod mode");
   // console.log("Preload URL: ", MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY);
   console.log("Load URL: ", MAIN_WINDOW_WEBPACK_ENTRY);
   
