@@ -13,25 +13,14 @@ import { useWorkbenchDB } from '../../contexts/workbenchContext'
 import CoreButton from '../../components/CoreButton/CoreButton';
 import ProgressLoader from '../../components/ProgressLoader/ProgressLoader'
 
-import { ROUTES } from '../../constants/routes'
+import { OPEN_DIALOG_CHANNEL } from '../../constants/IpcConnection';
 import { GetHistory, HistoryItem, RemoveEntry } from '../../services/historyStore'
 
-import { OPEN_DIALOG_CHANNEL } from '../../constants/IpcConnection';
-
+import '../../utils/ensureRendererDeps';
 import './home.css'
 
 const { ipcRenderer } = electron;
 
-// console.log("Renderer Deps:", {
-//   electron,
-//   electronFs,
-//   electronOs,
-//   ipcRenderer,
-//   platform: electronOs.platform(),
-//   // remote,
-//   // sqlite3,
-//   // remoteMain,
-// });
 
 // // Debugging for native modules
 // const electronDialog = electron.dialog;
@@ -43,11 +32,6 @@ const { ipcRenderer } = electron;
 /**
  * Developer options
  */
-
-const DEV_CONFIG = {
-  AUTO_IMPORT_IN_DEV: false,
-  GO_TO_ROUTE_ON_IMPORT: ROUTES.LICENSE_DETECTIONS,
-}
 
 const Home = () => {
   const {
