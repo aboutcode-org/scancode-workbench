@@ -1,3 +1,4 @@
+import sqlite3 from 'sqlite3'
 import isDev from 'electron-is-dev';
 import { app, BrowserWindow, nativeImage, ipcMain, Menu, shell } from 'electron';
 
@@ -8,6 +9,8 @@ import { setUpGlobalIpcListeners, setUpWindowListeners } from './mainActions';
 // plugin that tells the Electron app where to look for the Webpack-bundled app code (depending on
 // whether you're running in development or production).
 declare const MAIN_WINDOW_WEBPACK_ENTRY: string;
+
+console.log("Sqlit3:", sqlite3);
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
