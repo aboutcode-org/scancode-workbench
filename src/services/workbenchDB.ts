@@ -349,7 +349,15 @@ export class WorkbenchDB {
             .then(() => this.db.Packages.bulkCreate(packages))
             .then(() => this.db.Dependencies.bulkCreate(dependencies))
             .then(() => this.db.Header.create(parsedHeader))
-            .then((header) => (headerId = Number(header.getDataValue("id"))));
+            .then((header) => (headerId = Number(header.getDataValue("id"))))
+            .catch((err: unknown) => {
+              console.error(
+                "Some error parsing Top level data (caught in workbenchDB) !!",
+                err,
+                TopLevelData
+              );
+              reject(err);
+            });
 
           console.log(
             "\n----------------------------------------------------------------\n"
@@ -364,15 +372,17 @@ export class WorkbenchDB {
           );
           // Handle absence of detection.identifier in matches at file level in prev toolkit versions
           // upto v32.0.0rc2
-          const for_license_detections: string[] = file.for_license_detections || [];
+          const for_license_detections: string[] =
+            file.for_license_detections || [];
 
           file?.license_detections?.forEach(
             (detection: any, detectionIdx: number) => {
-              const detectionIdentifier = detection.identifier || for_license_detections[detectionIdx];
+              const detectionIdentifier =
+                detection.identifier || for_license_detections[detectionIdx];
 
               const targetLicenseDetection: any =
                 TopLevelData.license_detections_map.get(detectionIdentifier);
-              
+
               if (!targetLicenseDetection) return;
               if (!targetLicenseDetection.file_regions)
                 targetLicenseDetection.file_regions = [];
@@ -573,7 +583,16 @@ export class WorkbenchDB {
             })
             .catch((e: unknown) => reject(e));
         })
-        .on("error", (e: unknown) => reject(e));
+        .on("error", (err: unknown) => {
+          console.error(
+            "Some error parsing data (caught in workbenchDB) !!",
+            err
+          );
+          toast.error(
+            "Some error parsing data !! \nPlease check console for more info"
+          );
+          reject(err);
+        });
     });
   }
 
@@ -741,7 +760,12 @@ export class WorkbenchDB {
         )
 
         .catch((err) => {
-          console.error("Some error parsing data !!", err);
+          console.error(
+            "Some error adding files data (caught in workbenchDB) !!",
+            err,
+            files,
+            options
+          );
           toast.error(
             "Some error parsing data !! \nPlease check console for more info"
           );
