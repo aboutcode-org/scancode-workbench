@@ -15,7 +15,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-import { useWorkbenchDB } from "../../contexts/workbenchContext";
+import { useWorkbenchDB } from "../../contexts/dbContext";
 import CoreButton from "../../components/CoreButton/CoreButton";
 import ProgressLoader from "../../components/ProgressLoader/ProgressLoader";
 

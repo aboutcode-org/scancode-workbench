@@ -5,7 +5,7 @@ import React, { useEffect, useState } from 'react';
 import { Badge, Collapse, ListGroup, ListGroupItem } from 'react-bootstrap';
 // import { PackageURL } from 'packageurl-js';
 
-import { useWorkbenchDB } from '../../contexts/workbenchContext';
+import { useWorkbenchDB } from '../../contexts/dbContext';
 import { DEPENDENCY_SCOPES } from '../../services/models/dependencies';
 import DependencyEntity from '../../components/PackagesEntityDetails/DependencyEntity';
 import { PackageDetails, DependencyDetails, PackageTypeGroupDetails } from './packageDefinitions';

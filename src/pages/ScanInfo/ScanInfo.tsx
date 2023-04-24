@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 // Maintained Fork of unmaintained but popular react-json-view
 import ReactJson from '@microlink/react-json-view'
 
-import { useWorkbenchDB } from '../../contexts/workbenchContext';
+import { useWorkbenchDB } from '../../contexts/dbContext';
 
 import './scanInfo.css';
 import InfoEntry from './InfoEntry';

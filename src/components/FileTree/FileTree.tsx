@@ -3,7 +3,7 @@ import { DataNode } from "rc-tree/lib/interface";
 import React, { useEffect, useState } from "react";
 
 import EllipticLoader from "../EllipticLoader";
-import { PathType, useWorkbenchDB } from "../../contexts/workbenchContext";
+import { PathType, useWorkbenchDB } from "../../contexts/dbContext";
 
 import SwitcherIcon from "./SwitcherIcon";
 
