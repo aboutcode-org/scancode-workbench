@@ -1,11 +1,6 @@
 import { Op } from "sequelize";
 import React, { useEffect, useState } from "react";
-import {
-  ColDef,
-  ColumnApi,
-  GridApi,
-  GridReadyEvent,
-} from "ag-grid-community";
+import { ColDef, ColumnApi, GridApi, GridReadyEvent } from "ag-grid-community";
 
 import AgDataTable from "./AgDataTable";
 import CoreButton from "../../components/CoreButton/CoreButton";
@@ -24,13 +19,14 @@ import { useWorkbenchDB } from "../../contexts/dbContext";
 
 import CustomColumnSelector from "./CustomColumnSelector";
 import { FormControl } from "react-bootstrap";
+import { useWorkbenchState } from "../../contexts/stateContext";
 
 import "./TableView.css";
-import { useWorkbenchState } from "../../contexts/stateContext";
 
 const TableView = () => {
   const { db, initialized, currentPath } = useWorkbenchDB();
-  const { columnDefs, columnState, setColumnDefs, updateColState } = useWorkbenchState();
+  const { columnDefs, columnState, setColumnDefs, updateColState } =
+    useWorkbenchState();
 
   // Necessary to keep coldef as empty array by default, to ensure filter set updates
   const [tableData, setTableData] = useState<unknown[]>([]);
@@ -86,8 +82,12 @@ const TableView = () => {
             longestPathLength = len;
           }
         });
+
         const calculatedColumnWidth = calculateCellWidth(longestPathLength);
-        ALL_COLUMNS.path.width = calculatedColumnWidth;
+
+        // Shrink path column, if user has over-extended it earlier (maybe for other scan with large paths)
+        if (calculatedColumnWidth < ALL_COLUMNS.path.width)
+          ALL_COLUMNS.path.width = calculatedColumnWidth;
 
         setColumnDefs((prevColDefs) => {
           if (prevColDefs.length > 0) return prevColDefs; // Don't mutate cols, if already set
@@ -163,16 +163,14 @@ const TableView = () => {
   }, [db, currentPath]);
 
   useEffect(() => {
-    console.log("Col defs changed", columnState);
     if (gridApi) {
       gridApi.refreshHeader();
     }
   }, [columnDefs]);
 
-  function gridReady(params: GridReadyEvent) {
+  function onGridReady(params: GridReadyEvent) {
     setGridApi(params.api);
     setColumnApi(params.columnApi);
-    console.log("Restore column state on grid", columnState, columnState[0]?.colId);
     params.columnApi.applyColumnState({ applyOrder: true, state: columnState });
   }
 
@@ -256,13 +254,12 @@ const TableView = () => {
       />
       <AgDataTable
         gridApi={gridApi}
-        onGridReady={gridReady}
-        onColumnEverythingChanged={(e) => updateColState(e.columnApi, false)}
+        tableData={tableData}
+        columnDefs={columnDefs}
+        onGridReady={onGridReady}
         onColumnMoved={(e) => updateColState(e.columnApi, true)}
         onColumnResized={(e) => updateColState(e.columnApi, false)}
-        // onVirtualColumnsChanged={(e) => reviveSavedColState(e.columnApi)}
-        columnDefs={columnDefs}
-        tableData={tableData}
+        onGridColumnsChanged={(e) => updateColState(e.columnApi, false)}
       />
     </div>
   );

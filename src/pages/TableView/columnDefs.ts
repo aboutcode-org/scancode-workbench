@@ -1,17 +1,17 @@
-import { QUERY_KEYS } from "./../../constants/params";
 import {
   ColDef,
   IFilterOptionDef,
   ValueFormatterParams,
 } from "ag-grid-community";
-import { ROUTES } from "../../constants/routes";
 
+import { ROUTES } from "../../constants/routes";
+import { QUERY_KEYS } from "./../../constants/params";
 import {
   FileLicenseDetectionsRenderer,
   ListCellRenderer,
   MatchLicenseExpressionRenderer,
-  UrlRenderer,
   UrlListCellRenderer,
+  UrlRenderer,
 } from "./CustomCellRenderers";
 
 enum CustomComponentKeys {
@@ -89,7 +89,7 @@ interface COLUMNS_LIST {
   detected_license_expression_spdx: ColDef;
   percentage_of_license_text: ColDef;
   license_policy: ColDef;
-  license_clues: ColDef;
+  // license_clues: ColDef;
   license_detections: ColDef;
 
   email: ColDef;
@@ -116,6 +116,8 @@ export const ALL_COLUMNS: COLUMNS_LIST = {
     colId: "path",
     headerName: "Path",
     initialWidth: 400,
+    // Note - Path width is also calculated after import in TableView.tsx
+    // ALL_COLUMNS.path.width = calculatedColumnWidth;
   },
   type: {
     field: "type",
@@ -287,17 +289,16 @@ export const ALL_COLUMNS: COLUMNS_LIST = {
       filterOptions: FILTER_OPTIONS.LIST_FILTERS,
     },
   },
-  license_clues: {
-    field: "license_clues",
-    colId: "license_clues",
-    headerName: "License clues",
-    initialWidth: 120,
-    cellRenderer: CustomComponentKeys.UrlListCellRenderer,
-    filterParams: {
-      filterOptions: FILTER_OPTIONS.LIST_FILTERS,
-    },
-  },
-
+  // license_clues: {
+  //   field: "license_clues",
+  //   colId: "license_clues",
+  //   headerName: "License clues",
+  //   initialWidth: 120,
+  //   cellRenderer: CustomComponentKeys.UrlListCellRenderer,
+  //   filterParams: {
+  //     filterOptions: FILTER_OPTIONS.LIST_FILTERS,
+  //   },
+  // },
   email: {
     field: "email",
     colId: "email",

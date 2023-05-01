@@ -16,7 +16,6 @@ const FileTree = (props: React.HTMLProps<HTMLDivElement>) => {
     initialized,
     importedSqliteFilePath,
     currentPath,
-    currentPathType,
     updateCurrentPath,
   } = workbenchDB;
 
@@ -38,7 +37,9 @@ const FileTree = (props: React.HTMLProps<HTMLDivElement>) => {
     updateCurrentPath(path, pathType);
   }
 
-  // console.log("Current path & type", currentPath, currentPathType);
+  // useEffect(() => {
+  //   console.log("Current path", currentPath);
+  // }, [currentPath]);
 
   if (!treeData) {
     return (
@@ -58,6 +59,7 @@ const FileTree = (props: React.HTMLProps<HTMLDivElement>) => {
         showLine
         treeData={treeData}
         switcherIcon={SwitcherIcon}
+        selectedKeys={[currentPath]}
         onSelect={(keys, info) => {
           if (keys && keys[0])
             selectPath(

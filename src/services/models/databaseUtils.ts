@@ -15,6 +15,7 @@
  */
 
  import Sequelize, { AbstractDataType } from 'sequelize';
+// eslint-disable-next-line import/no-unresolved
 import { parse } from 'license-expressions';
 
 // Stores an object as a json string internally, but as an object externally
@@ -110,7 +111,7 @@ export function parseTokenKeysFromExpression(expression: string){
 export function filterSpdxKeys(keys: string[]){
   const ignoredPrefixes = ["License-scancode-", "LicenseRef-scancode-"];
   return keys.filter(key => {
-    for(let prefix of ignoredPrefixes){
+    for(const prefix of ignoredPrefixes){
       if(key.includes(prefix))
         return false;
     }

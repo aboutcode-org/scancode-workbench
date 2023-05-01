@@ -19,15 +19,6 @@ export const DetectionMatchesCols: ColDef[] = [
     width: 270,
   },
   {
-    headerName: 'SPDX License expression',
-    field: 'license_expression_spdx',
-    cellRenderer: MatchLicenseExpressionRenderer,
-    cellRendererParams: {
-      spdxLicense: true,
-    },
-    width: 270,
-  },
-  {
     headerName: 'Score',
     field: 'score',
     width: MINI_FIELD_WIDTH,
@@ -75,7 +66,16 @@ export const DetectionMatchesCols: ColDef[] = [
     cellRendererParams: {
       customTextField: 'rule_identifier'
     },
-    width: 270,
+    width: 250,
+  },
+  {
+    headerName: 'SPDX License expression',
+    field: 'license_expression_spdx',
+    cellRenderer: MatchLicenseExpressionRenderer,
+    cellRendererParams: {
+      spdxLicense: true,
+    },
+    width: 250,
   },
   // {
   //   headerName: 'LDB URL',

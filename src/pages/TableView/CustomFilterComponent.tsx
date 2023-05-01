@@ -11,16 +11,24 @@ export interface CustomParams extends IFloatingFilterParams {
   color: string;
 }
 
+const FILTER_MAX_OPTION_LENGTH = 75;
+
+function trimString(str: string){
+  if (str.length > FILTER_MAX_OPTION_LENGTH) {
+    return str.trimEnd().slice(0, FILTER_MAX_OPTION_LENGTH) + '...';
+  }
+  return str.trimEnd();
+}
 function parseProbableStringifiedArray(str: string){
   try {
     const result = JSON.parse(str);
     if(Array.isArray(result)){
       const parseableResultArray = result as string[][];
-      return parseableResultArray.map(subEntry => subEntry.join(',')).join(',');
+      return trimString(parseableResultArray.map(subEntry => subEntry.join(',')).join(','));
     }
-    return str;
+    return trimString(str);
   } catch (e) {
-    return str;
+    return trimString(str);
   }
 }
 
@@ -49,6 +57,8 @@ const CustomFilterComponent = forwardRef((props: CustomParams, ref) => {
   });
 
   function selectionChanged(value: string){
+    // console.log("Option  changed to", value);
+    
     if (value === optionValues[0]) {
       parentFilterInstance(instance => {
         instance.onFloatingFilterChanged('equals', null);
@@ -59,6 +69,11 @@ const CustomFilterComponent = forwardRef((props: CustomParams, ref) => {
       instance.onFloatingFilterChanged('equals', value);
     });
   }
+
+  // useEffect(() => {
+  //   console.log("Opt vals", optionValues);
+    
+  // }, [optionValues]);
 
   return (
     <select
@@ -71,7 +86,7 @@ const CustomFilterComponent = forwardRef((props: CustomParams, ref) => {
         optionValues.map((optionValue, idx) => {
           const parsedOptionValue = parseProbableStringifiedArray(optionValue);
           return (
-            <option value={optionValue} key={optionValue+idx}>
+            <option value={parsedOptionValue || optionValue} key={optionValue+idx}>
               {
                 DEFAULT_EMPTY_VALUES.has(optionValue) ? "All"
                 : parsedOptionValue

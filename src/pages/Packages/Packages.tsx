@@ -1,21 +1,21 @@
 // eslint-disable-next-line import/namespace
 import { Allotment } from 'allotment';
-import { ThreeDots } from 'react-loader-spinner';
 import React, { useEffect, useState } from 'react';
 import { Badge, Collapse, ListGroup, ListGroupItem } from 'react-bootstrap';
-// import { PackageURL } from 'packageurl-js';
-
-import { useWorkbenchDB } from '../../contexts/dbContext';
-import { DEPENDENCY_SCOPES } from '../../services/models/dependencies';
-import DependencyEntity from '../../components/PackagesEntityDetails/DependencyEntity';
-import { PackageDetails, DependencyDetails, PackageTypeGroupDetails } from './packageDefinitions';
+import { ThreeDots } from 'react-loader-spinner';
+import { useSearchParams } from 'react-router-dom';
 
 import RightArrowIcon from "../../assets/icons/rightArrow.svg";
+import NoDataFallback from '../../components/NoDataSection';
+import DependencyEntity from '../../components/PackagesEntityDetails/DependencyEntity';
 import PackageEntity from '../../components/PackagesEntityDetails/PackageEntity';
+import { QUERY_KEYS } from '../../constants/params';
+// import { PackageURL } from 'packageurl-js';
+import { useWorkbenchDB } from '../../contexts/dbContext';
+import { DEPENDENCY_SCOPES } from '../../services/models/dependencies';
+import { DependencyDetails, PackageDetails, PackageTypeGroupDetails } from './packageDefinitions';
 
 import './packages.css';
-import { useSearchParams } from 'react-router-dom';
-import { QUERY_KEYS } from '../../constants/params';
 
 
 const Packages = () => {
@@ -69,7 +69,12 @@ const Packages = () => {
       .then(async () => {
         const packages = await db.getAllPackages();
         const deps = await db.getAllDependencies();
-        // console.log("Raw Packages", packages);
+        console.log("Raw Packages & deps", packages, deps);
+        if(!packages.length && !deps.length){
+          console.log("No package or deps available");
+          setPackageGroups([]);
+          return;
+        }
 
         // const type_other = 'type-other';
         const packageMapping = new Map<string, PackageDetails>(
@@ -117,8 +122,8 @@ const Packages = () => {
             }
           ]
         ));
-        const OTHERS = 'others';
-        const OTHERS_PACKAGE: PackageDetails = {
+        const MISC_DEPS = 'others';
+        const MISC_PACKAGE: PackageDetails = {
           package_uid: 'misc',
           name: 'Misc dependencies',
           type: 'Other',
@@ -158,12 +163,12 @@ const Packages = () => {
           datasource_ids: [],
           purl: null,
         };
-        packageMapping.set(OTHERS, OTHERS_PACKAGE);
+        packageMapping.set(MISC_DEPS, MISC_PACKAGE);
 
         // Group dependencies in their respective packages
         deps.forEach(dependencyInfo => {
           const targetPackageUid: string | null = dependencyInfo.getDataValue('for_package_uid')?.toString({});
-          packageMapping.get(targetPackageUid || OTHERS).dependencies.push({
+          packageMapping.get(targetPackageUid || MISC_DEPS).dependencies.push({
             // ...dependencyInfo,     // For debugging
             purl: dependencyInfo.getDataValue('purl').toString({}),
             extracted_requirement: dependencyInfo.getDataValue('extracted_requirement')?.toString({}) || "",
@@ -178,6 +183,12 @@ const Packages = () => {
             datasource_id: dependencyInfo.getDataValue('datasource_id').toString({}),
           })
         });
+
+        // Ignore misc package if no misc dependencies found
+        if(!MISC_PACKAGE.dependencies.length){
+          packageMapping.delete(MISC_DEPS);
+        }
+
         const parsedPackageWithDeps = Array.from(packageMapping.values());
         // @TODO - What are qualifiers ?
         parsedPackageWithDeps.forEach(pkg => {
@@ -251,7 +262,7 @@ const Packages = () => {
   }
 
   if(!packageGroups.length)
-    return <h5>No packages :/</h5>;
+    return <NoDataFallback text='No packages :/' />
 
   return (
     <div className='packages-main-container'>

@@ -1,4 +1,5 @@
 import { ColDef } from "ag-grid-community";
+import { TickRenderer } from "../../pages/TableView/CustomCellRenderers";
 
 const MINI_FIELD_WIDTH = 90;
 
@@ -28,5 +29,12 @@ export const DetectionFileRegionCols: ColDef[] = [
     headerName: 'End line',
     field: 'end_line',
     width: MINI_FIELD_WIDTH,
+  },
+  {
+    headerName: 'From package',
+    field: 'from_package',
+    cellRenderer: TickRenderer,
+    maxWidth: 110,
+    suppressMenu: true,
   },
 ]

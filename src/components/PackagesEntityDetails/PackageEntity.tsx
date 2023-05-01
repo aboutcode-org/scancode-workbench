@@ -1,8 +1,6 @@
 import ReactJson from '@microlink/react-json-view';
-import React, { useEffect } from 'react'
-// import { useNavigate } from 'react-router-dom';
-// import { ROUTES } from '../../constants/routes';
-// import { useWorkbenchDB } from '../../contexts/workbenchContext';
+import React from 'react'
+import { useWorkbenchDB } from '../../contexts/dbContext';
 import { DependencyDetails, PackageDetails } from '../../pages/Packages/packageDefinitions'
 
 import '../../styles/entityCommonStyles.css';
@@ -14,18 +12,8 @@ interface PackageEntityProps {
 }
 const PackageEntity = (props: PackageEntityProps) => {
   const { goToDependency, package: activePackage} = props;
-  // const navigate = useNavigate();
-  // const { updateCurrentPath } = useWorkbenchDB();
-  
-  useEffect(() => {
-    console.log("Active package", activePackage);
-  }, [activePackage])
+  // const { goToFileInTableView } = useWorkbenchDB();
 
-  // function goToFile(path: string){
-  //   // updateCurrentPath(path, 'file'); // Not two-way yet
-  //   navigate(ROUTES.TABLE_VIEW);
-  // }
-  
   if(!activePackage){
     return (
       <div>
@@ -35,6 +23,7 @@ const PackageEntity = (props: PackageEntityProps) => {
       </div>
     )
   }
+  
   return (
     <div className='package-entity'>
       <h5>
@@ -92,7 +81,7 @@ const PackageEntity = (props: PackageEntityProps) => {
             // <a
             //   className='deps-link'
             //   key={datafile_path}
-            //   onClick={() => goToFile(datafile_path)}
+            //   onClick={() => goToFileInTableView(datafile_path)}
             // >
             <React.Fragment key={datafile_path}>
               { datafile_path }
