@@ -14,53 +14,61 @@
  #
  */
 
-import { Sequelize, StringDataType, IntegerDataType, DataTypes, Model } from 'sequelize';
-import { jsonDataType, JSON_Type } from './databaseUtils';
+import {
+  Sequelize,
+  StringDataType,
+  IntegerDataType,
+  DataTypes,
+  Model,
+} from "sequelize";
+import { jsonDataType, JSON_Type } from "./databaseUtils";
 
 export interface PackagesAttributes {
   id: IntegerDataType;
-  type: StringDataType,
-  namespace: StringDataType | null,
-  name: StringDataType,
-  version: StringDataType | null,
-  qualifiers: JSON_Type,
-  subpath: StringDataType | null,
-  primary_language: StringDataType | null,
-  description: StringDataType | null,
-  release_date: StringDataType | null,
-  parties: JSON_Type,
-  keywords: JSON_Type,
-  homepage_url: StringDataType | null,
-  download_url: StringDataType | null,
-  size: StringDataType | null,
-  sha1: StringDataType | null,
-  md5: StringDataType | null,
-  sha256: StringDataType | null,
-  sha512: StringDataType | null,
-  bug_tracking_url: StringDataType | null,
-  code_view_url: StringDataType | null,
-  vcs_url: StringDataType | null,
-  copyright: StringDataType | null,
-  declared_license_expression: StringDataType | null,
-  declared_license_expression_spdx: StringDataType | null,
-  other_license_expression: StringDataType | null,
-  other_license_expression_spdx: StringDataType | null,
-  extracted_license_statement: JSON_Type | null,
-  notice_text: StringDataType | null,
-  source_packages: JSON_Type,
-  extra_data: JSON_Type,
-  repository_homepage_url: StringDataType | null,
-  repository_download_url: StringDataType | null,
-  api_data_url: StringDataType | null,
-  package_uid: StringDataType,
-  datafile_paths: JSON_Type,
-  datasource_ids: JSON_Type,
-  purl: StringDataType,
+  type: StringDataType;
+  namespace: StringDataType | null;
+  name: StringDataType;
+  version: StringDataType | null;
+  qualifiers: JSON_Type;
+  subpath: StringDataType | null;
+  primary_language: StringDataType | null;
+  description: StringDataType | null;
+  release_date: StringDataType | null;
+  parties: JSON_Type;
+  keywords: JSON_Type;
+  homepage_url: StringDataType | null;
+  download_url: StringDataType | null;
+  size: StringDataType | null;
+  sha1: StringDataType | null;
+  md5: StringDataType | null;
+  sha256: StringDataType | null;
+  sha512: StringDataType | null;
+  bug_tracking_url: StringDataType | null;
+  code_view_url: StringDataType | null;
+  vcs_url: StringDataType | null;
+  copyright: StringDataType | null;
+  declared_license_expression: StringDataType | null;
+  declared_license_expression_spdx: StringDataType | null;
+  license_detections: JSON_Type;
+  other_license_expression: StringDataType | null;
+  other_license_expression_spdx: StringDataType | null;
+  other_license_detections: JSON_Type;
+  extracted_license_statement: JSON_Type | null;
+  notice_text: StringDataType | null;
+  source_packages: JSON_Type;
+  extra_data: JSON_Type;
+  repository_homepage_url: StringDataType | null;
+  repository_download_url: StringDataType | null;
+  api_data_url: StringDataType | null;
+  package_uid: StringDataType;
+  datafile_paths: JSON_Type;
+  datasource_ids: JSON_Type;
+  purl: StringDataType;
 }
 
 export default function packagesModel(sequelize: Sequelize) {
   return sequelize.define<Model<PackagesAttributes>>(
-    'packages',
+    "packages",
     {
       id: {
         allowNull: false,
@@ -78,7 +86,7 @@ export default function packagesModel(sequelize: Sequelize) {
         allowNull: true,
         type: DataTypes.STRING,
       },
-      qualifiers: jsonDataType('qualifiers'),
+      qualifiers: jsonDataType("qualifiers"),
       subpath: {
         allowNull: true,
         type: DataTypes.STRING,
@@ -95,8 +103,8 @@ export default function packagesModel(sequelize: Sequelize) {
         allowNull: true,
         type: DataTypes.STRING,
       },
-      parties: jsonDataType('parties'),
-      keywords: jsonDataType('keywords'),
+      parties: jsonDataType("parties"),
+      keywords: jsonDataType("keywords"),
       homepage_url: {
         allowNull: true,
         type: DataTypes.STRING,
@@ -149,6 +157,7 @@ export default function packagesModel(sequelize: Sequelize) {
         allowNull: true,
         type: DataTypes.STRING,
       },
+      license_detections: jsonDataType("license_detections"),
       other_license_expression: {
         allowNull: true,
         type: DataTypes.STRING,
@@ -157,13 +166,14 @@ export default function packagesModel(sequelize: Sequelize) {
         allowNull: true,
         type: DataTypes.STRING,
       },
-      extracted_license_statement: jsonDataType('extracted_license_statement'),
+      other_license_detections: jsonDataType("other_license_detections"),
+      extracted_license_statement: jsonDataType("extracted_license_statement"),
       notice_text: {
         allowNull: true,
         type: DataTypes.STRING,
       },
-      source_packages: jsonDataType('source_packages'),
-      extra_data: jsonDataType('extra_data'),
+      source_packages: jsonDataType("source_packages"),
+      extra_data: jsonDataType("extra_data"),
       repository_homepage_url: {
         allowNull: true,
         type: DataTypes.STRING,
@@ -177,14 +187,15 @@ export default function packagesModel(sequelize: Sequelize) {
         type: DataTypes.STRING,
       },
       package_uid: DataTypes.STRING,
-      datafile_paths: jsonDataType('datafile_paths'),
-      datasource_ids: jsonDataType('datasource_ids'),
+      datafile_paths: jsonDataType("datafile_paths"),
+      datasource_ids: jsonDataType("datasource_ids"),
       purl: {
         allowNull: true,
         type: DataTypes.STRING,
       },
     },
     {
-      timestamps: false
-    });
+      timestamps: false,
+    }
+  );
 }

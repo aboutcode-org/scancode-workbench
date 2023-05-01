@@ -220,9 +220,7 @@ export const WorkbenchDBProvider = (props: React.PropsWithChildren<Record<string
             }
             console.error("Err trying to import sqlite:");
             console.error(err);
-            toast(`Unexpected error while importing json \nPlease check console for more info`, {
-              type: 'error'
-            });
+            toast.error(`Unexpected error while importing json \nPlease check console for more info`);
             abortImport();
           });
       })
@@ -233,9 +231,7 @@ export const WorkbenchDBProvider = (props: React.PropsWithChildren<Record<string
         }
         console.error("Err trying to import sqlite:");
         console.error(err);
-        toast(`Unexpected error while finalising json import \nPlease check console for more info`, {
-          type: 'error'
-        });
+        toast.error(`Unexpected error while finalising json import \nPlease check console for more info`);
         abortImport();
       });
   }
@@ -305,6 +301,13 @@ export const WorkbenchDBProvider = (props: React.PropsWithChildren<Record<string
             if(!preventNavigation)
               navigate(DEFAULT_ROUTE_ON_IMPORT);
         });
+      })
+      .catch(err => {
+        abortImport();
+        console.error("Some error parsing data (caught in workbenchContext) !!", err);
+        toast.error(
+          "Some error parsing data !! \nPlease check console for more info"
+        );
       });
   }
 
@@ -330,9 +333,7 @@ export const WorkbenchDBProvider = (props: React.PropsWithChildren<Record<string
       } catch (err) {
         console.log(`some error importing json - ${message.jsonFilePath}`, err);
         abortImport();
-        toast(`Unexpected error while importing json \nPlease check console for more info`, {
-          type: 'error'
-        });
+        toast.error(`Unexpected error while importing json \nPlease check console for more info`);
       }
     });
     ipcRenderer.on(IMPORT_REPLY_CHANNEL.SQLITE, (_, message: SQLITE_IMPORT_REPLY_FORMAT) => {
@@ -341,14 +342,12 @@ export const WorkbenchDBProvider = (props: React.PropsWithChildren<Record<string
       } catch (err) {
         console.log(`some error importing sqlite - ${message.sqliteFilePath}`, err);
         abortImport();
-        toast(`Unexpected error while importing sqlite \nPlease check console for more info`, {
-          type: 'error'
-        });
+        toast.error(`Unexpected error while importing sqlite \nPlease check console for more info`);
       }
     });
     ipcRenderer.on(SAVE_REPLY_CHANNEL.SQLITE, (_, message: SQLITE_SAVE_REPLY_FORMAT) => {
       if(!value.db || !value.initialized){
-        return toast("No JSON/Sqlite imported to save as new SQLite file", {
+        return toast.error("No JSON/Sqlite imported to save as new SQLite file", {
           type: "error",
           style: { width: 400 },
         });
@@ -365,7 +364,7 @@ export const WorkbenchDBProvider = (props: React.PropsWithChildren<Record<string
         reader.pipe(writer);
         reader.on('end', () => {
           console.log("Saved", newFileName);
-          toast("Saved sqlite file, loading from new file", { type: 'success' });
+          toast.success("Saved sqlite file, loading from new file");
           sqliteParser(newFileName, true);
         });
       }
