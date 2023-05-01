@@ -8,7 +8,7 @@ import Navbar from '../Navbar/Navbar';
 import FileTree from '../FileTree/FileTree'
 import ImportFallback from '../ImportFallback/ImportFallback';
 
-import { useWorkbenchDB } from '../../contexts/workbenchContext';
+import { useWorkbenchDB } from '../../contexts/dbContext';
 import { FILE_TREE_ROUTES, IMPORT_FALLBACK_ROUTES } from '../../constants/routes';
 
 import './layout.css';

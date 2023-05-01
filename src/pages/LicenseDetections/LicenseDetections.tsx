@@ -5,7 +5,7 @@ import { ThreeDots } from 'react-loader-spinner';
 import { useSearchParams } from 'react-router-dom';
 import LicenseDetectionEntity from '../../components/LicenseDetection/LicenseDetectionEntity';
 import { QUERY_KEYS } from '../../constants/params';
-import { useWorkbenchDB } from '../../contexts/workbenchContext';
+import { useWorkbenchDB } from '../../contexts/dbContext';
 import { LicenseDetectionDetails } from './licenseDefinitions';
 
 import "./LicenseDetection.css";

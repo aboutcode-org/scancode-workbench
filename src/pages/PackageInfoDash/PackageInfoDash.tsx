@@ -3,7 +3,7 @@ import { Row, Col, Card } from "react-bootstrap";
 import React, { useEffect, useState } from "react";
 
 import { formatChartData } from "../../utils/pie";
-import { useWorkbenchDB } from "../../contexts/workbenchContext";
+import { useWorkbenchDB } from "../../contexts/dbContext";
 import PieChart from "../../components/PieChart/PieChart";
 import EllipticLoader from "../../components/EllipticLoader";
 

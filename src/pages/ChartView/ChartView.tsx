@@ -13,7 +13,7 @@ import {
 
 import { BAR_CHART_COLUMN_GROUPS } from '../../constants/barChartColumns';
 
-import { useWorkbenchDB } from '../../contexts/workbenchContext';
+import { useWorkbenchDB } from '../../contexts/dbContext';
 import { formatBarchartData, getAttributeValues } from '../../utils/bar';
 import { FlatFileAttributes } from '../../services/models/flatFile';
 
