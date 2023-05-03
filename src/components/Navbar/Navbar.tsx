@@ -1,9 +1,8 @@
-import React, { useState } from 'react'
-import { useLocation, useNavigate } from 'react-router-dom'
-import { ProSidebar, Menu, MenuItem, SidebarFooter, SidebarContent } from 'react-pro-sidebar';
-
+import { faArchive, faBars, faChartColumn, faFileCode, faFileLines, faGavel, faHome, faInfoCircle, faList,faTable } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArchive, faBars, faChartColumn, faGavel, faHome, faInfoCircle, faFileCode, faTable, faFileLines, faList } from '@fortawesome/free-solid-svg-icons';
+import React, { useState } from 'react'
+import { Menu, MenuItem, ProSidebar, SidebarContent,SidebarFooter } from 'react-pro-sidebar';
+import { useLocation, useNavigate } from 'react-router-dom'
 
 import { ROUTES } from '../../constants/routes';
 
@@ -12,7 +11,7 @@ import './navbar.css';
 
 const MENU_ITEMS = [
     {
-        title: "Welcome page",
+        title: "Home",
         route: ROUTES.HOME,
         icon: faHome,
     },
@@ -37,7 +36,7 @@ const MENU_ITEMS = [
         icon: faArchive,
     },
     {
-        title: "License detections Explorer",
+        title: "License Detections Explorer",
         route: "/" + ROUTES.LICENSE_DETECTIONS,
         icon: faList,
     },
@@ -57,7 +56,7 @@ const MENU_ITEMS = [
         icon: faFileCode,
     },
     {
-        title: "About workbench",
+        title: "About Workbench",
         route: "/" + ROUTES.ABOUT,
         icon: faInfoCircle,
     },

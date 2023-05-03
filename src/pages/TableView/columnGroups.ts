@@ -1,4 +1,5 @@
 import { ColDef } from 'ag-grid-community';
+
 import { ALL_COLUMNS } from './columnDefs';
 
 // NOTE --- 
@@ -48,7 +49,7 @@ const LICENSE_COLUMN_GROUP: ColDef[] = [
   ALL_COLUMNS.detected_license_expression_spdx,
   ALL_COLUMNS.percentage_of_license_text,
   ALL_COLUMNS.license_policy,
-  ALL_COLUMNS.license_clues,
+  // ALL_COLUMNS.license_clues,
   ALL_COLUMNS.license_detections,
 ];
 

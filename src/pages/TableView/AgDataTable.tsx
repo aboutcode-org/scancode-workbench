@@ -62,7 +62,6 @@ const AgDataTable = (props: AgDataTableProps) => {
         rowData={tableData}
         components={frameworkComponents}
         className="ag-theme-alpine ag-grid-customClass"
-
         ensureDomOrder
         enableCellTextSelection
 

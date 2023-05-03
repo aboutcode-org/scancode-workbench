@@ -1,15 +1,11 @@
-import moment from "moment";
-import * as electronFs from "fs";
 import electron from "electron";
-import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
+import * as electronFs from "fs";
+import moment from "moment";
 import React, { createContext, useContext, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 import packageJson from "../../package.json";
-import { DEFAULT_ROUTE_ON_IMPORT } from "../constants/routes";
-import { AddEntry, GetHistory, RemoveEntry } from "../services/historyStore";
-import { isSchemaChanged } from "../utils/checks";
-import { WorkbenchDB } from "../services/workbenchDB";
 import {
   IMPORT_REPLY_CHANNEL,
   JSON_IMPORT_REPLY_FORMAT,
@@ -23,6 +19,10 @@ import {
   SQLITE_SAVE_REPLY_FORMAT,
   UTIL_CHANNEL,
 } from "../constants/IpcConnection";
+import { DEFAULT_ROUTE_ON_IMPORT, ROUTES } from "../constants/routes";
+import { AddEntry, GetHistory, RemoveEntry } from "../services/historyStore";
+import { WorkbenchDB } from "../services/workbenchDB";
+import { isSchemaChanged } from "../utils/checks";
 
 const { version: workbenchVersion } = packageJson;
 const { ipcRenderer } = electron;
@@ -48,6 +48,7 @@ interface WorkbenchContextProperties extends BasicValueState {
   importJsonFile: (jsonFilePath: string) => void;
   updateLoadingStatus: React.Dispatch<React.SetStateAction<number | null>>;
   updateCurrentPath: (newPath: string, type: PathType) => void;
+  goToFileInTableView: (path: string) => void;
   updateWorkbenchDB: (db: WorkbenchDB, sqliteFilePath: string) => void;
 }
 
@@ -65,6 +66,7 @@ export const defaultWorkbenchContextValue: WorkbenchContextProperties = {
   startImport: () => null,
   abortImport: () => null,
   updateCurrentPath: () => null,
+  goToFileInTableView: () => null,
   updateWorkbenchDB: () => null,
 };
 
@@ -89,6 +91,11 @@ export const WorkbenchDBProvider = (
   function updateCurrentPath(path: string, pathType: PathType) {
     setCurrentPath(path);
     setCurrentPathType(pathType);
+  }
+  
+  function goToFileInTableView(path: string){
+    updateCurrentPath(path, 'file');
+    navigate("/" + ROUTES.TABLE_VIEW);
   }
 
   const startImport = () => {
@@ -455,6 +462,7 @@ export const WorkbenchDBProvider = (
         startImport,
         abortImport,
         updateCurrentPath,
+        goToFileInTableView,
         updateWorkbenchDB,
       }}
     >

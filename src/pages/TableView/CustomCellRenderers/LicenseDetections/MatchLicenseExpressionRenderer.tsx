@@ -49,18 +49,18 @@ const MatchLicenseExpressionRenderer = (
       license_expression_spdx_keys.map((expKey) => [expKey.key, expKey])
     );
 
-    console.log(
-      "Keys mapper",
-      licenseExpressionKeysMap,
-      licenseExpressionSpdxKeysMap
-    );
+    // console.log(
+    //   "Keys mapper",
+    //   licenseExpressionKeysMap,
+    //   licenseExpressionSpdxKeysMap
+    // );
 
     let newParsedComponents: ParsedTokens[];
     if (spdxLicense) {
-      console.log(
-        "SPDX Tokens",
-        parseTokensFromExpression(license_expression_spdx)
-      );
+      // console.log(
+      //   "SPDX Tokens",
+      //   parseTokensFromExpression(license_expression_spdx)
+      // );
 
       newParsedComponents = parseTokensFromExpression(
         license_expression_spdx
@@ -75,7 +75,7 @@ const MatchLicenseExpressionRenderer = (
         return { value: token };
       });
     } else {
-      console.log("Tokens", parseTokensFromExpression(license_expression));
+      // console.log("Tokens", parseTokensFromExpression(license_expression));
 
       newParsedComponents = parseTokensFromExpression(license_expression).map(
         (token) => {
@@ -90,7 +90,7 @@ const MatchLicenseExpressionRenderer = (
         }
       );
     }
-    console.log("Parsed components", newParsedComponents);
+    // console.log("Parsed components", newParsedComponents);
     return newParsedComponents;
   }, [data]);
 

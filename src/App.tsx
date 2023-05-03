@@ -1,37 +1,34 @@
 import React from "react";
-import { HashRouter, Routes, Route } from "react-router-dom";
+import { HashRouter, Route,Routes } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 
+import DropZone from "./components/DropZone/DropZone";
+import Layout from "./components/Layout/Layout";
 import { ROUTES } from "./constants/routes";
 import { WorkbenchDBProvider } from "./contexts/dbContext";
-
-import Layout from "./components/Layout/Layout";
-import DropZone from "./components/DropZone/DropZone";
-
-import Home from "./pages/Home/Home";
-import TableView from "./pages/TableView/TableView";
+import { WorkbenchStateProvider } from "./contexts/stateContext";
+import About from "./pages/About/About";
+import ChartView from "./pages/ChartView/ChartView";
 import FileInfoDash from "./pages/FileInfoDash/FileInfoDash";
+import Home from "./pages/Home/Home";
+import LicenseDetections from "./pages/LicenseDetections/LicenseDetections";
 import LicenseInfoDash from "./pages/LicenseInfoDash/LicenseInfoDash";
 import PackageInfoDash from "./pages/PackageInfoDash/PackageInfoDash";
 import Packages from "./pages/Packages/Packages";
-import LicenseDetections from "./pages/LicenseDetections/LicenseDetections";
-import ChartView from "./pages/ChartView/ChartView";
-import ScanInfo from "./pages/ScanInfo/ScanInfo";
-import About from "./pages/About/About";
 import PageNotFound from "./pages/PageNotFound";
+import ScanInfo from "./pages/ScanInfo/ScanInfo";
+import TableView from "./pages/TableView/TableView";
 
 import "./utils/ensureRendererDeps";
-
 import "./fontawesome";
+
 import "rc-tree/assets/index.css";
 import "react-toastify/dist/ReactToastify.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "react-tooltip/dist/react-tooltip.css";
-
 import "./app.css";
 import "./dashStyles.css";
 import "./customFaColors.css";
-import { WorkbenchStateProvider } from "./contexts/stateContext";
 
 const App = () => {
   return (

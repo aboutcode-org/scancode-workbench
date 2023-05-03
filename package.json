@@ -57,6 +57,7 @@
     "electron-packager": "^16.0.0",
     "electron-rebuild": "^3.2.9",
     "eslint": "^8.24.0",
+    "eslint-plugin-css-import-order": "^1.1.0",
     "eslint-plugin-import": "^2.26.0",
     "fork-ts-checker-webpack-plugin": "^7.2.13",
     "json-loader": "^0.5.7",
