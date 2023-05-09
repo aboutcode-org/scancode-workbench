@@ -46,6 +46,9 @@ import {
 import { FileAttributes } from "./models/file";
 import { flattenFile } from "./models/flatFile";
 import {
+  LicenseExpressionKey,
+  LicenseExpressionSpdxKey,
+  LicenseReference,
   Resource,
   ResourceLicenseDetection,
   TopLevelLicenseDetection,
@@ -72,6 +75,19 @@ interface WorkbenchDbConfig {
   dbStorage: string;
   dbUser?: string;
   dbPassword?: string;
+}
+interface TopLevelDataFormat {
+  header: unknown;
+  parsedHeader: unknown;
+  packages: unknown[];
+  dependencies: unknown[];
+  license_clues: unknown[];
+  license_detections: TopLevelLicenseDetection[];
+  license_detections_map: Map<string, TopLevelLicenseDetection>;
+  license_references: LicenseReference[];
+  license_references_map: Map<string, LicenseReference>;
+  license_references_spdx_map: Map<string, LicenseReference>;
+  license_rule_references: unknown[];
 }
 type FileDataNode = Model<FileAttributes, FileAttributes> & DataNode;
 
@@ -154,6 +170,10 @@ export class WorkbenchDB {
 
   getAllLicenseDetections() {
     return this.sync.then((db) => db.LicenseDetections.findAll());
+  }
+
+  getAllLicenseClues() {
+    return this.sync.then((db) => db.LicenseClues.findAll());
   }
 
   getAllPackages() {
@@ -262,7 +282,7 @@ export class WorkbenchDB {
     let rootPath: string | null = null;
     let hasRootPath = false;
     const batchSize = 1000;
-    let files: unknown[] = []; // @TODO - Define proper type for this
+    let files: Resource[] = [];
     let progress = 0;
     let promiseChain: Promise<void | DatabaseStructure | number> = this.sync;
 
@@ -275,18 +295,6 @@ export class WorkbenchDB {
 
       let batchCount = 0;
 
-      interface TopLevelDataFormat {
-        header: unknown;
-        parsedHeader: unknown;
-        packages: unknown[];
-        dependencies: unknown[];
-        license_detections: unknown[];
-        license_detections_map: Map<string, TopLevelLicenseDetection>;
-        license_references: unknown[];
-        license_references_map: Map<string, unknown>;
-        license_references_spdx_map: Map<string, unknown>;
-        license_rule_references: unknown[];
-      }
       let TopLevelData: TopLevelDataFormat = null;
 
       stream
@@ -324,12 +332,12 @@ export class WorkbenchDB {
               detection,
             ])
           );
-          const license_references: any[] =
+          const license_references: LicenseReference[] =
             topLevelData.license_references || [];
-          const license_references_mapping = new Map<string, unknown>(
+          const license_references_mapping = new Map(
             license_references.map((ref) => [ref.key, ref])
           );
-          const license_references_mapping_spdx = new Map<string, unknown>(
+          const license_references_mapping_spdx = new Map(
             license_references.map((ref) => [ref.spdx_license_key, ref])
           );
           const license_rule_references: any[] =
@@ -344,6 +352,7 @@ export class WorkbenchDB {
             packages,
             dependencies,
             license_detections,
+            license_clues: [],
             license_references_map: license_references_mapping,
             license_references_spdx_map: license_references_mapping_spdx,
             license_detections_map,
@@ -374,159 +383,6 @@ export class WorkbenchDB {
         })
         .on("data", function (file?: Resource) {
           if (!file) return;
-          const file_license_expressions_components = parseSubExpressions(
-            file.detected_license_expression
-          );
-          const file_license_expressions_spdx_components = parseSubExpressions(
-            file.detected_license_expression_spdx
-          );
-          // Handle absence of detection.identifier in matches at file level in prev toolkit versions
-          // upto v32.0.0rc2
-          const for_license_detections: string[] =
-            file.for_license_detections || [];
-
-          function addLicenseDetection(
-            detection: ResourceLicenseDetection,
-            detectionIdx: number,
-            from_package = false
-          ) {
-            const detectionIdentifier =
-              detection.identifier || for_license_detections[detectionIdx];
-
-            const targetLicenseDetection =
-              TopLevelData.license_detections_map.get(detectionIdentifier);
-
-            if (!targetLicenseDetection) return;
-            if (!targetLicenseDetection.file_regions)
-              targetLicenseDetection.file_regions = [];
-
-            // Collect file region from each detection
-            let min_start_line = detection.matches[0].start_line;
-            let max_end_line = detection.matches[0].end_line;
-            detection.matches.forEach((match) => {
-              min_start_line = Math.min(min_start_line, match.start_line);
-              max_end_line = Math.max(max_end_line, match.end_line);
-            });
-            targetLicenseDetection.file_regions.push({
-              path: file.path,
-              start_line: min_start_line,
-              end_line: max_end_line,
-              from_package,
-            });
-
-            // Ensure that matches is collected only once for each unique License detection
-            // Ignore match encountered in other files as it would be the same repeated match
-            if (!targetLicenseDetection.matches && detection.matches.length) {
-              targetLicenseDetection.matches = [];
-              const detectionLicenseExpressionComponents = parseSubExpressions(
-                detection.license_expression
-              );
-
-              let correspondingFileLicenseExpressionSpdxComponent =
-                file_license_expressions_spdx_components[
-                  file_license_expressions_components.findIndex(
-                    (val) => val === detection.license_expression
-                  )
-                ];
-
-              // Cases when,
-              // detection.license_expression = file.detected_license_expression &
-              // detection.license_expression_spdx = file.detected_license_expression_spdx
-              if (
-                detection.license_expression ===
-                file.detected_license_expression
-              ) {
-                correspondingFileLicenseExpressionSpdxComponent =
-                  file.detected_license_expression_spdx;
-              }
-
-              // Unknown
-              if (detection.license_expression == UNKNOWN_EXPRESSION) {
-                correspondingFileLicenseExpressionSpdxComponent =
-                  UNKNOWN_EXPRESSION_SPDX;
-              }
-
-              const detectionSpdxLicenseExpressionComponents =
-                parseSubExpressions(
-                  correspondingFileLicenseExpressionSpdxComponent
-                );
-
-              detection.matches.forEach((match) => {
-                const { license_references_map, license_references_spdx_map } =
-                  TopLevelData;
-
-                if (!match.license_expression_keys?.length)
-                  match.license_expression_keys = [];
-                if (!match.license_expression_spdx_keys?.length)
-                  match.license_expression_spdx_keys = [];
-
-                // SPDX not available in matches, so find corresponding spdx license expression
-                match.license_expression_spdx =
-                  detectionSpdxLicenseExpressionComponents[
-                    detectionLicenseExpressionComponents.findIndex(
-                      (exp) => exp === match.license_expression
-                    )
-                  ];
-                // Cases when,
-                // match.license_expression = license_detection.license_expression &
-                // match.license_expression_spdx = license_detection.license_expression_spdx
-                if (match.license_expression === detection.license_expression) {
-                  match.license_expression_spdx =
-                    file_license_expressions_spdx_components[
-                      file_license_expressions_components.findIndex(
-                        (val) => val === detection.license_expression
-                      )
-                    ];
-                }
-                // Unknown
-                if (match.license_expression == UNKNOWN_EXPRESSION) {
-                  match.license_expression_spdx = UNKNOWN_EXPRESSION_SPDX;
-                }
-
-                const parsedLicenseKeys = parseSubExpressions(
-                  match.license_expression
-                );
-                const parsedSpdxLicenseKeys = parseSubExpressions(
-                  match.license_expression_spdx
-                );
-
-                parsedLicenseKeys.forEach((key) => {
-                  const license_reference: any =
-                    license_references_map.get(key);
-                  // if (!license_reference) return;
-
-                  match.license_expression_keys.push({
-                    key,
-                    licensedb_url: license_reference?.licensedb_url || null,
-                    scancode_url: license_reference?.scancode_url || null,
-                  });
-                });
-                parsedSpdxLicenseKeys.forEach((key) => {
-                  const license_reference: any =
-                    license_references_spdx_map.get(key);
-                  // if (!license_reference) return;
-
-                  match.license_expression_spdx_keys.push({
-                    key,
-                    spdx_url: license_reference?.spdx_url || null,
-                  });
-                });
-                match.path = file.path;
-                targetLicenseDetection.matches.push(match);
-              });
-            }
-
-            delete detection.matches; // Not required further, hence removing to reduce sqlite size
-          }
-
-          (file?.license_detections || []).forEach((detection, idx) =>
-            addLicenseDetection(detection, idx, false)
-          );
-          file?.package_data?.forEach((pkg) =>
-            pkg.license_detections?.forEach((detection, idx) =>
-              addLicenseDetection(detection, idx, true)
-            )
-          );
 
           if (!rootPath) {
             rootPath = file.path.split("/")[0];
@@ -540,12 +396,15 @@ export class WorkbenchDB {
             dirs_count = file.dirs_count;
           }
           file.id = index++;
+
+          primaryPromise._parseLicenseDetections(file, TopLevelData);
+          primaryPromise._parseLicenseClues(file, TopLevelData);
+
           files.push(file);
           if (files.length >= batchSize) {
             // Need to set a new variable before handing to promise
             this.pause();
 
-            // @TODO - is this required explicitly ?
             promiseChain = promiseChain
               .then(() => primaryPromise._batchCreateFiles(files, headerId))
               .then(() => {
@@ -572,15 +431,9 @@ export class WorkbenchDB {
           console.log(
             "\n----------------------------------------------------------------\n"
           );
+
           // Create license detections at the end, based on match data in files
-          promiseChain = promiseChain.then(() => {
-            const allLicenseDetections = Array.from(
-              TopLevelData.license_detections_map.values()
-            );
-            this.db.LicenseDetections.bulkCreate(
-              allLicenseDetections as any as LicenseDetectionAttributes[]
-            );
-          });
+          console.log("Create clues & detections", TopLevelData.license_clues);
 
           // Add root directory into data
           // See https://github.com/nexB/scancode-toolkit/issues/543
@@ -601,10 +454,22 @@ export class WorkbenchDB {
                 `Batch-${++batchCount} completed, \n`,
                 `JSON Import progress @ ${progress} % -- ${index}/${files_count}+${dirs_count}`
               );
+              onProgressUpdate(90);
+              console.log("Resource data updated");
+              resolve();
+            })
+            .then(() =>
+              this.db.LicenseDetections.bulkCreate(
+                TopLevelData.license_detections as any as LicenseDetectionAttributes[]
+              )
+            )
+            .then(() =>
+              this.db.LicenseClues.bulkCreate(TopLevelData.license_clues)
+            )
+            .then(() => {
               onProgressUpdate(100);
               console.log("JSON parse completed (final step)");
               console.timeEnd("json-parse-time");
-              resolve();
             })
             .catch((e: unknown) => reject(e));
         })
@@ -672,16 +537,222 @@ export class WorkbenchDB {
     return parsedHeader;
   }
 
-  _batchCreateFiles(files: any, headerId: number) {
+  _parseLicenseDetections(file: Resource, TopLevelData: TopLevelDataFormat) {
+    if (!file) return;
+
+    const file_license_expressions_components = parseSubExpressions(
+      file.detected_license_expression
+    );
+    const file_license_expressions_spdx_components = parseSubExpressions(
+      file.detected_license_expression_spdx
+    );
+    // Handle absence of detection.identifier in matches at file level in prev toolkit versions
+    // upto v32.0.0rc2
+    const for_license_detections: string[] = file.for_license_detections || [];
+
+    function addLicenseDetection(
+      detection: ResourceLicenseDetection,
+      detectionIdx: number,
+      from_package = false
+    ) {
+      const detectionIdentifier =
+        detection.identifier || for_license_detections[detectionIdx];
+
+      const targetLicenseDetection =
+        TopLevelData.license_detections_map.get(detectionIdentifier);
+
+      if (!targetLicenseDetection) return;
+      if (!targetLicenseDetection.file_regions)
+        targetLicenseDetection.file_regions = [];
+
+      // Collect file region from each detection
+      let min_start_line = detection.matches[0].start_line;
+      let max_end_line = detection.matches[0].end_line;
+      detection.matches.forEach((match) => {
+        min_start_line = Math.min(min_start_line, match.start_line);
+        max_end_line = Math.max(max_end_line, match.end_line);
+      });
+      targetLicenseDetection.file_regions.push({
+        path: file.path,
+        start_line: min_start_line,
+        end_line: max_end_line,
+        from_package,
+      });
+
+      // Ensure that matches is collected only once for each unique License detection
+      // Ignore match encountered in other files as it would be the same repeated match
+      if (!targetLicenseDetection.matches && detection.matches.length) {
+        targetLicenseDetection.matches = [];
+        const detectionLicenseExpressionComponents = parseSubExpressions(
+          detection.license_expression
+        );
+
+        let correspondingFileLicenseExpressionSpdxComponent =
+          file_license_expressions_spdx_components[
+            file_license_expressions_components.findIndex(
+              (val) => val === detection.license_expression
+            )
+          ];
+
+        // Cases when,
+        // detection.license_expression = file.detected_license_expression &
+        // detection.license_expression_spdx = file.detected_license_expression_spdx
+        if (detection.license_expression === file.detected_license_expression) {
+          correspondingFileLicenseExpressionSpdxComponent =
+            file.detected_license_expression_spdx;
+        }
+
+        // Unknown
+        if (detection.license_expression == UNKNOWN_EXPRESSION) {
+          correspondingFileLicenseExpressionSpdxComponent =
+            UNKNOWN_EXPRESSION_SPDX;
+        }
+
+        const detectionSpdxLicenseExpressionComponents = parseSubExpressions(
+          correspondingFileLicenseExpressionSpdxComponent
+        );
+
+        detection.matches.forEach((match) => {
+          const { license_references_map, license_references_spdx_map } =
+            TopLevelData;
+
+          if (!match.license_expression_keys?.length)
+            match.license_expression_keys = [];
+          if (!match.license_expression_spdx_keys?.length)
+            match.license_expression_spdx_keys = [];
+
+          // SPDX not available in matches, so find corresponding spdx license expression
+          match.license_expression_spdx =
+            detectionSpdxLicenseExpressionComponents[
+              detectionLicenseExpressionComponents.findIndex(
+                (exp) => exp === match.license_expression
+              )
+            ];
+
+          // Cases when,
+          // match.license_expression = license_detection.license_expression &
+          // match.license_expression_spdx = license_detection.license_expression_spdx
+          if (match.license_expression === detection.license_expression) {
+            match.license_expression_spdx =
+              file_license_expressions_spdx_components[
+                file_license_expressions_components.findIndex(
+                  (val) => val === detection.license_expression
+                )
+              ];
+          }
+          // Unknown
+          if (match.license_expression == UNKNOWN_EXPRESSION) {
+            match.license_expression_spdx = UNKNOWN_EXPRESSION_SPDX;
+          }
+
+          const parsedLicenseKeys = parseSubExpressions(
+            match.license_expression
+          );
+          const parsedSpdxLicenseKeys = parseSubExpressions(
+            match.license_expression_spdx
+          );
+
+          parsedLicenseKeys.forEach((key) => {
+            const license_reference: any = license_references_map.get(key);
+            // if (!license_reference) return;
+
+            match.license_expression_keys.push({
+              key,
+              licensedb_url: license_reference?.licensedb_url || null,
+              scancode_url: license_reference?.scancode_url || null,
+            });
+          });
+          parsedSpdxLicenseKeys.forEach((key) => {
+            const license_reference: any = license_references_spdx_map.get(key);
+            // if (!license_reference) return;
+
+            match.license_expression_spdx_keys.push({
+              key,
+              spdx_url: license_reference?.spdx_url || null,
+            });
+          });
+          match.path = file.path;
+          targetLicenseDetection.matches.push(match);
+        });
+      }
+
+      delete detection.matches; // Not required further, hence removing to reduce sqlite size
+    }
+
+    (file?.license_detections || []).forEach((detection, idx) =>
+      addLicenseDetection(detection, idx, false)
+    );
+    file?.package_data?.forEach((pkg) =>
+      pkg.license_detections?.forEach((detection, idx) =>
+        addLicenseDetection(detection, idx, true)
+      )
+    );
+  }
+
+  _parseLicenseClues(file: Resource, TopLevelData: TopLevelDataFormat) {
+    if (file.license_clues?.length){
+      console.log(
+        `Found License clues in file #${file.id} ${file.path}`,
+        file.license_clues
+      );
+    }
+
+    file.license_clues.forEach((license_clue) => {
+      const parsedLicenseKeys = parseSubExpressions(
+        license_clue.license_expression
+      );
+      
+      const license_expression_keys: LicenseExpressionKey[] = [];      
+      parsedLicenseKeys.forEach(key => {
+        const license_reference = TopLevelData.license_references_map.get(key);
+        if (!license_reference) return [];
+
+        license_expression_keys.push({
+          key,
+          licensedb_url: license_reference.licensedb_url || null,
+          scancode_url: license_reference.scancode_url || null,
+        });
+      });
+
+      license_clue.fileId = file.id;
+      TopLevelData.license_clues.push(license_clue);
+      license_clue.matches = [
+        {
+          score: license_clue.score,
+          start_line: license_clue.start_line,
+          end_line: license_clue.end_line,
+          matched_length: license_clue.matched_length,
+          match_coverage: license_clue.match_coverage,
+          matcher: license_clue.matcher,
+          license_expression: license_clue.license_expression,
+          rule_identifier: license_clue.rule_identifier,
+          rule_relevance: license_clue.rule_relevance,
+          rule_url: license_clue.rule_url,
+          path: file.path,
+          license_expression_keys,
+        },
+      ];
+      license_clue.file_regions = [
+        {
+          path: file.path,
+          start_line: license_clue.start_line,
+          end_line: license_clue.end_line,
+          // from_package: false,
+        },
+      ];
+    });
+  }
+
+  _batchCreateFiles(files: Resource[], headerId: number) {
     // Add batched files to the DB
     return this._addFlattenedFiles(files).then(() =>
       this._addFiles(files, headerId)
     );
   }
 
-  _addFlattenedFiles(files: unknown[]) {
+  _addFlattenedFiles(files: Resource[]) {
     // Fix for issue #232
-    $.each(files, (i, file: any) => {
+    $.each(files, (i, file) => {
       if (
         file.type === "directory" &&
         Object.prototype.hasOwnProperty.call(file, "size_count")
@@ -690,7 +761,7 @@ export class WorkbenchDB {
       }
     });
 
-    const flattenedFiles = files.map((file: unknown) => flattenFile(file));
+    const flattenedFiles = files.map((file) => flattenFile(file));
 
     return this.db.FlatFile.bulkCreate(flattenedFiles as any, {
       logging: false,

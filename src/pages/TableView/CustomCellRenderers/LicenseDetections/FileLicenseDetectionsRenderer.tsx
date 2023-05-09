@@ -2,14 +2,14 @@ import React from 'react'
 import { Link } from 'react-router-dom';
 import { QUERY_KEYS } from '../../../../constants/params';
 import { ROUTES } from '../../../../constants/routes';
-import { LicenseDetectionDetails } from '../../../LicenseDetections/licenseDefinitions';
+import { LicenseDetectionDetails } from '../../../Licenses/licenseDefinitions';
 
 interface FileLicenseDetectionsRendererProps {
   data: any[],
   value: LicenseDetectionDetails[],
 }
 
-const URL_PREFIX = `/${ROUTES.LICENSE_DETECTIONS}?${QUERY_KEYS.LICENSE_DETECTION}=`;
+const URL_PREFIX = `/${ROUTES.LICENSES}?${QUERY_KEYS.LICENSE_DETECTION}=`;
 
 const FileLicenseDetectionsRenderer = (props: FileLicenseDetectionsRendererProps) => {
   const { value } = props;

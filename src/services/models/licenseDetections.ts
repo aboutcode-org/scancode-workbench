@@ -14,7 +14,7 @@
  #
  */
 
- import { Sequelize, DataTypes, IntegerDataType, StringDataType, Model, NumberDataType } from 'sequelize';
+ import { Sequelize, DataTypes, StringDataType, Model, NumberDataType } from 'sequelize';
 import { jsonDataType, JSON_Type } from './databaseUtils';
 
  export interface LicenseDetectionAttributes {

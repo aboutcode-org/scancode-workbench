@@ -93,6 +93,10 @@ export const WorkbenchDBProvider = (
     setCurrentPathType(pathType);
   }
   
+  function changeRouteOnImport(){
+    navigate(DEFAULT_ROUTE_ON_IMPORT);
+  }
+
   function goToFileInTableView(path: string){
     updateCurrentPath(path, 'file');
     navigate("/" + ROUTES.TABLE_VIEW);
@@ -227,7 +231,7 @@ export const WorkbenchDBProvider = (
               newlyImportedFileName
             );
 
-            if (!preventNavigation) navigate(DEFAULT_ROUTE_ON_IMPORT);
+            if (!preventNavigation) changeRouteOnImport();
           })
           .catch((err) => {
             const foundInvalidHistoryItem = GetHistory().find(
@@ -337,7 +341,7 @@ export const WorkbenchDBProvider = (
               newlyImportedFileName
             );
 
-            if (!preventNavigation) navigate(DEFAULT_ROUTE_ON_IMPORT);
+            if (!preventNavigation) changeRouteOnImport();
           });
       })
       .catch((err) => {

@@ -11,11 +11,8 @@
   margin-top: 200px;
   justify-content: center;
 }
-.packages-main-container {
-  padding-top: 5px;
-}
 .packages-container {
-  height: 90vh;
+  height: calc(100vh - 60px);
 }
 .packages-panes {
   padding-right: 15px;

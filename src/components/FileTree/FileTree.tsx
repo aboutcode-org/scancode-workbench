@@ -26,6 +26,7 @@ const FileTree = (props: React.HTMLProps<HTMLDivElement>) => {
 
     db.sync.then(() => {
       db.findAllJSTree().then((treeData) => {
+        // console.log("Filetree data", treeData);
         setTreeData(treeData as unknown as DataNode[]);
       });
     });
@@ -33,7 +34,6 @@ const FileTree = (props: React.HTMLProps<HTMLDivElement>) => {
 
   function selectPath(path: string, pathType: PathType) {
     if (!initialized) return;
-    // console.log("FileTree: selected path:", path);
     updateCurrentPath(path, pathType);
   }
 
@@ -59,6 +59,8 @@ const FileTree = (props: React.HTMLProps<HTMLDivElement>) => {
         showLine
         treeData={treeData}
         switcherIcon={SwitcherIcon}
+        autoExpandParent
+        defaultExpandParent
         selectedKeys={[currentPath]}
         onSelect={(keys, info) => {
           if (keys && keys[0])

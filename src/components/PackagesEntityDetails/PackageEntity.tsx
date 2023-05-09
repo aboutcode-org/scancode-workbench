@@ -12,7 +12,7 @@ interface PackageEntityProps {
 }
 const PackageEntity = (props: PackageEntityProps) => {
   const { goToDependency, package: activePackage} = props;
-  // const { goToFileInTableView } = useWorkbenchDB();
+  const { goToFileInTableView } = useWorkbenchDB();
 
   if(!activePackage){
     return (

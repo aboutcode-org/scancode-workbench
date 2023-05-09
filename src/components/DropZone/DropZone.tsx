@@ -57,11 +57,9 @@ const DropZone = (props: React.PropsWithChildren) => {
     if (regex.sqlite.test(fileToImport.name)) {
       console.log("Parsing sqlite file:", fileToImport.name);
       sqliteParser(fileToImport.path);
-      navigate(ROUTES.HOME);
     } else {
       console.log("Parsing json file:", fileToImport.name);
       importJsonFile(fileToImport.path);
-      navigate(ROUTES.HOME);
     }
   }
 

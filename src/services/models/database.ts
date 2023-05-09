@@ -29,6 +29,7 @@ import scanErrorModel, { ScanErrorAttributes } from './scanError';
 import packagesModel, { PackagesAttributes } from './packages';
 import dependenciesModel, { DependenciesAttributes } from './dependencies';
 import licenseDetectionModel, { LicenseDetectionAttributes } from './licenseDetections';
+import licenseClueModel, { LicenseClueAttributes } from './licenseClues';
 
 
 // let Header;
@@ -49,6 +50,7 @@ export interface DatabaseStructure{
   Packages: ModelStatic<Model<PackagesAttributes, PackagesAttributes>>,
   Dependencies: ModelStatic<Model<DependenciesAttributes, DependenciesAttributes>>,
   LicenseDetections: ModelStatic<Model<LicenseDetectionAttributes, LicenseDetectionAttributes>>,
+  LicenseClues: ModelStatic<Model<LicenseClueAttributes, LicenseClueAttributes>>,
 
   File: ModelStatic<Model<FileAttributes>>,
   LicenseExpression: ModelStatic<Model<LicenseExpressionAttributes, OptionalLicenseExpressionAttributes>>,
@@ -72,6 +74,7 @@ export function newDatabase(sequelize: Sequelize): DatabaseStructure {
     Packages: packagesModel(sequelize),
     Dependencies: dependenciesModel(sequelize),
     LicenseDetections: licenseDetectionModel(sequelize),
+    LicenseClues: licenseClueModel(sequelize),
 
     File: fileModel(sequelize),
     LicenseExpression: licenseExpressionModel(sequelize),
@@ -87,6 +90,7 @@ export function newDatabase(sequelize: Sequelize): DatabaseStructure {
   // Define the relations
   result.Header.hasMany(result.File);
   result.File.hasMany(result.LicenseExpression);
+  result.File.hasMany(result.LicenseClues);
   result.File.hasMany(result.LicensePolicy);
   result.File.hasMany(result.Copyright);
   result.File.hasMany(result.PackageData);

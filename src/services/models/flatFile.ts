@@ -234,7 +234,7 @@ interface FlattenedFile {
   is_media: boolean,
   is_source: boolean,
   is_script: boolean,
-  scan_errors: unknown[],
+  scan_errors: StringDataType[],
 
   package_data_type: unknown[],
   package_data_namespace: unknown[],
