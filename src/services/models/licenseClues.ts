@@ -26,11 +26,13 @@ import { JSON_Type, jsonDataType } from "./databaseUtils";
 export interface LicenseClueAttributes {
   id: NumberDataType;
   fileId: NumberDataType;
+  filePath: StringDataType;
+  fileClueIdx: NumberDataType;
   score: NumberDataType;
   license_expression: StringDataType;
   rule_identifier: StringDataType;
-  matches: JSON_Type,
-  file_regions: JSON_Type,
+  matches: JSON_Type;
+  file_regions: JSON_Type;
 }
 
 export default function licenseClueModel(sequelize: Sequelize) {
@@ -42,10 +44,15 @@ export default function licenseClueModel(sequelize: Sequelize) {
       type: DataTypes.INTEGER,
     },
     fileId: DataTypes.NUMBER,
+    filePath: DataTypes.STRING,
+    fileClueIdx: {
+      type: DataTypes.INTEGER,
+      defaultValue: 0,
+    },
     score: DataTypes.NUMBER,
     license_expression: DataTypes.STRING,
     rule_identifier: DataTypes.STRING,
-    matches: jsonDataType('matches'),
-    file_regions: jsonDataType('file_regions'),
+    matches: jsonDataType("matches"),
+    file_regions: jsonDataType("file_regions"),
   });
 }

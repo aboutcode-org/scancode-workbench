@@ -14,70 +14,64 @@
  #
  */
 
- import Sequelize, { AbstractDataType } from 'sequelize';
+import Sequelize, { AbstractDataType } from "sequelize";
 // eslint-disable-next-line import/no-unresolved
-import { parse } from 'license-expressions';
+import { parse } from "license-expressions";
 
 // Stores an object as a json string internally, but as an object externally
 export type JSON_Type = AbstractDataType;
 export function jsonDataType(attributeName: string) {
   return {
     type: Sequelize.STRING,
-    get: function() {
+    get: function () {
       return JSON.parse(this.getDataValue(attributeName));
     },
-    set: function(val: any) {
+    set: function (val: any) {
       return this.setDataValue(attributeName, JSON.stringify(val));
-    }
+    },
   };
 }
 
 export function parentPath(path: string) {
-  const splits = path.split('/');
-  return splits.length === 1 ? '#' : splits.slice(0, -1).join('/');
+  const splits = path.split("/");
+  return splits.length === 1 ? "#" : splits.slice(0, -1).join("/");
 }
 
-export const LICENSE_EXPRESSIONS_CONJUNCTIONS = ['AND', 'OR', 'WITH'];
+export const LICENSE_EXPRESSIONS_CONJUNCTIONS = ["AND", "OR", "WITH"];
 
 // @TODO - Needs more testing
 export const parseSubExpressions = (expression: string) => {
-  if(!expression || !expression.length)
-    return [];
+  if (!expression || !expression.length) return [];
   const tokens = expression.split(/( |\(|\))/);
   const result = [];
   let currSubExpression = "";
   let popTokens = 0;
-  for(const token of tokens){
-    if(token === '('){
-      if(popTokens)
-        currSubExpression += '(';
+  for (const token of tokens) {
+    if (token === "(") {
+      if (popTokens) currSubExpression += "(";
       popTokens++;
-    }
-    else if(token === ')'){
+    } else if (token === ")") {
       popTokens--;
-      if(popTokens){
-        currSubExpression += ')';
-      }
-      else {
+      if (popTokens) {
+        currSubExpression += ")";
+      } else {
         result.push(currSubExpression);
-        currSubExpression = '';
+        currSubExpression = "";
       }
     } else {
-      if(popTokens)
-        currSubExpression += token;
+      if (popTokens) currSubExpression += token;
       else {
-        if(token.trim().length)
-          result.push(token);
+        if (token.trim().length) result.push(token);
       }
     }
   }
 
   return result.filter(
-    subExpression => subExpression.trim().length && 
+    (subExpression) =>
+      subExpression.trim().length &&
       !LICENSE_EXPRESSIONS_CONJUNCTIONS.includes(subExpression.trim())
   );
 };
-
 
 // Test parseSubExpressions
 // [
@@ -91,78 +85,81 @@ export const parseSubExpressions = (expression: string) => {
 //   console.log(key, parseSubExpressions(key), "\n");
 // })
 
-
-
-export function parseTokensFromExpression(expression: string){
-  if(!expression)
-    expression="";
-  // const tokens = `(${expression})`.split(/( |\(|\))/);
+export function parseTokensFromExpression(expression: string) {
+  if (!expression) expression = "";
   const tokens = expression.split(/( |\(|\))/);
   return tokens;
 }
 
-export function parseTokenKeysFromExpression(expression: string){
-  if(!expression)
-    expression="";
-  const AVOID_KEYWORDS = new Set(['WITH', 'OR', 'AND', '(', ')']);
+export function parseTokenKeysFromExpression(expression: string) {
+  if (!expression) expression = "";
+  const AVOID_KEYWORDS = new Set(["WITH", "OR", "AND", "(", ")"]);
   const tokens = parseTokensFromExpression(expression);
-  return tokens.filter(token => token.trim().length && token.length && !AVOID_KEYWORDS.has(token.trim()));
+  return tokens.filter(
+    (token) =>
+      token.trim().length && token.length && !AVOID_KEYWORDS.has(token.trim())
+  );
 }
-export function filterSpdxKeys(keys: string[]){
+export function filterSpdxKeys(keys: string[]) {
   const ignoredPrefixes = ["License-scancode-", "LicenseRef-scancode-"];
-  return keys.filter(key => {
-    for(const prefix of ignoredPrefixes){
-      if(key.includes(prefix))
-        return false;
+  return keys.filter((key) => {
+    for (const prefix of ignoredPrefixes) {
+      if (key.includes(prefix)) return false;
     }
     return true;
   });
 }
 
-
-
 // To test 'license-expressions' library
-function flattenIntoLicenseKeysUtil(parsedExpression: any, licenses: string[]){
+function flattenIntoLicenseKeysUtil(parsedExpression: any, licenses: string[]) {
   // LicenseInfo & ConjunctionInfo & LicenseRef
-  if (parsedExpression.license){
+  if (parsedExpression.license) {
     licenses.push(parsedExpression.license);
   }
-  if(parsedExpression.licenseRef){
+  if (parsedExpression.licenseRef) {
     licenses.push(parsedExpression.licenseRef);
   }
-  if(parsedExpression.exception){
+  if (parsedExpression.exception) {
     licenses.push(parsedExpression.exception);
   }
-  
+
   if (parsedExpression.conjunction) {
     flattenIntoLicenseKeysUtil(parsedExpression.left, licenses);
-    if (parsedExpression.conjunction === 'or' || parsedExpression.conjunction === 'and') {
-        flattenIntoLicenseKeysUtil(parsedExpression.right, licenses);
+    if (
+      parsedExpression.conjunction === "or" ||
+      parsedExpression.conjunction === "and"
+    ) {
+      flattenIntoLicenseKeysUtil(parsedExpression.right, licenses);
     }
   }
 }
-function parseKeysFromLibraryExpression(expression: string){
+function parseKeysFromLibraryExpression(expression: string) {
   const keys: string[] = [];
-  flattenIntoLicenseKeysUtil(parse(expression, { upgradeGPLVariants: false, strictSyntax: false }), keys);
+  flattenIntoLicenseKeysUtil(
+    parse(expression, { upgradeGPLVariants: false, strictSyntax: false }),
+    keys
+  );
   return keys;
 }
 
-
 const TEST_LICENSE_EXPRESSIONS_PARSER = false;
 const testCases = [
-  "GPL-3.0+", "MIT OR (Apache-2.0 AND 0BSD)", "gpl-2.0-plus WITH ada-linking-exception",
-  "zlib", "lgpl-2.1", "apache-1.1"   // not compatible for our use case
-]
-if(TEST_LICENSE_EXPRESSIONS_PARSER){
-  testCases.forEach(expression => {
+  "GPL-3.0+",
+  "MIT OR (Apache-2.0 AND 0BSD)",
+  "gpl-2.0-plus WITH ada-linking-exception",
+  "zlib",
+  "lgpl-2.1",
+  "apache-1.1", // not compatible for our use case
+];
+if (TEST_LICENSE_EXPRESSIONS_PARSER) {
+  testCases.forEach((expression) => {
     // console.log(expression, { tokens: parseTokensFromExpression(expression), keys: parseTokenKeysFromExpression(expression)});
     console.log("Parsers", {
       expectedKeys: parseTokenKeysFromExpression(expression),
-      parsedKeysUsingLibraryParser: parseKeysFromLibraryExpression(expression)
+      parsedKeysUsingLibraryParser: parseKeysFromLibraryExpression(expression),
     });
-  })
+  });
   // console.log(parse('GPL-3.0+'));
   // console.log(parse('apache-1.1', { strictSyntax: false, upgradeGPLVariants: false }));
   // console.log(parse('lgpl-2.1'));
 }
-

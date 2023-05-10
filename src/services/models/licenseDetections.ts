@@ -14,32 +14,38 @@
  #
  */
 
- import { Sequelize, DataTypes, StringDataType, Model, NumberDataType } from 'sequelize';
-import { jsonDataType, JSON_Type } from './databaseUtils';
+import {
+  Sequelize,
+  DataTypes,
+  StringDataType,
+  Model,
+  NumberDataType,
+} from "sequelize";
+import { jsonDataType, JSON_Type } from "./databaseUtils";
 
- export interface LicenseDetectionAttributes {
-  identifier: StringDataType,
-  license_expression: StringDataType,
-  detection_count: NumberDataType,
-  detection_log: JSON_Type,
-  matches: JSON_Type,
-  file_regions: JSON_Type,
- }
- 
- export default function licenseDetectionModel(sequelize: Sequelize) {
-   return sequelize.define<Model<LicenseDetectionAttributes>>(
-     'license_detections',
-     {
-       identifier: {
+export interface LicenseDetectionAttributes {
+  identifier: StringDataType;
+  license_expression: StringDataType;
+  detection_count: NumberDataType;
+  detection_log: JSON_Type;
+  matches: JSON_Type;
+  file_regions: JSON_Type;
+}
+
+export default function licenseDetectionModel(sequelize: Sequelize) {
+  return sequelize.define<Model<LicenseDetectionAttributes>>(
+    "license_detections",
+    {
+      identifier: {
         type: DataTypes.STRING,
         allowNull: false,
         primaryKey: true,
-       },
-       license_expression: DataTypes.STRING,
-       detection_count: DataTypes.NUMBER,
-       detection_log: jsonDataType('detection_log'),
-       matches: jsonDataType('matches'),
-       file_regions: jsonDataType('file_regions'),
+      },
+      license_expression: DataTypes.STRING,
+      detection_count: DataTypes.NUMBER,
+      detection_log: jsonDataType("detection_log"),
+      matches: jsonDataType("matches"),
+      file_regions: jsonDataType("file_regions"),
     }
-   )
- }
+  );
+}

@@ -1,22 +1,31 @@
 .license-detecion-entity {
   height: 100%;
 }
+
 .license-entity-properties {
   font-size: 15px;
 }
+
 .license-entity-properties .property {
   font-weight: 500;
 }
+
 .license-entity-properties .value {
   padding-left: 5px;
 }
-.license-detecion-entity .badge, .dependency-entity .badge {
+
+.license-detecion-entity .badge,
+.dependency-entity .badge {
   margin-right: 5px;
 }
-.license-detecion-entity .react-json-view, .dependency-entity .react-json-view {
+
+.license-detecion-entity .react-json-view,
+.dependency-entity .react-json-view {
   max-height: 75vh;
   overflow: scroll;
 }
-.matches-table, .file-regions-table {
+
+.matches-table,
+.file-regions-table {
   max-height: 30vh;
 }

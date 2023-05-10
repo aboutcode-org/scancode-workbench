@@ -4,6 +4,7 @@
   margin-top: 5px;
   width: 100%;
 }
+
 .license-detections-loader {
   display: flex;
   margin: auto;
@@ -11,17 +12,19 @@
   margin-top: 200px;
   justify-content: center;
 }
+
 .license-container {
   height: calc(100vh - 60px);
 }
+
 .licenses-navigator-container {
-  padding: 0.5rem;
-  padding-right: 15px;
-  padding-top: 0;
+  padding: 0;
 }
+
 .licenses-navigator-pane {
   overflow: scroll !important;
 }
+
 .licenses-navigator-pane-title {
   font-size: large;
   padding: 1px;
@@ -36,6 +39,7 @@
   display: table;
   align-items: center;
 }
+
 .selected-license {
   background-color: #dedede !important;
 }
@@ -44,32 +48,39 @@
 .license-group-item {
   padding: 0 !important;
 }
-.license-item .expression{
+
+.license-item .expression {
   padding-left: 2px;
   padding-right: 2px;
 }
-.license-item .expression .badge{
+
+.license-item .expression .badge {
   margin-left: 10px;
 }
-.license-item > div {
+
+.license-item>div {
   padding: 2px;
   padding-right: 4px;
   display: table-cell;
   vertical-align: middle;
 }
-.license-item > div > div {
+
+.license-item>div>div {
   padding: 3px;
   display: table-cell !important;
   word-break: break-word;
 }
-.license-item > .license-count {
+
+.license-item>.license-count {
   padding-top: 7px;
   padding-right: 7px;
 }
-.license-item > .license-count > * {
+
+.license-item>.license-count>* {
   float: right;
 }
-.license-item:hover{
+
+.license-item:hover {
   background-color: rgb(242, 242, 242);
 }
 

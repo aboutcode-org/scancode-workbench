@@ -46,14 +46,15 @@ import {
 import { FileAttributes } from "./models/file";
 import { flattenFile } from "./models/flatFile";
 import {
+  LicenseClue,
   LicenseExpressionKey,
-  LicenseExpressionSpdxKey,
   LicenseReference,
   Resource,
   ResourceLicenseDetection,
   TopLevelLicenseDetection,
 } from "./importedJsonTypes";
 import { LicenseDetectionAttributes } from "./models/licenseDetections";
+import { LicenseClueAttributes } from "./models/licenseClues";
 
 /**
  * Manages the database created from a ScanCode JSON input.
@@ -81,7 +82,7 @@ interface TopLevelDataFormat {
   parsedHeader: unknown;
   packages: unknown[];
   dependencies: unknown[];
-  license_clues: unknown[];
+  license_clues: LicenseClue[];
   license_detections: TopLevelLicenseDetection[];
   license_detections_map: Map<string, TopLevelLicenseDetection>;
   license_references: LicenseReference[];
@@ -432,9 +433,6 @@ export class WorkbenchDB {
             "\n----------------------------------------------------------------\n"
           );
 
-          // Create license detections at the end, based on match data in files
-          console.log("Create clues & detections", TopLevelData.license_clues);
-
           // Add root directory into data
           // See https://github.com/nexB/scancode-toolkit/issues/543
           promiseChain
@@ -464,7 +462,9 @@ export class WorkbenchDB {
               )
             )
             .then(() =>
-              this.db.LicenseClues.bulkCreate(TopLevelData.license_clues)
+              this.db.LicenseClues.bulkCreate(
+                TopLevelData.license_clues as any as LicenseClueAttributes[]
+              )
             )
             .then(() => {
               onProgressUpdate(100);
@@ -618,7 +618,10 @@ export class WorkbenchDB {
 
           if (!match.license_expression_keys?.length)
             match.license_expression_keys = [];
-          if (!match.license_expression_spdx_keys?.length)
+          if (
+            !match.license_expression_spdx_keys ||
+            !match.license_expression_spdx_keys.length
+          )
             match.license_expression_spdx_keys = [];
 
           // SPDX not available in matches, so find corresponding spdx license expression
@@ -690,20 +693,13 @@ export class WorkbenchDB {
   }
 
   _parseLicenseClues(file: Resource, TopLevelData: TopLevelDataFormat) {
-    if (file.license_clues?.length){
-      console.log(
-        `Found License clues in file #${file.id} ${file.path}`,
-        file.license_clues
-      );
-    }
-
-    file.license_clues.forEach((license_clue) => {
+    file.license_clues.forEach((license_clue, clue_idx) => {
       const parsedLicenseKeys = parseSubExpressions(
         license_clue.license_expression
       );
-      
-      const license_expression_keys: LicenseExpressionKey[] = [];      
-      parsedLicenseKeys.forEach(key => {
+
+      const license_expression_keys: LicenseExpressionKey[] = [];
+      parsedLicenseKeys.forEach((key) => {
         const license_reference = TopLevelData.license_references_map.get(key);
         if (!license_reference) return [];
 
@@ -715,6 +711,8 @@ export class WorkbenchDB {
       });
 
       license_clue.fileId = file.id;
+      license_clue.filePath = file.path;
+      license_clue.fileClueIdx = clue_idx;
       TopLevelData.license_clues.push(license_clue);
       license_clue.matches = [
         {

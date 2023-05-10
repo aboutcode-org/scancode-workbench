@@ -18,7 +18,9 @@ import "./Licenses.css";
 
 const LicenseDetections = () => {
   const [searchParams] = useSearchParams();
-  const [activeLicense, setActiveLicense] = useState<ActiveLicense>(null);
+  const [activeLicense, setActiveLicense] = useState<ActiveLicense | null>(
+    null
+  );
   function activateLicenseDetection(licenseDetection: LicenseDetectionDetails) {
     if (!licenseDetection) return;
     setActiveLicense({
@@ -41,17 +43,6 @@ const LicenseDetections = () => {
     null
   );
   const { db } = useWorkbenchDB();
-
-  useEffect(() => {
-    if (!licenseDetections || !licenseDetections.length) return;
-    const queriedDetectionIdentifier = searchParams.get(
-      QUERY_KEYS.LICENSE_DETECTION
-    );
-    const foundDetection = licenseDetections.find(
-      (detection) => detection.identifier == queriedDetectionIdentifier
-    );
-    if (foundDetection) activateLicenseDetection(foundDetection);
-  }, [searchParams]);
 
   useEffect(() => {
     db.sync.then(async () => {
@@ -78,10 +69,11 @@ const LicenseDetections = () => {
       const newLicenseClues: LicenseClueDetails[] = (
         await db.getAllLicenseClues()
       ).map((clue) => {
-        console.log("Clue", clue);
         return {
           id: Number(clue.getDataValue("id")),
           fileId: Number(clue.getDataValue("fileId")),
+          filePath: clue.getDataValue("filePath").toString({}) || "",
+          fileClueIdx: Number(clue.getDataValue("fileClueIdx")),
           score:
             clue.getDataValue("score") !== null
               ? Number(clue.getDataValue("score"))
@@ -100,25 +92,64 @@ const LicenseDetections = () => {
       });
       setLicenseClues(newLicenseClues);
 
-      console.log("New detections", newLicenseDetections);
-      console.log("New clues", newLicenseClues);
-
       const queriedDetectionIdentifier: string | null = searchParams.get(
         QUERY_KEYS.LICENSE_DETECTION
       );
-      const queriedDetection: LicenseDetectionDetails | null =
-        queriedDetectionIdentifier
-          ? newLicenseDetections.find(
-              (detection) => detection.identifier == queriedDetectionIdentifier
-            )
-          : null;
+      const queriedClueExpression = searchParams.get(
+        QUERY_KEYS.LICENSE_CLUE_EXPRESSION
+      );
+      const queriedClueFilePath = searchParams.get(
+        QUERY_KEYS.LICENSE_CLUE_FILE_PATH
+      );
+      const queriedClueFileIdx = Number(
+        searchParams.get(QUERY_KEYS.LICENSE_CLUE_FILE_CLUE_IDX) || 0
+      );
+      // console.log("All license queries", {
+      //   queriedDetectionIdentifier,
+      //   queriedClueExpression,
+      //   queriedClueFilePath,
+      //   queriedClueFileIdx,
+      // });
 
-      if (queriedDetectionIdentifier && queriedDetection) {
-        console.log(
-          `Activate queried detection (${queriedDetectionIdentifier}): `,
-          queriedDetection
+      if (queriedDetectionIdentifier) {
+        const queriedDetection: LicenseDetectionDetails | null =
+          queriedDetectionIdentifier
+            ? newLicenseDetections.find(
+                (detection) =>
+                  detection.identifier == queriedDetectionIdentifier
+              )
+            : null;
+        if (queriedDetection) {
+          console.log(
+            `Activate queried detection (${queriedDetectionIdentifier}): `,
+            queriedDetection
+          );
+          activateLicenseDetection(queriedDetection);
+        }
+      } else if (queriedClueExpression && queriedClueFilePath) {
+        const queriedClue = newLicenseClues.find(
+          (clue) =>
+            clue.license_expression === queriedClueExpression &&
+            clue.filePath === queriedClueFilePath &&
+            clue.fileClueIdx === queriedClueFileIdx
         );
-        activateLicenseDetection(queriedDetection);
+        // console.log(
+        //   "Queried",
+        //   {
+        //     queriedClueExpression,
+        //     queriedClueFilePath,
+        //     queriedClueFileIdx,
+        //   },
+        //   "Found",
+        //   { foundClue: queriedClue }
+        // );
+        if (queriedClue) {
+          console.log(
+            `Activate queried clue (${queriedClueExpression}, ${queriedClueFilePath}): `,
+            queriedClue
+          );
+          activateLicenseClue(queriedClue);
+        }
       } else {
         if (newLicenseDetections.length > 0) {
           activateLicenseDetection(newLicenseDetections[0]);
@@ -144,14 +175,16 @@ const LicenseDetections = () => {
   }
 
   const totalLicenses = licenseDetections.length + licenseClues.length;
+  const MAX_SECTION_HEIGHT = 0.75;
   const capSectionSize = (ratio: number) => {
-    return Math.max(0.15, Math.min(0.85, ratio)) * 100 + "%";
+    return (
+      Math.max(1 - MAX_SECTION_HEIGHT, Math.min(MAX_SECTION_HEIGHT, ratio)) *
+        100 +
+      "%"
+    );
   };
   const licenseDetectionsSectionSize = capSectionSize(
     licenseDetections.length / totalLicenses
-  );
-  const licenseCluesSectionSize = capSectionSize(
-    licenseClues.length / totalLicenses
   );
 
   if (!licenseDetections.length && !licenseClues.length)
@@ -167,7 +200,7 @@ const LicenseDetections = () => {
         <Allotment.Pane
           snap
           minSize={200}
-          preferredSize="30%"
+          preferredSize="25%"
           className="licenses-navigator-container"
         >
           <Allotment vertical>
@@ -180,9 +213,10 @@ const LicenseDetections = () => {
                   ? "License Detections"
                   : "No license detections"}
               </div>
-              <ListGroup>
+              <ListGroup hidden={licenseDetections.length === 0}>
                 {licenseDetections.map((licenseDetection) => {
                   const isLicenseDetectionActive =
+                    activeLicense &&
                     activeLicense.type === "detection" &&
                     activeLicense.license === licenseDetection;
                   return (
@@ -211,16 +245,14 @@ const LicenseDetections = () => {
                 })}
               </ListGroup>
             </Allotment.Pane>
-            <Allotment.Pane
-              preferredSize={licenseCluesSectionSize}
-              className="licenses-navigator-pane pt-2"
-            >
+            <Allotment.Pane className="licenses-navigator-pane pt-2">
               <div className="licenses-navigator-pane-title">
                 {licenseClues.length > 0 ? "License Clues" : "No License Clues"}
               </div>
-              <ListGroup>
+              <ListGroup hidden={licenseClues.length === 0}>
                 {licenseClues.map((licenseClue) => {
                   const isLicenseClueActive =
+                    activeLicense &&
                     activeLicense.type === "clue" &&
                     activeLicense.license === licenseClue;
                   return (

@@ -1,5 +1,8 @@
 import React, { useMemo } from "react";
-import { LICENSE_EXPRESSIONS_CONJUNCTIONS, parseTokensFromExpression } from "../../../../services/models/databaseUtils";
+import {
+  LICENSE_EXPRESSIONS_CONJUNCTIONS,
+  parseTokensFromExpression,
+} from "../../../../services/models/databaseUtils";
 
 const DEBUG_URLS = false;
 
@@ -44,7 +47,11 @@ const MatchLicenseExpressionRenderer = (
     let newParsedComponents: ParsedTokens[];
     if (spdxLicense) {
       const licenseExpressionSpdxKeysMap = new Map(
-        license_expression_spdx_keys.map((expKey) => [expKey.key, expKey])
+        // Handle deferred state update to ag data grid
+        (license_expression_spdx_keys || []).map((expKey) => [
+          expKey.key,
+          expKey,
+        ])
       );
       newParsedComponents = parseTokensFromExpression(
         license_expression_spdx
@@ -85,20 +92,18 @@ const MatchLicenseExpressionRenderer = (
           return (
             <a href={href} key={href + value}>
               {value}
-              { DEBUG_URLS && `(${href})`}
+              {DEBUG_URLS && `(${href})`}
             </a>
           );
         }
         return (
           <React.Fragment key={value + idx}>
             {value}
-            {
-              DEBUG_URLS ?
-              value.trim().length>0 &&
-              !LICENSE_EXPRESSIONS_CONJUNCTIONS.includes(value) &&
-              "(NoURL)"
-              : ""
-            }
+            {DEBUG_URLS
+              ? value.trim().length > 0 &&
+                !LICENSE_EXPRESSIONS_CONJUNCTIONS.includes(value) &&
+                "(NoURL)"
+              : ""}
           </React.Fragment>
         );
       })}

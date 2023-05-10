@@ -31,6 +31,7 @@ export interface LicenseReference {
   licensedb_url: string | null;
   spdx_url: string | null;
 }
+
 export interface LicenseExpressionKey {
   key: string;
   licensedb_url: string | null;
@@ -61,13 +62,12 @@ export interface LicenseDetectionMatch extends LicenseMatch {
   license_expression_spdx_keys?: LicenseExpressionSpdxKey[];
 }
 export interface LicenseFileRegion {
-  path: string,
-  start_line: number,
-  end_line: number,
-  from_package?: boolean,
+  path: string;
+  start_line: number;
+  end_line: number;
+  from_package?: boolean;
 }
 export interface LicenseClue {
-  fileId?: number;
   score: number;
   start_line: number;
   end_line: number;
@@ -80,10 +80,12 @@ export interface LicenseClue {
   rule_url: string;
 
   // Parser-added fields
+  fileId?: number;
+  filePath?: string;
+  fileClueIdx: number;
   matches?: LicenseMatch[];
   file_regions?: LicenseFileRegion[];
 }
-
 export interface TopLevelLicenseDetection {
   identifier: string;
   license_expression: string;
@@ -95,7 +97,6 @@ export interface TopLevelLicenseDetection {
   // Legacy output version fields
   count?: number;
 }
-
 export interface ResourceLicenseDetection {
   license_expression: string;
   matches: LicenseDetectionMatch[];
@@ -132,7 +133,7 @@ export interface Resource {
   detected_license_expression_spdx?: string | null;
   for_license_detections?: string[];
   license_detections?: ResourceLicenseDetection[];
-  license_clues?:  LicenseClue[];
+  license_clues?: LicenseClue[];
   copyrights?: {
     copyright: string;
     start_line: number;

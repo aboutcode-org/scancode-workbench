@@ -17,11 +17,10 @@ import "../../styles/entityCommonStyles.css";
 import "./licenseEntity.css";
 
 interface LicenseDetectionEntityProps {
-  activeLicense: ActiveLicense;
+  activeLicense: ActiveLicense | null;
 }
 const LicenseEntity = (props: LicenseDetectionEntityProps) => {
   const { activeLicense } = props;
-  console.log("Show", activeLicense);
 
   const license = activeLicense?.license;
   const matches = activeLicense?.license?.matches;
@@ -30,7 +29,7 @@ const LicenseEntity = (props: LicenseDetectionEntityProps) => {
   if (!activeLicense) {
     return (
       <div>
-        <h5>No License Detection to show</h5>
+        <h5>No License detection / clue selected</h5>
       </div>
     );
   }
@@ -44,7 +43,6 @@ const LicenseEntity = (props: LicenseDetectionEntityProps) => {
       <div className="license-entity-properties">
         {(activeLicense.type === "detection"
           ? [
-              // [ "License Expression:", license.license_expression || "NA" ],
               ["License Identifier:", activeLicense.license.identifier || "NA"],
               [
                 "Instances:",
@@ -68,7 +66,6 @@ const LicenseEntity = (props: LicenseDetectionEntityProps) => {
                 ]),
             ]
           : [
-              // [ "License Expression:", license.license_expression || "NA" ],
               [
                 "Rule Identifier:",
                 activeLicense.license.rule_identifier || "NA",
