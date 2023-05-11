@@ -693,7 +693,7 @@ export class WorkbenchDB {
   }
 
   _parseLicenseClues(file: Resource, TopLevelData: TopLevelDataFormat) {
-    file.license_clues.forEach((license_clue, clue_idx) => {
+    file.license_clues?.forEach((license_clue, clue_idx) => {
       const parsedLicenseKeys = parseSubExpressions(
         license_clue.license_expression
       );

@@ -9,8 +9,8 @@ interface FileLicenseDetectionsRendererProps {
 }
 
 const URL_PREFIX = `/${ROUTES.LICENSES}?${QUERY_KEYS.LICENSE_DETECTION}=`;
-function generateUrl(detectionIdentifier: string){
-  return URL_PREFIX+detectionIdentifier;
+function generateUrl(detectionIdentifier: string) {
+  return URL_PREFIX + detectionIdentifier;
 }
 
 const FileLicenseDetectionsRenderer = (
@@ -18,7 +18,7 @@ const FileLicenseDetectionsRenderer = (
 ) => {
   const { value } = props;
 
-  if (!(value || value.length)) return <></>;
+  if (!value || value.length === 0) return <></>;
 
   return (
     <>

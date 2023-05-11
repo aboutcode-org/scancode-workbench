@@ -19,7 +19,7 @@ function generateUrl(
 const FileLicenseCluesRenderer = (props: FileLicenseCluesRendererProps) => {
   const { value } = props;
 
-  if (!(value || value.length)) return <></>;
+  if (!value || value.length === 0) return <></>;
 
   return (
     <>
