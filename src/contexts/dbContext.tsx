@@ -85,7 +85,7 @@ export const WorkbenchDBProvider = (
     initialized: false,
     importedSqliteFilePath: null,
   });
-  const [currentPath, setCurrentPath] = useState<string | null>(null);
+  const [currentPath, setCurrentPath] = useState<string | null>("");
   const [currentPathType, setCurrentPathType] = useState<PathType>("directory");
 
   function updateCurrentPath(path: string, pathType: PathType) {

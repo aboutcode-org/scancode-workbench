@@ -15,6 +15,10 @@
 .file-tree-loader .loader {
   justify-content: center;
 }
+.filetree-node-wrapper {
+  scroll-margin-left: 50px;
+  scroll-margin-top: 50px;
+}
 
 .rc-tree-child-tree {
   display: block;
@@ -219,22 +223,6 @@
   justify-content: center;
   width: 16px;
 }
-
-/* .rc-tree-icon__open, .rc-tree-icon__close, .rc-tree-icon__docu {
-  background-position: 0;
-  width: 200px;
-  height: 200px;
-  color: blue;
-}
-.rc-tree-icon__open{
-  background-image: url('./folderClosed.png') !important;
-}
-.rc-tree-icon__close{
-  background-image: url('./folderClosed.png') !important;
-}
-.rc-tree-icon__docu{
-  background-image: url('./document.png') !important;
-} */
 
 .rc-tree-iconEle {
   /* visibility: hidden; */
