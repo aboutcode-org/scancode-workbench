@@ -3,7 +3,6 @@ import React, { DragEvent } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { useWorkbenchDB } from "../../contexts/dbContext";
-import { ROUTES } from "../../constants/routes";
 
 const lastLogs: { [key: string]: number } = {};
 export const CustomLogger = (id: string, ...args: unknown[]) => {
