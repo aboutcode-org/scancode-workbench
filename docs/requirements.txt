@@ -12,7 +12,7 @@ packaging==20.3
 Pygments==2.7.4
 pyparsing==2.4.6
 pytz==2019.3
-requests==2.23.0
+requests==2.31.0
 six==1.14.0
 snowballstemmer==2.0.0
 Sphinx==2.4.4
