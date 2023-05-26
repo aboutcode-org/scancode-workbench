@@ -1,6 +1,5 @@
 import { toast } from "react-toastify";
 import React, { DragEvent } from "react";
-import { useNavigate } from "react-router-dom";
 
 import { useWorkbenchDB } from "../../contexts/dbContext";
 
@@ -14,7 +13,6 @@ export const CustomLogger = (id: string, ...args: unknown[]) => {
 };
 
 const DropZone = (props: React.PropsWithChildren) => {
-  const navigate = useNavigate();
   const { sqliteParser, importJsonFile } = useWorkbenchDB();
 
   function DragOverHandler(e: DragEvent) {

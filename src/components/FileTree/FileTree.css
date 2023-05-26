@@ -16,8 +16,9 @@
   justify-content: center;
 }
 .filetree-node-wrapper {
-  scroll-margin-left: 50px;
-  scroll-margin-top: 50px;
+  scroll-margin-left: 150px;
+  scroll-margin-top: 150px;
+  scroll-margin-bottom: 150px;
 }
 
 .rc-tree-child-tree {

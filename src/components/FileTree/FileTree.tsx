@@ -35,10 +35,8 @@ const FileTree = (props: React.HTMLProps<HTMLDivElement>) => {
     });
     if (currentPath.length) {
       setTimeout(() => {
-        console.log("Scrolling to " + currentPath);
         const targetNode = document.getElementsByName(currentPath)[0];
         if (targetNode) {
-          console.log("Target node", targetNode);
           // scrollToDomElement(targetNode, { yOffset: -50 });
           targetNode.scrollIntoView({
             behavior: "smooth",
