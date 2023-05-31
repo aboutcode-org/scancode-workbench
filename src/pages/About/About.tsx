@@ -1,5 +1,5 @@
 import React from "react";
-import { version } from "../../../package.json";
+import packageInfo from "../../../package.json";
 
 import "./about.css";
 
@@ -8,7 +8,7 @@ const About = () => {
     <div className="help">
       <h1>
         About ScanCode Workbench
-        <span className="app-version">v{version}</span>
+        <span className="app-version">v{packageInfo.version}</span>
       </h1>
       <br />
       <h3>Overview</h3>

@@ -23,6 +23,8 @@ import "./packages.css";
 
 const Packages = () => {
   const workbenchDB = useWorkbenchDB();
+  const { db, initialized, currentPath, startProcessing, endProcessing } =
+    workbenchDB;
   const [searchParams] = useSearchParams();
   const [expandedPackages, setExpandedPackages] = useState<string[]>([]);
   const [packagesWithDeps, setPackagesWithDeps] = useState<
@@ -74,244 +76,253 @@ const Packages = () => {
   };
 
   useEffect(() => {
-    const { db, initialized, currentPath } = workbenchDB;
-
     if (!initialized || !db || !currentPath) return;
 
-    db.sync.then(async () => {
-      const packages = await db.getAllPackages();
-      const deps = await db.getAllDependencies();
-      console.log("Raw Packages & deps", packages, deps);
-      if (!packages.length && !deps.length) {
-        console.log("No package or deps available");
-        setPackageGroups([]);
-        return;
-      }
-
-      // const type_other = 'type-other';
-      const packageMapping = new Map<string, PackageDetails>(
-        packages.map((packageInfo): [string, PackageDetails] => [
-          packageInfo.getDataValue("package_uid").toString({}),
-          {
-            package_uid: packageInfo.getDataValue("package_uid").toString({}),
-            name: packageInfo.getDataValue("name").toString({}),
-            type: packageInfo.getDataValue("type").toString({}),
-            dependencies: [],
-            namespace:
-              packageInfo.getDataValue("namespace")?.toString({}) || null,
-            version: packageInfo.getDataValue("version")?.toString({}) || null,
-            qualifiers: JSON.parse(
-              packageInfo.getDataValue("qualifiers").toString({})
-            ),
-            subpath: packageInfo.getDataValue("subpath")?.toString({}) || null,
-            primary_language:
-              packageInfo.getDataValue("primary_language")?.toString({}) ||
-              null,
-            description:
-              packageInfo.getDataValue("description")?.toString({}) || null,
-            release_date:
-              packageInfo.getDataValue("release_date")?.toString({}) || null,
-            parties: JSON.parse(
-              packageInfo.getDataValue("parties").toString({})
-            ),
-            keywords: JSON.parse(
-              packageInfo.getDataValue("keywords").toString({})
-            ),
-            homepage_url:
-              packageInfo.getDataValue("homepage_url")?.toString({}) || null,
-            download_url:
-              packageInfo.getDataValue("download_url")?.toString({}) || null,
-            size: packageInfo.getDataValue("size")?.toString({}) || null,
-            sha1: packageInfo.getDataValue("sha1")?.toString({}) || null,
-            md5: packageInfo.getDataValue("md5")?.toString({}) || null,
-            sha256: packageInfo.getDataValue("sha256")?.toString({}) || null,
-            sha512: packageInfo.getDataValue("sha512")?.toString({}) || null,
-            bug_tracking_url:
-              packageInfo.getDataValue("bug_tracking_url")?.toString({}) ||
-              null,
-            code_view_url:
-              packageInfo.getDataValue("code_view_url")?.toString({}) || null,
-            vcs_url: packageInfo.getDataValue("vcs_url")?.toString({}) || null,
-            copyright:
-              packageInfo.getDataValue("copyright")?.toString({}) || null,
-            declared_license_expression:
-              packageInfo
-                .getDataValue("declared_license_expression")
-                ?.toString({}) || null,
-            declared_license_expression_spdx:
-              packageInfo
-                .getDataValue("declared_license_expression_spdx")
-                ?.toString({}) || null,
-            other_license_expression:
-              packageInfo
-                .getDataValue("other_license_expression")
-                ?.toString({}) || null,
-            other_license_expression_spdx:
-              packageInfo
-                .getDataValue("other_license_expression_spdx")
-                ?.toString({}) || null,
-            extracted_license_statement:
-              packageInfo
-                .getDataValue("extracted_license_statement")
-                ?.toString({})
-                .replace(/(^"|"$)/g, "") || null,
-            notice_text:
-              packageInfo.getDataValue("notice_text")?.toString({}) || null,
-            source_packages: JSON.parse(
-              packageInfo.getDataValue("source_packages").toString({})
-            ),
-            extra_data: JSON.parse(
-              packageInfo.getDataValue("extra_data").toString({})
-            ),
-            repository_homepage_url:
-              packageInfo
-                .getDataValue("repository_homepage_url")
-                ?.toString({}) || null,
-            repository_download_url:
-              packageInfo
-                .getDataValue("repository_download_url")
-                ?.toString({}) || null,
-            api_data_url:
-              packageInfo.getDataValue("api_data_url")?.toString({}) || null,
-            datafile_paths:
-              JSON.parse(
-                packageInfo.getDataValue("datafile_paths")?.toString({}) || "[]"
-              ) || [],
-            datasource_ids:
-              JSON.parse(
-                packageInfo.getDataValue("datasource_ids")?.toString({}) || "[]"
-              ) || [],
-            purl: packageInfo.getDataValue("purl").toString({}),
-          },
-        ])
-      );
-      const MISC_DEPS = "others";
-      const MISC_PACKAGE: PackageDetails = {
-        package_uid: "misc",
-        name: "Misc dependencies",
-        type: "Other",
-        dependencies: [],
-        namespace: "",
-        version: null,
-        qualifiers: {},
-        subpath: null,
-        primary_language: null,
-        description: null,
-        release_date: null,
-        parties: {},
-        keywords: {},
-        homepage_url: null,
-        download_url: null,
-        size: null,
-        sha1: null,
-        md5: null,
-        sha256: null,
-        sha512: null,
-        bug_tracking_url: null,
-        code_view_url: null,
-        vcs_url: null,
-        copyright: null,
-        declared_license_expression: null,
-        declared_license_expression_spdx: null,
-        other_license_expression: null,
-        other_license_expression_spdx: null,
-        extracted_license_statement: null,
-        notice_text: null,
-        source_packages: {},
-        extra_data: {},
-        repository_homepage_url: null,
-        repository_download_url: null,
-        api_data_url: null,
-        datafile_paths: [],
-        datasource_ids: [],
-        purl: null,
-      };
-      packageMapping.set(MISC_DEPS, MISC_PACKAGE);
-
-      // Group dependencies in their respective packages
-      deps.forEach((dependencyInfo) => {
-        const targetPackageUid: string | null = dependencyInfo
-          .getDataValue("for_package_uid")
-          ?.toString({});
-        packageMapping.get(targetPackageUid || MISC_DEPS).dependencies.push({
-          // ...dependencyInfo,     // For debugging
-          purl: dependencyInfo.getDataValue("purl").toString({}),
-          extracted_requirement:
-            dependencyInfo
-              .getDataValue("extracted_requirement")
-              ?.toString({}) || "",
-          scope: dependencyInfo
-            .getDataValue("scope")
-            .toString({}) as DEPENDENCY_SCOPES,
-          is_runtime: dependencyInfo.getDataValue("is_runtime"),
-          is_optional: dependencyInfo.getDataValue("is_optional"),
-          is_resolved: dependencyInfo.getDataValue("is_resolved"),
-          resolved_package: JSON.parse(
-            dependencyInfo.getDataValue("resolved_package").toString({})
-          ),
-          dependency_uid: dependencyInfo
-            .getDataValue("dependency_uid")
-            .toString({}),
-          for_package_uid:
-            dependencyInfo.getDataValue("for_package_uid")?.toString({}) ||
-            null,
-          datafile_path: dependencyInfo
-            .getDataValue("datafile_path")
-            .toString({}),
-          datasource_id: dependencyInfo
-            .getDataValue("datasource_id")
-            .toString({}),
-        });
-      });
-
-      // Ignore misc package if no misc dependencies found
-      if (!MISC_PACKAGE.dependencies.length) {
-        packageMapping.delete(MISC_DEPS);
-      }
-
-      const parsedPackageWithDeps = Array.from(packageMapping.values());
-      // @TODO - What are qualifiers ?
-      parsedPackageWithDeps.forEach((pkg) => {
-        if (Object.keys(pkg.qualifiers).length) console.log("Qualifying:", pkg);
-      });
-      // console.log("Packages with deps:", parsedPackageWithDeps);
-      setPackagesWithDeps(parsedPackageWithDeps);
-
-      // Group packages in their respective package type group
-      const packageGroupMapping = new Map<string, PackageDetails[]>();
-      parsedPackageWithDeps.forEach((packageDetails) => {
-        if (!packageGroupMapping.has(packageDetails.type)) {
-          packageGroupMapping.set(packageDetails.type, []);
+    startProcessing();
+    db.sync
+      .then(async () => {
+        const packages = await db.getAllPackages();
+        const deps = await db.getAllDependencies();
+        console.log("Raw Packages & deps", packages, deps);
+        if (!packages.length && !deps.length) {
+          console.log("No package or deps available");
+          setPackageGroups([]);
+          return;
         }
-        packageGroupMapping.get(packageDetails.type).push(packageDetails);
-      });
-      const parsedPackageGroups = Array.from(packageGroupMapping.entries()).map(
-        ([type, packages]): PackageTypeGroupDetails => ({
-          type,
-          packages,
-        })
-      );
-      setPackageGroups(parsedPackageGroups);
-      // console.log("Package groups", parsedPackageGroups);
 
-      setExpandedPackages([]);
-
-      // Select package based on query or default
-      const queriedPackageUid = searchParams.get(QUERY_KEYS.PACKAGE);
-      const queriedPackage = parsedPackageWithDeps.find(
-        (packageInfo) => packageInfo.package_uid === queriedPackageUid
-      );
-      if (queriedPackage) {
-        activatePackage(queriedPackage);
-        console.log(
-          `Activate queried package(${queriedPackageUid}): `,
-          queriedPackage
+        // const type_other = 'type-other';
+        const packageMapping = new Map<string, PackageDetails>(
+          packages.map((packageInfo): [string, PackageDetails] => [
+            packageInfo.getDataValue("package_uid").toString({}),
+            {
+              package_uid: packageInfo.getDataValue("package_uid").toString({}),
+              name: packageInfo.getDataValue("name").toString({}),
+              type: packageInfo.getDataValue("type").toString({}),
+              dependencies: [],
+              namespace:
+                packageInfo.getDataValue("namespace")?.toString({}) || null,
+              version:
+                packageInfo.getDataValue("version")?.toString({}) || null,
+              qualifiers: JSON.parse(
+                packageInfo.getDataValue("qualifiers").toString({})
+              ),
+              subpath:
+                packageInfo.getDataValue("subpath")?.toString({}) || null,
+              primary_language:
+                packageInfo.getDataValue("primary_language")?.toString({}) ||
+                null,
+              description:
+                packageInfo.getDataValue("description")?.toString({}) || null,
+              release_date:
+                packageInfo.getDataValue("release_date")?.toString({}) || null,
+              parties: JSON.parse(
+                packageInfo.getDataValue("parties").toString({})
+              ),
+              keywords: JSON.parse(
+                packageInfo.getDataValue("keywords").toString({})
+              ),
+              homepage_url:
+                packageInfo.getDataValue("homepage_url")?.toString({}) || null,
+              download_url:
+                packageInfo.getDataValue("download_url")?.toString({}) || null,
+              size: packageInfo.getDataValue("size")?.toString({}) || null,
+              sha1: packageInfo.getDataValue("sha1")?.toString({}) || null,
+              md5: packageInfo.getDataValue("md5")?.toString({}) || null,
+              sha256: packageInfo.getDataValue("sha256")?.toString({}) || null,
+              sha512: packageInfo.getDataValue("sha512")?.toString({}) || null,
+              bug_tracking_url:
+                packageInfo.getDataValue("bug_tracking_url")?.toString({}) ||
+                null,
+              code_view_url:
+                packageInfo.getDataValue("code_view_url")?.toString({}) || null,
+              vcs_url:
+                packageInfo.getDataValue("vcs_url")?.toString({}) || null,
+              copyright:
+                packageInfo.getDataValue("copyright")?.toString({}) || null,
+              declared_license_expression:
+                packageInfo
+                  .getDataValue("declared_license_expression")
+                  ?.toString({}) || null,
+              declared_license_expression_spdx:
+                packageInfo
+                  .getDataValue("declared_license_expression_spdx")
+                  ?.toString({}) || null,
+              other_license_expression:
+                packageInfo
+                  .getDataValue("other_license_expression")
+                  ?.toString({}) || null,
+              other_license_expression_spdx:
+                packageInfo
+                  .getDataValue("other_license_expression_spdx")
+                  ?.toString({}) || null,
+              extracted_license_statement:
+                packageInfo
+                  .getDataValue("extracted_license_statement")
+                  ?.toString({})
+                  .replace(/(^"|"$)/g, "") || null,
+              notice_text:
+                packageInfo.getDataValue("notice_text")?.toString({}) || null,
+              source_packages: JSON.parse(
+                packageInfo.getDataValue("source_packages").toString({})
+              ),
+              extra_data: JSON.parse(
+                packageInfo.getDataValue("extra_data").toString({})
+              ),
+              repository_homepage_url:
+                packageInfo
+                  .getDataValue("repository_homepage_url")
+                  ?.toString({}) || null,
+              repository_download_url:
+                packageInfo
+                  .getDataValue("repository_download_url")
+                  ?.toString({}) || null,
+              api_data_url:
+                packageInfo.getDataValue("api_data_url")?.toString({}) || null,
+              datafile_paths:
+                JSON.parse(
+                  packageInfo.getDataValue("datafile_paths")?.toString({}) ||
+                    "[]"
+                ) || [],
+              datasource_ids:
+                JSON.parse(
+                  packageInfo.getDataValue("datasource_ids")?.toString({}) ||
+                    "[]"
+                ) || [],
+              purl: packageInfo.getDataValue("purl").toString({}),
+            },
+          ])
         );
-      } else {
-        activatePackage(parsedPackageWithDeps[0]);
-      }
-    });
-  }, [workbenchDB]);
+        const MISC_DEPS = "others";
+        const MISC_PACKAGE: PackageDetails = {
+          package_uid: "misc",
+          name: "Misc dependencies",
+          type: "Other",
+          dependencies: [],
+          namespace: "",
+          version: null,
+          qualifiers: {},
+          subpath: null,
+          primary_language: null,
+          description: null,
+          release_date: null,
+          parties: {},
+          keywords: {},
+          homepage_url: null,
+          download_url: null,
+          size: null,
+          sha1: null,
+          md5: null,
+          sha256: null,
+          sha512: null,
+          bug_tracking_url: null,
+          code_view_url: null,
+          vcs_url: null,
+          copyright: null,
+          declared_license_expression: null,
+          declared_license_expression_spdx: null,
+          other_license_expression: null,
+          other_license_expression_spdx: null,
+          extracted_license_statement: null,
+          notice_text: null,
+          source_packages: {},
+          extra_data: {},
+          repository_homepage_url: null,
+          repository_download_url: null,
+          api_data_url: null,
+          datafile_paths: [],
+          datasource_ids: [],
+          purl: null,
+        };
+        packageMapping.set(MISC_DEPS, MISC_PACKAGE);
+
+        // Group dependencies in their respective packages
+        deps.forEach((dependencyInfo) => {
+          const targetPackageUid: string | null = dependencyInfo
+            .getDataValue("for_package_uid")
+            ?.toString({});
+          packageMapping.get(targetPackageUid || MISC_DEPS).dependencies.push({
+            // ...dependencyInfo,     // For debugging
+            purl: dependencyInfo.getDataValue("purl").toString({}),
+            extracted_requirement:
+              dependencyInfo
+                .getDataValue("extracted_requirement")
+                ?.toString({}) || "",
+            scope: dependencyInfo
+              .getDataValue("scope")
+              .toString({}) as DEPENDENCY_SCOPES,
+            is_runtime: dependencyInfo.getDataValue("is_runtime"),
+            is_optional: dependencyInfo.getDataValue("is_optional"),
+            is_resolved: dependencyInfo.getDataValue("is_resolved"),
+            resolved_package: JSON.parse(
+              dependencyInfo.getDataValue("resolved_package").toString({})
+            ),
+            dependency_uid: dependencyInfo
+              .getDataValue("dependency_uid")
+              .toString({}),
+            for_package_uid:
+              dependencyInfo.getDataValue("for_package_uid")?.toString({}) ||
+              null,
+            datafile_path: dependencyInfo
+              .getDataValue("datafile_path")
+              .toString({}),
+            datasource_id: dependencyInfo
+              .getDataValue("datasource_id")
+              .toString({}),
+          });
+        });
+
+        // Ignore misc package if no misc dependencies found
+        if (!MISC_PACKAGE.dependencies.length) {
+          packageMapping.delete(MISC_DEPS);
+        }
+
+        const parsedPackageWithDeps = Array.from(packageMapping.values());
+        // @TODO - What are qualifiers ?
+        parsedPackageWithDeps.forEach((pkg) => {
+          if (Object.keys(pkg.qualifiers).length)
+            console.log("Qualifying:", pkg);
+        });
+        // console.log("Packages with deps:", parsedPackageWithDeps);
+        setPackagesWithDeps(parsedPackageWithDeps);
+
+        // Group packages in their respective package type group
+        const packageGroupMapping = new Map<string, PackageDetails[]>();
+        parsedPackageWithDeps.forEach((packageDetails) => {
+          if (!packageGroupMapping.has(packageDetails.type)) {
+            packageGroupMapping.set(packageDetails.type, []);
+          }
+          packageGroupMapping.get(packageDetails.type).push(packageDetails);
+        });
+        const parsedPackageGroups = Array.from(
+          packageGroupMapping.entries()
+        ).map(
+          ([type, packages]): PackageTypeGroupDetails => ({
+            type,
+            packages,
+          })
+        );
+        setPackageGroups(parsedPackageGroups);
+        // console.log("Package groups", parsedPackageGroups);
+
+        setExpandedPackages([]);
+
+        // Select package based on query or default
+        const queriedPackageUid = searchParams.get(QUERY_KEYS.PACKAGE);
+        const queriedPackage = parsedPackageWithDeps.find(
+          (packageInfo) => packageInfo.package_uid === queriedPackageUid
+        );
+        if (queriedPackage) {
+          activatePackage(queriedPackage);
+          console.log(
+            `Activate queried package(${queriedPackageUid}): `,
+            queriedPackage
+          );
+        } else {
+          activatePackage(parsedPackageWithDeps[0]);
+        }
+      })
+      .then(endProcessing);
+  }, [currentPath]);
 
   function collapsePackage(target_package_uid: string, e?: React.MouseEvent) {
     setExpandedPackages((prevPackages) =>

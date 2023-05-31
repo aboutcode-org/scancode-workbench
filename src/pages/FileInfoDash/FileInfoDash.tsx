@@ -18,6 +18,8 @@ import "./FileInfoDash.css";
 
 const FileInfoDash = () => {
   const workbenchDB = useWorkbenchDB();
+  const { db, initialized, currentPath, startProcessing, endProcessing } =
+    workbenchDB;
 
   const [progLangsData, setProgLangsData] = useState(null);
   const [fileTypesData, setFileTypesData] = useState(null);
@@ -29,10 +31,9 @@ const FileInfoDash = () => {
   });
 
   useEffect(() => {
-    const { db, initialized, currentPath } = workbenchDB;
-
     if (!initialized || !db || !currentPath) return;
 
+    startProcessing();
     db.sync
       .then((db) => db.File.findOne({ where: { path: currentPath } }))
       .then((root) => {
@@ -68,6 +69,8 @@ const FileInfoDash = () => {
           })
         );
       })
+      // @REMOVE_THIS
+      // .then((files) => new Promise(resolve => setTimeout(()=>resolve(files), 2000)))
       .then((files) => {
         // Prepare chart for file types
         const fileMimeTypes = files.map(
@@ -92,11 +95,10 @@ const FileInfoDash = () => {
 
         return files;
       })
-      .then((files) => {
-        const fileIDs = files.map((file) => file.getDataValue("id"));
-
+      .then((files) => files.map((file) => file.getDataValue("id")))
+      .then((fileIDs) => {
         // Query data for copyright holders chart
-        db.sync
+        return db.sync
           .then((db) => db.Copyright.findAll({ where: { fileId: fileIDs } }))
           .then((copyrights) =>
             copyrights.map(
@@ -117,8 +119,9 @@ const FileInfoDash = () => {
             );
             setCopyrightHoldersData(copyrightHoldersChartData);
           });
-      });
-  }, [workbenchDB]);
+      })
+      .then(endProcessing);
+  }, [currentPath]);
 
   return (
     <div className="text-center pieInfoDash">

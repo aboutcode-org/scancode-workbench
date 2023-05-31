@@ -24,7 +24,8 @@ import { useWorkbenchState } from "../../contexts/stateContext";
 import "./TableView.css";
 
 const TableView = () => {
-  const { db, initialized, currentPath } = useWorkbenchDB();
+  const { db, initialized, currentPath, startProcessing, endProcessing } =
+    useWorkbenchDB();
   const { columnDefs, columnState, setColumnDefs, updateColState } =
     useWorkbenchState();
 
@@ -55,11 +56,13 @@ const TableView = () => {
     }
   }
 
-  // Update table data whenever new db is loaded or path is changed
   useEffect(() => {
     if (!initialized || !db || !currentPath) return;
 
-    db.sync
+    startProcessing();
+
+    // Update table data whenever new db is loaded or path is changed
+    const DataProcessorPromise = db.sync
       .then((db) =>
         db.FlatFile.findAll({
           where: {
@@ -94,13 +97,9 @@ const TableView = () => {
           return [...COLUMN_GROUPS.DEFAULT];
         });
       });
-  }, [currentPath]);
 
-  // Update set filters whenever new db is loaded
-  useEffect(() => {
-    if (!initialized || !db || !currentPath) return;
-
-    db.sync.then((db) => {
+    // Update set filters whenever new db is loaded or path is changed
+    const FilterProcessorPromise = db.sync.then((db) => {
       const filterPromises: Promise<ColDef>[] = [];
 
       Object.values(ALL_COLUMNS).forEach((columnDef) => {
@@ -148,7 +147,7 @@ const TableView = () => {
         filterPromises.push(filterPromise);
       });
 
-      Promise.all(filterPromises).then(() => {
+      return Promise.all(filterPromises).then(() => {
         // console.log(
         //   "Generated unique set filters:",
         //   columnDefs.map(coldef => coldef.filterParams)
@@ -157,9 +156,12 @@ const TableView = () => {
           if (prevColDefs.length) return [...prevColDefs];
           return [...COLUMN_GROUPS.DEFAULT];
         });
-        // setDefaultColumnGroup();
       });
     });
+
+    Promise.all([DataProcessorPromise, FilterProcessorPromise]).then(
+      endProcessing
+    );
   }, [db, currentPath]);
 
   useEffect(() => {

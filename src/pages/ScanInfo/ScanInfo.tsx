@@ -42,55 +42,54 @@ function parseIfValidJson(str: unknown) {
 
 const ScanInfo = () => {
   const workbenchDB = useWorkbenchDB();
+  const { db, initialized, currentPath, startProcessing, endProcessing } = workbenchDB;
   const [parsedScanInfo, setParsedScanInfo] = useState<ScanInfo | null>(null);
 
   useEffect(() => {
-    const { db, initialized, currentPath } = workbenchDB;
-
     if (!initialized || !db || !currentPath) return;
 
-    db.sync.then(() => {
-      db.getScanInfo().then((rawInfo) => {
-        console.log("Raw scan info:", rawInfo);
-        const newParsedScanInfo: ScanInfo = {
-          tool_name: rawInfo.getDataValue("tool_name").toString({}) || "",
-          tool_version: rawInfo.getDataValue("tool_version").toString({}) || "",
-          notice: rawInfo.getDataValue("notice").toString({}) || "",
-          duration: Number(rawInfo.getDataValue("duration")),
-          options:
-            Object.entries(
-              parseIfValidJson(rawInfo.getDataValue("options")?.toString({})) ||
-                []
-            ) || [],
-          input:
-            parseIfValidJson(rawInfo.getDataValue("input")?.toString({})) || [],
-          files_count: Number(rawInfo.getDataValue("files_count")),
-          output_format_version:
-            rawInfo.getDataValue("output_format_version")?.toString({}) || "",
-          spdx_license_list_version:
-            rawInfo.getDataValue("spdx_license_list_version")?.toString({}) ||
-            "",
-          operating_system:
-            rawInfo.getDataValue("operating_system")?.toString({}) || "",
-          cpu_architecture:
-            rawInfo.getDataValue("cpu_architecture")?.toString({}) || "",
-          platform: rawInfo.getDataValue("platform")?.toString({}) || "",
-          platform_version:
-            rawInfo.getDataValue("platform_version")?.toString({}) || "",
-          python_version:
-            rawInfo.getDataValue("python_version")?.toString({}) || "",
-          workbench_version:
-            rawInfo.getDataValue("workbench_version")?.toString({}) || "",
-          workbench_notice:
-            rawInfo.getDataValue("workbench_notice")?.toString({}) || "",
-          raw_header_content:
-            rawInfo.getDataValue("header_content")?.toString({}) || "",
-        };
-        console.log("Parsed scan info:", newParsedScanInfo);
-        setParsedScanInfo(newParsedScanInfo);
-      });
-    });
-  }, [workbenchDB]);
+    startProcessing();
+    db.getScanInfo().then((rawInfo) => {
+      console.log("Raw scan info:", rawInfo);
+      const newParsedScanInfo: ScanInfo = {
+        tool_name: rawInfo.getDataValue("tool_name").toString({}) || "",
+        tool_version: rawInfo.getDataValue("tool_version").toString({}) || "",
+        notice: rawInfo.getDataValue("notice").toString({}) || "",
+        duration: Number(rawInfo.getDataValue("duration")),
+        options:
+          Object.entries(
+            parseIfValidJson(rawInfo.getDataValue("options")?.toString({})) ||
+              []
+          ) || [],
+        input:
+          parseIfValidJson(rawInfo.getDataValue("input")?.toString({})) || [],
+        files_count: Number(rawInfo.getDataValue("files_count")),
+        output_format_version:
+          rawInfo.getDataValue("output_format_version")?.toString({}) || "",
+        spdx_license_list_version:
+          rawInfo.getDataValue("spdx_license_list_version")?.toString({}) ||
+          "",
+        operating_system:
+          rawInfo.getDataValue("operating_system")?.toString({}) || "",
+        cpu_architecture:
+          rawInfo.getDataValue("cpu_architecture")?.toString({}) || "",
+        platform: rawInfo.getDataValue("platform")?.toString({}) || "",
+        platform_version:
+          rawInfo.getDataValue("platform_version")?.toString({}) || "",
+        python_version:
+          rawInfo.getDataValue("python_version")?.toString({}) || "",
+        workbench_version:
+          rawInfo.getDataValue("workbench_version")?.toString({}) || "",
+        workbench_notice:
+          rawInfo.getDataValue("workbench_notice")?.toString({}) || "",
+        raw_header_content:
+          rawInfo.getDataValue("header_content")?.toString({}) || "",
+      };
+      console.log("Parsed scan info:", newParsedScanInfo);
+      setParsedScanInfo(newParsedScanInfo);
+    })
+    .then(endProcessing);
+  }, [currentPath]);
 
   return (
     <div className="scan-info">
