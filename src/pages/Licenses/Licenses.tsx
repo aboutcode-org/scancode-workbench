@@ -42,10 +42,12 @@ const LicenseDetections = () => {
   const [licenseClues, setLicenseClues] = useState<LicenseClueDetails[] | null>(
     null
   );
-  const { db } = useWorkbenchDB();
+  const { db, startProcessing, endProcessing } = useWorkbenchDB();
 
   useEffect(() => {
-    db.sync.then(async () => {
+    startProcessing();
+
+    (async () => {
       const newLicenseDetections: LicenseDetectionDetails[] = (
         await db.getAllLicenseDetections()
       ).map((detection) => ({
@@ -104,12 +106,6 @@ const LicenseDetections = () => {
       const queriedClueFileIdx = Number(
         searchParams.get(QUERY_KEYS.LICENSE_CLUE_FILE_CLUE_IDX) || 0
       );
-      // console.log("All license queries", {
-      //   queriedDetectionIdentifier,
-      //   queriedClueExpression,
-      //   queriedClueFilePath,
-      //   queriedClueFileIdx,
-      // });
 
       if (queriedDetectionIdentifier) {
         const queriedDetection: LicenseDetectionDetails | null =
@@ -157,7 +153,7 @@ const LicenseDetections = () => {
           activateLicenseClue(newLicenseClues[0]);
         }
       }
-    });
+    })().then(endProcessing);
   }, []);
 
   if (!licenseDetections || !licenseClues) {

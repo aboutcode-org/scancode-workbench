@@ -15,6 +15,8 @@ import { NO_VALUE_DETECTED_LABEL } from "../../constants/data";
 
 const PackageInfoDash = () => {
   const workbenchDB = useWorkbenchDB();
+  const { db, initialized, currentPath, startProcessing, endProcessing } =
+    workbenchDB;
   const [packageTypeData, setPackageTypeData] = useState(null);
   const [packageLangData, setPackageLangData] = useState(null);
   const [packageLicenseData, setPackageLicenseData] = useState(null);
@@ -23,9 +25,9 @@ const PackageInfoDash = () => {
   });
 
   useEffect(() => {
-    const { db, initialized, currentPath } = workbenchDB;
-
     if (!initialized || !db || !currentPath) return;
+
+    startProcessing();
 
     const where: WhereOptions<FileAttributes> = {
       path: {
@@ -43,18 +45,18 @@ const PackageInfoDash = () => {
           attributes: ["id"],
         })
       )
+      // @REMOVE_THIS
+      // .then((flatFiles) => new Promise(resolve => setTimeout(()=>resolve(flatFiles), 2000)))
       .then((files) => {
         const fileIDs = files.map((file) => file.getDataValue("id"));
 
         // Query and prepare chart for package types
-        db.sync
+        const PackageDataPromise = db.sync
           .then((db) => db.PackageData.findAll({ where: { fileId: fileIDs } }))
           .then((packageData) => {
             // Prepare count of packages
             setScanData({ totalPackages: packageData.length });
-            return packageData;
-          })
-          .then((packageData) => {
+
             // Prepare chart for package types
             const packageTypes = packageData.map(
               (packageEntry) =>
@@ -85,8 +87,10 @@ const PackageInfoDash = () => {
 
             setPackageLicenseData(packageLicenseExpChartData);
           });
-      });
-  }, [workbenchDB]);
+        return [PackageDataPromise];
+      })
+      .then(endProcessing);
+  }, [currentPath]);
 
   return (
     <div className="text-center pieInfoDash">
