@@ -183,7 +183,7 @@ const TableView = () => {
           </CoreButton>
           <CoreButton
             small
-            onClick={() => changeColumnGroup(COLUMN_GROUPS.ALL)}
+            onClick={() => setColumnDefs([...COLUMN_GROUPS.ALL])}
           >
             Show all
           </CoreButton>

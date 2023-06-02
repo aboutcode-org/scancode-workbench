@@ -281,6 +281,7 @@ export const ALL_COLUMNS: COLUMNS_LIST = {
   license_detections: {
     field: "license_detections",
     colId: "license_detections",
+    headerName: "License Detections",
     cellRenderer: CustomComponentKeys.FileLicenseDetectionsRenderer,
   },
   license_policy: {

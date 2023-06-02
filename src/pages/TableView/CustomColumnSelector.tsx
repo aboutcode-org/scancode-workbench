@@ -3,7 +3,6 @@ import React from 'react'
 import { Col, Form, Modal, Row } from 'react-bootstrap'
 import { COLUMN_GROUPS } from './columnGroups';
 
-
 const columnCompareFn = (col1: ColDef, col2: ColDef) => col1.sortIndex - col2.sortIndex;
 
 interface ColumnSelectorProps {
