@@ -25,44 +25,51 @@ interface MatchColumns {
   rule_url: ColDef;
   license_expression_spdx: ColDef;
 }
-const MATCH_COLS: MatchColumns = {
+export const MATCH_COLS: MatchColumns = {
   license_expression: {
-    headerName: "License expression",
+    colId: "license_expression",
     field: "license_expression",
+    headerName: "License expression",
     cellRenderer: MatchLicenseExpressionRenderer,
     width: 270,
   },
   score: {
-    headerName: "Score",
+    colId: "score",
     field: "score",
+    headerName: "Score",
     width: MINI_FIELD_WIDTH,
   },
   matched_length: {
+    colId: "matched_length",
+    field: "matched_length",
     headerName: "Matched length",
     wrapHeaderText: true,
-    field: "matched_length",
     width: 110,
   },
   match_coverage: {
+    colId: "match_coverage",
+    field: "match_coverage",
     headerName: "Match Coverage",
     wrapHeaderText: true,
-    field: "match_coverage",
     width: 120,
   },
   matcher: {
-    headerName: "Matcher",
+    colId: "matcher",
     field: "matcher",
+    headerName: "Matcher",
     width: 120,
   },
   matched_text: {
-    headerName: "Matched Text",
+    colId: "matched_text",
     field: "matched_text",
+    headerName: "Matched Text",
     cellRenderer: MatchedTextRenderer,
     width: 150,
   },
   rule_url: {
-    headerName: "Rule",
+    colId: "rule_url",
     field: "rule_url",
+    headerName: "Rule",
     cellRenderer: UrlRenderer,
     cellRendererParams: {
       customTextField: "rule_identifier",
@@ -70,8 +77,9 @@ const MATCH_COLS: MatchColumns = {
     width: 250,
   },
   license_expression_spdx: {
-    headerName: "SPDX License expression",
+    colId: "license_expression_spdx",
     field: "license_expression_spdx",
+    headerName: "SPDX License expression",
     cellRenderer: MatchLicenseExpressionRenderer,
     cellRendererParams: {
       spdxLicense: true,

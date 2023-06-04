@@ -28,6 +28,10 @@
 .scan-info .options-table,
 .scan-info .options-table td {
   border: none;
-  padding: 0;
+  padding: 5;
   padding-right: 20px;
+}
+
+.scan-info .options-table tr:not(:last-child) {
+  border-bottom: solid 1px #f1f1ff;
 }

@@ -26,11 +26,11 @@ const FileTree = (props: React.HTMLProps<HTMLDivElement>) => {
 
   useEffect(() => {
     setExpandedKeys((keys) => {
-      console.log(
-        "Adding",
-        currentPath.substring(0, currentPath.lastIndexOf("/")),
-        [...keys, currentPath.substring(0, currentPath.lastIndexOf("/"))]
-      );
+      // console.log(
+      //   "Adding",
+      //   currentPath.substring(0, currentPath.lastIndexOf("/")),
+      //   [...keys, currentPath.substring(0, currentPath.lastIndexOf("/"))]
+      // );
       return [...keys, currentPath.substring(0, currentPath.lastIndexOf("/"))];
     });
     if (currentPath.length) {

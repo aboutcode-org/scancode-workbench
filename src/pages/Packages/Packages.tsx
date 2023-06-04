@@ -81,7 +81,7 @@ const Packages = () => {
     db.sync.then(async () => {
       const packages = await db.getAllPackages();
       const deps = await db.getAllDependencies();
-      console.log("Raw Packages & deps", packages, deps);
+      // console.log("Raw Packages & deps", packages, deps);
       if (!packages.length && !deps.length) {
         console.log("No package or deps available");
         setPackageGroups([]);

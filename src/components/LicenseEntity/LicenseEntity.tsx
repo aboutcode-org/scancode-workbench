@@ -1,6 +1,6 @@
 import ReactJson from "@microlink/react-json-view";
 import { AgGridReact } from "ag-grid-react";
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 import { ActiveLicense } from "../../pages/Licenses/licenseDefinitions";
 import {
@@ -11,17 +11,35 @@ import {
   DEFAULT_MATCHES_COL_DEF,
   LicenseDetectionMatchCols,
   LicenseClueMatchCols,
+  MATCH_COLS,
 } from "./MatchesTableCols";
 import { MatchedTextProvider } from "./MatchedTextContext";
+import { useWorkbenchDB } from "../../contexts/dbContext";
+import { parseScanInfo } from "../../utils/parsers";
+import { ColumnApi } from "ag-grid-community";
 
-import "../../styles/entityCommonStyles.css";
 import "./licenseEntity.css";
+import "../../styles/entityCommonStyles.css";
 
 interface LicenseDetectionEntityProps {
   activeLicense: ActiveLicense | null;
 }
 const LicenseEntity = (props: LicenseDetectionEntityProps) => {
   const { activeLicense } = props;
+  const { db } = useWorkbenchDB();
+  const [matchesTableColumnApi, setMatchesTableColumnApi] =
+    useState<ColumnApi | null>(null);
+
+  useEffect(() => {
+    if (!db || !matchesTableColumnApi) return;
+    db.getScanInfo().then((rawScanInfo) => {
+      const scanInfo = parseScanInfo(rawScanInfo);
+      matchesTableColumnApi.setColumnVisible(
+        MATCH_COLS.matched_text.colId,
+        Boolean(scanInfo.optionsMap.get("license-text"))
+      );
+    });
+  }, [db, matchesTableColumnApi]);
 
   const license = activeLicense?.license;
   const matches = activeLicense?.license?.matches;
@@ -91,6 +109,7 @@ const LicenseEntity = (props: LicenseDetectionEntityProps) => {
               ? LicenseDetectionMatchCols
               : LicenseClueMatchCols
           }
+          onGridReady={(params) => setMatchesTableColumnApi(params.columnApi)}
           className="ag-theme-alpine ag-grid-customClass matches-table"
           ensureDomOrder
           enableCellTextSelection
