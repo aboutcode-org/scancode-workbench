@@ -29,3 +29,8 @@
 .file-regions-table {
   max-height: 30vh;
 }
+
+.matched-text-diff-modal {
+  overflow: scroll;
+  max-height: calc(100vh - 120px);
+}

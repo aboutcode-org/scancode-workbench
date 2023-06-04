@@ -12,6 +12,7 @@ import {
   LicenseDetectionMatchCols,
   LicenseClueMatchCols,
 } from "./MatchesTableCols";
+import { MatchedTextProvider } from "./MatchedTextContext";
 
 import "../../styles/entityCommonStyles.css";
 import "./licenseEntity.css";
@@ -81,20 +82,22 @@ const LicenseEntity = (props: LicenseDetectionEntityProps) => {
         ))}
       </div>
       <br />
-      Matches
-      <AgGridReact
-        rowData={matches}
-        columnDefs={
-          activeLicense.type === "detection"
-            ? LicenseDetectionMatchCols
-            : LicenseClueMatchCols
-        }
-        className="ag-theme-alpine ag-grid-customClass matches-table"
-        ensureDomOrder
-        enableCellTextSelection
-        pagination={false}
-        defaultColDef={DEFAULT_MATCHES_COL_DEF}
-      />
+      <MatchedTextProvider>
+        Matches
+        <AgGridReact
+          rowData={matches}
+          columnDefs={
+            activeLicense.type === "detection"
+              ? LicenseDetectionMatchCols
+              : LicenseClueMatchCols
+          }
+          className="ag-theme-alpine ag-grid-customClass matches-table"
+          ensureDomOrder
+          enableCellTextSelection
+          pagination={false}
+          defaultColDef={DEFAULT_MATCHES_COL_DEF}
+        />
+      </MatchedTextProvider>
       <br />
       File regions
       <AgGridReact
