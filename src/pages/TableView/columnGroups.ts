@@ -72,9 +72,6 @@ const PACKAGE_COLUMN_GROUP: ColDef[] = [
   ALL_COLUMNS.package_data_declared_license_expression_spdx,
   ALL_COLUMNS.package_data_primary_language,
   ALL_COLUMNS.for_packages,
-  // ALL_COLUMNS.package_data_homepage_url,
-  // ALL_COLUMNS.package_data_download_url,
-  ALL_COLUMNS.package_data_purl,
 ];
 
 
