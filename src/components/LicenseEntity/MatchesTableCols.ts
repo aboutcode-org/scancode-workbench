@@ -44,20 +44,20 @@ export const MATCH_COLS: MatchColumns = {
     field: "matched_length",
     headerName: "Matched length",
     wrapHeaderText: true,
-    width: 110,
+    width: 108,
   },
   match_coverage: {
     colId: "match_coverage",
     field: "match_coverage",
     headerName: "Match Coverage",
     wrapHeaderText: true,
-    width: 120,
+    width: 115,
   },
   matcher: {
     colId: "matcher",
     field: "matcher",
     headerName: "Matcher",
-    width: 120,
+    width: 125,
   },
   matched_text: {
     colId: "matched_text",

@@ -34,3 +34,21 @@
   overflow: scroll;
   max-height: calc(100vh - 120px);
 }
+.matched-text-diff-modal .diff-line{
+  display: block;
+  margin: 0;
+}
+.matched-text-diff-modal .diff-line pre{
+  margin: 0;
+  display: inline-flex;
+}
+/* .matched-text-diff-modal .snippet {
+
+} */
+.matched-text-diff-modal .added-snippet {
+  background-color: rgb(195, 255, 188);
+}
+
+.matched-text-diff-modal .removed-snippet {
+  background-color: rgb(254, 203, 189);
+}

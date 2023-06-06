@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { useMatchedTextContext } from "../../../../components/LicenseEntity/MatchedTextContext";
+import { trimStringWithEllipsis } from "../../../../utils/text";
 
 interface MatchedTextRendererProps {
   value: string;
@@ -10,6 +11,11 @@ const MatchedTextRenderer = (props: MatchedTextRendererProps) => {
   const { value, data } = props;
   const { openDiffWindow } = useMatchedTextContext();
 
+  const trimmedText = useMemo(
+    () => trimStringWithEllipsis(value || "", 30),
+    [value]
+  );
+
   return (
     <a
       key={value}
@@ -18,7 +24,7 @@ const MatchedTextRenderer = (props: MatchedTextRendererProps) => {
         openDiffWindow(value, data.rule_identifier, data.start_line, data.score)
       }
     >
-      {value}
+      {trimmedText}
     </a>
   );
 };
