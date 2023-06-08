@@ -31,25 +31,61 @@
 }
 
 .matched-text-diff-modal {
-  overflow: scroll;
+  overflow: auto;
   max-height: calc(100vh - 120px);
 }
-.matched-text-diff-modal .diff-line{
-  display: block;
+
+.matched-text-diff-modal .rule-text-section {
+  background-color: #f4feff;
+}
+
+.matched-text-diff-modal .matched-text-section {
+  background-color: #fafff5;
+}
+
+.matched-text-diff-modal .diff-table {
+  table-layout: fixed;
+  width: 100%;
+}
+
+.matched-text-diff-modal .diff-table th {
+  padding: 15px;
+  padding-left: 5px;
+  font-size: 15px;
+  font-weight: 500;
+  background-color: #fafbfc;
+}
+
+.matched-text-diff-modal .diff-line {
+  display: table-row-group;
   margin: 0;
+  vertical-align: top;
   white-space: pre;
 }
-/* .matched-text-diff-modal .line-content {
 
-} */
-.matched-text-diff-modal .diff-line .snippet{
+.matched-text-diff-modal .line-number {
+  margin-right: 15px;
+  padding-left: 10px;
+  padding-right: 10px;
+  opacity: 0.9;
+}
+
+.matched-text-diff-modal .line-content {
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.matched-text-diff-modal .diff-line .line-content .snippet {
   margin: 0;
   display: inline-block;
-}
-.matched-text-diff-modal .diff-line .added-snippet {
-  background-color: rgb(195, 255, 188);
+  white-space: pre-wrap;
+  line-height: 20px;
 }
 
-.matched-text-diff-modal .diff-line .removed-snippet {
-  background-color: rgb(254, 203, 189);
+.matched-text-diff-modal .diff-line .line-content .removed-snippet {
+  background-color: #fdb8c0;
+}
+
+.matched-text-diff-modal .diff-line .line-content .added-snippet {
+  background-color: #acf2bd;
 }

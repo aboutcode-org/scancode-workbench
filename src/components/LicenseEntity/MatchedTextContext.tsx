@@ -57,9 +57,7 @@ export const MatchedTextProvider = (
 ) => {
   const { db } = useWorkbenchDB();
   const [showDiffWindow, setShowDiffWindow] = useState(false);
-  const [originalDiffLines, setOriginalDiffLines] = useState<Change[][] | null>(
-    null
-  );
+  const [ruleDiffLines, setRuleDiffLines] = useState<Change[][] | null>(null);
   const [modifiedDiffLines, setModifiedDiffLines] = useState<Change[][] | null>(
     null
   );
@@ -149,17 +147,15 @@ export const MatchedTextProvider = (
           }
         );
 
-
-        const normalizedOriginalLines = splitDiffIntoLines(
+        const normalizedRuleTextLines = splitDiffIntoLines(
           normalizedDiffs.filter(
             (diff) =>
               diff.belongsTo === BelongsText.BOTH ||
               diff.belongsTo === BelongsText.ORIGINAL
           )
-        )
+        );
 
-
-        const normalizedModifiedLines = splitDiffIntoLines(
+        const normalizedModifiedTextLines = splitDiffIntoLines(
           normalizedDiffs.filter(
             (diff) =>
               diff.belongsTo === BelongsText.BOTH ||
@@ -167,8 +163,8 @@ export const MatchedTextProvider = (
           )
         );
 
-        setOriginalDiffLines(normalizedOriginalLines);
-        setModifiedDiffLines(normalizedModifiedLines);
+        setRuleDiffLines(normalizedRuleTextLines);
+        setModifiedDiffLines(normalizedModifiedTextLines);
 
         const deletions = normalizedDiffs.filter((diff) => diff.removed).length;
         const finalDeletions = normalizedDiffs.filter(
@@ -184,8 +180,8 @@ export const MatchedTextProvider = (
           `Valid ${additions} adds & ${deletions} dels \n`,
           {
             normalizedDiffs,
-            normalizedOriginalLines,
-            normalizedModifiedLines,
+            normalizedOriginalLines: normalizedRuleTextLines,
+            normalizedModifiedLines: normalizedModifiedTextLines,
             origText: ruleText,
             modifiedText: matchedText,
           }
@@ -262,38 +258,49 @@ export const MatchedTextProvider = (
           ) : (
             matchDetails.matched_text &&
             ruleDetails.ruleText &&
-            (originalDiffLines && modifiedDiffLines ? (
+            (ruleDiffLines && modifiedDiffLines ? (
               <>
                 <h6>Score: {matchDetails.score} %</h6>
                 <Row>
-                  <Col sm={12} md={6}>
-                    {originalDiffLines.map((diffLine, idx) => (
-                      // @TODO - Better key for this
-                      <div
-                        key={diffLine.length + ":" + idx}
-                        className="diff-line"
-                      >
-                        {diffLine.map((diff, diffIdx) => {
-                          return (
-                            <pre
-                              key={diff.value + diffIdx}
-                              className={
-                                "snippet " + (diff.removed && "removed-snippet")
-                              }
-                            >
-                              {(() => {
-                                console.log(`Render text --${diff.value}--`);
-                                return "";
-                              })()}
-                              <span>{diff.value}</span>
-                            </pre>
-                          );
-                        })}
-                      </div>
-                    ))}
+                  <Col sm={12} md={6} className="rule-text-section">
+                    <table className="diff-table">
+                      <th>
+                        <td>Rule Text</td>
+                      </th>
+                      <tbody>
+                        {ruleDiffLines.map((diffLine, idx) => (
+                          // @TODO - Better key for this
+                          <tr
+                            key={diffLine.length + ":" + idx}
+                            className="diff-line"
+                          >
+                            <td className="line-content">
+                              <pre className="snippet">
+                                {diffLine.map((diff, diffIdx) => {
+                                  return (
+                                    <span
+                                      key={diff.value + diffIdx}
+                                      className={
+                                        "snippet " +
+                                        (diff.removed && "removed-snippet")
+                                      }
+                                    >
+                                      <span>{diff.value}</span>
+                                    </span>
+                                  );
+                                })}
+                              </pre>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
                   </Col>
-                  <Col sm={12} md={6}>
-                    <table>
+                  <Col sm={12} md={6} className="matched-text-section">
+                    <table className="diff-table">
+                      <th>
+                        <td>Matched Text</td>
+                      </th>
                       <tbody>
                         {modifiedDiffLines.map((diffLine, idx) => (
                           // @TODO - Better key for this
@@ -302,22 +309,23 @@ export const MatchedTextProvider = (
                             className="diff-line"
                           >
                             <td className="line-number">
-                              #{matchDetails.start_line + idx}.
+                              {matchDetails.start_line + idx}.
                             </td>
                             <td className="line-content">
-                              {diffLine.map((diff, diffIdx) => {
-                                return (
-                                  <pre
-                                    key={diff.value + diffIdx}
-                                    className={
-                                      "snippet " +
-                                      (diff.added && "added-snippet")
-                                    }
-                                  >
-                                    {diff.value}
-                                  </pre>
-                                );
-                              })}
+                              <pre className="snippet">
+                                {diffLine.map((diff, diffIdx) => {
+                                  return (
+                                    <span
+                                      key={diff.value + diffIdx}
+                                      className={
+                                        diff.added ? "added-snippet" : ""
+                                      }
+                                    >
+                                      {diff.value}
+                                    </span>
+                                  );
+                                })}
+                              </pre>
                             </td>
                           </tr>
                         ))}

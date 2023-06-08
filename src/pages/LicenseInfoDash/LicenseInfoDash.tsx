@@ -60,6 +60,7 @@ const LicenseInfoDash = () => {
             )
           )
           .filter((detections) => detections.length);
+
         setScanData((oldScanData) => ({
           ...oldScanData,
           totalLicenseFiles: filesWithDetections.length,
