@@ -52,5 +52,6 @@
 }
 
 .c3-tooltip td.value {
-  text-align: right
+  text-align: right;
+  white-space: pre-wrap;
 }

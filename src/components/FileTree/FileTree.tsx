@@ -4,7 +4,6 @@ import React, { useEffect, useState } from "react";
 
 import EllipticLoader from "../EllipticLoader";
 import { PathType, useWorkbenchDB } from "../../contexts/workbenchContext";
-
 import SwitcherIcon from "./SwitcherIcon";
 
 import "./FileTree.css";
