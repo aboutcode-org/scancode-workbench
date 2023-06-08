@@ -20,8 +20,17 @@ export function normalizeString(str: string) {
     .trim();
 }
 
-export function splitDiffIntoLines(diffs: Change[]) {
-  const lines: Change[][] = [[]];
+export enum BelongsText {
+  ORIGINAL = "original",
+  MODIFIED = "modified",
+  BOTH = "both",
+}
+export interface DiffInfo extends Change {
+  belongsTo: BelongsText;
+  trimmedValue?: string;
+}
+export function splitDiffIntoLines(diffs: DiffInfo[]) {
+  const lines: DiffInfo[][] = [[]];
 
   for (const diff of diffs) {
     const splitLines = diff.value.split("\n");
@@ -35,37 +44,23 @@ export function splitDiffIntoLines(diffs: Change[]) {
 
     const subLines = splitLines.slice(idx);
 
-    // console.log("Splitlines", splitLines, ">>", "Sublines", subLines);
-
-    if (subLines.length === 1) {
-      // Append to last line, without adding new line
-      lines[lines.length - 1].push({
-        ...diff,
-        value: subLines[0],
-      });
-      continue;
-    }
-
     for (const subLine of subLines) {
-      // Append to last line only if it is non-empty string &
+      // Append to last line only if it is non-empty string
       if (subLine.length > 0) {
         lines[lines.length - 1].push({
           ...diff,
           value: subLine,
         });
-        lines.push([]);
+
+        // Create newline for intermittent newlines
+        // (ignore last subLine, it is continued in next line)
+        if (subLine != subLines[subLines.length - 1]) {
+          lines.push([]);
+        }
       }
-
-      // Add newline for \n at first location in subLine or subLine is non empty string
-      // (subLine.length === 0 && subLine == subLines[0]) ||
-
-      // Add a new line for further iterations
-      // if (
-      //   subLine.length > 0
-      // ) {
-      // }
     }
   }
 
-  return lines;
+  // Filter out empty lines before returning;
+  return lines.filter((diffLine) => diffLine.length > 0);
 }

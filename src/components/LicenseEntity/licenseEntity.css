@@ -37,18 +37,19 @@
 .matched-text-diff-modal .diff-line{
   display: block;
   margin: 0;
+  white-space: pre;
 }
-.matched-text-diff-modal .diff-line pre{
-  margin: 0;
-  display: inline-flex;
-}
-/* .matched-text-diff-modal .snippet {
+/* .matched-text-diff-modal .line-content {
 
 } */
-.matched-text-diff-modal .added-snippet {
+.matched-text-diff-modal .diff-line .snippet{
+  margin: 0;
+  display: inline-block;
+}
+.matched-text-diff-modal .diff-line .added-snippet {
   background-color: rgb(195, 255, 188);
 }
 
-.matched-text-diff-modal .removed-snippet {
+.matched-text-diff-modal .diff-line .removed-snippet {
   background-color: rgb(254, 203, 189);
 }
