@@ -8,6 +8,7 @@ import { ROUTES } from "../../constants/routes";
 import { QUERY_KEYS } from "./../../constants/params";
 import {
   FileLicenseDetectionsRenderer,
+  FileLicenseCluesRenderer,
   ListCellRenderer,
   MatchLicenseExpressionRenderer,
   UrlListCellRenderer,
@@ -20,6 +21,7 @@ enum CustomComponentKeys {
   UrlListCellRenderer = "UrlListCellRenderer",
   LicenseExpressionRenderer = "LicenseExpressionRenderer",
   FileLicenseDetectionsRenderer = "FileLicenseDetectionsRenderer",
+  FileLicenseCluesRenderer = "FileLicenseCluesRenderer",
 }
 
 export const frameworkComponents = {
@@ -30,6 +32,7 @@ export const frameworkComponents = {
     MatchLicenseExpressionRenderer,
   [CustomComponentKeys.FileLicenseDetectionsRenderer]:
     FileLicenseDetectionsRenderer,
+  [CustomComponentKeys.FileLicenseCluesRenderer]: FileLicenseCluesRenderer,
 };
 
 export type ISimpleFilterModelType =
@@ -89,7 +92,7 @@ interface COLUMNS_LIST {
   detected_license_expression_spdx: ColDef;
   percentage_of_license_text: ColDef;
   license_policy: ColDef;
-  // license_clues: ColDef;
+  license_clues: ColDef;
   license_detections: ColDef;
 
   email: ColDef;
@@ -289,16 +292,16 @@ export const ALL_COLUMNS: COLUMNS_LIST = {
       filterOptions: FILTER_OPTIONS.LIST_FILTERS,
     },
   },
-  // license_clues: {
-  //   field: "license_clues",
-  //   colId: "license_clues",
-  //   headerName: "License clues",
-  //   initialWidth: 120,
-  //   cellRenderer: CustomComponentKeys.UrlListCellRenderer,
-  //   filterParams: {
-  //     filterOptions: FILTER_OPTIONS.LIST_FILTERS,
-  //   },
-  // },
+  license_clues: {
+    field: "license_clues",
+    colId: "license_clues",
+    headerName: "License clues",
+    initialWidth: 170,
+    cellRenderer: CustomComponentKeys.FileLicenseCluesRenderer,
+    filterParams: {
+      filterOptions: FILTER_OPTIONS.LIST_FILTERS,
+    },
+  },
   email: {
     field: "email",
     colId: "email",

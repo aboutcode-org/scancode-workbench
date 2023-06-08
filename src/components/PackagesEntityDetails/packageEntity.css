@@ -1,6 +1,6 @@
 .deps-list {
   max-height: 207px;
-  overflow: scroll;
+  overflow: auto;
   width: fit-content;
   max-width: 95%;
   padding: 5px;

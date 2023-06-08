@@ -14,5 +14,6 @@
 .dependency-entity .react-json-view,
 .license-detecion-entity .react-json-view{
   max-height: 75vh;
-  overflow: scroll;
+  overflow: auto;
+  margin-bottom: 15px;
 }

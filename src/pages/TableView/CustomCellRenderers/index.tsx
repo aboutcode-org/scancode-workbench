@@ -1,4 +1,5 @@
 import FileLicenseDetectionsRenderer from './LicenseDetections/FileLicenseDetectionsRenderer';
+import FileLicenseCluesRenderer from './LicenseDetections/FileLicenseCluesRenderer';
 import MatchLicenseExpressionRenderer from './LicenseDetections/MatchLicenseExpressionRenderer';
 import ListCellRenderer from './ListCellRenderer';
 import UrlListCellRenderer from './UrlListCellRenderer';
@@ -12,4 +13,5 @@ export {
   UrlListCellRenderer,
   MatchLicenseExpressionRenderer,
   FileLicenseDetectionsRenderer,
+  FileLicenseCluesRenderer,
 }

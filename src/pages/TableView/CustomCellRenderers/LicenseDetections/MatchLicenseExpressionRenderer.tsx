@@ -1,5 +1,8 @@
 import React, { useMemo } from "react";
-import { LICENSE_EXPRESSIONS_CONJUNCTIONS, parseTokensFromExpression } from "../../../../services/models/databaseUtils";
+import {
+  LICENSE_EXPRESSIONS_CONJUNCTIONS,
+  parseTokensFromExpression,
+} from "../../../../services/models/databaseUtils";
 
 const DEBUG_URLS = false;
 
@@ -39,29 +42,17 @@ const MatchLicenseExpressionRenderer = (
   } = data;
 
   const parsedComponents = useMemo<ParsedTokens[]>(() => {
-    console.log("Match data", data);
     if (!license_expression) return [];
-
-    const licenseExpressionKeysMap = new Map(
-      license_expression_keys.map((expKey) => [expKey.key, expKey])
-    );
-    const licenseExpressionSpdxKeysMap = new Map(
-      license_expression_spdx_keys.map((expKey) => [expKey.key, expKey])
-    );
-
-    // console.log(
-    //   "Keys mapper",
-    //   licenseExpressionKeysMap,
-    //   licenseExpressionSpdxKeysMap
-    // );
 
     let newParsedComponents: ParsedTokens[];
     if (spdxLicense) {
-      // console.log(
-      //   "SPDX Tokens",
-      //   parseTokensFromExpression(license_expression_spdx)
-      // );
-
+      const licenseExpressionSpdxKeysMap = new Map(
+        // Handle deferred state update to ag data grid
+        (license_expression_spdx_keys || []).map((expKey) => [
+          expKey.key,
+          expKey,
+        ])
+      );
       newParsedComponents = parseTokensFromExpression(
         license_expression_spdx
       ).map((token) => {
@@ -75,8 +66,9 @@ const MatchLicenseExpressionRenderer = (
         return { value: token };
       });
     } else {
-      // console.log("Tokens", parseTokensFromExpression(license_expression));
-
+      const licenseExpressionKeysMap = new Map(
+        license_expression_keys.map((expKey) => [expKey.key, expKey])
+      );
       newParsedComponents = parseTokensFromExpression(license_expression).map(
         (token) => {
           const tokenInfo = licenseExpressionKeysMap.get(token);
@@ -90,7 +82,6 @@ const MatchLicenseExpressionRenderer = (
         }
       );
     }
-    // console.log("Parsed components", newParsedComponents);
     return newParsedComponents;
   }, [data]);
 
@@ -101,20 +92,18 @@ const MatchLicenseExpressionRenderer = (
           return (
             <a href={href} key={href + value}>
               {value}
-              { DEBUG_URLS && `(${href})`}
+              {DEBUG_URLS && `(${href})`}
             </a>
           );
         }
         return (
           <React.Fragment key={value + idx}>
             {value}
-            {
-              DEBUG_URLS ?
-              value.trim().length>0 &&
-              !LICENSE_EXPRESSIONS_CONJUNCTIONS.includes(value) &&
-              "(NoURL)"
-              : ""
-            }
+            {DEBUG_URLS
+              ? value.trim().length > 0 &&
+                !LICENSE_EXPRESSIONS_CONJUNCTIONS.includes(value) &&
+                "(NoURL)"
+              : ""}
           </React.Fragment>
         );
       })}

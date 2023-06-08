@@ -1,39 +1,39 @@
-import React from 'react'
-import { Link } from 'react-router-dom';
-import { QUERY_KEYS } from '../../../../constants/params';
-import { ROUTES } from '../../../../constants/routes';
-import { LicenseDetectionDetails } from '../../../LicenseDetections/licenseDefinitions';
+import React from "react";
+import { Link } from "react-router-dom";
+import { QUERY_KEYS } from "../../../../constants/params";
+import { ROUTES } from "../../../../constants/routes";
+import { LicenseDetectionDetails } from "../../../Licenses/licenseDefinitions";
 
 interface FileLicenseDetectionsRendererProps {
-  data: any[],
-  value: LicenseDetectionDetails[],
+  value: LicenseDetectionDetails[];
 }
 
-const URL_PREFIX = `/${ROUTES.LICENSE_DETECTIONS}?${QUERY_KEYS.LICENSE_DETECTION}=`;
+const URL_PREFIX = `/${ROUTES.LICENSES}?${QUERY_KEYS.LICENSE_DETECTION}=`;
+function generateUrl(detectionIdentifier: string) {
+  return URL_PREFIX + detectionIdentifier;
+}
 
-const FileLicenseDetectionsRenderer = (props: FileLicenseDetectionsRendererProps) => {
+const FileLicenseDetectionsRenderer = (
+  props: FileLicenseDetectionsRendererProps
+) => {
   const { value } = props;
 
-  
-  if(!(value || value.length))
-    return <></>;
+  if (!value || value.length === 0) return <></>;
 
   return (
     <>
-      {
-        value.map((detection, idx) => {
-          return (
-            <React.Fragment key={detection.license_expression+idx}>
-              <Link to={URL_PREFIX + detection.identifier}>
-                { detection.license_expression }
-              </Link>
-              <br/>
-            </React.Fragment>
-          )
-        })
-      }
+      {value.map((detection, idx) => {
+        return (
+          <React.Fragment key={detection.license_expression + idx}>
+            <Link to={generateUrl(detection.identifier)}>
+              {detection.license_expression}
+            </Link>
+            <br />
+          </React.Fragment>
+        );
+      })}
     </>
-  )
-}
+  );
+};
 
 export default FileLicenseDetectionsRenderer;

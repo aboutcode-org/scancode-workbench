@@ -18,24 +18,14 @@ export function chooseSqlitePathForJsonImport(
   mainWindow: BrowserWindow,
   jsonFilePath: string
 ) {
-  console.log("Prompt to choose Sqlite path for JSON file");
-
-  let defaultPath;
-  if (electronOs.platform() === "linux") {
-    // remove the .json (or other) extention of the path.
-    defaultPath =
-      jsonFilePath.substring(0, jsonFilePath.lastIndexOf(".")) + ".sqlite";
-  } else {
-    // FIXME: this is some ugly regex used to get filename with no extension.
-    // see: https://stackoverflow.com/questions/4250364/how-to-trim-a-file-extension-from-a-string-in-javascript
-    defaultPath = jsonFilePath.replace(/^.*[\\/]/, "").replace(/\.[^/.]+$/, "");
-  }
+  
+  const defaultSqlitePath = jsonFilePath.substring(0, jsonFilePath.lastIndexOf('.')) + '.sqlite';
 
   // Immediately ask for a path to create & save the SQLite database
   dialog
     .showSaveDialog(mainWindow, {
       title: "Save a SQLite Database File",
-      defaultPath: defaultPath,
+      defaultPath: defaultSqlitePath,
       filters: [
         {
           name: "SQLite File",

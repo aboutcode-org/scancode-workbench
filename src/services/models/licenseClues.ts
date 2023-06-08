@@ -21,31 +21,38 @@ import {
   Model,
   NumberDataType,
 } from "sequelize";
-import { jsonDataType, JSON_Type } from "./databaseUtils";
+import { JSON_Type, jsonDataType } from "./databaseUtils";
 
-export interface LicenseDetectionAttributes {
-  identifier: StringDataType;
+export interface LicenseClueAttributes {
+  id: NumberDataType;
+  fileId: NumberDataType;
+  filePath: StringDataType;
+  fileClueIdx: NumberDataType;
+  score: NumberDataType;
   license_expression: StringDataType;
-  detection_count: NumberDataType;
-  detection_log: JSON_Type;
+  rule_identifier: StringDataType;
   matches: JSON_Type;
   file_regions: JSON_Type;
 }
 
-export default function licenseDetectionModel(sequelize: Sequelize) {
-  return sequelize.define<Model<LicenseDetectionAttributes>>(
-    "license_detections",
-    {
-      identifier: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        primaryKey: true,
-      },
-      license_expression: DataTypes.STRING,
-      detection_count: DataTypes.NUMBER,
-      detection_log: jsonDataType("detection_log"),
-      matches: jsonDataType("matches"),
-      file_regions: jsonDataType("file_regions"),
-    }
-  );
+export default function licenseClueModel(sequelize: Sequelize) {
+  return sequelize.define<Model<LicenseClueAttributes>>("license_clues", {
+    id: {
+      allowNull: false,
+      autoIncrement: true,
+      primaryKey: true,
+      type: DataTypes.INTEGER,
+    },
+    fileId: DataTypes.NUMBER,
+    filePath: DataTypes.STRING,
+    fileClueIdx: {
+      type: DataTypes.INTEGER,
+      defaultValue: 0,
+    },
+    score: DataTypes.NUMBER,
+    license_expression: DataTypes.STRING,
+    rule_identifier: DataTypes.STRING,
+    matches: jsonDataType("matches"),
+    file_regions: jsonDataType("file_regions"),
+  });
 }

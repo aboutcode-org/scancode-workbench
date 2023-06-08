@@ -11,7 +11,7 @@ import About from "./pages/About/About";
 import ChartView from "./pages/ChartView/ChartView";
 import FileInfoDash from "./pages/FileInfoDash/FileInfoDash";
 import Home from "./pages/Home/Home";
-import LicenseDetections from "./pages/LicenseDetections/LicenseDetections";
+import Licenses from "./pages/Licenses/Licenses";
 import LicenseInfoDash from "./pages/LicenseInfoDash/LicenseInfoDash";
 import PackageInfoDash from "./pages/PackageInfoDash/PackageInfoDash";
 import Packages from "./pages/Packages/Packages";
@@ -32,7 +32,7 @@ import "./customFaColors.css";
 
 const App = () => {
   return (
-    <HashRouter>
+    <HashRouter basename="/">
       <WorkbenchStateProvider>
         <WorkbenchDBProvider>
           <DropZone>
@@ -55,8 +55,8 @@ const App = () => {
                     element={<PackageInfoDash />}
                   />
                   <Route
-                    path={ROUTES.LICENSE_DETECTIONS}
-                    element={<LicenseDetections />}
+                    path={ROUTES.LICENSES}
+                    element={<Licenses />}
                   />
                   <Route path={ROUTES.PACKAGES} element={<Packages />} />
                   <Route path={ROUTES.CHART_SUMMARY} element={<ChartView />} />

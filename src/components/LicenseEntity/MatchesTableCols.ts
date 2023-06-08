@@ -11,55 +11,45 @@ export const DEFAULT_MATCHES_COL_DEF: ColDef = {
 }
 
 const MINI_FIELD_WIDTH = 90;
-export const DetectionMatchesCols: ColDef[] = [
-  {
+interface MatchColumns {
+  license_expression: ColDef;
+  score: ColDef;
+  matched_length: ColDef;
+  match_coverage: ColDef;
+  matcher: ColDef;
+  rule_url: ColDef;
+  license_expression_spdx: ColDef;
+}
+const MATCH_COLS: MatchColumns = {
+  license_expression: {
     headerName: 'License expression',
     field: 'license_expression',
     cellRenderer: MatchLicenseExpressionRenderer,
     width: 270,
   },
-  {
+  score: {
     headerName: 'Score',
     field: 'score',
     width: MINI_FIELD_WIDTH,
   },
-
-  // Separate table
-  // {
-  //   headerName: 'Start line',
-  //   wrapHeaderText: true,
-  //   field: 'start_line',
-  //   width: MINI_FIELD_WIDTH,
-  // },
-  // {
-  //   headerName: 'End line',
-  //   wrapHeaderText: true,
-  //   field: 'end_line',
-  //   width: MINI_FIELD_WIDTH,
-  // },
-  {
+  matched_length: {
     headerName: 'Matched length',
     wrapHeaderText: true,
     field: 'matched_length',
     width: 110,
   },
-  {
+  match_coverage: {
     headerName: 'Match Coverage',
     wrapHeaderText: true,
     field: 'match_coverage',
     width: 120,
   },
-  {
+  matcher: {
     headerName: 'Matcher',
     field: 'matcher',
     width: 120
   },
-  // {
-  //   headerName: 'License Expression',
-  //   field: 'license_expression',
-  // },
-
-  {
+  rule_url: {
     headerName: 'Rule',
     field: 'rule_url',
     cellRenderer: UrlRenderer,
@@ -68,7 +58,7 @@ export const DetectionMatchesCols: ColDef[] = [
     },
     width: 250,
   },
-  {
+  license_expression_spdx: {
     headerName: 'SPDX License expression',
     field: 'license_expression_spdx',
     cellRenderer: MatchLicenseExpressionRenderer,
@@ -77,32 +67,23 @@ export const DetectionMatchesCols: ColDef[] = [
     },
     width: 250,
   },
-  // {
-  //   headerName: 'LDB URL',
-  //   field: 'licensedb_url',
-  //   cellRenderer: UrlListCellRenderer,
-  //   cellRendererParams: {
-  //     customDisplayTextField: 'license_key',
-  //     // , 'licensedb_url', 'scancode_url'),
-  //   },
-  //   width: 270,
-  // },
-  // {
-  //   headerName: 'SC URL',
-  //   field: 'scancode_url',
-  //   cellRenderer: UrlListCellRenderer,
-  //   cellRendererParams: {
-  //     customDisplayTextField: 'license_key',
-  //   },
-  //   width: 270,
-  // },
-  // {
-  //   headerName: 'SPDX URL',
-  //   field: 'spdx_url',
-  //   cellRenderer: UrlListCellRenderer,
-  //   cellRendererParams: {
-  //     customDisplayTextField: 'spdx_license_key',
-  //   },
-  //   width: 270,
-  // },
+}
+
+export const LicenseDetectionMatchCols: ColDef[] = [
+  MATCH_COLS.license_expression,
+  MATCH_COLS.score,
+  MATCH_COLS.matched_length,
+  MATCH_COLS.match_coverage,
+  MATCH_COLS.matcher,
+  MATCH_COLS.rule_url,
+  MATCH_COLS.license_expression_spdx,
 ];
+
+export const LicenseClueMatchCols: ColDef[] = [
+  MATCH_COLS.license_expression,
+  MATCH_COLS.score,
+  MATCH_COLS.matched_length,
+  MATCH_COLS.match_coverage,
+  MATCH_COLS.matcher,
+  MATCH_COLS.rule_url,
+]

@@ -36,8 +36,8 @@ const MENU_ITEMS = [
         icon: faArchive,
     },
     {
-        title: "License Detections Explorer",
-        route: "/" + ROUTES.LICENSE_DETECTIONS,
+        title: "Licenses Explorer",
+        route: "/" + ROUTES.LICENSES,
         icon: faList,
     },
     {
@@ -104,7 +104,9 @@ const Navbar = () => {
                 </Menu>
             </SidebarFooter>
         </ProSidebar>
-        {/* Dummy sidebar to occupy space in dom */}
+
+        {/* Dummy sidebar-sized div to occupy space in dom */}
+        {/* @TODO - Try :before or some other css way to handle this instead */}
         <div className='dummy-sidebar' />
         </>
     )

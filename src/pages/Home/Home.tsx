@@ -40,7 +40,6 @@ const Home = () => {
     importedSqliteFilePath,
   } = useWorkbenchDB();
 
-  const navigate = useNavigate();
   const [historyRefreshToken, setRefreshToken] = useState(0);
   const refreshHistory = () => setRefreshToken(Math.random());
   const history = useMemo(GetHistory, [
