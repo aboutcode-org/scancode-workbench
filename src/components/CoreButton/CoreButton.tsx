@@ -1,11 +1,11 @@
-import React from 'react';
-import { Button, ButtonProps } from 'react-bootstrap';
+import React from "react";
+import { Button, ButtonProps } from "react-bootstrap";
 
-import './coreButton.css';
+import "./coreButton.css";
 
 interface CoreButtonProps extends ButtonProps {
-  small?: boolean
-  large?: boolean
+  small?: boolean;
+  large?: boolean;
 }
 
 const CoreButton = (props: CoreButtonProps) => {
@@ -13,13 +13,13 @@ const CoreButton = (props: CoreButtonProps) => {
   return (
     <Button
       {...otherProps}
-      size={large ? 'lg' : small ? 'sm' : null}
-      variant={variant || 'light'}
-      className={(className || '') + ' core-button'}
+      size={large ? "lg" : small ? "sm" : null}
+      variant={variant || "light"}
+      className={(className || "") + " core-button"}
     >
-      { props.children }
+      {props.children}
     </Button>
-  )
-}
+  );
+};
 
-export default CoreButton
+export default CoreButton;

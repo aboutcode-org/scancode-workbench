@@ -10,10 +10,10 @@ import EllipticLoader from "../../components/EllipticLoader";
 interface ScanData {
   totalPackages: number | null;
 }
-
-import "./PackageInfoDash.css";
 import { FileAttributes } from "../../services/models/file";
 import { NO_VALUE_DETECTED_LABEL } from "../../constants/data";
+
+import "./PackageInfoDash.css";
 
 const PackageInfoDash = () => {
   const workbenchDB = useWorkbenchDB();

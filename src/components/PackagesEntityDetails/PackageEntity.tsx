@@ -78,15 +78,15 @@ const PackageEntity = (props: PackageEntityProps) => {
       <div className='deps-list'>
         {
           activePackage.datafile_paths.map(datafile_path => (
-            // <a
-            //   className='deps-link'
-            //   key={datafile_path}
-            //   onClick={() => goToFileInTableView(datafile_path)}
-            // >
+            <a
+              className='deps-link'
+              key={datafile_path}
+              onClick={() => goToFileInTableView(datafile_path)}
+            >
             <React.Fragment key={datafile_path}>
               { datafile_path }
             </React.Fragment>
-            // </a>
+            </a>
           ))
         }
       </div>

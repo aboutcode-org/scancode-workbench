@@ -13,9 +13,9 @@ interface ScanData {
   totalLicenseFiles: number | null;
   totalSPDXLicenses: number | null;
 }
+import { NO_VALUE_DETECTED_LABEL } from "../../constants/data";
 
 import "./licenseInfoDash.css";
-import { NO_VALUE_DETECTED_LABEL } from "../../constants/data";
 
 const LicenseInfoDash = () => {
   const workbenchDB = useWorkbenchDB();
@@ -90,7 +90,9 @@ const LicenseInfoDash = () => {
               );
               license_keys_spdx.push(
                 ...JSON.parse(
-                  (expression.getDataValue("license_keys_spdx") || "[]").toString({})
+                  (
+                    expression.getDataValue("license_keys_spdx") || "[]"
+                  ).toString({})
                 )
               );
             });

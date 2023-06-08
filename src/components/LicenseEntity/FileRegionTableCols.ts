@@ -1,5 +1,5 @@
 import { ColDef } from "ag-grid-community";
-import { TickRenderer } from "../../pages/TableView/CustomCellRenderers";
+import { FileRegionPathRenderer, TickRenderer } from "../../pages/TableView/CustomCellRenderers";
 
 const MINI_FIELD_WIDTH = 90;
 
@@ -19,6 +19,7 @@ export const DetectionFileRegionCols: ColDef[] = [
     headerName: 'Path',
     field: 'path',
     width: 270,
+    cellRenderer: FileRegionPathRenderer,
   },
   {
     headerName: 'Start line',

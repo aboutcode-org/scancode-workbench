@@ -106,9 +106,6 @@ interface COLUMNS_LIST {
   package_data_declared_license_expression_spdx: ColDef;
   package_data_primary_language: ColDef;
   for_packages: ColDef;
-  // package_data_homepage_url: ColDef,
-  // package_data_download_url: ColDef,
-  package_data_purl: ColDef;
 
   scan_error: ColDef;
 }
@@ -281,6 +278,7 @@ export const ALL_COLUMNS: COLUMNS_LIST = {
   license_detections: {
     field: "license_detections",
     colId: "license_detections",
+    headerName: "License Detections",
     cellRenderer: CustomComponentKeys.FileLicenseDetectionsRenderer,
   },
   license_policy: {
@@ -412,26 +410,6 @@ export const ALL_COLUMNS: COLUMNS_LIST = {
       urlPrefix: `/${ROUTES.PACKAGES}?${QUERY_KEYS.PACKAGE}=`,
     },
     initialWidth: 320,
-  },
-  // package_data_homepage_url: {
-  //   field: 'package_data_homepage_url',
-  //   colId: " 'package_data_homepage_url",
-  //   headerName: 'Package Homepage URL',
-  // },
-  // package_data_download_url: {
-  //   field: 'package_data_download_url',
-  //   colId: " 'package_data_download_url",
-  //   headerName: 'Package Download URL',
-  // },
-  package_data_purl: {
-    field: "package_data_purl",
-    colId: "package_data_purl",
-    headerName: "Package URL",
-    cellRenderer: CustomComponentKeys.ListCellRenderer,
-    filterParams: {
-      filterOptions: FILTER_OPTIONS.LIST_FILTERS,
-    },
-    initialWidth: 300,
   },
 
   scan_error: {
