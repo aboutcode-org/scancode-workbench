@@ -22,7 +22,7 @@
 
 .scan-info .react-json-view {
   max-height: 600px;
-  overflow: scroll;
+  overflow: auto;
 }
 
 .scan-info .options-table,
