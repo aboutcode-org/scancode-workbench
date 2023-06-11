@@ -21,7 +21,12 @@ const MatchedTextRenderer = (props: MatchedTextRendererProps) => {
       key={value}
       onClick={() =>
         value &&
-        openDiffWindow(value, data.rule_identifier, data.start_line, data.score)
+        openDiffWindow(
+          value,
+          data.rule_identifier,
+          data.start_line,
+          data.match_coverage
+        )
       }
     >
       {trimmedText}

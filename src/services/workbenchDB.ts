@@ -170,7 +170,9 @@ export class WorkbenchDB {
   }
 
   getAllLicenseDetections() {
-    return this.sync.then((db) => db.LicenseDetections.findAll());
+    return this.sync.then((db) =>
+      db.LicenseDetections.findAll({ order: ["license_expression"] })
+    );
   }
 
   getAllLicenseClues() {
@@ -251,7 +253,7 @@ export class WorkbenchDB {
         roots.push(file);
       }
 
-      // @TODO - Trying to fix rc-tree showing file icon instead of directory https://github.com/nexB/scancode-workbench/issues/542
+      // @TODO - Trial to fix rc-tree showing file icon instead of directory https://github.com/nexB/scancode-workbench/issues/542
       // fileList.forEach(file => {
       //   if(file.getDataValue('type').toString({}) === 'directory' && !file.children){
       //     file.children=[];
@@ -298,7 +300,7 @@ export class WorkbenchDB {
 
     return new Promise((resolve, reject) => {
       // eslint-disable-next-line @typescript-eslint/no-this-alias
-      const primaryPromise = this; // @TODO - Remove this
+      const primaryPromise = this;
 
       let batchCount = 0;
 

@@ -1,7 +1,3 @@
-import ReactDiffViewer, {
-  DiffMethod,
-  ReactDiffViewerStylesOverride,
-} from "react-diff-viewer-continued";
 import { diffWords, Change } from "diff";
 import { Alert, Col, Modal, Row } from "react-bootstrap";
 import { TailSpin } from "react-loader-spinner";
@@ -11,7 +7,7 @@ import { useWorkbenchDB } from "../../contexts/dbContext";
 import {
   BelongsText,
   DiffInfo,
-  normalizeString,
+  normalizeAndCategorizeDiffs,
   splitDiffIntoLines,
 } from "../../utils/text";
 
@@ -21,7 +17,7 @@ interface MatchedTextContextProperties {
     newMatchedText: string,
     ruleRefIdentifier: string,
     start_line: number,
-    score: number
+    coverage: number
   ) => void;
 }
 
@@ -33,24 +29,6 @@ export const defaultMatchedTextContextValue: MatchedTextContextProperties = {
 const MatchedTextContext = createContext<MatchedTextContextProperties>(
   defaultMatchedTextContextValue
 );
-
-const DIFF_VIEWER_STYLES: ReactDiffViewerStylesOverride = {
-  diffRemoved: {
-    backgroundColor: "#e8faff",
-  },
-  diffAdded: {
-    backgroundColor: "#f8fff1",
-  },
-  diffChanged: {
-    backgroundColor: "#f8fff1",
-  },
-  variables: {
-    light: {
-      codeFoldGutterBackground: "#6F767E",
-      codeFoldBackground: "#E2E4E5",
-    },
-  },
-};
 
 export const MatchedTextProvider = (
   props: React.PropsWithChildren<Record<string, unknown>>
@@ -65,12 +43,12 @@ export const MatchedTextProvider = (
     identifier: string | null;
     matched_text: string | null;
     start_line: number;
-    score: number;
+    coverage: number;
   }>({
     identifier: null,
     matched_text: null,
     start_line: 1,
-    score: 0,
+    coverage: 0,
   });
 
   const [ruleDetails, setRuleDetails] = useState<{
@@ -84,8 +62,6 @@ export const MatchedTextProvider = (
 
     db.getLicenseRuleReference(matchDetails.identifier, ["text"]).then(
       (ruleRef) => {
-        // console.log(`For ${matchDetails.identifier}, Found ref:`, ruleRef);
-
         if (!ruleRef) {
           return setRuleDetails({
             processing: false,
@@ -95,57 +71,13 @@ export const MatchedTextProvider = (
 
         const ruleText = ruleRef.getDataValue("text")?.toString({}) || "";
         const matchedText = matchDetails.matched_text;
-        const diffsDetected = diffWords(ruleText, matchedText, {
+        const rawDiffs = diffWords(ruleText, matchedText, {
           ignoreCase: true,
           ignoreWhitespace: true,
         });
 
-        console.log("Raw diff", diffsDetected);
-        const normalizedDiffs: DiffInfo[] = diffsDetected.map(
-          (diff): DiffInfo => {
-            {
-              const changeDetected = Boolean(diff.added || diff.removed);
-              const normalizedValue = normalizeString(diff.value);
-
-              // if (!changeDetected && normalizedValue.length === 0) {
-              //   console.log(`Trivial diff at ${idx}`, {
-              //     normalizedValue,
-              //     value: diff.value,
-              //     diff,
-              //   });
-              // }
-
-              // No change / Trivial diff
-              if (!changeDetected || normalizedValue.length === 0) {
-                return {
-                  value: diff.value,
-                  count: diff.count,
-                  belongsTo: diff.added
-                    ? BelongsText.MODIFIED
-                    : diff.removed
-                    ? BelongsText.ORIGINAL
-                    : BelongsText.BOTH,
-                };
-              }
-
-              return {
-                ...(diff.added
-                  ? { added: true }
-                  : diff.removed
-                  ? { removed: true }
-                  : {}),
-                belongsTo: diff.added
-                  ? BelongsText.MODIFIED
-                  : diff.removed
-                  ? BelongsText.ORIGINAL
-                  : BelongsText.BOTH,
-                value: diff.value,
-                count: diff.count,
-                trimmedValue: normalizedValue,
-              };
-            }
-          }
-        );
+        const normalizedDiffs: DiffInfo[] =
+          normalizeAndCategorizeDiffs(rawDiffs);
 
         const normalizedRuleTextLines = splitDiffIntoLines(
           normalizedDiffs.filter(
@@ -165,28 +97,6 @@ export const MatchedTextProvider = (
 
         setRuleDiffLines(normalizedRuleTextLines);
         setModifiedDiffLines(normalizedModifiedTextLines);
-
-        const deletions = normalizedDiffs.filter((diff) => diff.removed).length;
-        const finalDeletions = normalizedDiffs.filter(
-          (diff) => diff.belongsTo === BelongsText.ORIGINAL
-        ).length;
-        const additions = normalizedDiffs.filter((diff) => diff.added).length;
-        const finalAdditions = normalizedDiffs.filter(
-          (diff) => diff.belongsTo === BelongsText.MODIFIED
-        ).length;
-
-        console.log(
-          `Pure diff belongs Orig(${finalAdditions})  & Modified(${finalDeletions}) dels \n`,
-          `Valid ${additions} adds & ${deletions} dels \n`,
-          {
-            normalizedDiffs,
-            normalizedOriginalLines: normalizedRuleTextLines,
-            normalizedModifiedLines: normalizedModifiedTextLines,
-            origText: ruleText,
-            modifiedText: matchedText,
-          }
-        );
-
         setRuleDetails({
           processing: false,
           ruleText: ruleRef.getDataValue("text").toString({}),
@@ -196,17 +106,22 @@ export const MatchedTextProvider = (
   }, [matchDetails]);
 
   function closeDiffWindow() {
-    setMatchDetails({
-      matched_text: null,
-      identifier: null,
-      start_line: 0,
-      score: 0,
-    });
-    setRuleDetails({
-      ruleText: null,
-      processing: false,
-    });
     setShowDiffWindow(false);
+    // Prevents showing fallbacks inside modal, for the transition period
+    setTimeout(() => {
+      setRuleDiffLines(null);
+      setModifiedDiffLines(null);
+      setMatchDetails({
+        matched_text: null,
+        identifier: null,
+        start_line: 0,
+        coverage: 0,
+      });
+      setRuleDetails({
+        ruleText: null,
+        processing: false,
+      });
+    }, 200);
   }
 
   return (
@@ -217,14 +132,14 @@ export const MatchedTextProvider = (
           matched_text: string,
           rule_identifier: string,
           start_line: number,
-          score: number
+          coverage: number
         ) => {
           if (!matched_text) return;
           setMatchDetails({
             identifier: rule_identifier,
             matched_text: matched_text,
             start_line,
-            score,
+            coverage: coverage,
           });
           setShowDiffWindow(true);
         },
@@ -255,18 +170,19 @@ export const MatchedTextProvider = (
                 wrapperClass="d-inline-block mx-4"
               />
             </h5>
-          ) : (
-            matchDetails.matched_text &&
-            ruleDetails.ruleText &&
-            (ruleDiffLines && modifiedDiffLines ? (
+          ) : matchDetails.matched_text && ruleDetails.ruleText ? (
+            ruleDiffLines &&
+            modifiedDiffLines && (
               <>
-                <h6>Score: {matchDetails.score} %</h6>
+                <h6>Coverage: {matchDetails.coverage} %</h6>
                 <Row>
                   <Col sm={12} md={6} className="rule-text-section">
                     <table className="diff-table">
-                      <th>
-                        <td>Rule Text</td>
-                      </th>
+                      <thead>
+                        <tr>
+                          <th>Rule Text</th>
+                        </tr>
+                      </thead>
                       <tbody>
                         {ruleDiffLines.map((diffLine, idx) => (
                           // @TODO - Better key for this
@@ -298,9 +214,11 @@ export const MatchedTextProvider = (
                   </Col>
                   <Col sm={12} md={6} className="matched-text-section">
                     <table className="diff-table">
-                      <th>
-                        <td>Matched Text</td>
-                      </th>
+                      <thead>
+                        <tr>
+                          <th>Matched Text</th>
+                        </tr>
+                      </thead>
                       <tbody>
                         {modifiedDiffLines.map((diffLine, idx) => (
                           // @TODO - Better key for this
@@ -333,31 +251,18 @@ export const MatchedTextProvider = (
                     </table>
                   </Col>
                 </Row>
-                <ReactDiffViewer
-                  oldValue={ruleDetails.ruleText}
-                  newValue={matchDetails.matched_text}
-                  linesOffset={matchDetails.start_line - 1}
-                  splitView={true}
-                  compareMethod={DiffMethod.WORDS}
-                  styles={DIFF_VIEWER_STYLES}
-                  extraLinesSurroundingDiff={0}
-                  leftTitle="Rule Text"
-                  rightTitle="Matched Text"
-                />
               </>
-            ) : (
-              <div>
-                {/* @TODO - This is not working ? */}
-                {/* in liferay - lgpl2.1-plus */}
-                <h6>Score: {matchDetails.score} %</h6>
-                <h6>Matched Text:</h6>
-                <pre>{matchDetails.matched_text}</pre>
-                <Alert variant="danger">
-                  Couldn't find License Rule Reference for specified identifier
-                  - {matchDetails.identifier}
-                </Alert>
-              </div>
-            ))
+            )
+          ) : (
+            <div>
+              <h6>Coverage: {matchDetails.coverage} %</h6>
+              <h6>Matched Text:</h6>
+              <pre>{matchDetails.matched_text}</pre>
+              <Alert variant="danger">
+                Couldn't find License Rule Reference for specified identifier -{" "}
+                {matchDetails.identifier}
+              </Alert>
+            </div>
           )}
         </Modal.Body>
       </Modal>

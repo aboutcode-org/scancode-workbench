@@ -20,6 +20,44 @@ export function normalizeString(str: string) {
     .trim();
 }
 
+export function normalizeAndCategorizeDiffs(diffs: Change[]) {
+  return diffs.map((diff): DiffInfo => {
+    {
+      const changeDetected = Boolean(diff.added || diff.removed);
+      const normalizedValue = normalizeString(diff.value);
+
+      // No change / Trivial diff
+      if (!changeDetected || normalizedValue.length === 0) {
+        return {
+          value: diff.value,
+          count: diff.count,
+          belongsTo: diff.added
+            ? BelongsText.MODIFIED
+            : diff.removed
+            ? BelongsText.ORIGINAL
+            : BelongsText.BOTH,
+        };
+      }
+
+      return {
+        ...(diff.added
+          ? { added: true }
+          : diff.removed
+          ? { removed: true }
+          : {}),
+        belongsTo: diff.added
+          ? BelongsText.MODIFIED
+          : diff.removed
+          ? BelongsText.ORIGINAL
+          : BelongsText.BOTH,
+        value: diff.value,
+        count: diff.count,
+        trimmedValue: normalizedValue,
+      };
+    }
+  });
+}
+
 export enum BelongsText {
   ORIGINAL = "original",
   MODIFIED = "modified",
