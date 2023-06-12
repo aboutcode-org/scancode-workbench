@@ -19,12 +19,6 @@
   margin-right: 5px;
 }
 
-.license-detecion-entity .react-json-view,
-.dependency-entity .react-json-view {
-  max-height: 75vh;
-  overflow: scroll;
-}
-
 .matches-table,
 .file-regions-table {
   max-height: 30vh;

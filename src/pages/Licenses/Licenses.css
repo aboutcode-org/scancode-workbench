@@ -22,7 +22,7 @@
 }
 
 .licenses-navigator-pane {
-  overflow: scroll !important;
+  overflow: auto !important;
 }
 
 .licenses-navigator-pane-title {
