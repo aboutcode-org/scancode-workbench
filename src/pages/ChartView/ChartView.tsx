@@ -23,15 +23,6 @@ import { useWorkbenchDB } from "../../contexts/dbContext";
 import { formatBarchartData, getAttributeValues } from "../../utils/bar";
 import { FlatFileAttributes } from "../../services/models/flatFile";
 
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend
-);
-
 import "./chartView.css";
 
 const BAR_HEIGHT = 30;
@@ -41,6 +32,15 @@ const directoryAttributes = [
   "package_data_name",
   "package_data_primary_language",
 ];
+
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend
+);
 
 const ChartView = () => {
   const { importedSqliteFilePath, db, initialized, currentPath } =
@@ -130,14 +130,12 @@ const ChartView = () => {
             scales: {
               x: {
                 grid: {
-                  drawBorder: false,
                   drawTicks: false,
                   display: false,
                 },
               },
               y: {
                 grid: {
-                  drawBorder: true,
                   drawTicks: true,
                   display: false,
                 },

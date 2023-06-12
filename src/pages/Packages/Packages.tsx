@@ -10,7 +10,6 @@ import NoDataFallback from "../../components/NoDataSection";
 import DependencyEntity from "../../components/PackagesEntityDetails/DependencyEntity";
 import PackageEntity from "../../components/PackagesEntityDetails/PackageEntity";
 import { QUERY_KEYS } from "../../constants/params";
-// import { PackageURL } from 'packageurl-js';
 import { useWorkbenchDB } from "../../contexts/dbContext";
 import { DEPENDENCY_SCOPES } from "../../services/models/dependencies";
 import {
