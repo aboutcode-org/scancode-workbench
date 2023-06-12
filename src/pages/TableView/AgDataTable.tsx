@@ -1,17 +1,14 @@
 import React, { useEffect } from 'react'
-import { AgGridReact } from 'ag-grid-react';
+import { AgGridReact, AgGridReactProps } from 'ag-grid-react';
 import {
   ColDef,
-  ColumnMovedEvent,
   GridApi,
-  GridReadyEvent,
 } from 'ag-grid-community';
 
 import { frameworkComponents } from './columnDefs';
 
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-alpine.css';
-
 
 // Config for Ag DataTable
 const defaultColDef: ColDef = {
@@ -26,28 +23,23 @@ const paginationOptions = [25, 50, 100, 200];
 const defaultPaginationOption = paginationOptions[0];
 
 
-interface AgDataTableProps {
+interface AgDataTableProps extends AgGridReactProps {
   tableData: unknown[],
   columnDefs: ColDef[],
   gridApi: GridApi | null,
-  onColumnMoved: (event: ColumnMovedEvent<any>) => void,
-  updateGridApi: (value: React.SetStateAction<GridApi>) => void,
 }
 
 const AgDataTable = (props: AgDataTableProps) => {
   const {
-    tableData, columnDefs,
-    gridApi, updateGridApi, onColumnMoved,
+    tableData, columnDefs, gridApi,
   } = props;
 
-  const onGridReady = (params: GridReadyEvent) => updateGridApi(params.api);
 
   const changePaginationSize = (newValue: string | number) => {
     if(gridApi){
       gridApi.paginationSetPageSize(Number(newValue));
     }
   }
-
 
   useEffect(() => {
     if(gridApi){
@@ -68,11 +60,8 @@ const AgDataTable = (props: AgDataTableProps) => {
     >
       <AgGridReact
         rowData={tableData}
-        onGridReady={onGridReady}
-        onColumnMoved={onColumnMoved}
         components={frameworkComponents}
         className="ag-theme-alpine ag-grid-customClass"
-
         ensureDomOrder
         enableCellTextSelection
 
@@ -86,6 +75,8 @@ const AgDataTable = (props: AgDataTableProps) => {
         suppressColumnMoveAnimation
         suppressRowVirtualisation
         suppressColumnVirtualisation
+
+        {...props}
       />
 
       <div className="pagination-controls">

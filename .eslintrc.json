@@ -4,20 +4,22 @@
     "es6": true,
     "node": true
   },
+  "plugins": ["css-import-order"],
   "extends": [
     "eslint:recommended",
     "plugin:@typescript-eslint/eslint-recommended",
     "plugin:@typescript-eslint/recommended",
     "plugin:import/recommended",
     "plugin:import/electron",
-    "plugin:import/typescript"
+    "plugin:import/typescript",
+    "plugin:css-import-order/recommended"
   ],
   "parser": "@typescript-eslint/parser",
   "settings": {
     "import/resolver": {
       "node": {
-        "extensions": [".js", ".jsx", ".ts", ".tsx"]
+        "extensions": [".js", ".jsx", ".ts", ".tsx", "json"]
       }
     }
-  },
+  }
 }

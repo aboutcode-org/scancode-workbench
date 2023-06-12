@@ -1,4 +1,5 @@
 import { ColDef } from 'ag-grid-community';
+
 import { ALL_COLUMNS } from './columnDefs';
 
 // NOTE --- 
@@ -47,9 +48,9 @@ const LICENSE_COLUMN_GROUP: ColDef[] = [
   ALL_COLUMNS.detected_license_expression,
   ALL_COLUMNS.detected_license_expression_spdx,
   ALL_COLUMNS.percentage_of_license_text,
+  ALL_COLUMNS.license_detections,
   ALL_COLUMNS.license_policy,
   ALL_COLUMNS.license_clues,
-  ALL_COLUMNS.license_detections,
 ];
 
 const ORIGIN_COLUMN_GROUP: ColDef[] = [
@@ -71,9 +72,6 @@ const PACKAGE_COLUMN_GROUP: ColDef[] = [
   ALL_COLUMNS.package_data_declared_license_expression_spdx,
   ALL_COLUMNS.package_data_primary_language,
   ALL_COLUMNS.for_packages,
-  // ALL_COLUMNS.package_data_homepage_url,
-  // ALL_COLUMNS.package_data_download_url,
-  ALL_COLUMNS.package_data_purl,
 ];
 
 

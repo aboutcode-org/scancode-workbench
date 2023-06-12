@@ -8,15 +8,16 @@ import Navbar from '../Navbar/Navbar';
 import FileTree from '../FileTree/FileTree'
 import ImportFallback from '../ImportFallback/ImportFallback';
 
-import { useWorkbenchDB } from '../../contexts/workbenchContext';
+import { useWorkbenchDB } from '../../contexts/dbContext';
 import { FILE_TREE_ROUTES, IMPORT_FALLBACK_ROUTES } from '../../constants/routes';
+import ProgressLoader from '../ProgressLoader/ProgressLoader';
 
-import './layout.css';
 import "allotment/dist/style.css";
+import './layout.css';
 
 const Layout = (props: React.PropsWithChildren) => {
   const { pathname } = useLocation();
-  const { initialized } = useWorkbenchDB();
+  const { initialized, loadingStatus } = useWorkbenchDB();
   
   const isImportFallbackRoute = IMPORT_FALLBACK_ROUTES.find(route => pathname.includes(route)) !== undefined;
   const showFileTree = FILE_TREE_ROUTES.find(route => pathname.includes(route)) !== undefined;
@@ -36,7 +37,14 @@ const Layout = (props: React.PropsWithChildren) => {
         </Allotment.Pane>
         <Allotment.Pane className='content-pane'>
           <div className='content-container'>
-            { isImportFallbackRoute && !initialized ? <ImportFallback /> : props.children }
+            {
+              isImportFallbackRoute && !initialized ? (
+                loadingStatus !== null ?
+                  <ProgressLoader progress={loadingStatus} />
+                :
+                  <ImportFallback />
+              ) : props.children
+            }
           </div>
         </Allotment.Pane>
       </Allotment>

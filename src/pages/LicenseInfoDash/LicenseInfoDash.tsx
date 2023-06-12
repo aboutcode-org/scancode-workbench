@@ -4,7 +4,7 @@ import { Row, Col, Card } from "react-bootstrap";
 import React, { useEffect, useState } from "react";
 
 import { formatChartData } from "../../utils/pie";
-import { useWorkbenchDB } from "../../contexts/workbenchContext";
+import { useWorkbenchDB } from "../../contexts/dbContext";
 import PieChart from "../../components/PieChart/PieChart";
 import EllipticLoader from "../../components/EllipticLoader";
 
@@ -13,9 +13,9 @@ interface ScanData {
   totalLicenseFiles: number | null;
   totalSPDXLicenses: number | null;
 }
+import { NO_VALUE_DETECTED_LABEL } from "../../constants/data";
 
 import "./licenseInfoDash.css";
-import { NO_VALUE_DETECTED_LABEL } from "../../constants/data";
 
 const LicenseInfoDash = () => {
   const workbenchDB = useWorkbenchDB();
@@ -90,7 +90,9 @@ const LicenseInfoDash = () => {
               );
               license_keys_spdx.push(
                 ...JSON.parse(
-                  (expression.getDataValue("license_keys_spdx") || "[]").toString({})
+                  (
+                    expression.getDataValue("license_keys_spdx") || "[]"
+                  ).toString({})
                 )
               );
             });

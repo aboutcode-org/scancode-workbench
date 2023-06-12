@@ -1,9 +1,8 @@
-import React, { useState } from 'react'
-import { useLocation, useNavigate } from 'react-router-dom'
-import { ProSidebar, Menu, MenuItem, SidebarFooter, SidebarContent } from 'react-pro-sidebar';
-
+import { faArchive, faBars, faChartColumn, faFileCode, faFileLines, faGavel, faHome, faInfoCircle, faList,faTable } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArchive, faBars, faChartColumn, faGavel, faHome, faInfoCircle, faFileCode, faTable, faFileLines, faList } from '@fortawesome/free-solid-svg-icons';
+import React, { useState } from 'react'
+import { Menu, MenuItem, ProSidebar, SidebarContent,SidebarFooter } from 'react-pro-sidebar';
+import { useLocation, useNavigate } from 'react-router-dom'
 
 import { ROUTES } from '../../constants/routes';
 
@@ -12,7 +11,7 @@ import './navbar.css';
 
 const MENU_ITEMS = [
     {
-        title: "Welcome page",
+        title: "Home",
         route: ROUTES.HOME,
         icon: faHome,
     },
@@ -37,8 +36,8 @@ const MENU_ITEMS = [
         icon: faArchive,
     },
     {
-        title: "License detections Explorer",
-        route: "/" + ROUTES.LICENSE_DETECTIONS,
+        title: "Licenses Explorer",
+        route: "/" + ROUTES.LICENSES,
         icon: faList,
     },
     {
@@ -57,7 +56,7 @@ const MENU_ITEMS = [
         icon: faFileCode,
     },
     {
-        title: "About workbench",
+        title: "About Workbench",
         route: "/" + ROUTES.ABOUT,
         icon: faInfoCircle,
     },
@@ -105,7 +104,9 @@ const Navbar = () => {
                 </Menu>
             </SidebarFooter>
         </ProSidebar>
-        {/* Dummy sidebar to occupy space in dom */}
+
+        {/* Dummy sidebar-sized div to occupy space in dom */}
+        {/* @TODO - Try :before or some other css way to handle this instead */}
         <div className='dummy-sidebar' />
         </>
     )

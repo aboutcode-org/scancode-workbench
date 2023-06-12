@@ -1,7 +1,7 @@
 {
   "name": "scancode-workbench",
   "productName": "scancode-workbench",
-  "version": "4.0.0rc2",
+  "version": "4.0.0rc3",
   "description": "An application for viewing ScanCode results and concluding component origin and license",
   "repository": {
     "type": "git",
@@ -42,6 +42,7 @@
     "@types/node": "^18.8.0",
     "@types/react": "^18.0.21",
     "@types/react-dom": "^18.0.6",
+    "@types/react-scroll": "^1.8.7",
     "@types/react-toastify": "^4.1.0",
     "@types/sequelize": "^4.28.14",
     "@types/sqlite3": "^3.1.8",
@@ -57,6 +58,7 @@
     "electron-packager": "^16.0.0",
     "electron-rebuild": "^3.2.9",
     "eslint": "^8.24.0",
+    "eslint-plugin-css-import-order": "^1.1.0",
     "eslint-plugin-import": "^2.26.0",
     "fork-ts-checker-webpack-plugin": "^7.2.13",
     "json-loader": "^0.5.7",
@@ -103,6 +105,7 @@
     "react-loader-spinner": "^5.3.4",
     "react-pro-sidebar": "^0.7.1",
     "react-router-dom": "^6.4.1",
+    "react-scroll": "^1.8.9",
     "react-toastify": "^9.0.8",
     "react-tooltip": "^5.10.4",
     "sequelize": "^6.23.2",
