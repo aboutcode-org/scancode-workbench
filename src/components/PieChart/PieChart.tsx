@@ -1,15 +1,15 @@
-import c3, { ChartAPI } from 'c3';
-import React, { useEffect, useRef, useState } from 'react';
+import c3, { ChartAPI } from "c3";
+import React, { useEffect, useRef, useState } from "react";
 
-import { PieChartFallback, PieChartFallbackProps } from './PieChartFallback';
+import { PieChartFallback, PieChartFallbackProps } from "./PieChartFallback";
 
-import { FormattedEntry } from '../../utils/pie';
-import { LEGEND_COLORS } from '../../constants/colors';
+import { FormattedEntry } from "../../utils/pie";
+import { LEGEND_COLORS } from "../../constants/colors";
 
-import './piechart.css';
+import "./piechart.css";
 
 interface PieChartProps extends PieChartFallbackProps {
-  chartData: FormattedEntry[] | null,
+  chartData: FormattedEntry[] | null;
 }
 
 const PieChart = (props: PieChartProps) => {
@@ -20,26 +20,30 @@ const PieChart = (props: PieChartProps) => {
 
   // Redraw chart on data change
   useEffect(() => {
-    if(!chartData || !chartRef.current)
-      return;
-    
+    if (!chartData || !chartRef.current) return;
+
     const newChart = c3.generate({
       bindto: chartRef.current,
       data: {
         columns: chartData,
-        type : 'pie',
+        type: "pie",
       },
       color: {
         pattern: LEGEND_COLORS,
-      }
+      },
+      tooltip: {
+        format: {
+          value: (value, ratio) =>
+            `${String(value)} \n${(ratio * 100).toFixed(1)}%`,
+        },
+      },
     });
     setC3Chart(newChart);
   }, [chartData]);
 
   // Suppress continuous resize calls that may cause stutter and bad UX
   useEffect(() => {
-    if(!chartContainerRef.current || !c3Chart)
-      return;
+    if (!chartContainerRef.current || !c3Chart) return;
 
     const resizeChart = () => c3Chart.resize();
 
@@ -52,23 +56,22 @@ const PieChart = (props: PieChartProps) => {
 
     const chartContainerObserver = new ResizeObserver(resizeActionHandler);
     chartContainerObserver.observe(chartContainerRef.current);
-    
+
     return () => {
       clearTimeout(resizeTimeout);
       chartContainerObserver.disconnect();
-    }
+    };
   }, [c3Chart]);
 
-
-  if(!chartData || !chartData.length){
-    return <PieChartFallback {...props} loading={!chartData} />
+  if (!chartData || !chartData.length) {
+    return <PieChartFallback {...props} loading={!chartData} />;
   }
 
   return (
-    <div className='pie-chart-container' ref={chartContainerRef}>
-      <div ref={chartRef} className='pie-chart' />
+    <div className="pie-chart-container" ref={chartContainerRef}>
+      <div ref={chartRef} className="pie-chart" />
     </div>
-  )
-}
+  );
+};
 
-export default PieChart
+export default PieChart;
