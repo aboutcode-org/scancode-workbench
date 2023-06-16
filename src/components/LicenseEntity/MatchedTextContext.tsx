@@ -7,8 +7,8 @@ import { useWorkbenchDB } from "../../contexts/dbContext";
 import {
   BelongsText,
   DiffInfo,
-  normalizeAndCategorizeDiffs,
-  splitDiffIntoLines,
+  categorizeDiffs,
+  normalizeAndSplitDiffIntoLines,
 } from "../../utils/text";
 import { ScanOptionKeys } from "../../utils/parsers";
 
@@ -83,10 +83,9 @@ export const MatchedTextProvider = (
           ignoreWhitespace: true,
         });
 
-        const normalizedDiffs: DiffInfo[] =
-          normalizeAndCategorizeDiffs(rawDiffs);
+        const normalizedDiffs: DiffInfo[] = categorizeDiffs(rawDiffs);
 
-        const normalizedRuleTextLines = splitDiffIntoLines(
+        const normalizedRuleTextLines = normalizeAndSplitDiffIntoLines(
           normalizedDiffs.filter(
             (diff) =>
               diff.belongsTo === BelongsText.BOTH ||
@@ -94,7 +93,7 @@ export const MatchedTextProvider = (
           )
         );
 
-        const normalizedModifiedTextLines = splitDiffIntoLines(
+        const normalizedModifiedTextLines = normalizeAndSplitDiffIntoLines(
           normalizedDiffs.filter(
             (diff) =>
               diff.belongsTo === BelongsText.BOTH ||

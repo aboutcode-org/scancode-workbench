@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 
 // Maintained Fork of unmaintained but popular react-json-view
 import ReactJson from "@microlink/react-json-view";
 
 import InfoEntry from "./InfoEntry";
 import { useWorkbenchDB } from "../../contexts/dbContext";
-import { ScanInfo, parseIfValidJson, parseScanInfo } from "../../utils/parsers";
+import { ScanInfo, parseIfValidJson } from "../../utils/parsers";
 
 import "./scanInfo.css";
 
@@ -22,20 +22,16 @@ const ScanInfo = () => {
           <tbody>
             <InfoEntry name="Tool">{scanInfo.tool_name}</InfoEntry>
 
-            <InfoEntry name="Tool version">
-              {scanInfo.tool_version}
-            </InfoEntry>
+            <InfoEntry name="Tool version">{scanInfo.tool_version}</InfoEntry>
 
             <InfoEntry
               name="Input"
               show={scanInfo.input && scanInfo.input.length > 0}
             >
               <ul>
-                {(scanInfo.input || []).map(
-                  (value: string, idx: number) => (
-                    <li key={value + idx}>{value}</li>
-                  )
-                )}
+                {(scanInfo.input || []).map((value: string, idx: number) => (
+                  <li key={value + idx}>{value}</li>
+                ))}
               </ul>
             </InfoEntry>
 
@@ -55,9 +51,7 @@ const ScanInfo = () => {
               </table>
             </InfoEntry>
 
-            <InfoEntry name="Files count">
-              {scanInfo.files_count}
-            </InfoEntry>
+            <InfoEntry name="Files count">{scanInfo.files_count}</InfoEntry>
 
             <InfoEntry name="Output format version">
               {scanInfo.output_format_version}

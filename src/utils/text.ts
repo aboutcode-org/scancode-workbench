@@ -20,25 +20,9 @@ export function normalizeString(str: string) {
     .trim();
 }
 
-export function normalizeAndCategorizeDiffs(diffs: Change[]) {
+export function categorizeDiffs(diffs: Change[]) {
   return diffs.map((diff): DiffInfo => {
     {
-      const changeDetected = Boolean(diff.added || diff.removed);
-      const normalizedValue = normalizeString(diff.value);
-
-      // No change / Trivial diff
-      if (!changeDetected || normalizedValue.length === 0) {
-        return {
-          value: diff.value,
-          count: diff.count,
-          belongsTo: diff.added
-            ? BelongsText.MODIFIED
-            : diff.removed
-            ? BelongsText.ORIGINAL
-            : BelongsText.BOTH,
-        };
-      }
-
       return {
         ...(diff.added
           ? { added: true }
@@ -52,7 +36,6 @@ export function normalizeAndCategorizeDiffs(diffs: Change[]) {
           : BelongsText.BOTH,
         value: diff.value,
         count: diff.count,
-        trimmedValue: normalizedValue,
       };
     }
   });
@@ -65,9 +48,8 @@ export enum BelongsText {
 }
 export interface DiffInfo extends Change {
   belongsTo: BelongsText;
-  trimmedValue?: string;
 }
-export function splitDiffIntoLines(diffs: DiffInfo[]) {
+export function normalizeAndSplitDiffIntoLines(diffs: DiffInfo[]) {
   const lines: DiffInfo[][] = [[]];
 
   for (const diff of diffs) {
@@ -83,12 +65,22 @@ export function splitDiffIntoLines(diffs: DiffInfo[]) {
     const subLines = splitLines.slice(idx);
 
     for (const subLine of subLines) {
+      const isTrivialDiff = normalizeString(subLine).length === 0;
+
       // Append to last line only if it is non-empty string
       if (subLine.length > 0) {
-        lines[lines.length - 1].push({
-          ...diff,
-          value: subLine,
-        });
+        if (isTrivialDiff) {
+          lines[lines.length - 1].push({
+            value: subLine,
+            belongsTo: diff.belongsTo,
+            count: diff.count,
+          });
+        } else {
+          lines[lines.length - 1].push({
+            ...diff,
+            value: subLine,
+          });
+        }
 
         // Create newline for intermittent newlines
         // (ignore last subLine, it is continued in next line)
