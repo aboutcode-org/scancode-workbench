@@ -13,13 +13,32 @@ export function parseIfValidJson(str: unknown) {
   }
 }
 
+export enum ScanOptionKeys {
+  CLASSIFY = "--classify",
+  COPYRIGHT = "--copyright",
+  SYSTEM_PACKAGE = "--system-package",
+  JSON_PP = "--json-pp",
+  SUMMARY = "--summary",
+  PROCESSES = "--processes",
+  INFO = "--info",
+  EMAIL = "--email",
+  URL = "--url",
+  PACKAGE = "--package",
+  LICENSE = "--license",
+  LICENSE_DIAGNOSTICS = "--license-diagnostics",
+  LICENSE_REFERENCES = "--license-references",
+  LICENSE_TEXT = "--license-text",
+  LICENSE_SCORE = "--license-score",
+  UNKNOWN_LICENSES = "--unknown-licenses",
+}
+
 export interface ScanInfo {
   tool_name: string;
   tool_version: string;
   notice: string;
   duration: number;
   optionsList: [string, unknown][];
-  optionsMap: Map<string, unknown>;
+  optionsMap: Map<string, ScanOptionKeys>;
   input: string[];
   files_count: number;
   output_format_version: string;
@@ -39,7 +58,7 @@ export function parseScanInfo(rawInfo: Model<HeaderAttributes, HeaderAttributes>
     parseIfValidJson(rawInfo.getDataValue("options")?.toString({})) ||
       []
   ) || [];
-  const optionsMap = new Map<string, unknown>(optionsList.map(([k,v]) => [k.substring(2), v]));
+  const optionsMap = new Map<string, ScanOptionKeys>(optionsList.map(([k,v]) => [k, v as ScanOptionKeys]));
 
   const parsedScanInfo: ScanInfo = {
     tool_name: rawInfo.getDataValue("tool_name").toString({}) || "",

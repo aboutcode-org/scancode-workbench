@@ -23,6 +23,7 @@ import { DEFAULT_ROUTE_ON_IMPORT, ROUTES } from "../constants/routes";
 import { AddEntry, GetHistory, RemoveEntry } from "../services/historyStore";
 import { WorkbenchDB } from "../services/workbenchDB";
 import { isSchemaChanged } from "../utils/checks";
+import { ScanInfo, parseScanInfo } from "../utils/parsers";
 
 const { version: workbenchVersion } = packageJson;
 const { ipcRenderer } = electron;
@@ -32,6 +33,7 @@ interface BasicValueState {
   db: WorkbenchDB | null;
   initialized: boolean;
   importedSqliteFilePath: string | null;
+  scanInfo: ScanInfo | null;
 }
 interface WorkbenchContextProperties extends BasicValueState {
   currentPath: string | null;
@@ -49,13 +51,13 @@ interface WorkbenchContextProperties extends BasicValueState {
   updateLoadingStatus: React.Dispatch<React.SetStateAction<number | null>>;
   updateCurrentPath: (newPath: string, type: PathType) => void;
   goToFileInTableView: (path: string) => void;
-  updateWorkbenchDB: (db: WorkbenchDB, sqliteFilePath: string) => void;
 }
 
 export const defaultWorkbenchContextValue: WorkbenchContextProperties = {
   db: null,
   initialized: false,
   importedSqliteFilePath: null,
+  scanInfo: null,
   loadingStatus: null,
   currentPath: null,
   currentPathType: "directory",
@@ -67,7 +69,6 @@ export const defaultWorkbenchContextValue: WorkbenchContextProperties = {
   abortImport: () => null,
   updateCurrentPath: () => null,
   goToFileInTableView: () => null,
-  updateWorkbenchDB: () => null,
 };
 
 const WorkbenchContext = createContext<WorkbenchContextProperties>(
@@ -84,6 +85,7 @@ export const WorkbenchDBProvider = (
     db: null,
     initialized: false,
     importedSqliteFilePath: null,
+    scanInfo: null,
   });
   const [currentPath, setCurrentPath] = useState<string | null>("");
   const [currentPathType, setCurrentPathType] = useState<PathType>("directory");
@@ -92,13 +94,13 @@ export const WorkbenchDBProvider = (
     setCurrentPath(path);
     setCurrentPathType(pathType);
   }
-  
-  function changeRouteOnImport(){
+
+  function changeRouteOnImport() {
     navigate(DEFAULT_ROUTE_ON_IMPORT);
   }
 
-  function goToFileInTableView(path: string){
-    updateCurrentPath(path, 'file');
+  function goToFileInTableView(path: string) {
+    updateCurrentPath(path, "file");
     navigate("/" + ROUTES.TABLE_VIEW);
   }
 
@@ -108,17 +110,19 @@ export const WorkbenchDBProvider = (
       db: null,
       initialized: false,
       importedSqliteFilePath: null,
+      scanInfo: null,
     });
   };
 
   const abortImport = () => updateLoadingStatus(null);
 
-  const updateWorkbenchDB = (db: WorkbenchDB, sqliteFilePath: string) => {
+  const updateWorkbenchDB = async (db: WorkbenchDB, sqliteFilePath: string) => {
     updateLoadingStatus(100);
     setValue({
       db,
       initialized: true,
       importedSqliteFilePath: sqliteFilePath,
+      scanInfo: parseScanInfo(await db.getScanInfo()),
     });
   };
 
@@ -199,7 +203,7 @@ export const WorkbenchDBProvider = (
 
         newWorkbenchDB.sync
           .then((db) => db.File.findOne({ where: { parent: "#" } }))
-          .then((root) => {
+          .then(async (root) => {
             if (!root) {
               console.error("Root path not found !!!!", root);
               return;
@@ -212,13 +216,14 @@ export const WorkbenchDBProvider = (
               opened_at: moment().format(),
             });
 
-            updateWorkbenchDB(newWorkbenchDB, sqliteFilePath);
+            await updateWorkbenchDB(newWorkbenchDB, sqliteFilePath);
 
-            if (defaultPath)
+            if (defaultPath){
               updateCurrentPath(
                 defaultPath,
                 root.getDataValue("type").toString({}) as PathType
               );
+            }
 
             // Update window title
             const newlyImportedFileName = sqliteFilePath
@@ -313,7 +318,7 @@ export const WorkbenchDBProvider = (
 
         newWorkbenchDB.sync
           .then((db) => db.File.findOne({ where: { parent: "#" } }))
-          .then((root) => {
+          .then(async (root) => {
             if (!root) {
               console.error("Root path not found !!!!");
               console.error("Root:", root);
@@ -322,13 +327,14 @@ export const WorkbenchDBProvider = (
             }
             const defaultPath = root.getDataValue("path");
 
-            updateWorkbenchDB(newWorkbenchDB, sqliteFilePath);
+            await updateWorkbenchDB(newWorkbenchDB, sqliteFilePath);
 
-            if (defaultPath)
+            if (defaultPath){
               updateCurrentPath(
                 defaultPath,
                 root.getDataValue("type").toString({}) as PathType
               );
+            }
 
             // Update window title
             const newlyImportedFileName = jsonFilePath
@@ -467,7 +473,6 @@ export const WorkbenchDBProvider = (
         abortImport,
         updateCurrentPath,
         goToFileInTableView,
-        updateWorkbenchDB,
       }}
     >
       {props.children}

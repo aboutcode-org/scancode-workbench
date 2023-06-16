@@ -15,7 +15,7 @@ import {
 } from "./MatchesTableCols";
 import { MatchedTextProvider } from "./MatchedTextContext";
 import { useWorkbenchDB } from "../../contexts/dbContext";
-import { parseScanInfo } from "../../utils/parsers";
+import { ScanOptionKeys } from "../../utils/parsers";
 import { ColumnApi } from "ag-grid-community";
 
 import "./licenseEntity.css";
@@ -26,20 +26,17 @@ interface LicenseDetectionEntityProps {
 }
 const LicenseEntity = (props: LicenseDetectionEntityProps) => {
   const { activeLicense } = props;
-  const { db } = useWorkbenchDB();
+  const { scanInfo } = useWorkbenchDB();
   const [matchesTableColumnApi, setMatchesTableColumnApi] =
     useState<ColumnApi | null>(null);
 
   useEffect(() => {
-    if (!db || !matchesTableColumnApi) return;
-    db.getScanInfo().then((rawScanInfo) => {
-      const scanInfo = parseScanInfo(rawScanInfo);
-      matchesTableColumnApi.setColumnVisible(
-        MATCH_COLS.matched_text.colId,
-        Boolean(scanInfo.optionsMap.get("license-text"))
-      );
-    });
-  }, [db, matchesTableColumnApi]);
+    if (!scanInfo || !matchesTableColumnApi) return;
+    matchesTableColumnApi.setColumnVisible(
+      MATCH_COLS.matched_text.colId,
+      Boolean(scanInfo.optionsMap.get(ScanOptionKeys.LICENSE_TEXT))
+    );
+  }, [scanInfo, matchesTableColumnApi]);
 
   const license = activeLicense?.license;
   const matches = activeLicense?.license?.matches;

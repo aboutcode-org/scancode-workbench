@@ -10,6 +10,13 @@ import {
   normalizeAndCategorizeDiffs,
   splitDiffIntoLines,
 } from "../../utils/text";
+import { ScanOptionKeys } from "../../utils/parsers";
+
+const SYNTHETIC_RULE_PREFIXES = [
+  "spdx-license-identifier",
+  "license-detection-unknown",
+  "package-manifest-unknown",
+];
 
 interface MatchedTextContextProperties {
   showDiffWindow: boolean;
@@ -33,7 +40,7 @@ const MatchedTextContext = createContext<MatchedTextContextProperties>(
 export const MatchedTextProvider = (
   props: React.PropsWithChildren<Record<string, unknown>>
 ) => {
-  const { db } = useWorkbenchDB();
+  const { db, scanInfo } = useWorkbenchDB();
   const [showDiffWindow, setShowDiffWindow] = useState(false);
   const [ruleDiffLines, setRuleDiffLines] = useState<Change[][] | null>(null);
   const [modifiedDiffLines, setModifiedDiffLines] = useState<Change[][] | null>(
@@ -123,6 +130,12 @@ export const MatchedTextProvider = (
       });
     }, 200);
   }
+
+  const isSyntheticRule =
+    matchDetails.identifier &&
+    SYNTHETIC_RULE_PREFIXES.some((prefix) =>
+      matchDetails.identifier.startsWith(prefix)
+    );
 
   return (
     <MatchedTextContext.Provider
@@ -258,10 +271,33 @@ export const MatchedTextProvider = (
               <h6>Coverage: {matchDetails.coverage} %</h6>
               <h6>Matched Text:</h6>
               <pre>{matchDetails.matched_text}</pre>
-              <Alert variant="danger">
-                Couldn't find License Rule Reference for specified identifier -{" "}
-                {matchDetails.identifier}
-              </Alert>
+              {isSyntheticRule ? (
+                <Alert variant="primary">
+                  Rule text is not available for synthetic rules <br />
+                  Current rule - {matchDetails.identifier}
+                </Alert>
+              ) : scanInfo.optionsMap.get(ScanOptionKeys.LICENSE_REFERENCES) ? (
+                <Alert variant="danger">
+                  {/*
+                  Unable to find reference, although license-references option is enabled in scan
+                  (Edge case - If there's a bug in sct or detecting synthetic prefixes)
+                  */}
+                  Couldn't find License Rule Reference for specified identifier
+                  - {matchDetails.identifier}
+                </Alert>
+              ) : (
+                <Alert variant="primary">
+                  Please use{" "}
+                  <Alert.Link
+                    href="https://scancode-toolkit.readthedocs.io/en/stable/cli-reference/scan-options-post.html#license-references-option"
+                    className="text-decoration-underline"
+                  >
+                    --license-references
+                  </Alert.Link>{" "}
+                  CLI option with your scan to see the rule text, and the diff
+                  between rule/matched text
+                </Alert>
+              )}
             </div>
           )}
         </Modal.Body>

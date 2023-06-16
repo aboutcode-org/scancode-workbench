@@ -11,42 +11,27 @@ import "./scanInfo.css";
 
 const ScanInfo = () => {
   const workbenchDB = useWorkbenchDB();
-  const [parsedScanInfo, setParsedScanInfo] = useState<ScanInfo | null>(null);
-
-  useEffect(() => {
-    const { db, initialized, currentPath } = workbenchDB;
-
-    if (!initialized || !db || !currentPath) return;
-
-    db.sync.then(() => {
-      db.getScanInfo().then((rawInfo) => {
-        console.log("Raw scan info:", rawInfo);
-        const newParsedScanInfo = parseScanInfo(rawInfo);
-        console.log("Parsed scan info:", newParsedScanInfo);
-        setParsedScanInfo(newParsedScanInfo);
-      });
-    });
-  }, [workbenchDB]);
+  const { scanInfo } = workbenchDB;
 
   return (
     <div className="scan-info">
       <h4>Scan Information</h4>
       <br />
-      {parsedScanInfo ? (
+      {scanInfo ? (
         <table border={1} className="overview-table">
           <tbody>
-            <InfoEntry name="Tool">{parsedScanInfo.tool_name}</InfoEntry>
+            <InfoEntry name="Tool">{scanInfo.tool_name}</InfoEntry>
 
             <InfoEntry name="Tool version">
-              {parsedScanInfo.tool_version}
+              {scanInfo.tool_version}
             </InfoEntry>
 
             <InfoEntry
               name="Input"
-              show={parsedScanInfo.input && parsedScanInfo.input.length > 0}
+              show={scanInfo.input && scanInfo.input.length > 0}
             >
               <ul>
-                {(parsedScanInfo.input || []).map(
+                {(scanInfo.input || []).map(
                   (value: string, idx: number) => (
                     <li key={value + idx}>{value}</li>
                   )
@@ -56,11 +41,11 @@ const ScanInfo = () => {
 
             <InfoEntry
               name="Options"
-              show={parsedScanInfo.optionsList && parsedScanInfo.optionsList.length > 0}
+              show={scanInfo.optionsList && scanInfo.optionsList.length > 0}
             >
               <table className="options-table">
                 <tbody>
-                  {parsedScanInfo.optionsList.map(([key, value]) => (
+                  {scanInfo.optionsList.map(([key, value]) => (
                     <tr key={key}>
                       <td>{key}</td>
                       {typeof value !== "boolean" && <td>{String(value)}</td>}
@@ -71,44 +56,44 @@ const ScanInfo = () => {
             </InfoEntry>
 
             <InfoEntry name="Files count">
-              {parsedScanInfo.files_count}
+              {scanInfo.files_count}
             </InfoEntry>
 
             <InfoEntry name="Output format version">
-              {parsedScanInfo.output_format_version}
+              {scanInfo.output_format_version}
             </InfoEntry>
 
             <InfoEntry name="SPDX license list version">
-              {parsedScanInfo.spdx_license_list_version}
+              {scanInfo.spdx_license_list_version}
             </InfoEntry>
 
             <InfoEntry name="Operating system">
-              {parsedScanInfo.operating_system}
+              {scanInfo.operating_system}
             </InfoEntry>
 
             <InfoEntry name="CPU architecture">
-              {parsedScanInfo.cpu_architecture}
+              {scanInfo.cpu_architecture}
             </InfoEntry>
 
-            <InfoEntry name="Platform">{parsedScanInfo.platform}</InfoEntry>
+            <InfoEntry name="Platform">{scanInfo.platform}</InfoEntry>
 
             <InfoEntry name="Platform version">
-              {parsedScanInfo.platform_version}
+              {scanInfo.platform_version}
             </InfoEntry>
 
             <InfoEntry name="Python version">
-              {parsedScanInfo.python_version}
+              {scanInfo.python_version}
             </InfoEntry>
 
             <InfoEntry name="Scan duration">
-              {parsedScanInfo.duration} seconds
+              {scanInfo.duration} seconds
             </InfoEntry>
 
-            <InfoEntry name="Tool notice">{parsedScanInfo.notice}</InfoEntry>
+            <InfoEntry name="Tool notice">{scanInfo.notice}</InfoEntry>
 
             <InfoEntry name=" Raw header">
               <ReactJson
-                src={parseIfValidJson(parsedScanInfo.raw_header_content || {})}
+                src={parseIfValidJson(scanInfo.raw_header_content || {})}
                 enableClipboard={false}
                 displayDataTypes={false}
               />
