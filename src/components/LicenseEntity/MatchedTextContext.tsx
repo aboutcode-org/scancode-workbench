@@ -1,13 +1,12 @@
-import { diffWords, Change } from "diff";
 import { Alert, Col, Modal, Row } from "react-bootstrap";
 import { TailSpin } from "react-loader-spinner";
 import React, { createContext, useContext, useEffect, useState } from "react";
 
 import { useWorkbenchDB } from "../../contexts/dbContext";
 import {
-  BelongsText,
-  DiffInfo,
-  categorizeDiffs,
+  BelongsIndicator,
+  DiffComponents,
+  diffStrings,
   normalizeAndSplitDiffIntoLines,
 } from "../../utils/text";
 import { ScanOptionKeys } from "../../utils/parsers";
@@ -42,10 +41,12 @@ export const MatchedTextProvider = (
 ) => {
   const { db, scanInfo } = useWorkbenchDB();
   const [showDiffWindow, setShowDiffWindow] = useState(false);
-  const [ruleDiffLines, setRuleDiffLines] = useState<Change[][] | null>(null);
-  const [modifiedDiffLines, setModifiedDiffLines] = useState<Change[][] | null>(
+  const [ruleDiffLines, setRuleDiffLines] = useState<DiffComponents[][] | null>(
     null
   );
+  const [modifiedDiffLines, setModifiedDiffLines] = useState<
+    DiffComponents[][] | null
+  >(null);
   const [matchDetails, setMatchDetails] = useState<{
     identifier: string | null;
     matched_text: string | null;
@@ -78,26 +79,20 @@ export const MatchedTextProvider = (
 
         const ruleText = ruleRef.getDataValue("text")?.toString({}) || "";
         const matchedText = matchDetails.matched_text;
-        const rawDiffs = diffWords(ruleText, matchedText, {
-          ignoreCase: true,
-          ignoreWhitespace: true,
-        });
 
-        const normalizedDiffs: DiffInfo[] = categorizeDiffs(rawDiffs);
-
+        const diffs = diffStrings(ruleText, matchedText);
         const normalizedRuleTextLines = normalizeAndSplitDiffIntoLines(
-          normalizedDiffs.filter(
+          diffs.filter(
             (diff) =>
-              diff.belongsTo === BelongsText.BOTH ||
-              diff.belongsTo === BelongsText.ORIGINAL
+              diff.belongsTo === BelongsIndicator.BOTH ||
+              diff.belongsTo === BelongsIndicator.ORIGINAL
           )
         );
-
         const normalizedModifiedTextLines = normalizeAndSplitDiffIntoLines(
-          normalizedDiffs.filter(
+          diffs.filter(
             (diff) =>
-              diff.belongsTo === BelongsText.BOTH ||
-              diff.belongsTo === BelongsText.MODIFIED
+              diff.belongsTo === BelongsIndicator.BOTH ||
+              diff.belongsTo === BelongsIndicator.MODIFIED
           )
         );
 
@@ -188,7 +183,7 @@ export const MatchedTextProvider = (
               <>
                 <h6>Coverage: {matchDetails.coverage} %</h6>
                 <Row>
-                  <Col sm={12} md={6} className="rule-text-section">
+                  <Col sm={12} md={6}>
                     <table className="diff-table">
                       <thead>
                         <tr>
@@ -203,17 +198,18 @@ export const MatchedTextProvider = (
                             className="diff-line"
                           >
                             <td className="line-content">
-                              <pre className="snippet">
+                              <pre className="line-text">
                                 {diffLine.map((diff, diffIdx) => {
                                   return (
                                     <span
                                       key={diff.value + diffIdx}
                                       className={
-                                        "snippet " +
-                                        (diff.removed && "removed-snippet")
+                                        diff.diffComponent === "removed"
+                                          ? "removed-snippet"
+                                          : ""
                                       }
                                     >
-                                      <span>{diff.value}</span>
+                                      {diff.value}
                                     </span>
                                   );
                                 })}
@@ -224,7 +220,7 @@ export const MatchedTextProvider = (
                       </tbody>
                     </table>
                   </Col>
-                  <Col sm={12} md={6} className="matched-text-section">
+                  <Col sm={12} md={6}>
                     <table className="diff-table">
                       <thead>
                         <tr>
@@ -242,13 +238,15 @@ export const MatchedTextProvider = (
                               {matchDetails.start_line + idx}.
                             </td>
                             <td className="line-content">
-                              <pre className="snippet">
+                              <pre className="line-text">
                                 {diffLine.map((diff, diffIdx) => {
                                   return (
                                     <span
                                       key={diff.value + diffIdx}
                                       className={
-                                        diff.added ? "added-snippet" : ""
+                                        diff.diffComponent === "added"
+                                          ? "added-snippet"
+                                          : ""
                                       }
                                     >
                                       {diff.value}

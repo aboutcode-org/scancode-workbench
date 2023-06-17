@@ -55,6 +55,7 @@
   margin: 0;
   vertical-align: top;
   white-space: pre;
+  overflow-wrap: anywhere;
 }
 
 .matched-text-diff-modal .line-number {
@@ -69,7 +70,7 @@
   padding-right: 10px;
 }
 
-.matched-text-diff-modal .diff-line .line-content .snippet {
+.matched-text-diff-modal .diff-line .line-content .line-text {
   margin: 0;
   display: inline-block;
   white-space: pre-wrap;
