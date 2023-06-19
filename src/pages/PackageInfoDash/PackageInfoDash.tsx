@@ -13,8 +13,6 @@ interface ScanData {
 import { FileAttributes } from "../../services/models/file";
 import { NO_VALUE_DETECTED_LABEL } from "../../constants/data";
 
-import "./PackageInfoDash.css";
-
 const PackageInfoDash = () => {
   const workbenchDB = useWorkbenchDB();
   const [packageTypeData, setPackageTypeData] = useState(null);
@@ -42,7 +40,7 @@ const PackageInfoDash = () => {
       .then((db) =>
         db.File.findAll({
           where,
-          // attributes: ['id'],
+          attributes: ["id"],
         })
       )
       .then((files) => {
@@ -62,11 +60,8 @@ const PackageInfoDash = () => {
               (packageEntry) =>
                 packageEntry.getDataValue("type") || NO_VALUE_DETECTED_LABEL
             );
-            const { chartData: packageTypesChartData } = formatChartData(
-              packageTypes,
-              "package types"
-            );
-            // console.log("Result packages types:", packageTypesChartData);
+            const { chartData: packageTypesChartData } =
+              formatChartData(packageTypes);
             setPackageTypeData(packageTypesChartData);
 
             // Prepare chart for package languages
@@ -75,11 +70,8 @@ const PackageInfoDash = () => {
                 packageEntry.getDataValue("primary_language") ||
                 NO_VALUE_DETECTED_LABEL
             );
-            const { chartData: packageLangsChartData } = formatChartData(
-              packageLangs,
-              "package langs"
-            );
-            // console.log("Result packages languages:", packageLangsChartData);
+            const { chartData: packageLangsChartData } =
+              formatChartData(packageLangs);
             setPackageLangData(packageLangsChartData);
 
             // Prepare chart for package license expression
@@ -88,12 +80,9 @@ const PackageInfoDash = () => {
                 packageEntry.getDataValue("declared_license_expression") ||
                 NO_VALUE_DETECTED_LABEL
             );
-            const { chartData: packageLicenseExpChartData } = formatChartData(
-              packageLicenseExp,
-              "package license exp"
-            );
+            const { chartData: packageLicenseExpChartData } =
+              formatChartData(packageLicenseExp);
 
-            // console.log("Result packages license exp:", packageLicenseExpChartData);
             setPackageLicenseData(packageLicenseExpChartData);
           });
       });

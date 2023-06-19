@@ -34,7 +34,6 @@ function limitChartData(data: FormattedEntry[], limit: number) {
 // Formats data suitable for Pie chart
 export function formatChartData(
   names: (string | StringDataType)[],
-  chartKey?: string,
   limit?: number,
 ): {
   chartData: FormattedEntry[],

@@ -77,7 +77,7 @@ const LicenseInfoDash = () => {
                 NO_VALUE_DETECTED_LABEL
             );
             // Prepare chart for license expressions
-            const { chartData } = formatChartData(expressions, "expressions");
+            const { chartData } = formatChartData(expressions);
             setLicenseExpressionData(chartData);
 
             const license_keys: string[] = [];
@@ -104,10 +104,8 @@ const LicenseInfoDash = () => {
               totalSPDXLicenses: new Set(license_keys_spdx).size,
             }));
 
-            const { chartData: licenseKeysChartData } = formatChartData(
-              license_keys,
-              "license_keys"
-            );
+            const { chartData: licenseKeysChartData } =
+              formatChartData(license_keys);
             setLicenseKeyData(licenseKeysChartData);
           });
 
@@ -123,8 +121,7 @@ const LicenseInfoDash = () => {
           )
           .then((labels) => {
             // @TODO - Set pie chart color based on the received color_code in policies
-            const { chartData } = formatChartData(labels, "policy");
-            // console.log("Result License policy formatted", chartData);
+            const { chartData } = formatChartData(labels);
             setLicensePolicyData(chartData);
           });
       });

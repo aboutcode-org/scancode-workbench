@@ -10,7 +10,6 @@ import EllipticLoader from "../../components/EllipticLoader";
 interface ScanData {
   totalFiles: number | null;
   totalDirectories: number | null;
-  totalUniqueCopyrightHolders: number | null;
 }
 import { NO_VALUE_DETECTED_LABEL } from "../../constants/data";
 
@@ -20,12 +19,11 @@ const FileInfoDash = () => {
   const workbenchDB = useWorkbenchDB();
 
   const [progLangsData, setProgLangsData] = useState(null);
+  const [mimeTypesData, setMimeTypesData] = useState(null);
   const [fileTypesData, setFileTypesData] = useState(null);
-  const [copyrightHoldersData, setCopyrightHoldersData] = useState(null);
   const [scanData, setScanData] = useState<ScanData>({
     totalFiles: null,
     totalDirectories: null,
-    totalUniqueCopyrightHolders: null,
   });
 
   useEffect(() => {
@@ -45,78 +43,51 @@ const FileInfoDash = () => {
             ? root.getDataValue("dirs_count") || 0
             : 0;
 
-        setScanData((oldScanData) => ({
-          ...oldScanData,
+        setScanData({
           totalFiles: Number(filesCount),
           totalDirectories: Number(dirsCount),
-        }));
-
-        return db.sync.then((db) =>
-          db.File.findAll({
-            where: {
-              type: {
-                [Op.eq]: "file",
-              },
-              path: {
-                [Op.or]: [
-                  { [Op.like]: `${currentPath}` }, // Matches self
-                  { [Op.like]: `${currentPath}/%` }, // Matches all its children (if any).
-                ],
-              },
-            },
-            attributes: ["id", "mime_type", "programming_language"],
-          })
-        );
+        });
+        return db.sync;
       })
+      .then((db) =>
+        db.File.findAll({
+          where: {
+            type: {
+              [Op.eq]: "file",
+            },
+            path: {
+              [Op.or]: [
+                { [Op.like]: `${currentPath}` }, // Matches self
+                { [Op.like]: `${currentPath}/%` }, // Matches all its children (if any).
+              ],
+            },
+          },
+          attributes: ["id", "file_type", "mime_type", "programming_language"],
+        })
+      )
       .then((files) => {
-        // Prepare chart for file types
-        const fileMimeTypes = files.map(
-          (file) => file.getDataValue("mime_type") || NO_VALUE_DETECTED_LABEL
-        );
-        const { chartData: fileTypesChartData } = formatChartData(
-          fileMimeTypes,
-          "file-types"
-        );
-        setFileTypesData(fileTypesChartData);
-
         // Prepare chart for programming languages
         const langs = files.map(
           (file) =>
             file.getDataValue("programming_language") || NO_VALUE_DETECTED_LABEL
         );
-        const { chartData: langsChartData } = formatChartData(
-          langs,
-          "programming-langs"
-        );
+        const { chartData: langsChartData } = formatChartData(langs);
         setProgLangsData(langsChartData);
 
-        return files;
-      })
-      .then((files) => {
-        const fileIDs = files.map((file) => file.getDataValue("id"));
+        // Prepare chart for file types
+        const fileTypes = files.map(
+          (file) => file.getDataValue("file_type") || NO_VALUE_DETECTED_LABEL
+        );
+        const { chartData: fileTypesChartData } = formatChartData(fileTypes);
+        setFileTypesData(fileTypesChartData);
 
-        // Query data for copyright holders chart
-        db.sync
-          .then((db) => db.Copyright.findAll({ where: { fileId: fileIDs } }))
-          .then((copyrights) =>
-            copyrights.map(
-              (copyright) =>
-                copyright.getDataValue("holders") || NO_VALUE_DETECTED_LABEL
-            )
-          )
-          .then((copyrightHolders) => {
-            setScanData((oldScanData) => ({
-              ...oldScanData,
-              totalUniqueCopyrightHolders: new Set(copyrightHolders).size,
-            }));
-
-            // Prepare chart for copyright holders
-            const { chartData: copyrightHoldersChartData } = formatChartData(
-              copyrightHolders,
-              "policy"
-            );
-            setCopyrightHoldersData(copyrightHoldersChartData);
-          });
+        // Prepare chart for mime types
+        const fileMimeTypes = files.map(
+          (file) => file.getDataValue("mime_type") || NO_VALUE_DETECTED_LABEL
+        );
+        const { chartData: mimeTypesChartData } =
+          formatChartData(fileMimeTypes);
+        setMimeTypesData(mimeTypesChartData);
       });
   }, [workbenchDB]);
 
@@ -147,16 +118,6 @@ const FileInfoDash = () => {
             <h5 className="title">Total Number of Directories</h5>
           </Card>
         </Col>
-        <Col sm={6} md={4}>
-          <Card className="info-card">
-            {scanData.totalUniqueCopyrightHolders === null ? (
-              <EllipticLoader wrapperClass="value" />
-            ) : (
-              <h4 className="value">{scanData.totalUniqueCopyrightHolders}</h4>
-            )}
-            <h5 className="title">Unique Copyright Holders Detected</h5>
-          </Card>
-        </Col>
       </Row>
       <br />
       <br />
@@ -183,11 +144,11 @@ const FileInfoDash = () => {
         </Col>
         <Col sm={6} md={4}>
           <Card className="chart-card">
-            <h5 className="title">Copyright holders</h5>
+            <h5 className="title">Mime types</h5>
             <PieChart
-              chartData={copyrightHoldersData}
-              noDataText="Use --copyright CLI option for copyright data"
-              noDataLink="https://scancode-toolkit.readthedocs.io/en/latest/cli-reference/basic-options.html#copyright-option"
+              chartData={mimeTypesData}
+              noDataText="Use --info CLI option for mime types"
+              noDataLink="https://scancode-toolkit.readthedocs.io/en/latest/cli-reference/basic-options.html#info-option"
             />
           </Card>
         </Col>
