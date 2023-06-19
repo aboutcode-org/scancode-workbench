@@ -183,7 +183,7 @@ export const MatchedTextProvider = (
               <>
                 <h6>Coverage: {matchDetails.coverage} %</h6>
                 <Row>
-                  <Col sm={12} md={6}>
+                  <Col sm={12} md={6} className="rule-text-section">
                     <table className="diff-table">
                       <thead>
                         <tr>
@@ -220,7 +220,7 @@ export const MatchedTextProvider = (
                       </tbody>
                     </table>
                   </Col>
-                  <Col sm={12} md={6}>
+                  <Col sm={12} md={6} className="matched-text-section">
                     <table className="diff-table">
                       <thead>
                         <tr>

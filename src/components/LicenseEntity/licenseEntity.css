@@ -29,12 +29,18 @@
   max-height: calc(100vh - 120px);
 }
 
+.matched-text-diff-modal .row {
+  padding: 5px;
+}
+
 .matched-text-diff-modal .rule-text-section {
-  background-color: #f4feff;
+  background-color: #f6feff;
+  padding: 0;
 }
 
 .matched-text-diff-modal .matched-text-section {
-  background-color: #fafff5;
+  background-color: #f9fffc;
+  padding: 0;
 }
 
 .matched-text-diff-modal .diff-table {
@@ -44,7 +50,7 @@
 
 .matched-text-diff-modal .diff-table th {
   padding: 15px;
-  padding-left: 5px;
+  padding-left: 10px;
   font-size: 15px;
   font-weight: 500;
   background-color: #fafbfc;
