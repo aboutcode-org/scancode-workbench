@@ -83,18 +83,3 @@
 .license-item:hover {
   background-color: rgb(242, 242, 242);
 }
-
-
-/* .expand-package {
-  display: inline-block;
-  border-radius: 50%;
-}
-.expand-package .expanded-icon{
-  transform: rotate(90deg);
-}
-.expand-package svg{
-  transition: transform 300ms ease-in;
-}
-.expand-package:active, .expand-package:hover {
-  font-size: 14px;
-} */

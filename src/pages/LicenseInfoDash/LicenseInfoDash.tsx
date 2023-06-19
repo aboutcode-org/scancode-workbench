@@ -60,6 +60,7 @@ const LicenseInfoDash = () => {
             )
           )
           .filter((detections) => detections.length);
+
         setScanData((oldScanData) => ({
           ...oldScanData,
           totalLicenseFiles: filesWithDetections.length,
@@ -209,7 +210,7 @@ const LicenseInfoDash = () => {
             <PieChart
               chartData={licensePolicyData}
               noDataText="Use --license-policy CLI option for policy data"
-              noDataLink="https://scancode-toolkit.readthedocs.io/plugins/licence_policy_plugin.html#using-the-plugin"
+              noDataLink="https://scancode-toolkit.readthedocs.io/en/latest/plugins/licence_policy_plugin.html#using-the-plugin"
             />
           </Card>
         </Col>

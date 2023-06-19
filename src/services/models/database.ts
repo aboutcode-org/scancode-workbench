@@ -14,23 +14,30 @@
  #
  */
 
-import { Model, ModelStatic, Sequelize } from 'sequelize';
+import { Model, ModelStatic, Sequelize } from "sequelize";
 
-import headerModel, { HeaderAttributes } from './header';
-import fileModel, { FileAttributes } from './file';
-import licenseExpressionModel, { LicenseExpressionAttributes, OptionalLicenseExpressionAttributes } from './licenseExpression';
-import licensePolicyModel, { LicensePolicyAttributes } from './licensePolicy';
-import copyrightModel, { CopyrightAttributes } from './copyright';
-import packageDataModel, { PackageDataAttributes } from './packageData';
-import emailModel, { EmailAttributes } from './email';
-import urlModel, { UrlAttributes } from './url';
-import flatFileModel, { FlatFileAttributes } from './flatFile';
-import scanErrorModel, { ScanErrorAttributes } from './scanError';
-import packagesModel, { PackagesAttributes } from './packages';
-import dependenciesModel, { DependenciesAttributes } from './dependencies';
-import licenseDetectionModel, { LicenseDetectionAttributes } from './licenseDetections';
-import licenseClueModel, { LicenseClueAttributes } from './licenseClues';
-
+import headerModel, { HeaderAttributes } from "./header";
+import fileModel, { FileAttributes } from "./file";
+import licenseExpressionModel, {
+  LicenseExpressionAttributes,
+  OptionalLicenseExpressionAttributes,
+} from "./licenseExpression";
+import licensePolicyModel, { LicensePolicyAttributes } from "./licensePolicy";
+import copyrightModel, { CopyrightAttributes } from "./copyright";
+import packageDataModel, { PackageDataAttributes } from "./packageData";
+import emailModel, { EmailAttributes } from "./email";
+import urlModel, { UrlAttributes } from "./url";
+import flatFileModel, { FlatFileAttributes } from "./flatFile";
+import scanErrorModel, { ScanErrorAttributes } from "./scanError";
+import packagesModel, { PackagesAttributes } from "./packages";
+import dependenciesModel, { DependenciesAttributes } from "./dependencies";
+import licenseDetectionModel, {
+  LicenseDetectionAttributes,
+} from "./licenseDetections";
+import licenseClueModel, { LicenseClueAttributes } from "./licenseClues";
+import licenseRuleReferenceModel, {
+  LicenseRuleReferenceAttributes,
+} from "./licenseRuleReference";
 
 // let Header;
 // let File;
@@ -41,29 +48,39 @@ import licenseClueModel, { LicenseClueAttributes } from './licenseClues';
 // let Url;
 // let Scan;
 
-
 // type SupportedModels = <Model<HeaderAttributes, HeaderAttributes>>;
 
-export interface DatabaseStructure{
+export interface DatabaseStructure {
   // Top level entities
-  Header: ModelStatic<Model<HeaderAttributes, HeaderAttributes>>,
-  Packages: ModelStatic<Model<PackagesAttributes, PackagesAttributes>>,
-  Dependencies: ModelStatic<Model<DependenciesAttributes, DependenciesAttributes>>,
-  LicenseDetections: ModelStatic<Model<LicenseDetectionAttributes, LicenseDetectionAttributes>>,
-  LicenseClues: ModelStatic<Model<LicenseClueAttributes, LicenseClueAttributes>>,
+  Header: ModelStatic<Model<HeaderAttributes, HeaderAttributes>>;
+  Packages: ModelStatic<Model<PackagesAttributes, PackagesAttributes>>;
+  Dependencies: ModelStatic<
+    Model<DependenciesAttributes, DependenciesAttributes>
+  >;
+  LicenseDetections: ModelStatic<
+    Model<LicenseDetectionAttributes, LicenseDetectionAttributes>
+  >;
+  LicenseRuleReferences: ModelStatic<
+    Model<LicenseRuleReferenceAttributes, LicenseRuleReferenceAttributes>
+  >;
+  LicenseClues: ModelStatic<
+    Model<LicenseClueAttributes, LicenseClueAttributes>
+  >;
 
-  File: ModelStatic<Model<FileAttributes>>,
-  LicenseExpression: ModelStatic<Model<LicenseExpressionAttributes, OptionalLicenseExpressionAttributes>>,
-  LicensePolicy: ModelStatic<Model<LicensePolicyAttributes>>,
-  Copyright: ModelStatic<Model<CopyrightAttributes>>,
-  PackageData: ModelStatic<Model<PackageDataAttributes>>,
-  Email: ModelStatic<Model<EmailAttributes>>,
-  Url: ModelStatic<Model<UrlAttributes>>,
-  ScanError: ModelStatic<Model<ScanErrorAttributes>>,
+  File: ModelStatic<Model<FileAttributes>>;
+  LicenseExpression: ModelStatic<
+    Model<LicenseExpressionAttributes, OptionalLicenseExpressionAttributes>
+  >;
+  LicensePolicy: ModelStatic<Model<LicensePolicyAttributes>>;
+  Copyright: ModelStatic<Model<CopyrightAttributes>>;
+  PackageData: ModelStatic<Model<PackageDataAttributes>>;
+  Email: ModelStatic<Model<EmailAttributes>>;
+  Url: ModelStatic<Model<UrlAttributes>>;
+  ScanError: ModelStatic<Model<ScanErrorAttributes>>;
 
-  FlatFile: ModelStatic<Model<FlatFileAttributes>>,
+  FlatFile: ModelStatic<Model<FlatFileAttributes>>;
 
-  fileIncludes: { model: ModelStatic<Model<unknown>>, separate: boolean }[],
+  fileIncludes: { model: ModelStatic<Model<unknown>>; separate: boolean }[];
 }
 
 export function newDatabase(sequelize: Sequelize): DatabaseStructure {
@@ -74,6 +91,7 @@ export function newDatabase(sequelize: Sequelize): DatabaseStructure {
     Packages: packagesModel(sequelize),
     Dependencies: dependenciesModel(sequelize),
     LicenseDetections: licenseDetectionModel(sequelize),
+    LicenseRuleReferences: licenseRuleReferenceModel(sequelize),
     LicenseClues: licenseClueModel(sequelize),
 
     File: fileModel(sequelize),
@@ -111,6 +129,6 @@ export function newDatabase(sequelize: Sequelize): DatabaseStructure {
 
   return {
     ...result,
-    fileIncludes
+    fileIncludes,
   };
 }

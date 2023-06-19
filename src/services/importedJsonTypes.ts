@@ -45,6 +45,7 @@ export interface LicenseMatch {
   score: number;
   start_line: number;
   end_line: number;
+  matched_text: string;
   matched_length: number;
   match_coverage: number;
   matcher: string;
@@ -71,6 +72,7 @@ export interface LicenseClue {
   score: number;
   start_line: number;
   end_line: number;
+  matched_text: string;
   matched_length: number;
   match_coverage: number;
   matcher: string;

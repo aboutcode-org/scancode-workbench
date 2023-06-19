@@ -170,7 +170,9 @@ export class WorkbenchDB {
   }
 
   getAllLicenseDetections() {
-    return this.sync.then((db) => db.LicenseDetections.findAll());
+    return this.sync.then((db) =>
+      db.LicenseDetections.findAll({ order: ["license_expression"] })
+    );
   }
 
   getAllLicenseClues() {
@@ -183,6 +185,12 @@ export class WorkbenchDB {
 
   getAllDependencies() {
     return this.sync.then((db) => db.Dependencies.findAll());
+  }
+
+  getLicenseRuleReference(identifier: string, attributes?: string[]) {
+    return this.sync.then((db) =>
+      db.LicenseRuleReferences.findOne({ where: { identifier }, attributes })
+    );
   }
 
   // Uses the files table to do a findOne query
@@ -245,7 +253,7 @@ export class WorkbenchDB {
         roots.push(file);
       }
 
-      // @TODO - Trying to fix rc-tree showing file icon instead of directory https://github.com/nexB/scancode-workbench/issues/542
+      // @TODO - Trial to fix rc-tree showing file icon instead of directory https://github.com/nexB/scancode-workbench/issues/542
       // fileList.forEach(file => {
       //   if(file.getDataValue('type').toString({}) === 'directory' && !file.children){
       //     file.children=[];
@@ -292,7 +300,7 @@ export class WorkbenchDB {
 
     return new Promise((resolve, reject) => {
       // eslint-disable-next-line @typescript-eslint/no-this-alias
-      const primaryPromise = this; // @TODO - Remove this
+      const primaryPromise = this;
 
       let batchCount = 0;
 
@@ -343,9 +351,6 @@ export class WorkbenchDB {
           );
           const license_rule_references: any[] =
             topLevelData.license_rule_references || [];
-          // const license_rule_references_mapping = new Map<string, unknown>(
-          //   license_rule_references.map(rule_ref => [rule_ref.identifier, rule_ref])
-          // );
 
           TopLevelData = {
             header,
@@ -367,6 +372,9 @@ export class WorkbenchDB {
           promiseChain = promiseChain
             .then(() => this.db.Packages.bulkCreate(packages))
             .then(() => this.db.Dependencies.bulkCreate(dependencies))
+            .then(() =>
+              this.db.LicenseRuleReferences.bulkCreate(license_rule_references)
+            )
             .then(() => this.db.Header.create(parsedHeader))
             .then((header) => (headerId = Number(header.getDataValue("id"))))
             .catch((err: unknown) => {
@@ -719,6 +727,7 @@ export class WorkbenchDB {
           score: license_clue.score,
           start_line: license_clue.start_line,
           end_line: license_clue.end_line,
+          matched_text: license_clue.matched_text,
           matched_length: license_clue.matched_length,
           match_coverage: license_clue.match_coverage,
           matcher: license_clue.matcher,

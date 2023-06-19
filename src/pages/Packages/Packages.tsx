@@ -10,7 +10,6 @@ import NoDataFallback from "../../components/NoDataSection";
 import DependencyEntity from "../../components/PackagesEntityDetails/DependencyEntity";
 import PackageEntity from "../../components/PackagesEntityDetails/PackageEntity";
 import { QUERY_KEYS } from "../../constants/params";
-// import { PackageURL } from 'packageurl-js';
 import { useWorkbenchDB } from "../../contexts/dbContext";
 import { DEPENDENCY_SCOPES } from "../../services/models/dependencies";
 import {
@@ -81,7 +80,7 @@ const Packages = () => {
     db.sync.then(async () => {
       const packages = await db.getAllPackages();
       const deps = await db.getAllDependencies();
-      console.log("Raw Packages & deps", packages, deps);
+      // console.log("Raw Packages & deps", packages, deps);
       if (!packages.length && !deps.length) {
         console.log("No package or deps available");
         setPackageGroups([]);
