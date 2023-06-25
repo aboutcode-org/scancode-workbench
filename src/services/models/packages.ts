@@ -76,6 +76,10 @@ export default function packagesModel(sequelize: Sequelize) {
         primaryKey: true,
         type: DataTypes.INTEGER,
       },
+      package_uid: {
+        unique: true,
+        type: DataTypes.STRING,
+      },
       type: DataTypes.STRING,
       namespace: {
         allowNull: true,
@@ -186,7 +190,6 @@ export default function packagesModel(sequelize: Sequelize) {
         allowNull: true,
         type: DataTypes.STRING,
       },
-      package_uid: DataTypes.STRING,
       datafile_paths: jsonDataType("datafile_paths"),
       datasource_ids: jsonDataType("datasource_ids"),
       purl: {

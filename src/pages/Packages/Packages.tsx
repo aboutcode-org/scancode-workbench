@@ -21,7 +21,8 @@ import {
 import "./packages.css";
 
 const Packages = () => {
-  const workbenchDB = useWorkbenchDB();
+  const { db, initialized, currentPath, goToFileInTableView } = useWorkbenchDB();
+
   const [searchParams] = useSearchParams();
   const [expandedPackages, setExpandedPackages] = useState<string[]>([]);
   const [packagesWithDeps, setPackagesWithDeps] = useState<
@@ -73,8 +74,6 @@ const Packages = () => {
   };
 
   useEffect(() => {
-    const { db, initialized, currentPath } = workbenchDB;
-
     if (!initialized || !db || !currentPath) return;
 
     db.sync.then(async () => {
@@ -254,9 +253,7 @@ const Packages = () => {
           for_package_uid:
             dependencyInfo.getDataValue("for_package_uid")?.toString({}) ||
             null,
-          datafile_path: dependencyInfo
-            .getDataValue("datafile_path")
-            .toString({}),
+          datafile_path: dependencyInfo.getDataValue("datafile_path"),
           datasource_id: dependencyInfo
             .getDataValue("datasource_id")
             .toString({}),
@@ -310,7 +307,7 @@ const Packages = () => {
         activatePackage(parsedPackageWithDeps[0]);
       }
     });
-  }, [workbenchDB]);
+  }, [db, initialized, currentPath]);
 
   function collapsePackage(target_package_uid: string, e?: React.MouseEvent) {
     setExpandedPackages((prevPackages) =>
@@ -520,6 +517,7 @@ const Packages = () => {
                 <DependencyEntity
                   dependency={activeDependency}
                   goToPackageByUID={activatePackageByUID}
+                  goToFileInTableView={goToFileInTableView}
                 />
               )}
         </Allotment.Pane>

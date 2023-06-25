@@ -1,4 +1,4 @@
-import { faArchive, faBars, faChartColumn, faFileCode, faFileLines, faGavel, faHome, faInfoCircle, faList,faTable } from '@fortawesome/free-solid-svg-icons';
+import { faArchive, faBars, faChartColumn, faCopyright, faFileCode, faFileLines, faGavel, faHome, faInfoCircle, faList,faListCheck,faTable } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useState } from 'react'
 import { Menu, MenuItem, ProSidebar, SidebarContent,SidebarFooter } from 'react-pro-sidebar';
@@ -31,9 +31,19 @@ const MENU_ITEMS = [
         icon: faGavel,
     },
     {
+        title: "Copyright Info Dashboard",
+        route: "/" + ROUTES.COPYRIGHT_DASHBOARD,
+        icon: faCopyright,
+    },
+    {
         title: "Package Info Dashboard",
         route: "/" + ROUTES.PACKAGE_DASHBOARD,
         icon: faArchive,
+    },
+    {
+        title: "Dependency Info Dashboard",
+        route: "/" + ROUTES.DEPENDENCY_DASHBOARD,
+        icon: faListCheck,
     },
     {
         title: "Licenses Explorer",

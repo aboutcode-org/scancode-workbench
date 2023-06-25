@@ -61,9 +61,9 @@ export function parseScanInfo(rawInfo: Model<HeaderAttributes, HeaderAttributes>
   const optionsMap = new Map<string, ScanOptionKeys>(optionsList.map(([k,v]) => [k, v as ScanOptionKeys]));
 
   const parsedScanInfo: ScanInfo = {
-    tool_name: rawInfo.getDataValue("tool_name").toString({}) || "",
-    tool_version: rawInfo.getDataValue("tool_version").toString({}) || "",
-    notice: rawInfo.getDataValue("notice").toString({}) || "",
+    tool_name: rawInfo.getDataValue("tool_name")?.toString({}) || "",
+    tool_version: rawInfo.getDataValue("tool_version")?.toString({}) || "",
+    notice: rawInfo.getDataValue("notice")?.toString({}) || "",
     duration: Number(rawInfo.getDataValue("duration")),
     optionsList,
     optionsMap,

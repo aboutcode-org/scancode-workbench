@@ -370,7 +370,7 @@ export class WorkbenchDB {
 
           files_count = Number(parsedHeader.files_count);
           promiseChain = promiseChain
-            .then(() => this.db.Packages.bulkCreate(packages))
+          .then(() => this.db.Packages.bulkCreate(packages))
             .then(() => this.db.Dependencies.bulkCreate(dependencies))
             .then(() =>
               this.db.LicenseRuleReferences.bulkCreate(license_rule_references)

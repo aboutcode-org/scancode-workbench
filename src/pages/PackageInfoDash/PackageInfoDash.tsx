@@ -27,19 +27,17 @@ const PackageInfoDash = () => {
 
     if (!initialized || !db || !currentPath) return;
 
-    const where: WhereOptions<FileAttributes> = {
-      path: {
-        [Op.or]: [
-          { [Op.like]: `${currentPath}` }, // Matches a file / directory.
-          { [Op.like]: `${currentPath}/%` }, // Matches all its children (if any).
-        ],
-      },
-    };
-
     db.sync
       .then((db) =>
         db.File.findAll({
-          where,
+          where: {
+            path: {
+              [Op.or]: [
+                { [Op.like]: `${currentPath}` }, // Matches a file / directory.
+                { [Op.like]: `${currentPath}/%` }, // Matches all its children (if any).
+              ],
+            },
+          },
           attributes: ["id"],
         })
       )
