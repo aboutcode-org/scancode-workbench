@@ -7,15 +7,14 @@ import { useWorkbenchDB } from "../../contexts/dbContext";
 import PieChart from "../../components/PieChart/PieChart";
 import EllipticLoader from "../../components/EllipticLoader";
 import { LEGEND_LIMIT, NO_VALUE_DETECTED_LABEL } from "../../constants/data";
+import { ScanOptionKeys } from "../../utils/parsers";
 
 interface ScanData {
-  totalUniqueHolders: number | null;
-  totalUniqueNotices: number | null;
-  totalUniqueAuthors: number | null;
+  totalDependencies: number | null;
 }
 
 const DependencyInfoDash = () => {
-  const workbenchDB = useWorkbenchDB();
+  const { db, initialized, currentPath, scanInfo } = useWorkbenchDB();
 
   const [packageTypeDependenciesData, setPackageTypeDependenciesData] =
     useState(null);
@@ -25,14 +24,10 @@ const DependencyInfoDash = () => {
   const [optionalDependenciesData, setOptionalDependenciesData] =
     useState(null);
   const [scanData, setScanData] = useState<ScanData>({
-    totalUniqueHolders: 0,
-    totalUniqueAuthors: 0,
-    totalUniqueNotices: 0,
+    totalDependencies: null,
   });
 
   useEffect(() => {
-    const { db, initialized, currentPath } = workbenchDB;
-
     if (!initialized || !db || !currentPath) return;
 
     // db.sync.then((db) => {});
@@ -64,6 +59,7 @@ const DependencyInfoDash = () => {
       )
       .then((dependencies) => {
         console.log({ dependencies });
+        setScanData({ totalDependencies: dependencies.length });
 
         // Prepare chart for runtime dependencies
         const runtimeDependencies = dependencies.map((dependency) =>
@@ -73,7 +69,7 @@ const DependencyInfoDash = () => {
           formatChartData(runtimeDependencies);
         setRuntimeDependenciesData(runtimeDependenciesChartData);
 
-        // Prepare chart for resolvved dependencies
+        // Prepare chart for resolved dependencies
         const resolvedDependencies = dependencies.map((dependency) =>
           dependency.getDataValue("is_resolved") ? "Resolved" : "Unresolved"
         );
@@ -88,6 +84,11 @@ const DependencyInfoDash = () => {
         const { chartData: optionalDependenciesChartData } =
           formatChartData(optionalDependencies);
         setOptionalDependenciesData(optionalDependenciesChartData);
+        console.log({
+          optionalDependenciesChartData,
+          resolvedDependenciesChartData,
+          runtimeDependenciesChartData,
+        });
       });
 
     db.sync.then(async (db) => {
@@ -109,62 +110,40 @@ const DependencyInfoDash = () => {
       });
       const PackageTypeWiseCount = new Map<string, number>();
       packagesData.forEach((packageData) => {
+        const deps: unknown[] = JSON.parse(
+          packageData.getDataValue("dependencies")?.toString({}) || "[]"
+        );
+        if (!deps.length) return;
         PackageTypeWiseCount.set(
           packageData.getDataValue("type")?.toString({}) ||
             NO_VALUE_DETECTED_LABEL,
           PackageTypeWiseCount.get(
             packageData.getDataValue("type")?.toString({}) ||
               NO_VALUE_DETECTED_LABEL
-          ) ||
-            0 +
-              (
-                JSON.parse(
-                  packageData.getDataValue("dependencies")?.toString({}) || "[]"
-                ) as unknown[]
-              ).length
+          ) || 0 + deps.length
         );
       });
       setPackageTypeDependenciesData(
         limitChartData(Array.from(PackageTypeWiseCount.entries()), LEGEND_LIMIT)
       );
     });
-  }, [workbenchDB]);
+  }, [initialized, db, currentPath]);
 
   return (
     <div className="text-center pieInfoDash">
       <br />
-      <h3>File info - {workbenchDB.currentPath || ""}</h3>
+      <h3>Dependency info - {currentPath || ""}</h3>
       <br />
       <br />
       <Row className="dash-cards">
         <Col sm={4}>
-          <Card className="info-card">
-            {scanData.totalUniqueHolders === null ? (
+          <Card className="counter-card">
+            {scanData.totalDependencies === null ? (
               <EllipticLoader wrapperClass="value" />
             ) : (
-              <h4 className="value">{scanData.totalUniqueHolders}</h4>
+              <h4 className="value">{scanData.totalDependencies}</h4>
             )}
-            <h5 className="title">Total Unique holders</h5>
-          </Card>
-        </Col>
-        <Col sm={4}>
-          <Card className="info-card">
-            {scanData.totalUniqueNotices === null ? (
-              <EllipticLoader wrapperClass="value" />
-            ) : (
-              <h4 className="value">{scanData.totalUniqueNotices}</h4>
-            )}
-            <h5 className="title">Total Unique notices</h5>
-          </Card>
-        </Col>
-        <Col sm={4}>
-          <Card className="info-card">
-            {scanData.totalUniqueAuthors === null ? (
-              <EllipticLoader wrapperClass="value" />
-            ) : (
-              <h4 className="value">{scanData.totalUniqueAuthors}</h4>
-            )}
-            <h5 className="title">Total Unique authors</h5>
+            <h5 className="title">Total Dependencies</h5>
           </Card>
         </Col>
       </Row>
@@ -173,11 +152,12 @@ const DependencyInfoDash = () => {
       <Row className="dash-cards">
         <Col sm={6} md={3}>
           <Card className="chart-card">
-            <h5 className="title">Package types</h5>
+            <h5 className="title">Dependencies for each Package type</h5>
             <PieChart
               chartData={packageTypeDependenciesData}
-              noDataText="Use --package CLI option for dependencies"
-              noDataLink="https://scancode-toolkit.readthedocs.io/en/latest/cli-reference/basic-options.html#package-option"
+              notOpted={!scanInfo.optionsMap.get(ScanOptionKeys.PACKAGE)}
+              notOptedText="Use --package CLI option for dependencies"
+              notOptedLink="https://scancode-toolkit.readthedocs.io/en/latest/cli-reference/basic-options.html#package-option"
             />
           </Card>
         </Col>
@@ -186,8 +166,9 @@ const DependencyInfoDash = () => {
             <h5 className="title">Runtime dependencies</h5>
             <PieChart
               chartData={runtimeDependenciesData}
-              noDataText="Use --package CLI option for dependencies"
-              noDataLink="https://scancode-toolkit.readthedocs.io/en/latest/cli-reference/basic-options.html#package-option"
+              notOpted={!scanInfo.optionsMap.get(ScanOptionKeys.PACKAGE)}
+              notOptedText="Use --package CLI option for dependencies"
+              notOptedLink="https://scancode-toolkit.readthedocs.io/en/latest/cli-reference/basic-options.html#package-option"
             />
           </Card>
         </Col>
@@ -196,8 +177,9 @@ const DependencyInfoDash = () => {
             <h5 className="title">Resolved dependencies</h5>
             <PieChart
               chartData={resolvedDependenciesData}
-              noDataText="Use --package CLI option for dependencies"
-              noDataLink="https://scancode-toolkit.readthedocs.io/en/latest/cli-reference/basic-options.html#package-option"
+              notOpted={!scanInfo.optionsMap.get(ScanOptionKeys.PACKAGE)}
+              notOptedText="Use --package CLI option for dependencies"
+              notOptedLink="https://scancode-toolkit.readthedocs.io/en/latest/cli-reference/basic-options.html#package-option"
             />
           </Card>
         </Col>
@@ -206,8 +188,9 @@ const DependencyInfoDash = () => {
             <h5 className="title">Optional Dependencies</h5>
             <PieChart
               chartData={optionalDependenciesData}
-              noDataText="Use --package CLI option for dependencies"
-              noDataLink="https://scancode-toolkit.readthedocs.io/en/latest/cli-reference/basic-options.html#package-option"
+              notOpted={!scanInfo.optionsMap.get(ScanOptionKeys.PACKAGE)}
+              notOptedText="Use --package CLI option for dependencies"
+              notOptedLink="https://scancode-toolkit.readthedocs.io/en/latest/cli-reference/basic-options.html#package-option"
             />
           </Card>
         </Col>

@@ -9,8 +9,8 @@ import { LEGEND_COLORS } from "../../constants/colors";
 import "./piechart.css";
 
 interface PieChartProps extends PieChartFallbackProps {
-  chartData: FormattedEntry[] | null;
   hideLegend?: boolean;
+  chartData: FormattedEntry[] | null;
 }
 
 const PieChart = (props: PieChartProps) => {
@@ -40,7 +40,7 @@ const PieChart = (props: PieChartProps) => {
       },
       legend: {
         hide: hideLegend,
-      }
+      },
     });
     setC3Chart(newChart);
   }, [chartData]);

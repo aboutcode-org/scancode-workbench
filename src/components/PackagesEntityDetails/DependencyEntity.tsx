@@ -5,10 +5,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faCogs } from "@fortawesome/free-solid-svg-icons";
 
 import { DependencyDetails } from "../../pages/Packages/packageDefinitions";
-import { DependencyScopeMapping } from "./dependencyScopeMapper";
 
 import "../../styles/entityCommonStyles.css";
-import "./dependencyEntity.css";
 
 interface DependencyEntityProps {
   dependency: DependencyDetails;
@@ -32,25 +30,15 @@ const DependencyEntity = (props: DependencyEntityProps) => {
   return (
     <div className="dependency-entity">
       <h5>{dependency.purl}</h5>
-      {dependency.is_runtime ? (
+      {dependency.is_runtime && (
         <Badge pill bg="primary">
           <FontAwesomeIcon icon={faCogs} /> Runtime
         </Badge>
-      ) : dependency.is_optional ? (
-        <Badge pill bg="dark">
-          {DependencyScopeMapping[dependency.scope] ? (
-            <>
-              <FontAwesomeIcon
-                icon={DependencyScopeMapping[dependency.scope].icon}
-              />{" "}
-              {DependencyScopeMapping[dependency.scope].text}
-            </>
-          ) : (
-            dependency.scope || "Optional"
-          )}
+      )}
+      {dependency.is_optional && (
+        <Badge pill bg="warning" text="dark">
+          <FontAwesomeIcon icon={faCogs} /> Optional
         </Badge>
-      ) : (
-        ""
       )}
       {dependency.is_resolved && (
         <Badge pill bg="success">

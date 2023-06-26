@@ -38,7 +38,7 @@ export interface ScanInfo {
   notice: string;
   duration: number;
   optionsList: [string, unknown][];
-  optionsMap: Map<string, ScanOptionKeys>;
+  optionsMap: Map<ScanOptionKeys, unknown>;
   input: string[];
   files_count: number;
   output_format_version: string;
@@ -58,7 +58,7 @@ export function parseScanInfo(rawInfo: Model<HeaderAttributes, HeaderAttributes>
     parseIfValidJson(rawInfo.getDataValue("options")?.toString({})) ||
       []
   ) || [];
-  const optionsMap = new Map<string, ScanOptionKeys>(optionsList.map(([k,v]) => [k, v as ScanOptionKeys]));
+  const optionsMap = new Map<ScanOptionKeys, unknown>(optionsList.map(([k,v]) => [k as ScanOptionKeys, v]));
 
   const parsedScanInfo: ScanInfo = {
     tool_name: rawInfo.getDataValue("tool_name")?.toString({}) || "",

@@ -6,6 +6,7 @@ import { formatChartData } from "../../utils/pie";
 import { useWorkbenchDB } from "../../contexts/dbContext";
 import PieChart from "../../components/PieChart/PieChart";
 import EllipticLoader from "../../components/EllipticLoader";
+import { ScanOptionKeys } from "../../utils/parsers";
 
 interface ScanData {
   totalUniqueHolders: number | null;
@@ -14,7 +15,7 @@ interface ScanData {
 }
 
 const CopyrightInfoDash = () => {
-  const workbenchDB = useWorkbenchDB();
+  const { db, initialized, currentPath, scanInfo } = useWorkbenchDB();
 
   const [copyrightHoldersData, setCopyrightHoldersData] = useState(null);
   const [copyrightNoticesData, setCopyrightNoticesData] = useState(null);
@@ -26,8 +27,6 @@ const CopyrightInfoDash = () => {
   });
 
   useEffect(() => {
-    const { db, initialized, currentPath } = workbenchDB;
-
     if (!initialized || !db || !currentPath) return;
 
     db.sync
@@ -102,17 +101,17 @@ const CopyrightInfoDash = () => {
           totalUniqueCopyrightAuthors,
         });
       });
-  }, [workbenchDB]);
+  }, [db, initialized, currentPath]);
 
   return (
     <div className="text-center pieInfoDash">
       <br />
-      <h3>File info - {workbenchDB.currentPath || ""}</h3>
+      <h3>Copyright info - {currentPath || ""}</h3>
       <br />
       <br />
       <Row className="dash-cards">
         <Col sm={4}>
-          <Card className="info-card">
+          <Card className="counter-card">
             {scanData.totalUniqueHolders === null ? (
               <EllipticLoader wrapperClass="value" />
             ) : (
@@ -122,7 +121,7 @@ const CopyrightInfoDash = () => {
           </Card>
         </Col>
         <Col sm={4}>
-          <Card className="info-card">
+          <Card className="counter-card">
             {scanData.totalUniqueNotices === null ? (
               <EllipticLoader wrapperClass="value" />
             ) : (
@@ -132,7 +131,7 @@ const CopyrightInfoDash = () => {
           </Card>
         </Col>
         <Col sm={4}>
-          <Card className="info-card">
+          <Card className="counter-card">
             {scanData.totalUniqueAuthors === null ? (
               <EllipticLoader wrapperClass="value" />
             ) : (
@@ -148,22 +147,26 @@ const CopyrightInfoDash = () => {
         <Col sm={6} md={4}>
           <Card className="chart-card">
             <h5 className="title">Copyright Holders</h5>
+            <br />
             <PieChart
               hideLegend
               chartData={copyrightHoldersData}
-              noDataText="Use --copyright CLI option for copyright data"
-              noDataLink="https://scancode-toolkit.readthedocs.io/en/latest/cli-reference/basic-options.html#copyright-option"
+              notOpted={!scanInfo.optionsMap.get(ScanOptionKeys.COPYRIGHT)}
+              notOptedText="Use --copyright CLI option for copyright data"
+              notOptedLink="https://scancode-toolkit.readthedocs.io/en/latest/cli-reference/basic-options.html#copyright-option"
             />
           </Card>
         </Col>
         <Col sm={6} md={4}>
           <Card className="chart-card">
             <h5 className="title">Copyright Notices</h5>
+            <br />
             <PieChart
               hideLegend
               chartData={copyrightNoticesData}
-              noDataText="Use --copyright CLI option for copyright data"
-              noDataLink="https://scancode-toolkit.readthedocs.io/en/latest/cli-reference/basic-options.html#copyright-option"
+              notOpted={!scanInfo.optionsMap.get(ScanOptionKeys.COPYRIGHT)}
+              notOptedText="Use --copyright CLI option for copyright data"
+              notOptedLink="https://scancode-toolkit.readthedocs.io/en/latest/cli-reference/basic-options.html#copyright-option"
             />
           </Card>
         </Col>
@@ -173,8 +176,9 @@ const CopyrightInfoDash = () => {
             <PieChart
               hideLegend
               chartData={copyrightAuthorsData}
-              noDataText="Use --copyright CLI option for copyright data"
-              noDataLink="https://scancode-toolkit.readthedocs.io/en/latest/cli-reference/basic-options.html#copyright-option"
+              notOpted={!scanInfo.optionsMap.get(ScanOptionKeys.COPYRIGHT)}
+              notOptedText="Use --copyright CLI option for copyright data"
+              notOptedLink="https://scancode-toolkit.readthedocs.io/en/latest/cli-reference/basic-options.html#copyright-option"
             />
           </Card>
         </Col>

@@ -11,15 +11,15 @@ export function isValid(value: unknown): boolean {
 export function getAttributeValues(values: any[], attribute: any) {
   const validatedValues = [];
   let attributeValue = null;
-   
+
   for (let i = 0; i < values.length; i++) {
     attributeValue = values[i][attribute];
     const fileType = values[i].type;
-    
+
     // dedupe entries to prevent overcounting files. See https://github.com/nexB/scancode-workbench/issues/285
     if (Array.isArray(attributeValue)) {
       attributeValue = Array.from(new Set(attributeValue));
-    }  
+    }
 
     if (!Array.isArray(attributeValue) || attributeValue.length === 0) {
       attributeValue = [attributeValue];
@@ -27,42 +27,48 @@ export function getAttributeValues(values: any[], attribute: any) {
 
     for (let j = 0; j < attributeValue.length; j++) {
       const val = attributeValue[j];
-      if (!isValid(val) && attribute === 'package_data_type' && fileType === 'directory') {
+      if (
+        !isValid(val) &&
+        attribute === "package_data_type" &&
+        fileType === "directory"
+      ) {
         continue;
       }
-      validatedValues.push(
-        isValid(val) ?
-          val : NO_VALUE_DETECTED_LABEL);
+      validatedValues.push(isValid(val) ? val : NO_VALUE_DETECTED_LABEL);
     }
   }
   return validatedValues;
 }
 
-export function formatBarchartData(data: unknown[]){
+export function formatBarchartData(data: unknown[]) {
   const counterMapping = new Map<string, number>();
   let existingCount = 0;
   data.forEach((entry: string | string[]) => {
-    const entryString = typeof entry === 'string' ? entry : Array.isArray(entry) ? entry.join(',') : String(entry);
+    const entryString =
+      typeof entry === "string"
+        ? entry
+        : Array.isArray(entry)
+        ? entry.join(",")
+        : String(entry);
     existingCount = counterMapping.get(entryString);
-    if(existingCount)
-      counterMapping.set(entryString, existingCount + 1);
-    else
-      counterMapping.set(entryString, 1);
+    if (existingCount) counterMapping.set(entryString, existingCount + 1);
+    else counterMapping.set(entryString, 1);
   });
 
+  const noValueEntriesCount =
+    (counterMapping.get("") || 0) +
+    (counterMapping.get(NO_VALUE_DETECTED_LABEL) || 0);
 
-  if(counterMapping.has('')){
-    counterMapping.set(
-      NO_VALUE_DETECTED_LABEL,
-      (counterMapping.get(NO_VALUE_DETECTED_LABEL) || 0) + counterMapping.get('')
-    );
-    counterMapping.delete('');
-  }
+  counterMapping.delete("");
+  counterMapping.delete(NO_VALUE_DETECTED_LABEL);
 
-  const formattedList = Array.from(counterMapping, entry => ({
+  const formattedChartData = Array.from(counterMapping, (entry) => ({
     label: entry[0],
     value: entry[1],
-  })).sort((a, b) => b.value - a.value);  
+  })).sort((a, b) => b.value - a.value);
 
-  return formattedList;
+  return {
+    formattedChartData,
+    noValueEntriesCount,
+  };
 }

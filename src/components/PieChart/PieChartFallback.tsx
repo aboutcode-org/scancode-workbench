@@ -4,8 +4,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUpRightFromSquare } from "@fortawesome/free-solid-svg-icons";
 
 export interface PieChartFallbackProps {
-  noDataText: string;
-  noDataLink: string;
+  notOpted?: boolean;
+  notOptedText: string;
+  notOptedLink: string;
+  noDataText?: string;
   loading?: boolean;
 }
 
@@ -22,13 +24,15 @@ export const PieChartFallback = (props: PieChartFallbackProps) => {
         />
       ) : (
         <div>
-          No Data <br />
+          {props.noDataText || "No Data"} <br />
           <br />
-          <a href={props.noDataLink}>
-            {props.noDataText}
-            &nbsp;
-            <FontAwesomeIcon icon={faUpRightFromSquare} />
-          </a>
+          {props.notOpted && (
+            <a href={props.notOptedLink}>
+              {props.notOptedText}
+              &nbsp;
+              <FontAwesomeIcon icon={faUpRightFromSquare} />
+            </a>
+          )}
         </div>
       )}
     </div>

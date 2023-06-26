@@ -58,7 +58,7 @@
   width: 100%;
   padding: 5px;
   margin: 0 !important;
-  display: table;
+  display: flex;
   align-items: center;
 }
 
@@ -79,7 +79,11 @@
 .entity-info>div {
   padding: 2px;
   padding-right: 4px;
-  display: table-cell;
+  display: flex;
+}
+
+.entity-info>div:last-child {
+  margin-left: auto;
 }
 
 .entity-info>div>div {

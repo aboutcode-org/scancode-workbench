@@ -10,8 +10,7 @@ import { ScanInfo, parseIfValidJson } from "../../utils/parsers";
 import "./scanInfo.css";
 
 const ScanInfo = () => {
-  const workbenchDB = useWorkbenchDB();
-  const { scanInfo } = workbenchDB;
+  const { scanInfo } = useWorkbenchDB();
 
   return (
     <div className="scan-info">
