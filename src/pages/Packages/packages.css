@@ -1,6 +1,6 @@
-.page-title {
+.packages-title {
   text-align: center;
-  margin: 15px;
+  margin: 7px;
   margin-top: 5px;
   width: 100%;
 }
@@ -19,7 +19,7 @@
 
 .packages-panes {
   padding-right: 15px;
-  overflow: overlay !important;
+  overflow: auto !important;
 }
 
 .details-pane {
@@ -60,6 +60,8 @@
   margin: 0 !important;
   display: flex;
   align-items: center;
+  padding: 2px;
+  padding-left: 6px;
 }
 
 .entity-type-badge {
@@ -120,9 +122,9 @@
 }
 
 .entity-info:hover {
-  background-color: rgb(242, 242, 242);
+  background-color: var(--listHoverColor);
 }
 
 .selected-entity>.entity-info {
-  background-color: #dedede;
+  background-color: var(--listSelectionColor);
 }

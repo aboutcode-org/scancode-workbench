@@ -22,6 +22,14 @@ a:not([href]):not([class]):hover {
   color: #0a58ca;
 }
 
+input[type="search"]::-webkit-search-results-button {
+  display: block;
+
+}
+input[type="search"]::-webkit-search-cancel-button {
+  cursor: pointer;
+}
+
 button:focus:not(:focus-visible) {
   outline: none;
   box-shadow: none;

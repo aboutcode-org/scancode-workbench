@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { Badge } from "react-bootstrap";
 import ReactJson from "@microlink/react-json-view";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCheck, faCogs } from "@fortawesome/free-solid-svg-icons";
+import { faCheck } from "@fortawesome/free-solid-svg-icons";
 
 import { DependencyDetails } from "../../pages/Packages/packageDefinitions";
 
@@ -32,12 +32,12 @@ const DependencyEntity = (props: DependencyEntityProps) => {
       <h5>{dependency.purl}</h5>
       {dependency.is_runtime && (
         <Badge pill bg="primary">
-          <FontAwesomeIcon icon={faCogs} /> Runtime
+          Runtime
         </Badge>
       )}
       {dependency.is_optional && (
         <Badge pill bg="warning" text="dark">
-          <FontAwesomeIcon icon={faCogs} /> Optional
+          Optional
         </Badge>
       )}
       {dependency.is_resolved && (

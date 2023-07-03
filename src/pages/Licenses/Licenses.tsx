@@ -1,6 +1,12 @@
 import { Allotment } from "allotment";
 import React, { useEffect, useState } from "react";
-import { Badge, ListGroup, ListGroupItem } from "react-bootstrap";
+import {
+  Badge,
+  Form,
+  InputGroup,
+  ListGroup,
+  ListGroupItem,
+} from "react-bootstrap";
 import { ThreeDots } from "react-loader-spinner";
 import { useSearchParams } from "react-router-dom";
 
@@ -21,6 +27,8 @@ const LicenseDetections = () => {
   const [activeLicense, setActiveLicense] = useState<ActiveLicense | null>(
     null
   );
+  const [searchedLicense, setSearchedLicense] = useState("");
+
   function activateLicenseDetection(licenseDetection: LicenseDetectionDetails) {
     if (!licenseDetection) return;
     setActiveLicense({
@@ -133,16 +141,6 @@ const LicenseDetections = () => {
             clue.filePath === queriedClueFilePath &&
             clue.fileClueIdx === queriedClueFileIdx
         );
-        // console.log(
-        //   "Queried",
-        //   {
-        //     queriedClueExpression,
-        //     queriedClueFilePath,
-        //     queriedClueFileIdx,
-        //   },
-        //   "Found",
-        //   { foundClue: queriedClue }
-        // );
         if (queriedClue) {
           console.log(
             `Activate queried clue (${queriedClueExpression}, ${queriedClueFilePath}): `,
@@ -203,7 +201,15 @@ const LicenseDetections = () => {
           preferredSize="25%"
           className="licenses-navigator-container"
         >
-          <Allotment vertical>
+          <InputGroup className="search-box">
+            <Form.Control
+              aria-label="Search"
+              type="search"
+              placeholder="Search licenses"
+              onChange={(e) => setSearchedLicense(e.target.value)}
+            />
+          </InputGroup>
+          <Allotment vertical snap={false} minSize={90}>
             <Allotment.Pane
               preferredSize={licenseDetectionsSectionSize}
               className="licenses-navigator-pane pb-2"
@@ -219,11 +225,18 @@ const LicenseDetections = () => {
                     activeLicense &&
                     activeLicense.type === "detection" &&
                     activeLicense.license === licenseDetection;
+                  const showDetection =
+                    licenseDetection.license_expression.includes(
+                      searchedLicense
+                    );
                   return (
                     <ListGroupItem
                       onClick={() => activateLicenseDetection(licenseDetection)}
                       key={licenseDetection.identifier}
                       className="license-group-item"
+                      style={{
+                        display: showDetection ? "block" : "none",
+                      }}
                     >
                       <div
                         className={
@@ -255,11 +268,16 @@ const LicenseDetections = () => {
                     activeLicense &&
                     activeLicense.type === "clue" &&
                     activeLicense.license === licenseClue;
+                  const showClue =
+                    licenseClue.license_expression.includes(searchedLicense);
                   return (
                     <ListGroupItem
                       onClick={() => activateLicenseClue(licenseClue)}
                       key={licenseClue.id}
                       className="license-group-item"
+                      style={{
+                        display: showClue ? "block" : "none",
+                      }}
                     >
                       <div
                         className={
@@ -281,7 +299,7 @@ const LicenseDetections = () => {
         <Allotment.Pane
           snap
           minSize={500}
-          className="license-entity-panes p-4 overflow-scroll"
+          className="license-entity-pane p-4 overflow-scroll"
         >
           <LicenseEntity activeLicense={activeLicense} />
         </Allotment.Pane>

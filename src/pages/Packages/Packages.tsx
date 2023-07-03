@@ -355,7 +355,7 @@ const Packages = () => {
 
   return (
     <div className="packages-main-container">
-      <h4 className="page-title">Packages & Dependencies explorer</h4>
+      <h4 className="packages-title">Packages & Dependencies explorer</h4>
       <Allotment className="packages-container">
         <Allotment.Pane
           snap
