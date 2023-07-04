@@ -1,6 +1,7 @@
 import React, { useMemo } from "react";
 import { useMatchedTextContext } from "../../../../components/LicenseEntity/MatchedTextContext";
 import { trimStringWithEllipsis } from "../../../../utils/text";
+import CoreLink from "../../../../components/CoreLink/CoreLink";
 
 interface MatchedTextRendererProps {
   value: string;
@@ -17,7 +18,7 @@ const MatchedTextRenderer = (props: MatchedTextRendererProps) => {
   );
 
   return (
-    <a
+    <CoreLink
       key={value}
       onClick={() =>
         value &&
@@ -30,7 +31,7 @@ const MatchedTextRenderer = (props: MatchedTextRendererProps) => {
       }
     >
       {trimmedText}
-    </a>
+    </CoreLink>
   );
 };
 

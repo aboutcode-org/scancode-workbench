@@ -86,7 +86,6 @@ const PackageInfoDash = () => {
 
   return (
     <div className="text-center pieInfoDash">
-      <br />
       <h3>Package info - {currentPath || ""}</h3>
       <br />
       <br />
@@ -110,7 +109,7 @@ const PackageInfoDash = () => {
             <h5 className="title">Package Types</h5>
             <PieChart
               chartData={packageTypeData}
-              notOpted={!(scanInfo.optionsMap.get(ScanOptionKeys.PACKAGE))}
+              notOpted={!scanInfo.optionsMap.get(ScanOptionKeys.PACKAGE)}
               notOptedText="Use --package CLI option for package types"
               notOptedLink="https://scancode-toolkit.readthedocs.io/en/latest/cli-reference/basic-options.html#package-option"
             />
@@ -121,7 +120,7 @@ const PackageInfoDash = () => {
             <h5 className="title">Package languages</h5>
             <PieChart
               chartData={packageLangData}
-              notOpted={!(scanInfo.optionsMap.get(ScanOptionKeys.PACKAGE))}
+              notOpted={!scanInfo.optionsMap.get(ScanOptionKeys.PACKAGE)}
               notOptedText="Use --package CLI option for package languages"
               notOptedLink="https://scancode-toolkit.readthedocs.io/en/latest/cli-reference/basic-options.html#package-option"
             />
@@ -132,14 +131,13 @@ const PackageInfoDash = () => {
             <h5 className="title">Package Licenses</h5>
             <PieChart
               chartData={packageLicenseData}
-              notOpted={!(scanInfo.optionsMap.get(ScanOptionKeys.PACKAGE))}
+              notOpted={!scanInfo.optionsMap.get(ScanOptionKeys.PACKAGE)}
               notOptedText="Use --package CLI option for package licenses"
               notOptedLink="https://scancode-toolkit.readthedocs.io/en/latest/cli-reference/basic-options.html#package-option"
             />
           </Card>
         </Col>
       </Row>
-      <br />
       <br />
     </div>
   );

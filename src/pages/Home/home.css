@@ -3,16 +3,6 @@
   margin-top: 10px;
 }
 
-#welcomepage-title .logo {
-  font-family: 'Raleway', Helvetica, san-serif;
-  color: #0064cd;
-}
-
-#welcomepage-title .strong-logo {
-  font-weight: bolder;
-  font-family: 'Raleway Black', Helvetica, san-serif;
-}
-
 .quickActions {
   text-align: center;
   display: flex;

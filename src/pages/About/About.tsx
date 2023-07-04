@@ -1,5 +1,6 @@
 import React from "react";
 import { version } from "../../../package.json";
+import CoreLink from "../../components/CoreLink/CoreLink";
 
 import "./about.css";
 
@@ -17,16 +18,19 @@ const About = () => {
         and evaluate it using charts
         <br />
         For more details, see our
-        <a href="https://github.com/nexB/scancode-workbench/">
+        <CoreLink href="https://github.com/nexB/scancode-workbench/" external>
           GitHub Repository
-        </a>
+        </CoreLink>
         .
       </p>
       <br />
       <h3>Learn More:</h3>
       <p>
         Check out the ScanCode-Workbench
-        <a href="https://scancode-workbench.readthedocs.io">Documentation</a>.
+        <CoreLink href="https://scancode-workbench.readthedocs.io" external>
+          Documentation
+        </CoreLink>
+        .
       </p>
       <br />
       <h3>Workbench notice:</h3>
@@ -38,18 +42,21 @@ const About = () => {
         ScanCode Workbench is a free software analysis application from nexB
         Inc. and others. <br />
         Visit
-        <a href="https://github.com/nexB/scancode-workbench">
+        <CoreLink href="https://github.com/nexB/scancode-workbench" external>
           https://github.com/nexB/scancode-workbench
-        </a>{" "}
+        </CoreLink>{" "}
         for support and download.
       </p>
       <br />
       <h3>Having Trouble?</h3>
       <p>
         Report a bug or request a feature on the ScanCode-Workbench.
-        <a href="https://github.com/nexB/scancode-workbench/issues/new">
+        <CoreLink
+          href="https://github.com/nexB/scancode-workbench/issues/new"
+          external
+        >
           Report an issue
-        </a>
+        </CoreLink>
         .
       </p>
     </div>

@@ -12,11 +12,9 @@ import {
   ListCellRenderer,
   MatchLicenseExpressionRenderer,
   UrlListCellRenderer,
-  UrlRenderer,
 } from "./CustomCellRenderers";
 
 enum CustomComponentKeys {
-  UrlRenderer = "UrlRenderer",
   ListCellRenderer = "ListCellRenderer",
   UrlListCellRenderer = "UrlListCellRenderer",
   LicenseExpressionRenderer = "LicenseExpressionRenderer",
@@ -25,7 +23,6 @@ enum CustomComponentKeys {
 }
 
 export const frameworkComponents = {
-  [CustomComponentKeys.UrlRenderer]: UrlRenderer,
   [CustomComponentKeys.ListCellRenderer]: ListCellRenderer,
   [CustomComponentKeys.UrlListCellRenderer]: UrlListCellRenderer,
   [CustomComponentKeys.LicenseExpressionRenderer]:
@@ -426,4 +423,6 @@ export const ALL_COLUMNS: COLUMNS_LIST = {
 // Set Sorting order index
 Object.values(ALL_COLUMNS).forEach((col, idx) => (col.sortIndex = idx));
 
-export const ALL_COLUMNS_MAP = new Map(Object.values(ALL_COLUMNS).map(col => [col.colId, col]));
+export const ALL_COLUMNS_MAP = new Map(
+  Object.values(ALL_COLUMNS).map((col) => [col.colId, col])
+);

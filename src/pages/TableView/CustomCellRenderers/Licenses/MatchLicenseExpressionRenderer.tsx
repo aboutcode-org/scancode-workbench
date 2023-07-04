@@ -3,6 +3,7 @@ import {
   LICENSE_EXPRESSIONS_CONJUNCTIONS,
   parseTokensFromExpression,
 } from "../../../../services/models/databaseUtils";
+import CoreLink from "../../../../components/CoreLink/CoreLink";
 
 const DEBUG_URLS = false;
 
@@ -90,10 +91,10 @@ const MatchLicenseExpressionRenderer = (
       {parsedComponents.map(({ value, href }, idx) => {
         if (href) {
           return (
-            <a href={href} key={href + value}>
+            <CoreLink href={href} key={href + value}>
               {value}
               {DEBUG_URLS && `(${href})`}
-            </a>
+            </CoreLink>
           );
         }
         return (

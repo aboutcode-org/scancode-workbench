@@ -2,17 +2,15 @@
 import { Allotment } from "allotment";
 import React, { useEffect, useState } from "react";
 import { Badge, Collapse, ListGroup, ListGroupItem } from "react-bootstrap";
+import MultiSelect from "react-select";
+import makeAnimated from "react-select/animated";
 import { ThreeDots } from "react-loader-spinner";
 import { useSearchParams } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faCheck,
-  faCogs,
-  faQuestion,
-  faQuestionCircle,
-} from "@fortawesome/free-solid-svg-icons";
 
-import RightArrowIcon from "../../assets/icons/rightArrow.svg";
+import { DepFilterTag, DepFilterTags, DepFilterTagsList } from "./depsFilters";
+import { MISC_DEPS, MISC_PACKAGE } from "./miscInfo";
+import { generatePackagesMapping } from "./packageParsers";
 import NoDataFallback from "../../components/NoDataSection";
 import DependencyEntity from "../../components/PackagesEntityDetails/DependencyEntity";
 import PackageEntity from "../../components/PackagesEntityDetails/PackageEntity";
@@ -27,16 +25,25 @@ import {
 
 import "./packages.css";
 
+const animatedComponents = makeAnimated();
+
 const Packages = () => {
   const { db, initialized, currentPath, goToFileInTableView } =
     useWorkbenchDB();
 
   const [searchParams] = useSearchParams();
+  const [selectedDepFilters, setSelectedDepFilters] = useState<DepFilterTag[]>(
+    []
+  );
+
+  const [expandedPackageTypes, setExpandedPackageTypes] = useState<string[]>(
+    []
+  );
   const [expandedPackages, setExpandedPackages] = useState<string[]>([]);
   const [packagesWithDeps, setPackagesWithDeps] = useState<
     PackageDetails[] | null
   >(null);
-  const [packageGroups, setPackageGroups] = useState<
+  const [allPackageGroups, setAllPackageGroups] = useState<
     PackageTypeGroupDetails[] | null
   >(null);
 
@@ -49,10 +56,48 @@ const Packages = () => {
     "package" | "dependency" | null
   >(null);
 
+  function expandPackageType(packageType: string) {
+    setExpandedPackageTypes((prevTypes) => [...prevTypes, packageType]);
+  }
+  function collapsePackageType(packageType: string) {
+    setExpandedPackageTypes((prevTypes) =>
+      prevTypes.filter((pkgType) => pkgType != packageType)
+    );
+  }
+  function toggleDepTagFilter(depFilter: DepFilterTag, e: React.MouseEvent) {
+    if (selectedDepFilters.includes(depFilter))
+      setSelectedDepFilters((prevDepFilters) =>
+        prevDepFilters.filter((dep) => dep != depFilter)
+      );
+    else
+      setSelectedDepFilters((prevDepFilters) => [...prevDepFilters, depFilter]);
+    if (e) e.preventDefault();
+  }
+
+  function collapsePackage(target_package_uid: string, e?: React.MouseEvent) {
+    setExpandedPackages((prevPackages) =>
+      prevPackages.filter((package_uid) => package_uid !== target_package_uid)
+    );
+    if (e) {
+      e.stopPropagation();
+      e.preventDefault();
+    }
+  }
+  function expandPackage(target_package_uid: string, e?: React.MouseEvent) {
+    setExpandedPackages((prevPackages) => [
+      ...prevPackages,
+      target_package_uid,
+    ]);
+    if (e) {
+      e.stopPropagation();
+      e.preventDefault();
+    }
+  }
   const activatePackage = (packageInfo: PackageDetails) => {
     setActiveDependency(null);
     setActivePackage(packageInfo);
     setActiveEntityType("package");
+    expandPackageType(packageInfo.type);
   };
   const activatePackageByUID = (package_uid: string) => {
     const targetPackage = packagesWithDeps?.find(
@@ -71,6 +116,8 @@ const Packages = () => {
   }, [searchParams]);
 
   const activateDependency = (dependency: DependencyDetails) => {
+    console.log("Active dep", dependency);
+
     setActivePackage(null);
     setActiveDependency(dependency);
     setActiveEntityType("dependency");
@@ -80,7 +127,6 @@ const Packages = () => {
     );
     expandPackage(parentPackage.package_uid);
   };
-
   useEffect(() => {
     if (!initialized || !db || !currentPath) return;
 
@@ -90,148 +136,12 @@ const Packages = () => {
       // console.log("Raw Packages & deps", packages, deps);
       if (!packages.length && !deps.length) {
         console.log("No package or deps available");
-        setPackageGroups([]);
+        setAllPackageGroups([]);
         return;
       }
 
       // const type_other = 'type-other';
-      const packageMapping = new Map<string, PackageDetails>(
-        packages.map((packageInfo): [string, PackageDetails] => [
-          packageInfo.getDataValue("package_uid").toString({}),
-          {
-            package_uid: packageInfo.getDataValue("package_uid").toString({}),
-            name: packageInfo.getDataValue("name").toString({}),
-            type: packageInfo.getDataValue("type").toString({}),
-            dependencies: [],
-            namespace:
-              packageInfo.getDataValue("namespace")?.toString({}) || null,
-            version: packageInfo.getDataValue("version")?.toString({}) || null,
-            qualifiers: JSON.parse(
-              packageInfo.getDataValue("qualifiers").toString({})
-            ),
-            subpath: packageInfo.getDataValue("subpath")?.toString({}) || null,
-            primary_language:
-              packageInfo.getDataValue("primary_language")?.toString({}) ||
-              null,
-            description:
-              packageInfo.getDataValue("description")?.toString({}) || null,
-            release_date:
-              packageInfo.getDataValue("release_date")?.toString({}) || null,
-            parties: JSON.parse(
-              packageInfo.getDataValue("parties").toString({})
-            ),
-            keywords: JSON.parse(
-              packageInfo.getDataValue("keywords").toString({})
-            ),
-            homepage_url:
-              packageInfo.getDataValue("homepage_url")?.toString({}) || null,
-            download_url:
-              packageInfo.getDataValue("download_url")?.toString({}) || null,
-            size: packageInfo.getDataValue("size")?.toString({}) || null,
-            sha1: packageInfo.getDataValue("sha1")?.toString({}) || null,
-            md5: packageInfo.getDataValue("md5")?.toString({}) || null,
-            sha256: packageInfo.getDataValue("sha256")?.toString({}) || null,
-            sha512: packageInfo.getDataValue("sha512")?.toString({}) || null,
-            bug_tracking_url:
-              packageInfo.getDataValue("bug_tracking_url")?.toString({}) ||
-              null,
-            code_view_url:
-              packageInfo.getDataValue("code_view_url")?.toString({}) || null,
-            vcs_url: packageInfo.getDataValue("vcs_url")?.toString({}) || null,
-            copyright:
-              packageInfo.getDataValue("copyright")?.toString({}) || null,
-            declared_license_expression:
-              packageInfo
-                .getDataValue("declared_license_expression")
-                ?.toString({}) || null,
-            declared_license_expression_spdx:
-              packageInfo
-                .getDataValue("declared_license_expression_spdx")
-                ?.toString({}) || null,
-            other_license_expression:
-              packageInfo
-                .getDataValue("other_license_expression")
-                ?.toString({}) || null,
-            other_license_expression_spdx:
-              packageInfo
-                .getDataValue("other_license_expression_spdx")
-                ?.toString({}) || null,
-            extracted_license_statement:
-              packageInfo
-                .getDataValue("extracted_license_statement")
-                ?.toString({})
-                .replace(/(^"|"$)/g, "") || null,
-            notice_text:
-              packageInfo.getDataValue("notice_text")?.toString({}) || null,
-            source_packages: JSON.parse(
-              packageInfo.getDataValue("source_packages").toString({})
-            ),
-            extra_data: JSON.parse(
-              packageInfo.getDataValue("extra_data").toString({})
-            ),
-            repository_homepage_url:
-              packageInfo
-                .getDataValue("repository_homepage_url")
-                ?.toString({}) || null,
-            repository_download_url:
-              packageInfo
-                .getDataValue("repository_download_url")
-                ?.toString({}) || null,
-            api_data_url:
-              packageInfo.getDataValue("api_data_url")?.toString({}) || null,
-            datafile_paths:
-              JSON.parse(
-                packageInfo.getDataValue("datafile_paths")?.toString({}) || "[]"
-              ) || [],
-            datasource_ids:
-              JSON.parse(
-                packageInfo.getDataValue("datasource_ids")?.toString({}) || "[]"
-              ) || [],
-            purl: packageInfo.getDataValue("purl").toString({}),
-          },
-        ])
-      );
-      const MISC_DEPS = "others";
-      const MISC_PACKAGE: PackageDetails = {
-        package_uid: "misc",
-        name: "Misc dependencies",
-        type: "Other",
-        dependencies: [],
-        namespace: "",
-        version: null,
-        qualifiers: {},
-        subpath: null,
-        primary_language: null,
-        description: null,
-        release_date: null,
-        parties: {},
-        keywords: {},
-        homepage_url: null,
-        download_url: null,
-        size: null,
-        sha1: null,
-        md5: null,
-        sha256: null,
-        sha512: null,
-        bug_tracking_url: null,
-        code_view_url: null,
-        vcs_url: null,
-        copyright: null,
-        declared_license_expression: null,
-        declared_license_expression_spdx: null,
-        other_license_expression: null,
-        other_license_expression_spdx: null,
-        extracted_license_statement: null,
-        notice_text: null,
-        source_packages: {},
-        extra_data: {},
-        repository_homepage_url: null,
-        repository_download_url: null,
-        api_data_url: null,
-        datafile_paths: [],
-        datasource_ids: [],
-        purl: null,
-      };
+      const packageMapping = generatePackagesMapping(packages);
       packageMapping.set(MISC_DEPS, MISC_PACKAGE);
 
       // Group dependencies in their respective packages
@@ -295,7 +205,7 @@ const Packages = () => {
           packages,
         })
       );
-      setPackageGroups(parsedPackageGroups);
+      setAllPackageGroups(parsedPackageGroups);
       // console.log("Package groups", parsedPackageGroups);
 
       setExpandedPackages([]);
@@ -317,27 +227,60 @@ const Packages = () => {
     });
   }, [db, initialized, currentPath]);
 
-  function collapsePackage(target_package_uid: string, e?: React.MouseEvent) {
-    setExpandedPackages((prevPackages) =>
-      prevPackages.filter((package_uid) => package_uid !== target_package_uid)
-    );
-    if (e) {
-      e.stopPropagation();
-      e.preventDefault();
-    }
-  }
-  function expandPackage(target_package_uid: string, e?: React.MouseEvent) {
-    setExpandedPackages((prevPackages) => [
-      ...prevPackages,
-      target_package_uid,
-    ]);
-    if (e) {
-      e.stopPropagation();
-      e.preventDefault();
-    }
-  }
+  const [filteredPackageGroups, setFilteredPackageGroups] =
+    useState<PackageTypeGroupDetails[]>(null);
 
-  if (!packageGroups) {
+  useEffect(() => {
+    const allowedFlags = selectedDepFilters.map((tag) => tag.flag);
+
+    if (!allowedFlags.length || !allPackageGroups?.length)
+      return setFilteredPackageGroups(
+        allPackageGroups?.sort((a, b) => b.packages.length - a.packages.length)
+      );
+
+    const newFilteredPackageGroups = allPackageGroups.map(
+      (packageGroup): PackageTypeGroupDetails => ({
+        ...packageGroup,
+        packages: packageGroup.packages.flatMap((packageDetails) => {
+          const filteredDeps = packageDetails.dependencies.filter((dep) =>
+            allowedFlags.find((flag) => dep[flag] === true)
+          );
+          return filteredDeps.length
+            ? { ...packageDetails, dependencies: filteredDeps }
+            : [];
+        }),
+      })
+    );
+    console.log(
+      newFilteredPackageGroups,
+      newFilteredPackageGroups.sort(
+        (a, b) => b.packages.length - a.packages.length
+      )
+    );
+
+    setFilteredPackageGroups(
+      newFilteredPackageGroups.sort(
+        (a, b) => b.packages.length - a.packages.length
+      )
+    );
+
+    const isDependencyAllowed = (dep: DependencyDetails) =>
+      allowedFlags.find((flag) => dep[flag]);
+
+    if (
+      activePackage &&
+      !activePackage.dependencies.find(isDependencyAllowed)
+    ) {
+      setActivePackage(null);
+      setActiveEntityType(null);
+    }
+    if (activeDependency && !isDependencyAllowed(activeDependency)) {
+      setActiveDependency(null);
+      setActiveEntityType(null);
+    }
+  }, [allPackageGroups, selectedDepFilters]);
+
+  if (!filteredPackageGroups) {
     return (
       <ThreeDots
         height={150}
@@ -351,172 +294,276 @@ const Packages = () => {
     );
   }
 
-  if (!packageGroups.length) return <NoDataFallback text="No packages :/" />;
+  if (!filteredPackageGroups?.length)
+    return <NoDataFallback text="No packages :/" />;
 
   return (
-    <div className="packages-main-container">
+    <div>
       <h4 className="packages-title">Packages & Dependencies explorer</h4>
       <Allotment className="packages-container">
-        <Allotment.Pane
-          snap
-          minSize={200}
-          preferredSize="35%"
-          className="packages-panes p-2"
-        >
-          <ListGroup>
-            {packageGroups.map((packageGroup) => (
-              <ListGroupItem
-                key={packageGroup.type}
-                className="package-group-list"
-              >
-                {packageGroup.packages.length} {packageGroup.type} packages
-                <ListGroup className="package-list">
-                  {packageGroup.packages.map((packageWithDep) => {
-                    const isPackageActive =
-                      activeEntityType === "package" &&
-                      activePackage === packageWithDep;
-                    const isPackageExpanded = expandedPackages.includes(
-                      packageWithDep.package_uid
-                    );
-                    let packageTitle = [
-                      packageWithDep.type,
-                      packageWithDep.namespace,
-                      packageWithDep.name,
-                    ]
-                      .filter(
-                        (val) => val !== null && val !== undefined && val.length
-                      )
-                      .join("/");
+        <Allotment.Pane snap minSize={200} preferredSize="30%">
+          <MultiSelect
+            closeMenuOnSelect={false}
+            components={animatedComponents}
+            isMulti
+            value={selectedDepFilters}
+            onChange={setSelectedDepFilters}
+            options={DepFilterTagsList}
+            className="packages-search-bar"
+          />
+          <br />
+          <ListGroup className="packages-list-container">
+            {filteredPackageGroups.map((packageGroup) => {
+              const isPackageTypeExpanded = expandedPackageTypes.includes(
+                packageGroup.type
+              );
 
-                    if (packageWithDep.version) {
-                      packageTitle += "@" + packageWithDep.version;
+              return (
+                <ListGroupItem
+                  key={packageGroup.type}
+                  className="package-group-list"
+                >
+                  <div
+                    className="package-type"
+                    onDoubleClick={(e) => {
+                      if (isPackageTypeExpanded)
+                        collapsePackageType(packageGroup.type);
+                      else expandPackageType(packageGroup.type);
+                      window.getSelection().empty();
+                    }}
+                    onClick={() =>
+                      isPackageTypeExpanded
+                        ? collapsePackageType(packageGroup.type)
+                        : expandPackageType(packageGroup.type)
                     }
+                  >
+                    <div
+                      className="expand-indicator"
+                      style={{
+                        display: packageGroup.packages.length
+                          ? "inline-block"
+                          : "none",
+                      }}
+                    >
+                      <FontAwesomeIcon
+                        icon={"chevron-right"}
+                        className={isPackageTypeExpanded ? "fa-rotate-90" : ""}
+                      />
+                    </div>
+                    <span className="label">
+                      {packageGroup.type} ({packageGroup.packages.length}{" "}
+                      packages)
+                    </span>
+                  </div>
+                  <Collapse
+                    in={isPackageTypeExpanded}
+                    className="collapsed-body"
+                  >
+                    <ListGroup className="package-list">
+                      {packageGroup.packages.map((packageWithDep) => {
+                        const isPackageActive =
+                          activePackage &&
+                          activeEntityType === "package" &&
+                          activePackage.package_uid ===
+                            packageWithDep.package_uid;
+                        const isPackageExpanded = expandedPackages.includes(
+                          packageWithDep.package_uid
+                        );
+                        let packageTitle = [
+                          packageWithDep.type,
+                          packageWithDep.namespace,
+                          packageWithDep.name,
+                        ]
+                          .filter(
+                            (val) =>
+                              val !== null && val !== undefined && val.length
+                          )
+                          .join("/");
 
-                    return (
-                      <ListGroupItem
-                        key={packageWithDep.package_uid}
-                        style={{ cursor: "pointer" }}
-                        className={
-                          (isPackageActive ? "selected-entity " : "") +
-                          "entity dependency-list"
+                        if (packageWithDep.version) {
+                          packageTitle += "@" + packageWithDep.version;
                         }
-                      >
-                        <div
-                          onClick={() => activatePackage(packageWithDep)}
-                          className="entity-info"
-                        >
-                          <div>
+
+                        return (
+                          <ListGroupItem
+                            key={packageWithDep.package_uid}
+                            className={
+                              (isPackageActive ? "selected-entity " : "") +
+                              "entity package-entry"
+                            }
+                          >
                             <div
-                              className="expand-package"
-                              onClick={(e) =>
+                              onClick={() => activatePackage(packageWithDep)}
+                              onDoubleClick={(e) => {
+                                activatePackage(packageWithDep);
                                 (isPackageExpanded
                                   ? collapsePackage
                                   : expandPackage)(
                                   packageWithDep.package_uid,
                                   e
-                                )
-                              }
+                                );
+                                // @TODO - Better way to achieve this ?
+                                // Handle text selecion occuring as a side-effect of doubleClick
+                                window.getSelection().empty();
+                              }}
+                              className="entity-info"
                             >
-                              <RightArrowIcon
-                                className={
-                                  (isPackageExpanded && "expanded-icon") || ""
-                                }
-                              />
-                            </div>
-                            <div className="entity-name">
-                              {packageTitle}
-                              {/* {
-                                isPackageActive && 
-                                <span>
-                                  <Badge pill>selected</Badge>
-                                </span>
-                              } */}
-                            </div>
-                          </div>
-                          <div className="total-deps">
-                            <Badge pill>
-                              {packageWithDep.dependencies.length}
-                            </Badge>
-                          </div>
-                        </div>
-                        <Collapse
-                          in={isPackageExpanded}
-                          className="collapsed-body"
-                        >
-                          <ListGroup>
-                            {packageWithDep.dependencies.map((dependency) => {
-                              const isDependencyActive =
-                                activeEntityType === "dependency" &&
-                                activeDependency === dependency;
-                              return (
-                                <ListGroupItem
-                                  key={dependency.dependency_uid}
-                                  className={
-                                    (isDependencyActive
-                                      ? "selected-entity "
-                                      : "") + "entity"
+                              <div>
+                                <div
+                                  className="expand-indicator"
+                                  style={{
+                                    display: packageWithDep.dependencies.length
+                                      ? "block"
+                                      : "none",
+                                  }}
+                                  onClick={(e) =>
+                                    (isPackageExpanded
+                                      ? collapsePackage
+                                      : expandPackage)(
+                                      packageWithDep.package_uid,
+                                      e
+                                    )
                                   }
-                                  onClick={() => activateDependency(dependency)}
                                 >
-                                  <div className="entity-info">
-                                    <div>
-                                      <div>
-                                        {dependency.purl.replace("pkg:", "")}
-                                      </div>
-                                    </div>
-                                    <div className="entity-type-badge">
-                                      {dependency.is_runtime && (
-                                        <Badge pill bg="primary">
-                                          Runtime
-                                          {/* <FontAwesomeIcon icon={faCogs} /> */}
-                                        </Badge>
-                                      )}
-                                      {dependency.is_optional && (
-                                        <Badge pill bg="warning" text="dark">
-                                          Optional
-                                          {/* <FontAwesomeIcon icon={} /> */}
-                                        </Badge>
-                                      )}
-                                      {dependency.is_resolved && (
-                                        <Badge pill bg="success">
-                                          Resolved
-                                          {/* <FontAwesomeIcon icon={faCheck} /> */}
-                                        </Badge>
-                                      )}
-                                    </div>
-                                  </div>
-                                </ListGroupItem>
-                              );
-                            })}
-                          </ListGroup>
-                        </Collapse>
-                      </ListGroupItem>
-                    );
-                  })}
-                </ListGroup>
-              </ListGroupItem>
-            ))}
+                                  <FontAwesomeIcon
+                                    icon={"chevron-right"}
+                                    className={
+                                      isPackageExpanded ? "fa-rotate-90" : ""
+                                    }
+                                  />
+                                </div>
+                                <div className="entity-name">
+                                  {packageTitle}
+                                </div>
+                              </div>
+                              <div className="total-deps">
+                                <Badge pill bg="light" text="dark">
+                                  {packageWithDep.dependencies.length}
+                                </Badge>
+                              </div>
+                            </div>
+                            <Collapse
+                              in={isPackageExpanded}
+                              className="collapsed-body"
+                            >
+                              <ListGroup>
+                                {packageWithDep.dependencies.map(
+                                  (dependency) => {
+                                    const isDependencyActive =
+                                      activeDependency &&
+                                      activeEntityType === "dependency" &&
+                                      activeDependency.dependency_uid ===
+                                        dependency.dependency_uid;
+                                    return (
+                                      <ListGroupItem
+                                        key={dependency.dependency_uid}
+                                        className={
+                                          (isDependencyActive
+                                            ? "selected-entity "
+                                            : "") + "entity"
+                                        }
+                                        onClick={() =>
+                                          activateDependency(dependency)
+                                        }
+                                      >
+                                        <div className="entity-info">
+                                          <div>
+                                            <div>
+                                              {dependency.purl.replace(
+                                                "pkg:",
+                                                ""
+                                              )}
+                                            </div>
+                                          </div>
+                                          <div className="entity-type-badges">
+                                            {dependency.is_runtime && (
+                                              <Badge
+                                                pill
+                                                bg="primary"
+                                                onClick={(e) =>
+                                                  toggleDepTagFilter(
+                                                    DepFilterTags.RUNTIME,
+                                                    e
+                                                  )
+                                                }
+                                              >
+                                                Runtime
+                                              </Badge>
+                                            )}
+                                            {dependency.is_optional && (
+                                              <Badge
+                                                pill
+                                                bg="warning"
+                                                text="dark"
+                                                onClick={(e) =>
+                                                  toggleDepTagFilter(
+                                                    DepFilterTags.OPTIONAL,
+                                                    e
+                                                  )
+                                                }
+                                              >
+                                                Optional
+                                              </Badge>
+                                            )}
+                                            {dependency.is_resolved && (
+                                              <Badge
+                                                pill
+                                                bg="success"
+                                                onClick={(e) =>
+                                                  toggleDepTagFilter(
+                                                    DepFilterTags.RESOLVED,
+                                                    e
+                                                  )
+                                                }
+                                              >
+                                                Resolved
+                                              </Badge>
+                                            )}
+                                          </div>
+                                        </div>
+                                      </ListGroupItem>
+                                    );
+                                  }
+                                )}
+                              </ListGroup>
+                            </Collapse>
+                          </ListGroupItem>
+                        );
+                      })}
+                    </ListGroup>
+                  </Collapse>
+                </ListGroupItem>
+              );
+            })}
           </ListGroup>
         </Allotment.Pane>
-        <Allotment.Pane
-          snap
-          minSize={200}
-          className="packages-panes details-pane p-4"
-        >
-          {activeEntityType === "package"
-            ? activePackage && (
-                <PackageEntity
-                  package={activePackage}
-                  goToDependency={activateDependency}
-                />
-              )
-            : activeDependency && (
-                <DependencyEntity
-                  dependency={activeDependency}
-                  goToPackageByUID={activatePackageByUID}
-                  goToFileInTableView={goToFileInTableView}
-                />
-              )}
+        <Allotment.Pane snap minSize={200} className="details-pane px-4">
+          {activeEntityType ? (
+            activeEntityType === "package" && activePackage ? (
+              <PackageEntity
+                package={activePackage}
+                goToDependency={activateDependency}
+              />
+            ) : activeEntityType === "dependency" && activeDependency ? (
+              <DependencyEntity
+                dependency={activeDependency}
+                goToPackageByUID={activatePackageByUID}
+                goToFileInTableView={goToFileInTableView}
+              />
+            ) : (
+              <div>
+                <h5>
+                  Please select a package or dependency to view more details
+                </h5>
+              </div>
+            )
+          ) : (
+            <div>
+              <h5>
+                Please select a package or dependency to view more details
+              </h5>
+            </div>
+          )}
         </Allotment.Pane>
       </Allotment>
     </div>

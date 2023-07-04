@@ -53,7 +53,7 @@ export interface PackagesAttributes {
   other_license_expression: StringDataType | null;
   other_license_expression_spdx: StringDataType | null;
   other_license_detections: JSON_Type;
-  extracted_license_statement: JSON_Type | null;
+  extracted_license_statement: StringDataType | null;
   notice_text: StringDataType | null;
   source_packages: JSON_Type;
   extra_data: JSON_Type;
@@ -171,7 +171,10 @@ export default function packagesModel(sequelize: Sequelize) {
         type: DataTypes.STRING,
       },
       other_license_detections: jsonDataType("other_license_detections"),
-      extracted_license_statement: jsonDataType("extracted_license_statement"),
+      extracted_license_statement: {
+        allowNull: true,
+        type: DataTypes.STRING,
+      },
       notice_text: {
         allowNull: true,
         type: DataTypes.STRING,

@@ -22,6 +22,7 @@ import { BAR_CHART_COLUMN_GROUPS } from "../../constants/barChartColumns";
 import { useWorkbenchDB } from "../../contexts/dbContext";
 import { formatBarchartData, getAttributeValues } from "../../utils/bar";
 import { FlatFileAttributes } from "../../services/models/flatFile";
+import { trimStringWithEllipsis } from "../../utils/text";
 
 import "./chartView.css";
 
@@ -118,61 +119,68 @@ const ChartView = () => {
           ))}
         </select>
       </div>
-      <div
-        style={{
-          minHeight: BAR_HEIGHT + 50,
-          height: BAR_HEIGHT * formattedBarchartData.counts.length + 50,
-        }}
-      >
-        <Bar
-          style={{ overflow: "scroll" }}
-          options={{
-            maintainAspectRatio: false,
-            indexAxis: "y",
-            scales: {
-              x: {
-                grid: {
-                  drawTicks: false,
-                  display: false,
+      <div className="chartWrapper">
+        <div
+          style={{
+            minHeight: BAR_HEIGHT + 50,
+            height: BAR_HEIGHT * formattedBarchartData.counts.length + 50,
+          }}
+        >
+          <Bar
+            options={{
+              maintainAspectRatio: false,
+              indexAxis: "y",
+              scales: {
+                x: {
+                  grid: {
+                    drawTicks: false,
+                    display: false,
+                  },
+                },
+                y: {
+                  grid: {
+                    drawTicks: true,
+                    display: false,
+                  },
                 },
               },
-              y: {
-                grid: {
-                  drawTicks: true,
-                  display: false,
+              elements: {
+                bar: {
+                  borderWidth: 2,
                 },
               },
-            },
-            elements: {
-              bar: {
-                borderWidth: 2,
+              responsive: true,
+              plugins: {
+                legend: {
+                  display: false,
+                },
+                title: {
+                  display: true,
+                  text: `${selectedAttribute} (No values detected: ${formattedBarchartData.noValueEntriesCount})`,
+                },
+                tooltip: {
+                  callbacks: {
+                    title: (rawTitle) =>
+                      trimStringWithEllipsis(rawTitle[0].label, 200),
+                  },
+                },
               },
-            },
-            responsive: true,
-            plugins: {
-              legend: {
-                display: false,
-              },
-              title: {
-                display: true,
-                text: `${selectedAttribute} (No values detected: ${formattedBarchartData.noValueEntriesCount})`,
-              },
-            },
-          }}
-          data={{
-            labels: formattedBarchartData.labels,
-            datasets: [
-              {
-                backgroundColor: "#3498db",
-                borderColor: "#bbe7fc",
-                borderWidth: 1,
-                hoverBackgroundColor: "#0a81d1",
-                hoverBorderColor: "#80c8e9",
-                data: formattedBarchartData.counts,
-              },
-            ],
-          }}
-        />
+            }}
+            data={{
+              labels: formattedBarchartData.labels,
+              datasets: [
+                {
+                  backgroundColor: "#3498db",
+                  borderColor: "#bbe7fc",
+                  borderWidth: 1,
+                  hoverBackgroundColor: "#0a81d1",
+                  hoverBorderColor: "#80c8e9",
+                  data: formattedBarchartData.counts,
+                },
+              ],
+            }}
+          />
+        </div>
       </div>
     </div>
   );

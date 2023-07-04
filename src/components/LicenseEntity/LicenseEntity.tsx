@@ -119,6 +119,8 @@ const LicenseEntity = (props: LicenseDetectionEntityProps) => {
       <AgGridReact
         rowData={file_regions}
         columnDefs={DetectionFileRegionCols}
+        onGridReady={(params) => params.api.sizeColumnsToFit()}
+        onGridSizeChanged={(params) => params.api.sizeColumnsToFit()}
         className="ag-theme-alpine ag-grid-customClass file-regions-table"
         ensureDomOrder
         enableCellTextSelection

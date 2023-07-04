@@ -1,7 +1,7 @@
 import React from "react";
 import { TailSpin } from "react-loader-spinner";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUpRightFromSquare } from "@fortawesome/free-solid-svg-icons";
+
+import CoreLink from "../CoreLink/CoreLink";
 
 export interface PieChartFallbackProps {
   notOpted?: boolean;
@@ -27,11 +27,9 @@ export const PieChartFallback = (props: PieChartFallbackProps) => {
           {props.noDataText || "No Data"} <br />
           <br />
           {props.notOpted && (
-            <a href={props.notOptedLink}>
+            <CoreLink href={props.notOptedLink} external>
               {props.notOptedText}
-              &nbsp;
-              <FontAwesomeIcon icon={faUpRightFromSquare} />
-            </a>
+            </CoreLink>
           )}
         </div>
       )}

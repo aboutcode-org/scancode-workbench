@@ -4,6 +4,7 @@ import ReactJson from "@microlink/react-json-view";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck } from "@fortawesome/free-solid-svg-icons";
 
+import CoreLink from "../CoreLink/CoreLink";
 import { DependencyDetails } from "../../pages/Packages/packageDefinitions";
 
 import "../../styles/entityCommonStyles.css";
@@ -52,9 +53,11 @@ const DependencyEntity = (props: DependencyEntityProps) => {
           [
             "For:",
             dependency.for_package_uid ? (
-              <a onClick={() => goToPackageByUID(dependency.for_package_uid)}>
+              <CoreLink
+                onClick={() => goToPackageByUID(dependency.for_package_uid)}
+              >
                 {dependency.for_package_uid}
-              </a>
+              </CoreLink>
             ) : (
               <>NA</>
             ),
@@ -64,9 +67,11 @@ const DependencyEntity = (props: DependencyEntityProps) => {
           [
             "Data file:",
             dependency.datafile_path ? (
-              <a onClick={() => goToFileInTableView(dependency.datafile_path)}>
+              <CoreLink
+                onClick={() => goToFileInTableView(dependency.datafile_path)}
+              >
                 {dependency.datafile_path}
-              </a>
+              </CoreLink>
             ) : (
               <>NA</>
             ),

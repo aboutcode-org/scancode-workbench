@@ -1,10 +1,12 @@
-import ReactJson from "@microlink/react-json-view";
 import React from "react";
+import ReactJson from "@microlink/react-json-view";
+
 import { useWorkbenchDB } from "../../contexts/dbContext";
 import {
   DependencyDetails,
   PackageDetails,
 } from "../../pages/Packages/packageDefinitions";
+import CoreLink from "../CoreLink/CoreLink";
 
 import "../../styles/entityCommonStyles.css";
 import "./packageEntity.css";
@@ -35,7 +37,6 @@ const PackageEntity = (props: PackageEntityProps) => {
               {activePackage.package_uid}
               <br />
             </>,
-            "",
           ],
           ["Type:", activePackage.type || null],
           ["Namespace:", activePackage.namespace || null],
@@ -43,7 +44,6 @@ const PackageEntity = (props: PackageEntityProps) => {
           ["Version:", activePackage.version || null],
           ["Subpath:", activePackage.subpath || null],
           ["Primary Language:", activePackage.primary_language || null],
-          ["Homepage URL:", activePackage.homepage_url || null],
           [
             "Extracted license statement: ",
             activePackage.extracted_license_statement || null,
@@ -64,16 +64,30 @@ const PackageEntity = (props: PackageEntityProps) => {
             "Other license expression SPDX",
             activePackage.other_license_expression_spdx || null,
           ],
-        ].map(
-          (entry) =>
-            entry[1] && (
-              <React.Fragment key={entry[0].toString()}>
-                <span className="property">{entry[0] || ""}</span>
-                <span className="value">{entry[1] || ""}</span>
-                <br />
-              </React.Fragment>
-            )
-        )}
+        ].map((entry) => (
+          <React.Fragment key={entry[0].toString()}>
+            <span className="property">{entry[0]}</span>
+            {entry.length > 1 && (
+              <span className="value">: {entry[1] || "None"}<br /></span>
+            
+            )}
+          </React.Fragment>
+        ))}
+        <span className="property">Homepage URL:</span>
+        <span className="value">
+          {activePackage.homepage_url ? (
+            <CoreLink
+              className="value"
+              href={activePackage.homepage_url}
+              external
+            >
+              {activePackage.homepage_url}
+            </CoreLink>
+          ) : (
+            "None"
+          )}
+        </span>
+        <br />
       </div>
       <br />
       <b>
@@ -84,13 +98,13 @@ const PackageEntity = (props: PackageEntityProps) => {
       <br />
       <div className="deps-list">
         {activePackage.datafile_paths.map((datafile_path) => (
-          <a
+          <CoreLink
             className="deps-link"
             key={datafile_path}
             onClick={() => goToFileInTableView(datafile_path)}
           >
             <React.Fragment key={datafile_path}>{datafile_path}</React.Fragment>
-          </a>
+          </CoreLink>
         ))}
       </div>
       <br />
@@ -104,13 +118,13 @@ const PackageEntity = (props: PackageEntityProps) => {
       <br />
       <div className="deps-list">
         {activePackage.dependencies.map((dependency) => (
-          <a
+          <CoreLink
             className="deps-link"
             key={dependency.dependency_uid}
             onClick={() => goToDependency(dependency)}
           >
             {dependency.purl}
-          </a>
+          </CoreLink>
         ))}
       </div>
       <br />

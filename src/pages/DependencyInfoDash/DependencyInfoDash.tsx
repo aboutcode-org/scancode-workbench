@@ -131,7 +131,6 @@ const DependencyInfoDash = () => {
 
   return (
     <div className="text-center pieInfoDash">
-      <br />
       <h3>Dependency info - {currentPath || ""}</h3>
       <br />
       <br />
@@ -195,7 +194,6 @@ const DependencyInfoDash = () => {
           </Card>
         </Col>
       </Row>
-      <br />
       <br />
     </div>
   );

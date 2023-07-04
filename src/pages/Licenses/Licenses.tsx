@@ -198,7 +198,7 @@ const LicenseDetections = () => {
         <Allotment.Pane
           snap
           minSize={200}
-          preferredSize="25%"
+          preferredSize="30%"
           className="licenses-navigator-container"
         >
           <InputGroup className="search-box">
@@ -248,7 +248,12 @@ const LicenseDetections = () => {
                           {licenseDetection.license_expression}
                         </div>
                         <div className="license-count">
-                          <Badge pill className="license-count">
+                          <Badge
+                            pill
+                            bg="light"
+                            text="dark"
+                            className="license-count"
+                          >
                             {licenseDetection.detection_count}
                           </Badge>
                         </div>
@@ -299,7 +304,7 @@ const LicenseDetections = () => {
         <Allotment.Pane
           snap
           minSize={500}
-          className="license-entity-pane p-4 overflow-scroll"
+          className="license-entity-pane px-4 overflow-scroll"
         >
           <LicenseEntity activeLicense={activeLicense} />
         </Allotment.Pane>
