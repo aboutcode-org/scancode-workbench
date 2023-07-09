@@ -1,6 +1,7 @@
 import React from "react";
 import { faBoxOpen, faFileLines } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { OverlayTrigger, Tooltip } from "react-bootstrap";
 
 interface DetectionOriginRendererProps {
   value: boolean;
@@ -11,21 +12,21 @@ const DetectionOriginRenderer = (props: DetectionOriginRendererProps) => {
   const { value } = props;
 
   return (
-    // <OverlayTrigger
-    //   placement="right"
-    //   trigger={["focus", "hover"]}
-    //   overlay={() => (
-    //     <Tooltip id="button-tooltip" {...props}>
-    //       {value ? "Structured package manifest" : "Plain file"}
-    //     </Tooltip>
-    //   )}
-    // >
+    <OverlayTrigger
+      placement="auto"
+      delay={{ show: 200, hide: 50 }}
+      overlay={
+        <Tooltip>
+          {value ? "Structured package manifest" : "Plain file"}
+        </Tooltip>
+      }
+    >
       <FontAwesomeIcon
         icon={value ? faBoxOpen : faFileLines}
         size="lg"
         color="#035228"
       />
-    // </OverlayTrigger>
+    </OverlayTrigger>
   );
 };
 

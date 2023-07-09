@@ -6,6 +6,7 @@
   align-items: center;
   justify-content: center;
 }
+
 .fallback-container img {
   max-height: 200px;
   max-width: 150px;
@@ -29,16 +30,8 @@
   border: 1px solid rgb(255, 255, 255)
 }
 
-.c3-tooltip th {
-  background-color: rgb(255, 255, 255);
-  font-size: 14px;
-  padding: 2px 5px;
-  text-align: left;
-  color: #fff
-}
-
 .c3-tooltip td {
-  font-size: 13px;
+  font-size: 12px;
   padding: 3px 6px;
   background-color: #fff;
   border-left: 1px dotted #999

@@ -129,7 +129,7 @@ const LicenseInfoDash = () => {
 
   return (
     <div className="text-center pieInfoDash">
-      <h3>License info - {currentPath || ""}</h3>
+      <h4>License info - {currentPath || ""}</h4>
       <br />
       <br />
       <Row className="dash-cards">

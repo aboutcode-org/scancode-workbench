@@ -6,10 +6,11 @@ interface LinkProps extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
   external?: boolean;
 }
 const CoreLink = (props: LinkProps) => {
+  const { external, children, ...anchorProps } = props;
+
   return (
-    <a {...props}>
-      {props.children}
-      {" "}{props.external && <FontAwesomeIcon icon={faUpRightFromSquare} />}
+    <a {...anchorProps}>
+      {children} {external && <FontAwesomeIcon icon={faUpRightFromSquare} />}
     </a>
   );
 };

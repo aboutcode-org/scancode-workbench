@@ -1,7 +1,14 @@
 // eslint-disable-next-line import/namespace
 import { Allotment } from "allotment";
 import React, { useEffect, useState } from "react";
-import { Badge, Collapse, ListGroup, ListGroupItem } from "react-bootstrap";
+import {
+  Badge,
+  Collapse,
+  ListGroup,
+  ListGroupItem,
+  OverlayTrigger,
+  Tooltip,
+} from "react-bootstrap";
 import MultiSelect from "react-select";
 import makeAnimated from "react-select/animated";
 import { ThreeDots } from "react-loader-spinner";
@@ -325,7 +332,7 @@ const Packages = () => {
                 >
                   <div
                     className="package-type"
-                    onDoubleClick={(e) => {
+                    onDoubleClick={() => {
                       if (isPackageTypeExpanded)
                         collapsePackageType(packageGroup.type);
                       else expandPackageType(packageGroup.type);
@@ -437,9 +444,20 @@ const Packages = () => {
                                 </div>
                               </div>
                               <div className="total-deps">
-                                <Badge pill bg="light" text="dark">
-                                  {packageWithDep.dependencies.length}
-                                </Badge>
+                                <OverlayTrigger
+                                  placement="right"
+                                  delay={{ show: 250, hide: 400 }}
+                                  overlay={
+                                    <Tooltip>
+                                      {packageWithDep.dependencies.length}{" "}
+                                      dependencies
+                                    </Tooltip>
+                                  }
+                                >
+                                  <Badge pill bg="light" text="dark">
+                                    {packageWithDep.dependencies.length}
+                                  </Badge>
+                                </OverlayTrigger>
                               </div>
                             </div>
                             <Collapse
@@ -475,51 +493,60 @@ const Packages = () => {
                                               )}
                                             </div>
                                           </div>
-                                          <div className="entity-type-badges">
-                                            {dependency.is_runtime && (
-                                              <Badge
-                                                pill
-                                                bg="primary"
-                                                onClick={(e) =>
-                                                  toggleDepTagFilter(
-                                                    DepFilterTags.RUNTIME,
-                                                    e
-                                                  )
-                                                }
-                                              >
-                                                Runtime
-                                              </Badge>
-                                            )}
-                                            {dependency.is_optional && (
-                                              <Badge
-                                                pill
-                                                bg="warning"
-                                                text="dark"
-                                                onClick={(e) =>
-                                                  toggleDepTagFilter(
-                                                    DepFilterTags.OPTIONAL,
-                                                    e
-                                                  )
-                                                }
-                                              >
-                                                Optional
-                                              </Badge>
-                                            )}
-                                            {dependency.is_resolved && (
-                                              <Badge
-                                                pill
-                                                bg="success"
-                                                onClick={(e) =>
-                                                  toggleDepTagFilter(
-                                                    DepFilterTags.RESOLVED,
-                                                    e
-                                                  )
-                                                }
-                                              >
-                                                Resolved
-                                              </Badge>
-                                            )}
-                                          </div>
+
+                                          <OverlayTrigger
+                                            placement="right"
+                                            delay={{ show: 300, hide: 200 }}
+                                            overlay={
+                                              <Tooltip>Click to filter</Tooltip>
+                                            }
+                                          >
+                                            <div className="entity-type-badges">
+                                              {dependency.is_runtime && (
+                                                <Badge
+                                                  pill
+                                                  bg="primary"
+                                                  onClick={(e) =>
+                                                    toggleDepTagFilter(
+                                                      DepFilterTags.RUNTIME,
+                                                      e
+                                                    )
+                                                  }
+                                                >
+                                                  Runtime
+                                                </Badge>
+                                              )}
+                                              {dependency.is_optional && (
+                                                <Badge
+                                                  pill
+                                                  bg="warning"
+                                                  text="dark"
+                                                  onClick={(e) =>
+                                                    toggleDepTagFilter(
+                                                      DepFilterTags.OPTIONAL,
+                                                      e
+                                                    )
+                                                  }
+                                                >
+                                                  Optional
+                                                </Badge>
+                                              )}
+                                              {dependency.is_resolved && (
+                                                <Badge
+                                                  pill
+                                                  bg="success"
+                                                  onClick={(e) =>
+                                                    toggleDepTagFilter(
+                                                      DepFilterTags.RESOLVED,
+                                                      e
+                                                    )
+                                                  }
+                                                >
+                                                  Resolved
+                                                </Badge>
+                                              )}
+                                            </div>
+                                          </OverlayTrigger>
                                         </div>
                                       </ListGroupItem>
                                     );

@@ -1,4 +1,3 @@
-import React from "react";
 import { ColDef } from "ag-grid-community";
 import {
   DetectionOriginRenderer,
@@ -24,19 +23,8 @@ export const DetectionFileRegionCols: ColDef[] = [
     minWidth: 300,
     cellRenderer: FileRegionPathRenderer,
   },
-  // {
-  //   headerName: 'Start line',
-  //   field: 'start_line',
-  //   width: MINI_FIELD_WIDTH,
-  // },
-  // {
-  //   headerName: 'End line',
-  //   field: 'end_line',
-  //   width: MINI_FIELD_WIDTH,
-  // },
   {
     headerName: "Lines",
-    field: "start_line",
     cellRenderer: RegionLinesRenderer,
     maxWidth: 85,
   },
@@ -44,15 +32,7 @@ export const DetectionFileRegionCols: ColDef[] = [
     headerName: "Detection origin",
     field: "from_package",
     cellRenderer: DetectionOriginRenderer,
-    // tooltipComponent: (props: { value: boolean }) => {
-    //   console.log(props);
-    //   return (
-    //     <div>
-    //       {props.value ? "Structured package manifest" : "Plain file"}
-    //     </div>
-    //   );
-    // },
-    maxWidth: 95,
+    maxWidth: 100,
     suppressMenu: true,
   },
 ];

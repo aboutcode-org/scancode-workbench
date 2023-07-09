@@ -173,10 +173,13 @@ const LicenseDetections = () => {
   }
 
   const totalLicenses = licenseDetections.length + licenseClues.length;
-  const MAX_SECTION_HEIGHT = 0.75;
+  const DEFAULT_SECTION_HEIGHT_CAP = 0.8;
   const capSectionSize = (ratio: number) => {
     return (
-      Math.max(1 - MAX_SECTION_HEIGHT, Math.min(MAX_SECTION_HEIGHT, ratio)) *
+      Math.max(
+        1 - DEFAULT_SECTION_HEIGHT_CAP,
+        Math.min(DEFAULT_SECTION_HEIGHT_CAP, ratio)
+      ) *
         100 +
       "%"
     );
@@ -192,8 +195,6 @@ const LicenseDetections = () => {
 
   return (
     <div>
-      <h4 className="license-detections-title">License Detections</h4>
-
       <Allotment className="license-container">
         <Allotment.Pane
           snap
@@ -219,7 +220,10 @@ const LicenseDetections = () => {
                   ? "License Detections"
                   : "No license detections"}
               </div>
-              <ListGroup hidden={licenseDetections.length === 0}>
+              <ListGroup
+                hidden={licenseDetections.length === 0}
+                className="licenses-list"
+              >
                 {licenseDetections.map((licenseDetection) => {
                   const isLicenseDetectionActive =
                     activeLicense &&
@@ -267,7 +271,10 @@ const LicenseDetections = () => {
               <div className="licenses-navigator-pane-title">
                 {licenseClues.length > 0 ? "License Clues" : "No License Clues"}
               </div>
-              <ListGroup hidden={licenseClues.length === 0}>
+              <ListGroup
+                hidden={licenseClues.length === 0}
+                className="licenses-list"
+              >
                 {licenseClues.map((licenseClue) => {
                   const isLicenseClueActive =
                     activeLicense &&

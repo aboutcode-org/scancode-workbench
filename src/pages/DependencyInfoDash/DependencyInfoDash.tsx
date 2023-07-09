@@ -18,6 +18,7 @@ const DependencyInfoDash = () => {
 
   const [packageTypeDependenciesData, setPackageTypeDependenciesData] =
     useState(null);
+  const [dataSourceIDsData, setDataSourceIDsData] = useState(null);
   const [runtimeDependenciesData, setRuntimeDependenciesData] = useState(null);
   const [resolvedDependenciesData, setResolvedDependenciesData] =
     useState(null);
@@ -54,11 +55,11 @@ const DependencyInfoDash = () => {
             "is_runtime",
             "is_resolved",
             "is_optional",
+            "datasource_id",
           ],
         })
       )
       .then((dependencies) => {
-        console.log({ dependencies });
         setScanData({ totalDependencies: dependencies.length });
 
         // Prepare chart for runtime dependencies
@@ -84,11 +85,14 @@ const DependencyInfoDash = () => {
         const { chartData: optionalDependenciesChartData } =
           formatChartData(optionalDependencies);
         setOptionalDependenciesData(optionalDependenciesChartData);
-        console.log({
-          optionalDependenciesChartData,
-          resolvedDependenciesChartData,
-          runtimeDependenciesChartData,
-        });
+
+        // Prepare chart for dependencies' data source IDs
+        const dataSourceIDs = dependencies.map((dependency) =>
+          dependency.getDataValue("datasource_id")
+        );
+        const { chartData: dataSourceIDsChartData } =
+          formatChartData(dataSourceIDs);
+        setDataSourceIDsData(dataSourceIDsChartData);
       });
 
     db.sync.then(async (db) => {
@@ -131,7 +135,7 @@ const DependencyInfoDash = () => {
 
   return (
     <div className="text-center pieInfoDash">
-      <h3>Dependency info - {currentPath || ""}</h3>
+      <h4>Dependency info - {currentPath || ""}</h4>
       <br />
       <br />
       <Row className="dash-cards">
@@ -147,20 +151,8 @@ const DependencyInfoDash = () => {
         </Col>
       </Row>
       <br />
-      <br />
       <Row className="dash-cards">
-        <Col sm={6} md={3}>
-          <Card className="chart-card">
-            <h5 className="title">Dependencies for each Package type</h5>
-            <PieChart
-              chartData={packageTypeDependenciesData}
-              notOpted={!scanInfo.optionsMap.get(ScanOptionKeys.PACKAGE)}
-              notOptedText="Use --package CLI option for dependencies"
-              notOptedLink="https://scancode-toolkit.readthedocs.io/en/latest/cli-reference/basic-options.html#package-option"
-            />
-          </Card>
-        </Col>
-        <Col sm={6} md={3}>
+        <Col sm={4}>
           <Card className="chart-card">
             <h5 className="title">Runtime dependencies</h5>
             <PieChart
@@ -171,7 +163,7 @@ const DependencyInfoDash = () => {
             />
           </Card>
         </Col>
-        <Col sm={6} md={3}>
+        <Col sm={4}>
           <Card className="chart-card">
             <h5 className="title">Resolved dependencies</h5>
             <PieChart
@@ -182,11 +174,35 @@ const DependencyInfoDash = () => {
             />
           </Card>
         </Col>
-        <Col sm={6} md={3}>
+        <Col sm={4}>
           <Card className="chart-card">
             <h5 className="title">Optional Dependencies</h5>
             <PieChart
               chartData={optionalDependenciesData}
+              notOpted={!scanInfo.optionsMap.get(ScanOptionKeys.PACKAGE)}
+              notOptedText="Use --package CLI option for dependencies"
+              notOptedLink="https://scancode-toolkit.readthedocs.io/en/latest/cli-reference/basic-options.html#package-option"
+            />
+          </Card>
+        </Col>
+      </Row>
+      <Row className="dash-cards">
+        <Col sm={4}>
+          <Card className="chart-card">
+            <h5 className="title">Dependencies for each Package type</h5>
+            <PieChart
+              chartData={packageTypeDependenciesData}
+              notOpted={!scanInfo.optionsMap.get(ScanOptionKeys.PACKAGE)}
+              notOptedText="Use --package CLI option for dependencies"
+              notOptedLink="https://scancode-toolkit.readthedocs.io/en/latest/cli-reference/basic-options.html#package-option"
+            />
+          </Card>
+        </Col>
+        <Col sm={4}>
+          <Card className="chart-card">
+            <h5 className="title">Data Source IDs</h5>
+            <PieChart
+              chartData={dataSourceIDsData}
               notOpted={!scanInfo.optionsMap.get(ScanOptionKeys.PACKAGE)}
               notOptedText="Use --package CLI option for dependencies"
               notOptedLink="https://scancode-toolkit.readthedocs.io/en/latest/cli-reference/basic-options.html#package-option"

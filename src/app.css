@@ -17,9 +17,11 @@ a:not([href]):not([class]):hover {
   color: #0a58ca;
 }
 
+input[type="text"] {
+  font-size: 14px;
+}
 input[type="search"]::-webkit-search-results-button {
   display: block;
-
 }
 
 input[type="search"]::-webkit-search-cancel-button {
@@ -115,12 +117,6 @@ img {
   color: #3898fc;
   font-weight: 500;
   padding-bottom: 15px;
-}
-
-.card .category {
-  font-size: 17px;
-  font-weight: 400;
-  color: #555;
 }
 
 .c3 svg {

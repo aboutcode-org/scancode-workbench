@@ -139,7 +139,9 @@ const LinkComponent: FunctionComponent<ListComponentProps> = (props) => {
       {routerLink ? (
         <Link to={URL}>{customDisplayText || value}</Link>
       ) : (
-        <CoreLink href={URL} external>{customDisplayText || value}</CoreLink>
+        <CoreLink href={URL} external>
+          {customDisplayText || value}
+        </CoreLink>
       )}
     </>
   );

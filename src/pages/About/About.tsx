@@ -6,13 +6,13 @@ import "./about.css";
 
 const About = () => {
   return (
-    <div className="help">
-      <h1>
+    <div className="about">
+      <h3>
         About ScanCode Workbench
         <span className="app-version">v{version}</span>
-      </h1>
+      </h3>
       <br />
-      <h3>Overview</h3>
+      <h4>Overview</h4>
       <p>
         ScanCode Workbench allows you take the scan results from the ScanCode
         and evaluate it using charts
@@ -24,7 +24,7 @@ const About = () => {
         .
       </p>
       <br />
-      <h3>Learn More:</h3>
+      <h4>Learn More:</h4>
       <p>
         Check out the ScanCode-Workbench
         <CoreLink href="https://scancode-workbench.readthedocs.io" external>
@@ -33,7 +33,7 @@ const About = () => {
         .
       </p>
       <br />
-      <h3>Workbench notice:</h3>
+      <h4>Workbench notice:</h4>
       <p>
         Provided on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
         KIND, either express or implied. <br />
@@ -48,7 +48,7 @@ const About = () => {
         for support and download.
       </p>
       <br />
-      <h3>Having Trouble?</h3>
+      <h4>Having Trouble?</h4>
       <p>
         Report a bug or request a feature on the ScanCode-Workbench.
         <CoreLink

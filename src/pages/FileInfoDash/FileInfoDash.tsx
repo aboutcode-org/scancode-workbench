@@ -91,7 +91,7 @@ const FileInfoDash = () => {
 
   return (
     <div className="text-center pieInfoDash">
-      <h3>File info - {currentPath || ""}</h3>
+      <h4>File info - {currentPath || ""}</h4>
       <br />
       <br />
       <Row className="dash-cards">

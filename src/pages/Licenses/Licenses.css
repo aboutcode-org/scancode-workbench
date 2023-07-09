@@ -14,7 +14,8 @@
 }
 
 .license-container {
-  height: calc(100vh - 60px);
+  height: calc(100vh - 30px);
+  margin-top: 15px;
 }
 
 .licenses-navigator-container {
@@ -30,15 +31,24 @@
   margin-bottom: 12px;
 }
 
+.licenses-navigator-container .search-box input {
+  font-size: 14px;
+}
+
 .licenses-navigator-pane {
   overflow: auto !important;
   padding-right: 4px;
 }
 
+.licenses-navigator-pane .licenses-list {
+  height: calc(100% - 30px);
+  overflow: auto;
+}
+
 .licenses-navigator-pane-title {
-  font-size: medium;
+  font-size: 15px;
   padding: 1px;
-  padding-left: 9px;
+  padding-left: 7px;
   font-weight: 700;
 }
 
@@ -57,6 +67,7 @@
 .license-item:hover {
   background-color: var(--listHoverColor);
 }
+
 .selected-license {
   background-color: var(--listSelectionColor) !important;
 }

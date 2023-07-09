@@ -22,6 +22,14 @@ const PackageInfoDash = () => {
     totalPackages: null,
   });
 
+  // Path independent
+  useEffect(() => {
+    if (!initialized || !db || !currentPath) return;
+    db.sync
+      .then((db) => db.Packages.count())
+      .then((totalPackages) => setScanData({ totalPackages }));
+  }, [db, initialized]);
+
   useEffect(() => {
     if (!initialized || !db || !currentPath) return;
 
@@ -45,11 +53,6 @@ const PackageInfoDash = () => {
         // Query and prepare chart for package types
         db.sync
           .then((db) => db.PackageData.findAll({ where: { fileId: fileIDs } }))
-          .then((packageData) => {
-            // Prepare count of packages
-            setScanData({ totalPackages: packageData.length });
-            return packageData;
-          })
           .then((packageData) => {
             // Prepare chart for package types
             const packageTypes = packageData.map(
@@ -86,7 +89,7 @@ const PackageInfoDash = () => {
 
   return (
     <div className="text-center pieInfoDash">
-      <h3>Package info - {currentPath || ""}</h3>
+      <h4>Package info - {currentPath || ""}</h4>
       <br />
       <br />
       <Row className="dash-cards">
