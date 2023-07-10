@@ -1,3 +1,8 @@
+export interface DatasourceFilter {
+  value: string;
+  label: string;
+}
+
 export interface DepFilterTag {
   value: string;
   label: string;

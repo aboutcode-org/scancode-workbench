@@ -38,14 +38,14 @@ const PackageEntity = (props: PackageEntityProps) => {
               <br />
             </>,
           ],
-          ["Type:", activePackage.type || null],
-          ["Namespace:", activePackage.namespace || null],
-          ["Name:", activePackage.name || null],
-          ["Version:", activePackage.version || null],
-          ["Subpath:", activePackage.subpath || null],
+          ["Type", activePackage.type || null],
+          ["Namespace", activePackage.namespace || null],
+          ["Name", activePackage.name || null],
+          ["Version", activePackage.version || null],
+          ["Subpath", activePackage.subpath || null],
           ["Primary Language:", activePackage.primary_language || null],
           [
-            "Extracted license statement: ",
+            "Extracted license statement",
             activePackage.extracted_license_statement || null,
           ],
           [
@@ -69,11 +69,10 @@ const PackageEntity = (props: PackageEntityProps) => {
             <span className="property">{entry[0]}</span>
             {entry.length > 1 && (
               <span className="value">: {entry[1] || "None"}<br /></span>
-            
             )}
           </React.Fragment>
         ))}
-        <span className="property">Homepage URL:</span>
+        <span className="property">Homepage URL: </span>
         <span className="value">
           {activePackage.homepage_url ? (
             <CoreLink

@@ -15,7 +15,12 @@ import { ThreeDots } from "react-loader-spinner";
 import { useSearchParams } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-import { DepFilterTag, DepFilterTags, DepFilterTagsList } from "./depsFilters";
+import {
+  DatasourceFilter,
+  DepFilterTag,
+  DepFilterTags,
+  DepFilterTagsList,
+} from "./filters";
 import { MISC_DEPS, MISC_PACKAGE } from "./miscInfo";
 import { generatePackagesMapping } from "./packageParsers";
 import NoDataFallback from "../../components/NoDataSection";
@@ -39,6 +44,10 @@ const Packages = () => {
     useWorkbenchDB();
 
   const [searchParams] = useSearchParams();
+  const [dataSourceIDs, setDataSourceIDs] = useState<DatasourceFilter[]>([]);
+  const [selectedDataSourceIDs, setSelectedDataSourceIDs] = useState<
+    DatasourceFilter[]
+  >([]);
   const [selectedDepFilters, setSelectedDepFilters] = useState<DepFilterTag[]>(
     []
   );
@@ -151,6 +160,16 @@ const Packages = () => {
       const packageMapping = generatePackagesMapping(packages);
       packageMapping.set(MISC_DEPS, MISC_PACKAGE);
 
+      const uniqueDataSourceIDs = new Set(
+        deps.map((dep) => dep.getDataValue("datasource_id").toString({}))
+      );
+      setDataSourceIDs(
+        Array.from(uniqueDataSourceIDs.values()).map((dataSourceID) => ({
+          label: dataSourceID,
+          value: dataSourceID,
+        }))
+      );
+
       // Group dependencies in their respective packages
       deps.forEach((dependencyInfo) => {
         const targetPackageUid: string | null = dependencyInfo
@@ -238,20 +257,37 @@ const Packages = () => {
     useState<PackageTypeGroupDetails[]>(null);
 
   useEffect(() => {
-    const allowedFlags = selectedDepFilters.map((tag) => tag.flag);
-
-    if (!allowedFlags.length || !allPackageGroups?.length)
+    if (
+      !allPackageGroups?.length ||
+      (!selectedDepFilters.length && !selectedDataSourceIDs.length)
+    ) {
       return setFilteredPackageGroups(
         allPackageGroups?.sort((a, b) => b.packages.length - a.packages.length)
       );
+    }
+
+    const allowedDepFlags = selectedDepFilters.length
+      ? selectedDepFilters.map((tag) => tag.flag)
+      : DepFilterTagsList.map((tag) => tag.flag);
+
+    const allowedDataSourceIDs = selectedDataSourceIDs.length
+      ? selectedDataSourceIDs.map((datasourceOption) => datasourceOption.value)
+      : dataSourceIDs.map((datasourceOption) => datasourceOption.value);
+    console.log("Allowed data sources", {
+      allowedDataSourceIDs,
+      allowedDepFlags,
+    });
 
     const newFilteredPackageGroups = allPackageGroups.map(
       (packageGroup): PackageTypeGroupDetails => ({
         ...packageGroup,
         packages: packageGroup.packages.flatMap((packageDetails) => {
-          const filteredDeps = packageDetails.dependencies.filter((dep) =>
-            allowedFlags.find((flag) => dep[flag] === true)
+          const filteredDeps = packageDetails.dependencies.filter(
+            (dep) =>
+              allowedDepFlags.find((flag) => dep[flag] === true) &&
+              allowedDataSourceIDs.includes(dep.datasource_id)
           );
+
           return filteredDeps.length
             ? { ...packageDetails, dependencies: filteredDeps }
             : [];
@@ -272,7 +308,7 @@ const Packages = () => {
     );
 
     const isDependencyAllowed = (dep: DependencyDetails) =>
-      allowedFlags.find((flag) => dep[flag]);
+      allowedDepFlags.find((flag) => dep[flag]);
 
     if (
       activePackage &&
@@ -285,7 +321,7 @@ const Packages = () => {
       setActiveDependency(null);
       setActiveEntityType(null);
     }
-  }, [allPackageGroups, selectedDepFilters]);
+  }, [allPackageGroups, selectedDepFilters, selectedDataSourceIDs]);
 
   if (!filteredPackageGroups) {
     return (
@@ -313,10 +349,22 @@ const Packages = () => {
             closeMenuOnSelect={false}
             components={animatedComponents}
             isMulti
+            placeholder="Filter data sources"
+            value={selectedDataSourceIDs}
+            onChange={setSelectedDataSourceIDs}
+            options={dataSourceIDs}
+            className="packages-filter-bar"
+          />
+          <br />
+          <MultiSelect
+            closeMenuOnSelect={false}
+            components={animatedComponents}
+            isMulti
+            placeholder="Filter dependency flag"
             value={selectedDepFilters}
             onChange={setSelectedDepFilters}
             options={DepFilterTagsList}
-            className="packages-search-bar"
+            className="packages-filter-bar"
           />
           <br />
           <ListGroup className="packages-list-container">

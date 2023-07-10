@@ -51,7 +51,7 @@ const DependencyEntity = (props: DependencyEntityProps) => {
       <div className="entity-properties">
         {[
           [
-            "For:",
+            "For",
             dependency.for_package_uid ? (
               <CoreLink
                 onClick={() => goToPackageByUID(dependency.for_package_uid)}
@@ -62,10 +62,10 @@ const DependencyEntity = (props: DependencyEntityProps) => {
               <>NA</>
             ),
           ],
-          ["Scope:", dependency.scope || "NA"],
-          ["Extracted requirement:", dependency.extracted_requirement || "NA"],
+          ["Scope", dependency.scope || "NA"],
+          ["Extracted requirement", dependency.extracted_requirement || "NA"],
           [
-            "Data file:",
+            "Data file",
             dependency.datafile_path ? (
               <CoreLink
                 onClick={() => goToFileInTableView(dependency.datafile_path)}
@@ -79,9 +79,10 @@ const DependencyEntity = (props: DependencyEntityProps) => {
           ["Data source ID", dependency.datasource_id || "NA"],
         ].map((entry) => (
           <React.Fragment key={entry[0].toString()}>
-            <span className="property">{entry[0] || ""}</span>
-            <span className="value">{entry[1] || ""}</span>
-            <br />
+            <span className="property">{entry[0]}</span>
+            {entry.length > 1 && (
+              <span className="value">: {entry[1] || "None"}<br /></span>
+            )}
           </React.Fragment>
         ))}
       </div>

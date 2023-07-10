@@ -17,9 +17,8 @@
   height: calc(100vh - 60px);
 }
 
-.packages-search-bar {
+.packages-filter-bar {
   width: 98%;
-  font-size: 14px;
 }
 
 .packages-list-container {
