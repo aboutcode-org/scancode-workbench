@@ -2,7 +2,7 @@ import { Op } from "sequelize";
 import { Row, Col, Card } from "react-bootstrap";
 import React, { useEffect, useState } from "react";
 
-import { formatChartData } from "../../utils/pie";
+import { FormattedEntry, formatChartData } from "../../utils/pie";
 import { useWorkbenchDB } from "../../contexts/dbContext";
 import PieChart from "../../components/PieChart/PieChart";
 import EllipticLoader from "../../components/EllipticLoader";
@@ -18,9 +18,15 @@ import "./FileInfoDash.css";
 const FileInfoDash = () => {
   const { db, initialized, currentPath } = useWorkbenchDB();
 
-  const [progLangsData, setProgLangsData] = useState(null);
-  const [mimeTypesData, setMimeTypesData] = useState(null);
-  const [fileTypesData, setFileTypesData] = useState(null);
+  const [progLangsData, setProgLangsData] = useState<FormattedEntry[] | null>(
+    null
+  );
+  const [mimeTypesData, setMimeTypesData] = useState<FormattedEntry[] | null>(
+    null
+  );
+  const [fileTypesData, setFileTypesData] = useState<FormattedEntry[] | null>(
+    null
+  );
   const [scanData, setScanData] = useState<ScanData>({
     totalFiles: null,
     totalDirectories: null,

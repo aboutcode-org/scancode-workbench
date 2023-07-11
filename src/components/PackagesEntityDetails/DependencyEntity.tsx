@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Badge } from "react-bootstrap";
 import ReactJson from "@microlink/react-json-view";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -16,10 +16,6 @@ interface DependencyEntityProps {
 }
 const DependencyEntity = (props: DependencyEntityProps) => {
   const { goToPackageByUID, goToFileInTableView, dependency } = props;
-
-  useEffect(() => {
-    console.log("Active dep", dependency);
-  }, [dependency]);
 
   if (!dependency) {
     return (
@@ -81,7 +77,10 @@ const DependencyEntity = (props: DependencyEntityProps) => {
           <React.Fragment key={entry[0].toString()}>
             <span className="property">{entry[0]}</span>
             {entry.length > 1 && (
-              <span className="value">: {entry[1] || "None"}<br /></span>
+              <span className="value">
+                : {entry[1] || "None"}
+                <br />
+              </span>
             )}
           </React.Fragment>
         ))}

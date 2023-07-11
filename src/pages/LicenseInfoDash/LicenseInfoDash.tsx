@@ -3,7 +3,7 @@ import { Tooltip } from "react-tooltip";
 import { Row, Col, Card } from "react-bootstrap";
 import React, { useEffect, useState } from "react";
 
-import { formatChartData } from "../../utils/pie";
+import { FormattedEntry, formatChartData } from "../../utils/pie";
 import { useWorkbenchDB } from "../../contexts/dbContext";
 import PieChart from "../../components/PieChart/PieChart";
 import EllipticLoader from "../../components/EllipticLoader";
@@ -21,9 +21,15 @@ import "./licenseInfoDash.css";
 const LicenseInfoDash = () => {
   const { db, initialized, currentPath, scanInfo } = useWorkbenchDB();
 
-  const [licenseExpressionData, setLicenseExpressionData] = useState(null);
-  const [licenseKeyData, setLicenseKeyData] = useState(null);
-  const [licensePolicyData, setLicensePolicyData] = useState(null);
+  const [licenseExpressionData, setLicenseExpressionData] = useState<
+    FormattedEntry[] | null
+  >(null);
+  const [licenseKeyData, setLicenseKeyData] = useState<FormattedEntry[] | null>(
+    null
+  );
+  const [licensePolicyData, setLicensePolicyData] = useState<
+    FormattedEntry[] | null
+  >(null);
   const [scanData, setScanData] = useState<ScanData>({
     totalLicenses: null,
     totalLicenseFiles: null,

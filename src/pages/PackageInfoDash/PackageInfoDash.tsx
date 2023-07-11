@@ -2,7 +2,7 @@ import { Op } from "sequelize";
 import { Row, Col, Card } from "react-bootstrap";
 import React, { useEffect, useState } from "react";
 
-import { formatChartData } from "../../utils/pie";
+import { FormattedEntry, formatChartData } from "../../utils/pie";
 import { useWorkbenchDB } from "../../contexts/dbContext";
 import { NO_VALUE_DETECTED_LABEL } from "../../constants/data";
 import PieChart from "../../components/PieChart/PieChart";
@@ -15,9 +15,15 @@ interface ScanData {
 
 const PackageInfoDash = () => {
   const { db, initialized, currentPath, scanInfo } = useWorkbenchDB();
-  const [packageTypeData, setPackageTypeData] = useState(null);
-  const [packageLangData, setPackageLangData] = useState(null);
-  const [packageLicenseData, setPackageLicenseData] = useState(null);
+  const [packageTypeData, setPackageTypeData] = useState<
+    FormattedEntry[] | null
+  >(null);
+  const [packageLangData, setPackageLangData] = useState<
+    FormattedEntry[] | null
+  >(null);
+  const [packageLicenseData, setPackageLicenseData] = useState<
+    FormattedEntry[] | null
+  >(null);
   const [scanData, setScanData] = useState<ScanData>({
     totalPackages: null,
   });

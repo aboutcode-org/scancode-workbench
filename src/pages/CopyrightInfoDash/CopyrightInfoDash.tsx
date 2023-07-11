@@ -2,7 +2,7 @@ import { Op } from "sequelize";
 import { Row, Col, Card } from "react-bootstrap";
 import React, { useEffect, useState } from "react";
 
-import { formatChartData } from "../../utils/pie";
+import { FormattedEntry, formatChartData } from "../../utils/pie";
 import { useWorkbenchDB } from "../../contexts/dbContext";
 import PieChart from "../../components/PieChart/PieChart";
 import EllipticLoader from "../../components/EllipticLoader";
@@ -17,9 +17,15 @@ interface ScanData {
 const CopyrightInfoDash = () => {
   const { db, initialized, currentPath, scanInfo } = useWorkbenchDB();
 
-  const [copyrightHoldersData, setCopyrightHoldersData] = useState(null);
-  const [copyrightNoticesData, setCopyrightNoticesData] = useState(null);
-  const [copyrightAuthorsData, setCopyrightAuthorsData] = useState(null);
+  const [copyrightHoldersData, setCopyrightHoldersData] = useState<
+    FormattedEntry[] | null
+  >(null);
+  const [copyrightNoticesData, setCopyrightNoticesData] = useState<
+    FormattedEntry[] | null
+  >(null);
+  const [copyrightAuthorsData, setCopyrightAuthorsData] = useState<
+    FormattedEntry[] | null
+  >(null);
   const [scanData, setScanData] = useState<ScanData>({
     totalUniqueHolders: 0,
     totalUniqueAuthors: 0,
@@ -88,18 +94,18 @@ const CopyrightInfoDash = () => {
           totalUniqueAuthors: totalUniqueCopyrightAuthors,
           totalUniqueNotices: totalUniqueCopyrightNotices,
         });
-        console.log({
-          copyrights,
-          copyrightHolders,
-          copyrightNotices,
-          copyrightAuthors,
-          copyrightHoldersChartData,
-          copyrightNoticesChartData,
-          copyrightAuthorsChartData,
-          totalUniqueCopyrightHolders,
-          totalUniqueCopyrightNotices,
-          totalUniqueCopyrightAuthors,
-        });
+        // console.log({
+        //   copyrights,
+        //   copyrightHolders,
+        //   copyrightNotices,
+        //   copyrightAuthors,
+        //   copyrightHoldersChartData,
+        //   copyrightNoticesChartData,
+        //   copyrightAuthorsChartData,
+        //   totalUniqueCopyrightHolders,
+        //   totalUniqueCopyrightNotices,
+        //   totalUniqueCopyrightAuthors,
+        // });
       });
   }, [db, initialized, currentPath]);
 

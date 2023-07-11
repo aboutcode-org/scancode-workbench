@@ -132,8 +132,6 @@ const Packages = () => {
   }, [searchParams]);
 
   const activateDependency = (dependency: DependencyDetails) => {
-    console.log("Active dep", dependency);
-
     setActivePackage(null);
     setActiveDependency(dependency);
     setActiveEntityType("dependency");
@@ -273,10 +271,6 @@ const Packages = () => {
     const allowedDataSourceIDs = selectedDataSourceIDs.length
       ? selectedDataSourceIDs.map((datasourceOption) => datasourceOption.value)
       : dataSourceIDs.map((datasourceOption) => datasourceOption.value);
-    console.log("Allowed data sources", {
-      allowedDataSourceIDs,
-      allowedDepFlags,
-    });
 
     const newFilteredPackageGroups = allPackageGroups.map(
       (packageGroup): PackageTypeGroupDetails => ({
@@ -293,12 +287,6 @@ const Packages = () => {
             : [];
         }),
       })
-    );
-    console.log(
-      newFilteredPackageGroups,
-      newFilteredPackageGroups.sort(
-        (a, b) => b.packages.length - a.packages.length
-      )
     );
 
     setFilteredPackageGroups(

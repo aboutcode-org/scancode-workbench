@@ -2,7 +2,11 @@ import { Op } from "sequelize";
 import { Row, Col, Card } from "react-bootstrap";
 import React, { useEffect, useState } from "react";
 
-import { formatChartData, limitChartData } from "../../utils/pie";
+import {
+  FormattedEntry,
+  formatChartData,
+  limitChartData,
+} from "../../utils/pie";
 import { useWorkbenchDB } from "../../contexts/dbContext";
 import PieChart from "../../components/PieChart/PieChart";
 import EllipticLoader from "../../components/EllipticLoader";
@@ -17,13 +21,20 @@ const DependencyInfoDash = () => {
   const { db, initialized, currentPath, scanInfo } = useWorkbenchDB();
 
   const [packageTypeDependenciesData, setPackageTypeDependenciesData] =
-    useState(null);
-  const [dataSourceIDsData, setDataSourceIDsData] = useState(null);
-  const [runtimeDependenciesData, setRuntimeDependenciesData] = useState(null);
-  const [resolvedDependenciesData, setResolvedDependenciesData] =
-    useState(null);
-  const [optionalDependenciesData, setOptionalDependenciesData] =
-    useState(null);
+    useState<FormattedEntry[] | null>(null);
+  const [dataSourceIDsData, setDataSourceIDsData] = useState<
+    FormattedEntry[] | null
+  >(null);
+  const [scopesData, setScopesData] = useState(null);
+  const [runtimeDependenciesData, setRuntimeDependenciesData] = useState<
+    FormattedEntry[] | null
+  >(null);
+  const [resolvedDependenciesData, setResolvedDependenciesData] = useState<
+    FormattedEntry[] | null
+  >(null);
+  const [optionalDependenciesData, setOptionalDependenciesData] = useState<
+    FormattedEntry[] | null
+  >(null);
   const [scanData, setScanData] = useState<ScanData>({
     totalDependencies: null,
   });
@@ -56,6 +67,7 @@ const DependencyInfoDash = () => {
             "is_resolved",
             "is_optional",
             "datasource_id",
+            "scope",
           ],
         })
       )
@@ -93,6 +105,13 @@ const DependencyInfoDash = () => {
         const { chartData: dataSourceIDsChartData } =
           formatChartData(dataSourceIDs);
         setDataSourceIDsData(dataSourceIDsChartData);
+
+        // Prepare chart for dependencies' data source IDs
+        const scopes = dependencies.map((dependency) =>
+          dependency.getDataValue("scope")
+        );
+        const { chartData: scopesChartData } = formatChartData(scopes);
+        setScopesData(scopesChartData);
       });
 
     db.sync.then(async (db) => {
@@ -154,6 +173,42 @@ const DependencyInfoDash = () => {
       <Row className="dash-cards">
         <Col sm={4}>
           <Card className="chart-card">
+            <h5 className="title">Dependencies for each Package type</h5>
+            <PieChart
+              chartData={packageTypeDependenciesData}
+              notOpted={!scanInfo.optionsMap.get(ScanOptionKeys.PACKAGE)}
+              notOptedText="Use --package CLI option for dependencies"
+              notOptedLink="https://scancode-toolkit.readthedocs.io/en/latest/cli-reference/basic-options.html#package-option"
+            />
+          </Card>
+        </Col>
+        <Col sm={4}>
+          <Card className="chart-card">
+            <h5 className="title">Data Source IDs</h5>
+            <PieChart
+              chartData={dataSourceIDsData}
+              notOpted={!scanInfo.optionsMap.get(ScanOptionKeys.PACKAGE)}
+              notOptedText="Use --package CLI option for dependencies"
+              notOptedLink="https://scancode-toolkit.readthedocs.io/en/latest/cli-reference/basic-options.html#package-option"
+            />
+          </Card>
+        </Col>
+        <Col sm={4}>
+          <Card className="chart-card">
+            <h5 className="title">Dependency scopes</h5>
+            <PieChart
+              chartData={scopesData}
+              notOpted={!scanInfo.optionsMap.get(ScanOptionKeys.PACKAGE)}
+              notOptedText="Use --package CLI option for dependencies"
+              notOptedLink="https://scancode-toolkit.readthedocs.io/en/latest/cli-reference/basic-options.html#package-option"
+            />
+          </Card>
+        </Col>
+      </Row>
+      <br />
+      <Row className="dash-cards">
+        <Col sm={4}>
+          <Card className="chart-card">
             <h5 className="title">Runtime dependencies</h5>
             <PieChart
               chartData={runtimeDependenciesData}
@@ -186,31 +241,6 @@ const DependencyInfoDash = () => {
           </Card>
         </Col>
       </Row>
-      <Row className="dash-cards">
-        <Col sm={4}>
-          <Card className="chart-card">
-            <h5 className="title">Dependencies for each Package type</h5>
-            <PieChart
-              chartData={packageTypeDependenciesData}
-              notOpted={!scanInfo.optionsMap.get(ScanOptionKeys.PACKAGE)}
-              notOptedText="Use --package CLI option for dependencies"
-              notOptedLink="https://scancode-toolkit.readthedocs.io/en/latest/cli-reference/basic-options.html#package-option"
-            />
-          </Card>
-        </Col>
-        <Col sm={4}>
-          <Card className="chart-card">
-            <h5 className="title">Data Source IDs</h5>
-            <PieChart
-              chartData={dataSourceIDsData}
-              notOpted={!scanInfo.optionsMap.get(ScanOptionKeys.PACKAGE)}
-              notOptedText="Use --package CLI option for dependencies"
-              notOptedLink="https://scancode-toolkit.readthedocs.io/en/latest/cli-reference/basic-options.html#package-option"
-            />
-          </Card>
-        </Col>
-      </Row>
-      <br />
     </div>
   );
 };
