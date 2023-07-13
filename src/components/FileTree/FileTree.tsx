@@ -36,7 +36,7 @@ const FileTree = (props: React.HTMLProps<HTMLDivElement>) => {
             inline: "start",
           });
         }
-      }, 500);
+      }, 1000);
     }
   }, [currentPath]);
 
