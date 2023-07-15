@@ -1,6 +1,6 @@
 import FileLicenseDetectionsRenderer from "./Licenses/FileLicenseDetectionsRenderer";
 import FileLicenseCluesRenderer from "./Licenses/FileLicenseCluesRenderer";
-import FileRegionPathRenderer from "./Licenses/FileRegionPathRenderer";
+import FilePathRenderer from "./Licenses/FilePathRenderer";
 import MatchLicenseExpressionRenderer from "./Licenses/MatchLicenseExpressionRenderer";
 import DetectionOriginRenderer from "./Licenses/DetectionOriginRenderer.tsx";
 import RegionLinesRenderer from "./Licenses/RegionLinesRenderer";
@@ -17,7 +17,7 @@ export {
   DetectionOriginRenderer,
   UrlListCellRenderer,
   MatchLicenseExpressionRenderer,
-  FileRegionPathRenderer,
+  FilePathRenderer,
   FileLicenseDetectionsRenderer,
   FileLicenseCluesRenderer,
 };

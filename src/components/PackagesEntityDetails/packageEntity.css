@@ -1,12 +1,7 @@
-.deps-list {
-  max-height: 207px;
-  overflow: auto;
-  width: fit-content;
-  max-width: 95%;
-  padding: 5px;
-  padding-left: 0px;
-  padding-right: 25px;
+.package-entity {
+  height: 100%;
 }
-.deps-list .deps-link {
-  display: block;
+
+.dependencies-table {
+  max-height: 40vh;
 }

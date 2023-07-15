@@ -1,4 +1,4 @@
-import { Op } from "sequelize";
+import { Model, Op } from "sequelize";
 import { Row, Col, Card } from "react-bootstrap";
 import React, { useEffect, useState } from "react";
 
@@ -12,6 +12,15 @@ import PieChart from "../../components/PieChart/PieChart";
 import EllipticLoader from "../../components/EllipticLoader";
 import { LEGEND_LIMIT, NO_VALUE_DETECTED_LABEL } from "../../constants/data";
 import { ScanOptionKeys } from "../../utils/parsers";
+import { AgGridReact } from "ag-grid-react";
+import {
+  DEFAULT_DEPS_SUMMARY_COL_DEF,
+  DependencySummarySections,
+  DependencySummaryTableCols,
+} from "./DependencySummaryTableCols";
+import { DependenciesAttributes } from "../../services/models/dependencies";
+
+import "./dependencyInfoDash.css";
 
 interface ScanData {
   totalDependencies: number | null;
@@ -38,6 +47,84 @@ const DependencyInfoDash = () => {
   const [scanData, setScanData] = useState<ScanData>({
     totalDependencies: null,
   });
+  const [depsStatusSummaryData, setDepsStatusSummaryData] = useState<
+    DependencySummarySections[]
+  >([]);
+
+  function summariseDeps(
+    dependencies: Model<DependenciesAttributes, DependenciesAttributes>[]
+  ) {
+    const resolvedlDeps = dependencies.filter((dep) =>
+      dep.getDataValue("is_resolved")
+    );
+    const runtimeDeps = dependencies.filter((dep) =>
+      dep.getDataValue("is_runtime")
+    );
+    const optionalDeps = dependencies.filter((dep) =>
+      dep.getDataValue("is_optional")
+    );
+
+    const dataSourcesMapping = new Map<
+      string,
+      Model<DependenciesAttributes, DependenciesAttributes>[]
+    >();
+    dependencies.forEach((dep) => {
+      const dataSourceID = dep.getDataValue("datasource_id").toString({});
+      if (!dataSourcesMapping.has(dataSourceID))
+        dataSourcesMapping.set(dataSourceID, []);
+      dataSourcesMapping.get(dataSourceID).push(dep);
+    });
+    const dataSourceIdSummary: DependencySummarySections[] = Array.from(
+      dataSourcesMapping.entries()
+    ).map(([dataSource, dataSourceDeps]) => ({
+      category: {
+        title: dataSource,
+        total: dataSourceDeps.length,
+      },
+      resolved: dataSourceDeps.filter((dep) => dep.getDataValue("is_resolved"))
+        .length,
+      runtime: dataSourceDeps.filter((dep) => dep.getDataValue("is_runtime"))
+        .length,
+      optional: dataSourceDeps.filter((dep) => dep.getDataValue("is_optional"))
+        .length,
+    }));
+    const newStatusSummary: DependencySummarySections[] = [
+      {
+        category: {
+          title: "Resolved",
+          total: resolvedlDeps.length,
+        },
+        resolved: resolvedlDeps.length,
+        runtime: resolvedlDeps.filter((dep) => dep.getDataValue("is_runtime"))
+          .length,
+        optional: resolvedlDeps.filter((dep) => dep.getDataValue("is_optional"))
+          .length,
+      },
+      {
+        category: {
+          title: "Runtime",
+          total: runtimeDeps.length,
+        },
+        resolved: runtimeDeps.filter((dep) => dep.getDataValue("is_resolved"))
+          .length,
+        runtime: runtimeDeps.length,
+        optional: runtimeDeps.filter((dep) => dep.getDataValue("is_optional"))
+          .length,
+      },
+      {
+        category: {
+          title: "Optional",
+          total: optionalDeps.length,
+        },
+        resolved: optionalDeps.filter((dep) => dep.getDataValue("is_resolved"))
+          .length,
+        runtime: optionalDeps.filter((dep) => dep.getDataValue("is_runtime"))
+          .length,
+        optional: optionalDeps.length,
+      },
+    ];
+    return [ ...newStatusSummary, ...dataSourceIdSummary,];
+  }
 
   useEffect(() => {
     if (!initialized || !db || !currentPath) return;
@@ -73,6 +160,8 @@ const DependencyInfoDash = () => {
       )
       .then((dependencies) => {
         setScanData({ totalDependencies: dependencies.length });
+
+        setDepsStatusSummaryData(summariseDeps(dependencies));
 
         // Prepare chart for runtime dependencies
         const runtimeDependencies = dependencies.map((dependency) =>
@@ -156,7 +245,6 @@ const DependencyInfoDash = () => {
     <div className="text-center pieInfoDash">
       <h4>Dependency info - {currentPath || ""}</h4>
       <br />
-      <br />
       <Row className="dash-cards">
         <Col sm={4}>
           <Card className="counter-card">
@@ -169,6 +257,18 @@ const DependencyInfoDash = () => {
           </Card>
         </Col>
       </Row>
+      <br />
+      <AgGridReact
+        rowData={Object.values(depsStatusSummaryData || {})}
+        columnDefs={DependencySummaryTableCols}
+        defaultColDef={DEFAULT_DEPS_SUMMARY_COL_DEF}
+        pagination
+        ensureDomOrder
+        enableCellTextSelection
+        onGridReady={(params) => params.api.sizeColumnsToFit()}
+        onGridSizeChanged={(params) => params.api.sizeColumnsToFit()}
+        className="ag-theme-alpine ag-grid-customClass deps-status-flag-table"
+      />
       <br />
       <Row className="dash-cards">
         <Col sm={4}>

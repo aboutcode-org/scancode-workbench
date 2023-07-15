@@ -87,6 +87,7 @@ img {
 .pieInfoDash {
   padding: 5px;
   padding-right: 18px;
+  height: 100%;
 }
 
 .card {
