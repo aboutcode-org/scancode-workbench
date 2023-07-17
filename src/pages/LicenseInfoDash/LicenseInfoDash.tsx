@@ -3,7 +3,7 @@ import { Tooltip } from "react-tooltip";
 import { Row, Col, Card } from "react-bootstrap";
 import React, { useEffect, useState } from "react";
 
-import { FormattedEntry, formatChartData } from "../../utils/pie";
+import { FormattedEntry, formatPieChartData } from "../../utils/pie";
 import { useWorkbenchDB } from "../../contexts/dbContext";
 import PieChart from "../../components/PieChart/PieChart";
 import EllipticLoader from "../../components/EllipticLoader";
@@ -83,7 +83,7 @@ const LicenseInfoDash = () => {
                 NO_VALUE_DETECTED_LABEL
             );
             // Prepare chart for license expressions
-            const { chartData } = formatChartData(expressions);
+            const { chartData } = formatPieChartData(expressions);
             setLicenseExpressionData(chartData);
 
             const license_keys: string[] = [];
@@ -111,7 +111,7 @@ const LicenseInfoDash = () => {
             }));
 
             const { chartData: licenseKeysChartData } =
-              formatChartData(license_keys);
+              formatPieChartData(license_keys);
             setLicenseKeyData(licenseKeysChartData);
           });
 
@@ -127,7 +127,7 @@ const LicenseInfoDash = () => {
           )
           .then((labels) => {
             // @TODO - Set pie chart color based on the received color_code in policies
-            const { chartData } = formatChartData(labels);
+            const { chartData } = formatPieChartData(labels);
             setLicensePolicyData(chartData);
           });
       });

@@ -5,6 +5,7 @@ export function trimStringWithEllipsis(
   str: string,
   maxLengthInclusive: number
 ) {
+  if (!str) return "";
   if (str.length > maxLengthInclusive) {
     return str.trimEnd().slice(0, maxLengthInclusive - 3) + "...";
   }
@@ -12,7 +13,7 @@ export function trimStringWithEllipsis(
 }
 
 // Removes symbols & extra spaces from given string.
-export function normalizeString(str: string) {
+export function normalizeDiffString(str: string) {
   return str
     .replace(/[.,/#!$%^&*;:[{}\]=\-_'"`~()]/g, "")
     .replace(/\s{2,}/g, " ")
@@ -47,8 +48,8 @@ export function diffStrings(text1: string, text2: string) {
       nextDiff &&
       currentDiff[0] === -1 &&
       nextDiff[0] === 1 &&
-      normalizeString(currentDiff[1]).toLowerCase() ===
-        normalizeString(nextDiff[1]).toLowerCase()
+      normalizeDiffString(currentDiff[1]).toLowerCase() ===
+        normalizeDiffString(nextDiff[1]).toLowerCase()
     ) {
       // Add both to their respective diff category without identifying as diffComponent
       diffsWithIgnoredLetterCases.push({
@@ -101,7 +102,7 @@ export function normalizeAndSplitDiffIntoLines(diffs: DiffComponents[]) {
     const subLines = splitLines.slice(idx);
 
     for (const subLine of subLines) {
-      const isTrivialDiff = normalizeString(subLine).length === 0;
+      const isTrivialDiff = normalizeDiffString(subLine).length === 0;
 
       // Append to last line only if it is non-empty string
       if (subLine.length > 0) {
@@ -126,6 +127,11 @@ export function normalizeAndSplitDiffIntoLines(diffs: DiffComponents[]) {
     }
   }
 
+  // console.log("Line splitter", {
+  //   diffs,
+  //   lines: lines.filter((diffLine) => diffLine.length > 0),
+  // });
+  
   // Filter out empty lines before returning;
   return lines.filter((diffLine) => diffLine.length > 0);
 }

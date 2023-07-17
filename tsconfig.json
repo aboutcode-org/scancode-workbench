@@ -15,8 +15,6 @@
       "*": ["node_modules/*"]
     }
   },
-  "types": [
-    "node"
-  ],
-  "include": ["src/**/*"]
+  "types": ["node"],
+  "include": ["src/**/*"],
 }

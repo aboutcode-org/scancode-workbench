@@ -2,7 +2,7 @@ import { Op } from "sequelize";
 import { Row, Col, Card } from "react-bootstrap";
 import React, { useEffect, useState } from "react";
 
-import { FormattedEntry, formatChartData } from "../../utils/pie";
+import { FormattedEntry, formatPieChartData } from "../../utils/pie";
 import { useWorkbenchDB } from "../../contexts/dbContext";
 import PieChart from "../../components/PieChart/PieChart";
 import EllipticLoader from "../../components/EllipticLoader";
@@ -67,7 +67,7 @@ const CopyrightInfoDash = () => {
           JSON.parse(copyright.getDataValue("holders")?.toString({}) || "[]")
         );
         const { chartData: copyrightHoldersChartData } =
-          formatChartData(copyrightHolders);
+          formatPieChartData(copyrightHolders);
         setCopyrightHoldersData(copyrightHoldersChartData);
         const totalUniqueCopyrightHolders = new Set(copyrightHolders).size;
 
@@ -76,7 +76,7 @@ const CopyrightInfoDash = () => {
           JSON.parse(copyright.getDataValue("statements")?.toString({}) || "[]")
         );
         const { chartData: copyrightNoticesChartData } =
-          formatChartData(copyrightNotices);
+          formatPieChartData(copyrightNotices);
         setCopyrightNoticesData(copyrightNoticesChartData);
         const totalUniqueCopyrightNotices = new Set(copyrightNotices).size;
 
@@ -85,7 +85,7 @@ const CopyrightInfoDash = () => {
           JSON.parse(copyright.getDataValue("authors")?.toString({}) || "[]")
         );
         const { chartData: copyrightAuthorsChartData } =
-          formatChartData(copyrightAuthors);
+          formatPieChartData(copyrightAuthors);
         setCopyrightAuthorsData(copyrightAuthorsChartData);
         const totalUniqueCopyrightAuthors = new Set(copyrightAuthors).size;
 

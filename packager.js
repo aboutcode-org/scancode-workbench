@@ -3,11 +3,11 @@ const packager = require('electron-packager');
 
 const ignoreDir = [
   'src', 'dist', 'samples', 'test-old',
-  '.github', 'docs',
+  '.github', 'docs', 'test-db',
   ''  // Required as the last element !!
 ].join('*|');
 const ignoreFilesOrExtensions = [
-  'rst', 'py', 'md', 'txt', 'enc',
+  'rst', 'py', 'md', 'txt', 'enc', '.test.ts',
   'ABOUT', 'LICENSE', 'NOTICE',
   '.gitignore', '.eslintrc.json',
   'package-lock.json', 'electron-builder.json', 'tsconfig.json',

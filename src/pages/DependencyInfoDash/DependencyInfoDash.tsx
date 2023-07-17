@@ -4,8 +4,8 @@ import React, { useEffect, useState } from "react";
 
 import {
   FormattedEntry,
-  formatChartData,
-  limitChartData,
+  formatPieChartData,
+  limitPieChartData,
 } from "../../utils/pie";
 import { useWorkbenchDB } from "../../contexts/dbContext";
 import PieChart from "../../components/PieChart/PieChart";
@@ -79,7 +79,7 @@ const DependencyInfoDash = () => {
           dependency.getDataValue("is_runtime") ? "Runtime" : "Not runtime"
         );
         const { chartData: runtimeDependenciesChartData } =
-          formatChartData(runtimeDependencies);
+          formatPieChartData(runtimeDependencies);
         setRuntimeDependenciesData(runtimeDependenciesChartData);
 
         // Prepare chart for resolved dependencies
@@ -87,7 +87,7 @@ const DependencyInfoDash = () => {
           dependency.getDataValue("is_resolved") ? "Resolved" : "Unresolved"
         );
         const { chartData: resolvedDependenciesChartData } =
-          formatChartData(resolvedDependencies);
+          formatPieChartData(resolvedDependencies);
         setResolvedDependenciesData(resolvedDependenciesChartData);
 
         // Prepare chart for optional dependencies
@@ -95,7 +95,7 @@ const DependencyInfoDash = () => {
           dependency.getDataValue("is_optional") ? "Optional" : "Required"
         );
         const { chartData: optionalDependenciesChartData } =
-          formatChartData(optionalDependencies);
+          formatPieChartData(optionalDependencies);
         setOptionalDependenciesData(optionalDependenciesChartData);
 
         // Prepare chart for dependencies' data source IDs
@@ -103,14 +103,14 @@ const DependencyInfoDash = () => {
           dependency.getDataValue("datasource_id")
         );
         const { chartData: dataSourceIDsChartData } =
-          formatChartData(dataSourceIDs);
+          formatPieChartData(dataSourceIDs);
         setDataSourceIDsData(dataSourceIDsChartData);
 
         // Prepare chart for dependencies' data source IDs
         const scopes = dependencies.map((dependency) =>
           dependency.getDataValue("scope")
         );
-        const { chartData: scopesChartData } = formatChartData(scopes);
+        const { chartData: scopesChartData } = formatPieChartData(scopes);
         setScopesData(scopesChartData);
       });
 
@@ -147,7 +147,7 @@ const DependencyInfoDash = () => {
         );
       });
       setPackageTypeDependenciesData(
-        limitChartData(Array.from(PackageTypeWiseCount.entries()), LEGEND_LIMIT)
+        limitPieChartData(Array.from(PackageTypeWiseCount.entries()), LEGEND_LIMIT)
       );
     });
   }, [initialized, db, currentPath]);

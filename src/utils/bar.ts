@@ -4,21 +4,26 @@ export function isValid(value: unknown): boolean {
   if (Array.isArray(value)) {
     return value.length > 0 && value.every((element) => isValid(element));
   } else {
-    return value !== null;
+    return value !== null && value !== undefined;
   }
 }
 
-export function getAttributeValues(values: any[], attribute: any) {
+export function getAttributeValues(
+  values: { dataValues: any }[],
+  attribute: any
+) {
   const validatedValues = [];
   let attributeValue = null;
 
   for (let i = 0; i < values.length; i++) {
-    attributeValue = values[i][attribute];
-    const fileType = values[i].type;
+    attributeValue = values[i].dataValues[attribute];
 
     // dedupe entries to prevent overcounting files. See https://github.com/nexB/scancode-workbench/issues/285
-    if (Array.isArray(attributeValue)) {
-      attributeValue = Array.from(new Set(attributeValue));
+    try {
+      const parsed = JSON.parse(attributeValue);
+      if (Array.isArray(parsed)) attributeValue = parsed;
+    } catch (e) {
+      /* empty */
     }
 
     if (!Array.isArray(attributeValue) || attributeValue.length === 0) {
@@ -27,11 +32,7 @@ export function getAttributeValues(values: any[], attribute: any) {
 
     for (let j = 0; j < attributeValue.length; j++) {
       const val = attributeValue[j];
-      if (
-        !isValid(val) &&
-        attribute === "package_data_type" &&
-        fileType === "directory"
-      ) {
+      if (!isValid(val) && attribute === "package_data_type") {
         continue;
       }
       validatedValues.push(isValid(val) ? val : NO_VALUE_DETECTED_LABEL);

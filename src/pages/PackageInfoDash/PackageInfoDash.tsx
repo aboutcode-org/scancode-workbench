@@ -2,7 +2,7 @@ import { Op } from "sequelize";
 import { Row, Col, Card } from "react-bootstrap";
 import React, { useEffect, useState } from "react";
 
-import { FormattedEntry, formatChartData } from "../../utils/pie";
+import { FormattedEntry, formatPieChartData } from "../../utils/pie";
 import { useWorkbenchDB } from "../../contexts/dbContext";
 import { NO_VALUE_DETECTED_LABEL } from "../../constants/data";
 import PieChart from "../../components/PieChart/PieChart";
@@ -66,7 +66,7 @@ const PackageInfoDash = () => {
                 packageEntry.getDataValue("type") || NO_VALUE_DETECTED_LABEL
             );
             const { chartData: packageTypesChartData } =
-              formatChartData(packageTypes);
+              formatPieChartData(packageTypes);
             setPackageTypeData(packageTypesChartData);
 
             // Prepare chart for package languages
@@ -76,7 +76,7 @@ const PackageInfoDash = () => {
                 NO_VALUE_DETECTED_LABEL
             );
             const { chartData: packageLangsChartData } =
-              formatChartData(packageLangs);
+              formatPieChartData(packageLangs);
             setPackageLangData(packageLangsChartData);
 
             // Prepare chart for package license expression
@@ -86,7 +86,7 @@ const PackageInfoDash = () => {
                 NO_VALUE_DETECTED_LABEL
             );
             const { chartData: packageLicenseExpChartData } =
-              formatChartData(packageLicenseExp);
+              formatPieChartData(packageLicenseExp);
 
             setPackageLicenseData(packageLicenseExpChartData);
           });
