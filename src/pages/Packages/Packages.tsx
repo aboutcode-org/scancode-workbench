@@ -150,6 +150,7 @@ const Packages = () => {
   useEffect(() => {
     if (!initialized || !db || !currentPath) return;
 
+    startProcessing();
     db.sync.then(async () => {
       const packages = await db.getAllPackages();
       const deps = await db.getAllDependencies();
