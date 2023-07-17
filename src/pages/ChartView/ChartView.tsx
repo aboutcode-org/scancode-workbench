@@ -50,7 +50,8 @@ const ChartView = () => {
   );
   const [formattedBarchartData, setFormattedBarchartData] = useState({
     counts: [10],
-    labels: ["No Data"],
+    labels: ["Chart data"],
+    noValueEntriesCount: 0,
   });
 
   useEffect(() => {
@@ -84,11 +85,12 @@ const ChartView = () => {
       .then((db) => db.FlatFile.findAll(query))
       .then((values) => getAttributeValues(values, selectedAttribute))
       .then((values) => {
-        const parsedData = formatBarchartData(values);
-        // console.log('Parsed bar chart values', parsedData);
+        const { noValueEntriesCount, formattedChartData } =
+          formatBarchartData(values);
         setFormattedBarchartData({
-          labels: parsedData.map((entry) => entry.label),
-          counts: parsedData.map((entry) => entry.value),
+          noValueEntriesCount,
+          labels: formattedChartData.map((entry) => entry.label),
+          counts: formattedChartData.map((entry) => entry.value),
         });
         return values;
       });
@@ -153,7 +155,7 @@ const ChartView = () => {
               },
               title: {
                 display: true,
-                text: selectedAttribute,
+                text: `${selectedAttribute} (No values detected: ${formattedBarchartData.noValueEntriesCount})`,
               },
             },
           }}

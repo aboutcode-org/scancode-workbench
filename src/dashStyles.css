@@ -1,24 +1,27 @@
 .dash-cards {
   justify-content: space-around;
 }
+
 .dash-cards .card {
   background-color: #fff;
   padding: 15px;
-  /* box-shadow: 1px 0 8px -3px #b1b1b1; */
 }
 
-.info-card {
+.counter-card {
   min-height: 100px;
 }
+
 .chart-card {
   min-height: 410px;
 }
-@media only screen and (max-width: 1200px){
-  .info-card {
+
+.chart-card .title {
+  margin-top: 10px;
+  margin-bottom: 15px;
+}
+
+@media only screen and (max-width: 1200px) {
+  .counter-card {
     min-height: 140px;
   }
 }
-
-/* .info-card .title{
-
-} */

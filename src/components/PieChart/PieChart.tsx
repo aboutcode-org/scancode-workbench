@@ -9,11 +9,12 @@ import { LEGEND_COLORS } from "../../constants/colors";
 import "./piechart.css";
 
 interface PieChartProps extends PieChartFallbackProps {
+  hideLegend?: boolean;
   chartData: FormattedEntry[] | null;
 }
 
 const PieChart = (props: PieChartProps) => {
-  const { chartData } = props;
+  const { chartData, hideLegend } = props;
   const chartRef = useRef<HTMLDivElement | null>(null);
   const chartContainerRef = useRef<HTMLDivElement | null>(null);
   const [c3Chart, setC3Chart] = useState<ChartAPI | null>(null);
@@ -36,6 +37,9 @@ const PieChart = (props: PieChartProps) => {
           value: (value, ratio) =>
             `${String(value)} \n${(ratio * 100).toFixed(1)}%`,
         },
+      },
+      legend: {
+        hide: hideLegend,
       },
     });
     setC3Chart(newChart);

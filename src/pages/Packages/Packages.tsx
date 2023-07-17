@@ -4,6 +4,13 @@ import React, { useEffect, useState } from "react";
 import { Badge, Collapse, ListGroup, ListGroupItem } from "react-bootstrap";
 import { ThreeDots } from "react-loader-spinner";
 import { useSearchParams } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faCheck,
+  faCogs,
+  faQuestion,
+  faQuestionCircle,
+} from "@fortawesome/free-solid-svg-icons";
 
 import RightArrowIcon from "../../assets/icons/rightArrow.svg";
 import NoDataFallback from "../../components/NoDataSection";
@@ -22,8 +29,14 @@ import "./packages.css";
 
 const Packages = () => {
   const workbenchDB = useWorkbenchDB();
-  const { db, initialized, currentPath, startProcessing, endProcessing } =
-    workbenchDB;
+  const {
+    db,
+    initialized,
+    currentPath,
+    goToFileInTableView,
+    startProcessing,
+    endProcessing,
+  } = workbenchDB;
   const [searchParams] = useSearchParams();
   const [expandedPackages, setExpandedPackages] = useState<string[]>([]);
   const [packagesWithDeps, setPackagesWithDeps] = useState<
@@ -261,9 +274,7 @@ const Packages = () => {
             for_package_uid:
               dependencyInfo.getDataValue("for_package_uid")?.toString({}) ||
               null,
-            datafile_path: dependencyInfo
-              .getDataValue("datafile_path")
-              .toString({}),
+            datafile_path: dependencyInfo.getDataValue("datafile_path"),
             datasource_id: dependencyInfo
               .getDataValue("datasource_id")
               .toString({}),
@@ -375,7 +386,7 @@ const Packages = () => {
                 key={packageGroup.type}
                 className="package-group-list"
               >
-                {packageGroup.type} - {packageGroup.packages.length}
+                {packageGroup.packages.length} {packageGroup.type} packages
                 <ListGroup className="package-list">
                   {packageGroup.packages.map((packageWithDep) => {
                     const isPackageActive =
@@ -392,7 +403,8 @@ const Packages = () => {
                       .filter(
                         (val) => val !== null && val !== undefined && val.length
                       )
-                      .join(" - ");
+                      .join("/");
+
                     if (packageWithDep.version) {
                       packageTitle += "@" + packageWithDep.version;
                     }
@@ -467,39 +479,27 @@ const Packages = () => {
                                     <div>
                                       <div>
                                         {dependency.purl.replace("pkg:", "")}
-                                        {!dependency.is_runtime}
                                       </div>
                                     </div>
                                     <div className="entity-type-badge">
-                                      <Badge
-                                        pill
-                                        bg={
-                                          dependency.is_runtime
-                                            ? "primary"
-                                            : dependency.is_optional
-                                            ? "light"
-                                            : dependency.is_resolved
-                                            ? "success"
-                                            : "light"
-                                        }
-                                        text={
-                                          dependency.is_runtime
-                                            ? "light"
-                                            : dependency.is_optional
-                                            ? "dark"
-                                            : dependency.is_resolved
-                                            ? "light"
-                                            : "dark"
-                                        }
-                                      >
-                                        {dependency.is_optional
-                                          ? "Optional"
-                                          : dependency.is_runtime
-                                          ? "Runtime"
-                                          : dependency.is_resolved
-                                          ? "Resolved"
-                                          : ""}
-                                      </Badge>
+                                      {dependency.is_runtime && (
+                                        <Badge pill bg="primary">
+                                          Runtime
+                                          {/* <FontAwesomeIcon icon={faCogs} /> */}
+                                        </Badge>
+                                      )}
+                                      {dependency.is_optional && (
+                                        <Badge pill bg="warning" text="dark">
+                                          Optional
+                                          {/* <FontAwesomeIcon icon={} /> */}
+                                        </Badge>
+                                      )}
+                                      {dependency.is_resolved && (
+                                        <Badge pill bg="success">
+                                          Resolved
+                                          {/* <FontAwesomeIcon icon={faCheck} /> */}
+                                        </Badge>
+                                      )}
                                     </div>
                                   </div>
                                 </ListGroupItem>
@@ -531,6 +531,7 @@ const Packages = () => {
                 <DependencyEntity
                   dependency={activeDependency}
                   goToPackageByUID={activatePackageByUID}
+                  goToFileInTableView={goToFileInTableView}
                 />
               )}
         </Allotment.Pane>

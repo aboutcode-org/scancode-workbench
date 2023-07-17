@@ -11,14 +11,13 @@ import SwitcherIcon from "./SwitcherIcon";
 import "./FileTree.css";
 
 const FileTree = (props: React.HTMLProps<HTMLDivElement>) => {
-  const workbenchDB = useWorkbenchDB();
   const {
     db,
     initialized,
     importedSqliteFilePath,
     currentPath,
     updateCurrentPath,
-  } = workbenchDB;
+  } = useWorkbenchDB();
 
   const [treeData, setTreeData] = useState<DataNode[] | null>(null);
   const [expandedKeys, setExpandedKeys] = useState<Key[]>([]);

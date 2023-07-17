@@ -1,47 +1,50 @@
-import { GENERAL_ACTIONS, NAVIGATION_CHANNEL } from './constants/IpcConnection';
-import packageJson from '../package.json';
-import { app, BrowserWindow, MenuItem, shell } from 'electron';
-import { importJsonFile, openSqliteFile, saveSqliteFile } from './mainActions';
-import { ROUTES } from './constants/routes';
-import { createWindow } from './main';
+import { GENERAL_ACTIONS, NAVIGATION_CHANNEL } from "./constants/IpcConnection";
+import packageJson from "../package.json";
+import { app, BrowserWindow, MenuItem, shell } from "electron";
+import { importJsonFile, openSqliteFile, saveSqliteFile } from "./mainActions";
+import { ROUTES } from "./constants/routes";
+import { createWindow } from "./main";
 
 /** Returns a 'lambda' that sends the event to the renderer process. */
 export function sendNavEventToRenderer(route: string) {
-  return (_: MenuItem, currentWindow: BrowserWindow) => 
+  return (_: MenuItem, currentWindow: BrowserWindow) =>
     currentWindow.webContents.send(NAVIGATION_CHANNEL, route);
 }
 export function sendEventToRenderer(eventKey: string, ...args: unknown[]) {
-  return (_: MenuItem, currentWindow: BrowserWindow) => 
+  return (_: MenuItem, currentWindow: BrowserWindow) =>
     currentWindow.webContents.send(eventKey, args);
 }
 
 /** Returns a template for building the main electron menu */
 function getTemplate() {
-  const isMac = process.platform === 'darwin'
+  const isMac = process.platform === "darwin";
 
   const template: Electron.MenuItemConstructorOptions[] = [
     {
-      label: '&File',
+      label: "&File",
       submenu: [
         {
-          label: 'New Window',
-          accelerator: 'CmdOrCtrl+N',
+          label: "New Window",
+          accelerator: "CmdOrCtrl+N",
           click: () => createWindow(),
         },
         {
-          label: 'Open SQLite File',
-          accelerator: 'CmdOrCtrl+O',
-          click: (_: MenuItem, currentWindow: BrowserWindow) => openSqliteFile(currentWindow),
+          label: "Open SQLite File",
+          accelerator: "CmdOrCtrl+O",
+          click: (_: MenuItem, currentWindow: BrowserWindow) =>
+            openSqliteFile(currentWindow),
         },
         {
-          label: 'Save As New SQLite File',
-          accelerator: 'CmdOrCtrl+S',
-          click: (_: MenuItem, currentWindow: BrowserWindow) => saveSqliteFile(currentWindow),
+          label: "Save As New SQLite File",
+          accelerator: "CmdOrCtrl+S",
+          click: (_: MenuItem, currentWindow: BrowserWindow) =>
+            saveSqliteFile(currentWindow),
         },
         {
-          label: 'Import JSON File',
-          accelerator: 'CmdOrCtrl+I',
-          click: (_: MenuItem, currentWindow: BrowserWindow) => importJsonFile(currentWindow),
+          label: "Import JSON File",
+          accelerator: "CmdOrCtrl+I",
+          click: (_: MenuItem, currentWindow: BrowserWindow) =>
+            importJsonFile(currentWindow),
         },
         // @TODO-discuss This is duplicated in App's menu tab, is it necessary under file tab also ??
         // ...(
@@ -53,220 +56,261 @@ function getTemplate() {
         //     }
         //   ] : []
         // )
-      ]
+      ],
     },
     {
-      label: '&Edit',
+      label: "&Edit",
       submenu: [
         {
-          label: 'Cut',
-          accelerator: 'CmdOrCtrl+X',
-          role: 'cut'
+          label: "Cut",
+          accelerator: "CmdOrCtrl+X",
+          role: "cut",
         },
         {
-          label: 'Copy',
-          accelerator: 'CmdOrCtrl+C',
-          role: 'copy'
+          label: "Copy",
+          accelerator: "CmdOrCtrl+C",
+          role: "copy",
         },
         {
-          label: 'Paste',
-          accelerator: 'CmdOrCtrl+V',
-          role: 'paste'
+          label: "Paste",
+          accelerator: "CmdOrCtrl+V",
+          role: "paste",
         },
         {
-          label: 'Select All',
-          accelerator: 'CmdOrCtrl+A',
-          role: 'selectAll'
+          label: "Select All",
+          accelerator: "CmdOrCtrl+A",
+          role: "selectAll",
         },
-      ]
+      ],
     },
     {
-      label: '&View',
+      label: "&View",
       submenu: [
         {
-          label: 'Table View',
-          accelerator: 'CmdOrCtrl+Shift+T',
+          label: "Table View",
+          accelerator: "CmdOrCtrl+Shift+T",
           click: sendNavEventToRenderer(ROUTES.TABLE_VIEW),
         },
         {
-          label: 'Chart Summary View',
-          accelerator: 'CmdOrCtrl+Shift+D',
+          label: "Chart Summary View",
+          accelerator: "CmdOrCtrl+Shift+D",
           click: sendNavEventToRenderer(ROUTES.CHART_SUMMARY),
         },
         {
-          type: 'separator'
+          type: "separator",
         },
         {
-          label: 'Reload',
-          accelerator: 'CmdOrCtrl+R',
+          label: "File dashboard",
+          click: sendNavEventToRenderer(ROUTES.FILE_DASHBOARD),
+        },
+        {
+          label: "License dashboard",
+          click: sendNavEventToRenderer(ROUTES.LICENSE_DASHBOARD),
+        },
+        {
+          label: "Copyright dashboard",
+          click: sendNavEventToRenderer(ROUTES.COPYRIGHT_DASHBOARD),
+        },
+        {
+          label: "Package dashboard",
+          click: sendNavEventToRenderer(ROUTES.PACKAGE_DASHBOARD),
+        },
+        {
+          label: "Dependencies dashboard",
+          click: sendNavEventToRenderer(ROUTES.DEPENDENCY_DASHBOARD),
+        },
+        {
+          type: "separator",
+        },
+        {
+          label: "Licenses Explorer",
+          click: sendNavEventToRenderer(ROUTES.LICENSES),
+        },
+        {
+          label: "Packages Explorer",
+          click: sendNavEventToRenderer(ROUTES.PACKAGES),
+        },
+        {
+          label: "Scan Info",
+          click: sendNavEventToRenderer(ROUTES.SCAN_INFO),
+        },
+        {
+          type: "separator",
+        },
+        {
+          label: "Reload",
+          accelerator: "CmdOrCtrl+R",
           click: (_: MenuItem, focusedWindow: BrowserWindow) => {
-            if(focusedWindow) {
+            if (focusedWindow) {
               focusedWindow.reload();
             }
-          }
+          },
         },
         {
-          label: 'Toggle Full Screen',
-          accelerator: isMac ? 'Ctrl+Command+F' : 'F11',
+          label: "Toggle Full Screen",
+          accelerator: isMac ? "Ctrl+Command+F" : "F11",
           click: (item: MenuItem, focusedWindow: BrowserWindow) => {
             if (focusedWindow) {
-              focusedWindow.setFullScreen(
-                !focusedWindow.isFullScreen());
+              focusedWindow.setFullScreen(!focusedWindow.isFullScreen());
             }
-          }
+          },
         },
         {
-          label: 'Toggle Developer Tools',
-          accelerator: 'CmdOrCtrl+Alt+I',
+          label: "Toggle Developer Tools",
+          accelerator: "CmdOrCtrl+Alt+I",
           click: (item: MenuItem, focusedWindow: BrowserWindow) => {
             if (focusedWindow) {
               focusedWindow.webContents.toggleDevTools();
             }
-          }
+          },
         },
         {
-          type: 'separator'
+          type: "separator",
         },
         {
-          label: 'Reset Zoom',
-          accelerator: 'CmdOrCtrl+0',
-          click: sendEventToRenderer(GENERAL_ACTIONS.ZOOM_RESET)
+          label: "Reset Zoom",
+          accelerator: "CmdOrCtrl+0",
+          click: sendEventToRenderer(GENERAL_ACTIONS.ZOOM_RESET),
         },
         {
-          label: 'Zoom In',
-          accelerator: 'CmdOrCtrl+=',
-          click: sendEventToRenderer(GENERAL_ACTIONS.ZOOM_IN)
+          label: "Zoom In",
+          accelerator: "CmdOrCtrl+=",
+          click: sendEventToRenderer(GENERAL_ACTIONS.ZOOM_IN),
         },
         {
-          label: 'Zoom Out',
-          accelerator: 'CmdOrCtrl+-',
-          click: sendEventToRenderer(GENERAL_ACTIONS.ZOOM_OUT)
+          label: "Zoom Out",
+          accelerator: "CmdOrCtrl+-",
+          click: sendEventToRenderer(GENERAL_ACTIONS.ZOOM_OUT),
         },
-      ]
+      ],
     },
     {
-      label: '&Window',
-      role: 'window',
-      type: 'submenu',
+      label: "&Window",
+      role: "window",
       submenu: [
         {
-          label: 'Minimize',
-          accelerator: 'CmdOrCtrl+M',
-          role: 'minimize'
+          label: "Minimize",
+          accelerator: "CmdOrCtrl+M",
+          role: "minimize",
         },
         {
-          label: 'Close',
-          accelerator: 'CmdOrCtrl+W',
-          role: 'close'
+          label: "Close",
+          accelerator: "CmdOrCtrl+W",
+          role: "close",
         },
-        ...(
-          isMac ? [
-            // {
-            //   type: 'separator',
-            //   role: 'separator',
-            // },
-            // {
-            //   label: 'Bring All to Front',
-            //   role: 'quit',
-            //   accelerator: '',
-            // },
-          ]  : []
-        )
-      ]
+        ...(isMac
+          ? [
+              // {
+              //   type: 'separator',
+              //   role: 'separator',
+              // },
+              // {
+              //   label: 'Bring All to Front',
+              //   role: 'quit',
+              //   accelerator: '',
+              // },
+            ]
+          : []),
+      ],
     },
     {
-      label: '&Help',
-      role: 'help',
+      label: "&Help",
+      role: "help",
       submenu: [
         {
           label: `ScanCode Workbench Version ${packageJson.version}`,
-          enabled: false
+          enabled: false,
         },
         {
-          label: 'Show ScanCode Header Information',
-          accelerator: 'CmdOrCtrl+G',
+          label: "Show ScanCode Header Information",
+          accelerator: "CmdOrCtrl+G",
           click: sendNavEventToRenderer(ROUTES.SCAN_INFO),
         },
         {
-          type: 'separator'
+          type: "separator",
         },
         {
-          label: 'GitHub Repository',
-          click: () => shell.openExternal('https://github.com/nexB/scancode-workbench/')
+          label: "GitHub Repository",
+          click: () =>
+            shell.openExternal("https://github.com/nexB/scancode-workbench/"),
         },
         {
-          label: 'Licensing Information',
+          label: "Licensing Information",
           click: () => {
-          // @TODO - make react route instead
-            let win = new BrowserWindow({frame: true});
+            // @TODO - make react route instead
+            let win = new BrowserWindow({ frame: true });
             win.setMenu(null);
-            win.on('closed', ():void => win = null);
-            win.loadFile('./attribution.html');
+            win.on("closed", (): void => (win = null));
+            win.loadFile("./attribution.html");
             // win.loadURL('file://' + __dirname + '/attribution.html');
             win.show();
-          }
+          },
         },
         {
-          label: 'Documentation',
-          click: () => shell.openExternal(`https://scancode-workbench.readthedocs.io`)
+          label: "Documentation",
+          click: () =>
+            shell.openExternal(`https://scancode-workbench.readthedocs.io`),
         },
         {
-          label: 'Issue Tracker',
-          click: () => shell.openExternal('https://github.com/nexB/scancode-workbench/issues')
-        }
-      ]
+          label: "Issue Tracker",
+          click: () =>
+            shell.openExternal(
+              "https://github.com/nexB/scancode-workbench/issues"
+            ),
+        },
+      ],
     },
   ];
 
-  // Mac OS specific menu item for app 
+  // Mac OS specific menu item for app
   if (isMac) {
     template.unshift({
-      label: 'ScanCode Workbench',
+      label: "ScanCode Workbench",
       submenu: [
         {
-          label: 'About ScanCode Workbench',
+          label: "About ScanCode Workbench",
           click: sendNavEventToRenderer(ROUTES.ABOUT),
         },
         {
           label: `Version ${packageJson.version}`,
-          enabled: false
+          enabled: false,
         },
         {
-          type: 'separator',
+          type: "separator",
         },
         {
-          label: 'Services',
-          role: 'services',
-          accelerator: '',
+          label: "Services",
+          role: "services",
+          accelerator: "",
         },
         {
-          type: 'separator',
+          type: "separator",
         },
         {
-          label: 'Hide Electron',
-          accelerator: 'Command+H',
-          role: 'hide',
+          label: "Hide Electron",
+          accelerator: "Command+H",
+          role: "hide",
         },
         {
-          label: 'Hide Others',
-          accelerator: 'Command+Alt+H',
-          role: 'hideOthers',
+          label: "Hide Others",
+          accelerator: "Command+Alt+H",
+          role: "hideOthers",
         },
         {
-          label: 'Show All',
-          role: 'unhide',
-          accelerator: '',
+          label: "Show All",
+          role: "unhide",
+          accelerator: "",
         },
         {
-          type: 'separator',
+          type: "separator",
         },
         {
-          label: 'Quit',
-          accelerator: 'Command+Q',
+          label: "Quit",
+          accelerator: "Command+Q",
           click: () => app.quit(),
         },
-      ]
-    })
+      ],
+    });
   }
 
   return template;

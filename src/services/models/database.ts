@@ -115,6 +115,16 @@ export function newDatabase(sequelize: Sequelize): DatabaseStructure {
   result.File.hasMany(result.Email);
   result.File.hasMany(result.Url);
   result.File.hasMany(result.ScanError);
+  result.Packages.hasMany(result.Dependencies, {
+    sourceKey: "package_uid",
+    foreignKey: "for_package_uid",
+    as: "dependencies",
+  });
+  result.Dependencies.belongsTo(result.Packages, {
+    foreignKey: "for_package_uid",
+    as: "package",
+    targetKey: "package_uid",
+  });
 
   // Include Array for queries
   const fileIncludes = [

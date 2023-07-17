@@ -28,7 +28,7 @@ import { jsonDataType, JSON_Type } from './databaseUtils';
   resolved_package: JSON_Type,
   dependency_uid: StringDataType,
   for_package_uid: StringDataType,
-  datafile_path: StringDataType,
+  datafile_path: string,
   datasource_id: StringDataType,
  }
 

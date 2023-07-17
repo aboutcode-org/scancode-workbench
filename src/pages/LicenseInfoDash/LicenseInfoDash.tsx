@@ -7,19 +7,20 @@ import { formatChartData } from "../../utils/pie";
 import { useWorkbenchDB } from "../../contexts/dbContext";
 import PieChart from "../../components/PieChart/PieChart";
 import EllipticLoader from "../../components/EllipticLoader";
+import { NO_VALUE_DETECTED_LABEL } from "../../constants/data";
+import { ScanOptionKeys } from "../../utils/parsers";
 
 interface ScanData {
   totalLicenses: number | null;
   totalLicenseFiles: number | null;
   totalSPDXLicenses: number | null;
 }
-import { NO_VALUE_DETECTED_LABEL } from "../../constants/data";
 
 import "./licenseInfoDash.css";
 
 const LicenseInfoDash = () => {
   const workbenchDB = useWorkbenchDB();
-  const { db, initialized, currentPath, startProcessing, endProcessing } =
+  const { db, initialized, currentPath, scanInfo, startProcessing, endProcessing } =
     workbenchDB;
 
   const [licenseExpressionData, setLicenseExpressionData] = useState(null);
@@ -138,13 +139,13 @@ const LicenseInfoDash = () => {
   return (
     <div className="text-center pieInfoDash">
       <br />
-      <h3>License info - {workbenchDB.currentPath || ""}</h3>
+      <h3>License info - {currentPath || ""}</h3>
       <br />
       <br />
       <Row className="dash-cards">
         <Col sm={4}>
           <Card
-            className="info-card"
+            className="counter-card"
             data-tooltip-id="total-licenses"
             data-tooltip-content="No. of unique license keys across selected files"
           >
@@ -159,7 +160,7 @@ const LicenseInfoDash = () => {
         </Col>
         <Col sm={4}>
           <Card
-            className="info-card"
+            className="counter-card"
             data-tooltip-id="total-license-files"
             data-tooltip-content="No. of files having at least a license detection"
           >
@@ -174,7 +175,7 @@ const LicenseInfoDash = () => {
         </Col>
         <Col sm={4}>
           <Card
-            className="info-card"
+            className="counter-card"
             data-tooltip-id="total-spdx-licenses"
             data-tooltip-content="No. of unique SPDX license keys across selected files"
           >
@@ -196,8 +197,9 @@ const LicenseInfoDash = () => {
             <h5 className="title">License expression</h5>
             <PieChart
               chartData={licenseExpressionData}
-              noDataText="Use --license CLI option for License expressions"
-              noDataLink="https://scancode-toolkit.readthedocs.io/en/latest/cli-reference/basic-options.html#license-option"
+              notOpted={!scanInfo.optionsMap.get(ScanOptionKeys.LICENSE)}
+              notOptedText="Use --license CLI option for License expressions"
+              notOptedLink="https://scancode-toolkit.readthedocs.io/en/latest/cli-reference/basic-options.html#license-option"
             />
           </Card>
         </Col>
@@ -206,8 +208,9 @@ const LicenseInfoDash = () => {
             <h5 className="title">License keys</h5>
             <PieChart
               chartData={licenseKeyData}
-              noDataText="Use --license CLI option for License keys"
-              noDataLink="https://scancode-toolkit.readthedocs.io/en/latest/cli-reference/basic-options.html#license-option"
+              notOpted={!scanInfo.optionsMap.get(ScanOptionKeys.LICENSE)}
+              notOptedText="Use --license CLI option for License keys"
+              notOptedLink="https://scancode-toolkit.readthedocs.io/en/latest/cli-reference/basic-options.html#license-option"
             />
           </Card>
         </Col>
@@ -216,8 +219,9 @@ const LicenseInfoDash = () => {
             <h5 className="title">License policy</h5>
             <PieChart
               chartData={licensePolicyData}
-              noDataText="Use --license-policy CLI option for policy data"
-              noDataLink="https://scancode-toolkit.readthedocs.io/en/latest/plugins/licence_policy_plugin.html#using-the-plugin"
+              notOpted={!scanInfo.optionsMap.get(ScanOptionKeys.LICENSE)}
+              notOptedText="Use --license-policy CLI option for policy data"
+              notOptedLink="https://scancode-toolkit.readthedocs.io/en/latest/plugins/licence_policy_plugin.html#using-the-plugin"
             />
           </Card>
         </Col>

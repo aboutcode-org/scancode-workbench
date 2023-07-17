@@ -97,12 +97,12 @@ const FileInfoDash = () => {
   return (
     <div className="text-center pieInfoDash">
       <br />
-      <h3>File info - {workbenchDB.currentPath || ""}</h3>
+      <h3>File info - {currentPath || ""}</h3>
       <br />
       <br />
       <Row className="dash-cards">
         <Col sm={4}>
-          <Card className="info-card">
+          <Card className="counter-card">
             {scanData.totalFiles === null ? (
               <EllipticLoader wrapperClass="value" />
             ) : (
@@ -112,7 +112,7 @@ const FileInfoDash = () => {
           </Card>
         </Col>
         <Col sm={4}>
-          <Card className="info-card">
+          <Card className="counter-card">
             {scanData.totalDirectories === null ? (
               <EllipticLoader wrapperClass="value" />
             ) : (
@@ -130,8 +130,8 @@ const FileInfoDash = () => {
             <h5 className="title">Programming languages</h5>
             <PieChart
               chartData={progLangsData}
-              noDataText="Use --info CLI option for programming languages"
-              noDataLink="https://scancode-toolkit.readthedocs.io/en/latest/cli-reference/basic-options.html#info-option"
+              notOptedText="Use --info CLI option for programming languages"
+              notOptedLink="https://scancode-toolkit.readthedocs.io/en/latest/cli-reference/basic-options.html#info-option"
             />
           </Card>
         </Col>
@@ -140,8 +140,8 @@ const FileInfoDash = () => {
             <h5 className="title">File types</h5>
             <PieChart
               chartData={fileTypesData}
-              noDataText="Use --info CLI option for file types"
-              noDataLink="https://scancode-toolkit.readthedocs.io/en/latest/cli-reference/basic-options.html#info-option"
+              notOptedText="Use --info CLI option for file types"
+              notOptedLink="https://scancode-toolkit.readthedocs.io/en/latest/cli-reference/basic-options.html#info-option"
             />
           </Card>
         </Col>
@@ -150,8 +150,8 @@ const FileInfoDash = () => {
             <h5 className="title">Mime types</h5>
             <PieChart
               chartData={mimeTypesData}
-              noDataText="Use --info CLI option for mime types"
-              noDataLink="https://scancode-toolkit.readthedocs.io/en/latest/cli-reference/basic-options.html#info-option"
+              notOptedText="Use --info CLI option for mime types"
+              notOptedLink="https://scancode-toolkit.readthedocs.io/en/latest/cli-reference/basic-options.html#info-option"
             />
           </Card>
         </Col>

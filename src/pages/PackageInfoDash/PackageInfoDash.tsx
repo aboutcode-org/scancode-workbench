@@ -4,19 +4,26 @@ import React, { useEffect, useState } from "react";
 
 import { formatChartData } from "../../utils/pie";
 import { useWorkbenchDB } from "../../contexts/dbContext";
+import { NO_VALUE_DETECTED_LABEL } from "../../constants/data";
 import PieChart from "../../components/PieChart/PieChart";
 import EllipticLoader from "../../components/EllipticLoader";
+import { ScanOptionKeys } from "../../utils/parsers";
+import { FileAttributes } from "../../services/models/file";
 
 interface ScanData {
   totalPackages: number | null;
 }
-import { FileAttributes } from "../../services/models/file";
-import { NO_VALUE_DETECTED_LABEL } from "../../constants/data";
 
 const PackageInfoDash = () => {
   const workbenchDB = useWorkbenchDB();
-  const { db, initialized, currentPath, startProcessing, endProcessing } =
-    workbenchDB;
+  const {
+    db,
+    initialized,
+    currentPath,
+    scanInfo,
+    startProcessing,
+    endProcessing,
+  } = workbenchDB;
   const [packageTypeData, setPackageTypeData] = useState(null);
   const [packageLangData, setPackageLangData] = useState(null);
   const [packageLicenseData, setPackageLicenseData] = useState(null);
@@ -95,12 +102,12 @@ const PackageInfoDash = () => {
   return (
     <div className="text-center pieInfoDash">
       <br />
-      <h3>Package info - {workbenchDB.currentPath || ""}</h3>
+      <h3>Package info - {currentPath || ""}</h3>
       <br />
       <br />
       <Row className="dash-cards">
         <Col sm={4}>
-          <Card className="info-card">
+          <Card className="counter-card">
             {scanData.totalPackages === null ? (
               <EllipticLoader wrapperClass="value" />
             ) : (
@@ -118,8 +125,9 @@ const PackageInfoDash = () => {
             <h5 className="title">Package Types</h5>
             <PieChart
               chartData={packageTypeData}
-              noDataText="Use --package CLI option for package types"
-              noDataLink="https://scancode-toolkit.readthedocs.io/en/latest/cli-reference/basic-options.html#package-option"
+              notOpted={!scanInfo.optionsMap.get(ScanOptionKeys.PACKAGE)}
+              notOptedText="Use --package CLI option for package types"
+              notOptedLink="https://scancode-toolkit.readthedocs.io/en/latest/cli-reference/basic-options.html#package-option"
             />
           </Card>
         </Col>
@@ -128,8 +136,9 @@ const PackageInfoDash = () => {
             <h5 className="title">Package languages</h5>
             <PieChart
               chartData={packageLangData}
-              noDataText="Use --package CLI option for package languages"
-              noDataLink="https://scancode-toolkit.readthedocs.io/en/latest/cli-reference/basic-options.html#package-option"
+              notOpted={!scanInfo.optionsMap.get(ScanOptionKeys.PACKAGE)}
+              notOptedText="Use --package CLI option for package languages"
+              notOptedLink="https://scancode-toolkit.readthedocs.io/en/latest/cli-reference/basic-options.html#package-option"
             />
           </Card>
         </Col>
@@ -138,8 +147,9 @@ const PackageInfoDash = () => {
             <h5 className="title">Package Licenses</h5>
             <PieChart
               chartData={packageLicenseData}
-              noDataText="Use --package CLI option for package licenses"
-              noDataLink="https://scancode-toolkit.readthedocs.io/en/latest/cli-reference/basic-options.html#package-option"
+              notOpted={!scanInfo.optionsMap.get(ScanOptionKeys.PACKAGE)}
+              notOptedText="Use --package CLI option for package licenses"
+              notOptedLink="https://scancode-toolkit.readthedocs.io/en/latest/cli-reference/basic-options.html#package-option"
             />
           </Card>
         </Col>

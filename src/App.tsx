@@ -1,5 +1,5 @@
 import React from "react";
-import { HashRouter, Route,Routes } from "react-router-dom";
+import { HashRouter, Route, Routes } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 
 import DropZone from "./components/DropZone/DropZone";
@@ -13,7 +13,9 @@ import FileInfoDash from "./pages/FileInfoDash/FileInfoDash";
 import Home from "./pages/Home/Home";
 import Licenses from "./pages/Licenses/Licenses";
 import LicenseInfoDash from "./pages/LicenseInfoDash/LicenseInfoDash";
+import CopyrightInfoDash from "./pages/CopyrightInfoDash/CopyrightInfoDash";
 import PackageInfoDash from "./pages/PackageInfoDash/PackageInfoDash";
+import DependencyInfoDash from "./pages/DependencyInfoDash/DependencyInfoDash";
 import Packages from "./pages/Packages/Packages";
 import PageNotFound from "./pages/PageNotFound";
 import ScanInfo from "./pages/ScanInfo/ScanInfo";
@@ -51,13 +53,18 @@ const App = () => {
                     element={<LicenseInfoDash />}
                   />
                   <Route
+                    path={ROUTES.COPYRIGHT_DASHBOARD}
+                    element={<CopyrightInfoDash />}
+                  />
+                  <Route
                     path={ROUTES.PACKAGE_DASHBOARD}
                     element={<PackageInfoDash />}
                   />
                   <Route
-                    path={ROUTES.LICENSES}
-                    element={<Licenses />}
+                    path={ROUTES.DEPENDENCY_DASHBOARD}
+                    element={<DependencyInfoDash />}
                   />
+                  <Route path={ROUTES.LICENSES} element={<Licenses />} />
                   <Route path={ROUTES.PACKAGES} element={<Packages />} />
                   <Route path={ROUTES.CHART_SUMMARY} element={<ChartView />} />
                   <Route path={ROUTES.SCAN_INFO} element={<ScanInfo />} />
