@@ -108,6 +108,7 @@ export class WorkbenchDB {
   sequelize: Sequelize;
   db: DatabaseStructure;
   sync: Promise<DatabaseStructure>;
+  config: WorkbenchDbConfig;
 
   constructor(config: WorkbenchDbConfig) {
     // Constructor returns an object which effectively represents a connection
@@ -116,6 +117,12 @@ export class WorkbenchDB {
     const user = config && config.dbUser ? config.dbUser : null;
     const password = config && config.dbPassword ? config.dbPassword : null;
     const storage = config && config.dbStorage ? config.dbStorage : ":memory:";
+    this.config = {
+      dbName: name,
+      dbStorage: storage,
+      dbUser: user,
+      dbPassword: password,
+    }
 
     // console.log("Sequelize DB details", {
     //   name,

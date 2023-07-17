@@ -40,9 +40,15 @@ import "./packages.css";
 const animatedComponents = makeAnimated();
 
 const Packages = () => {
-  const { db, initialized, currentPath, goToFileInTableView } =
-    useWorkbenchDB();
-
+  const workbenchDB = useWorkbenchDB();
+  const {
+    db,
+    initialized,
+    currentPath,
+    goToFileInTableView,
+    startProcessing,
+    endProcessing,
+  } = workbenchDB;
   const [searchParams] = useSearchParams();
   const [dataSourceIDs, setDataSourceIDs] = useState<DatasourceFilter[]>([]);
   const [selectedDataSourceIDs, setSelectedDataSourceIDs] = useState<
@@ -144,112 +150,117 @@ const Packages = () => {
   useEffect(() => {
     if (!initialized || !db || !currentPath) return;
 
-    db.sync.then(async () => {
-      const packages = await db.getAllPackages();
-      const deps = await db.getAllDependencies();
-      // console.log("Raw Packages & deps", packages, deps);
-      if (!packages.length && !deps.length) {
-        console.log("No package or deps available");
-        setAllPackageGroups([]);
-        return;
-      }
-
-      // const type_other = 'type-other';
-      const packageMapping = generatePackagesMapping(packages);
-      packageMapping.set(MISC_DEPS, MISC_PACKAGE);
-
-      const uniqueDataSourceIDs = new Set(
-        deps.map((dep) => dep.getDataValue("datasource_id").toString({}))
-      );
-      setDataSourceIDs(
-        Array.from(uniqueDataSourceIDs.values()).map((dataSourceID) => ({
-          label: dataSourceID,
-          value: dataSourceID,
-        }))
-      );
-
-      // Group dependencies in their respective packages
-      deps.forEach((dependencyInfo) => {
-        const targetPackageUid: string | null = dependencyInfo
-          .getDataValue("for_package_uid")
-          ?.toString({});
-        packageMapping.get(targetPackageUid || MISC_DEPS).dependencies.push({
-          // ...dependencyInfo,     // For debugging
-          purl: dependencyInfo.getDataValue("purl").toString({}),
-          extracted_requirement:
-            dependencyInfo
-              .getDataValue("extracted_requirement")
-              ?.toString({}) || "",
-          scope: dependencyInfo
-            .getDataValue("scope")
-            .toString({}) as DEPENDENCY_SCOPES,
-          is_runtime: dependencyInfo.getDataValue("is_runtime"),
-          is_optional: dependencyInfo.getDataValue("is_optional"),
-          is_resolved: dependencyInfo.getDataValue("is_resolved"),
-          resolved_package: JSON.parse(
-            dependencyInfo.getDataValue("resolved_package").toString({})
-          ),
-          dependency_uid: dependencyInfo
-            .getDataValue("dependency_uid")
-            .toString({}),
-          for_package_uid:
-            dependencyInfo.getDataValue("for_package_uid")?.toString({}) ||
-            null,
-          datafile_path: dependencyInfo.getDataValue("datafile_path"),
-          datasource_id: dependencyInfo
-            .getDataValue("datasource_id")
-            .toString({}),
-        });
-      });
-
-      // Ignore misc package if no misc dependencies found
-      if (!MISC_PACKAGE.dependencies.length) {
-        packageMapping.delete(MISC_DEPS);
-      }
-
-      const parsedPackageWithDeps = Array.from(packageMapping.values());
-      // @TODO - What are qualifiers ?
-      parsedPackageWithDeps.forEach((pkg) => {
-        if (Object.keys(pkg.qualifiers).length) console.log("Qualifying:", pkg);
-      });
-      // console.log("Packages with deps:", parsedPackageWithDeps);
-      setPackagesWithDeps(parsedPackageWithDeps);
-
-      // Group packages in their respective package type group
-      const packageGroupMapping = new Map<string, PackageDetails[]>();
-      parsedPackageWithDeps.forEach((packageDetails) => {
-        if (!packageGroupMapping.has(packageDetails.type)) {
-          packageGroupMapping.set(packageDetails.type, []);
+    db.sync
+      .then(async () => {
+        const packages = await db.getAllPackages();
+        const deps = await db.getAllDependencies();
+        // console.log("Raw Packages & deps", packages, deps);
+        if (!packages.length && !deps.length) {
+          console.log("No package or deps available");
+          setAllPackageGroups([]);
+          return;
         }
-        packageGroupMapping.get(packageDetails.type).push(packageDetails);
-      });
-      const parsedPackageGroups = Array.from(packageGroupMapping.entries()).map(
-        ([type, packages]): PackageTypeGroupDetails => ({
-          type,
-          packages,
-        })
-      );
-      setAllPackageGroups(parsedPackageGroups);
-      // console.log("Package groups", parsedPackageGroups);
 
-      setExpandedPackages([]);
+        // const type_other = 'type-other';
+        const packageMapping = generatePackagesMapping(packages);
+        packageMapping.set(MISC_DEPS, MISC_PACKAGE);
 
-      // Select package based on query or default
-      const queriedPackageUid = searchParams.get(QUERY_KEYS.PACKAGE);
-      const queriedPackage = parsedPackageWithDeps.find(
-        (packageInfo) => packageInfo.package_uid === queriedPackageUid
-      );
-      if (queriedPackage) {
-        activatePackage(queriedPackage);
-        console.log(
-          `Activate queried package(${queriedPackageUid}): `,
-          queriedPackage
+        const uniqueDataSourceIDs = new Set(
+          deps.map((dep) => dep.getDataValue("datasource_id").toString({}))
         );
-      } else {
-        activatePackage(parsedPackageWithDeps[0]);
-      }
-    });
-  }, [db, initialized, currentPath]);
+        setDataSourceIDs(
+          Array.from(uniqueDataSourceIDs.values()).map((dataSourceID) => ({
+            label: dataSourceID,
+            value: dataSourceID,
+          }))
+        );
+
+        // Group dependencies in their respective packages
+        deps.forEach((dependencyInfo) => {
+          const targetPackageUid: string | null = dependencyInfo
+            .getDataValue("for_package_uid")
+            ?.toString({});
+          packageMapping.get(targetPackageUid || MISC_DEPS).dependencies.push({
+            // ...dependencyInfo,     // For debugging
+            purl: dependencyInfo.getDataValue("purl").toString({}),
+            extracted_requirement:
+              dependencyInfo
+                .getDataValue("extracted_requirement")
+                ?.toString({}) || "",
+            scope: dependencyInfo
+              .getDataValue("scope")
+              .toString({}) as DEPENDENCY_SCOPES,
+            is_runtime: dependencyInfo.getDataValue("is_runtime"),
+            is_optional: dependencyInfo.getDataValue("is_optional"),
+            is_resolved: dependencyInfo.getDataValue("is_resolved"),
+            resolved_package: JSON.parse(
+              dependencyInfo.getDataValue("resolved_package").toString({})
+            ),
+            dependency_uid: dependencyInfo
+              .getDataValue("dependency_uid")
+              .toString({}),
+            for_package_uid:
+              dependencyInfo.getDataValue("for_package_uid")?.toString({}) ||
+              null,
+            datafile_path: dependencyInfo.getDataValue("datafile_path"),
+            datasource_id: dependencyInfo
+              .getDataValue("datasource_id")
+              .toString({}),
+          });
+        });
+
+        // Ignore misc package if no misc dependencies found
+        if (!MISC_PACKAGE.dependencies.length) {
+          packageMapping.delete(MISC_DEPS);
+        }
+
+        const parsedPackageWithDeps = Array.from(packageMapping.values());
+        // @TODO - What are qualifiers ?
+        parsedPackageWithDeps.forEach((pkg) => {
+          if (Object.keys(pkg.qualifiers).length)
+            console.log("Qualifying:", pkg);
+        });
+        // console.log("Packages with deps:", parsedPackageWithDeps);
+        setPackagesWithDeps(parsedPackageWithDeps);
+
+        // Group packages in their respective package type group
+        const packageGroupMapping = new Map<string, PackageDetails[]>();
+        parsedPackageWithDeps.forEach((packageDetails) => {
+          if (!packageGroupMapping.has(packageDetails.type)) {
+            packageGroupMapping.set(packageDetails.type, []);
+          }
+          packageGroupMapping.get(packageDetails.type).push(packageDetails);
+        });
+        const parsedPackageGroups = Array.from(
+          packageGroupMapping.entries()
+        ).map(
+          ([type, packages]): PackageTypeGroupDetails => ({
+            type,
+            packages,
+          })
+        );
+        setAllPackageGroups(parsedPackageGroups);
+        // console.log("Package groups", parsedPackageGroups);
+
+        setExpandedPackages([]);
+
+        // Select package based on query or default
+        const queriedPackageUid = searchParams.get(QUERY_KEYS.PACKAGE);
+        const queriedPackage = parsedPackageWithDeps.find(
+          (packageInfo) => packageInfo.package_uid === queriedPackageUid
+        );
+        if (queriedPackage) {
+          activatePackage(queriedPackage);
+          console.log(
+            `Activate queried package(${queriedPackageUid}): `,
+            queriedPackage
+          );
+        } else {
+          activatePackage(parsedPackageWithDeps[0]);
+        }
+      })
+      .then(endProcessing);
+  }, [currentPath]);
 
   const [filteredPackageGroups, setFilteredPackageGroups] =
     useState<PackageTypeGroupDetails[]>(null);

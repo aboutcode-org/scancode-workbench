@@ -19,7 +19,9 @@ interface ScanData {
 import "./licenseInfoDash.css";
 
 const LicenseInfoDash = () => {
-  const { db, initialized, currentPath, scanInfo } = useWorkbenchDB();
+  const workbenchDB = useWorkbenchDB();
+  const { db, initialized, currentPath, scanInfo, startProcessing, endProcessing } =
+    workbenchDB;
 
   const [licenseExpressionData, setLicenseExpressionData] = useState<
     FormattedEntry[] | null
@@ -39,6 +41,8 @@ const LicenseInfoDash = () => {
   useEffect(() => {
     if (!initialized || !db || !currentPath) return;
 
+    startProcessing();
+
     db.sync
       .then((db) =>
         db.FlatFile.findAll({
@@ -53,6 +57,8 @@ const LicenseInfoDash = () => {
           attributes: ["fileId", "license_detections"],
         })
       )
+      // @REMOVE_THIS
+      // .then((flatFiles) => new Promise(resolve => setTimeout(()=>resolve(flatFiles), 4000)))
       .then((flatFiles) => {
         const fileIDs = flatFiles.map((flatFile) =>
           flatFile.getDataValue("fileId")
@@ -72,7 +78,7 @@ const LicenseInfoDash = () => {
         }));
 
         // Query and prepare chart for license expression
-        db.sync
+        const ExpressionPromise = db.sync
           .then((db) =>
             db.LicenseExpression.findAll({ where: { fileId: fileIDs } })
           )
@@ -116,7 +122,7 @@ const LicenseInfoDash = () => {
           });
 
         // Query and prepare chart for license policy
-        db.sync
+        const PolicyPromise = db.sync
           .then((db) =>
             db.LicensePolicy.findAll({ where: { fileId: fileIDs } })
           )
@@ -130,8 +136,11 @@ const LicenseInfoDash = () => {
             const { chartData } = formatChartData(labels);
             setLicensePolicyData(chartData);
           });
-      });
-  }, [initialized, db, currentPath]);
+
+        return Promise.all([ExpressionPromise, PolicyPromise]);
+      })
+      .then(endProcessing);
+  }, [currentPath]);
 
   return (
     <div className="text-center pieInfoDash">
