@@ -16,7 +16,9 @@ import { NO_VALUE_DETECTED_LABEL } from "../../constants/data";
 import "./FileInfoDash.css";
 
 const FileInfoDash = () => {
-  const { db, initialized, currentPath } = useWorkbenchDB();
+  const workbenchDB = useWorkbenchDB();
+  const { db, initialized, currentPath, startProcessing, endProcessing } =
+    workbenchDB;
 
   const [progLangsData, setProgLangsData] = useState<FormattedEntry[] | null>(
     null
@@ -34,6 +36,8 @@ const FileInfoDash = () => {
 
   useEffect(() => {
     if (!initialized || !db || !currentPath) return;
+
+    startProcessing();
 
     db.sync
       .then((db) => db.File.findOne({ where: { path: currentPath } }))
@@ -92,8 +96,9 @@ const FileInfoDash = () => {
         const { chartData: mimeTypesChartData } =
           formatPieChartData(fileMimeTypes);
         setMimeTypesData(mimeTypesChartData);
-      });
-  }, [db, initialized, currentPath]);
+      })
+      .then(endProcessing);
+  }, [workbenchDB]);
 
   return (
     <div className="text-center pieInfoDash">

@@ -38,9 +38,12 @@ interface BasicValueState {
 interface WorkbenchContextProperties extends BasicValueState {
   currentPath: string | null;
   currentPathType: PathType;
+  loadingStatus: null | number;
+  processingQuery: boolean;
   startImport: () => void;
   abortImport: () => void;
-  loadingStatus: null | number;
+  startProcessing: () => void;
+  endProcessing: () => void;
   sqliteParser: (sqliteFilePath: string, preventNavigation?: boolean) => void;
   jsonParser: (
     jsonFilePath: string,
@@ -61,12 +64,15 @@ export const defaultWorkbenchContextValue: WorkbenchContextProperties = {
   loadingStatus: null,
   currentPath: null,
   currentPathType: "directory",
+  processingQuery: false,
   jsonParser: () => null,
   sqliteParser: () => null,
   importJsonFile: () => null,
   updateLoadingStatus: () => null,
   startImport: () => null,
   abortImport: () => null,
+  startProcessing: () => null,
+  endProcessing: () => null,
   updateCurrentPath: () => null,
   goToFileInTableView: () => null,
 };
@@ -81,6 +87,7 @@ export const WorkbenchDBProvider = (
   const navigate = useNavigate();
 
   const [loadingStatus, updateLoadingStatus] = useState<number | null>(null);
+  const [processingQuery, setProcessingQuery] = useState<boolean>(null);
   const [value, setValue] = useState<BasicValueState>({
     db: null,
     initialized: false,
@@ -462,15 +469,18 @@ export const WorkbenchDBProvider = (
     <WorkbenchContext.Provider
       value={{
         ...value,
-        loadingStatus,
-        updateLoadingStatus,
         currentPath,
         currentPathType,
+        loadingStatus,
+        processingQuery,
+        updateLoadingStatus,
         jsonParser,
         sqliteParser,
         importJsonFile,
         startImport,
         abortImport,
+        startProcessing: () => setProcessingQuery(true),
+        endProcessing: () => setProcessingQuery(false),
         updateCurrentPath,
         goToFileInTableView,
       }}

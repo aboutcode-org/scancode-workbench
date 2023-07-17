@@ -43,8 +43,10 @@ const FileTree = (props: React.HTMLProps<HTMLDivElement>) => {
   useEffect(() => {
     if (!initialized || !db || !importedSqliteFilePath) return;
 
-    db.sync.then(() => {
-      db.findAllJSTree().then((treeData) => {
+    db.findAllJSTree()
+      .then((treeData) => {
+        console.log("Filetree data", treeData);
+
         // Wrap with react-scroll wrapper
         function wrapNode(node: DataNode) {
           const key = String(node.key);
@@ -57,8 +59,7 @@ const FileTree = (props: React.HTMLProps<HTMLDivElement>) => {
         }
         treeData.forEach(wrapNode);
         setTreeData(treeData as unknown as DataNode[]);
-      });
-    });
+      })
   }, [importedSqliteFilePath]);
 
   function selectPath(path: string, pathType: PathType) {
