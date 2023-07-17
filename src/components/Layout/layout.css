@@ -8,12 +8,37 @@
   box-shadow: rgb(177 177 177) 1px 0px 18px -3px;
   overflow: overlay !important;
 }
+
 .content-pane {
   overflow-y: overlay !important;
 }
+
 .content-container {
   padding: 10px;
   padding-top: 5px;
   padding-bottom: 5px;
   min-height: 100%;
+}
+
+.query-processing-indicator {
+  position: fixed;
+  background: #f3f9ff;
+  padding: 10px;
+  right: 20px;
+  z-index: 999;
+  border-radius: 8px;
+  -webkit-box-shadow: 0px 3px 15px -2px rgba(0, 0, 0, 0.67);
+  box-shadow: 0px 3px 15px -2px rgba(0, 0, 0, 0.67);
+
+  /* Animate */
+  bottom: -100%;
+  opacity: 0;
+  animation: smooth-appear 0.5s ease forwards;
+}
+
+@keyframes smooth-appear {
+  to {
+    bottom: 20px;
+    opacity: 1;
+  }
 }

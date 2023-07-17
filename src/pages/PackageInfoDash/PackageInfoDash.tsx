@@ -1,4 +1,4 @@
-import { Op } from "sequelize";
+import { Op, WhereOptions } from "sequelize";
 import { Row, Col, Card } from "react-bootstrap";
 import React, { useEffect, useState } from "react";
 
@@ -8,13 +8,22 @@ import { NO_VALUE_DETECTED_LABEL } from "../../constants/data";
 import PieChart from "../../components/PieChart/PieChart";
 import EllipticLoader from "../../components/EllipticLoader";
 import { ScanOptionKeys } from "../../utils/parsers";
+import { FileAttributes } from "../../services/models/file";
 
 interface ScanData {
   totalPackages: number | null;
 }
 
 const PackageInfoDash = () => {
-  const { db, initialized, currentPath, scanInfo } = useWorkbenchDB();
+  const workbenchDB = useWorkbenchDB();
+  const {
+    db,
+    initialized,
+    currentPath,
+    scanInfo,
+    startProcessing,
+    endProcessing,
+  } = workbenchDB;
   const [packageTypeData, setPackageTypeData] = useState(null);
   const [packageLangData, setPackageLangData] = useState(null);
   const [packageLicenseData, setPackageLicenseData] = useState(null);
@@ -25,32 +34,36 @@ const PackageInfoDash = () => {
   useEffect(() => {
     if (!initialized || !db || !currentPath) return;
 
+    startProcessing();
+
+    const where: WhereOptions<FileAttributes> = {
+      path: {
+        [Op.or]: [
+          { [Op.like]: `${currentPath}` }, // Matches a file / directory.
+          { [Op.like]: `${currentPath}/%` }, // Matches all its children (if any).
+        ],
+      },
+    };
+
     db.sync
       .then((db) =>
         db.File.findAll({
-          where: {
-            path: {
-              [Op.or]: [
-                { [Op.like]: `${currentPath}` }, // Matches a file / directory.
-                { [Op.like]: `${currentPath}/%` }, // Matches all its children (if any).
-              ],
-            },
-          },
+          where,
           attributes: ["id"],
         })
       )
+      // @REMOVE_THIS
+      // .then((flatFiles) => new Promise(resolve => setTimeout(()=>resolve(flatFiles), 2000)))
       .then((files) => {
         const fileIDs = files.map((file) => file.getDataValue("id"));
 
         // Query and prepare chart for package types
-        db.sync
+        const PackageDataPromise = db.sync
           .then((db) => db.PackageData.findAll({ where: { fileId: fileIDs } }))
           .then((packageData) => {
             // Prepare count of packages
             setScanData({ totalPackages: packageData.length });
-            return packageData;
-          })
-          .then((packageData) => {
+
             // Prepare chart for package types
             const packageTypes = packageData.map(
               (packageEntry) =>
@@ -81,8 +94,10 @@ const PackageInfoDash = () => {
 
             setPackageLicenseData(packageLicenseExpChartData);
           });
-      });
-  }, [db, initialized, currentPath]);
+        return [PackageDataPromise];
+      })
+      .then(endProcessing);
+  }, [currentPath]);
 
   return (
     <div className="text-center pieInfoDash">
@@ -110,7 +125,7 @@ const PackageInfoDash = () => {
             <h5 className="title">Package Types</h5>
             <PieChart
               chartData={packageTypeData}
-              notOpted={!(scanInfo.optionsMap.get(ScanOptionKeys.PACKAGE))}
+              notOpted={!scanInfo.optionsMap.get(ScanOptionKeys.PACKAGE)}
               notOptedText="Use --package CLI option for package types"
               notOptedLink="https://scancode-toolkit.readthedocs.io/en/latest/cli-reference/basic-options.html#package-option"
             />
@@ -121,7 +136,7 @@ const PackageInfoDash = () => {
             <h5 className="title">Package languages</h5>
             <PieChart
               chartData={packageLangData}
-              notOpted={!(scanInfo.optionsMap.get(ScanOptionKeys.PACKAGE))}
+              notOpted={!scanInfo.optionsMap.get(ScanOptionKeys.PACKAGE)}
               notOptedText="Use --package CLI option for package languages"
               notOptedLink="https://scancode-toolkit.readthedocs.io/en/latest/cli-reference/basic-options.html#package-option"
             />
@@ -132,7 +147,7 @@ const PackageInfoDash = () => {
             <h5 className="title">Package Licenses</h5>
             <PieChart
               chartData={packageLicenseData}
-              notOpted={!(scanInfo.optionsMap.get(ScanOptionKeys.PACKAGE))}
+              notOpted={!scanInfo.optionsMap.get(ScanOptionKeys.PACKAGE)}
               notOptedText="Use --package CLI option for package licenses"
               notOptedLink="https://scancode-toolkit.readthedocs.io/en/latest/cli-reference/basic-options.html#package-option"
             />
