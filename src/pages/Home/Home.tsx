@@ -2,7 +2,6 @@ import moment from "moment";
 import electron from "electron";
 import * as electronFs from "fs";
 import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
 import React, { useMemo, useState } from "react";
 
 import {

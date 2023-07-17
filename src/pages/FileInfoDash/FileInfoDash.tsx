@@ -17,6 +17,8 @@ import "./FileInfoDash.css";
 
 const FileInfoDash = () => {
   const workbenchDB = useWorkbenchDB();
+  const { db, initialized, currentPath, startProcessing, endProcessing } =
+    workbenchDB;
 
   const [progLangsData, setProgLangsData] = useState(null);
   const [mimeTypesData, setMimeTypesData] = useState(null);
@@ -27,9 +29,9 @@ const FileInfoDash = () => {
   });
 
   useEffect(() => {
-    const { db, initialized, currentPath } = workbenchDB;
-
     if (!initialized || !db || !currentPath) return;
+
+    startProcessing();
 
     db.sync
       .then((db) => db.File.findOne({ where: { path: currentPath } }))
@@ -88,7 +90,8 @@ const FileInfoDash = () => {
         const { chartData: mimeTypesChartData } =
           formatChartData(fileMimeTypes);
         setMimeTypesData(mimeTypesChartData);
-      });
+      })
+      .then(endProcessing);
   }, [workbenchDB]);
 
   return (
