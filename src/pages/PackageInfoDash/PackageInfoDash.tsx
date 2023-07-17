@@ -1,4 +1,4 @@
-import { Op } from "sequelize";
+import { Op, WhereOptions } from "sequelize";
 import { Row, Col, Card } from "react-bootstrap";
 import React, { useEffect, useState } from "react";
 
@@ -8,13 +8,14 @@ import { NO_VALUE_DETECTED_LABEL } from "../../constants/data";
 import PieChart from "../../components/PieChart/PieChart";
 import EllipticLoader from "../../components/EllipticLoader";
 import { ScanOptionKeys } from "../../utils/parsers";
+import { FileAttributes } from "../../services/models/file";
 
 interface ScanData {
   totalPackages: number | null;
 }
 
 const PackageInfoDash = () => {
-  const { db, initialized, currentPath, scanInfo } = useWorkbenchDB();
+  const { db, initialized, currentPath, scanInfo, startProcessing, endProcessing } = useWorkbenchDB();
   const [packageTypeData, setPackageTypeData] = useState<
     FormattedEntry[] | null
   >(null);
@@ -39,25 +40,31 @@ const PackageInfoDash = () => {
   useEffect(() => {
     if (!initialized || !db || !currentPath) return;
 
+    startProcessing();
+
+    const where: WhereOptions<FileAttributes> = {
+      path: {
+        [Op.or]: [
+          { [Op.like]: `${currentPath}` }, // Matches a file / directory.
+          { [Op.like]: `${currentPath}/%` }, // Matches all its children (if any).
+        ],
+      },
+    };
+
     db.sync
       .then((db) =>
         db.File.findAll({
-          where: {
-            path: {
-              [Op.or]: [
-                { [Op.like]: `${currentPath}` }, // Matches a file / directory.
-                { [Op.like]: `${currentPath}/%` }, // Matches all its children (if any).
-              ],
-            },
-          },
+          where,
           attributes: ["id"],
         })
       )
+      // @REMOVE_THIS
+      // .then((flatFiles) => new Promise(resolve => setTimeout(()=>resolve(flatFiles), 2000)))
       .then((files) => {
         const fileIDs = files.map((file) => file.getDataValue("id"));
 
         // Query and prepare chart for package types
-        db.sync
+        const PackageDataPromise = db.sync
           .then((db) => db.PackageData.findAll({ where: { fileId: fileIDs } }))
           .then((packageData) => {
             // Prepare chart for package types
@@ -90,8 +97,10 @@ const PackageInfoDash = () => {
 
             setPackageLicenseData(packageLicenseExpChartData);
           });
-      });
-  }, [db, initialized, currentPath]);
+        return [PackageDataPromise];
+      })
+      .then(endProcessing);
+  }, [currentPath]);
 
   return (
     <div className="text-center pieInfoDash">

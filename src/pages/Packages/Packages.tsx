@@ -40,9 +40,15 @@ import "./packages.css";
 const animatedComponents = makeAnimated();
 
 const Packages = () => {
-  const { db, initialized, currentPath, goToFileInTableView } =
-    useWorkbenchDB();
-
+  const workbenchDB = useWorkbenchDB();
+  const {
+    db,
+    initialized,
+    currentPath,
+    goToFileInTableView,
+    startProcessing,
+    endProcessing,
+  } = workbenchDB;
   const [searchParams] = useSearchParams();
   const [dataSourceIDs, setDataSourceIDs] = useState<DatasourceFilter[]>([]);
   const [selectedDataSourceIDs, setSelectedDataSourceIDs] = useState<
@@ -231,25 +237,25 @@ const Packages = () => {
       );
       setAllPackageGroups(parsedPackageGroups);
       // console.log("Package groups", parsedPackageGroups);
+        setExpandedPackages([]);
 
-      setExpandedPackages([]);
-
-      // Select package based on query or default
-      const queriedPackageUid = searchParams.get(QUERY_KEYS.PACKAGE);
-      const queriedPackage = parsedPackageWithDeps.find(
-        (packageInfo) => packageInfo.package_uid === queriedPackageUid
-      );
-      if (queriedPackage) {
-        activatePackage(queriedPackage);
-        console.log(
-          `Activate queried package(${queriedPackageUid}): `,
-          queriedPackage
+        // Select package based on query or default
+        const queriedPackageUid = searchParams.get(QUERY_KEYS.PACKAGE);
+        const queriedPackage = parsedPackageWithDeps.find(
+          (packageInfo) => packageInfo.package_uid === queriedPackageUid
         );
-      } else {
-        activatePackage(parsedPackageWithDeps[0]);
-      }
-    });
-  }, [db, initialized, currentPath]);
+        if (queriedPackage) {
+          activatePackage(queriedPackage);
+          console.log(
+            `Activate queried package(${queriedPackageUid}): `,
+            queriedPackage
+          );
+        } else {
+          activatePackage(parsedPackageWithDeps[0]);
+        }
+      })
+      .then(endProcessing);
+  }, [currentPath]);
 
   const [filteredPackageGroups, setFilteredPackageGroups] =
     useState<PackageTypeGroupDetails[]>(null);
