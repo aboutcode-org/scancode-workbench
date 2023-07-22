@@ -5,10 +5,10 @@ export const TrimTexts: {
   maxLengthInclusive: number;
   trimmed: string;
 }[] = [
-  { text: undefined, maxLengthInclusive: 30, trimmed: "" },
-  { text: null, maxLengthInclusive: 30, trimmed: "" },
-  { text: "", maxLengthInclusive: 30, trimmed: "" },
-  { text: "abcd", maxLengthInclusive: 30, trimmed: "abcd" },
+  { text: undefined, maxLengthInclusive: 10, trimmed: "" },
+  { text: null, maxLengthInclusive: 10, trimmed: "" },
+  { text: "", maxLengthInclusive: 10, trimmed: "" },
+  { text: "abcd", maxLengthInclusive: 10, trimmed: "abcd" },
   { text: "abcdef", maxLengthInclusive: 6, trimmed: "abcdef" },
   { text: "Statement", maxLengthInclusive: 10, trimmed: "Statement" },
   { text: "Statement", maxLengthInclusive: 9, trimmed: "Statement" },
@@ -17,20 +17,8 @@ export const TrimTexts: {
   { text: "Statement", maxLengthInclusive: 6, trimmed: "Sta..." },
   {
     text: "License :: OSI Approved :: BSD License",
-    maxLengthInclusive: 30,
-    trimmed: "License :: OSI Approved :: ...",
-  },
-  {
-    text: "Copyright (c) 2016 - 2019 nexB Inc. and others,Copyright (c) 2016 nexB Inc. and others,Copyright (c) 2008-2015 SpryMedia Limited http://datatables.net,Copyright (c) 2011-2015 Twitter, Inc,Copyright (c) 2015 SpryMedia Limited http://datatables.net,Copyright (c) 2013 Masayuki Tanaka,Copyright 2015 The Chromium Authors,Copyright (c) 2010-2015 SpryMedia Limited http://datatables.net,Copyright (c) 2010-2016, Michael Bostock,Copyright (c) 2008-2015 SpryMedia Limited http://datatables.net,Copyright (c) 2013-2018 GitHub Inc.,Copyright (c) Electron project,Copyright (c) 2010-2015 SpryMedia Limited http://datatables.net,Copyright (c) 2009-2015 SpryMedia Limited http://datatables.net,Copyright (c) 2006-2013 Mika Tuupola, Dylan Verheul,Copyright 2014 jQuery Foundation and other contributors http://jquery.com,Copyright jQuery Foundation and other contributors, https://jquery.org,Copyright jQuery Foundation and other contributors, https://jquery.org,Copyright (c) 2011 Dominic Tarr,Copyright (c) 2014 Ivan Bozhanov,Copyright (c) 2009-2014 Stuart Knightley, David Duponchel, Franz Buchinger,Copyright (c) 2009-2015 SpryMedia Limited http://datatables.net,Copyright (c) 2010-2015 by Lukasz Dziedzic Dziedzic,Copyright (c) 2018 NAN WG Members,Copyright (c) 2014 bpampuch,Copyright (c) 2015 Kimmo Brunfeldt,Copyright (c) 2010, Matt McInerney (matt@pixelspread.com),Copyright (c) 2011",
-    maxLengthInclusive: 200,
-    trimmed:
-      "Copyright (c) 2016 - 2019 nexB Inc. and others,Copyright (c) 2016 nexB Inc. and others,Copyright (c) 2008-2015 SpryMedia Limited http://datatables.net,Copyright (c) 2011-2015 Twitter, Inc,Copyright...",
-  },
-  {
-    text: "nexB Inc. and others,nexB Inc. and others,SpryMedia Limited,Twitter, Inc,SpryMedia Limited,Masayuki Tanaka,The Chromium Authors,SpryMedia Limited,Michael Bostock,SpryMedia Limited,GitHub Inc.,Electron project,SpryMedia Limited,SpryMedia Limited,Mika Tuupola, Dylan Verheul,jQuery Foundation and other contributors,jQuery Foundation and other contributors,jQuery Foundation and other contributors,Dominic Tarr,Ivan Bozhanov,Stuart Knightley, David Duponchel, Franz Buchinger,SpryMedia Limited,Lukasz Dziedzic Dziedzic,NAN WG Members,bpampuch,Kimmo Brunfeldt,Matt McInerney,Pablo Impallari,Rodrigo Fuenzalida,SpryMedia Limited,SpryMedia Limited,SpryMedia Limited,SpryMedia Limited,SpryMedia Limited,Kevin Brown, Igor Vaynberg, and Select2 contributors,Sequelize contributors,Nathan Cahill,MapBox,Iron Summit Media Strategies, LLC.,Dominic Tarr,Sindre Sorhus,Sindre Sorhus,Rebecca Turner,Mark Cavage,Mark Cavage,Alex Indigo,Michael Hart,Stefan Penner,Tim Caswell,Free Software Foundation, Inc.,Free Software Foundation, Inc.,the Free Software Foundation",
-    maxLengthInclusive: 200,
-    trimmed:
-      "nexB Inc. and others,nexB Inc. and others,SpryMedia Limited,Twitter, Inc,SpryMedia Limited,Masayuki Tanaka,The Chromium Authors,SpryMedia Limited,Michael Bostock,SpryMedia Limited,GitHub Inc.,Elect...",
+    maxLengthInclusive: 20,
+    trimmed: "License :: OSI Ap...",
   },
 ];
 
@@ -44,119 +32,403 @@ export const NormalizeTexts: { text: string; normalized: string }[] = [
   { text: "abcd wef \n mno   pqr  ", normalized: "abcd wef mno pqr" },
 ];
 
-export const DiffToLineSamples: {
-  diffs: DiffComponents[];
-  lines: DiffComponents[][];
+export const DiffTextSamples: {
+  sourceText: string;
+  modifiedText: string;
+  normalizedDiffs: DiffComponents[];
+  normalizedSourceTextLines: DiffComponents[][];
+  normalizedModifiedTextLines: DiffComponents[][];
 }[] = [
   {
-    diffs: [
+    sourceText: "creativecommons.org/publicdomain",
+    modifiedText: "creativecommons.org/publicdomain",
+    normalizedDiffs: [
       {
         diffComponent: null,
         belongsTo: BelongsIndicator.BOTH,
-        value: "The ",
+        value: "creativecommons.org/publicdomain",
+      },
+    ],
+    normalizedSourceTextLines: [
+      [
+        {
+          diffComponent: null,
+          belongsTo: BelongsIndicator.BOTH,
+          value: "creativecommons.org/publicdomain",
+        },
+      ],
+    ],
+    normalizedModifiedTextLines: [
+      [
+        {
+          diffComponent: null,
+          belongsTo: BelongsIndicator.BOTH,
+          value: "creativecommons.org/publicdomain",
+        },
+      ],
+    ],
+  },
+  {
+    sourceText: "Contributor License Agreement](#cla",
+    modifiedText: "Contributor License Agreement (CLA)",
+    normalizedDiffs: [
+      {
+        diffComponent: null,
+        belongsTo: BelongsIndicator.BOTH,
+        value: "Contributor License Agreement",
+      },
+      {
+        belongsTo: BelongsIndicator.ORIGINAL,
+        value: "]",
+      },
+      {
+        belongsTo: BelongsIndicator.MODIFIED,
+        value: " ",
+      },
+      {
+        diffComponent: null,
+        belongsTo: BelongsIndicator.BOTH,
+        value: "(",
+      },
+      {
+        belongsTo: BelongsIndicator.ORIGINAL,
+        value: "#cla",
+      },
+      {
+        belongsTo: BelongsIndicator.MODIFIED,
+        value: "CLA)",
+      },
+    ],
+    normalizedSourceTextLines: [
+      [
+        {
+          diffComponent: null,
+          belongsTo: BelongsIndicator.BOTH,
+          value: "Contributor License Agreement",
+        },
+        {
+          value: "]",
+          belongsTo: BelongsIndicator.ORIGINAL,
+        },
+        {
+          value: "(",
+          belongsTo: BelongsIndicator.BOTH,
+        },
+        {
+          belongsTo: BelongsIndicator.ORIGINAL,
+          value: "#cla",
+        },
+      ],
+    ],
+    normalizedModifiedTextLines: [
+      [
+        {
+          diffComponent: null,
+          belongsTo: BelongsIndicator.BOTH,
+          value: "Contributor License Agreement",
+        },
+        {
+          value: " ",
+          belongsTo: BelongsIndicator.MODIFIED,
+        },
+        {
+          value: "(",
+          belongsTo: BelongsIndicator.BOTH,
+        },
+        {
+          belongsTo: BelongsIndicator.MODIFIED,
+          value: "CLA)",
+        },
+      ],
+    ],
+  },
+  {
+    sourceText:
+      '# Licensed under the Apache License, Version 2.0 (the "License");\n# you may not use this file except in \ncompliance with the License.\n#',
+    modifiedText:
+      'Licensed under\n the (Apache License), Version 2.0 (the "License");\n * you may not use - this file except in \n (compliance^) /with the + License.\n * You may obtain a copy of the License at\n',
+    normalizedDiffs: [
+      {
+        diffComponent: "removed",
+        belongsTo: BelongsIndicator.ORIGINAL,
+        value: "# ",
+      },
+      {
+        diffComponent: null,
+        belongsTo: BelongsIndicator.BOTH,
+        value: "Licensed under",
       },
       {
         diffComponent: "added",
         belongsTo: BelongsIndicator.MODIFIED,
-        value: "[Netty]",
+        value: "\n",
       },
       {
         diffComponent: null,
         belongsTo: BelongsIndicator.BOTH,
-        value:
-          ' Project licenses this file to you under the Apache License,\n * version 2.0 (the "License"); you may not use this file except in compliance\n * with the License. You may obtain a copy of the License at:\n *\n *   https://www.apache.org/licenses/LICENSE-2.0\n *\n * Unless required by applicable law or agreed to in writing, software\n * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT\n * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the\n * License for the specific language governing permissions and limitations\n * under the License.',
+        value: " the ",
+      },
+      {
+        diffComponent: "added",
+        belongsTo: BelongsIndicator.MODIFIED,
+        value: "(",
+      },
+      {
+        diffComponent: null,
+        belongsTo: BelongsIndicator.BOTH,
+        value: "Apache License",
+      },
+      {
+        diffComponent: "added",
+        belongsTo: BelongsIndicator.MODIFIED,
+        value: ")",
+      },
+      {
+        diffComponent: null,
+        belongsTo: BelongsIndicator.BOTH,
+        value: ', Version 2.0 (the "License");\n',
+      },
+      {
+        belongsTo: BelongsIndicator.ORIGINAL,
+        value: "#",
+      },
+      {
+        belongsTo: BelongsIndicator.MODIFIED,
+        value: " *",
+      },
+      {
+        diffComponent: null,
+        belongsTo: BelongsIndicator.BOTH,
+        value: " you may not use ",
+      },
+      {
+        diffComponent: "added",
+        belongsTo: BelongsIndicator.MODIFIED,
+        value: "- ",
+      },
+      {
+        diffComponent: null,
+        belongsTo: BelongsIndicator.BOTH,
+        value: "this file except in \n",
+      },
+      {
+        diffComponent: "added",
+        belongsTo: BelongsIndicator.MODIFIED,
+        value: " (",
+      },
+      {
+        diffComponent: null,
+        belongsTo: BelongsIndicator.BOTH,
+        value: "compliance",
+      },
+      {
+        diffComponent: "added",
+        belongsTo: BelongsIndicator.MODIFIED,
+        value: "^)",
+      },
+      {
+        diffComponent: null,
+        belongsTo: BelongsIndicator.BOTH,
+        value: " ",
+      },
+      {
+        diffComponent: "added",
+        belongsTo: BelongsIndicator.MODIFIED,
+        value: "/",
+      },
+      {
+        diffComponent: null,
+        belongsTo: BelongsIndicator.BOTH,
+        value: "with the ",
+      },
+      {
+        diffComponent: "added",
+        belongsTo: BelongsIndicator.MODIFIED,
+        value: "+ ",
+      },
+      {
+        diffComponent: null,
+        belongsTo: BelongsIndicator.BOTH,
+        value: "License.\n",
+      },
+      {
+        diffComponent: "removed",
+        belongsTo: BelongsIndicator.ORIGINAL,
+        value: "#",
+      },
+      {
+        diffComponent: "added",
+        belongsTo: BelongsIndicator.MODIFIED,
+        value: " * You may obtain a copy of the License at\n",
       },
     ],
-    lines: [
+    normalizedSourceTextLines: [
+      [
+        {
+          value: "# ",
+          belongsTo: BelongsIndicator.ORIGINAL,
+        },
+        {
+          diffComponent: null,
+          belongsTo: BelongsIndicator.BOTH,
+          value: "Licensed under",
+        },
+        {
+          diffComponent: null,
+          belongsTo: BelongsIndicator.BOTH,
+          value: " the ",
+        },
+        {
+          diffComponent: null,
+          belongsTo: BelongsIndicator.BOTH,
+          value: "Apache License",
+        },
+        {
+          diffComponent: null,
+          belongsTo: BelongsIndicator.BOTH,
+          value: ', Version 2.0 (the "License");',
+        },
+      ],
+      [
+        {
+          value: "#",
+          belongsTo: BelongsIndicator.ORIGINAL,
+        },
+        {
+          diffComponent: null,
+          belongsTo: BelongsIndicator.BOTH,
+          value: " you may not use ",
+        },
+        {
+          diffComponent: null,
+          belongsTo: BelongsIndicator.BOTH,
+          value: "this file except in ",
+        },
+      ],
       [
         {
           diffComponent: null,
           belongsTo: BelongsIndicator.BOTH,
-          value: "The ",
+          value: "compliance",
+        },
+        {
+          value: " ",
+          belongsTo: BelongsIndicator.BOTH,
+        },
+        {
+          diffComponent: null,
+          belongsTo: BelongsIndicator.BOTH,
+          value: "with the ",
+        },
+        {
+          diffComponent: null,
+          belongsTo: BelongsIndicator.BOTH,
+          value: "License.",
+        },
+      ],
+      [
+        {
+          value: "#",
+          belongsTo: BelongsIndicator.ORIGINAL,
+        },
+      ],
+    ],
+    normalizedModifiedTextLines: [
+      [
+        {
+          diffComponent: null,
+          belongsTo: BelongsIndicator.BOTH,
+          value: "Licensed under",
+        },
+      ],
+      [
+        {
+          diffComponent: null,
+          belongsTo: BelongsIndicator.BOTH,
+          value: " the ",
+        },
+        {
+          value: "(",
+          belongsTo: BelongsIndicator.MODIFIED,
+        },
+        {
+          diffComponent: null,
+          belongsTo: BelongsIndicator.BOTH,
+          value: "Apache License",
+        },
+        {
+          value: ")",
+          belongsTo: BelongsIndicator.MODIFIED,
+        },
+        {
+          diffComponent: null,
+          belongsTo: BelongsIndicator.BOTH,
+          value: ', Version 2.0 (the "License");',
+        },
+      ],
+      [
+        {
+          value: " *",
+          belongsTo: BelongsIndicator.MODIFIED,
+        },
+        {
+          diffComponent: null,
+          belongsTo: BelongsIndicator.BOTH,
+          value: " you may not use ",
+        },
+        {
+          value: "- ",
+          belongsTo: BelongsIndicator.MODIFIED,
+        },
+        {
+          diffComponent: null,
+          belongsTo: BelongsIndicator.BOTH,
+          value: "this file except in ",
+        },
+      ],
+      [
+        {
+          value: " (",
+          belongsTo: BelongsIndicator.MODIFIED,
+        },
+        {
+          diffComponent: null,
+          belongsTo: BelongsIndicator.BOTH,
+          value: "compliance",
+        },
+        {
+          value: "^)",
+          belongsTo: BelongsIndicator.MODIFIED,
+        },
+        {
+          value: " ",
+          belongsTo: BelongsIndicator.BOTH,
+        },
+        {
+          value: "/",
+          belongsTo: BelongsIndicator.MODIFIED,
+        },
+        {
+          diffComponent: null,
+          belongsTo: BelongsIndicator.BOTH,
+          value: "with the ",
         },
         {
           diffComponent: "added",
           belongsTo: BelongsIndicator.MODIFIED,
-          value: "[Netty]",
+          value: "+ ",
         },
         {
           diffComponent: null,
           belongsTo: BelongsIndicator.BOTH,
-          value: " Project licenses this file to you under the Apache License,",
+          value: "License.",
         },
       ],
       [
         {
-          diffComponent: null,
-          belongsTo: BelongsIndicator.BOTH,
-          value:
-            ' * version 2.0 (the "License"); you may not use this file except in compliance',
-        },
-      ],
-      [
-        {
-          diffComponent: null,
-          belongsTo: BelongsIndicator.BOTH,
-          value:
-            " * with the License. You may obtain a copy of the License at:",
-        },
-      ],
-      [
-        {
-          value: " *",
-          belongsTo: BelongsIndicator.BOTH,
-        },
-      ],
-      [
-        {
-          diffComponent: null,
-          belongsTo: BelongsIndicator.BOTH,
-          value: " *   https://www.apache.org/licenses/LICENSE-2.0",
-        },
-      ],
-      [
-        {
-          value: " *",
-          belongsTo: BelongsIndicator.BOTH,
-        },
-      ],
-      [
-        {
-          diffComponent: null,
-          belongsTo: BelongsIndicator.BOTH,
-          value:
-            " * Unless required by applicable law or agreed to in writing, software",
-        },
-      ],
-      [
-        {
-          diffComponent: null,
-          belongsTo: BelongsIndicator.BOTH,
-          value:
-            ' * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT',
-        },
-      ],
-      [
-        {
-          diffComponent: null,
-          belongsTo: BelongsIndicator.BOTH,
-          value:
-            " * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the",
-        },
-      ],
-      [
-        {
-          diffComponent: null,
-          belongsTo: BelongsIndicator.BOTH,
-          value:
-            " * License for the specific language governing permissions and limitations",
-        },
-      ],
-      [
-        {
-          diffComponent: null,
-          belongsTo: BelongsIndicator.BOTH,
-          value: " * under the License.",
+          diffComponent: "added",
+          belongsTo: BelongsIndicator.MODIFIED,
+          value: " * You may obtain a copy of the License at",
         },
       ],
     ],

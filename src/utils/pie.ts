@@ -1,5 +1,5 @@
 import { StringDataType } from "sequelize";
-import { LEGEND_LIMIT } from "../constants/data";
+import { LEGEND_LIMIT, NO_VALUE_DETECTED_LABEL } from "../constants/data";
 
 export type FormattedEntry = [string, number];
 
@@ -29,7 +29,7 @@ export function limitPieChartData(data: FormattedEntry[], limit: number) {
   return limitedData.sort(ascendingFrequencyComparator);
 }
 
-// Formats data suitable for Pie chart
+// Counts occurences for unique entries & return formatted object required to draw the Pie chart
 export function formatPieChartData(
   entries: (string | StringDataType)[],
   limit?: number
@@ -40,12 +40,12 @@ export function formatPieChartData(
   // Sum the total number of times the entry appears
   const count = new Map<string, number>();
 
-  entries.forEach((entry) =>
-    count.set(
-      entry?.toString({}) || (entry as string),
-      (count.get(entry.toString({})) || 0) + 1
-    )
-  );
+  entries.forEach((entry) => {
+    const entryLabel = entry
+      ? entry?.toString({}) || (entry as string)
+      : NO_VALUE_DETECTED_LABEL;
+    count.set(entryLabel, (count.get(entryLabel) || 0) + 1);
+  });
 
   const chartData = Array.from(count.entries());
   const untrimmedLength = chartData.length;

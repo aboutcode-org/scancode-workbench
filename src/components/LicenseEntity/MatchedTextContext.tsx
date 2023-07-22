@@ -7,7 +7,7 @@ import {
   BelongsIndicator,
   DiffComponents,
   diffStrings,
-  normalizeAndSplitDiffIntoLines,
+  splitDiffIntoLines,
 } from "../../utils/text";
 import { ScanOptionKeys } from "../../utils/parsers";
 
@@ -81,14 +81,14 @@ export const MatchedTextProvider = (
         const matchedText = matchDetails.matched_text;
 
         const diffs = diffStrings(ruleText, matchedText);
-        const normalizedRuleTextLines = normalizeAndSplitDiffIntoLines(
+        const newRuleTextLines = splitDiffIntoLines(
           diffs.filter(
             (diff) =>
               diff.belongsTo === BelongsIndicator.BOTH ||
               diff.belongsTo === BelongsIndicator.ORIGINAL
           )
         );
-        const normalizedModifiedTextLines = normalizeAndSplitDiffIntoLines(
+        const newModifiedTextLines = splitDiffIntoLines(
           diffs.filter(
             (diff) =>
               diff.belongsTo === BelongsIndicator.BOTH ||
@@ -96,8 +96,8 @@ export const MatchedTextProvider = (
           )
         );
 
-        setRuleDiffLines(normalizedRuleTextLines);
-        setModifiedDiffLines(normalizedModifiedTextLines);
+        setRuleDiffLines(newRuleTextLines);
+        setModifiedDiffLines(newModifiedTextLines);
         setRuleDetails({
           processing: false,
           ruleText: ruleRef.getDataValue("text").toString({}),

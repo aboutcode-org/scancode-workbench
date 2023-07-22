@@ -8,11 +8,16 @@ export function isValid(value: unknown): boolean {
   }
 }
 
-export function getAttributeValues(
+/**
+ *
+ * @param values - List of Model objects returned by any Sequelize queries
+ * @param attribute - Attribute of Model object to be obtained
+ */
+export function getValidatedAttributeValues(
   values: { dataValues: any }[],
-  attribute: any
+  attribute: string
 ) {
-  const validatedValues = [];
+  const validatedAttributeValues = [];
   let attributeValue = null;
 
   for (let i = 0; i < values.length; i++) {
@@ -35,18 +40,22 @@ export function getAttributeValues(
       if (!isValid(val) && attribute === "package_data_type") {
         continue;
       }
-      validatedValues.push(isValid(val) ? val : NO_VALUE_DETECTED_LABEL);
+      validatedAttributeValues.push(isValid(val) ? val : NO_VALUE_DETECTED_LABEL);
     }
   }
-  return validatedValues;
+
+  return validatedAttributeValues;
 }
 
+// Counts occurences for unique entries & return formatted object required to draw the Bar chart
 export function formatBarchartData(data: unknown[]) {
   const counterMapping = new Map<string, number>();
   let existingCount = 0;
   data.forEach((entry: string | string[]) => {
     const entryString =
-      typeof entry === "string"
+      entry == null || entry == undefined
+        ? NO_VALUE_DETECTED_LABEL
+        : typeof entry === "string"
         ? entry
         : Array.isArray(entry)
         ? entry.join(",")

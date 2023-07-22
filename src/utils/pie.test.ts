@@ -5,20 +5,18 @@ import {
 } from "./test-data/pie-data";
 import { formatPieChartData, limitPieChartData } from "./pie";
 
-test("Pie chart values - Limit Entries", () => {
-  PieLimitDataSamples.forEach((sample) =>
-    assert.deepEqual(
-      limitPieChartData(sample.data, sample.chartDataLimit),
-      sample.limited
-    )
+describe("Pie chart - Limit values to be shown in chart", () => {
+  it.each(PieLimitDataSamples)(
+    "Limit entries from $data.length => $limited.length",
+    ({ data, chartDataLimit, limited }) =>
+      assert.deepEqual(limitPieChartData(data, chartDataLimit), limited)
   );
 });
 
-test("Pie chart values - Formatting", () => {
-  PieFormatDataSamples.forEach((sample) =>
-    assert.deepEqual(
-      formatPieChartData(sample.entries, sample.limit),
-      sample.formatted
-    )
+describe("Pie chart - Count & format value occurences in given list of values", () => {
+  it.each(PieFormatDataSamples)(
+    "Format chart values of length $entries.length",
+    ({ entries, limit, formatted }) =>
+      assert.deepEqual(formatPieChartData(entries, limit), formatted)
   );
 });

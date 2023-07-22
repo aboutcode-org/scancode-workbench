@@ -1,37 +1,67 @@
 import assert from "assert";
+
 import {
-  DiffToLineSamples,
+  DiffTextSamples,
   NormalizeTexts,
   TrimTexts,
 } from "./test-data/text-data";
 import {
-  normalizeAndSplitDiffIntoLines,
+  diffStrings,
+  splitDiffIntoLines,
   normalizeDiffString,
   trimStringWithEllipsis,
+  BelongsIndicator,
 } from "./text";
 
-test("Text trimmer", () => {
-  TrimTexts.forEach((sample) =>
-    expect(trimStringWithEllipsis(sample.text, sample.maxLengthInclusive)).toBe(
-      sample.trimmed
-    )
+describe("Text - Trim text", () => {
+  it.each(TrimTexts)(
+    "Trim text: '$text' => '$trimmed'",
+    ({ text, maxLengthInclusive, trimmed }) => {
+      expect(trimStringWithEllipsis(text, maxLengthInclusive)).toBe(trimmed);
+    }
   );
 });
 
-test("Text Normalizer", () => {
-  NormalizeTexts.forEach((sample) =>
-    expect(normalizeDiffString(sample.text)).toBe(sample.normalized)
+describe("Text - Normalize text", () => {
+  it.each(NormalizeTexts)(
+    "Normalize text: '$text' => '$normalized'",
+    ({ text, normalized }) => {
+      expect(normalizeDiffString(text)).toBe(normalized);
+    }
   );
 });
 
-// Incomplete
-// test("Diff strings", () => {
+describe("Text - Diff two strings", () => {
+  it.each(DiffTextSamples)(
+    "Diff text",
+    ({ sourceText, modifiedText, normalizedDiffs }) =>
+      assert.deepEqual(diffStrings(sourceText, modifiedText), normalizedDiffs)
+  );
+});
 
-// })
+describe("Text - Group diffs into Lines", () => {
+  it.each(DiffTextSamples)(
+    "Diff to lines",
+    ({
+      normalizedDiffs,
+      normalizedSourceTextLines,
+      normalizedModifiedTextLines,
+    }) => {
+      assert.deepEqual(splitDiffIntoLines(
+        normalizedDiffs.filter(
+          (diff) =>
+            diff.belongsTo === BelongsIndicator.BOTH ||
+            diff.belongsTo === BelongsIndicator.ORIGINAL
+        )
+      ), normalizedSourceTextLines);
 
-// Incomplete
-// test("Diff to Lines", () => {
-//   DiffToLineSamples.forEach((sample) =>
-//     assert.deepEqual(normalizeAndSplitDiffIntoLines(sample.diffs), sample.lines)
-//   );
-// });
+      assert.deepEqual(splitDiffIntoLines(
+        normalizedDiffs.filter(
+          (diff) =>
+            diff.belongsTo === BelongsIndicator.BOTH ||
+            diff.belongsTo === BelongsIndicator.MODIFIED
+        )
+      ), normalizedModifiedTextLines);
+    }
+  );
+});

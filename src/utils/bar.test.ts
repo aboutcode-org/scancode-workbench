@@ -1,18 +1,41 @@
 import assert from "assert";
-import { formatBarchartData, isValid } from "./bar";
-import { BarDataSamples } from "./test-data/bar-data";
+import {
+  formatBarchartData,
+  getValidatedAttributeValues,
+  isValid,
+} from "./bar";
+import { BarDataSamples, RawModelDataSamples } from "./test-data/bar-data";
 
-test("Bar chart values - Validity", () => {
-  const possibleValues: { valid: unknown[]; invalid: unknown[] } = {
-    valid: [["Copyright (c) nexB Inc. and others"]],
-    invalid: [null, undefined, []],
-  };
-  possibleValues.valid.forEach((value) => expect(isValid(value)).toBe(true));
-  possibleValues.invalid.forEach((value) => expect(isValid(value)).toBe(false));
+const PossibleBarchartValues: { valid: unknown[]; invalid: unknown[] } = {
+  valid: [["nexB Inc"], "ABCD", 23, 55.5, true],
+  invalid: [null, undefined, []],
+};
+describe("Bar chart - Check Validity of values", () => {
+  it.each(PossibleBarchartValues.valid)("Valid chart values %s", (chartValue) =>
+    assert.equal(isValid(chartValue), true)
+  );
+  it.each(PossibleBarchartValues.invalid)(
+    "Invalid chart value - %s",
+    (chartValue) => assert.equal(isValid(chartValue), false)
+  );
 });
 
-test("Bar chart values - Formatting", () => {
-  BarDataSamples.forEach((sample) =>
-    assert.deepStrictEqual(sample.formatted, formatBarchartData(sample.data))
+describe("Bar chart - Get attribute from Sequelize model", () => {
+  it.each(RawModelDataSamples)(
+    "Get attribute $attribute",
+    ({ attribute, values, validatedAttributeValues }) =>
+      assert.deepEqual(
+        getValidatedAttributeValues(values, attribute),
+        validatedAttributeValues
+      )
+  );
+});
+
+describe("Bar chart - Format bar chart values", () => {
+  it.each(BarDataSamples)(
+    "Format bar chart data of length: $data.length",
+    ({ data, formatted }) => {
+      assert.deepStrictEqual(formatBarchartData(data), formatted);
+    }
   );
 });

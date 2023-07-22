@@ -11,7 +11,7 @@ const { ipcRenderer } = electron;
 
 export const sqlite3Version = sqlite3.VERSION;
 
-console.log("Renderer Deps:", {
+console.log("Renderer Dependencies:", {
   electron,
   electronFs,
   electronOs,

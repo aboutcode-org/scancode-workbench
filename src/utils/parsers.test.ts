@@ -24,11 +24,11 @@ export const JsonValiditySamples: {
   ],
 };
 
-test("JSON validity", () => {
-  JsonValiditySamples.valid.forEach((sample) =>
+describe("Parsers - Check if JSON is valid", () => {
+  it.each(JsonValiditySamples.valid)("Valid sample: %s", (sample) =>
     expect(parseIfValidJson(sample)).toBeTruthy()
   );
-  JsonValiditySamples.invalid.forEach((sample) =>
+  it.each(JsonValiditySamples.invalid)("Invalid sample: %s", (sample) =>
     expect(parseIfValidJson(sample)).toBeNull()
   );
 });
