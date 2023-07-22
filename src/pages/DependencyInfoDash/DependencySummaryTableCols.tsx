@@ -9,8 +9,8 @@ export const DEFAULT_DEPS_SUMMARY_COL_DEF: ColDef = {
   wrapHeaderText: true,
 };
 
-export interface DependencySummarySections {
-  category: {
+export interface PackageTypeSummaryRow {
+  packageTypeDetails: {
     title: string;
     total: number;
   };
@@ -20,13 +20,13 @@ export interface DependencySummarySections {
 }
 
 interface DepsSummaryCOlDef extends ColDef {
-  field: keyof DependencySummarySections;
+  field: keyof PackageTypeSummaryRow;
 }
 
 export const DependencySummaryTableCols: DepsSummaryCOlDef[] = [
   {
-    headerName: "Category wise dependencies",
-    field: "category",
+    headerName: "Dependencies per Package type ",
+    field: "packageTypeDetails",
     comparator: (
       valueA: { title: string; total: number },
       valueB: { title: string; total: number }

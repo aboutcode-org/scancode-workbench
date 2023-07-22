@@ -15,10 +15,11 @@ import { ScanOptionKeys } from "../../utils/parsers";
 import { AgGridReact } from "ag-grid-react";
 import {
   DEFAULT_DEPS_SUMMARY_COL_DEF,
-  DependencySummarySections,
+  PackageTypeSummaryRow,
   DependencySummaryTableCols,
 } from "./DependencySummaryTableCols";
-import { DependenciesAttributes } from "../../services/models/dependencies";
+import { DependencyDetails } from "../Packages/packageDefinitions";
+import { PackageDataAttributes } from "../../services/models/packageData";
 
 import "./dependencyInfoDash.css";
 
@@ -47,83 +48,55 @@ const DependencyInfoDash = () => {
   const [scanData, setScanData] = useState<ScanData>({
     totalDependencies: null,
   });
-  const [depsStatusSummaryData, setDepsStatusSummaryData] = useState<
-    DependencySummarySections[]
+  const [packageTypeSummaryData, setPackageTypeSummaryData] = useState<
+    PackageTypeSummaryRow[]
   >([]);
 
-  function summariseDeps(
-    dependencies: Model<DependenciesAttributes, DependenciesAttributes>[]
+  function summarisePackageDataDeps(
+    packagesData: Model<PackageDataAttributes, PackageDataAttributes>[]
   ) {
-    const resolvedlDeps = dependencies.filter((dep) =>
-      dep.getDataValue("is_resolved")
-    );
-    const runtimeDeps = dependencies.filter((dep) =>
-      dep.getDataValue("is_runtime")
-    );
-    const optionalDeps = dependencies.filter((dep) =>
-      dep.getDataValue("is_optional")
-    );
-
-    const dataSourcesMapping = new Map<
+    const packageTypeToSummaryMapping = new Map<
       string,
-      Model<DependenciesAttributes, DependenciesAttributes>[]
+      PackageTypeSummaryRow
     >();
-    dependencies.forEach((dep) => {
-      const dataSourceID = dep.getDataValue("datasource_id").toString({});
-      if (!dataSourcesMapping.has(dataSourceID))
-        dataSourcesMapping.set(dataSourceID, []);
-      dataSourcesMapping.get(dataSourceID).push(dep);
+    packagesData.forEach((packageData) => {
+      const packageDataType =
+        packageData.getDataValue("type")?.toString({}) ||
+        NO_VALUE_DETECTED_LABEL;
+      const deps: DependencyDetails[] = JSON.parse(
+        packageData.getDataValue("dependencies")?.toString({}) || "[]"
+      );
+      if (!packageTypeToSummaryMapping.has(packageDataType)) {
+        packageTypeToSummaryMapping.set(packageDataType, {
+          packageTypeDetails: {
+            title: packageDataType,
+            total: 0,
+          },
+          resolved: 0,
+          runtime: 0,
+          optional: 0,
+        });
+      }
+      const packageTypeSummary =
+        packageTypeToSummaryMapping.get(packageDataType);
+
+      packageTypeSummary.packageTypeDetails.total += deps.length;
+      packageTypeSummary.resolved += deps.reduce((counter, curr) => {
+        return counter + (curr.is_resolved ? 1 : 0);
+      }, 0);
+      packageTypeSummary.runtime += deps.reduce((counter, curr) => {
+        return counter + (curr.is_runtime ? 1 : 0);
+      }, 0);
+      packageTypeSummary.optional += deps.reduce((counter, curr) => {
+        return counter + (curr.is_optional ? 1 : 0);
+      }, 0);
     });
-    const dataSourceIdSummary: DependencySummarySections[] = Array.from(
-      dataSourcesMapping.entries()
-    ).map(([dataSource, dataSourceDeps]) => ({
-      category: {
-        title: dataSource,
-        total: dataSourceDeps.length,
-      },
-      resolved: dataSourceDeps.filter((dep) => dep.getDataValue("is_resolved"))
-        .length,
-      runtime: dataSourceDeps.filter((dep) => dep.getDataValue("is_runtime"))
-        .length,
-      optional: dataSourceDeps.filter((dep) => dep.getDataValue("is_optional"))
-        .length,
-    }));
-    const newStatusSummary: DependencySummarySections[] = [
-      {
-        category: {
-          title: "Resolved",
-          total: resolvedlDeps.length,
-        },
-        resolved: resolvedlDeps.length,
-        runtime: resolvedlDeps.filter((dep) => dep.getDataValue("is_runtime"))
-          .length,
-        optional: resolvedlDeps.filter((dep) => dep.getDataValue("is_optional"))
-          .length,
-      },
-      {
-        category: {
-          title: "Runtime",
-          total: runtimeDeps.length,
-        },
-        resolved: runtimeDeps.filter((dep) => dep.getDataValue("is_resolved"))
-          .length,
-        runtime: runtimeDeps.length,
-        optional: runtimeDeps.filter((dep) => dep.getDataValue("is_optional"))
-          .length,
-      },
-      {
-        category: {
-          title: "Optional",
-          total: optionalDeps.length,
-        },
-        resolved: optionalDeps.filter((dep) => dep.getDataValue("is_resolved"))
-          .length,
-        runtime: optionalDeps.filter((dep) => dep.getDataValue("is_runtime"))
-          .length,
-        optional: optionalDeps.length,
-      },
-    ];
-    return [ ...newStatusSummary, ...dataSourceIdSummary,];
+
+    return Array.from(packageTypeToSummaryMapping.values()).sort(
+      (packageTypeSummary1, packageTypeSummary2) =>
+        packageTypeSummary2.packageTypeDetails.total -
+        packageTypeSummary1.packageTypeDetails.total
+    );
   }
 
   useEffect(() => {
@@ -160,8 +133,6 @@ const DependencyInfoDash = () => {
       )
       .then((dependencies) => {
         setScanData({ totalDependencies: dependencies.length });
-
-        setDepsStatusSummaryData(summariseDeps(dependencies));
 
         // Prepare chart for runtime dependencies
         const runtimeDependencies = dependencies.map((dependency) =>
@@ -220,24 +191,18 @@ const DependencyInfoDash = () => {
         where: { fileId: fileIDs },
         attributes: ["type", "dependencies"],
       });
-      const PackageTypeWiseCount = new Map<string, number>();
-      packagesData.forEach((packageData) => {
-        const deps: unknown[] = JSON.parse(
-          packageData.getDataValue("dependencies")?.toString({}) || "[]"
-        );
-        if (!deps.length) return;
-        PackageTypeWiseCount.set(
-          packageData.getDataValue("type")?.toString({}) ||
-            NO_VALUE_DETECTED_LABEL,
-          PackageTypeWiseCount.get(
-            packageData.getDataValue("type")?.toString({}) ||
-              NO_VALUE_DETECTED_LABEL
-          ) || 0 + deps.length
-        );
-      });
+
+      const depsSummaryData = summarisePackageDataDeps(packagesData);
       setPackageTypeDependenciesData(
-        limitChartData(Array.from(PackageTypeWiseCount.entries()), LEGEND_LIMIT)
+        limitChartData(
+          depsSummaryData.map(({ packageTypeDetails: { title, total } }) => [
+            title,
+            total,
+          ]),
+          LEGEND_LIMIT
+        )
       );
+      setPackageTypeSummaryData(depsSummaryData);
     });
   }, [initialized, db, currentPath]);
 
@@ -259,7 +224,7 @@ const DependencyInfoDash = () => {
       </Row>
       <br />
       <AgGridReact
-        rowData={Object.values(depsStatusSummaryData || {})}
+        rowData={Object.values(packageTypeSummaryData || {})}
         columnDefs={DependencySummaryTableCols}
         defaultColDef={DEFAULT_DEPS_SUMMARY_COL_DEF}
         pagination
