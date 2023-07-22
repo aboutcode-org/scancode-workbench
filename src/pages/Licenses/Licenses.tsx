@@ -225,10 +225,10 @@ const LicenseDetections = () => {
                     activeLicense &&
                     activeLicense.type === "detection" &&
                     activeLicense.license === licenseDetection;
-                  const showDetection =
-                    licenseDetection.license_expression.includes(
-                      searchedLicense
-                    );
+                  const showDetection = licenseDetection.license_expression
+                    .toLowerCase()
+                    .includes(searchedLicense.toLowerCase());
+
                   return (
                     <ListGroupItem
                       onClick={() => activateLicenseDetection(licenseDetection)}
@@ -276,8 +276,10 @@ const LicenseDetections = () => {
                     activeLicense &&
                     activeLicense.type === "clue" &&
                     activeLicense.license === licenseClue;
-                  const showClue =
-                    licenseClue.license_expression.includes(searchedLicense);
+                  const showClue = licenseClue.license_expression
+                    .toLowerCase()
+                    .includes(searchedLicense.toLowerCase());
+
                   return (
                     <ListGroupItem
                       onClick={() => activateLicenseClue(licenseClue)}
