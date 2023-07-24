@@ -1,17 +1,19 @@
 .entity-properties {
   font-size: 14px;
 }
+
 .entity-properties .property {
   font-weight: 500;
 }
-/* .entity-properties .value {
-} */
-.package-entity .badge, .dependency-entity .badge {
+
+.package-entity .badge,
+.dependency-entity .badge {
   margin-right: 5px;
 }
+
 .package-entity .react-json-view,
 .dependency-entity .react-json-view,
-.license-detecion-entity .react-json-view{
+.license-detecion-entity .react-json-view {
   max-height: 75vh;
   overflow: auto;
   margin-bottom: 15px;

@@ -35,7 +35,6 @@ const DependencyInfoDash = () => {
   const [dataSourceIDsData, setDataSourceIDsData] = useState<
     FormattedEntry[] | null
   >(null);
-  const [scopesData, setScopesData] = useState(null);
   const [runtimeDependenciesData, setRuntimeDependenciesData] = useState<
     FormattedEntry[] | null
   >(null);
@@ -165,13 +164,6 @@ const DependencyInfoDash = () => {
         const { chartData: dataSourceIDsChartData } =
           formatChartData(dataSourceIDs);
         setDataSourceIDsData(dataSourceIDsChartData);
-
-        // Prepare chart for dependencies' data source IDs
-        const scopes = dependencies.map((dependency) =>
-          dependency.getDataValue("scope")
-        );
-        const { chartData: scopesChartData } = formatChartData(scopes);
-        setScopesData(scopesChartData);
       });
 
     db.sync.then(async (db) => {
@@ -252,17 +244,6 @@ const DependencyInfoDash = () => {
             <h5 className="title">Data Source IDs</h5>
             <PieChart
               chartData={dataSourceIDsData}
-              notOpted={!scanInfo.optionsMap.get(ScanOptionKeys.PACKAGE)}
-              notOptedText="Use --package CLI option for dependencies"
-              notOptedLink="https://scancode-toolkit.readthedocs.io/en/latest/cli-reference/basic-options.html#package-option"
-            />
-          </Card>
-        </Col>
-        <Col sm={4}>
-          <Card className="chart-card">
-            <h5 className="title">Dependency scopes</h5>
-            <PieChart
-              chartData={scopesData}
               notOpted={!scanInfo.optionsMap.get(ScanOptionKeys.PACKAGE)}
               notOptedText="Use --package CLI option for dependencies"
               notOptedLink="https://scancode-toolkit.readthedocs.io/en/latest/cli-reference/basic-options.html#package-option"
