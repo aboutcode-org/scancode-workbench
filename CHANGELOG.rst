@@ -27,6 +27,8 @@ New Features
 - Support Drag & drop JSON/SQLite files
 - Github actions to create automated releases
 - Remove the ability to upload Conclusions to DejaCode #413
+- Remove ability to edit conclusions & remove conclusions view
+- New top-level views: Packages Explorer & Licenses Explorer
 - Update in-app help links #412
 - Add source controlled documentation #411
 - Update app icon to a more visible one #382
