@@ -1,9 +1,10 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Badge } from "react-bootstrap";
 import ReactJson from "@microlink/react-json-view";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCheck, faCogs } from "@fortawesome/free-solid-svg-icons";
+import { faCheck } from "@fortawesome/free-solid-svg-icons";
 
+import CoreLink from "../CoreLink/CoreLink";
 import { DependencyDetails } from "../../pages/Packages/packageDefinitions";
 
 import "../../styles/entityCommonStyles.css";
@@ -15,10 +16,6 @@ interface DependencyEntityProps {
 }
 const DependencyEntity = (props: DependencyEntityProps) => {
   const { goToPackageByUID, goToFileInTableView, dependency } = props;
-
-  useEffect(() => {
-    console.log("Active dep", dependency);
-  }, [dependency]);
 
   if (!dependency) {
     return (
@@ -32,12 +29,12 @@ const DependencyEntity = (props: DependencyEntityProps) => {
       <h5>{dependency.purl}</h5>
       {dependency.is_runtime && (
         <Badge pill bg="primary">
-          <FontAwesomeIcon icon={faCogs} /> Runtime
+          Runtime
         </Badge>
       )}
       {dependency.is_optional && (
         <Badge pill bg="warning" text="dark">
-          <FontAwesomeIcon icon={faCogs} /> Optional
+          Optional
         </Badge>
       )}
       {dependency.is_resolved && (
@@ -50,23 +47,27 @@ const DependencyEntity = (props: DependencyEntityProps) => {
       <div className="entity-properties">
         {[
           [
-            "For:",
+            "For",
             dependency.for_package_uid ? (
-              <a onClick={() => goToPackageByUID(dependency.for_package_uid)}>
+              <CoreLink
+                onClick={() => goToPackageByUID(dependency.for_package_uid)}
+              >
                 {dependency.for_package_uid}
-              </a>
+              </CoreLink>
             ) : (
               <>NA</>
             ),
           ],
-          ["Scope:", dependency.scope || "NA"],
-          ["Extracted requirement:", dependency.extracted_requirement || "NA"],
+          ["Scope", dependency.scope || "NA"],
+          ["Extracted requirement", dependency.extracted_requirement || "NA"],
           [
-            "Data file:",
+            "Data file",
             dependency.datafile_path ? (
-              <a onClick={() => goToFileInTableView(dependency.datafile_path)}>
+              <CoreLink
+                onClick={() => goToFileInTableView(dependency.datafile_path)}
+              >
                 {dependency.datafile_path}
-              </a>
+              </CoreLink>
             ) : (
               <>NA</>
             ),
@@ -74,9 +75,13 @@ const DependencyEntity = (props: DependencyEntityProps) => {
           ["Data source ID", dependency.datasource_id || "NA"],
         ].map((entry) => (
           <React.Fragment key={entry[0].toString()}>
-            <span className="property">{entry[0] || ""}</span>
-            <span className="value">{entry[1] || ""}</span>
-            <br />
+            <span className="property">{entry[0]}</span>
+            {entry.length > 1 && (
+              <span className="value">
+                : {entry[1] || "None"}
+                <br />
+              </span>
+            )}
           </React.Fragment>
         ))}
       </div>

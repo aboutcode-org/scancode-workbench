@@ -6,15 +6,15 @@
 .file-tree-pane {
   border: 0;
   box-shadow: rgb(177 177 177) 1px 0px 18px -3px;
-  overflow: overlay !important;
+  overflow: auto !important;
 }
 
 .content-pane {
-  overflow-y: overlay !important;
+  overflow-y: auto !important;
 }
 
 .content-container {
-  padding: 10px;
+  padding: 8px;
   padding-top: 5px;
   padding-bottom: 5px;
   min-height: 100%;

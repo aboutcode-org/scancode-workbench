@@ -1,12 +1,7 @@
 /*---------------------------------------
   General
 -----------------------------------------*/
-body {
-  font-family: 'Lato', Helvetica, sans-serif;
-  height: 100%;
-  width: 100%;
-  position: absolute;
-}
+
 
 a,
 a:not([href]),
@@ -22,6 +17,17 @@ a:not([href]):not([class]):hover {
   color: #0a58ca;
 }
 
+input[type="text"] {
+  font-size: 14px;
+}
+input[type="search"]::-webkit-search-results-button {
+  display: block;
+}
+
+input[type="search"]::-webkit-search-cancel-button {
+  cursor: pointer;
+}
+
 button:focus:not(:focus-visible) {
   outline: none;
   box-shadow: none;
@@ -34,6 +40,17 @@ img {
   user-select: none;
 }
 
+/* Revive scrollbar being hidden on macos */
+::-webkit-scrollbar {
+  -webkit-appearance: none;
+  width: 5.5px; /* Width ignored by horizontal scrllbars */
+  height: 5.5px; /* Height ignored by vertical scrllbars */
+}
+::-webkit-scrollbar-thumb {
+  border-radius: 3px;
+  background-color: rgba(0,0,0,.4);
+  box-shadow: 0 0 0.1px rgb(255 255 255 / 30%);
+}
 
 /*---------------------------------------
   Font source mapping
@@ -76,7 +93,7 @@ img {
   border-radius: 2px;
   box-shadow: 1px 0 8px -3px #b1b1b1;
   background-color: #FFFFFF;
-  margin-bottom: 30px;
+  margin-bottom: 20px;
 }
 
 img {
@@ -100,12 +117,6 @@ img {
   color: #3898fc;
   font-weight: 500;
   padding-bottom: 15px;
-}
-
-.card .category {
-  font-size: 17px;
-  font-weight: 400;
-  color: #555;
 }
 
 .c3 svg {

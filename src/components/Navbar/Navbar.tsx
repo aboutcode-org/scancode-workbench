@@ -1,5 +1,6 @@
 import {
   faBars,
+  faBook,
   faBoxOpen,
   faChartColumn,
   faCopyright,
@@ -7,10 +8,9 @@ import {
   faFileLines,
   faFolderTree,
   faHome,
-  faIdCard,
   faInfoCircle,
   faListCheck,
-  faListUl,
+  faRectangleList,
   faTable,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -48,7 +48,7 @@ const MENU_ITEMS = [
   {
     title: "License Info Dashboard",
     route: "/" + ROUTES.LICENSE_DASHBOARD,
-    icon: faIdCard,
+    icon: faBook,
   },
   {
     title: "Copyright Info Dashboard",
@@ -68,7 +68,7 @@ const MENU_ITEMS = [
   {
     title: "Licenses Explorer",
     route: "/" + ROUTES.LICENSES,
-    icon: faListUl,
+    icon: faRectangleList,
   },
   {
     title: "Packages Explorer",

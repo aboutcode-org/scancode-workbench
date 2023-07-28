@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
+import CoreLink from "../CoreLink/CoreLink";
 import { ROUTES } from "../../constants/routes";
 import AddFileImage from "../../assets/images/AddFiles.png";
 
@@ -20,7 +21,9 @@ const ImportFallback = () => {
       </h2>
 
       <div className="credits">
-        <a href="https://storyset.com/work">Work illustrations by Storyset</a>
+        <CoreLink href="https://storyset.com/work" external>
+          Work illustrations by Storyset
+        </CoreLink>
       </div>
     </div>
   );

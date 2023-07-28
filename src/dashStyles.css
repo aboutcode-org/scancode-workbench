@@ -4,7 +4,7 @@
 
 .dash-cards .card {
   background-color: #fff;
-  padding: 15px;
+  padding: 7px;
 }
 
 .counter-card {
@@ -18,10 +18,4 @@
 .chart-card .title {
   margin-top: 10px;
   margin-bottom: 15px;
-}
-
-@media only screen and (max-width: 1200px) {
-  .counter-card {
-    min-height: 140px;
-  }
 }

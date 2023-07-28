@@ -1,35 +1,39 @@
 import React from "react";
-import packageInfo from "../../../package.json";
+import PackageJson from "../../../package.json";
+import CoreLink from "../../components/CoreLink/CoreLink";
 
 import "./about.css";
 
 const About = () => {
   return (
-    <div className="help">
-      <h1>
+    <div className="about">
+      <h3>
         About ScanCode Workbench
-        <span className="app-version">v{packageInfo.version}</span>
-      </h1>
+        <span className="app-version">v{PackageJson.version}</span>
+      </h3>
       <br />
-      <h3>Overview</h3>
+      <h4>Overview</h4>
       <p>
         ScanCode Workbench allows you take the scan results from the ScanCode
         and evaluate it using charts
         <br />
         For more details, see our
-        <a href="https://github.com/nexB/scancode-workbench/">
+        <CoreLink href="https://github.com/nexB/scancode-workbench/" external>
           GitHub Repository
-        </a>
+        </CoreLink>
         .
       </p>
       <br />
-      <h3>Learn More:</h3>
+      <h4>Learn More:</h4>
       <p>
         Check out the ScanCode-Workbench
-        <a href="https://scancode-workbench.readthedocs.io">Documentation</a>.
+        <CoreLink href="https://scancode-workbench.readthedocs.io" external>
+          Documentation
+        </CoreLink>
+        .
       </p>
       <br />
-      <h3>Workbench notice:</h3>
+      <h4>Workbench notice:</h4>
       <p>
         Provided on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
         KIND, either express or implied. <br />
@@ -38,18 +42,21 @@ const About = () => {
         ScanCode Workbench is a free software analysis application from nexB
         Inc. and others. <br />
         Visit
-        <a href="https://github.com/nexB/scancode-workbench">
+        <CoreLink href="https://github.com/nexB/scancode-workbench" external>
           https://github.com/nexB/scancode-workbench
-        </a>{" "}
+        </CoreLink>{" "}
         for support and download.
       </p>
       <br />
-      <h3>Having Trouble?</h3>
+      <h4>Having Trouble?</h4>
       <p>
         Report a bug or request a feature on the ScanCode-Workbench.
-        <a href="https://github.com/nexB/scancode-workbench/issues/new">
+        <CoreLink
+          href="https://github.com/nexB/scancode-workbench/issues/new"
+          external
+        >
           Report an issue
-        </a>
+        </CoreLink>
         .
       </p>
     </div>

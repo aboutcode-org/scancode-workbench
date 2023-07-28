@@ -1,7 +1,9 @@
 import { ColDef } from "ag-grid-community";
-import { FileRegionPathRenderer, TickRenderer } from "../../pages/TableView/CustomCellRenderers";
-
-const MINI_FIELD_WIDTH = 90;
+import {
+  DetectionOriginRenderer,
+  FileRegionPathRenderer,
+  RegionLinesRenderer,
+} from "../../pages/TableView/CustomCellRenderers";
 
 export const DEFAULT_FILE_REGION_COL_DEF: ColDef = {
   sortable: true,
@@ -11,31 +13,26 @@ export const DEFAULT_FILE_REGION_COL_DEF: ColDef = {
   autoHeight: true,
   wrapHeaderText: true,
   flex: 1,
-  cellStyle: { "whiteSpace": "normal" },
-}
+  cellStyle: { whiteSpace: "normal" },
+};
 
 export const DetectionFileRegionCols: ColDef[] = [
   {
-    headerName: 'Path',
-    field: 'path',
-    width: 270,
+    headerName: "Path",
+    field: "path",
+    minWidth: 300,
     cellRenderer: FileRegionPathRenderer,
   },
   {
-    headerName: 'Start line',
-    field: 'start_line',
-    width: MINI_FIELD_WIDTH,
+    headerName: "Lines",
+    cellRenderer: RegionLinesRenderer,
+    maxWidth: 85,
   },
   {
-    headerName: 'End line',
-    field: 'end_line',
-    width: MINI_FIELD_WIDTH,
-  },
-  {
-    headerName: 'From package',
-    field: 'from_package',
-    cellRenderer: TickRenderer,
-    maxWidth: 110,
+    headerName: "Detection origin",
+    field: "from_package",
+    cellRenderer: DetectionOriginRenderer,
+    maxWidth: 100,
     suppressMenu: true,
   },
-]
+];

@@ -20,7 +20,7 @@ Entire source code is refactored to TypeScript + React
 New Features
 ~~~~~~~~~~~~
 
-- AMaintain history of imports
+- Maintain history of imports for quick access
 - Updated dependencies
 - Support for top level packages-deps obtained in latest scans
 - Scan Info page to present header info
@@ -32,7 +32,16 @@ New Features
 - Update app icon to a more visible one #382
 - Add color to DataTables "Progress..." pop-up #407
 - Update the display of scan headers #400
+- New views:
+   - Licenses Explorer
+   - Packages Explorer
+   - Dependencies Info Dashboard
+   - Scan Info
+- Inter-view links for 'for_packages' & 'license_detections'
 - Remove ability to edit conclusions & remove conclusions view
+- Search in licenses explorer
+- Filters for packages based on dependencies flags & data_source_id
+- Normalize Chart summary data
 
 Bug Fixes
 ~~~~~~~~~

@@ -1,6 +1,6 @@
-.page-title {
+.packages-title {
   text-align: center;
-  margin: 15px;
+  margin: 7px;
   margin-top: 5px;
   width: 100%;
 }
@@ -17,41 +17,65 @@
   height: calc(100vh - 60px);
 }
 
-.packages-panes {
-  padding-right: 15px;
-  overflow: overlay !important;
+.packages-filter-bar {
+  width: 98%;
+}
+
+.packages-list-container {
+  overflow: auto;
+  width: 99%;
+  height: calc(100% - 50px);
+}
+
+.package-type {
+  cursor: pointer;
+  padding: 4px;
+}
+
+.package-type .label {
+  margin-left: 5px;
 }
 
 .details-pane {
   padding: 10px;
+  overflow: auto !important;
 }
 
 .package-group-list {
   border: 0 !important;
   padding: 0 !important;
-  padding-bottom: 25px !important;
+  padding-bottom: 5px !important;
+}
+
+.package-list {
+  border: 0;
 }
 
 .entity {
   width: 100%;
   overflow-x: clip;
   padding: 0 !important;
+  cursor: pointer;
 }
 
 .packages-list {
   border: 0 !important;
 }
 
-.collapsed-body {
-  padding-left: 22px;
-}
-
-.dependency-list>.collapsed-body .entity {
+.package-entry {
   border: 0 !important;
 }
 
-.dependency-list>.collapsed-body .entity-info {
-  padding-left: 20px;
+.package-entry>.entity-info {
+  font-weight: 550;
+}
+
+.package-entry>.collapsed-body .entity {
+  border: 0 !important;
+}
+
+.package-entry>.collapsed-body .entity-info {
+  padding-left: 30px;
 }
 
 .entity-info {
@@ -60,11 +84,22 @@
   margin: 0 !important;
   display: flex;
   align-items: center;
+  padding: 2px;
+  padding-left: 10px;
 }
 
-.entity-type-badge {
+.entity-type-badges {
   float: right;
   margin-right: 0;
+}
+
+.entity-type-badges .badge {
+  min-width: 65px;
+  font-weight: 625;
+}
+
+.entity-type-badges .badge:hover {
+  font-weight: 750;
 }
 
 .entity-info .entity-name {
@@ -88,26 +123,26 @@
 
 .entity-info>div>div {
   padding: 3px;
-  display: table-cell !important;
+  display: table-cell;
   word-break: break-word;
 }
 
-.expand-package {
+.expand-indicator {
   display: inline-block;
-  border-radius: 50%;
+  cursor: pointer;
+  width: 20px;
+  height: 20%;
+  font-size: 15px;
+  padding-left: 5px;
 }
 
-.expand-package .expanded-icon {
-  transform: rotate(90deg);
+.expand-indicator svg {
+  transition: transform 100ms ease-in;
 }
 
-.expand-package svg {
-  transition: transform 300ms ease-in;
-}
-
-.expand-package:active,
-.expand-package:hover {
-  font-size: 14px;
+.expand-indicator:active,
+.expand-indicator:hover {
+  font-weight: 500;
 }
 
 .entity-info>.total-deps {
@@ -120,9 +155,9 @@
 }
 
 .entity-info:hover {
-  background-color: rgb(242, 242, 242);
+  background-color: var(--listHoverColor);
 }
 
 .selected-entity>.entity-info {
-  background-color: #dedede;
+  background-color: var(--listSelectionColor);
 }

@@ -2,10 +2,6 @@
   height: 100%;
 }
 
-.license-entity-properties {
-  font-size: 15px;
-}
-
 .license-entity-properties .property {
   font-weight: 500;
 }
@@ -51,7 +47,6 @@
 .matched-text-diff-modal .diff-table th {
   padding: 15px;
   padding-left: 10px;
-  font-size: 15px;
   font-weight: 500;
   background-color: #fafbfc;
 }

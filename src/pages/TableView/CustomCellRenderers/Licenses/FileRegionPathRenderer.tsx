@@ -1,5 +1,6 @@
 import React from "react";
 import { useWorkbenchDB } from "../../../../contexts/dbContext";
+import CoreLink from "../../../../components/CoreLink/CoreLink";
 
 interface FileRegionPathRendererProps {
   value: string;
@@ -12,13 +13,13 @@ const FileRegionPathRenderer = (
   const { goToFileInTableView } = useWorkbenchDB();
 
   return (
-    <a
+    <CoreLink
       className='deps-link'
       key={value}
       onClick={() => goToFileInTableView(value)}
     >
       { value }
-    </a>
+    </CoreLink>
   );
 };
 

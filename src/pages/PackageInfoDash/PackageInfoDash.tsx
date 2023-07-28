@@ -2,7 +2,7 @@ import { Op, WhereOptions } from "sequelize";
 import { Row, Col, Card } from "react-bootstrap";
 import React, { useEffect, useState } from "react";
 
-import { formatChartData } from "../../utils/pie";
+import { FormattedEntry, formatChartData } from "../../utils/pie";
 import { useWorkbenchDB } from "../../contexts/dbContext";
 import { NO_VALUE_DETECTED_LABEL } from "../../constants/data";
 import PieChart from "../../components/PieChart/PieChart";
@@ -15,21 +15,27 @@ interface ScanData {
 }
 
 const PackageInfoDash = () => {
-  const workbenchDB = useWorkbenchDB();
-  const {
-    db,
-    initialized,
-    currentPath,
-    scanInfo,
-    startProcessing,
-    endProcessing,
-  } = workbenchDB;
-  const [packageTypeData, setPackageTypeData] = useState(null);
-  const [packageLangData, setPackageLangData] = useState(null);
-  const [packageLicenseData, setPackageLicenseData] = useState(null);
+  const { db, initialized, currentPath, scanInfo, startProcessing, endProcessing } = useWorkbenchDB();
+  const [packageTypeData, setPackageTypeData] = useState<
+    FormattedEntry[] | null
+  >(null);
+  const [packageLangData, setPackageLangData] = useState<
+    FormattedEntry[] | null
+  >(null);
+  const [packageLicenseData, setPackageLicenseData] = useState<
+    FormattedEntry[] | null
+  >(null);
   const [scanData, setScanData] = useState<ScanData>({
     totalPackages: null,
   });
+
+  // Path independent
+  useEffect(() => {
+    if (!initialized || !db || !currentPath) return;
+    db.sync
+      .then((db) => db.Packages.count())
+      .then((totalPackages) => setScanData({ totalPackages }));
+  }, [db, initialized]);
 
   useEffect(() => {
     if (!initialized || !db || !currentPath) return;
@@ -61,9 +67,6 @@ const PackageInfoDash = () => {
         const PackageDataPromise = db.sync
           .then((db) => db.PackageData.findAll({ where: { fileId: fileIDs } }))
           .then((packageData) => {
-            // Prepare count of packages
-            setScanData({ totalPackages: packageData.length });
-
             // Prepare chart for package types
             const packageTypes = packageData.map(
               (packageEntry) =>
@@ -101,8 +104,7 @@ const PackageInfoDash = () => {
 
   return (
     <div className="text-center pieInfoDash">
-      <br />
-      <h3>Package info - {currentPath || ""}</h3>
+      <h4>Package info - {currentPath || ""}</h4>
       <br />
       <br />
       <Row className="dash-cards">
@@ -154,7 +156,6 @@ const PackageInfoDash = () => {
           </Card>
         </Col>
       </Row>
-      <br />
       <br />
     </div>
   );
