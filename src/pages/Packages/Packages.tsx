@@ -339,7 +339,7 @@ const Packages = () => {
     <div>
       <h4 className="packages-title">Packages & Dependencies explorer</h4>
       <Allotment className="packages-container">
-        <Allotment.Pane snap minSize={200} preferredSize="30%">
+        <Allotment.Pane snap minSize={200} preferredSize="47%">
           <MultiSelect
             closeMenuOnSelect={false}
             components={animatedComponents}
@@ -419,20 +419,6 @@ const Packages = () => {
                         const isPackageExpanded = expandedPackages.includes(
                           packageWithDep.package_uid
                         );
-                        let packageTitle = [
-                          packageWithDep.type,
-                          packageWithDep.namespace,
-                          packageWithDep.name,
-                        ]
-                          .filter(
-                            (val) =>
-                              val !== null && val !== undefined && val.length
-                          )
-                          .join("/");
-
-                        if (packageWithDep.version) {
-                          packageTitle += "@" + packageWithDep.version;
-                        }
 
                         return (
                           <ListGroupItem
@@ -483,7 +469,7 @@ const Packages = () => {
                                   />
                                 </div>
                                 <div className="entity-name">
-                                  {packageTitle}
+                                  {packageWithDep.purl}
                                 </div>
                               </div>
                               <div className="total-deps">
