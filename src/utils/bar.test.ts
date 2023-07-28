@@ -4,7 +4,7 @@ import {
   getValidatedAttributeValues,
   isValid,
 } from "./bar";
-import { BarDataSamples, RawModelDataSamples } from "./test-data/bar-data";
+import { BarDataSamples, RawModelDataSamples } from "./bar.test.data";
 
 const PossibleBarchartValues: { valid: unknown[]; invalid: unknown[] } = {
   valid: [["nexB Inc"], "ABCD", 23, 55.5, true],

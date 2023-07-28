@@ -61,11 +61,11 @@ export default function headerModel(sequelize: Sequelize) {
       files_count: DataTypes.INTEGER,
       output_format_version: {
         type: DataTypes.STRING,
-        defaultValue: '0.1.0',
+        defaultValue: '3.0.0',
       },
       spdx_license_list_version: {
         type: DataTypes.STRING,
-        defaultValue: '1.00',
+        defaultValue: '3.20',
       },
       operating_system: {
         type: DataTypes.STRING,

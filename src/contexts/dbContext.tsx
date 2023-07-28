@@ -145,13 +145,11 @@ export const WorkbenchDBProvider = (
     updateLoadingStatus(25);
 
     // Check that that the database schema matches current schema.
-    newWorkbenchDB.sync
-      .then((db) => db.Header.findAll())
-      .then((headers) => {
-        const infoHeader = headers[0];
-
+    newWorkbenchDB
+      .getScanInfo()
+      .then((infoHeader) => {
         // Check that the database has the correct header information.
-        if (!headers || headers.length === 0 || !infoHeader) {
+        if (!infoHeader) {
           const errTitle = "Invalid SQLite file";
           const errMessage =
             "Invalid SQLite file: " +
@@ -225,7 +223,7 @@ export const WorkbenchDBProvider = (
 
             await updateWorkbenchDB(newWorkbenchDB, sqliteFilePath);
 
-            if (defaultPath){
+            if (defaultPath) {
               updateCurrentPath(
                 defaultPath,
                 root.getDataValue("type").toString({}) as PathType
@@ -300,7 +298,7 @@ export const WorkbenchDBProvider = (
 
     // Create a new database when importing a json file
     const newWorkbenchDB = new WorkbenchDB({
-      dbName: "demo_schema",
+      dbName: "workbench_db",
       dbStorage: sqliteFilePath,
     });
 
@@ -308,7 +306,6 @@ export const WorkbenchDBProvider = (
       .then(() =>
         newWorkbenchDB.addFromJson(
           jsonFilePath,
-          workbenchVersion,
           (progress: number) => {
             updateLoadingStatus(progress);
           }
@@ -336,7 +333,7 @@ export const WorkbenchDBProvider = (
 
             await updateWorkbenchDB(newWorkbenchDB, sqliteFilePath);
 
-            if (defaultPath){
+            if (defaultPath) {
               updateCurrentPath(
                 defaultPath,
                 root.getDataValue("type").toString({}) as PathType

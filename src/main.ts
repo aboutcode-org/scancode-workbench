@@ -12,8 +12,6 @@ declare const MAIN_WINDOW_WEBPACK_ENTRY: string;
 
 const isDev = !app.isPackaged;
 
-console.log("Using Sqlite3 ", sqlite3.VERSION);
-
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
   // eslint-disable-line global-require
@@ -63,7 +61,10 @@ export const createWindow = (): void => {
   }); 
   Menu.setApplicationMenu(Menu.buildFromTemplate(getTemplate()));
 
-  console.log("\n" + isDev ? "Dev mode" : "Prod mode");
+  console.log(
+    "\n" + isDev ? "Dev mode" : "Prod mode",
+    `- Sqlite version: ${sqlite3.VERSION}`
+  );
   // console.log("Preload URL: ", MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY);
   console.log("Load URL: ", MAIN_WINDOW_WEBPACK_ENTRY);
   

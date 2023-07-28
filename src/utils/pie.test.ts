@@ -2,7 +2,7 @@ import assert from "assert";
 import {
   PieFormatDataSamples,
   PieLimitDataSamples,
-} from "./test-data/pie-data";
+} from "./pie.test.data";
 import { formatPieChartData, limitPieChartData } from "./pie";
 
 describe("Pie chart - Limit values to be shown in chart", () => {

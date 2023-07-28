@@ -4,7 +4,7 @@ import {
   DiffTextSamples,
   NormalizeTexts,
   TrimTexts,
-} from "./test-data/text-data";
+} from "./text.test.data";
 import {
   diffStrings,
   splitDiffIntoLines,

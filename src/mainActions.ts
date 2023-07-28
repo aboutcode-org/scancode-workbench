@@ -1,4 +1,3 @@
-import * as electronOs from "os";
 import { ipcMain, dialog, BrowserWindow } from "electron";
 
 import {
@@ -13,13 +12,13 @@ import {
   SQLITE_PATH_FOR_JSON_REQUEST_FORMAT,
   UTIL_CHANNEL,
 } from "./constants/IpcConnection";
+import { figureOutDefaultSqliteFilePath } from "./utils/paths";
 
 export function chooseSqlitePathForJsonImport(
   mainWindow: BrowserWindow,
   jsonFilePath: string
 ) {
-  
-  const defaultSqlitePath = jsonFilePath.substring(0, jsonFilePath.lastIndexOf('.')) + '.sqlite';
+  const defaultSqlitePath = figureOutDefaultSqliteFilePath(jsonFilePath);
 
   // Immediately ask for a path to create & save the SQLite database
   dialog

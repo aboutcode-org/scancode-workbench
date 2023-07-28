@@ -42,7 +42,6 @@ const DependencyInfoDash = () => {
   useEffect(() => {
     if (!initialized || !db || !currentPath) return;
 
-    // db.sync.then((db) => {});
     db.sync
       .then((db) =>
         db.Dependencies.findAll({

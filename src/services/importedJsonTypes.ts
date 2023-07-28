@@ -1,3 +1,26 @@
+import { DataTypes, IntegerDataType, StringDataType } from "sequelize";
+import { JSON_Type } from "./models/databaseUtils";
+
+export interface ParsedJsonHeader {
+  tool_name: StringDataType;
+  tool_version: StringDataType;
+  notice: StringDataType;
+  duration: DataTypes.DoubleDataType;
+  options: JSON_Type;
+  input: JSON_Type;
+  files_count: IntegerDataType;
+  output_format_version: StringDataType;
+  spdx_license_list_version: StringDataType; // @QUERY - Justify need for this
+  operating_system: StringDataType;
+  cpu_architecture: StringDataType;
+  platform: StringDataType;
+  platform_version: StringDataType;
+  python_version: StringDataType;
+  workbench_version: StringDataType;
+  workbench_notice: StringDataType;
+  header_content: StringDataType;
+}
+
 export interface LicenseReference {
   key: string;
   language: string;
