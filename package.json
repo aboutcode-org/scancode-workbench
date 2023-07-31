@@ -1,7 +1,7 @@
 {
   "name": "scancode-workbench",
   "productName": "scancode-workbench",
-  "version": "4.0.0rc3",
+  "version": "4.0.0rc4",
   "description": "An application for viewing ScanCode results and concluding component origin and license",
   "repository": {
     "type": "git",
