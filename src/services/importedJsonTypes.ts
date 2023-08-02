@@ -187,5 +187,4 @@ export interface Resource {
 
   // Parser-added fields
   parent?: string;
-  headerId?: number;
 }

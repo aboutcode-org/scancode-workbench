@@ -32,11 +32,11 @@ const FileTree = (props: React.HTMLProps<HTMLDivElement>) => {
         if (targetNode) {
           targetNode.scrollIntoView({
             behavior: "smooth",
-            block: "start",
+            block: "nearest",
             inline: "start",
           });
         }
-      }, 1000);
+      }, 1500);
     }
   }, [currentPath]);
 

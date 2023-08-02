@@ -7,8 +7,6 @@ import sqlite3 from "sqlite3";
 // Particularly, sqlite3 module isn't imported directly anywhere, but is required by Sequelize
 // Hence, need to use here
 
-export const sqlite3Version = sqlite3.VERSION;
-
 const RequiredRendererDependencies = {
   electron,
   electronFs,
@@ -16,7 +14,7 @@ const RequiredRendererDependencies = {
   ipcRenderer: electron?.ipcRenderer,
   platform: electronOs?.platform,
   sqlite3,
-  sqlite3Version,
+  sqlite3Version: sqlite3.VERSION,
 };
 // console.log("Renderer Dependencies:", RequiredRendererDependencies);
 // console.log(

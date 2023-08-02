@@ -7,7 +7,7 @@
       "start_timestamp": "2023-04-03T075922.014902",
       "end_timestamp": "2023-04-03T075941.622685",
       "output_format_version": "3.0.0",
-      "duration": 19.607794523239136,
+      "duration": 25,
       "extra_data": {
         "system_environment": {
           "operating_system": "linux",

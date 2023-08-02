@@ -1,4 +1,4 @@
-export function isSchemaChanged(dbVersion: string, workbenchVersion: string) {  
+export function isSqliteSchemaOutdated(dbVersion: string, workbenchVersion: string) {  
   const majorDBVersion = dbVersion.split('.')[0];
   const majorWorkbenchVersion = workbenchVersion.split('.')[0];
   

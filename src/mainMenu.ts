@@ -1,9 +1,9 @@
 import { GENERAL_ACTIONS, NAVIGATION_CHANNEL } from "./constants/IpcConnection";
-import packageJson from "../package.json";
 import { app, BrowserWindow, MenuItem, shell } from "electron";
 import { importJsonFile, openSqliteFile, saveSqliteFile } from "./mainActions";
 import { ROUTES } from "./constants/routes";
 import { createWindow } from "./main";
+import { WORKBENCH_VERSION } from "./constants/general";
 
 /** Returns a 'lambda' that sends the event to the renderer process. */
 export function sendNavEventToRenderer(route: string) {
@@ -218,7 +218,7 @@ function getTemplate() {
       role: "help",
       submenu: [
         {
-          label: `ScanCode Workbench Version ${packageJson.version}`,
+          label: `ScanCode Workbench Version ${WORKBENCH_VERSION}`,
           enabled: false,
         },
         {
@@ -272,7 +272,7 @@ function getTemplate() {
           click: sendNavEventToRenderer(ROUTES.ABOUT),
         },
         {
-          label: `Version ${packageJson.version}`,
+          label: `Version ${WORKBENCH_VERSION}`,
           enabled: false,
         },
         {

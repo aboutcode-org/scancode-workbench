@@ -1,3 +1,4 @@
+import { WORKBENCH_VERSION } from "../../../constants/general";
 import { ScanInfo, ScanOptionKeys } from "../../../utils/parsers";
 
 export const HeaderSamples: {
@@ -10,19 +11,19 @@ export const HeaderSamples: {
       tool_name: "",
       tool_version: "",
       notice: "",
-      duration: 0,
+      duration: null,
       optionsList: [],
       optionsMap: new Map(),
       input: [],
       files_count: 0,
-      output_format_version: "3.0.0",
-      spdx_license_list_version: "3.20",
+      output_format_version: "",
+      spdx_license_list_version: "",
       operating_system: "",
       cpu_architecture: "",
       platform: "",
       platform_version: "",
       python_version: "",
-      workbench_version: "4.0.0rc3",
+      workbench_version: WORKBENCH_VERSION,
       workbench_notice:
         'Exported from ScanCode Workbench and provided on an "AS IS" BASIS, WITHOUT WARRANTIES\\nOR CONDITIONS OF ANY KIND, either express or implied. No content created from\\nScanCode Workbench should be considered or used as legal advice. Consult an Attorney\\nfor any legal advice.\\nScanCode Workbench is a free software analysis application from nexB Inc. and others.\\nVisit https://github.com/nexB/scancode-workbench/ for support and download.',
       raw_header_content: "{}",
@@ -35,7 +36,7 @@ export const HeaderSamples: {
       tool_version: "32.0.0rc3",
       notice:
         'Generated with ScanCode and provided on an "AS IS" BASIS, WITHOUT WARRANTIES.',
-      duration: 19.607794523239136,
+      duration: "25.00",
       optionsList: [],
       optionsMap: new Map(),
       input: [],
@@ -47,11 +48,11 @@ export const HeaderSamples: {
       platform: "Linux-5.14.0-1059-oem-x86_64-with-glibc2.29",
       platform_version: "#67-Ubuntu SMP Mon Mar 13 14:22:10 UTC 2023",
       python_version: "3.8.10 (default, Mar 13 2023, 10:26:41) \n[GCC 9.4.0]",
-      workbench_version: "4.0.0rc3",
+      workbench_version: WORKBENCH_VERSION,
       workbench_notice:
         'Exported from ScanCode Workbench and provided on an "AS IS" BASIS, WITHOUT WARRANTIES\\nOR CONDITIONS OF ANY KIND, either express or implied. No content created from\\nScanCode Workbench should be considered or used as legal advice. Consult an Attorney\\nfor any legal advice.\\nScanCode Workbench is a free software analysis application from nexB Inc. and others.\\nVisit https://github.com/nexB/scancode-workbench/ for support and download.',
       raw_header_content:
-        '{\n  "tool_name": "scancode-toolkit",\n  "tool_version": "32.0.0rc3",\n  "notice": "Generated with ScanCode and provided on an \\"AS IS\\" BASIS, WITHOUT WARRANTIES.",\n  "start_timestamp": "2023-04-03T075922.014902",\n  "end_timestamp": "2023-04-03T075941.622685",\n  "output_format_version": "3.0.0",\n  "duration": 19.607794523239136,\n  "extra_data": {\n    "system_environment": {\n      "operating_system": "linux",\n      "cpu_architecture": "64",\n      "platform": "Linux-5.14.0-1059-oem-x86_64-with-glibc2.29",\n      "platform_version": "#67-Ubuntu SMP Mon Mar 13 14:22:10 UTC 2023",\n      "python_version": "3.8.10 (default, Mar 13 2023, 10:26:41) \\n[GCC 9.4.0]"\n    },\n    "spdx_license_list_version": "3.20"\n  }\n}',
+        '{\n  "tool_name": "scancode-toolkit",\n  "tool_version": "32.0.0rc3",\n  "notice": "Generated with ScanCode and provided on an \\"AS IS\\" BASIS, WITHOUT WARRANTIES.",\n  "start_timestamp": "2023-04-03T075922.014902",\n  "end_timestamp": "2023-04-03T075941.622685",\n  "output_format_version": "3.0.0",\n  "duration": 25,\n  "extra_data": {\n    "system_environment": {\n      "operating_system": "linux",\n      "cpu_architecture": "64",\n      "platform": "Linux-5.14.0-1059-oem-x86_64-with-glibc2.29",\n      "platform_version": "#67-Ubuntu SMP Mon Mar 13 14:22:10 UTC 2023",\n      "python_version": "3.8.10 (default, Mar 13 2023, 10:26:41) \\n[GCC 9.4.0]"\n    },\n    "spdx_license_list_version": "3.20"\n  }\n}',
     },
   },
   {
@@ -61,7 +62,7 @@ export const HeaderSamples: {
       tool_version: "32.0.0rc3",
       notice:
         'Generated with ScanCode and provided on an "AS IS" BASIS, WITHOUT WARRANTIES.',
-      duration: 19.607794523239136,
+      duration: "19.61",
       optionsList: [
         ["--classify", true],
         ["--copyright", true],
@@ -87,7 +88,7 @@ export const HeaderSamples: {
       platform: "Linux-5.14.0-1059-oem-x86_64-with-glibc2.29",
       platform_version: "#67-Ubuntu SMP Mon Mar 13 14:22:10 UTC 2023",
       python_version: "3.8.10 (default, Mar 13 2023, 10:26:41) \n[GCC 9.4.0]",
-      workbench_version: "4.0.0rc3",
+      workbench_version: WORKBENCH_VERSION,
       workbench_notice:
         'Exported from ScanCode Workbench and provided on an "AS IS" BASIS, WITHOUT WARRANTIES\\nOR CONDITIONS OF ANY KIND, either express or implied. No content created from\\nScanCode Workbench should be considered or used as legal advice. Consult an Attorney\\nfor any legal advice.\\nScanCode Workbench is a free software analysis application from nexB Inc. and others.\\nVisit https://github.com/nexB/scancode-workbench/ for support and download.',
       raw_header_content:

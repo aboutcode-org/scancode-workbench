@@ -36,7 +36,7 @@ export interface ScanInfo {
   tool_name: string;
   tool_version: string;
   notice: string;
-  duration: number;
+  duration: string;
   optionsList: [string, unknown][];
   optionsMap: Map<ScanOptionKeys, unknown>;
   input: string[];
@@ -53,28 +53,32 @@ export interface ScanInfo {
   raw_header_content: string;
 }
 
-export function parseScanInfo(rawInfo: Model<HeaderAttributes, HeaderAttributes>){
-  const optionsList = Object.entries(
-    parseIfValidJson(rawInfo.getDataValue("options")?.toString({})) ||
-      []
-  ) || [];
-  const optionsMap = new Map<ScanOptionKeys, unknown>(optionsList.map(([k,v]) => [k as ScanOptionKeys, v]));
+export function parseScanInfo(
+  rawInfo: Model<HeaderAttributes, HeaderAttributes>
+): ScanInfo {
+  const optionsList =
+    Object.entries(
+      parseIfValidJson(rawInfo.getDataValue("options")?.toString({})) || []
+    ) || [];
+  const optionsMap = new Map<ScanOptionKeys, unknown>(
+    optionsList.map(([k, v]) => [k as ScanOptionKeys, v])
+  );
 
   const parsedScanInfo: ScanInfo = {
     tool_name: rawInfo.getDataValue("tool_name")?.toString({}) || "",
     tool_version: rawInfo.getDataValue("tool_version")?.toString({}) || "",
     notice: rawInfo.getDataValue("notice")?.toString({}) || "",
-    duration: Number(rawInfo.getDataValue("duration")),
+    duration: rawInfo.getDataValue("duration")
+      ? Number(rawInfo.getDataValue("duration")).toFixed(2)
+      : null,
     optionsList,
     optionsMap,
-    input:
-      parseIfValidJson(rawInfo.getDataValue("input")?.toString({})) || [],
+    input: parseIfValidJson(rawInfo.getDataValue("input")?.toString({})) || [],
     files_count: Number(rawInfo.getDataValue("files_count")),
     output_format_version:
       rawInfo.getDataValue("output_format_version")?.toString({}) || "",
     spdx_license_list_version:
-      rawInfo.getDataValue("spdx_license_list_version")?.toString({}) ||
-      "",
+      rawInfo.getDataValue("spdx_license_list_version")?.toString({}) || "",
     operating_system:
       rawInfo.getDataValue("operating_system")?.toString({}) || "",
     cpu_architecture:
@@ -82,8 +86,7 @@ export function parseScanInfo(rawInfo: Model<HeaderAttributes, HeaderAttributes>
     platform: rawInfo.getDataValue("platform")?.toString({}) || "",
     platform_version:
       rawInfo.getDataValue("platform_version")?.toString({}) || "",
-    python_version:
-      rawInfo.getDataValue("python_version")?.toString({}) || "",
+    python_version: rawInfo.getDataValue("python_version")?.toString({}) || "",
     workbench_version:
       rawInfo.getDataValue("workbench_version")?.toString({}) || "",
     workbench_notice:

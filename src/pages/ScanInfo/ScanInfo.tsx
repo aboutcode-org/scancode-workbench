@@ -40,7 +40,7 @@ const ScanInfo = () => {
             >
               <table className="options-table">
                 <tbody>
-                  {scanInfo.optionsList.map(([key, value]) => (
+                  {(scanInfo.optionsList || []).map(([key, value]) => (
                     <tr key={key}>
                       <td>{key}</td>
                       {typeof value !== "boolean" && <td>{String(value)}</td>}
@@ -79,7 +79,7 @@ const ScanInfo = () => {
             </InfoEntry>
 
             <InfoEntry name="Scan duration">
-              {scanInfo.duration} seconds
+              {scanInfo.duration && `${scanInfo.duration} seconds`}
             </InfoEntry>
 
             <InfoEntry name="Tool notice">{scanInfo.notice}</InfoEntry>

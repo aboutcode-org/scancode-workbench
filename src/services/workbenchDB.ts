@@ -21,10 +21,9 @@ import { DataNode } from "rc-tree/lib/interface";
 import { toast } from "react-toastify";
 import {
   BulkCreateOptions,
-  DataTypes,
   FindOptions,
-  IntegerDataType,
   Model,
+  NumberDataType,
   Sequelize,
   StringDataType,
   Transaction,
@@ -76,7 +75,7 @@ const { version: workbenchVersion } = packageJson;
 
 interface WorkbenchDbConfig {
   dbName: string;
-  dbStorage: string;
+  dbStoragePath: string;
   dbUser?: string;
   dbPassword?: string;
 }
@@ -113,19 +112,30 @@ export class WorkbenchDB {
   sync: Promise<DatabaseStructure>;
   config: WorkbenchDbConfig;
 
-  constructor(config: WorkbenchDbConfig) {
+  constructor(config?: WorkbenchDbConfig & { deleteExisting?: boolean }) {
     // Constructor returns an object which effectively represents a connection
     // to the db arguments (name of db, username for db, pw for that user)
     const name = config && config.dbName ? config.dbName : "tmp";
     const user = config && config.dbUser ? config.dbUser : null;
     const password = config && config.dbPassword ? config.dbPassword : null;
-    const storage = config && config.dbStorage ? config.dbStorage : ":memory:";
+    const storagePath =
+      config && config.dbStoragePath ? config.dbStoragePath : ":memory:";
     this.config = {
       dbName: name,
-      dbStorage: storage,
+      dbStoragePath: storagePath,
       dbUser: user,
       dbPassword: password,
     };
+
+    // Clear existing data in sqlite file (if any)
+    if (config.deleteExisting && fs.existsSync(storagePath)) {
+      fs.unlink(storagePath, (err: Error) => {
+        if (err) {
+          throw err;
+        }
+        console.info(`Deleted existing db: ${storagePath}`);
+      });
+    }
 
     this.sequelize = new Sequelize(name, user, password, {
       dialect: "sqlite",
@@ -133,7 +143,7 @@ export class WorkbenchDB {
       // dialectOptions: {
       //   sqlite3: Database,
       // },
-      storage: storage,
+      storage: storagePath,
       logging: false,
     });
     this.db = newDatabase(this.sequelize);
@@ -282,7 +292,6 @@ export class WorkbenchDB {
     // console.log("Adding from json with params", { jsonFileName, workbenchVersion, onProgressUpdate });
 
     const stream = fs.createReadStream(jsonFileName, { encoding: "utf8" });
-    let headerId: number | null = null;
     let files_count = 0;
     let dirs_count = 0;
     let index = 0;
@@ -291,160 +300,156 @@ export class WorkbenchDB {
     const batchSize = 1000;
     let files: Resource[] = [];
     let progress = 0;
-    let promiseChain: Promise<void | DatabaseStructure | number> = this.sync;
+    let promiseChain: Promise<unknown> = this.sync;
 
-    console.log("JSON parse started (step 1)");
+    console.info("JSON parse started (step 1)");
     console.time("json-parse-time");
 
-    return (
-      this.sync
-        // Clear existing data in sqlite file (if any)
-        .then(() => this.sequelize.truncate())
-        .then(
-          () =>
-            new Promise((resolve, reject) => {
-              // eslint-disable-next-line @typescript-eslint/no-this-alias
-              const primaryPromise = this;
+    return this.sync.then(
+      () =>
+        new Promise((resolve, reject) => {
+          // eslint-disable-next-line @typescript-eslint/no-this-alias
+          const primaryPromise = this;
 
-              let batchCount = 0;
-              let TopLevelData: TopLevelDataFormat = null;
+          let batchCount = 0;
+          let TopLevelData: TopLevelDataFormat = {
+            header: null,
+            parsedHeader: this._parseHeader(workbenchVersion, {}),
+            packages: [],
+            dependencies: [],
+            license_clues: [],
+            license_detections: [],
+            license_detections_map: new Map(),
+            license_references: [],
+            license_references_map: new Map(),
+            license_references_spdx_map: new Map(),
+            license_rule_references: [],
+          };
 
-              stream
-                .pipe(JSONStream.parse("files.*")) // files field is piped to 'data' & rest to 'header'
-                .on("header", (rawTopLevelData: any) => {
-                  TopLevelData = this._parseTopLevelFields(rawTopLevelData);
+          stream
+            .pipe(JSONStream.parse("files.*")) // files field is piped to 'data' & rest to 'header' (Includes other top level fields)
+            .on("header", (rawTopLevelData: any) => {
+              TopLevelData = this._parseTopLevelFields(rawTopLevelData);
 
-                  // console.log("Parsed Top level data", TopLevelData);
-
-                  files_count = Number(TopLevelData.parsedHeader.files_count);
-                  promiseChain = promiseChain
-                    .then(() =>
-                      this.db.Packages.bulkCreate(TopLevelData.packages)
-                    )
-                    .then(() =>
-                      this.db.Dependencies.bulkCreate(TopLevelData.dependencies)
-                    )
-                    .then(() =>
-                      this.db.LicenseRuleReferences.bulkCreate(
-                        TopLevelData.license_rule_references
-                      )
-                    )
-                    .then(() =>
-                      this.db.Header.create(TopLevelData.parsedHeader)
-                    )
-                    .then(
-                      (header) => (headerId = Number(header.getDataValue("id")))
-                    )
-                    .catch((err: unknown) => {
-                      console.error(
-                        "Some error parsing Top level data (caught in workbenchDB) !!",
-                        err,
-                        TopLevelData
-                      );
-                      reject(err);
-                    });
-                })
-                .on("data", function (file?: Resource) {
-                  if (!file) return;
-
-                  if (!rootPath) {
-                    rootPath = file.path.split("/")[0];
-                  }
-                  if (rootPath === file.path) {
-                    hasRootPath = true;
-                  }
-                  // @TODO: When/if scancode reports directories in its header, this needs
-                  //       to be replaced.
-                  if (index === 0) {
-                    dirs_count = file.dirs_count;
-                  }
-                  file.id = index++;
-
-                  primaryPromise._parseLicenseDetections(file, TopLevelData);
-                  primaryPromise._parseLicenseClues(file, TopLevelData);
-
-                  files.push(file);
-                  if (files.length >= batchSize) {
-                    // Need to set a new variable before handing to promise
-                    this.pause();
-
-                    promiseChain = promiseChain
-                      .then(() =>
-                        primaryPromise._batchCreateFiles(files, headerId)
-                      )
-                      .then(() => {
-                        const currentProgress = Math.round(
-                          (index / (files_count + dirs_count)) * 100
-                        );
-                        if (currentProgress > progress) {
-                          progress = currentProgress;
-                          console.log(
-                            `Batch-${++batchCount} completed, \n`,
-                            `JSON Import progress @ ${progress} % -- ${index}/${files_count}+${dirs_count}`
-                          );
-                          onProgressUpdate(progress);
-                        }
-                      })
-                      .then(() => {
-                        files = [];
-                        this.resume();
-                      })
-                      .catch((e: unknown) => reject(e));
-                  }
-                })
-                .on("end", () => {
-                  // Add root directory into data
-                  // See https://github.com/nexB/scancode-toolkit/issues/543
-                  promiseChain
-                    .then(() => {
-                      if (rootPath && !hasRootPath) {
-                        files.push({
-                          path: rootPath,
-                          name: rootPath,
-                          type: "directory",
-                          files_count: files_count,
-                        });
-                      }
-                    })
-                    .then(() => this._batchCreateFiles(files, headerId))
-                    .then(() => {
-                      console.log(
-                        `Batch-${++batchCount} completed, \n`,
-                        `JSON Import progress @ ${progress} % -- ${index}/${files_count}+${dirs_count}`
-                      );
-                      onProgressUpdate(90);
-                      resolve();
-                    })
-                    .then(() =>
-                      this.db.LicenseDetections.bulkCreate(
-                        TopLevelData.license_detections as any as LicenseDetectionAttributes[]
-                      )
-                    )
-                    .then(() =>
-                      this.db.LicenseClues.bulkCreate(
-                        TopLevelData.license_clues as any as LicenseClueAttributes[]
-                      )
-                    )
-                    .then(() => {
-                      onProgressUpdate(100);
-                      console.log("JSON parse completed (final step)");
-                      console.timeEnd("json-parse-time");
-                    })
-                    .catch((e: unknown) => reject(e));
-                })
-                .on("error", (err: unknown) => {
+              files_count = Number(TopLevelData.parsedHeader.files_count);
+              promiseChain = promiseChain
+                .then(() => this.db.Packages.bulkCreate(TopLevelData.packages))
+                .then(() =>
+                  this.db.Dependencies.bulkCreate(TopLevelData.dependencies)
+                )
+                .then(() =>
+                  this.db.LicenseRuleReferences.bulkCreate(
+                    TopLevelData.license_rule_references
+                  )
+                )
+                .catch((err: unknown) => {
                   console.error(
-                    "Some error parsing data (caught in workbenchDB) !!",
-                    err
+                    "Some error parsing Top level data (caught in workbenchDB) !!",
+                    err,
+                    TopLevelData
                   );
-                  toast.error(
-                    "Some error parsing data !! \nPlease check console for more info"
-                  );
-                  logDependenciesOnError();
                   reject(err);
                 });
             })
-        )
+            .on("data", function (file?: Resource) {
+              if (!file) return;
+
+              if (!rootPath) {
+                rootPath = file.path.split("/")[0];
+              }
+              if (rootPath === file.path) {
+                hasRootPath = true;
+              }
+              // @TODO: When/if scancode reports directories in its header, this needs
+              //       to be replaced.
+              if (index === 0) {
+                dirs_count = file.dirs_count;
+              }
+              file.id = index++;
+
+              primaryPromise._parseLicenseDetections(file, TopLevelData);
+              primaryPromise._parseLicenseClues(file, TopLevelData);
+
+              files.push(file);
+              if (files.length >= batchSize) {
+                // Need to set a new variable before handing to promise
+                this.pause();
+
+                promiseChain = promiseChain
+                  .then(() => primaryPromise._batchCreateFiles(files))
+                  .then(() => {
+                    const currentProgress = Math.round(
+                      (index / (files_count + dirs_count)) * 100
+                    );
+                    if (currentProgress > progress) {
+                      progress = currentProgress;
+                      console.info(
+                        `Batch-${++batchCount} completed, \n`,
+                        `JSON Import progress @ ${progress} % -- ${index}/${files_count}+${dirs_count}`
+                      );
+                      onProgressUpdate(progress);
+                    }
+                  })
+                  .then(() => {
+                    files = [];
+                    this.resume();
+                  })
+                  .catch((e: unknown) => reject(e));
+              }
+            })
+            .on("end", () => {
+              // Add root directory into data
+              // See https://github.com/nexB/scancode-toolkit/issues/543
+              promiseChain
+                .then(() => {
+                  if (rootPath && !hasRootPath) {
+                    files.push({
+                      path: rootPath,
+                      name: rootPath,
+                      type: "directory",
+                      files_count: files_count,
+                    });
+                  }
+                })
+                .then(() => this._batchCreateFiles(files))
+                .then(() => this.db.Header.create(TopLevelData.parsedHeader))
+                .then(() => {
+                  console.info(
+                    `Batch-${++batchCount} completed, \n`,
+                    `JSON Import progress @ ${progress} % -- ${index}/${files_count}+${dirs_count}`
+                  );
+                  onProgressUpdate(90);
+                })
+                .then(() =>
+                  this.db.LicenseDetections.bulkCreate(
+                    TopLevelData.license_detections as any as LicenseDetectionAttributes[]
+                  )
+                )
+                .then(() =>
+                  this.db.LicenseClues.bulkCreate(
+                    TopLevelData.license_clues as any as LicenseClueAttributes[]
+                  )
+                )
+                .then(() => {
+                  onProgressUpdate(100);
+                  console.info("JSON parse completed (final step)");
+                  console.timeEnd("json-parse-time");
+                  resolve();
+                })
+                .catch((e: unknown) => reject(e));
+            })
+            .on("error", (err: unknown) => {
+              console.error(
+                "Some error parsing data (caught in workbenchDB) !!",
+                err
+              );
+              toast.error(
+                "Some error parsing data !! \nPlease check console for more info"
+              );
+              logDependenciesOnError();
+              reject(err);
+            });
+        })
     );
   }
 
@@ -734,11 +739,9 @@ export class WorkbenchDB {
     });
   }
 
-  _batchCreateFiles(files: Resource[], headerId: number) {
+  _batchCreateFiles(files: Resource[]) {
     // Add batched files to the DB
-    return this._addFlattenedFiles(files).then(() =>
-      this._addFiles(files, headerId)
-    );
+    return this._addFlattenedFiles(files).then(() => this._addFiles(files));
   }
 
   _addFlattenedFiles(files: Resource[]) {
@@ -759,7 +762,7 @@ export class WorkbenchDB {
     });
   }
 
-  _addFiles(files: Resource[], headerId: number) {
+  _addFiles(files: Resource[]) {
     const transactionOptions: TransactionOptions = {
       autocommit: false,
       isolationLevel: Transaction.ISOLATION_LEVELS.READ_COMMITTED,
@@ -778,7 +781,6 @@ export class WorkbenchDB {
           file.size = file.size_count;
         }
         file.parent = parentPath(file.path);
-        file.headerId = headerId;
       });
 
       return this.db.File.bulkCreate(files as any, options)

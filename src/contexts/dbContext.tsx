@@ -22,7 +22,7 @@ import {
 import { DEFAULT_ROUTE_ON_IMPORT, ROUTES } from "../constants/routes";
 import { AddEntry, GetHistory, RemoveEntry } from "../services/historyStore";
 import { WorkbenchDB } from "../services/workbenchDB";
-import { isSchemaChanged } from "../utils/checks";
+import { isSqliteSchemaOutdated } from "../utils/checks";
 import { ScanInfo, parseScanInfo } from "../utils/parsers";
 
 const { version: workbenchVersion } = packageJson;
@@ -136,10 +136,10 @@ export const WorkbenchDBProvider = (
   function sqliteParser(sqliteFilePath: string, preventNavigation?: boolean) {
     startImport();
 
-    // Create a new database when importing a sqlite file
+    // Create connection to existing database when importing a sqlite file
     const newWorkbenchDB = new WorkbenchDB({
       dbName: "workbench_db",
-      dbStorage: sqliteFilePath,
+      dbStoragePath: sqliteFilePath,
     });
 
     updateLoadingStatus(25);
@@ -178,7 +178,7 @@ export const WorkbenchDBProvider = (
           .getDataValue("workbench_version")
           .toString({});
 
-        if (!dbVersion || isSchemaChanged(dbVersion, workbenchVersion)) {
+        if (!dbVersion || isSqliteSchemaOutdated(dbVersion, workbenchVersion)) {
           const errTitle = "Old SQLite schema found";
           const errMessage =
             "Old SQLite schema found at file: " +
@@ -286,30 +286,18 @@ export const WorkbenchDBProvider = (
 
     startImport();
 
-    // Overwrite existing sqlite file
-    if (electronFs.existsSync(sqliteFilePath)) {
-      electronFs.unlink(sqliteFilePath, (err: Error) => {
-        if (err) {
-          throw err;
-        }
-        console.info(`Deleted ${sqliteFilePath}`);
-      });
-    }
-
-    // Create a new database when importing a json file
+    // Create a new database when importing a json file (Delete any existing data in the sqlite file)
     const newWorkbenchDB = new WorkbenchDB({
       dbName: "workbench_db",
-      dbStorage: sqliteFilePath,
+      dbStoragePath: sqliteFilePath,
+      deleteExisting: true,
     });
 
     newWorkbenchDB.sync
       .then(() =>
-        newWorkbenchDB.addFromJson(
-          jsonFilePath,
-          (progress: number) => {
-            updateLoadingStatus(progress);
-          }
-        )
+        newWorkbenchDB.addFromJson(jsonFilePath, (progress: number) => {
+          updateLoadingStatus(progress);
+        })
       )
       .then(() => {
         console.log("JSON parsing completed");
