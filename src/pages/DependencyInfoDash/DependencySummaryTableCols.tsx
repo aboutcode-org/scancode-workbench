@@ -25,14 +25,18 @@ interface DepsSummaryCOlDef extends ColDef {
 
 export const DependencySummaryTableCols: DepsSummaryCOlDef[] = [
   {
-    headerName: "Dependencies per Package type ",
+    headerName: "Package type",
     field: "packageTypeDetails",
-    comparator: (
-      valueA: { title: string; total: number },
-      valueB: { title: string; total: number }
-    ) => valueA.total - valueB.total,
-    cellRenderer: (props: { value: { title: string; total: number } }) =>
-      `${props.value.title} - ${props.value.total}`,
+    comparator: (valueA: { title: string }, valueB: { title: string }) =>
+      valueA.title.localeCompare(valueB.title),
+    cellRenderer: (props: { value: { title: string } }) => props.value.title,
+  },
+  {
+    headerName: "Total dependencies",
+    field: "packageTypeDetails",
+    comparator: (valueA: { total: number }, valueB: { total: number }) =>
+      valueA.total - valueB.total,
+    cellRenderer: (props: { value: { total: number } }) => props.value.total,
   },
   {
     headerName: "Runtime",
