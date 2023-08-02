@@ -14,9 +14,12 @@
 - Retain column order & states https://github.com/nexB/scancode-workbench/pull/568
 - License clues section in Licenses explorer https://github.com/nexB/scancode-workbench/pull/570
 - Go to specific file from licenses & packages explorer https://github.com/nexB/scancode-workbench/pull/572
-- https://github.com/nexB/scancode-workbench/pull/577
+- Diff modal for Matched text & Rule text in Matches table https://github.com/nexB/scancode-workbench/pull/577
 - Working indicator for queries https://github.com/nexB/scancode-workbench/pull/583
 - Dashboard updates https://github.com/nexB/scancode-workbench/pull/585
+
+## ScanCode Toolkit Compatibility
+This beta version of ScanCode Workbench is compatible with scans from any [ScanCode Toolkit](https://github.com/nexB/scancode-toolkit/) releases at or after [`v32.0.0rc4`](https://github.com/nexB/scancode-toolkit/releases/tag/v32.0.0rc4) and also from the latest develop, but using the latest `v32.x` stable releases is recommended: [latest SCTK release](https://github.com/nexB/scancode-toolkit/releases/latest).
 
 ## Bug fixes
 - Prevent crashes on unsupported scans
