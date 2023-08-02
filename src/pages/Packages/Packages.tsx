@@ -339,7 +339,7 @@ const Packages = () => {
     <div>
       <h4 className="packages-title">Packages & Dependencies explorer</h4>
       <Allotment className="packages-container">
-        <Allotment.Pane snap minSize={200} preferredSize="47%">
+        <Allotment.Pane snap minSize={200} preferredSize="35%">
           <MultiSelect
             closeMenuOnSelect={false}
             components={animatedComponents}
