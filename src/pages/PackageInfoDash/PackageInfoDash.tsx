@@ -15,18 +15,16 @@ interface ScanData {
 }
 
 const PackageInfoDash = () => {
-  const workbenchDB = useWorkbenchDB();
-  const {
-    db,
-    initialized,
-    currentPath,
-    scanInfo,
-    startProcessing,
-    endProcessing,
-  } = workbenchDB;
-  const [packageTypeData, setPackageTypeData] = useState(null);
-  const [packageLangData, setPackageLangData] = useState(null);
-  const [packageLicenseData, setPackageLicenseData] = useState(null);
+  const { db, initialized, currentPath, scanInfo, startProcessing, endProcessing } = useWorkbenchDB();
+  const [packageTypeData, setPackageTypeData] = useState<
+    FormattedEntry[] | null
+  >(null);
+  const [packageLangData, setPackageLangData] = useState<
+    FormattedEntry[] | null
+  >(null);
+  const [packageLicenseData, setPackageLicenseData] = useState<
+    FormattedEntry[] | null
+  >(null);
   const [scanData, setScanData] = useState<ScanData>({
     totalPackages: null,
   });

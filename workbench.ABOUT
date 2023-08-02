@@ -1,6 +1,6 @@
 about_resource: scancode-workbench
 name: ScanCode Workbench
-version: 4.0.0rc3
+version: 4.0.0rc4
 license: apache-2.0
 owner: nexB Inc.
 copyright: Copyright (c) 2019 nexB Inc.
