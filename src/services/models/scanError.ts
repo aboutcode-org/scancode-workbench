@@ -1,4 +1,4 @@
-import { Model } from 'sequelize';
+import { Model } from "sequelize";
 /*
  #
  # Copyright (c) 2018 nexB Inc. and others. All rights reserved.
@@ -15,19 +15,20 @@ import { Model } from 'sequelize';
  #
  */
 
-import { Sequelize, StringDataType, DataTypes } from 'sequelize';
+import { Sequelize, DataTypes } from "sequelize";
 
 export interface ScanErrorAttributes {
-  scan_error: StringDataType
+  scan_error: string;
 }
 
 export default function scanErrorModel(sequelize: Sequelize) {
   return sequelize.define<Model<ScanErrorAttributes>>(
-    'scan_errors',
+    "scan_errors",
     {
-      scan_error: DataTypes.STRING
+      scan_error: DataTypes.STRING,
     },
     {
-      timestamps: false
-    });
+      timestamps: false,
+    }
+  );
 }

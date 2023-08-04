@@ -14,22 +14,22 @@
  #
  */
 
-import { Sequelize, DataTypes, IntegerDataType, StringDataType, Model } from 'sequelize';
+import { Sequelize, DataTypes, Model } from "sequelize";
 import { jsonDataType } from "./databaseUtils";
 
 export interface CopyrightAttributes {
-  id: IntegerDataType,
-  fileId: IntegerDataType,
-  start_line: IntegerDataType,
-  end_line: IntegerDataType,
-  holders: StringDataType,
-  authors: StringDataType,
-  statements: StringDataType,
+  id: number;
+  fileId: number;
+  start_line: number;
+  end_line: number;
+  holders: string;
+  authors: string;
+  statements: string;
 }
 
 export default function copyrightModel(sequelize: Sequelize) {
   return sequelize.define<Model<CopyrightAttributes>>(
-    'copyrights',
+    "copyrights",
     {
       id: {
         allowNull: false,
@@ -40,11 +40,12 @@ export default function copyrightModel(sequelize: Sequelize) {
       fileId: DataTypes.INTEGER,
       start_line: DataTypes.INTEGER,
       end_line: DataTypes.INTEGER,
-      holders: jsonDataType('holders'),
-      authors: jsonDataType('authors'),
-      statements: jsonDataType('statements')
+      holders: jsonDataType("holders"),
+      authors: jsonDataType("authors"),
+      statements: jsonDataType("statements"),
     },
     {
-      timestamps: false
-    });
+      timestamps: false,
+    }
+  );
 }

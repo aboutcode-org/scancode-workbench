@@ -151,93 +151,87 @@ const Packages = () => {
     if (!initialized || !db || !currentPath) return;
 
     startProcessing();
-    db.sync.then(async () => {
-      const packages = await db.getAllPackages();
-      const deps = await db.getAllDependencies();
-      // console.log("Raw Packages & deps", packages, deps);
-      if (!packages.length && !deps.length) {
-        console.log("No package or deps available");
-        setAllPackageGroups([]);
-        return;
-      }
-
-      // const type_other = 'type-other';
-      const packageMapping = generatePackagesMapping(packages);
-      packageMapping.set(MISC_DEPS, MISC_PACKAGE);
-
-      const uniqueDataSourceIDs = new Set(
-        deps.map((dep) => dep.getDataValue("datasource_id").toString({}))
-      );
-      setDataSourceIDs(
-        Array.from(uniqueDataSourceIDs.values()).map((dataSourceID) => ({
-          label: dataSourceID,
-          value: dataSourceID,
-        }))
-      );
-
-      // Group dependencies in their respective packages
-      deps.forEach((dependencyInfo) => {
-        const targetPackageUid: string | null = dependencyInfo
-          .getDataValue("for_package_uid")
-          ?.toString({});
-        packageMapping.get(targetPackageUid || MISC_DEPS).dependencies.push({
-          // ...dependencyInfo,     // For debugging
-          purl: dependencyInfo.getDataValue("purl").toString({}),
-          extracted_requirement:
-            dependencyInfo
-              .getDataValue("extracted_requirement")
-              ?.toString({}) || "",
-          scope: dependencyInfo
-            .getDataValue("scope")
-            .toString({}) as DEPENDENCY_SCOPES,
-          is_runtime: dependencyInfo.getDataValue("is_runtime"),
-          is_optional: dependencyInfo.getDataValue("is_optional"),
-          is_resolved: dependencyInfo.getDataValue("is_resolved"),
-          resolved_package: JSON.parse(
-            dependencyInfo.getDataValue("resolved_package").toString({})
-          ),
-          dependency_uid: dependencyInfo
-            .getDataValue("dependency_uid")
-            .toString({}),
-          for_package_uid:
-            dependencyInfo.getDataValue("for_package_uid")?.toString({}) ||
-            null,
-          datafile_path: dependencyInfo.getDataValue("datafile_path"),
-          datasource_id: dependencyInfo
-            .getDataValue("datasource_id")
-            .toString({}),
-        });
-      });
-
-      // Ignore misc package if no misc dependencies found
-      if (!MISC_PACKAGE.dependencies.length) {
-        packageMapping.delete(MISC_DEPS);
-      }
-
-      const parsedPackageWithDeps = Array.from(packageMapping.values());
-      // @TODO - What are qualifiers ?
-      parsedPackageWithDeps.forEach((pkg) => {
-        if (Object.keys(pkg.qualifiers).length) console.log("Qualifying:", pkg);
-      });
-      // console.log("Packages with deps:", parsedPackageWithDeps);
-      setPackagesWithDeps(parsedPackageWithDeps);
-
-      // Group packages in their respective package type group
-      const packageGroupMapping = new Map<string, PackageDetails[]>();
-      parsedPackageWithDeps.forEach((packageDetails) => {
-        if (!packageGroupMapping.has(packageDetails.type)) {
-          packageGroupMapping.set(packageDetails.type, []);
+    db.sync
+      .then(async () => {
+        const packages = await db.getAllPackages();
+        const deps = await db.getAllDependencies();
+        // console.log("Raw Packages & deps", packages, deps);
+        if (!packages.length && !deps.length) {
+          console.log("No package or deps available");
+          setAllPackageGroups([]);
+          return;
         }
-        packageGroupMapping.get(packageDetails.type).push(packageDetails);
-      });
-      const parsedPackageGroups = Array.from(packageGroupMapping.entries()).map(
-        ([type, packages]): PackageTypeGroupDetails => ({
-          type,
-          packages,
-        })
-      );
-      setAllPackageGroups(parsedPackageGroups);
-      // console.log("Package groups", parsedPackageGroups);
+
+        // const type_other = 'type-other';
+        const packageMapping = generatePackagesMapping(packages);
+        packageMapping.set(MISC_DEPS, MISC_PACKAGE);
+
+        const uniqueDataSourceIDs = new Set(
+          deps.map((dep) => dep.getDataValue("datasource_id"))
+        );
+        setDataSourceIDs(
+          Array.from(uniqueDataSourceIDs.values()).map((dataSourceID) => ({
+            label: dataSourceID,
+            value: dataSourceID,
+          }))
+        );
+
+        // Group dependencies in their respective packages
+        deps.forEach((dependencyInfo) => {
+          const targetPackageUid: string | null =
+            dependencyInfo.getDataValue("for_package_uid");
+          packageMapping.get(targetPackageUid || MISC_DEPS).dependencies.push({
+            // ...dependencyInfo,     // For debugging
+            purl: dependencyInfo.getDataValue("purl"),
+            extracted_requirement:
+              dependencyInfo.getDataValue("extracted_requirement") || "",
+            scope: dependencyInfo.getDataValue("scope") as DEPENDENCY_SCOPES,
+            is_runtime: dependencyInfo.getDataValue("is_runtime"),
+            is_optional: dependencyInfo.getDataValue("is_optional"),
+            is_resolved: dependencyInfo.getDataValue("is_resolved"),
+            resolved_package: JSON.parse(
+              dependencyInfo.getDataValue("resolved_package")
+            ),
+            dependency_uid: dependencyInfo.getDataValue("dependency_uid"),
+            for_package_uid:
+              dependencyInfo.getDataValue("for_package_uid") || null,
+            datafile_path: dependencyInfo.getDataValue("datafile_path"),
+            datasource_id: dependencyInfo.getDataValue("datasource_id"),
+          });
+        });
+
+        // Ignore misc package if no misc dependencies found
+        if (!MISC_PACKAGE.dependencies.length) {
+          packageMapping.delete(MISC_DEPS);
+        }
+
+        const parsedPackageWithDeps = Array.from(packageMapping.values());
+        // @TODO - What are qualifiers ?
+        parsedPackageWithDeps.forEach((pkg) => {
+          if (Object.keys(pkg.qualifiers).length)
+            console.log("Qualifying:", pkg);
+        });
+        // console.log("Packages with deps:", parsedPackageWithDeps);
+        setPackagesWithDeps(parsedPackageWithDeps);
+
+        // Group packages in their respective package type group
+        const packageGroupMapping = new Map<string, PackageDetails[]>();
+        parsedPackageWithDeps.forEach((packageDetails) => {
+          if (!packageGroupMapping.has(packageDetails.type)) {
+            packageGroupMapping.set(packageDetails.type, []);
+          }
+          packageGroupMapping.get(packageDetails.type).push(packageDetails);
+        });
+        const parsedPackageGroups = Array.from(
+          packageGroupMapping.entries()
+        ).map(
+          ([type, packages]): PackageTypeGroupDetails => ({
+            type,
+            packages,
+          })
+        );
+        setAllPackageGroups(parsedPackageGroups);
+        // console.log("Package groups", parsedPackageGroups);
         setExpandedPackages([]);
 
         // Select package based on query or default

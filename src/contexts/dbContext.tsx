@@ -174,10 +174,7 @@ export const WorkbenchDBProvider = (
 
         updateLoadingStatus(50);
 
-        const dbVersion = infoHeader
-          .getDataValue("workbench_version")
-          .toString({});
-
+        const dbVersion = infoHeader.getDataValue("workbench_version");
         if (!dbVersion || isSqliteSchemaOutdated(dbVersion, workbenchVersion)) {
           const errTitle = "Old SQLite schema found";
           const errMessage =
@@ -226,7 +223,7 @@ export const WorkbenchDBProvider = (
             if (defaultPath) {
               updateCurrentPath(
                 defaultPath,
-                root.getDataValue("type").toString({}) as PathType
+                root.getDataValue("type") as PathType
               );
             }
 
@@ -324,7 +321,7 @@ export const WorkbenchDBProvider = (
             if (defaultPath) {
               updateCurrentPath(
                 defaultPath,
-                root.getDataValue("type").toString({}) as PathType
+                root.getDataValue("type") as PathType
               );
             }
 

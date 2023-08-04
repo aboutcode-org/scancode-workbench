@@ -77,7 +77,7 @@ export const MatchedTextProvider = (
           });
         }
 
-        const ruleText = ruleRef.getDataValue("text")?.toString({}) || "";
+        const ruleText = ruleRef.getDataValue("text") || "";
         const matchedText = matchDetails.matched_text;
 
         const diffs = diffStrings(ruleText, matchedText);
@@ -100,7 +100,7 @@ export const MatchedTextProvider = (
         setModifiedDiffLines(newModifiedTextLines);
         setRuleDetails({
           processing: false,
-          ruleText: ruleRef.getDataValue("text").toString({}),
+          ruleText,
         });
       }
     );

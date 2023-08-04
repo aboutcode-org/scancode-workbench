@@ -14,47 +14,46 @@
  #
  */
 
-import { Sequelize, DataTypes, IntegerDataType, StringDataType, Model } from 'sequelize';
-import { jsonDataType, JSON_Type } from './databaseUtils';
+import { Sequelize, DataTypes, Model } from "sequelize";
+import { jsonDataType, JSON_Type } from "./databaseUtils";
 
 export interface FileAttributes {
-  id: IntegerDataType,
+  id: number;
   path: string;
-  parent: StringDataType,
-  type: StringDataType,
-  name: StringDataType,
-  extension: StringDataType,
-  date: StringDataType,
-  size: IntegerDataType,
-  sha1: StringDataType,
-  md5: StringDataType,
-  files_count: IntegerDataType,
-  dirs_count: IntegerDataType,
-  mime_type: StringDataType,
-  file_type: StringDataType,
-  programming_language: StringDataType,
-  for_packages: JSON_Type,
-  is_binary: boolean,
-  is_text: boolean,
-  is_archive: boolean,
-  is_media: boolean,
-  is_source: boolean,
-  is_script: boolean,
+  parent: string;
+  type: string;
+  name: string;
+  extension: string;
+  date: string;
+  size: number;
+  sha1: string;
+  md5: string;
+  files_count: number;
+  dirs_count: number;
+  mime_type: string;
+  file_type: string;
+  programming_language: string;
+  for_packages: JSON_Type;
+  is_binary: boolean;
+  is_text: boolean;
+  is_archive: boolean;
+  is_media: boolean;
+  is_source: boolean;
+  is_script: boolean;
 }
 
 // interface OptionalFileAttributes
 //   extends Optional<FileAttributes, {}> {}
 
-
 export default function fileModel(sequelize: Sequelize) {
   // return sequelize.define<Model<FileAttributes, OptionalFileAttributes>>(
   return sequelize.define<Model<FileAttributes>>(
-    'files',
+    "files",
     {
       path: {
         type: DataTypes.STRING,
         unique: true,
-        allowNull: false
+        allowNull: false,
       },
       id: {
         allowNull: false,
@@ -75,15 +74,16 @@ export default function fileModel(sequelize: Sequelize) {
       mime_type: DataTypes.STRING,
       file_type: DataTypes.STRING,
       programming_language: DataTypes.STRING,
-      for_packages: jsonDataType('for_packages'),
+      for_packages: jsonDataType("for_packages"),
       is_binary: DataTypes.BOOLEAN,
       is_text: DataTypes.BOOLEAN,
       is_archive: DataTypes.BOOLEAN,
       is_media: DataTypes.BOOLEAN,
       is_source: DataTypes.BOOLEAN,
-      is_script: DataTypes.BOOLEAN
+      is_script: DataTypes.BOOLEAN,
     },
     {
-      timestamps: false
-    });
+      timestamps: false,
+    }
+  );
 }

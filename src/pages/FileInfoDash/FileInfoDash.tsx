@@ -43,11 +43,11 @@ const FileInfoDash = () => {
       .then((db) => db.File.findOne({ where: { path: currentPath } }))
       .then((root) => {
         const filesCount =
-          root.getDataValue("type").toString({}) === "directory"
+          root.getDataValue("type") === "directory"
             ? root.getDataValue("files_count") || 0
             : 1;
         const dirsCount =
-          root.getDataValue("type").toString({}) === "directory"
+          root.getDataValue("type") === "directory"
             ? root.getDataValue("dirs_count") || 0
             : 0;
 

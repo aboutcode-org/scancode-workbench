@@ -14,25 +14,25 @@
  #
  */
 
- import { Sequelize, StringDataType, IntegerDataType, DataTypes, Model } from 'sequelize';
-import { jsonDataType, JSON_Type } from './databaseUtils';
+import { Sequelize, DataTypes, Model } from "sequelize";
+import { jsonDataType, JSON_Type } from "./databaseUtils";
 
- export interface DependenciesAttributes {
-  id: IntegerDataType,
-  purl: StringDataType,
-  extracted_requirement: StringDataType,
-  scope: StringDataType,
-  is_runtime: boolean,
-  is_optional: boolean,
-  is_resolved: boolean,
-  resolved_package: JSON_Type,
-  dependency_uid: StringDataType,
-  for_package_uid: StringDataType,
-  datafile_path: string,
-  datasource_id: StringDataType,
- }
+export interface DependenciesAttributes {
+  id: number;
+  purl: string;
+  extracted_requirement: string;
+  scope: string;
+  is_runtime: boolean;
+  is_optional: boolean;
+  is_resolved: boolean;
+  resolved_package: JSON_Type;
+  dependency_uid: string;
+  for_package_uid: string;
+  datafile_path: string;
+  datasource_id: string;
+}
 
- export enum DEPENDENCY_SCOPES {
+export enum DEPENDENCY_SCOPES {
   TEST = "test",
   COMPILE = "compile",
   DEVELOPMENT = "development",
@@ -43,35 +43,35 @@ import { jsonDataType, JSON_Type } from './databaseUtils';
   RUNTIME = "runtime",
   PROVIDED = "provided",
   DEPENDENCY_MGMT = "dependencymanagement",
- }
- 
+}
+
 export default function dependenciesModel(sequelize: Sequelize) {
   return sequelize.define<Model<DependenciesAttributes>>(
     "dependencies",
     {
-    id: {
-      allowNull: false,
-      autoIncrement: true,
-      primaryKey: true,
-      type: DataTypes.INTEGER,
-    },
-    purl: DataTypes.STRING,
-    extracted_requirement: DataTypes.STRING,
-    scope: DataTypes.STRING,
-    is_runtime: DataTypes.BOOLEAN,
-    is_optional: DataTypes.BOOLEAN,
-    is_resolved: DataTypes.BOOLEAN,
-    resolved_package: jsonDataType('resolved_package'),
-    dependency_uid: DataTypes.STRING,
-    for_package_uid: {
-      allowNull: true,
-      type: DataTypes.STRING,
-    },
-    datafile_path: DataTypes.STRING,
-    datasource_id: DataTypes.STRING,
+      id: {
+        allowNull: false,
+        autoIncrement: true,
+        primaryKey: true,
+        type: DataTypes.INTEGER,
+      },
+      purl: DataTypes.STRING,
+      extracted_requirement: DataTypes.STRING,
+      scope: DataTypes.STRING,
+      is_runtime: DataTypes.BOOLEAN,
+      is_optional: DataTypes.BOOLEAN,
+      is_resolved: DataTypes.BOOLEAN,
+      resolved_package: jsonDataType("resolved_package"),
+      dependency_uid: DataTypes.STRING,
+      for_package_uid: {
+        allowNull: true,
+        type: DataTypes.STRING,
+      },
+      datafile_path: DataTypes.STRING,
+      datasource_id: DataTypes.STRING,
     },
     {
       timestamps: false,
     }
   );
- }
+}

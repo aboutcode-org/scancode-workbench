@@ -133,20 +133,21 @@ const DependencyInfoDash = () => {
       const PackageTypeWiseCount = new Map<string, number>();
       packagesData.forEach((packageData) => {
         const deps: unknown[] = JSON.parse(
-          packageData.getDataValue("dependencies")?.toString({}) || "[]"
+          packageData.getDataValue("dependencies") || "[]"
         );
         if (!deps.length) return;
         PackageTypeWiseCount.set(
-          packageData.getDataValue("type")?.toString({}) ||
-            NO_VALUE_DETECTED_LABEL,
+          packageData.getDataValue("type") || NO_VALUE_DETECTED_LABEL,
           PackageTypeWiseCount.get(
-            packageData.getDataValue("type")?.toString({}) ||
-              NO_VALUE_DETECTED_LABEL
+            packageData.getDataValue("type") || NO_VALUE_DETECTED_LABEL
           ) || 0 + deps.length
         );
       });
       setPackageTypeDependenciesData(
-        limitPieChartData(Array.from(PackageTypeWiseCount.entries()), LEGEND_LIMIT)
+        limitPieChartData(
+          Array.from(PackageTypeWiseCount.entries()),
+          LEGEND_LIMIT
+        )
       );
     });
   }, [initialized, db, currentPath]);

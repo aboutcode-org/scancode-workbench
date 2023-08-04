@@ -14,21 +14,14 @@
  #
  */
 
-import {
-  Sequelize,
-  StringDataType,
-  IntegerDataType,
-  DataTypes,
-  Model,
-  Optional,
-} from "sequelize";
+import { Sequelize, DataTypes, Model, Optional } from "sequelize";
 import { jsonDataType, JSON_Type } from "./databaseUtils";
 
 export interface LicenseExpressionAttributes {
-  id: IntegerDataType;
-  fileId: IntegerDataType;
-  license_expression: StringDataType;
-  license_expression_spdx: StringDataType;
+  id: number;
+  fileId: number;
+  license_expression: string;
+  license_expression_spdx: string;
   license_keys: JSON_Type;
   license_keys_spdx: JSON_Type;
 }

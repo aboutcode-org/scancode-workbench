@@ -23,9 +23,7 @@ import {
   BulkCreateOptions,
   FindOptions,
   Model,
-  NumberDataType,
   Sequelize,
-  StringDataType,
   Transaction,
   TransactionOptions,
 } from "sequelize";
@@ -250,7 +248,7 @@ export class WorkbenchDB {
     });
 
     fileList.forEach((file) => {
-      const fileParentPath = file.getDataValue("parent").toString({});
+      const fileParentPath = file.getDataValue("parent");
       if (Number(file.getDataValue("id")) !== 0) {
         if (pathToIndexMap.has(fileParentPath)) {
           // @TODO
@@ -263,12 +261,12 @@ export class WorkbenchDB {
 
       // @TODO - Trial to fix rc-tree showing file icon instead of directory https://github.com/nexB/scancode-workbench/issues/542
       // fileList.forEach(file => {
-      //   if(file.getDataValue('type').toString({}) === 'directory' && !file.children){
+      //   if(file.getDataValue('type') === 'directory' && !file.children){
       //     file.children=[];
       //     file.isLeaf=true;
       //   }
       //   file.children?.forEach((file: any) => {
-      //     if(file.getDataValue('type').toString({}) === 'directory' && !file.children){
+      //     if(file.getDataValue('type') === 'directory' && !file.children){
       //       file.children=[];
       //       file.isLeaf=true;
       //     }
@@ -522,14 +520,10 @@ export class WorkbenchDB {
       platform: header.extra_data?.system_environment?.platform,
       platform_version: header.extra_data?.system_environment?.platform_version,
       python_version: header.extra_data?.system_environment?.python_version,
-      workbench_version: workbenchVersion as unknown as StringDataType,
+      workbench_version: workbenchVersion,
       workbench_notice:
-        'Exported from ScanCode Workbench and provided on an "AS IS" BASIS, WITHOUT WARRANTIES\\nOR CONDITIONS OF ANY KIND, either express or implied. No content created from\\nScanCode Workbench should be considered or used as legal advice. Consult an Attorney\\nfor any legal advice.\\nScanCode Workbench is a free software analysis application from nexB Inc. and others.\\nVisit https://github.com/nexB/scancode-workbench/ for support and download.' as unknown as StringDataType,
-      header_content: JSON.stringify(
-        header,
-        undefined,
-        2
-      ) as unknown as StringDataType, // FIXME
+        'Exported from ScanCode Workbench and provided on an "AS IS" BASIS, WITHOUT WARRANTIES\\nOR CONDITIONS OF ANY KIND, either express or implied. No content created from\\nScanCode Workbench should be considered or used as legal advice. Consult an Attorney\\nfor any legal advice.\\nScanCode Workbench is a free software analysis application from nexB Inc. and others.\\nVisit https://github.com/nexB/scancode-workbench/ for support and download.',
+      header_content: JSON.stringify(header, undefined, 2),
     };
     return parsedHeader;
   }
@@ -939,7 +933,7 @@ export class WorkbenchDB {
 
   _getLicensePolicy(file: Resource) {
     if (!file.license_policy || !Object.keys(file.license_policy).length) {
-      return null;
+      return [];
     }
     const license_policies = file.license_policy;
     license_policies.forEach((policy) => (policy.fileId = file.id));

@@ -14,19 +14,13 @@
  #
  */
 
-import {
-  Sequelize,
-  DataTypes,
-  StringDataType,
-  Model,
-  NumberDataType,
-} from "sequelize";
+import { Sequelize, DataTypes, Model } from "sequelize";
 import { jsonDataType, JSON_Type } from "./databaseUtils";
 
 export interface LicenseDetectionAttributes {
-  identifier: StringDataType;
-  license_expression: StringDataType;
-  detection_count: NumberDataType;
+  identifier: string;
+  license_expression: string;
+  detection_count: number;
   detection_log: JSON_Type;
   matches: JSON_Type;
   file_regions: JSON_Type;
@@ -46,6 +40,9 @@ export default function licenseDetectionModel(sequelize: Sequelize) {
       detection_log: jsonDataType("detection_log"),
       matches: jsonDataType("matches"),
       file_regions: jsonDataType("file_regions"),
+    },
+    {
+      timestamps: false,
     }
   );
 }

@@ -6,7 +6,7 @@ export const HeaderSamples: {
   expectedHeaders: ScanInfo;
 }[] = [
   {
-    jsonFileName: "empty.json",
+    jsonFileName: "headerless.json",
     expectedHeaders: {
       tool_name: "",
       tool_version: "",

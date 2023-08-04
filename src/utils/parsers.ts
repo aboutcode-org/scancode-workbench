@@ -58,41 +58,41 @@ export function parseScanInfo(
 ): ScanInfo {
   const optionsList =
     Object.entries(
-      parseIfValidJson(rawInfo.getDataValue("options")?.toString({})) || []
+      parseIfValidJson(rawInfo.getDataValue("options")) || []
     ) || [];
   const optionsMap = new Map<ScanOptionKeys, unknown>(
     optionsList.map(([k, v]) => [k as ScanOptionKeys, v])
   );
 
   const parsedScanInfo: ScanInfo = {
-    tool_name: rawInfo.getDataValue("tool_name")?.toString({}) || "",
-    tool_version: rawInfo.getDataValue("tool_version")?.toString({}) || "",
-    notice: rawInfo.getDataValue("notice")?.toString({}) || "",
+    tool_name: rawInfo.getDataValue("tool_name") || "",
+    tool_version: rawInfo.getDataValue("tool_version") || "",
+    notice: rawInfo.getDataValue("notice") || "",
     duration: rawInfo.getDataValue("duration")
       ? Number(rawInfo.getDataValue("duration")).toFixed(2)
       : null,
     optionsList,
     optionsMap,
-    input: parseIfValidJson(rawInfo.getDataValue("input")?.toString({})) || [],
+    input: parseIfValidJson(rawInfo.getDataValue("input")) || [],
     files_count: Number(rawInfo.getDataValue("files_count")),
     output_format_version:
-      rawInfo.getDataValue("output_format_version")?.toString({}) || "",
+      rawInfo.getDataValue("output_format_version") || "",
     spdx_license_list_version:
-      rawInfo.getDataValue("spdx_license_list_version")?.toString({}) || "",
+      rawInfo.getDataValue("spdx_license_list_version") || "",
     operating_system:
-      rawInfo.getDataValue("operating_system")?.toString({}) || "",
+      rawInfo.getDataValue("operating_system") || "",
     cpu_architecture:
-      rawInfo.getDataValue("cpu_architecture")?.toString({}) || "",
-    platform: rawInfo.getDataValue("platform")?.toString({}) || "",
+      rawInfo.getDataValue("cpu_architecture") || "",
+    platform: rawInfo.getDataValue("platform") || "",
     platform_version:
-      rawInfo.getDataValue("platform_version")?.toString({}) || "",
-    python_version: rawInfo.getDataValue("python_version")?.toString({}) || "",
+      rawInfo.getDataValue("platform_version") || "",
+    python_version: rawInfo.getDataValue("python_version") || "",
     workbench_version:
-      rawInfo.getDataValue("workbench_version")?.toString({}) || "",
+      rawInfo.getDataValue("workbench_version") || "",
     workbench_notice:
-      rawInfo.getDataValue("workbench_notice")?.toString({}) || "",
+      rawInfo.getDataValue("workbench_notice") || "",
     raw_header_content:
-      rawInfo.getDataValue("header_content")?.toString({}) || "",
+      rawInfo.getDataValue("header_content") || "",
   };
   return parsedScanInfo;
 }

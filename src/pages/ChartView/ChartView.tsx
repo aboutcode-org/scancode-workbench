@@ -82,7 +82,6 @@ const ChartView = () => {
         Sequelize.fn("TRIM", Sequelize.col(selectedAttribute)),
         selectedAttribute,
       ] as FindAttributeOptions,
-      // attributes: [Sequelize.fn('TRIM', Sequelize.col(selectedAttribute)), selectedAttribute],
     };
 
     db.sync

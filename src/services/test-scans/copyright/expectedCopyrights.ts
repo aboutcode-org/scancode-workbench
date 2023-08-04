@@ -1,14 +1,10 @@
+import { CopyrightFlatFileAttributes } from "../../models/flatFile";
+import { CopyrightAttributes } from "../../models/copyright";
+
 export const CopyrightSamples: {
   jsonFileName: string;
-  expectedCopyrights: {
-    id: number;
-    fileId: number;
-    start_line: number;
-    end_line: number;
-    holders: string;
-    authors: string;
-    statements: string;
-  }[];
+  expectedCopyrights: CopyrightAttributes[];
+  expectedFlatFiles: CopyrightFlatFileAttributes[];
 }[] = [
   {
     jsonFileName: "simple.json",
@@ -32,9 +28,57 @@ export const CopyrightSamples: {
         statements: '["Copyright 2021 Google\', type"]',
       },
     ],
+    expectedFlatFiles: [
+      {
+        copyright_statements: "[[]]",
+        copyright_holders: "[[]]",
+        copyright_authors: "[[]]",
+        copyright_start_line: "[]",
+        copyright_end_line: "[]",
+      },
+      {
+        copyright_statements:
+          '[["copyright 1997, 1998, 1999 Jason Gunthorpe and others"]]',
+        copyright_holders: '[["Jason Gunthorpe and others"]]',
+        copyright_authors:
+          '[["APT Development Team <deity@lists.debian.org>"]]',
+        copyright_start_line: "[[1]]",
+        copyright_end_line: "[[1]]",
+      },
+      {
+        copyright_statements: '[["Copyright 2021 Google\', type"]]',
+        copyright_holders: '[["Google\', type"]]',
+        copyright_authors: "[[]]",
+        copyright_start_line: "[[25]]",
+        copyright_end_line: "[[26]]",
+      },
+    ],
   },
   {
     jsonFileName: "noCopyrights.json",
     expectedCopyrights: [],
-  }
+    expectedFlatFiles: [
+      {
+        copyright_statements: "[[]]",
+        copyright_holders: "[[]]",
+        copyright_authors: "[[]]",
+        copyright_start_line: "[]",
+        copyright_end_line: "[]",
+      },
+      {
+        copyright_statements: "[[]]",
+        copyright_holders: "[[]]",
+        copyright_authors: "[[]]",
+        copyright_start_line: "[]",
+        copyright_end_line: "[]",
+      },
+      {
+        copyright_statements: "[[]]",
+        copyright_holders: "[[]]",
+        copyright_authors: "[[]]",
+        copyright_start_line: "[]",
+        copyright_end_line: "[]",
+      },
+    ],
+  },
 ];

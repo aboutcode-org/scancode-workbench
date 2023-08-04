@@ -57,8 +57,6 @@ const LicenseInfoDash = () => {
           attributes: ["fileId", "license_detections"],
         })
       )
-      // @REMOVE_THIS
-      // .then((flatFiles) => new Promise(resolve => setTimeout(()=>resolve(flatFiles), 4000)))
       .then((flatFiles) => {
         const fileIDs = flatFiles.map((flatFile) =>
           flatFile.getDataValue("fileId")
@@ -67,7 +65,7 @@ const LicenseInfoDash = () => {
         const filesWithDetections = flatFiles
           .map((flatFile) =>
             JSON.parse(
-              flatFile.getDataValue("license_detections")?.toString({}) || "[]"
+              flatFile.getDataValue("license_detections") || "[]"
             )
           )
           .filter((detections) => detections.length);
@@ -97,14 +95,14 @@ const LicenseInfoDash = () => {
             license_expressions.forEach((expression) => {
               license_keys.push(
                 ...JSON.parse(
-                  (expression.getDataValue("license_keys") || "[]").toString({})
+                  (expression.getDataValue("license_keys") || "[]")
                 )
               );
               license_keys_spdx.push(
                 ...JSON.parse(
                   (
                     expression.getDataValue("license_keys_spdx") || "[]"
-                  ).toString({})
+                  )
                 )
               );
             });
