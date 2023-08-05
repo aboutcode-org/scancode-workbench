@@ -51,15 +51,15 @@ export interface ScanInfo {
   workbench_version: string;
   workbench_notice: string;
   raw_header_content: string;
+  errors: string[];
 }
 
 export function parseScanInfo(
   rawInfo: Model<HeaderAttributes, HeaderAttributes>
 ): ScanInfo {
   const optionsList =
-    Object.entries(
-      parseIfValidJson(rawInfo.getDataValue("options")) || []
-    ) || [];
+    Object.entries(parseIfValidJson(rawInfo.getDataValue("options")) || []) ||
+    [];
   const optionsMap = new Map<ScanOptionKeys, unknown>(
     optionsList.map(([k, v]) => [k as ScanOptionKeys, v])
   );
@@ -75,24 +75,18 @@ export function parseScanInfo(
     optionsMap,
     input: parseIfValidJson(rawInfo.getDataValue("input")) || [],
     files_count: Number(rawInfo.getDataValue("files_count")),
-    output_format_version:
-      rawInfo.getDataValue("output_format_version") || "",
+    output_format_version: rawInfo.getDataValue("output_format_version") || "",
     spdx_license_list_version:
       rawInfo.getDataValue("spdx_license_list_version") || "",
-    operating_system:
-      rawInfo.getDataValue("operating_system") || "",
-    cpu_architecture:
-      rawInfo.getDataValue("cpu_architecture") || "",
+    operating_system: rawInfo.getDataValue("operating_system") || "",
+    cpu_architecture: rawInfo.getDataValue("cpu_architecture") || "",
     platform: rawInfo.getDataValue("platform") || "",
-    platform_version:
-      rawInfo.getDataValue("platform_version") || "",
+    platform_version: rawInfo.getDataValue("platform_version") || "",
     python_version: rawInfo.getDataValue("python_version") || "",
-    workbench_version:
-      rawInfo.getDataValue("workbench_version") || "",
-    workbench_notice:
-      rawInfo.getDataValue("workbench_notice") || "",
-    raw_header_content:
-      rawInfo.getDataValue("header_content") || "",
+    workbench_version: rawInfo.getDataValue("workbench_version") || "",
+    workbench_notice: rawInfo.getDataValue("workbench_notice") || "",
+    raw_header_content: rawInfo.getDataValue("header_content") || "",
+    errors: parseIfValidJson(rawInfo.getDataValue("errors")) || [],
   };
   return parsedScanInfo;
 }

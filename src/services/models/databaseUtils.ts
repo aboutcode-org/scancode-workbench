@@ -19,7 +19,7 @@ import Sequelize from "sequelize";
 import { parse } from "license-expressions";
 
 // @TODO
-// Stores an object as a json string internally, but as an object externally
+// Store an object as a json string internally, but as an object externally
 export type JSON_Type = string;
 export function jsonDataType(attributeName: string) {
   return {

@@ -18,6 +18,7 @@ export interface ParsedJsonHeader {
   workbench_version: string;
   workbench_notice: string;
   header_content: string;
+  errors: JSON_Type;
 }
 
 export interface LicenseReference {

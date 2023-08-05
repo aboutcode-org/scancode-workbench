@@ -28,8 +28,8 @@ const ScanInfo = () => {
               show={scanInfo.input && scanInfo.input.length > 0}
             >
               <ul>
-                {(scanInfo.input || []).map((value: string, idx: number) => (
-                  <li key={value + idx}>{value}</li>
+                {(scanInfo.input || []).map((inputPath: string) => (
+                  <li key={inputPath}>{inputPath}</li>
                 ))}
               </ul>
             </InfoEntry>
@@ -83,6 +83,22 @@ const ScanInfo = () => {
             </InfoEntry>
 
             <InfoEntry name="Tool notice">{scanInfo.notice}</InfoEntry>
+
+            <InfoEntry
+              name="Files with errors"
+              show={scanInfo.errors && scanInfo.errors.length > 0}
+            >
+              <ul>
+                {(scanInfo.errors || []).map((error: string) => (
+                  <li key={error}>
+                    {/* <CoreLink onClick={() => goToFileInTableView(error)}>
+                      {error}
+                    </CoreLink> */}
+                    {error}
+                  </li>
+                ))}
+              </ul>
+            </InfoEntry>
 
             <InfoEntry name=" Raw header">
               <ReactJson

@@ -30,7 +30,7 @@ const TableView = () => {
     useWorkbenchState();
 
   // Necessary to keep coldef as empty array by default, to ensure filter set updates
-  const [tableData, setTableData] = useState<unknown[]>([]);
+  const [tableData, setTableData] = useState<FlatFileAttributes[]>([]);
   const [gridApi, setGridApi] = useState<GridApi | null>(null);
   const [columnApi, setColumnApi] = useState<ColumnApi | null>(null);
 
@@ -73,20 +73,25 @@ const TableView = () => {
               ],
             },
           },
-          // raw: true,   // TOIMPROVE: Maybe we can get better performance with this
         })
       )
+      .then((fileModels) => fileModels.map((fileModel) => fileModel.dataValues))
       .then((files) => {
         setTableData(files);
         let longestPathLength = 20;
+        let hasError = false;
         files.forEach((file) => {
-          const len = file.getDataValue("path").length;
+          const len = file.path.length;
           if (len > longestPathLength) {
             longestPathLength = len;
           }
+          if (!hasError && file.scan_errors?.length > 0) hasError = true;
         });
 
         const calculatedColumnWidth = calculateCellWidth(longestPathLength);
+
+        // Set scan_errors column width based on the presence of any error
+        ALL_COLUMNS.scan_errors.width = hasError ? 270 : 130;
 
         // Shrink path column, if user has over-extended it earlier (maybe for other scan with large paths)
         if (calculatedColumnWidth < ALL_COLUMNS.path.width)

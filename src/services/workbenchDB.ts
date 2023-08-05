@@ -524,6 +524,7 @@ export class WorkbenchDB {
       workbench_notice:
         'Exported from ScanCode Workbench and provided on an "AS IS" BASIS, WITHOUT WARRANTIES\\nOR CONDITIONS OF ANY KIND, either express or implied. No content created from\\nScanCode Workbench should be considered or used as legal advice. Consult an Attorney\\nfor any legal advice.\\nScanCode Workbench is a free software analysis application from nexB Inc. and others.\\nVisit https://github.com/nexB/scancode-workbench/ for support and download.',
       header_content: JSON.stringify(header, undefined, 2),
+      errors: header.errors,
     };
     return parsedHeader;
   }

@@ -4,10 +4,11 @@ import { parseScanInfo } from "../utils/parsers";
 import { figureOutDefaultSqliteFilePath } from "../utils/paths";
 import { WorkbenchDB } from "./workbenchDB";
 import { HeaderSamples } from "./test-scans/headers/expectedHeaders";
-import { CopyrightSamples } from "./test-scans/copyright/expectedCopyrights";
+import { CopyrightSamples } from "./test-scans/copyrights/expectedCopyrights";
 import { EmailUrlInfoSamples } from "./test-scans/email_url_info/expectedEmailUrlInfo";
 import { LicenseSamples } from "./test-scans/licenses/expectedLicenses";
 import { SanitySamples } from "./test-scans/sanity/sanitySamples";
+import { ErrorSamples } from "./test-scans/scan-errors/expectedErrors";
 
 // Avoid logging scan-parser checkpoints during tests
 beforeEach(() => {
@@ -15,7 +16,7 @@ beforeEach(() => {
   jest.spyOn(console, "info").mockImplementation(() => null);
 });
 
-describe("Can parse scans", () => {
+describe("Can process special cases", () => {
   it.each(SanitySamples)("Parses $jsonFileName", async ({ jsonFileName }) => {
     const jsonFilePath = path.join(
       __dirname,
@@ -57,13 +58,46 @@ describe("Can parse Headers", () => {
   );
 });
 
+describe("Can parse Errors", () => {
+  it.each(ErrorSamples)(
+    "Parses $jsonFileName",
+    async ({ jsonFileName, expectedFlatFiles, expectedScanErrors }) => {
+      const jsonFilePath = path.join(
+        __dirname,
+        "test-scans/scan-errors/",
+        jsonFileName
+      );
+
+      const newWorkbenchDB = new WorkbenchDB({
+        dbName: "workbench_db",
+        dbStoragePath: figureOutDefaultSqliteFilePath(jsonFilePath),
+        deleteExisting: true,
+      });
+      const db = await newWorkbenchDB.sync;
+      await newWorkbenchDB.addFromJson(jsonFilePath, () => null);
+
+      const flatFiles = (
+        await db.FlatFile.findAll({
+          attributes: ["fileId", "scan_errors"],
+        })
+      ).map((flatFile) => flatFile.dataValues);
+      const scanErrors = (await newWorkbenchDB.db.ScanError.findAll()).map(
+        (error) => error.dataValues
+      );
+
+      assert.deepEqual(flatFiles, expectedFlatFiles);
+      assert.deepEqual(scanErrors, expectedScanErrors);
+    }
+  );
+});
+
 describe("Can parse Copyrights", () => {
   it.each(CopyrightSamples)(
     "Parses $jsonFileName",
     async ({ jsonFileName, expectedFlatFiles, expectedCopyrights }) => {
       const jsonFilePath = path.join(
         __dirname,
-        "test-scans/copyright/",
+        "test-scans/copyrights/",
         jsonFileName
       );
 
@@ -86,12 +120,12 @@ describe("Can parse Copyrights", () => {
           ],
         })
       ).map((flatFile) => flatFile.dataValues);
-      const rawCopyrights = (await newWorkbenchDB.db.Copyright.findAll()).map(
+      const copyrights = (await newWorkbenchDB.db.Copyright.findAll()).map(
         (copyright) => copyright.dataValues
       );
 
       assert.deepEqual(flatFiles, expectedFlatFiles);
-      assert.deepEqual(rawCopyrights, expectedCopyrights);
+      assert.deepEqual(copyrights, expectedCopyrights);
     }
   );
 });

@@ -79,7 +79,7 @@ const PACKAGE_COLUMN_GROUP: ColDef[] = [
 const DEFAULT_COLUMN_GROUP: ColDef[] = [
   ALL_COLUMNS.path,
   ...FILE_COLUMN_GROUP,
-  ALL_COLUMNS.scan_error,
+  ALL_COLUMNS.scan_errors,
 ];
 
 

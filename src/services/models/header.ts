@@ -36,6 +36,7 @@ export interface HeaderAttributes {
   python_version: string;
   workbench_version: string;
   workbench_notice: string;
+  errors: JSON_Type;
 }
 
 export default function headerModel(sequelize: Sequelize) {
@@ -92,6 +93,7 @@ export default function headerModel(sequelize: Sequelize) {
         type: DataTypes.STRING,
         defaultValue: "None",
       },
+      errors: jsonDataType("errors"),
     },
     {
       timestamps: false,
