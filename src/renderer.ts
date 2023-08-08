@@ -29,9 +29,10 @@
 import { ipcRenderer, webFrame } from 'electron';
 import { renderReactApp } from './reactApp';
 
-import './index.css';
-import './colors.css';
 import { GENERAL_ACTIONS } from './constants/IpcConnection';
+
+import './styles/index.css';
+import './styles/colors.css';
 
 // Setup general actions
 ipcRenderer.on(GENERAL_ACTIONS.ZOOM_IN, () => {

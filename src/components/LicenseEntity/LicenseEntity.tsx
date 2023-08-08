@@ -35,7 +35,8 @@ const LicenseEntity = (props: LicenseDetectionEntityProps) => {
     matchesTableColumnApi.setColumnVisible(
       MATCH_COLS.matched_text.colId,
       Boolean(scanInfo.optionsMap.get(ScanOptionKeys.LICENSE_TEXT)) ||
-        matches[0].matched_text.length > 0
+        matches[0]?.matched_text?.length > 0 ||
+        false
     );
   }, [scanInfo, matchesTableColumnApi]);
 

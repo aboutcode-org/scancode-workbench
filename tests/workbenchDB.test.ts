@@ -1,8 +1,8 @@
 import path from "path";
 import assert from "assert";
-import { parseScanInfo } from "../utils/parsers";
-import { figureOutDefaultSqliteFilePath } from "../utils/paths";
-import { WorkbenchDB } from "./workbenchDB";
+import { parseScanInfo } from "../src/utils/parsers";
+import { figureOutDefaultSqliteFilePath } from "../src/utils/paths";
+import { WorkbenchDB } from "../src/services/workbenchDB";
 import { HeaderSamples } from "./test-scans/headers/expectedHeaders";
 import { CopyrightSamples } from "./test-scans/copyrights/expectedCopyrights";
 import { EmailUrlInfoSamples } from "./test-scans/email_url_info/expectedEmailUrlInfo";

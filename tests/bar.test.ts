@@ -3,7 +3,7 @@ import {
   formatBarchartData,
   getValidatedAttributeValues,
   isValid,
-} from "./bar";
+} from "../src/utils/bar";
 import { BarDataSamples, RawModelDataSamples } from "./bar.test.data";
 
 const PossibleBarchartValues: { valid: unknown[]; invalid: unknown[] } = {

@@ -1,4 +1,4 @@
-import { BelongsIndicator, DiffComponents } from "./text";
+import { BelongsIndicator, DiffComponents } from "../src/utils/text";
 
 export const TrimTexts: {
   text: string;

@@ -1,4 +1,4 @@
-import { figureOutDefaultSqliteFilePath } from "./paths";
+import { figureOutDefaultSqliteFilePath } from "../src/utils/paths";
 
 const PathSamples: { jsonPath: string; sqlitePath: string }[] = [
   {

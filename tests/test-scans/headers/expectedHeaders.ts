@@ -1,5 +1,5 @@
-import { WORKBENCH_VERSION } from "../../../constants/general";
-import { ScanInfo, ScanOptionKeys } from "../../../utils/parsers";
+import { WORKBENCH_VERSION } from "../../../src/constants/general";
+import { ScanInfo, ScanOptionKeys } from "../../../src/utils/parsers";
 
 export const HeaderSamples: {
   jsonFileName: string;

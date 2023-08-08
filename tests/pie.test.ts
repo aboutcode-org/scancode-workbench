@@ -3,7 +3,7 @@ import {
   PieFormatDataSamples,
   PieLimitDataSamples,
 } from "./pie.test.data";
-import { formatPieChartData, limitPieChartData } from "./pie";
+import { formatPieChartData, limitPieChartData } from "../src/utils/pie";
 
 describe("Pie chart - Limit values to be shown in chart", () => {
   it.each(PieLimitDataSamples)(

@@ -1,5 +1,5 @@
-import { CopyrightFlatFileAttributes } from "../../models/flatFile";
-import { CopyrightAttributes } from "../../models/copyright";
+import { CopyrightFlatFileAttributes } from "../../../src/services/models/flatFile";
+import { CopyrightAttributes } from "../../../src/services/models/copyright";
 
 export const CopyrightSamples: {
   jsonFileName: string;

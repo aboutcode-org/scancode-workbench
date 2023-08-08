@@ -1,4 +1,4 @@
-import { FormattedEntry } from "./pie";
+import { FormattedEntry } from "../src/utils/pie";
 
 export const PieLimitDataSamples: {
   chartDataLimit: number;

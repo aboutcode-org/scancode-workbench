@@ -1,9 +1,9 @@
-import { LicenseFlatFileAttributes } from "../../models/flatFile";
-import { LicenseClueAttributes } from "../../models/licenseClues";
-import { LicenseDetectionAttributes } from "../../models/licenseDetections";
-import { LicenseExpressionAttributes } from "../../models/licenseExpression";
-import { LicensePolicyAttributes } from "../../models/licensePolicy";
-import { LicenseRuleReferenceAttributes } from "../../models/licenseRuleReference";
+import { LicenseFlatFileAttributes } from "../../../src/services/models/flatFile";
+import { LicenseClueAttributes } from "../../../src/services/models/licenseClues";
+import { LicenseDetectionAttributes } from "../../../src/services/models/licenseDetections";
+import { LicenseExpressionAttributes } from "../../../src/services/models/licenseExpression";
+import { LicensePolicyAttributes } from "../../../src/services/models/licensePolicy";
+import { LicenseRuleReferenceAttributes } from "../../../src/services/models/licenseRuleReference";
 
 export const LicenseSamples: {
   jsonFileName: string;

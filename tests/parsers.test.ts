@@ -1,4 +1,4 @@
-import { parseIfValidJson } from "./parsers";
+import { parseIfValidJson } from "../src/utils/parsers";
 
 export const JsonValiditySamples: {
   valid: unknown[];

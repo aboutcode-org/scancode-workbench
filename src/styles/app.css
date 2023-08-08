@@ -59,27 +59,27 @@ img {
   font-family: 'Raleway';
   font-style: normal;
   font-weight: 400;
-  src: url('./lib/css/fonts/Raleway-Regular.ttf');
+  src: url('../lib/css/fonts/Raleway-Regular.ttf');
   src: local('?'),
-    url('./lib/css/fonts/Raleway-Regular.ttf') format('truetype');
+    url('../lib/css/fonts/Raleway-Regular.ttf') format('truetype');
 }
 
 @font-face {
   font-family: 'Raleway Black';
   font-style: normal;
   font-weight: 800;
-  src: url('./lib/css/fonts/Raleway-Black.ttf');
+  src: url('../lib/css/fonts/Raleway-Black.ttf');
   src: local('?'),
-    url('./lib/css/fonts/Raleway-Black.ttf') format('truetype');
+    url('../lib/css/fonts/Raleway-Black.ttf') format('truetype');
 }
 
 @font-face {
   font-family: 'Lato';
   font-style: normal;
   font-weight: 400;
-  src: url('./lib/css/fonts/Lato-Regular.ttf');
+  src: url('../lib/css/fonts/Lato-Regular.ttf');
   src: local('?'),
-    url('./lib/css/fonts/Lato-Regular.ttf') format('truetype');
+    url('../lib/css/fonts/Lato-Regular.ttf') format('truetype');
 }
 
 

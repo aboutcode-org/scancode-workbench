@@ -1,9 +1,9 @@
 import {
   EmailUrlFlatFileAttributes,
   InfoFlatFileAttributes,
-} from "../../models/flatFile";
-import { EmailAttributes } from "../../models/email";
-import { UrlAttributes } from "../../models/url";
+} from "../../../src/services/models/flatFile";
+import { EmailAttributes } from "../../../src/services/models/email";
+import { UrlAttributes } from "../../../src/services/models/url";
 
 export const EmailUrlInfoSamples: {
   jsonFileName: string;

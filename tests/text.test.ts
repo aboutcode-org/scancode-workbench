@@ -11,7 +11,7 @@ import {
   normalizeDiffString,
   trimStringWithEllipsis,
   BelongsIndicator,
-} from "./text";
+} from "../src/utils/text";
 
 describe("Text - Trim text", () => {
   it.each(TrimTexts)(

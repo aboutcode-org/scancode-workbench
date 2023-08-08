@@ -85,7 +85,7 @@ const ScanInfo = () => {
             <InfoEntry name="Tool notice">{scanInfo.notice}</InfoEntry>
 
             <InfoEntry
-              name="Files with errors"
+              name="Errors"
               show={scanInfo.errors && scanInfo.errors.length > 0}
             >
               <ul>
