@@ -9,6 +9,7 @@ import { EmailUrlInfoSamples } from "./test-scans/email_url_info/expectedEmailUr
 import { LicenseSamples } from "./test-scans/licenses/expectedLicenses";
 import { SanitySamples } from "./test-scans/sanity/sanitySamples";
 import { ErrorSamples } from "./test-scans/scan-errors/expectedErrors";
+import { PackageDepsSamples } from "./test-scans/packages_dependencies/expectedPackagesDeps";
 
 // Avoid logging scan-parser checkpoints during tests
 beforeEach(() => {
@@ -256,6 +257,84 @@ describe("Can parse Licenses", () => {
       assert.deepEqual(licenseExpressions, expectedLicenseExpressions);
       assert.deepEqual(licensePolicies, expectedLicensePolicies);
       assert.deepEqual(licenseRuleReferences, expectedLicenseRuleReferences);
+    }
+  );
+});
+
+describe("Can parse Packages & Dependencies", () => {
+  it.each(PackageDepsSamples)(
+    "Parses $jsonFileName",
+    async ({
+      jsonFileName,
+      expectedFlatFiles,
+      expectedDependencies,
+      expectedPackageData,
+      expectedPackages,
+    }) => {
+      const jsonFilePath = path.join(
+        __dirname,
+        "test-scans/packages_dependencies/",
+        jsonFileName
+      );
+
+      const newWorkbenchDB = new WorkbenchDB({
+        dbName: "workbench_db",
+        dbStoragePath: figureOutDefaultSqliteFilePath(jsonFilePath),
+        deleteExisting: true,
+      });
+      const db = await newWorkbenchDB.sync;
+
+      await newWorkbenchDB.addFromJson(jsonFilePath, () => null);
+
+      const flatFiles = (
+        await db.FlatFile.findAll({
+          attributes: [
+            "for_packages",
+            "package_data_type",
+            "package_data_namespace",
+            "package_data_name",
+            "package_data_version",
+            "package_data_qualifiers",
+            "package_data_subpath",
+            "package_data_purl",
+            "package_data_primary_language",
+            "package_data_code_type",
+            "package_data_description",
+            "package_data_size",
+            "package_data_release_date",
+            "package_data_keywords",
+            "package_data_homepage_url",
+            "package_data_download_url",
+            "package_data_download_checksums",
+            "package_data_bug_tracking_url",
+            "package_data_code_view_url",
+            "package_data_vcs_tool",
+            "package_data_vcs_url",
+            "package_data_vcs_repository",
+            "package_data_vcs_revision",
+            "package_data_extracted_license_statement",
+            "package_data_declared_license_expression",
+            "package_data_declared_license_expression_spdx",
+            "package_data_notice_text",
+            "package_data_dependencies",
+            "package_data_related_packages",
+          ],
+        })
+      ).map((flatFile) => flatFile.dataValues);
+      const packages = (await db.Packages.findAll()).map(
+        (pkg) => pkg.dataValues
+      );
+      const packageData = (await db.PackageData.findAll()).map(
+        (pkgData) => pkgData.dataValues
+      );
+      const dependencies = (await db.Dependencies.findAll()).map(
+        (dependency) => dependency.dataValues
+      );
+
+      assert.deepEqual(flatFiles, expectedFlatFiles);
+      assert.deepEqual(packages, expectedPackages);
+      assert.deepEqual(packageData, expectedPackageData);
+      assert.deepEqual(dependencies, expectedDependencies);
     }
   );
 });
