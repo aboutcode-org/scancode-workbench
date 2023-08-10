@@ -1,4 +1,4 @@
-import { Op } from "sequelize";
+import { Model, Op } from "sequelize";
 import { Row, Col, Card } from "react-bootstrap";
 import React, { useEffect, useState } from "react";
 
@@ -12,6 +12,16 @@ import PieChart from "../../components/PieChart/PieChart";
 import EllipticLoader from "../../components/EllipticLoader";
 import { LEGEND_LIMIT, NO_VALUE_DETECTED_LABEL } from "../../constants/data";
 import { ScanOptionKeys } from "../../utils/parsers";
+import { AgGridReact } from "ag-grid-react";
+import {
+  DEFAULT_DEPS_SUMMARY_COL_DEF,
+  PackageTypeSummaryRow,
+  DependencySummaryTableCols,
+} from "./DependencySummaryTableCols";
+import { DependencyDetails } from "../Packages/packageDefinitions";
+import { PackageDataAttributes } from "../../services/models/packageData";
+
+import "./dependencyInfoDash.css";
 
 interface ScanData {
   totalDependencies: number | null;
@@ -25,7 +35,6 @@ const DependencyInfoDash = () => {
   const [dataSourceIDsData, setDataSourceIDsData] = useState<
     FormattedEntry[] | null
   >(null);
-  const [scopesData, setScopesData] = useState(null);
   const [runtimeDependenciesData, setRuntimeDependenciesData] = useState<
     FormattedEntry[] | null
   >(null);
@@ -38,6 +47,56 @@ const DependencyInfoDash = () => {
   const [scanData, setScanData] = useState<ScanData>({
     totalDependencies: null,
   });
+  const [packageTypeSummaryData, setPackageTypeSummaryData] = useState<
+    PackageTypeSummaryRow[]
+  >([]);
+
+  function summarisePackageDataDeps(
+    packagesData: Model<PackageDataAttributes, PackageDataAttributes>[]
+  ) {
+    const packageTypeToSummaryMapping = new Map<
+      string,
+      PackageTypeSummaryRow
+    >();
+    packagesData.forEach((packageData) => {
+      const packageDataType =
+        packageData.getDataValue("type") ||
+        NO_VALUE_DETECTED_LABEL;
+      const deps: DependencyDetails[] = JSON.parse(
+        packageData.getDataValue("dependencies") || "[]"
+      );
+      if (!packageTypeToSummaryMapping.has(packageDataType)) {
+        packageTypeToSummaryMapping.set(packageDataType, {
+          packageTypeDetails: {
+            title: packageDataType,
+            total: 0,
+          },
+          resolved: 0,
+          runtime: 0,
+          optional: 0,
+        });
+      }
+      const packageTypeSummary =
+        packageTypeToSummaryMapping.get(packageDataType);
+
+      packageTypeSummary.packageTypeDetails.total += deps.length;
+      packageTypeSummary.resolved += deps.reduce((counter, curr) => {
+        return counter + (curr.is_resolved ? 1 : 0);
+      }, 0);
+      packageTypeSummary.runtime += deps.reduce((counter, curr) => {
+        return counter + (curr.is_runtime ? 1 : 0);
+      }, 0);
+      packageTypeSummary.optional += deps.reduce((counter, curr) => {
+        return counter + (curr.is_optional ? 1 : 0);
+      }, 0);
+    });
+
+    return Array.from(packageTypeToSummaryMapping.values()).sort(
+      (packageTypeSummary1, packageTypeSummary2) =>
+        packageTypeSummary2.packageTypeDetails.total -
+        packageTypeSummary1.packageTypeDetails.total
+    );
+  }
 
   useEffect(() => {
     if (!initialized || !db || !currentPath) return;
@@ -104,13 +163,6 @@ const DependencyInfoDash = () => {
         const { chartData: dataSourceIDsChartData } =
           formatPieChartData(dataSourceIDs);
         setDataSourceIDsData(dataSourceIDsChartData);
-
-        // Prepare chart for dependencies' data source IDs
-        const scopes = dependencies.map((dependency) =>
-          dependency.getDataValue("scope")
-        );
-        const { chartData: scopesChartData } = formatPieChartData(scopes);
-        setScopesData(scopesChartData);
       });
 
     db.sync.then(async (db) => {
@@ -130,32 +182,24 @@ const DependencyInfoDash = () => {
         where: { fileId: fileIDs },
         attributes: ["type", "dependencies"],
       });
-      const PackageTypeWiseCount = new Map<string, number>();
-      packagesData.forEach((packageData) => {
-        const deps: unknown[] = JSON.parse(
-          packageData.getDataValue("dependencies") || "[]"
-        );
-        if (!deps.length) return;
-        PackageTypeWiseCount.set(
-          packageData.getDataValue("type") || NO_VALUE_DETECTED_LABEL,
-          PackageTypeWiseCount.get(
-            packageData.getDataValue("type") || NO_VALUE_DETECTED_LABEL
-          ) || 0 + deps.length
-        );
-      });
+
+      const depsSummaryData = summarisePackageDataDeps(packagesData);
       setPackageTypeDependenciesData(
         limitPieChartData(
-          Array.from(PackageTypeWiseCount.entries()),
+          depsSummaryData.map(({ packageTypeDetails: { title, total } }) => [
+            title,
+            total,
+          ]),
           LEGEND_LIMIT
         )
       );
+      setPackageTypeSummaryData(depsSummaryData);
     });
   }, [initialized, db, currentPath]);
 
   return (
     <div className="text-center pieInfoDash">
       <h4>Dependency info - {currentPath || ""}</h4>
-      <br />
       <br />
       <Row className="dash-cards">
         <Col sm={4}>
@@ -169,6 +213,18 @@ const DependencyInfoDash = () => {
           </Card>
         </Col>
       </Row>
+      <br />
+      <AgGridReact
+        rowData={Object.values(packageTypeSummaryData || {})}
+        columnDefs={DependencySummaryTableCols}
+        defaultColDef={DEFAULT_DEPS_SUMMARY_COL_DEF}
+        pagination
+        ensureDomOrder
+        enableCellTextSelection
+        onGridReady={(params) => params.api.sizeColumnsToFit()}
+        onGridSizeChanged={(params) => params.api.sizeColumnsToFit()}
+        className="ag-theme-alpine ag-grid-customClass deps-status-flag-table"
+      />
       <br />
       <Row className="dash-cards">
         <Col sm={4}>
@@ -187,17 +243,6 @@ const DependencyInfoDash = () => {
             <h5 className="title">Data Source IDs</h5>
             <PieChart
               chartData={dataSourceIDsData}
-              notOpted={!scanInfo.optionsMap.get(ScanOptionKeys.PACKAGE)}
-              notOptedText="Use --package CLI option for dependencies"
-              notOptedLink="https://scancode-toolkit.readthedocs.io/en/latest/cli-reference/basic-options.html#package-option"
-            />
-          </Card>
-        </Col>
-        <Col sm={4}>
-          <Card className="chart-card">
-            <h5 className="title">Dependency scopes</h5>
-            <PieChart
-              chartData={scopesData}
               notOpted={!scanInfo.optionsMap.get(ScanOptionKeys.PACKAGE)}
               notOptedText="Use --package CLI option for dependencies"
               notOptedLink="https://scancode-toolkit.readthedocs.io/en/latest/cli-reference/basic-options.html#package-option"

@@ -191,6 +191,7 @@ const LicenseDetections = () => {
 
   return (
     <div>
+      <h4 className="licenses-title">License explorer</h4>
       <Allotment className="license-container">
         <Allotment.Pane
           snap
@@ -309,7 +310,7 @@ const LicenseDetections = () => {
         <Allotment.Pane
           snap
           minSize={500}
-          className="license-entity-pane px-4 overflow-scroll"
+          className="license-entity-pane overflow-scroll"
         >
           <LicenseEntity activeLicense={activeLicense} />
         </Allotment.Pane>

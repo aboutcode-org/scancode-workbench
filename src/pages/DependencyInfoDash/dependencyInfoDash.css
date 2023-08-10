@@ -1,0 +1,7 @@
+.deps-status-flag-table {
+  max-height: 42vh;
+}
+
+.deps-status-flag-table .ag-header-cell-label {
+  justify-content: center;
+}

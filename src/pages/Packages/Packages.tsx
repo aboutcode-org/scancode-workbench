@@ -331,9 +331,9 @@ const Packages = () => {
 
   return (
     <div>
-      <h4 className="packages-title">Packages & Dependencies explorer</h4>
+      <h4 className="packages-title">Package explorer</h4>
       <Allotment className="packages-container">
-        <Allotment.Pane snap minSize={200} preferredSize="47%">
+        <Allotment.Pane snap minSize={200} preferredSize="35%">
           <MultiSelect
             closeMenuOnSelect={false}
             components={animatedComponents}
@@ -587,7 +587,7 @@ const Packages = () => {
             })}
           </ListGroup>
         </Allotment.Pane>
-        <Allotment.Pane snap minSize={200} className="details-pane px-4">
+        <Allotment.Pane snap minSize={200} className="details-pane">
           {activeEntityType ? (
             activeEntityType === "package" && activePackage ? (
               <PackageEntity

@@ -8,6 +8,12 @@ import {
 } from "../../pages/Packages/packageDefinitions";
 import CoreLink from "../CoreLink/CoreLink";
 
+import { AgGridReact } from "ag-grid-react";
+import {
+  DEFAULT_DEPENDENCIES_COL_DEF,
+  DependenciesTableCols,
+} from "./DependenciesTableCols.ts";
+
 import "../../styles/entityCommonStyles.css";
 import "./packageEntity.css";
 
@@ -16,7 +22,7 @@ interface PackageEntityProps {
   goToDependency: (dependency: DependencyDetails) => void;
 }
 const PackageEntity = (props: PackageEntityProps) => {
-  const { goToDependency, package: activePackage } = props;
+  const { package: activePackage } = props;
   const { goToFileInTableView } = useWorkbenchDB();
 
   if (!activePackage) {
@@ -68,7 +74,10 @@ const PackageEntity = (props: PackageEntityProps) => {
           <React.Fragment key={entry[0].toString()}>
             <span className="property">{entry[0]}</span>
             {entry.length > 1 && (
-              <span className="value">: {entry[1] || "None"}<br /></span>
+              <span className="value">
+                : {entry[1] || "None"}
+                <br />
+              </span>
             )}
           </React.Fragment>
         ))}
@@ -98,7 +107,6 @@ const PackageEntity = (props: PackageEntityProps) => {
       <div className="deps-list">
         {activePackage.datafile_paths.map((datafile_path) => (
           <CoreLink
-            className="deps-link"
             key={datafile_path}
             onClick={() => goToFileInTableView(datafile_path)}
           >
@@ -115,17 +123,15 @@ const PackageEntity = (props: PackageEntityProps) => {
           : `${activePackage.dependencies.length} Dependencies:`}
       </b>
       <br />
-      <div className="deps-list">
-        {activePackage.dependencies.map((dependency) => (
-          <CoreLink
-            className="deps-link"
-            key={dependency.dependency_uid}
-            onClick={() => goToDependency(dependency)}
-          >
-            {dependency.purl}
-          </CoreLink>
-        ))}
-      </div>
+      <AgGridReact
+        rowData={activePackage.dependencies}
+        columnDefs={DependenciesTableCols}
+        className="ag-theme-alpine ag-grid-customClass dependencies-table"
+        pagination
+        ensureDomOrder
+        enableCellTextSelection
+        defaultColDef={DEFAULT_DEPENDENCIES_COL_DEF}
+      />
       <br />
       Raw package:
       <ReactJson

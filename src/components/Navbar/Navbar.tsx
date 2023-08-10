@@ -81,7 +81,7 @@ const MENU_ITEMS = [
     icon: faChartColumn,
   },
   {
-    title: "Scan Info",
+    title: "Scan Information",
     route: "/" + ROUTES.SCAN_INFO,
     icon: faFileCode,
   },
