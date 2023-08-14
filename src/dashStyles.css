@@ -1,5 +1,6 @@
 .dash-cards {
   justify-content: space-around;
+  text-align: center;
 }
 
 .dash-cards .card {
