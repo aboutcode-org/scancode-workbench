@@ -21,7 +21,7 @@ import {
   DepFilterTags,
   DepFilterTagsList,
 } from "./filters";
-import { MISC_DEPS, MISC_PACKAGE } from "./miscInfo";
+import { MISC_DEPS, getMiscPackage } from "./miscInfo";
 import { generatePackagesMapping } from "./packageParsers";
 import NoDataFallback from "../../components/NoDataSection";
 import DependencyEntity from "../../components/PackagesEntityDetails/DependencyEntity";
@@ -164,7 +164,7 @@ const Packages = () => {
 
         // const type_other = 'type-other';
         const packageMapping = generatePackagesMapping(packages);
-        packageMapping.set(MISC_DEPS, MISC_PACKAGE);
+        packageMapping.set(MISC_DEPS, getMiscPackage());
 
         const uniqueDataSourceIDs = new Set(
           deps.map((dep) => dep.getDataValue("datasource_id"))
@@ -190,7 +190,7 @@ const Packages = () => {
             is_optional: dependencyInfo.getDataValue("is_optional"),
             is_resolved: dependencyInfo.getDataValue("is_resolved"),
             resolved_package: JSON.parse(
-              dependencyInfo.getDataValue("resolved_package")
+              dependencyInfo.getDataValue("resolved_package") || "{}"
             ),
             dependency_uid: dependencyInfo.getDataValue("dependency_uid"),
             for_package_uid:
@@ -200,8 +200,8 @@ const Packages = () => {
           });
         });
 
-        // Ignore misc package if no misc dependencies found
-        if (!MISC_PACKAGE.dependencies.length) {
+        // Ignore misc deps if none found
+        if (!packageMapping.get(MISC_DEPS).dependencies.length) {
           packageMapping.delete(MISC_DEPS);
         }
 

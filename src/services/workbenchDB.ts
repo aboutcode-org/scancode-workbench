@@ -860,8 +860,6 @@ export class WorkbenchDB {
   }
 
   _addExtraFields(files: Resource[], attribute: string) {
-    // if (!files || !files.length) console.log("Got empty files", files);
-
     return files.flatMap((file) => {
       if (!file) {
         // console.log("invalid file added", file);

@@ -103,8 +103,8 @@ const PackageInfoDash = () => {
   }, [currentPath]);
 
   return (
-    <div className="text-center pieInfoDash">
-      <h4>Package info - {currentPath || ""}</h4>
+    <div className="pieInfoDash">
+      <h4 className="text-center">Package info - {currentPath || ""}</h4>
       <br />
       <br />
       <Row className="dash-cards">

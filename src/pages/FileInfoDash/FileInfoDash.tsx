@@ -101,8 +101,8 @@ const FileInfoDash = () => {
   }, [workbenchDB]);
 
   return (
-    <div className="text-center pieInfoDash">
-      <h4>File info - {currentPath || ""}</h4>
+    <div className="pieInfoDash">
+      <h4 className="text-center">File info - {currentPath || ""}</h4>
       <br />
       <br />
       <Row className="dash-cards">

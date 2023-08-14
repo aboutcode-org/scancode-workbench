@@ -10,7 +10,7 @@ import {
 import { useWorkbenchDB } from "../../contexts/dbContext";
 import PieChart from "../../components/PieChart/PieChart";
 import EllipticLoader from "../../components/EllipticLoader";
-import { LEGEND_LIMIT, NO_VALUE_DETECTED_LABEL } from "../../constants/data";
+import { LEGEND_LIMIT } from "../../constants/data";
 import { ScanOptionKeys } from "../../utils/parsers";
 import { AgGridReact } from "ag-grid-react";
 import {
@@ -59,12 +59,15 @@ const DependencyInfoDash = () => {
       PackageTypeSummaryRow
     >();
     packagesData.forEach((packageData) => {
-      const packageDataType =
-        packageData.getDataValue("type") ||
-        NO_VALUE_DETECTED_LABEL;
+      // Package data having PURL as null are invalid & will have no dependency
+      // Hence, don't consider such package data (will be fixed in further toolkit version)
+      if (!packageData.getDataValue("purl")) return;
+
+      const packageDataType = packageData.getDataValue("type");
       const deps: DependencyDetails[] = JSON.parse(
         packageData.getDataValue("dependencies") || "[]"
       );
+
       if (!packageTypeToSummaryMapping.has(packageDataType)) {
         packageTypeToSummaryMapping.set(packageDataType, {
           packageTypeDetails: {
@@ -180,7 +183,7 @@ const DependencyInfoDash = () => {
 
       const packagesData = await db.PackageData.findAll({
         where: { fileId: fileIDs },
-        attributes: ["type", "dependencies"],
+        attributes: ["type", "dependencies", "purl"],
       });
 
       const depsSummaryData = summarisePackageDataDeps(packagesData);
@@ -198,8 +201,8 @@ const DependencyInfoDash = () => {
   }, [initialized, db, currentPath]);
 
   return (
-    <div className="text-center pieInfoDash">
-      <h4>Dependency info - {currentPath || ""}</h4>
+    <div className="pieInfoDash">
+      <h4 className="text-center">Dependency info - {currentPath || ""}</h4>
       <br />
       <Row className="dash-cards">
         <Col sm={4}>
@@ -214,16 +217,16 @@ const DependencyInfoDash = () => {
         </Col>
       </Row>
       <br />
+      Dependency Scope summary by Package Type
       <AgGridReact
         rowData={Object.values(packageTypeSummaryData || {})}
         columnDefs={DependencySummaryTableCols}
         defaultColDef={DEFAULT_DEPS_SUMMARY_COL_DEF}
-        pagination
         ensureDomOrder
         enableCellTextSelection
         onGridReady={(params) => params.api.sizeColumnsToFit()}
         onGridSizeChanged={(params) => params.api.sizeColumnsToFit()}
-        className="ag-theme-alpine ag-grid-customClass deps-status-flag-table"
+        className="ag-theme-alpine ag-grid-customClass scope-summary-table"
       />
       <br />
       <Row className="dash-cards">
