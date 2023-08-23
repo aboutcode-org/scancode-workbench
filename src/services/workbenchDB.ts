@@ -886,9 +886,10 @@ export class WorkbenchDB {
   }
 
   _addExtraFields(files: Resource[], attribute: string) {
-    return $.map(files, (file) => {
+    return files.flatMap((file) => {
       if (!file) {
-        console.log("invalid file added", file);
+        // console.log("invalid file added", file);
+        return [];
       }
 
       if (attribute === "copyrights") {
@@ -899,7 +900,7 @@ export class WorkbenchDB {
 
       const fileAttr = (file as any)[attribute] || [];
 
-      return $.map(fileAttr, (value) => {
+      return fileAttr.map((value: any) => {
         if (attribute === "license_expressions") {
           return {
             license_expression: value,

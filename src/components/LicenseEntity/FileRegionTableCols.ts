@@ -1,7 +1,7 @@
 import { ColDef } from "ag-grid-community";
 import {
   DetectionOriginRenderer,
-  FileRegionPathRenderer,
+  FilePathRenderer,
   RegionLinesRenderer,
 } from "../../pages/TableView/CustomCellRenderers";
 
@@ -21,7 +21,7 @@ export const DetectionFileRegionCols: ColDef[] = [
     headerName: "Path",
     field: "path",
     minWidth: 300,
-    cellRenderer: FileRegionPathRenderer,
+    cellRenderer: FilePathRenderer,
   },
   {
     headerName: "Lines",

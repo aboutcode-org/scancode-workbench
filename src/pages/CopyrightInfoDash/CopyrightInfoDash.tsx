@@ -110,8 +110,8 @@ const CopyrightInfoDash = () => {
   }, [db, initialized, currentPath]);
 
   return (
-    <div className="text-center pieInfoDash">
-      <h4>Copyright info - {currentPath || ""}</h4>
+    <div className="pieInfoDash">
+      <h4 className="text-center">Copyright info - {currentPath || ""}</h4>
       <br />
       <br />
       <Row className="dash-cards">

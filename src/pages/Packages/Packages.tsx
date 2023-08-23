@@ -21,7 +21,7 @@ import {
   DepFilterTags,
   DepFilterTagsList,
 } from "./filters";
-import { MISC_DEPS, MISC_PACKAGE } from "./miscInfo";
+import { MISC_DEPS, getMiscPackage } from "./miscInfo";
 import { generatePackagesMapping } from "./packageParsers";
 import NoDataFallback from "../../components/NoDataSection";
 import DependencyEntity from "../../components/PackagesEntityDetails/DependencyEntity";
@@ -163,7 +163,7 @@ const Packages = () => {
 
       // const type_other = 'type-other';
       const packageMapping = generatePackagesMapping(packages);
-      packageMapping.set(MISC_DEPS, MISC_PACKAGE);
+      packageMapping.set(MISC_DEPS, (getMiscPackage()));
 
       const uniqueDataSourceIDs = new Set(
         deps.map((dep) => dep.getDataValue("datasource_id").toString({}))
@@ -209,8 +209,8 @@ const Packages = () => {
         });
       });
 
-      // Ignore misc package if no misc dependencies found
-      if (!MISC_PACKAGE.dependencies.length) {
+      // Ignore misc deps if none found
+      if (!packageMapping.get(MISC_DEPS).dependencies.length) {
         packageMapping.delete(MISC_DEPS);
       }
 
@@ -238,7 +238,7 @@ const Packages = () => {
       );
       setAllPackageGroups(parsedPackageGroups);
       // console.log("Package groups", parsedPackageGroups);
-        setExpandedPackages([]);
+      setExpandedPackages([]);
 
         // Select package based on query or default
         const queriedPackageUid = searchParams.get(QUERY_KEYS.PACKAGE);
@@ -337,9 +337,9 @@ const Packages = () => {
 
   return (
     <div>
-      <h4 className="packages-title">Packages & Dependencies explorer</h4>
+      <h4 className="packages-title">Package explorer</h4>
       <Allotment className="packages-container">
-        <Allotment.Pane snap minSize={200} preferredSize="47%">
+        <Allotment.Pane snap minSize={200} preferredSize="35%">
           <MultiSelect
             closeMenuOnSelect={false}
             components={animatedComponents}
@@ -593,7 +593,7 @@ const Packages = () => {
             })}
           </ListGroup>
         </Allotment.Pane>
-        <Allotment.Pane snap minSize={200} className="details-pane px-4">
+        <Allotment.Pane snap minSize={200} className="details-pane">
           {activeEntityType ? (
             activeEntityType === "package" && activePackage ? (
               <PackageEntity

@@ -1,4 +1,3 @@
-import * as $ from "jquery";
 import { StringDataType } from "sequelize";
 import { LEGEND_LIMIT } from "../constants/data";
 

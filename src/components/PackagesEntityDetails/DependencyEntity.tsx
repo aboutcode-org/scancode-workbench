@@ -98,7 +98,7 @@ const DependencyEntity = (props: DependencyEntityProps) => {
         </div>
       )}
       <br />
-      Raw package:
+      Raw dependency:
       <ReactJson
         src={dependency || {}}
         enableClipboard={false}

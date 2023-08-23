@@ -66,12 +66,12 @@ const MENU_ITEMS = [
     icon: faListCheck,
   },
   {
-    title: "Licenses Explorer",
+    title: "License Explorer",
     route: "/" + ROUTES.LICENSES,
     icon: faRectangleList,
   },
   {
-    title: "Packages Explorer",
+    title: "Package Explorer",
     route: "/" + ROUTES.PACKAGES,
     icon: faFolderTree,
   },
@@ -81,7 +81,7 @@ const MENU_ITEMS = [
     icon: faChartColumn,
   },
   {
-    title: "Scan Info",
+    title: "Scan Information",
     route: "/" + ROUTES.SCAN_INFO,
     icon: faFileCode,
   },

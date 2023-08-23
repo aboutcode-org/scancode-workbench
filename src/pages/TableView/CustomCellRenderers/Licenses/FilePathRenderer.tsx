@@ -2,25 +2,19 @@ import React from "react";
 import { useWorkbenchDB } from "../../../../contexts/dbContext";
 import CoreLink from "../../../../components/CoreLink/CoreLink";
 
-interface FileRegionPathRendererProps {
+interface FilePathRendererProps {
   value: string;
 }
 
-const FileRegionPathRenderer = (
-  props: FileRegionPathRendererProps
-) => {
+const FilePathRenderer = (props: FilePathRendererProps) => {
   const { value } = props;
   const { goToFileInTableView } = useWorkbenchDB();
 
   return (
-    <CoreLink
-      className='deps-link'
-      key={value}
-      onClick={() => goToFileInTableView(value)}
-    >
-      { value }
+    <CoreLink key={value} onClick={() => goToFileInTableView(value)}>
+      {value}
     </CoreLink>
   );
 };
 
-export default FileRegionPathRenderer
+export default FilePathRenderer;

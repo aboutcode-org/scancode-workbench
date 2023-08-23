@@ -45,8 +45,6 @@ const FileTree = (props: React.HTMLProps<HTMLDivElement>) => {
 
     db.findAllJSTree()
       .then((treeData) => {
-        console.log("Filetree data", treeData);
-
         // Wrap with react-scroll wrapper
         function wrapNode(node: DataNode) {
           const key = String(node.key);
