@@ -1,5 +1,22 @@
 import { diff_match_patch } from "diff-match-patch";
 
+// Convert stringified nested list to comma separated string for Filters
+export function parseProbableStringifiedArray(str: string, maxLength: number) {
+  try {
+    const result = JSON.parse(str);
+    if (Array.isArray(result)) {
+      const parseableResultArray = result as string[][];
+      return trimStringWithEllipsis(
+        parseableResultArray.map((subEntry) => subEntry.join(",")).join(","),
+        maxLength
+      );
+    }
+    return trimStringWithEllipsis(str, maxLength);
+  } catch (e) {
+    return trimStringWithEllipsis(str, maxLength);
+  }
+}
+
 // Trim string to specified length & add ellipsis if required
 export function trimStringWithEllipsis(
   str: string,

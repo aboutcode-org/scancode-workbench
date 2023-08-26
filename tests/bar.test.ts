@@ -10,7 +10,7 @@ const PossibleBarchartValues: { valid: unknown[]; invalid: unknown[] } = {
   valid: [["nexB Inc"], "ABCD", 23, 55.5, true],
   invalid: [null, undefined, []],
 };
-describe("Bar chart - Check Validity of values", () => {
+describe("Check Validity of values", () => {
   it.each(PossibleBarchartValues.valid)("Valid chart values %s", (chartValue) =>
     assert.equal(isValid(chartValue), true)
   );
@@ -20,7 +20,7 @@ describe("Bar chart - Check Validity of values", () => {
   );
 });
 
-describe("Bar chart - Get attribute from Sequelize model", () => {
+describe("Get attribute from Sequelize model", () => {
   it.each(RawModelDataSamples)(
     "Get attribute $attribute",
     ({ attribute, values, validatedAttributeValues }) =>
@@ -31,7 +31,7 @@ describe("Bar chart - Get attribute from Sequelize model", () => {
   );
 });
 
-describe("Bar chart - Format bar chart values", () => {
+describe("Format bar chart values", () => {
   it.each(BarDataSamples)(
     "Format bar chart data of length: $data.length",
     ({ data, formatted }) => {

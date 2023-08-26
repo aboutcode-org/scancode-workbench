@@ -421,7 +421,7 @@ export const ALL_COLUMNS: COLUMNS_LIST = {
   },
 };
 
-// Set Sorting order index
+// Set Sorting order index the same as the order in which columns are defined
 Object.values(ALL_COLUMNS).forEach((col, idx) => (col.sortIndex = idx));
 
 export const ALL_COLUMNS_MAP = new Map(

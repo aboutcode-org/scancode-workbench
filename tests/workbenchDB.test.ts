@@ -17,7 +17,7 @@ beforeEach(() => {
   jest.spyOn(console, "info").mockImplementation(() => null);
 });
 
-describe("Can process special cases", () => {
+describe("Process special cases", () => {
   it.each(SanitySamples)("Parses $jsonFileName", async ({ jsonFileName }) => {
     const jsonFilePath = path.join(
       __dirname,
@@ -35,7 +35,7 @@ describe("Can process special cases", () => {
   });
 });
 
-describe("Can parse Headers", () => {
+describe("Parse Headers", () => {
   it.each(HeaderSamples)(
     "Parses $jsonFileName",
     async ({ jsonFileName, expectedHeaders }) => {
@@ -59,7 +59,7 @@ describe("Can parse Headers", () => {
   );
 });
 
-describe("Can parse Errors", () => {
+describe("Parse Errors", () => {
   it.each(ErrorSamples)(
     "Parses $jsonFileName",
     async ({ jsonFileName, expectedFlatFiles, expectedScanErrors }) => {
@@ -92,7 +92,7 @@ describe("Can parse Errors", () => {
   );
 });
 
-describe("Can parse Copyrights", () => {
+describe("Parse Copyrights", () => {
   it.each(CopyrightSamples)(
     "Parses $jsonFileName",
     async ({ jsonFileName, expectedFlatFiles, expectedCopyrights }) => {
@@ -131,7 +131,7 @@ describe("Can parse Copyrights", () => {
   );
 });
 
-describe("Can parse Email, URL & Info", () => {
+describe("Parse Email, URL & Info", () => {
   it.each(EmailUrlInfoSamples)(
     "Parses $jsonFileName",
     async ({
@@ -196,7 +196,7 @@ describe("Can parse Email, URL & Info", () => {
   );
 });
 
-describe("Can parse Licenses", () => {
+describe("Parse Licenses", () => {
   it.each(LicenseSamples)(
     "Parses $jsonFileName",
     async ({
@@ -261,7 +261,7 @@ describe("Can parse Licenses", () => {
   );
 });
 
-describe("Can parse Packages & Dependencies", () => {
+describe("Parse Packages & Dependencies", () => {
   it.each(PackageDepsSamples)(
     "Parses $jsonFileName",
     async ({

@@ -32,6 +32,36 @@ export const NormalizeTexts: { text: string; normalized: string }[] = [
   { text: "abcd wef \n mno   pqr  ", normalized: "abcd wef mno pqr" },
 ];
 
+export const StringifiedArrayParserSamples: {
+  stringifiedArray: string;
+  readableString: string;
+  trimmedSize?: number;
+}[] = [
+  {
+    stringifiedArray: "[[]]",
+    readableString: "",
+  },
+  {
+    stringifiedArray: '[["Google\', type"]]',
+    readableString: "Google', type",
+  },
+  {
+    stringifiedArray: '[["nexB Inc."]]',
+    readableString: "nexB Inc.",
+  },
+  {
+    stringifiedArray:
+      '[["nexB Inc. and others","nexB Inc. and others","SpryMedia Limited","Twitter, Inc","SpryMedia Limited","Masayuki Tanaka","The Chromium Authors","SpryMedia Limited","Michael Bostock","SpryMedia Limited","GitHub Inc.","Electron project","SpryMedia Limited","SpryMedia Limited","Mika Tuupola, Dylan Verheul","jQuery Foundation and other contributors","jQuery Foundation and other contributors"]]',
+    trimmedSize: 75,
+    readableString:
+      "nexB Inc. and others,nexB Inc. and others,SpryMedia Limited,Twitter, Inc...",
+  },
+  {
+    stringifiedArray: '[["nexB Inc. and others","nexB Inc. and others"]]',
+    readableString: "nexB Inc. and others,nexB Inc. and others",
+  },
+];
+
 export const DiffTextSamples: {
   sourceText: string;
   modifiedText: string;

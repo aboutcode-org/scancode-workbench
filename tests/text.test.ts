@@ -3,6 +3,7 @@ import assert from "assert";
 import {
   DiffTextSamples,
   NormalizeTexts,
+  StringifiedArrayParserSamples,
   TrimTexts,
 } from "./text.test.data";
 import {
@@ -11,9 +12,21 @@ import {
   normalizeDiffString,
   trimStringWithEllipsis,
   BelongsIndicator,
+  parseProbableStringifiedArray,
 } from "../src/utils/text";
 
-describe("Text - Trim text", () => {
+describe("Create readable string from stringified nested array", () => {
+  it.each(StringifiedArrayParserSamples)(
+    "Parse stringified array",
+    ({ stringifiedArray, readableString, trimmedSize }) => {
+      expect(
+        parseProbableStringifiedArray(stringifiedArray, trimmedSize || 75)
+      ).toBe(readableString);
+    }
+  );
+});
+
+describe("Trim text with ellipsis", () => {
   it.each(TrimTexts)(
     "Trim text: '$text' => '$trimmed'",
     ({ text, maxLengthInclusive, trimmed }) => {
@@ -22,7 +35,7 @@ describe("Text - Trim text", () => {
   );
 });
 
-describe("Text - Normalize text", () => {
+describe("Normalize text", () => {
   it.each(NormalizeTexts)(
     "Normalize text: '$text' => '$normalized'",
     ({ text, normalized }) => {
@@ -31,7 +44,7 @@ describe("Text - Normalize text", () => {
   );
 });
 
-describe("Text - Diff two strings", () => {
+describe("Diff two strings", () => {
   it.each(DiffTextSamples)(
     "Diff text",
     ({ sourceText, modifiedText, normalizedDiffs }) =>
@@ -39,7 +52,7 @@ describe("Text - Diff two strings", () => {
   );
 });
 
-describe("Text - Group diffs into Lines", () => {
+describe("Group diffs into Lines", () => {
   it.each(DiffTextSamples)(
     "Diff to lines",
     ({
@@ -47,21 +60,27 @@ describe("Text - Group diffs into Lines", () => {
       normalizedSourceTextLines,
       normalizedModifiedTextLines,
     }) => {
-      assert.deepEqual(splitDiffIntoLines(
-        normalizedDiffs.filter(
-          (diff) =>
-            diff.belongsTo === BelongsIndicator.BOTH ||
-            diff.belongsTo === BelongsIndicator.ORIGINAL
-        )
-      ), normalizedSourceTextLines);
+      assert.deepEqual(
+        splitDiffIntoLines(
+          normalizedDiffs.filter(
+            (diff) =>
+              diff.belongsTo === BelongsIndicator.BOTH ||
+              diff.belongsTo === BelongsIndicator.ORIGINAL
+          )
+        ),
+        normalizedSourceTextLines
+      );
 
-      assert.deepEqual(splitDiffIntoLines(
-        normalizedDiffs.filter(
-          (diff) =>
-            diff.belongsTo === BelongsIndicator.BOTH ||
-            diff.belongsTo === BelongsIndicator.MODIFIED
-        )
-      ), normalizedModifiedTextLines);
+      assert.deepEqual(
+        splitDiffIntoLines(
+          normalizedDiffs.filter(
+            (diff) =>
+              diff.belongsTo === BelongsIndicator.BOTH ||
+              diff.belongsTo === BelongsIndicator.MODIFIED
+          )
+        ),
+        normalizedModifiedTextLines
+      );
     }
   );
 });

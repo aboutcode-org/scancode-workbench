@@ -5,7 +5,7 @@ import {
 } from "./pie.test.data";
 import { formatPieChartData, limitPieChartData } from "../src/utils/pie";
 
-describe("Pie chart - Limit values to be shown in chart", () => {
+describe("Limit values to be shown in chart", () => {
   it.each(PieLimitDataSamples)(
     "Limit entries from $data.length => $limited.length",
     ({ data, chartDataLimit, limited }) =>
@@ -13,7 +13,7 @@ describe("Pie chart - Limit values to be shown in chart", () => {
   );
 });
 
-describe("Pie chart - Count & format value occurences in given list of values", () => {
+describe("Count & format value occurences in given list of values", () => {
   it.each(PieFormatDataSamples)(
     "Format chart values of length $entries.length",
     ({ entries, limit, formatted }) =>
