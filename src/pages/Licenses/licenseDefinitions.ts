@@ -24,7 +24,7 @@ export interface LicenseClueDetails {
   file_regions: LicenseFileRegion[];
 }
 
-export type ActiveLicense =
+export type ActiveLicenseEntity =
   | {
       type: "detection";
       license: LicenseDetectionDetails;

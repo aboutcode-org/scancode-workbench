@@ -1,0 +1,40 @@
+{
+  "files": [
+    {
+      "path": "manifests",
+      "type": "directory"
+    },
+    {
+      "path": "manifests/copyright",
+      "type": "file"
+    },
+    {
+      "path": "manifests/folder1",
+      "type": "directory"
+    },
+    {
+      "path": "manifests/folder1/file1.txt",
+      "type": "file"
+    },
+    {
+      "path": "manifests/folder1/folder2",
+      "type": "directory"
+    },
+    {
+      "path": "manifests/folder1/folder2/file2.json",
+      "type": "file"
+    },
+    {
+      "path": "manifests/folder3",
+      "type": "directory"
+    },
+    {
+      "path": "manifests/folder3/file3.md",
+      "type": "file"
+    },
+    {
+      "path": "manifests/GoogleCloudAnalytics.podspec.json",
+      "type": "file"
+    }
+  ]
+}

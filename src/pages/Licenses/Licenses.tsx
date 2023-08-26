@@ -15,7 +15,7 @@ import NoDataFallback from "../../components/NoDataSection";
 import { QUERY_KEYS } from "../../constants/params";
 import { useWorkbenchDB } from "../../contexts/dbContext";
 import {
-  ActiveLicense,
+  ActiveLicenseEntity,
   LicenseClueDetails,
   LicenseDetectionDetails,
 } from "./licenseDefinitions";
@@ -24,7 +24,7 @@ import "./Licenses.css";
 
 const LicenseDetections = () => {
   const [searchParams] = useSearchParams();
-  const [activeLicense, setActiveLicense] = useState<ActiveLicense | null>(
+  const [activeLicense, setActiveLicense] = useState<ActiveLicenseEntity | null>(
     null
   );
   const [searchedLicense, setSearchedLicense] = useState("");
@@ -312,7 +312,7 @@ const LicenseDetections = () => {
           minSize={500}
           className="license-entity-pane overflow-scroll"
         >
-          <LicenseEntity activeLicense={activeLicense} />
+          <LicenseEntity activeLicenseEntity={activeLicense} />
         </Allotment.Pane>
       </Allotment>
     </div>

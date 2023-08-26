@@ -2,7 +2,7 @@ import ReactJson from "@microlink/react-json-view";
 import { AgGridReact } from "ag-grid-react";
 import React, { useEffect, useState } from "react";
 
-import { ActiveLicense } from "../../pages/Licenses/licenseDefinitions";
+import { ActiveLicenseEntity } from "../../pages/Licenses/licenseDefinitions";
 import {
   DEFAULT_FILE_REGION_COL_DEF,
   DetectionFileRegionCols,
@@ -22,10 +22,10 @@ import "./licenseEntity.css";
 import "../../styles/entityCommonStyles.css";
 
 interface LicenseDetectionEntityProps {
-  activeLicense: ActiveLicense | null;
+  activeLicenseEntity: ActiveLicenseEntity | null;
 }
 const LicenseEntity = (props: LicenseDetectionEntityProps) => {
-  const { activeLicense } = props;
+  const { activeLicenseEntity } = props;
   const { scanInfo } = useWorkbenchDB();
   const [matchesTableColumnApi, setMatchesTableColumnApi] =
     useState<ColumnApi | null>(null);
@@ -40,11 +40,11 @@ const LicenseEntity = (props: LicenseDetectionEntityProps) => {
     );
   }, [scanInfo, matchesTableColumnApi]);
 
-  const license = activeLicense?.license;
-  const matches = activeLicense?.license?.matches;
-  const file_regions = activeLicense?.license?.file_regions;
+  const license = activeLicenseEntity?.license;
+  const matches = activeLicenseEntity?.license?.matches;
+  const file_regions = activeLicenseEntity?.license?.file_regions;
 
-  if (!activeLicense) {
+  if (!activeLicenseEntity) {
     return (
       <div>
         <h5>No License detection / clue selected</h5>
@@ -59,21 +59,24 @@ const LicenseEntity = (props: LicenseDetectionEntityProps) => {
         <br />
       </h5>
       <div className="license-entity-properties">
-        {(activeLicense.type === "detection"
+        {(activeLicenseEntity.type === "detection"
           ? [
-              ["License Identifier:", activeLicense.license.identifier || "NA"],
+              [
+                "License Identifier:",
+                activeLicenseEntity.license.identifier || "NA",
+              ],
               [
                 "Instances:",
-                (activeLicense.license.detection_count || 0).toString(),
+                (activeLicenseEntity.license.detection_count || 0).toString(),
               ],
-              ...(activeLicense.license.detection_log &&
-                Array.isArray(activeLicense.license.detection_log) &&
-                activeLicense.license.detection_log.length && [
+              ...(activeLicenseEntity.license.detection_log &&
+                Array.isArray(activeLicenseEntity.license.detection_log) &&
+                activeLicenseEntity.license.detection_log.length && [
                   [
                     "Detection log ",
                     <>
                       <ul>
-                        {activeLicense.license.detection_log.map(
+                        {activeLicenseEntity.license.detection_log.map(
                           (log_item, idx) => (
                             <li key={String(log_item) + idx}>{log_item}</li>
                           )
@@ -86,9 +89,9 @@ const LicenseEntity = (props: LicenseDetectionEntityProps) => {
           : [
               [
                 "Rule Identifier:",
-                activeLicense.license.rule_identifier || "NA",
+                activeLicenseEntity.license.rule_identifier || "NA",
               ],
-              ["Score:", (activeLicense.license.score || 0).toString()],
+              ["Score:", (activeLicenseEntity.license.score || 0).toString()],
             ]
         ).map((entry) => (
           <React.Fragment key={entry[0].toString()}>
@@ -104,7 +107,7 @@ const LicenseEntity = (props: LicenseDetectionEntityProps) => {
         <AgGridReact
           rowData={matches}
           columnDefs={
-            activeLicense.type === "detection"
+            activeLicenseEntity.type === "detection"
               ? LicenseDetectionMatchCols
               : LicenseClueMatchCols
           }
@@ -130,9 +133,9 @@ const LicenseEntity = (props: LicenseDetectionEntityProps) => {
         defaultColDef={DEFAULT_FILE_REGION_COL_DEF}
       />
       <br />
-      Raw license {activeLicense.type}
+      Raw license {activeLicenseEntity.type}
       <ReactJson
-        src={activeLicense.license}
+        src={activeLicenseEntity.license}
         enableClipboard={false}
         displayDataTypes={false}
         collapsed={0}

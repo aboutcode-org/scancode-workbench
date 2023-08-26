@@ -1,12 +1,12 @@
 import RcTree from "rc-tree";
-import { DataNode, Key } from "rc-tree/lib/interface";
+import { Key } from "rc-tree/lib/interface";
 import React, { useEffect, useState } from "react";
 import { Element } from "react-scroll";
 
 import EllipticLoader from "../EllipticLoader";
-import { PathType, useWorkbenchDB } from "../../contexts/dbContext";
-
 import SwitcherIcon from "./SwitcherIcon";
+import { PathType, useWorkbenchDB } from "../../contexts/dbContext";
+import { FileDataNode } from "../../services/workbenchDB";
 
 import "./FileTree.css";
 
@@ -19,7 +19,7 @@ const FileTree = (props: React.HTMLProps<HTMLDivElement>) => {
     updateCurrentPath,
   } = useWorkbenchDB();
 
-  const [treeData, setTreeData] = useState<DataNode[] | null>(null);
+  const [treeData, setTreeData] = useState<FileDataNode[] | null>(null);
   const [expandedKeys, setExpandedKeys] = useState<Key[]>([]);
 
   useEffect(() => {
@@ -43,21 +43,20 @@ const FileTree = (props: React.HTMLProps<HTMLDivElement>) => {
   useEffect(() => {
     if (!initialized || !db || !importedSqliteFilePath) return;
 
-    db.findAllJSTree()
-      .then((treeData) => {
-        // Wrap with react-scroll wrapper
-        function wrapNode(node: DataNode) {
-          const key = String(node.key);
-          node.title = (
-            <Element key={key} name={key} className="filetree-node-wrapper">
-              <span>{String(node.title)}</span>
-            </Element>
-          );
-          node.children?.forEach(wrapNode);
-        }
-        treeData.forEach(wrapNode);
-        setTreeData(treeData as unknown as DataNode[]);
-      })
+    db.findAllJSTree().then((treeData) => {
+      // Wrap with react-scroll wrapper
+      function wrapNode(node: FileDataNode) {
+        const key = String(node.key);
+        node.title = (
+          <Element key={key} name={key} className="filetree-node-wrapper">
+            <span>{String(node.title)}</span>
+          </Element>
+        );
+        node.children?.forEach(wrapNode);
+      }
+      treeData.forEach(wrapNode);
+      setTreeData(treeData);
+    });
   }, [importedSqliteFilePath]);
 
   function selectPath(path: string, pathType: PathType) {
@@ -99,7 +98,10 @@ const FileTree = (props: React.HTMLProps<HTMLDivElement>) => {
         selectedKeys={[currentPath]}
         onSelect={(keys, info) => {
           if (keys && keys[0]) {
-            selectPath(keys[0].toString(), (info.node as any).dataValues.type);
+            selectPath(
+              keys[0].toString(),
+              (info.node as any as FileDataNode).type as PathType
+            );
           }
         }}
         motion={{

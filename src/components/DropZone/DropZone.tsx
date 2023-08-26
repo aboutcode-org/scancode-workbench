@@ -2,15 +2,7 @@ import { toast } from "react-toastify";
 import React, { DragEvent } from "react";
 
 import { useWorkbenchDB } from "../../contexts/dbContext";
-
-const lastLogs: { [key: string]: number } = {};
-export const CustomLogger = (id: string, ...args: unknown[]) => {
-  const currentTime = new Date().getTime();
-  if (!(lastLogs[id] && currentTime < lastLogs[id] + 1000)) {
-    console.log(id, ...args);
-    lastLogs[id] = currentTime;
-  }
-};
+import { filterValidFiles, getFileType } from "../../utils/files";
 
 const DropZone = (props: React.PropsWithChildren) => {
   const { sqliteParser, importJsonFile } = useWorkbenchDB();
@@ -18,26 +10,21 @@ const DropZone = (props: React.PropsWithChildren) => {
   function DragOverHandler(e: DragEvent) {
     e.preventDefault();
     e.stopPropagation();
-    // CustomLogger("Drag detected", e, e.dataTransfer.files);
+    // TimeThrottledLogger("Drag detected", e, e.dataTransfer.files);
   }
+
   function DropHandler(e: DragEvent) {
     e.preventDefault();
     e.stopPropagation();
 
-    const regex = {
-      json: /\.(json)+$/i,
-      sqlite: /\.(sqlite)+$/i,
-    };
-
-    const validFiles = Array.from(e.dataTransfer.files)
-      .filter(
-        (file) => file.name.match(regex.json) || file.name.match(regex.sqlite)
-      )
-      .filter((file) => file !== null);
+    const validFiles = filterValidFiles(e.dataTransfer.files);
     const fileToImport = validFiles[0];
 
-    console.log("Dropped files:", e, e.dataTransfer.files);
-    console.log("Valid files:", validFiles);
+    console.log({
+      validFiles,
+      droppedFiles: e.dataTransfer.files,
+      fileToImport,
+    });
 
     if (!validFiles.length) {
       return toast.error("Only json/sqlite file can be imported !", {
@@ -51,10 +38,12 @@ const DropZone = (props: React.PropsWithChildren) => {
       });
     }
 
-    if (regex.sqlite.test(fileToImport.name)) {
+    const fileType = getFileType(fileToImport);
+
+    if (fileType === "sqlite") {
       console.log("Parsing sqlite file:", fileToImport.name);
       sqliteParser(fileToImport.path);
-    } else {
+    } else if (fileType === "json") {
       console.log("Parsing json file:", fileToImport.name);
       importJsonFile(fileToImport.path);
     }

@@ -34,7 +34,6 @@ import { DebugLogger } from "../utils/logger";
 import { DatabaseStructure, newDatabase } from "./models/database";
 import {
   filterSpdxKeys,
-  JSON_Type,
   parentPath,
   parseSubExpressions,
   parseTokenKeysFromExpression,
@@ -90,7 +89,14 @@ interface TopLevelDataFormat {
   license_references_spdx_map: Map<string, LicenseReference>;
   license_rule_references: unknown[];
 }
-export type FileDataNode = Model<FileAttributes, FileAttributes> & DataNode;
+export interface FileDataNode extends DataNode {
+  id: number;
+  path: string;
+  parent: string;
+  name: string;
+  type: string;
+  children?: FileDataNode[];
+}
 
 // @TODO
 // function sortChildren(node: Model<FileAttributes, FileAttributes>){
@@ -222,56 +228,41 @@ export class WorkbenchDB {
     };
     return this.sync
       .then((db) => db.File.findAll(fileQuery))
-      .then((files) => {
-        const result = this.listToTreeData(files as FileDataNode[]);
-        return result;
-      });
+      .then((files) => this.listToTreeData(files));
   }
 
-  listToTreeData(
-    fileList: FileDataNode[] & Model<FileAttributes, FileAttributes>[]
-  ) {
-    const pathToIndexMap = new Map<string, number>();
+  listToTreeData(fileList: Model<FileAttributes, FileAttributes>[]) {
+    const pathToNodeMap = new Map<string, FileDataNode>();
     const roots: FileDataNode[] = [];
 
     fileList.forEach((file) => {
-      // Maintain path mapping for each file
-      pathToIndexMap.set(
-        file.getDataValue("path"),
-        Number(file.getDataValue("id"))
-      );
-
-      // Setup DataNode properties
-      file.key = file.getDataValue("path");
-      file.children = [];
-      file.title = path.basename(file.getDataValue("path"));
+      // Maintain path mapping for each file to DataNode properties
+      const filePath = file.getDataValue("path");
+      const fileType = file.getDataValue("type") || "file";
+      pathToNodeMap.set(filePath, {
+        id: file.getDataValue("id"),
+        key: filePath,
+        title: path.basename(filePath),
+        path: filePath,
+        parent: file.getDataValue("parent"),
+        name: file.getDataValue("name"),
+        type: fileType,
+        ...(fileType == "directory" && { children: [] }),
+        // @TODO - Trial to fix rc-tree showing file icon instead of empty directory https://github.com/nexB/scancode-workbench/issues/542
+        // isLeaf: fileType == "file",
+      });
     });
 
     fileList.forEach((file) => {
       const fileParentPath = file.getDataValue("parent");
+      const fileNode = pathToNodeMap.get(file.getDataValue("path"));
       if (Number(file.getDataValue("id")) !== 0) {
-        if (pathToIndexMap.has(fileParentPath)) {
-          // @TODO
-          // if you have dangling branches check that map[node.parentId] exists
-          fileList[pathToIndexMap.get(fileParentPath)].children.push(file);
+        if (pathToNodeMap.has(fileParentPath)) {
+          pathToNodeMap.get(fileParentPath).children?.push(fileNode);
         }
       } else {
-        roots.push(file);
+        roots.push(fileNode);
       }
-
-      // @TODO - Trial to fix rc-tree showing file icon instead of directory https://github.com/nexB/scancode-workbench/issues/542
-      // fileList.forEach(file => {
-      //   if(file.getDataValue('type') === 'directory' && !file.children){
-      //     file.children=[];
-      //     file.isLeaf=true;
-      //   }
-      //   file.children?.forEach((file: any) => {
-      //     if(file.getDataValue('type') === 'directory' && !file.children){
-      //       file.children=[];
-      //       file.isLeaf=true;
-      //     }
-      //   })
-      // })
     });
 
     roots.forEach(sortChildren);

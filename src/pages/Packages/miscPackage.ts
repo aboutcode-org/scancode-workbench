@@ -2,7 +2,7 @@ import { PackageDetails } from "./packageDefinitions";
 
 export const MISC_DEPS = "others";
 
-// Obtaining a misc package via function to prevent preserving the same object across rerenders
+// Obtaining a new misc package via function to prevent preserving the same object across renders
 export const getMiscPackage = (): PackageDetails => {
   return {
     package_uid: "misc",

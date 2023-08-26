@@ -54,8 +54,6 @@ export const WorkbenchStateProvider = (
   ) => {
     const newColumnState = columnApi.getColumnState();
 
-    // console.log("Update state request ---");
-
     // Need to perform this in all cases, for width to be updated
     const newColumnDefs = getColumnDefsFromState(newColumnState);
 

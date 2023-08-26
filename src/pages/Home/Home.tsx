@@ -3,7 +3,6 @@ import electron from "electron";
 import * as electronFs from "fs";
 import { toast } from "react-toastify";
 import React, { useMemo, useState } from "react";
-
 import {
   faCogs,
   faDatabase,
@@ -17,7 +16,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useWorkbenchDB } from "../../contexts/dbContext";
 import CoreButton from "../../components/CoreButton/CoreButton";
 import ProgressLoader from "../../components/ProgressLoader/ProgressLoader";
-
 import { OPEN_DIALOG_CHANNEL } from "../../constants/IpcConnection";
 import {
   GetHistory,

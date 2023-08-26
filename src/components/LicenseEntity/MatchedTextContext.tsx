@@ -10,12 +10,7 @@ import {
   splitDiffIntoLines,
 } from "../../utils/text";
 import { ScanOptionKeys } from "../../utils/parsers";
-
-const SYNTHETIC_RULE_PREFIXES = [
-  "spdx-license-identifier",
-  "license-detection-unknown",
-  "package-manifest-unknown",
-];
+import { SYNTHETIC_RULE_PREFIXES } from "../../constants/licenseRules";
 
 interface MatchedTextContextProperties {
   showDiffWindow: boolean;
@@ -108,7 +103,7 @@ export const MatchedTextProvider = (
 
   function closeDiffWindow() {
     setShowDiffWindow(false);
-    // Prevents showing fallbacks inside modal, for the transition period
+    // Hiding diff winodw first, ensures fallbacks inside modal are hidden during the transition
     setTimeout(() => {
       setRuleDiffLines(null);
       setModifiedDiffLines(null);
@@ -122,7 +117,7 @@ export const MatchedTextProvider = (
         ruleText: null,
         processing: false,
       });
-    }, 200);
+    }, 100);
   }
 
   const isSyntheticRule =

@@ -21,7 +21,7 @@ import {
   DepFilterTags,
   DepFilterTagsList,
 } from "./filters";
-import { MISC_DEPS, getMiscPackage } from "./miscInfo";
+import { MISC_DEPS, getMiscPackage } from "./miscPackage";
 import { generatePackagesMapping } from "./packageParsers";
 import NoDataFallback from "../../components/NoDataSection";
 import DependencyEntity from "../../components/PackagesEntityDetails/DependencyEntity";
@@ -128,7 +128,6 @@ const Packages = () => {
     if (package_uid && targetPackage) {
       activatePackage(targetPackage);
     }
-    return targetPackage;
   };
   useEffect(() => {
     const queriedPackageUid = searchParams.get(QUERY_KEYS.PACKAGE);
@@ -162,7 +161,6 @@ const Packages = () => {
           return;
         }
 
-        // const type_other = 'type-other';
         const packageMapping = generatePackagesMapping(packages);
         packageMapping.set(MISC_DEPS, getMiscPackage());
 

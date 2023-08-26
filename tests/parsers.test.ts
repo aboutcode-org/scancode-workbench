@@ -24,7 +24,7 @@ export const JsonValiditySamples: {
   ],
 };
 
-describe("Parsers - Check if JSON is valid", () => {
+describe("Check if JSON is valid", () => {
   it.each(JsonValiditySamples.valid)("Valid sample: %s", (sample) =>
     expect(parseIfValidJson(sample)).toBeTruthy()
   );
