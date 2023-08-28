@@ -111,14 +111,9 @@
       "is_unknown": false,
       "is_generic": false,
       "spdx_license_key": "Apache-2.0",
-      "other_spdx_license_keys": [
-        "LicenseRef-Apache",
-        "LicenseRef-Apache-2.0"
-      ],
+      "other_spdx_license_keys": ["LicenseRef-Apache", "LicenseRef-Apache-2.0"],
       "osi_license_key": "Apache-2.0",
-      "text_urls": [
-        "http://www.apache.org/licenses/LICENSE-2.0"
-      ],
+      "text_urls": ["http://www.apache.org/licenses/LICENSE-2.0"],
       "osi_url": "http://opensource.org/licenses/apache2.0.php",
       "faq_url": "http://www.apache.org/foundation/licence-FAQ.html",
       "other_urls": [
@@ -156,11 +151,7 @@
       "is_unknown": false,
       "is_generic": false,
       "spdx_license_key": "GPL-2.0-only",
-      "other_spdx_license_keys": [
-        "GPL-2.0",
-        "GPL 2.0",
-        "LicenseRef-GPL-2.0"
-      ],
+      "other_spdx_license_keys": ["GPL-2.0", "GPL 2.0", "LicenseRef-GPL-2.0"],
       "osi_license_key": "GPL-2.0",
       "text_urls": [
         "http://www.gnu.org/licenses/gpl-2.0.txt",
@@ -284,9 +275,7 @@
       "ignorable_copyrights": [],
       "ignorable_holders": [],
       "ignorable_authors": [],
-      "ignorable_urls": [
-        "http://www.apache.org/licenses/LICENSE-2.0.html"
-      ],
+      "ignorable_urls": ["http://www.apache.org/licenses/LICENSE-2.0.html"],
       "ignorable_emails": [],
       "text": "http://www.apache.org/licenses/LICENSE-2.0.html"
     },
@@ -705,13 +694,7 @@
               "url": "https://github.com/Reactive-Extensions/RxJS/blob/master/authors.txt"
             }
           ],
-          "keywords": [
-            "React",
-            "Reactive",
-            "Events",
-            "Rx",
-            "RxJS"
-          ],
+          "keywords": ["React", "Reactive", "Events", "Rx", "RxJS"],
           "homepage_url": "https://github.com/Reactive-Extensions/RxJS",
           "download_url": "https://registry.npmjs.org/rx-lite/-/rx-lite-4.0.8.tgz",
           "bug_tracking_url": "https://github.com/Reactive-Extensions/RxJS/issues",

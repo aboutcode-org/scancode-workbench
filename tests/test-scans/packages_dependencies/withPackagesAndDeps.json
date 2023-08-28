@@ -91,12 +91,8 @@
       "repository_download_url": null,
       "api_data_url": null,
       "package_uid": "pkg:about/scancode-toolkit?uuid=3b5a9865-8101-430a-ac7c-9f184631b803",
-      "datafile_paths": [
-        "python-sample-trimmed/scancode-toolkit.ABOUT"
-      ],
-      "datasource_ids": [
-        "about_file"
-      ],
+      "datafile_paths": ["python-sample-trimmed/scancode-toolkit.ABOUT"],
+      "datasource_ids": ["about_file"],
       "purl": "pkg:about/scancode-toolkit"
     }
   ],

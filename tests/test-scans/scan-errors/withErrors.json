@@ -11,10 +11,7 @@
       "start_timestamp": "2019-04-20T035642.140687",
       "end_timestamp": "2019-04-20T035653.827335",
       "message": null,
-      "errors": [
-        "Path: samples/README",
-        "Path: samples/EULA"
-      ]
+      "errors": ["Path: samples/README", "Path: samples/EULA"]
     }
   ],
   "files": [

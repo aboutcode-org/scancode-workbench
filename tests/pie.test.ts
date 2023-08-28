@@ -1,8 +1,5 @@
 import assert from "assert";
-import {
-  PieFormatDataSamples,
-  PieLimitDataSamples,
-} from "./pie.test.data";
+import { PieFormatDataSamples, PieLimitDataSamples } from "./pie.test.data";
 import { formatPieChartData, limitPieChartData } from "../src/utils/pie";
 
 describe("Limit values to be shown in chart", () => {

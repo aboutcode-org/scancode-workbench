@@ -52,7 +52,7 @@ else:
 
 # Prepare file name for archive using platform, architecture & app version
 archive_file_name = '-'.join([APP_NAME, PLATFORM_NAME, ARCH, APP_VERSION])
-print("Composed Archive file name: '" + archive_file_name + "'")
+print(f"Composed Archive file name: '{archive_file_name}'")
 
 # Ensure archive directory dist/ is created, before attempting to store archive inside it
 ensure_archive_directory = f"mkdir -p {ARCHIVE_DIR}"
@@ -64,13 +64,13 @@ if on_windows:
   zip_command = f"powershell Compress-Archive {PACKAGE_DIR}/* {ARCHIVE_DIR}/{archive_file_name}.zip"
   print("Executing zip command on powershell:", zip_command)
   os.system(zip_command)
-  print(f"Zip file ready in {ARCHIVE_DIR}/ !!")
+  print(f"Zip file ready: {ARCHIVE_DIR}/{archive_file_name}.zip")
 
 # Prepare .tar.gz file for mac & linux
 else:
   tar_command = f"tar -czf {ARCHIVE_DIR}/{archive_file_name}.tar.gz -C {PACKAGE_DIR} ."
   print("Executing tar command:", tar_command)
   os.system(tar_command)
-  print(f"Tar file ready in {ARCHIVE_DIR}/ !!")
+  print(f"Tar file ready: {ARCHIVE_DIR}/{archive_file_name}.tar.gz")
 
 print("Build succeeded !!!")

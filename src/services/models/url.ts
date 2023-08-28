@@ -1,4 +1,3 @@
-import { Model } from "sequelize";
 /*
  #
  # Copyright (c) 2018 nexB Inc. and others. All rights reserved.
@@ -15,7 +14,7 @@ import { Model } from "sequelize";
  #
  */
 
-import { Sequelize, DataTypes } from "sequelize";
+import { Sequelize, DataTypes, Model } from "sequelize";
 
 export interface UrlAttributes {
   id: number;

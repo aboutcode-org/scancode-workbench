@@ -14,10 +14,7 @@ export const GetHistory = () => {
     window.localStorage.getItem(HISTORY_STORE_KEY) || "[]"
   ) as HistoryItem[];
   history.sort(function (a, b) {
-    return (
-      Number(moment(b.opened_at)) -
-      Number(moment(a.opened_at))
-    );
+    return Number(moment(b.opened_at)) - Number(moment(a.opened_at));
   });
 
   return JSON.parse(
@@ -39,10 +36,7 @@ export const AddEntry = (entry: HistoryItem) => {
     existingEntry.opened_at = entry.opened_at;
     existingEntry.sqlite_path = entry.sqlite_path;
     history.sort(function (a, b) {
-      return (
-        Number(moment(b.opened_at)) -
-        Number(moment(a.opened_at))
-      );
+      return Number(moment(b.opened_at)) - Number(moment(a.opened_at));
     });
   } else {
     // console.log("Adding new history entry:", entry);

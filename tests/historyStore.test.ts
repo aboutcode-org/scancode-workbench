@@ -30,7 +30,11 @@ test("AddEntry should add a new history entry", () => {
 });
 
 describe("AddEntry should update an existing history entry", () => {
-  const testCases: {description: string,initialEntry: HistoryItem, updatedEntry: HistoryItem}[] = [
+  const testCases: {
+    description: string;
+    initialEntry: HistoryItem;
+    updatedEntry: HistoryItem;
+  }[] = [
     {
       description: "Existing json import",
       initialEntry: {
@@ -42,7 +46,7 @@ describe("AddEntry should update an existing history entry", () => {
         opened_at: moment().add(1, "days").format(),
         json_path: "path/to/json",
         sqlite_path: "path/to/sqlite",
-      }
+      },
     },
     {
       description: "Existing sqlite import",
@@ -53,17 +57,17 @@ describe("AddEntry should update an existing history entry", () => {
       updatedEntry: {
         opened_at: moment().add(1, "days").format(),
         sqlite_path: "path/to/sqlite",
-      }
-    }
-  ]
-  it.each(testCases)("$description", ({initialEntry, updatedEntry}) => {
+      },
+    },
+  ];
+  it.each(testCases)("$description", ({ initialEntry, updatedEntry }) => {
     AddEntry(initialEntry);
     AddEntry(updatedEntry);
-  
+
     const history = GetHistory();
     expect(history).toHaveLength(1);
     expect(history[0]).toEqual(updatedEntry);
-  })
+  });
 });
 
 test("RemoveEntry should remove an existing history entry", () => {
@@ -131,13 +135,13 @@ test("History should be sorted by opened_at in descending order", () => {
       json_path: "path/to/json/3",
       sqlite_path: "path/to/sqlite/3",
     },
-  ]
+  ];
 
   entries.forEach(AddEntry);
 
   const history = GetHistory();
   // console.log("after add", history);
-  
+
   for (let i = 0; i < history.length - 1; i++) {
     const currentEntry = history[i];
     const nextEntry = history[i + 1];

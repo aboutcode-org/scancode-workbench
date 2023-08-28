@@ -40,7 +40,9 @@ export function getValidatedAttributeValues(
       if (!isValid(val) && attribute === "package_data_type") {
         continue;
       }
-      validatedAttributeValues.push(isValid(val) ? val : NO_VALUE_DETECTED_LABEL);
+      validatedAttributeValues.push(
+        isValid(val) ? val : NO_VALUE_DETECTED_LABEL
+      );
     }
   }
 
