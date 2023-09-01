@@ -41,7 +41,10 @@ const FileTree = (props: React.HTMLProps<HTMLDivElement>) => {
   }, [currentPath]);
 
   useEffect(() => {
-    if (!initialized || !db || !importedSqliteFilePath) return;
+    if (!initialized || !db || !importedSqliteFilePath) {
+      setTreeData(null);
+      return;
+    }
 
     db.findAllJSTree().then((treeData) => {
       // Wrap with react-scroll wrapper

@@ -113,6 +113,10 @@ export function saveSqliteFile(mainWindow: BrowserWindow) {
     });
 }
 
+export function closeFile(mainWindow: BrowserWindow) {
+  mainWindow.webContents.send(UTIL_CHANNEL.CLOSE_FILE);
+}
+
 export function showErrorDialog(err: ErrorInfo) {
   console.log("Showing error to user:", err);
   dialog.showErrorBox(err.title, err.message);

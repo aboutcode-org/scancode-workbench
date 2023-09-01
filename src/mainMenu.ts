@@ -1,6 +1,11 @@
 import { GENERAL_ACTIONS, NAVIGATION_CHANNEL } from "./constants/IpcConnection";
 import { app, BrowserWindow, MenuItem, shell } from "electron";
-import { importJsonFile, openSqliteFile, saveSqliteFile } from "./mainActions";
+import {
+  closeFile,
+  importJsonFile,
+  openSqliteFile,
+  saveSqliteFile,
+} from "./mainActions";
 import { ROUTES } from "./constants/routes";
 import { createWindow } from "./main";
 import { WORKBENCH_VERSION } from "./constants/general";
@@ -45,6 +50,12 @@ function getTemplate() {
           accelerator: "CmdOrCtrl+I",
           click: (_: MenuItem, currentWindow: BrowserWindow) =>
             importJsonFile(currentWindow),
+        },
+        {
+          label: "Close File",
+          // accelerator: "CmdOrCtrl+",
+          click: (_: MenuItem, currentWindow: BrowserWindow) =>
+            closeFile(currentWindow),
         },
         // @TODO-discuss This is duplicated in App's menu tab, is it necessary under file tab also ??
         // ...(

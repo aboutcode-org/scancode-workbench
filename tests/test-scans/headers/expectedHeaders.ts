@@ -8,6 +8,7 @@ export const HeaderSamples: {
   {
     jsonFileName: "headerless.json",
     expectedHeaders: {
+      json_file_name: "headerless.json",
       tool_name: "",
       tool_version: "",
       notice: "",
@@ -33,6 +34,7 @@ export const HeaderSamples: {
   {
     jsonFileName: "minimal.json",
     expectedHeaders: {
+      json_file_name: "minimal.json",
       tool_name: "scancode-toolkit",
       tool_version: "32.0.0rc3",
       notice:
@@ -60,6 +62,7 @@ export const HeaderSamples: {
   {
     jsonFileName: "withOptions.json",
     expectedHeaders: {
+      json_file_name: "withOptions.json",
       tool_name: "scancode-toolkit",
       tool_version: "32.0.0rc3",
       notice:

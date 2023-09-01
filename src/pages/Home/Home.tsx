@@ -3,7 +3,9 @@ import electron from "electron";
 import * as electronFs from "fs";
 import { toast } from "react-toastify";
 import React, { useMemo, useState } from "react";
+import { Button } from "react-bootstrap";
 import {
+  faClose,
   faCogs,
   faDatabase,
   faFileCode,
@@ -32,9 +34,11 @@ const Home = () => {
     db,
     loadingStatus,
     initialized,
+    scanInfo,
+    importedSqliteFilePath,
     jsonParser,
     sqliteParser,
-    importedSqliteFilePath,
+    closeFile,
   } = useWorkbenchDB();
 
   const [historyRefreshToken, setRefreshToken] = useState(0);
@@ -114,6 +118,21 @@ const Home = () => {
                 OR Simply drop your json / sqlite file anywhere in the app !!
               </h5>
             </div>
+            {db && initialized && (
+              <div className="currentscan">
+                <h5>
+                  Imported scan - {scanInfo.json_file_name}
+                  <Button
+                    variant="outline-danger"
+                    className="mx-2"
+                    size="sm"
+                    onClick={closeFile}
+                  >
+                    <FontAwesomeIcon icon={faClose} /> Close
+                  </Button>
+                </h5>
+              </div>
+            )}
             <div className="history">
               <br />
               <h5>Recent files</h5>

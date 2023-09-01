@@ -41,14 +41,23 @@
 .drop-instruction {
   text-align: center;
   width: 100%;
-  margin-top: 50px;
+  margin-top: 25px;
   color: var(--lightTextColor);
 }
 
 .quicklinks,
+.currentscan,
 .history {
-  margin-top: 15px;
   padding-left: 2rem;
+}
+
+.currentscan {
+  margin-top: 35px;
+  margin-bottom: 5px;
+}
+
+.quicklinks {
+  margin-top: 10px;
 }
 
 .history table {
