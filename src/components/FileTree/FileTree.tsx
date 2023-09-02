@@ -1,6 +1,6 @@
 import RcTree from "rc-tree";
 import { Key } from "rc-tree/lib/interface";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import { Element } from "react-scroll";
 
 import EllipticLoader from "../EllipticLoader";
@@ -9,6 +9,8 @@ import { PathType, useWorkbenchDB } from "../../contexts/dbContext";
 import { FileDataNode } from "../../services/workbenchDB";
 
 import "./FileTree.css";
+
+const FOCUS_ATTEMPT_DELAY = 500;
 
 const FileTree = (props: React.HTMLProps<HTMLDivElement>) => {
   const {
@@ -22,26 +24,38 @@ const FileTree = (props: React.HTMLProps<HTMLDivElement>) => {
   const [treeData, setTreeData] = useState<FileDataNode[] | null>(null);
   const [expandedKeys, setExpandedKeys] = useState<Key[]>([]);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
+    if (currentPath.length === 0) return;
+
     setExpandedKeys((keys) => {
       return [...keys, currentPath.substring(0, currentPath.lastIndexOf("/"))];
     });
-    if (currentPath.length) {
-      setTimeout(() => {
-        const targetNode = document.getElementsByName(currentPath)[0];
-        if (targetNode) {
+
+    // Timeout ensures that targetNode is accessed only after its rendered
+    let pendingTimeoutId: NodeJS.Timeout;
+    pendingTimeoutId = setTimeout(() => {
+      const targetNode = document.getElementsByName(currentPath)[0];
+      if (targetNode) {
+        pendingTimeoutId = setTimeout(() => {
           targetNode.scrollIntoView({
             behavior: "smooth",
             block: "nearest",
             inline: "start",
           });
-        }
-      }, 1500);
-    }
+        }, FOCUS_ATTEMPT_DELAY);
+      }
+    });
+
+    return () => {
+      clearTimeout(pendingTimeoutId);
+    };
   }, [currentPath]);
 
   useEffect(() => {
-    if (!initialized || !db || !importedSqliteFilePath) return;
+    if (!initialized || !db || !importedSqliteFilePath) {
+      setTreeData(null);
+      return;
+    }
 
     db.findAllJSTree().then((treeData) => {
       // Wrap with react-scroll wrapper
@@ -98,10 +112,7 @@ const FileTree = (props: React.HTMLProps<HTMLDivElement>) => {
         selectedKeys={[currentPath]}
         onSelect={(keys, info) => {
           if (keys && keys[0]) {
-            selectPath(
-              keys[0].toString(),
-              (info.node as any as FileDataNode).type as PathType
-            );
+            selectPath(keys[0].toString(), info.node.type as PathType);
           }
         }}
         motion={{
