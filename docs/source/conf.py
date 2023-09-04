@@ -32,7 +32,8 @@ release = version
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
-    'sphinx.ext.intersphinx'
+    'sphinx.ext.intersphinx',
+    'sphinx_rtd_theme'
 ]
 
 master_doc = 'index'
@@ -65,13 +66,13 @@ html_static_path = ['_static']
 html_context = {
     'css_files': [
         '_static/theme_overrides.css',  # override wide tables in RTD theme
-        ],
+    ],
     "display_github": True,
     "github_user": "nexB",
     "github_repo": "scancode-workbench",
     "github_version": "develop",  # branch
     "conf_py_path": "/docs/source/",  # path in the checkout to the docs root
-    }
+}
 
 # If false, no index is generated.
 #

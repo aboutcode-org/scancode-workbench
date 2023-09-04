@@ -3,12 +3,16 @@ The first step you want to do is create the python virtual environment:
 ```
 $ cd docs/
 $ python3 -m venv .venv
-$ source .venv/bin/active
+$ source .venv/bin/activate
 $ pip install -r requirements.txt
 ```
 
-Now, you can run the various Spinx build things:
+Run Sphinx documentation server in dev mode:
+```
+$ make dev
+```
+
+Build Sphinx documentation
 ```
 $ make html
-$ etc
 ```

@@ -13,6 +13,16 @@ Download and Install
    ``ScanCode-Workbench-<os>-x64-<version>`` folder.
    On Windows 10, for example, the executable will be named `ScanCode-Workbench.exe`.
 
+-  Note - For CentOS (or linux distros without the new libstdc++):
+
+   -  Install the new libstdc++ library: ``yum provides libstdc++``.
+   -  Update LD_LIBRARY_PATH:
+      
+      ``export LD_LIBRARY_PATH="/usr/local/lib64/:$LD_LIBRARY_PATH"``
+   -  Run the application with ``no-sandbox`` option:
+   
+      ``./ScanCode\ Workbench-linux-x64/ScanCode\ Workbench --no-sandbox``
+
 -  If you're interested in digging into the code, you can also use ScanCode Workbench by cloning
    the GitHub repository and building it yourself -- see the :ref:`Contribute/Building<building>`
    section for details.
