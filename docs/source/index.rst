@@ -15,3 +15,9 @@ Welcome to the documentation for ScanCode Workbench!
    technical-reference/index
    contribute/index
    license
+
+Indices and tables
+==================
+
+* :ref:`genindex`
+* :ref:`search`

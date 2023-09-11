@@ -9,9 +9,10 @@ Download and Install
 
 -  You can download the latest ScanCode Workbench release for your Windows, OS X or Linux
    operating system from the `ScanCode Workbench releases page <https://github.com/nexB/scancode-workbench/releases>`__.
-   Once downloaded, you'll find the ScanCode Workbench executable in the
-   ``ScanCode-Workbench-<os>-x64-<version>`` folder.
+   Once downloaded, you'll find the ScanCode Workbench executable inside the
+   ``ScanCode Workbench-<os>-<arch>`` folder
    On Windows 10, for example, the executable will be named `ScanCode-Workbench.exe`.
+
 
 -  Note - For CentOS (or linux distros without the new libstdc++):
 
@@ -30,7 +31,7 @@ Download and Install
 ScanCode Workbench-ScanCode Toolkit Compatibility
 =================================================
 
--  ScanCode Workbench >= v3.1.1 is only compatible with scans from ScanCode v3.1.1 and above
+-  ScanCode Workbench >= v4.0.0 is only compatible with scans from ScanCode v32.x and above
    that have been run with the ScanCode Toolkit ``-i`` option.
 
    -  A list of available ScanCode Toolkit options is available in the ScanCode Toolkit
@@ -57,7 +58,7 @@ Open ScanCode Workbench and Load a ScanCode Toolkit Scan
    -  Keep or modify the default SQLite filename and click :kbd:`Save`.
 
 -  You're now looking at your scan data displayed in the Table View -- the Table View itself is on
-   the right, and the Directory Tree (which is visible in all views) is on the left.
+   the right, and the Directory Tree (shown in resource level views) is on the left.
 
    .. figure:: data/initial_load_getting_started.png
       :class: with-border

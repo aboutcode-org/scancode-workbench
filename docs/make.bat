@@ -7,10 +7,15 @@ REM Command file for Sphinx documentation
 if "%SPHINXBUILD%" == "" (
 	set SPHINXBUILD=sphinx-build
 )
+if "%SPHINXAUTOBUILD%" == "" (
+	set SPHINXAUTOBUILD=sphinx-autobuild
+)
 set SOURCEDIR=source
 set BUILDDIR=build
 
 if "%1" == "" goto help
+
+if "%1" == "dev" goto dev
 
 %SPHINXBUILD% >NUL 2>NUL
 if errorlevel 9009 (
@@ -26,6 +31,14 @@ if errorlevel 9009 (
 )
 
 %SPHINXBUILD% -M %1 %SOURCEDIR% %BUILDDIR% %SPHINXOPTS% %O%
+goto end
+
+:dev
+%SPHINXAUTOBUILD% -b html %SPHINXOPTS% %SOURCEDIR% %BUILDDIR%\html
+@echo
+@echo Starting up the auto-reloading development server...
+@echo
+%SPHINXAUTOBUILD% --port 8000 --watch %SOURCEDIR% %SOURCEDIR% %BUILDDIR%\html %SPHINXOPTS% %O%
 goto end
 
 :help

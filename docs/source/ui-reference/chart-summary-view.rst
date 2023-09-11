@@ -12,4 +12,4 @@ selected by clicking the dropdown at the top of the view. The chart displays the
 values for the selected directory tree node and attribute and the number of times each value occurs
 in the scanned codebase.
 
-.. image:: data/scancode-workbench-chart-summary.gif
+.. image:: data/chart-summary-view.gif

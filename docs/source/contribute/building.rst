@@ -17,14 +17,8 @@ You'll need `Node.js <https://nodejs.org/>`__ (which comes with `npm <http://npm
    # Go into the repository
    $ cd scancode-workbench
 
-   # Install dependencies and run the app
+   # Install dependencies and run the app (Native dependencies are handled automatically)
    $ npm install
-
-   # Rebuild native Node.js modules against the app version of Node.js
-   # MacOS, Linux and Git Bash on Windows
-   $ $(npm bin)/electron-rebuild
-   # Windows except for Git Bash
-   > .\node_modules\.bin\electron-rebuild.cmd
 
    # Run the app
    $ npm start
@@ -57,18 +51,6 @@ Windows
 
   * Make sure your Python path is set. To verify, open a command prompt and type
     ``python --version``. Then, the version of python will be displayed.
-
-- Visual C++ Build Environment:
-
-  * Either:
-
-  - Option 1: Install `Visual C++ Build Tools 2015 <https://www.microsoft.com/en-in/download/details.aspx?id=48159>`_
-    (or modify an existing installation) and select Common Tools for Visual C++ during setup.
-    This also works with the free Community and Express for Desktop editions.
-  - Option 2: `Visual Studio 2015 <https://visualstudio.microsoft.com/vs/older-downloads/>`_ (Community Edition or better)
-
-  * Note: Windows 7 requires `.NET Framework 4.5.1 <http://www.microsoft.com/en-us/download/details.aspx?id=40773>`_
-  * Launch cmd, ``npm config set msvs_version 2015``
 
 Release Instructions
 ====================

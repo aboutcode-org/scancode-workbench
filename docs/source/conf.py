@@ -18,12 +18,8 @@
 # -- Project information -----------------------------------------------------
 
 project = 'ScanCode Workbench Documentation'
-copyright = '2020 nexB Inc.'
-author = 'nexB Inc.'
-
-version = '0.0.1'
-# The full version, including alpha/beta/rc tags
-release = version
+copyright = '2023 nexB Inc.'
+author = 'nexB Inc'
 
 
 # -- General configuration ---------------------------------------------------
@@ -32,18 +28,28 @@ release = version
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
-    'sphinx.ext.intersphinx',
-    'sphinx_rtd_theme'
+    "sphinx.ext.intersphinx",
+    'sphinx_rtd_theme',
+    "sphinx_reredirects"
 ]
 
-master_doc = 'index'
+
+# Redirects for olds pages
+# See https://documatt.gitlab.io/sphinx-reredirects/usage.html
+redirects = {}
+
+# This points to aboutcode.readthedocs.io
+# In case of "undefined label" ERRORS check docs on intersphinx to troubleshoot
+# Link was created at commit - https://github.com/nexB/aboutcode/commit/faea9fcf3248f8f198844fe34d43833224ac4a83
 
 intersphinx_mapping = {
+    "aboutcode": ("https://aboutcode.readthedocs.io/en/latest/", None),
     'scancode-toolkit': ('https://scancode-toolkit.readthedocs.io/en/latest/', None),
 }
 
+
 # Add any paths that contain templates here, relative to this directory.
-templates_path = ['_templates']
+templates_path = ["_templates"]
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
@@ -56,17 +62,16 @@ exclude_patterns = []
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-html_theme = 'sphinx_rtd_theme'
+html_theme = "sphinx_rtd_theme"
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
-html_static_path = ['_static']
+html_static_path = ["_static"]
+
+master_doc = "index"
 
 html_context = {
-    'css_files': [
-        '_static/theme_overrides.css',  # override wide tables in RTD theme
-    ],
     "display_github": True,
     "github_user": "nexB",
     "github_repo": "scancode-workbench",
@@ -74,17 +79,32 @@ html_context = {
     "conf_py_path": "/docs/source/",  # path in the checkout to the docs root
 }
 
-# If false, no index is generated.
-#
-# html_use_index = True
+html_css_files = ["_static/theme_overrides.css"]
 
-# If true, the index is split into individual pages for each letter.
-#
-# html_split_index = False
-
-# If true, links to the reST sources are added to the pages.
-#
-# html_show_sourcelink = True
 
 # If true, "Created using Sphinx" is shown in the HTML footer. Default is True.
 html_show_sphinx = True
+
+# Define CSS and HTML abbreviations used in .rst files.  These are examples.
+# .. role:: is used to refer to styles defined in _static/theme_overrides.css and is used like this: :red:`text`
+rst_prolog = """
+.. |psf| replace:: Python Software Foundation
+
+.. # define a hard line break for HTML
+.. |br| raw:: html
+
+   <br />
+
+.. role:: red
+
+.. role:: img-title
+
+.. role:: img-title-para
+
+"""
+
+# -- Options for LaTeX output -------------------------------------------------
+
+latex_elements = {
+    'classoptions': ',openany,oneside'
+}
