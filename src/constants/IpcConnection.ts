@@ -22,6 +22,7 @@ export const SAVE_REPLY_CHANNEL = {
 
 export const UTIL_CHANNEL = {
   SET_CURRENT_FILE_TITLE: "set-current-file-title",
+  RESET_FILE_TITLE: "reset-current-file-title",
   CLOSE_FILE: "close-file",
 };
 

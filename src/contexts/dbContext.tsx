@@ -42,7 +42,7 @@ interface WorkbenchContextProperties extends BasicValueState {
   processingQuery: boolean;
   startImport: () => void;
   abortImport: () => void;
-  closeFile: () => void,
+  closeFile: () => void;
   startProcessing: () => void;
   endProcessing: () => void;
   sqliteParser: (sqliteFilePath: string, preventNavigation?: boolean) => void;
@@ -135,8 +135,9 @@ export const WorkbenchDBProvider = (
       importedSqliteFilePath: null,
       scanInfo: null,
     });
-    navigate(ROUTES.HOME)
-  }
+    navigate(ROUTES.HOME);
+    ipcRenderer.send(UTIL_CHANNEL.RESET_FILE_TITLE);
+  };
 
   const updateWorkbenchDB = async (db: WorkbenchDB, sqliteFilePath: string) => {
     updateLoadingStatus(100);
@@ -455,10 +456,7 @@ export const WorkbenchDBProvider = (
         }
       }
     );
-    ipcRenderer.on(
-      UTIL_CHANNEL.CLOSE_FILE,
-      closeFile
-    )
+    ipcRenderer.on(UTIL_CHANNEL.CLOSE_FILE, closeFile);
 
     // Remove all listeners on window unmount
     return () => {
