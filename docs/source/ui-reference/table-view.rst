@@ -2,8 +2,6 @@
 :index:`Table View`
 ===================
 
-:guilabel:`[Intro to come.]`
-
 In the table view, the available clues detected by `ScanCode Toolkit <https://github.com/nexB/scancode-toolkit/>`_
 are shown in a tabular format. A user can see provenance clues such as license and copyright
 information detected by ScanCode. A user can also see the file information (e.g., file type,
@@ -13,6 +11,62 @@ detected.
 The columns can be sorted as well as shown or hidden based on what the user’s
 preferences. Searching for specific clues (license names, copyrights, etc.) is also available in
 this view.
+
+----------------
+Columns
+----------------
+
+COPYRIGHT
+                             - ``copyright_statements``
+                             - ``copyright_holders``
+                             - ``copyright_authors``
+                             - ``copyright_start_line``
+                             - ``copyright_end_line``
+
+FILE
+                             - ``type``
+                             - ``name``
+                             - ``extension``
+                             - ``size``
+                             - ``programming_language``
+                             - ``mime_type``
+                             - ``file_type``
+                             - ``is_binary``
+                             - ``is_text``
+                             - ``is_archive``
+                             - ``is_media``
+                             - ``is_source``
+                             - ``is_script``
+
+LICENSE
+                             - ``detected_license_expression``
+                             - ``detected_license_expression_spdx``
+                             - ``percentage_of_license_text``
+                             - ``license_detections``
+                             - ``license_policy``
+                             - ``license_clues``
+
+ORIGIN
+                             - ``copyright_statements``
+                             - ``license_policy``
+                             - ``email``
+                             - ``url``
+                             - ``mime_type``
+                             - ``file_type``
+                             - ``programming_language``
+
+PACKAGE
+                             - ``package_data_type``
+                             - ``package_data_name``
+                             - ``package_data_version``
+                             - ``package_data_extracted_license_statement``
+                             - ``package_data_declared_license_expression``
+                             - ``package_data_declared_license_expression_spdx``
+                             - ``package_data_primary_language``
+                             - ``for_packages``
+
+MISC
+                             - ``scan_error``   
 
 .. image:: data/tableview/tableview-intro.gif
 
@@ -28,6 +82,12 @@ Select Custom Columns
 In addition to the preset groups, Users can select a custom set of columns by using the ``Custom Columns`` button found in the quick actions row.
 
 .. image:: data/tableview/tableview-custom-columns.gif
+
+Pin columns
+------------------------
+Users can pin any column(s) to the left by dragging them through the column-header towards the left
+
+.. image:: data/tableview/tableview-pin-columns.gif
 
 Column wise filter & search
 ------------------------

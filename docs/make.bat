@@ -34,9 +34,8 @@ if errorlevel 9009 (
 goto end
 
 :dev
-%SPHINXAUTOBUILD% -b html %SPHINXOPTS% %SOURCEDIR% %BUILDDIR%\html
 @echo
-@echo Starting up the auto-reloading development server...
+@echo Starting up the dev docs server...
 @echo
 %SPHINXAUTOBUILD% --port 8000 --watch %SOURCEDIR% %SOURCEDIR% %BUILDDIR%\html %SPHINXOPTS% %O%
 goto end

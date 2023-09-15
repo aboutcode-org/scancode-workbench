@@ -17,9 +17,8 @@ help:
 
 # Run the development server using sphinx-autobuild
 dev:
-	@$(SPHINXBUILD) -b html $(SPHINXOPTS) "$(SOURCEDIR)" "$(BUILDDIR)/html"
 	@echo
-	@echo "Starting up the auto-reloading development server..."
+	@echo "Starting up the dev docs server..."
 	@echo
 	$(SPHINXAUTOBUILD) --port 8000 --watch ${SOURCEDIR} $(SOURCEDIR) "$(BUILDDIR)/html" $(SPHINXOPTS) $(O)
 

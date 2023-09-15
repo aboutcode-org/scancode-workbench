@@ -14,7 +14,7 @@ export const SET_FILTERED_COLUMNS = new Set<string>([
   ALL_COLUMNS.extension.field || "",
   ALL_COLUMNS.programming_language.field || "",
   ALL_COLUMNS.file_type.field || "",
-
+  ALL_COLUMNS.mime_type.field || "",
   ALL_COLUMNS.copyright_holders.field || "",
   ALL_COLUMNS.copyright_authors.field || "",
 ]);
