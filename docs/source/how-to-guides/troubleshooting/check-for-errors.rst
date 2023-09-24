@@ -12,4 +12,6 @@ If you can reproduce the error, use this approach to get the stack trace and rep
 the Developer Tools with ``Ctrl+Shift+I`` or ``Alt+Cmd+I``. From there, click the Console tab.
 Include the error that is logged in the issue in a code block or a file attachment.
 
+You can `Create an issue here <https://github.com/nexB/scancode-workbench/issues>`__.
+
 .. image:: data/developer-tools-error.png

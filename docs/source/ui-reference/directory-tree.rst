@@ -9,6 +9,10 @@ If a directory is selected, only the information for that directory and its sub-
 will be shown in the view.
 Similarly, if a single file is selected, only information for that selected file will be shown.
 
+
+Demo of filetree on different views:
+------------------------------------------------
+
 .. image:: data/directory-tree/directory-tree-navigate.gif
 
 .. image:: data/directory-tree/directory-tree-copyright.gif

@@ -1,6 +1,7 @@
-Sphinx>=5.0.2
-sphinx-rtd-theme>=1.0.0
-sphinx-reredirects >= 0.1.2
-doc8>=0.11.2
-jinja2==2.11.3
-markupSafe==1.1.1
+Sphinx>=7.0.0
+sphinx-autobuild
+sphinx-rtd-theme
+sphinx-reredirects
+doc8
+jinja2
+markupSafe

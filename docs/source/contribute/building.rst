@@ -29,25 +29,34 @@ Building Requirements
 Linux
 -----
 
-- Python 3.7
-- `Node.js version <https://nodejs.org/en/download/package-manager/>`_ 6.x or later
-- npm 3.10.x or later but <= 5.2.0 (run ``npm install npm@5.2.0 -g``)
+- Python 3.7 or later
+- `Node.js <https://nodejs.org/en/download/package-manager/>`_ 12.x or later
+- npm 6.14.x or later
+- For CentOS (or linux distros without the new libstdc++) -
+   
+   -  Install the new libstdc++ library: ``yum provides libstdc++``.
+   -  Update LD_LIBRARY_PATH:
+      
+      ``export LD_LIBRARY_PATH="/usr/local/lib64/:$LD_LIBRARY_PATH"``
+   -  Run the application with ``no-sandbox`` option:
+   
+      ``./ScanCode\ Workbench-linux-x64/ScanCode\ Workbench --no-sandbox``
 
 MacOS
 -----
 
-- Python 3.7
-- `Node.js <https://nodejs.org/en/>`_ >=6.x or later but <=8.9.4
-- npm 3.10.x or later but <= 5.2.0 (run ``npm install npm@5.2.0 -g``)
+- Python 3.7 or later
+- `Node.js <https://nodejs.org/en/>`_ 12.x or later
+- npm 6.14.x or later
 - Command Line Tools for `Xcode <https://developer.apple.com/xcode/downloads/>`_
   (run ``xcode-select --install`` to install)
 
 Windows
 -------
 
-- `Node.js <https://nodejs.org/en/>`_ 6.x or later
-- npm 3.10.x or later but <= 5.2.0 (``run npm install npm@5.2.0 -g``)
-- Python v3.7.x
+- Python v3.7 or later
+- `Node.js <https://nodejs.org/en/>`_ 12.x or later
+- npm 6.14.x or later
 
   * Make sure your Python path is set. To verify, open a command prompt and type
     ``python --version``. Then, the version of python will be displayed.
@@ -55,15 +64,15 @@ Windows
 Release Instructions
 ====================
 
-You can build a ``dist`` directory containing executables for any one of three target platforms
+You can build a ``dist`` directory and a ``tar/zip`` file containing executable for your platform
 by running:
 
 .. code-block:: none
 
-   $ python build.py
+   $ npm run publish
 
 After building is done, you can find ScanCode-Workbench under
-``dist/ScanCode-Workbench-<os>-x64-<version>``. Archives (``tar.gz`` and ``.zip``)
+``dist/ScanCode-Workbench-<os>-<arch>-<version>``. Archives (``tar.gz`` and ``.zip``)
 are also built.
 
 .. Note:: A build for any of the three target platforms must be executed on the targeted platform.

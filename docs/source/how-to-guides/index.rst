@@ -16,8 +16,7 @@ a ``-clipeu`` scan of ``e2fsprogs-1.45.6.tar.gz``.
    :maxdepth: 3
 
    load-your-data/index
-   lookup-scan-version/index
+   lookup-scan-info/index
    explore-your-data/index
-   export-json-records/index
    troubleshooting/index
    special-topics/index

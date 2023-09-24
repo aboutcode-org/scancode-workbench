@@ -19,50 +19,61 @@ ScanCode Workbench Supported Platforms
 Our approach for platform support is to focus on one primary release for each of Linux, MacOS and
 Windows. The Priority definitions are:
 
-#. Primary - These are the primary platforms for build/test/release on an ongoing basis.
-#. Secondary - These are platforms where the primary ScanCode Workbench release for the
+* Primary - These are the primary platforms for build/test/release on an ongoing basis.
+* Secondary - These are platforms where the primary ScanCode Workbench release for the
    corresponding OS Group should be forward-compatible, e.g., Windows 7 build should work on
    Windows 10. Issues reported and traced to a Secondary platform may not be fixed.
-#. Tertiary - These are any other platforms not listed as Primary or Secondary. In these cases, we
+* Tertiary - These are any other platforms not listed as Primary or Secondary. In these cases, we
    will help users help themselves, but we are likely not to fix Issues that only surface on a
    Tertiary platform.
 
-+-------------+------------------+---------+------------+-----------------------------------------+
-| OS Group    |  Desktop OS      |    Arch |  Priority  |      Notes                              |
-|             |  Version         |         |            |                                         |
-+=============+==================+=========+============+=========================================+
-|  Windows    | Windows 7 SP1    |    x64  |     1      |                                         |
-+-------------+------------------+---------+------------+-----------------------------------------+
-|  Windows    | Windows 10 SP?   |    x64  |     2      |                                         |
-+-------------+------------------+---------+------------+-----------------------------------------+
-|  MacOS      | 10.9 Mavericks   |    x64  |     1      |                                         |
-+-------------+------------------+---------+------------+-----------------------------------------+
-|  MacOS      | 10.10 Yosemite   |    x64  |     2      |                                         |
-+-------------+------------------+---------+------------+-----------------------------------------+
-|  MacOS      | 10.11 El Capitan |    x64  |     2      |                                         |
-+-------------+------------------+---------+------------+-----------------------------------------+
-|  MacOS      | 10.12 Sierra     |    x64  |     2      |                                         |
-+-------------+------------------+---------+------------+-----------------------------------------+
-| Linux Deb   | Ubuntu 12.04     |    x64  |     1      | From Electron Docs: The prebuilt ia32   |
-|             |                  |         |            | (i686) and x64 (amd64) binaries of      |
-|             |                  |         |            | Electron are built on Ubuntu 12.04.     |
-+-------------+------------------+---------+------------+-----------------------------------------+
-| Linux Deb   | Ubuntu 14.xx     |    x64  |     2      | Verified to be able to run the prebuilt |
-|             |                  |         |            | binaries of Electron.                   |
-+-------------+------------------+---------+------------+-----------------------------------------+
-| Linux Deb   | Ubuntu 16.xx     |    x64  |     2      | Verified to be able to run the prebuilt |
-|             |                  |         |            | binaries of Electron.                   |
-+-------------+------------------+---------+------------+-----------------------------------------+
-|   Linux     |  Fedora 21       |    x64  |     2      | Verified to be able to run the prebuilt |
-|             |                  |         |            | binaries of Electron.                   |
-+-------------+------------------+---------+------------+-----------------------------------------+
-|   Linux     |  Debian 8        |    x64  |     2      | Verified to be able to run the prebuilt |
-|             |                  |         |            | binaries of Electron.                   |
-+-------------+------------------+---------+------------+-----------------------------------------+
-| Linux RH    |  CentOS 7.xx     |    x64  |     ?      |                                         |
-+-------------+------------------+---------+------------+-----------------------------------------+
-| Linux RH    |  RHEL 7.xx       |    x64  |     ?      |                                         |
-+-------------+------------------+---------+------------+-----------------------------------------+
++-------------+------------------+----------+------------+-----------------------------------------+
+| OS Group    |  Desktop OS      |    Arch  |  Priority  |      Notes                              |
+|             |  Version         |          |            |                                         |
++=============+==================+==========+============+=========================================+
+|  Windows    |   Windows 7      |    x64   |      2     |                                         |
++-------------+------------------+----------+------------+-----------------------------------------+
+|  Windows    |  Windows 10      |    x64   |     1      | Verified to be able to run the prebuilt |
++-------------+------------------+----------+------------+-----------------------------------------+
+|  Windows    | Windows 11       |    x64   |     1      | Verified to be able to run the prebuilt |
++-------------+------------------+----------+------------+-----------------------------------------+
+|  MacOS      | 10.15 Catalina   |    x64   |      2     |                                         |
++-------------+------------------+----------+------------+-----------------------------------------+
+|  MacOS      | 11 Big Sur       |x64, arm64|    2       | Verified to be able to run the prebuilt |
++-------------+------------------+----------+------------+-----------------------------------------+
+|  MacOS      | 12 Monterey      |x64, arm64|     1      | Verified to be able to run the prebuilt |
++-------------+------------------+----------+------------+-----------------------------------------+
+|  MacOS      | 13 Ventura       |x64, arm64|     1      | Verified to be able to run the prebuilt |
++-------------+------------------+----------+------------+-----------------------------------------+
+| Linux Deb   | Ubuntu 12.04     |    x64   |     2      | From Electron Docs: The prebuilt ia32   |
+|             |                  |          |            | (i686) and x64 (amd64) binaries of      |
+|             |                  |          |            | Electron are built on Ubuntu 12.04.     |
++-------------+------------------+----------+------------+-----------------------------------------+
+| Linux Deb   | Ubuntu 14.xx     |    x64   |     2      | Verified to be able to run the prebuilt |
+|             |                  |          |            | binaries of Electron.                   |
++-------------+------------------+----------+------------+-----------------------------------------+
+| Linux Deb   | Ubuntu 16.xx     |    x64   |     1      | Verified to be able to run the prebuilt |
+|             |                  |          |            | binaries of Electron.                   |
++-------------+------------------+----------+------------+-----------------------------------------+
+| Linux Deb   | Ubuntu 18.xx     |    x64   |     1      | Verified to be able to run the prebuilt |
+|             |                  |          |            | binaries of Electron.                   |
++-------------+------------------+----------+------------+-----------------------------------------+
+| Linux Deb   | Ubuntu 20.xx     |    x64   |     1      | Verified to be able to run the prebuilt |
+|             |                  |          |            | binaries of Electron.                   |
++-------------+------------------+----------+------------+-----------------------------------------+
+| Linux Deb   | Ubuntu 22.xx     |    x64   |     1      | Verified to be able to run the prebuilt |
+|             |                  |          |            | binaries of Electron.                   |
++-------------+------------------+----------+------------+-----------------------------------------+
+|   Linux     |  Fedora 21       |    x64   |     2      | Verified to be able to run the prebuilt |
+|             |                  |          |            | binaries of Electron.                   |
++-------------+------------------+----------+------------+-----------------------------------------+
+|   Linux     |  Debian 8        |    x64   |     2      | Verified to be able to run the prebuilt |
+|             |                  |          |            | binaries of Electron.                   |
++-------------+------------------+----------+------------+-----------------------------------------+
+| Linux RH    |  CentOS 7.xx     |    x64   |     ?      |                                         |
++-------------+------------------+----------+------------+-----------------------------------------+
+| Linux RH    |  RHEL 7.xx       |    x64   |     ?      |                                         |
++-------------+------------------+----------+------------+-----------------------------------------+
 
 Electron Supported Platforms
 ----------------------------
@@ -74,7 +85,7 @@ The following platforms are supported by Electron:
 MacOS
 ^^^^^
 
-Only 64-bit binaries are provided for MacOS, and the minimum MacOS version supported is MacOS 10.9.
+Binaries for both x64 & arm64 are provided for MacOS, and the minimum MacOS version supported is MacOS 10.9
 
 Windows
 ^^^^^^^

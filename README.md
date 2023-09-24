@@ -23,8 +23,8 @@ works on Windows, OS X and Linux operating systems.
 * You can [download the latest release](https://github.com/nexB/scancode-workbench/releases) 
 for your operating system or build it yourself (see below). Once downloaded, you 
 can find `ScanCode-Workbench` under `dist/ScanCode-Workbench-<os>-<arch>-<version>`
-* ScanCode Workbench >= v2 is only compatible with scans from 
-[ScanCode v2.0.0](https://github.com/nexB/scancode-toolkit/releases) and 
+* ScanCode Workbench >= v4 is only compatible with scans from 
+[ScanCode v32.0.0](https://github.com/nexB/scancode-toolkit/releases) and 
 above which are run with the ScanCode `-i` option. For a list of available ScanCode 
 options see [How To: Set what will be detected in a scan](https://scancode-toolkit.readthedocs.io/en/latest/tutorials/how_to_set_what_will_be_detected_in_a_scan.html)
 

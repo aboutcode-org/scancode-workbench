@@ -1,3 +1,5 @@
+.. _table-view:
+
 ===================
 :index:`Table View`
 ===================
@@ -13,17 +15,17 @@ preferences. Searching for specific clues (license names, copyrights, etc.) is a
 this view.
 
 ----------------
-Columns
+Column groups
 ----------------
 
-COPYRIGHT
+Copyright
                              - ``copyright_statements``
                              - ``copyright_holders``
                              - ``copyright_authors``
                              - ``copyright_start_line``
                              - ``copyright_end_line``
 
-FILE
+File
                              - ``type``
                              - ``name``
                              - ``extension``
@@ -38,7 +40,7 @@ FILE
                              - ``is_source``
                              - ``is_script``
 
-LICENSE
+License
                              - ``detected_license_expression``
                              - ``detected_license_expression_spdx``
                              - ``percentage_of_license_text``
@@ -46,7 +48,7 @@ LICENSE
                              - ``license_policy``
                              - ``license_clues``
 
-ORIGIN
+Origin
                              - ``copyright_statements``
                              - ``license_policy``
                              - ``email``
@@ -55,7 +57,7 @@ ORIGIN
                              - ``file_type``
                              - ``programming_language``
 
-PACKAGE
+Package
                              - ``package_data_type``
                              - ``package_data_name``
                              - ``package_data_version``
@@ -65,19 +67,19 @@ PACKAGE
                              - ``package_data_primary_language``
                              - ``for_packages``
 
-MISC
-                             - ``scan_error``   
+Misc
+                             - ``scan_error``
 
 .. image:: data/tableview/tableview-intro.gif
 
 Preset Column Groups
 ------------------------
-The columns are grouped based on their nature type such as ``Copyright Cols``, ``Origin Cols``, ``License Cols``, etc. User can select one of these groups
+The columns are grouped based on their nature such as ``Copyright Cols``, ``Origin Cols``, ``License Cols``, etc. User can select one of these groups
 using the corresponding buttons available in the quick actions row.
 
 .. image:: data/tableview/tableview-column-groups.gif
 
-Select Custom Columns
+View Custom set of columns
 ------------------------
 In addition to the preset groups, Users can select a custom set of columns by using the ``Custom Columns`` button found in the quick actions row.
 

@@ -8,7 +8,7 @@ const ascendingFrequencyComparator = (a: FormattedEntry, b: FormattedEntry) =>
 const descendingFrequencyComparator = (a: FormattedEntry, b: FormattedEntry) =>
   a[1] == b[1] ? (a[0] < b[0] ? -1 : 1) : a[1] < b[1] ? 1 : -1;
 
-// Limit data to n-highest values in the chart
+// Limit data to n-highest values in charts
 export function limitPieChartData(data: FormattedEntry[], limit: number) {
   if (data.length <= limit) return data.sort(ascendingFrequencyComparator);
 

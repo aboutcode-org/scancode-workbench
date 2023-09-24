@@ -123,11 +123,11 @@ function getTemplate() {
           type: "separator",
         },
         {
-          label: "Licenses Explorer",
+          label: "License Explorer",
           click: sendNavEventToRenderer(ROUTES.LICENSES),
         },
         {
-          label: "Packages Explorer",
+          label: "Package Explorer",
           click: sendNavEventToRenderer(ROUTES.PACKAGES),
         },
         {
