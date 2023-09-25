@@ -18,8 +18,8 @@
 # -- Project information -----------------------------------------------------
 
 project = 'ScanCode Workbench Documentation'
-copyright = '2023 nexB Inc.'
-author = 'nexB Inc'
+copyright = 'nexB Inc. and others'
+author = 'nexB Inc. and others'
 
 
 # -- General configuration ---------------------------------------------------

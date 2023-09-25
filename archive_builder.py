@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-# Copyright (c) 2017 - 2019 nexB Inc. http://www.nexb.com/ - All rights reserved.
+# Copyright (c) nexB Inc. and others. All rights reserved.
 
 """
 Run this script to build ScanCode Workbench. The script detects which OS
