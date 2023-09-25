@@ -1,8 +1,8 @@
 .. _package-info-dashboard:
 
-============================
+===================================
 :index:`Package Info Dashboard`
-============================
+===================================
 
 Scan must have ``--package`` option for License Info Dashboard
 

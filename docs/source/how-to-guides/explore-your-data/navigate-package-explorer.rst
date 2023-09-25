@@ -1,16 +1,16 @@
-================================================
+====================================================
 :index:`How-To: Navigate the Package Explorer View`
-================================================
+====================================================
 
 Display the Package Explorer view
-================
+===================================
 
 Once you have a SQLite file loaded into ScanCode Workbench,
 
 * Click on `Package Explorer` in the sidebar or open the :kbd:`View` menu and select :kbd:`Package Explorer`
 
 Select a Package or Dependency
-=========================
+====================================
 
 On the left pane, Packages are shown in a hierarchical manner as `Package Type` > `Package` > `Dependencies`
 Upon selecting a Package / Dependency, details of the entire entity is shown on the right.
@@ -30,7 +30,7 @@ You can filter the packages / dependencies by their data sources and/or dependen
 .. figure:: data/package-explorer-filter.gif
 
 Dependencies table
-====================
+========================
 
 When a package is selected, the dependencies for that package are shown in a table in the details pane showing Dependency information like `PURL, Scope, Data source ID, etc`
 

@@ -3,7 +3,7 @@
 ================================================
 
 Display the Chart Summary view
-================
+====================================
 
 Once you have a SQLite file loaded into ScanCode Workbench, displaying the Chart
 Summary View is easy:

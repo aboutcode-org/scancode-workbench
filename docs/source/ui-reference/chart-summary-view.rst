@@ -1,4 +1,4 @@
-.. _license-explorer:
+.. _chart-summary-view:
 
 ===========================
 :index:`Chart Summary View`

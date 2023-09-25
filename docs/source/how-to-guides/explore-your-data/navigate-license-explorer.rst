@@ -1,9 +1,9 @@
-================================================
+====================================================
 :index:`How-To: Navigate the License Explorer View`
-================================================
+====================================================
 
 Display the License Explorer view
-================
+===================================
 
 Once you have a SQLite file loaded into ScanCode Workbench,
 
@@ -24,7 +24,7 @@ You can search for any license detecttion / clue by typing in the search box on 
 .. figure:: data/license-explorer-search.gif
 
 Matches & File regions table
-====================
+===================================
 
 For the selected license, you can view the matches resulting into the detection and the file regions where the license was detected.
 You can click on the data file path to view that path in Tableview

@@ -1,6 +1,6 @@
-============================
+================================
 :index:`License Info Dashboard`
-============================
+================================
 
 Scan must have ``--license`` option for License Info Dashboard
 

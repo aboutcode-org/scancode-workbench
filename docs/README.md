@@ -2,8 +2,8 @@
 The first step you want to do is create the python virtual environment:
 ```
 $ cd docs/
-$ python3 -m venv .venv
-$ source .venv/bin/activate
+$ python3 -m venv venv
+$ source venv/bin/activate
 $ pip install -r requirements.txt
 ```
 

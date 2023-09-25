@@ -1,6 +1,6 @@
-============================
+=====================================
 :index:`Dependency Info Dashboard`
-============================
+=====================================
 
 Scan must have ``--package`` option for Dependency Info Dashboard
 

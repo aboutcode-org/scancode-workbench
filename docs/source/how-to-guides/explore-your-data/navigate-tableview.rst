@@ -3,7 +3,7 @@
 ================================================
 
 Display the Table view
-================
+============================
 
 Once you have a SQLite file loaded into ScanCode Workbench, you're automatically redirected to the Tableview.
 To navigate to Tableview from other views you can click on `Table View` in the sidebar or open the :kbd:`View` menu and select :kbd:`Table View`
@@ -12,7 +12,7 @@ To navigate to Tableview from other views you can click on `Table View` in the s
 
 
 Select a path
-===================
+========================
 
 You can collapse/expand the FileTree on the left and select a file/directory. Only the files under this path will be visible in the tableview
 
@@ -20,7 +20,7 @@ You can collapse/expand the FileTree on the left and select a file/directory. On
 
 
 Select Preset columns
-====================
+==========================
 
 You can select one of the available column groups, grouped based on their nature such as ``Copyright Cols``, ``Origin Cols``, ``License Cols``
 
