@@ -42,6 +42,7 @@ interface WorkbenchContextProperties extends BasicValueState {
   processingQuery: boolean;
   startImport: () => void;
   abortImport: () => void;
+  closeFile: () => void;
   startProcessing: () => void;
   endProcessing: () => void;
   sqliteParser: (sqliteFilePath: string, preventNavigation?: boolean) => void;
@@ -71,6 +72,7 @@ export const defaultWorkbenchContextValue: WorkbenchContextProperties = {
   updateLoadingStatus: () => null,
   startImport: () => null,
   abortImport: () => null,
+  closeFile: () => null,
   startProcessing: () => null,
   endProcessing: () => null,
   updateCurrentPath: () => null,
@@ -113,6 +115,7 @@ export const WorkbenchDBProvider = (
 
   const startImport = () => {
     updateLoadingStatus(0);
+    setProcessingQuery(false);
     setValue({
       db: null,
       initialized: false,
@@ -122,6 +125,19 @@ export const WorkbenchDBProvider = (
   };
 
   const abortImport = () => updateLoadingStatus(null);
+
+  const closeFile = () => {
+    updateLoadingStatus(null);
+    setProcessingQuery(false);
+    setValue({
+      db: null,
+      initialized: false,
+      importedSqliteFilePath: null,
+      scanInfo: null,
+    });
+    navigate(ROUTES.HOME);
+    ipcRenderer.send(UTIL_CHANNEL.RESET_FILE_TITLE);
+  };
 
   const updateWorkbenchDB = async (db: WorkbenchDB, sqliteFilePath: string) => {
     updateLoadingStatus(100);
@@ -440,6 +456,7 @@ export const WorkbenchDBProvider = (
         }
       }
     );
+    ipcRenderer.on(UTIL_CHANNEL.CLOSE_FILE, closeFile);
 
     // Remove all listeners on window unmount
     return () => {
@@ -461,6 +478,7 @@ export const WorkbenchDBProvider = (
         importJsonFile,
         startImport,
         abortImport,
+        closeFile,
         startProcessing: () => setProcessingQuery(true),
         endProcessing: () => setProcessingQuery(false),
         updateCurrentPath,

@@ -1,6 +1,7 @@
 import { JSON_Type } from "./models/databaseUtils";
 
 export interface ParsedJsonHeader {
+  json_file_name: string;
   tool_name: string;
   tool_version: string;
   notice: string;

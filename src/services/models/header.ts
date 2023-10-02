@@ -19,6 +19,7 @@ import { JSON_Type, jsonDataType } from "./databaseUtils";
 
 export interface HeaderAttributes {
   id: number;
+  json_file_name: string;
   tool_name: string;
   tool_version: string;
   notice: string;
@@ -52,6 +53,7 @@ export default function headerModel(sequelize: Sequelize) {
         primaryKey: true,
         type: DataTypes.INTEGER,
       },
+      json_file_name: DataTypes.STRING,
       tool_name: DataTypes.STRING,
       tool_version: DataTypes.STRING,
       notice: DataTypes.STRING,

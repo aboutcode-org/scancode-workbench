@@ -26,7 +26,8 @@
     "lint": "eslint --ext .ts,.tsx .",
     "test": "jest",
     "test:watch": "jest --watch",
-    "test:coverage": "jest --coverage"
+    "test:coverage": "jest --coverage",
+    "prepare": "husky install"
   },
   "devDependencies": {
     "@electron-forge/cli": "^6.1.1",
@@ -65,6 +66,7 @@
     "eslint-plugin-css-import-order": "^1.1.0",
     "eslint-plugin-import": "^2.26.0",
     "fork-ts-checker-webpack-plugin": "^7.2.13",
+    "husky": "^8.0.3",
     "jest": "^29.6.1",
     "jest-environment-jsdom": "^29.6.2",
     "json-loader": "^0.5.7",
@@ -118,6 +120,7 @@
     "react-select": "^5.7.3",
     "react-toastify": "^9.0.8",
     "react-tooltip": "^5.10.4",
+    "scroll-into-view-if-needed": "^3.1.0",
     "sequelize": "^6.23.2",
     "sequelize-cli": "^6.5.1",
     "sqlite3": "^5.1.6",
