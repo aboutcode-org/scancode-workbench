@@ -1,7 +1,8 @@
 import RcTree from "rc-tree";
 import { Key } from "rc-tree/lib/interface";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import { Element } from "react-scroll";
+import scrollIntoView from "scroll-into-view-if-needed";
 
 import EllipticLoader from "../EllipticLoader";
 import SwitcherIcon from "./SwitcherIcon";
@@ -10,38 +11,76 @@ import { FileDataNode } from "../../services/workbenchDB";
 
 import "./FileTree.css";
 
+const FOCUS_ATTEMPT_DELAY = 500;
+
 const FileTree = (props: React.HTMLProps<HTMLDivElement>) => {
   const {
     db,
     initialized,
     importedSqliteFilePath,
     currentPath,
+    startProcessing,
+    endProcessing,
     updateCurrentPath,
   } = useWorkbenchDB();
 
   const [treeData, setTreeData] = useState<FileDataNode[] | null>(null);
   const [expandedKeys, setExpandedKeys] = useState<Key[]>([]);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
+    if (currentPath.length === 0) return;
+
+    // Show working indicator while the FileTree Node is being rendered and focused
+    startProcessing();
+
     setExpandedKeys((keys) => {
       return [...keys, currentPath.substring(0, currentPath.lastIndexOf("/"))];
     });
-    if (currentPath.length) {
-      setTimeout(() => {
-        const targetNode = document.getElementsByName(currentPath)[0];
-        if (targetNode) {
-          targetNode.scrollIntoView({
-            behavior: "smooth",
-            block: "nearest",
-            inline: "start",
-          });
-        }
-      }, 1500);
+
+    function scrollTreeNode(targetNode: HTMLElement) {
+      scrollIntoView(targetNode, {
+        scrollMode: "if-needed",
+        behavior: "smooth",
+        block: "center",
+        inline: "start",
+      });
     }
+
+    // Timeout ensures that targetNode is accessed only after its rendered
+    let pendingScrollerTimeoutId: NodeJS.Timeout;
+
+    const alreadyRenderedTargetNode =
+      document.getElementsByName(currentPath)[0];
+      
+    if (alreadyRenderedTargetNode) {
+      // Immediate scroll possible
+      scrollTreeNode(alreadyRenderedTargetNode);
+    } else {
+      // Wait for target node to render
+      pendingScrollerTimeoutId = setTimeout(() => {
+        const targetNode = document.getElementsByName(currentPath)[0];
+
+        if (targetNode) {
+          pendingScrollerTimeoutId = setTimeout(() => {
+            scrollTreeNode(targetNode);
+          }, FOCUS_ATTEMPT_DELAY);
+
+          // Hide working indicator after the FileTree Node is focused
+          endProcessing();
+        }
+      });
+    }
+
+    return () => {
+      clearTimeout(pendingScrollerTimeoutId);
+    };
   }, [currentPath]);
 
   useEffect(() => {
-    if (!initialized || !db || !importedSqliteFilePath) return;
+    if (!initialized || !db || !importedSqliteFilePath) {
+      setTreeData(null);
+      return;
+    }
 
     db.findAllJSTree().then((treeData) => {
       // Wrap with react-scroll wrapper
@@ -98,10 +137,7 @@ const FileTree = (props: React.HTMLProps<HTMLDivElement>) => {
         selectedKeys={[currentPath]}
         onSelect={(keys, info) => {
           if (keys && keys[0]) {
-            selectPath(
-              keys[0].toString(),
-              (info.node as any as FileDataNode).type as PathType
-            );
+            selectPath(keys[0].toString(), info.node.type as PathType);
           }
         }}
         motion={{
