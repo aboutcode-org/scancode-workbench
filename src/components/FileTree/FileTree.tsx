@@ -2,6 +2,7 @@ import RcTree from "rc-tree";
 import { Key } from "rc-tree/lib/interface";
 import React, { useEffect, useLayoutEffect, useState } from "react";
 import { Element } from "react-scroll";
+import scrollIntoView from "scroll-into-view-if-needed";
 
 import EllipticLoader from "../EllipticLoader";
 import SwitcherIcon from "./SwitcherIcon";
@@ -18,6 +19,8 @@ const FileTree = (props: React.HTMLProps<HTMLDivElement>) => {
     initialized,
     importedSqliteFilePath,
     currentPath,
+    startProcessing,
+    endProcessing,
     updateCurrentPath,
   } = useWorkbenchDB();
 
@@ -27,27 +30,49 @@ const FileTree = (props: React.HTMLProps<HTMLDivElement>) => {
   useLayoutEffect(() => {
     if (currentPath.length === 0) return;
 
+    // Show working indicator while the FileTree Node is being rendered and focused
+    startProcessing();
+
     setExpandedKeys((keys) => {
       return [...keys, currentPath.substring(0, currentPath.lastIndexOf("/"))];
     });
 
+    function scrollTreeNode(targetNode: HTMLElement) {
+      scrollIntoView(targetNode, {
+        scrollMode: "if-needed",
+        behavior: "smooth",
+        block: "center",
+        inline: "start",
+      });
+    }
+
     // Timeout ensures that targetNode is accessed only after its rendered
-    let pendingTimeoutId: NodeJS.Timeout;
-    pendingTimeoutId = setTimeout(() => {
-      const targetNode = document.getElementsByName(currentPath)[0];
-      if (targetNode) {
-        pendingTimeoutId = setTimeout(() => {
-          targetNode.scrollIntoView({
-            behavior: "smooth",
-            block: "nearest",
-            inline: "start",
-          });
-        }, FOCUS_ATTEMPT_DELAY);
-      }
-    });
+    let pendingScrollerTimeoutId: NodeJS.Timeout;
+
+    const alreadyRenderedTargetNode =
+      document.getElementsByName(currentPath)[0];
+      
+    if (alreadyRenderedTargetNode) {
+      // Immediate scroll possible
+      scrollTreeNode(alreadyRenderedTargetNode);
+    } else {
+      // Wait for target node to render
+      pendingScrollerTimeoutId = setTimeout(() => {
+        const targetNode = document.getElementsByName(currentPath)[0];
+
+        if (targetNode) {
+          pendingScrollerTimeoutId = setTimeout(() => {
+            scrollTreeNode(targetNode);
+          }, FOCUS_ATTEMPT_DELAY);
+
+          // Hide working indicator after the FileTree Node is focused
+          endProcessing();
+        }
+      });
+    }
 
     return () => {
-      clearTimeout(pendingTimeoutId);
+      clearTimeout(pendingScrollerTimeoutId);
     };
   }, [currentPath]);
 
