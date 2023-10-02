@@ -247,6 +247,7 @@ export class WorkbenchDB {
         parent: file.getDataValue("parent"),
         name: file.getDataValue("name"),
         type: fileType,
+        isLeaf: fileType == "file",
         ...(fileType == "directory" && { children: [] }),
         // @TODO - Trial to fix rc-tree showing file icon instead of empty directory https://github.com/nexB/scancode-workbench/issues/542
         // isLeaf: fileType == "file",

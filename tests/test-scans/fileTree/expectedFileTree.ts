@@ -87,6 +87,7 @@ export const FileTreeSamples: {
         parent: "#",
         name: null,
         type: "directory",
+        isLeaf: false,
         children: [
           {
             id: 2,
@@ -96,6 +97,7 @@ export const FileTreeSamples: {
             parent: "manifests",
             name: null,
             type: "directory",
+            isLeaf: false,
             children: [
               {
                 id: 4,
@@ -105,6 +107,7 @@ export const FileTreeSamples: {
                 parent: "manifests/folder1",
                 name: null,
                 type: "directory",
+                isLeaf: false,
                 children: [
                   {
                     id: 5,
@@ -114,6 +117,7 @@ export const FileTreeSamples: {
                     parent: "manifests/folder1/folder2",
                     name: null,
                     type: "file",
+                    isLeaf: true,
                   },
                 ],
               },
@@ -125,6 +129,7 @@ export const FileTreeSamples: {
                 parent: "manifests/folder1",
                 name: null,
                 type: "file",
+                isLeaf: true,
               },
             ],
           },
@@ -136,6 +141,7 @@ export const FileTreeSamples: {
             parent: "manifests",
             name: null,
             type: "directory",
+            isLeaf: false,
             children: [
               {
                 id: 7,
@@ -145,6 +151,7 @@ export const FileTreeSamples: {
                 parent: "manifests/folder3",
                 name: null,
                 type: "file",
+                isLeaf: true,
               },
             ],
           },
@@ -156,6 +163,7 @@ export const FileTreeSamples: {
             parent: "manifests",
             name: null,
             type: "file",
+            isLeaf: true,
           },
           {
             id: 8,
@@ -165,6 +173,7 @@ export const FileTreeSamples: {
             parent: "manifests",
             name: null,
             type: "file",
+            isLeaf: true,
           },
         ],
       },
@@ -190,6 +199,7 @@ export const FileTreeSamples: {
         parent: "#",
         name: null,
         type: "directory",
+        isLeaf: false,
         children: [],
       },
     ],
@@ -214,6 +224,7 @@ export const FileTreeSamples: {
         parent: "#",
         name: null,
         type: "file",
+        isLeaf: true,
       },
     ],
   },
