@@ -33,6 +33,7 @@ export enum ScanOptionKeys {
 }
 
 export interface ScanInfo {
+  json_file_name: string;
   tool_name: string;
   tool_version: string;
   notice: string;
@@ -65,6 +66,7 @@ export function parseScanInfo(
   );
 
   const parsedScanInfo: ScanInfo = {
+    json_file_name: rawInfo.getDataValue("json_file_name") || "Not available",
     tool_name: rawInfo.getDataValue("tool_name") || "",
     tool_version: rawInfo.getDataValue("tool_version") || "",
     notice: rawInfo.getDataValue("notice") || "",

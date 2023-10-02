@@ -19,6 +19,8 @@ const ScanInfo = () => {
       {scanInfo ? (
         <table border={1} className="overview-table">
           <tbody>
+            <InfoEntry name="Scan">{scanInfo.json_file_name}</InfoEntry>
+
             <InfoEntry name="Tool">{scanInfo.tool_name}</InfoEntry>
 
             <InfoEntry name="Tool version">{scanInfo.tool_version}</InfoEntry>

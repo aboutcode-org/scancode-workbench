@@ -13,6 +13,7 @@ import {
   UTIL_CHANNEL,
 } from "./constants/IpcConnection";
 import { figureOutDefaultSqliteFilePath } from "./utils/paths";
+import { WORKBENCH_TITLE } from "./constants/general";
 
 export function chooseSqlitePathForJsonImport(
   mainWindow: BrowserWindow,
@@ -113,6 +114,10 @@ export function saveSqliteFile(mainWindow: BrowserWindow) {
     });
 }
 
+export function closeFile(mainWindow: BrowserWindow) {
+  mainWindow.webContents.send(UTIL_CHANNEL.CLOSE_FILE);
+}
+
 export function showErrorDialog(err: ErrorInfo) {
   console.log("Showing error to user:", err);
   dialog.showErrorBox(err.title, err.message);
@@ -123,7 +128,7 @@ export function setCurrentFileTitle(mainWindow: BrowserWindow, title: string) {
     console.log("Main window not found:", title, mainWindow);
     return;
   }
-  const titleString = "Scancode Workbench" + (title ? ` - ${title}` : "");
+  const titleString = WORKBENCH_TITLE + (title ? ` - ${title}` : "");
   mainWindow.setTitle(titleString);
 }
 
@@ -147,6 +152,9 @@ export function setUpGlobalIpcListeners() {
   );
   ipcMain.on(UTIL_CHANNEL.SET_CURRENT_FILE_TITLE, (e, title: string) =>
     setCurrentFileTitle(getSenderWindow(e), title)
+  );
+  ipcMain.on(UTIL_CHANNEL.RESET_FILE_TITLE, (e) =>
+    setCurrentFileTitle(getSenderWindow(e), "")
   );
   ipcMain.on(OPEN_ERROR_DIALOG_CHANNEL, (_, err: ErrorInfo) =>
     showErrorDialog(err)

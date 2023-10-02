@@ -61,7 +61,7 @@ const { version: workbenchVersion } = packageJson;
  *
  * The config will load an existing database or will create a new, empty
  * database if none exists. For a new database, the data is loaded from a JSON
- * file by calling addFromJson(jsonFileName).
+ * file by calling addFromJson(jsonFilePath).
  *
  * @param config
  * @param config.dbName
@@ -271,16 +271,16 @@ export class WorkbenchDB {
 
   // Add rows to the flattened files table from a ScanCode json object
   addFromJson(
-    jsonFileName: string,
+    jsonFilePath: string,
     onProgressUpdate: (progress: number) => void
   ): Promise<void> {
-    if (!jsonFileName) {
-      throw new Error("Invalid json file name: " + jsonFileName);
+    if (!jsonFilePath) {
+      throw new Error("Invalid json file name: " + jsonFilePath);
     }
 
-    // console.log("Adding from json with params", { jsonFileName, workbenchVersion, onProgressUpdate });
+    // console.log("Adding from json with params", { jsonFilePath, workbenchVersion, onProgressUpdate });
 
-    const stream = fs.createReadStream(jsonFileName, { encoding: "utf8" });
+    const stream = fs.createReadStream(jsonFilePath, { encoding: "utf8" });
     let files_count = 0;
     let dirs_count = 0;
     let index = 0;
@@ -303,7 +303,7 @@ export class WorkbenchDB {
           let batchCount = 0;
           let TopLevelData: TopLevelDataFormat = {
             header: null,
-            parsedHeader: this._parseHeader(workbenchVersion, {}),
+            parsedHeader: this._parseHeader(jsonFilePath, workbenchVersion, {}),
             packages: [],
             dependencies: [],
             license_clues: [],
@@ -318,7 +318,10 @@ export class WorkbenchDB {
           stream
             .pipe(JSONStream.parse("files.*")) // files field is piped to 'data' & rest to 'header' (Includes other top level fields)
             .on("header", (rawTopLevelData: any) => {
-              TopLevelData = this._parseTopLevelFields(rawTopLevelData);
+              TopLevelData = this._parseTopLevelFields(
+                jsonFilePath,
+                rawTopLevelData
+              );
 
               files_count = Number(TopLevelData.parsedHeader.files_count);
               promiseChain = promiseChain
@@ -443,11 +446,18 @@ export class WorkbenchDB {
   }
 
   // Helper function for parsing Toplevel data
-  _parseTopLevelFields(rawTopLevelData: any): TopLevelDataFormat {
+  _parseTopLevelFields(
+    jsonFilePath: string,
+    rawTopLevelData: any
+  ): TopLevelDataFormat {
     const header = rawTopLevelData.headers
       ? rawTopLevelData.headers[0] || {}
       : {};
-    const parsedHeader = this._parseHeader(workbenchVersion, header);
+    const parsedHeader = this._parseHeader(
+      jsonFilePath,
+      workbenchVersion,
+      header
+    );
     const packages = rawTopLevelData.packages || [];
     const dependencies = rawTopLevelData.dependencies || [];
     const license_detections: TopLevelLicenseDetection[] = (
@@ -493,10 +503,11 @@ export class WorkbenchDB {
     };
   }
 
-  _parseHeader(workbenchVersion: string, header: any) {
+  _parseHeader(jsonFilePath: string, workbenchVersion: string, header: any) {
     const input = header.options?.input || [];
     delete header.options?.input;
     const parsedHeader: ParsedJsonHeader = {
+      json_file_name: path.basename(jsonFilePath),
       tool_name: header.tool_name,
       tool_version: header.tool_version,
       notice: header.notice,
