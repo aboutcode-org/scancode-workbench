@@ -7,9 +7,9 @@ $ source venv/bin/activate
 $ pip install -r requirements.txt
 ```
 
-Run Sphinx documentation server in dev mode:
+Run Sphinx documentation server:
 ```
-$ make dev
+$ make docs
 ```
 
 Build Sphinx documentation

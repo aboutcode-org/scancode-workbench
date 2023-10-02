@@ -101,5 +101,5 @@ Create python environment, make docs
    # Build Documentation
    $ make html
 
-   # Run Documentation server in dev mode
-   $ make dev
+   # Run Documentation server
+   $ make docs

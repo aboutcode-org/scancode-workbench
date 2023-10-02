@@ -16,9 +16,9 @@ help:
 .PHONY: help Makefile
 
 # Run the development server using sphinx-autobuild
-dev:
+docs:
 	@echo
-	@echo "Starting up the dev docs server..."
+	@echo "Starting up the docs server..."
 	@echo
 	$(SPHINXAUTOBUILD) --port 8000 --watch ${SOURCEDIR} $(SOURCEDIR) "$(BUILDDIR)/html" $(SPHINXOPTS) $(O)
 
