@@ -112,7 +112,7 @@ const LicenseEntity = (props: LicenseDetectionEntityProps) => {
               : LicenseClueMatchCols
           }
           onGridReady={(params) => setMatchesTableColumnApi(params.columnApi)}
-          className="ag-theme-alpine ag-grid-customClass matches-table"
+          className="ag-theme-alpine ag-grid-customClass license-entity-table"
           ensureDomOrder
           enableCellTextSelection
           pagination={false}
@@ -120,13 +120,14 @@ const LicenseEntity = (props: LicenseDetectionEntityProps) => {
         />
       </MatchedTextProvider>
       <br />
+      <br />
       File regions
       <AgGridReact
         rowData={file_regions}
         columnDefs={DetectionFileRegionCols}
         onGridReady={(params) => params.api.sizeColumnsToFit()}
         onGridSizeChanged={(params) => params.api.sizeColumnsToFit()}
-        className="ag-theme-alpine ag-grid-customClass file-regions-table"
+        className="ag-theme-alpine ag-grid-customClass license-entity-table"
         ensureDomOrder
         enableCellTextSelection
         pagination={false}

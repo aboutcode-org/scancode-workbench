@@ -1,8 +1,9 @@
-.globalSearch{
+.globalSearch {
   display: inline-flex;
   float: right;
   margin-right: 15px;
 }
+
 .globalSearch input {
   display: inline-block;
 }
@@ -10,17 +11,19 @@
 .filterButtons {
   margin-bottom: 4px;
 }
-.filterButtons section{
+
+.filterButtons section {
   display: inline-flex;
   margin-left: 10px;
   margin-right: 10px;
 }
-.filterButtons button{
+
+.filterButtons button {
   margin: 3px;
   margin-right: 10px;
 }
 
-.column-selector{
+.column-selector {
   padding: 15px;
 }
 
@@ -30,23 +33,33 @@
   margin-right: 0px;
   font-size: 15px;
 }
-.pagination-controls select{
+
+.pagination-controls select {
   margin-left: 10px;
+}
+
+.matches-table {
+  max-height: 250px;
+  height: auto;
 }
 
 .ag-grid-customClass {
   font-size: 12px !important;
   --ag-cell-horizontal-border: 1px solid rgb(225 225 225) !important;
 }
+
+
 .ag-cell-wrapper {
   padding: 7px 0 10px 0;
   font-size: 14px;
   line-height: 1.5;
 }
+
 .ag-cell-wrapper .ag-cell-value {
   max-height: 300px;
   overflow-y: overlay;
 }
+
 .ag-cell-wrap-text {
   word-break: break-word;
 }

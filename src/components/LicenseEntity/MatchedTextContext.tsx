@@ -12,6 +12,8 @@ import {
 import { ScanOptionKeys } from "../../utils/parsers";
 import { SYNTHETIC_RULE_PREFIXES } from "../../constants/licenseRules";
 
+import "./matchedText.css";
+
 interface MatchedTextContextProperties {
   showDiffWindow: boolean;
   openDiffWindow: (

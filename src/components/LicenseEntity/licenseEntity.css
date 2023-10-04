@@ -1,3 +1,10 @@
+:root {
+  --max-license-entity-table-height: 35vh;
+  --license-entity-table-header-height: 49px;
+  --license-entity-table-height: 5px;
+}
+
+
 .license-detecion-entity {
   height: 100%;
 }
@@ -15,73 +22,25 @@
   margin-right: 5px;
 }
 
-.matches-table,
-.file-regions-table {
-  max-height: 30vh;
+
+.license-entity-table {
+  /* max-height: 250px; */
+  max-height: var(--max-license-entity-table-height);
+  height: auto !important;
 }
 
-.matched-text-diff-modal {
-  overflow: auto;
-  max-height: calc(100vh - 120px);
+.license-entity-table .ag-root-wrapper-body.ag-layout-normal {
+  flex: none;
+  height: auto;
 }
 
-.matched-text-diff-modal .row {
-  padding: 5px;
+.license-entity-table .ag-body-viewport {
+  height: auto;
+  /* Subtract height of horizontal scroll and header from table height */
+  max-height: calc(var(--max-license-entity-table-height) - var(--license-entity-table-header-height) - var(--license-entity-table-height));
+  flex: none;
 }
 
-.matched-text-diff-modal .rule-text-section {
-  background-color: #f6feff;
-  padding: 0;
-}
-
-.matched-text-diff-modal .matched-text-section {
-  background-color: #f9fffc;
-  padding: 0;
-}
-
-.matched-text-diff-modal .diff-table {
-  table-layout: fixed;
-  width: 100%;
-}
-
-.matched-text-diff-modal .diff-table th {
-  padding: 15px;
-  padding-left: 10px;
-  font-weight: 500;
-  background-color: #fafbfc;
-}
-
-.matched-text-diff-modal .diff-line {
-  display: table-row-group;
-  margin: 0;
-  vertical-align: top;
-  white-space: pre;
-  overflow-wrap: anywhere;
-}
-
-.matched-text-diff-modal .line-number {
-  margin-right: 15px;
-  padding-left: 10px;
-  padding-right: 10px;
-  opacity: 0.9;
-}
-
-.matched-text-diff-modal .line-content {
-  padding-left: 10px;
-  padding-right: 10px;
-}
-
-.matched-text-diff-modal .diff-line .line-content .line-text {
-  margin: 0;
-  display: inline-block;
-  white-space: pre-wrap;
-  line-height: 20px;
-}
-
-.matched-text-diff-modal .diff-line .line-content .removed-snippet {
-  background-color: #fdb8c0;
-}
-
-.matched-text-diff-modal .diff-line .line-content .added-snippet {
-  background-color: #acf2bd;
+.license-entity-table .ag-center-cols-viewport {
+  height: auto;
 }
