@@ -1,7 +1,38 @@
-.scope-summary-table {
-  max-height: 42vh;
+:root {
+  --min-scope-summary-table-height: 100px;
+  --max-scope-summary-table-height: 40vh;
+  --scope-summary-table-header-height: 49px;
+  --scope-summary-table-height: 5px;
 }
 
 .deps-status-flag-table .ag-header-cell-label {
   justify-content: center;
+}
+
+.scope-summary-table {
+  max-height: var(--max-scope-summary-table-height);
+  min-height: var(--min-scope-summary-table-height);
+  height: auto !important;
+}
+.scope-summary-table .ag-overlay-wrapper {
+  max-height: var(--max-scope-summary-table-height);
+  align-items: flex-end;
+  padding-bottom: 3%;
+}
+
+.scope-summary-table .ag-root-wrapper-body.ag-layout-normal {
+  flex: none;
+  height: auto;
+}
+
+.scope-summary-table .ag-body-viewport {
+  height: auto;
+  /* Subtract height of horizontal scroll and header from table height */
+  max-height: calc(var(--max-scope-summary-table-height) - var(--scope-summary-table-header-height) - var(--scope-summary-table-height));
+  min-height: calc(var(--min-scope-summary-table-height) - var(--scope-summary-table-header-height) - var(--scope-summary-table-height));
+  flex: none;
+}
+
+.scope-summary-table .ag-center-cols-viewport {
+  height: auto;
 }

@@ -97,14 +97,15 @@ const DependencyEntity = (props: DependencyEntityProps) => {
           />
         </div>
       )}
-      <br />
-      Raw dependency:
-      <ReactJson
-        src={dependency || {}}
-        enableClipboard={false}
-        displayDataTypes={false}
-        collapsed={0}
-      />
+      <div className="raw-info-section">
+        Raw dependency:
+        <ReactJson
+          src={dependency || {}}
+          enableClipboard={false}
+          displayDataTypes={false}
+          collapsed={0}
+        />
+      </div>
     </div>
   );
 };

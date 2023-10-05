@@ -1,10 +1,3 @@
-:root {
-  --max-license-entity-table-height: 35vh;
-  --license-entity-table-header-height: 49px;
-  --license-entity-table-height: 5px;
-}
-
-
 .license-detecion-entity {
   height: 100%;
 }
@@ -22,25 +15,3 @@
   margin-right: 5px;
 }
 
-
-.license-entity-table {
-  /* max-height: 250px; */
-  max-height: var(--max-license-entity-table-height);
-  height: auto !important;
-}
-
-.license-entity-table .ag-root-wrapper-body.ag-layout-normal {
-  flex: none;
-  height: auto;
-}
-
-.license-entity-table .ag-body-viewport {
-  height: auto;
-  /* Subtract height of horizontal scroll and header from table height */
-  max-height: calc(var(--max-license-entity-table-height) - var(--license-entity-table-header-height) - var(--license-entity-table-height));
-  flex: none;
-}
-
-.license-entity-table .ag-center-cols-viewport {
-  height: auto;
-}

@@ -1,5 +1,5 @@
 # Virtual environment
-.venv/
+venv/
 
 # sphinx build folder
 build/

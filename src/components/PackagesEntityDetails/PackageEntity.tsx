@@ -122,24 +122,26 @@ const PackageEntity = (props: PackageEntityProps) => {
           ? "1 Dependency:"
           : `${activePackage.dependencies.length} Dependencies:`}
       </b>
-      <br />
-      <AgGridReact
-        rowData={activePackage.dependencies}
-        columnDefs={DependenciesTableCols}
-        className="ag-theme-alpine ag-grid-customClass dependencies-table"
-        pagination
-        ensureDomOrder
-        enableCellTextSelection
-        defaultColDef={DEFAULT_DEPENDENCIES_COL_DEF}
-      />
-      <br />
-      Raw package:
-      <ReactJson
-        src={activePackage}
-        enableClipboard={false}
-        displayDataTypes={false}
-        collapsed={0}
-      />
+      {activePackage.dependencies.length > 0 && (
+        <AgGridReact
+          rowData={activePackage.dependencies}
+          columnDefs={DependenciesTableCols}
+          className="ag-theme-alpine ag-grid-customClass entity-table dependencies-table"
+          pagination
+          ensureDomOrder
+          enableCellTextSelection
+          defaultColDef={DEFAULT_DEPENDENCIES_COL_DEF}
+        />
+      )}
+      <div className="raw-info-section">
+        Raw package:
+        <ReactJson
+          src={activePackage}
+          enableClipboard={false}
+          displayDataTypes={false}
+          collapsed={0}
+        />
+      </div>
     </div>
   );
 };

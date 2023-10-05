@@ -112,7 +112,7 @@ const LicenseEntity = (props: LicenseDetectionEntityProps) => {
               : LicenseClueMatchCols
           }
           onGridReady={(params) => setMatchesTableColumnApi(params.columnApi)}
-          className="ag-theme-alpine ag-grid-customClass license-entity-table"
+          className="ag-theme-alpine ag-grid-customClass entity-table"
           ensureDomOrder
           enableCellTextSelection
           pagination={false}
@@ -127,20 +127,22 @@ const LicenseEntity = (props: LicenseDetectionEntityProps) => {
         columnDefs={DetectionFileRegionCols}
         onGridReady={(params) => params.api.sizeColumnsToFit()}
         onGridSizeChanged={(params) => params.api.sizeColumnsToFit()}
-        className="ag-theme-alpine ag-grid-customClass license-entity-table"
+        className="ag-theme-alpine ag-grid-customClass entity-table"
         ensureDomOrder
         enableCellTextSelection
         pagination={false}
         defaultColDef={DEFAULT_FILE_REGION_COL_DEF}
       />
       <br />
-      Raw license {activeLicenseEntity.type}
-      <ReactJson
-        src={activeLicenseEntity.license}
-        enableClipboard={false}
-        displayDataTypes={false}
-        collapsed={0}
-      />
+      <div className="raw-info-section">
+        Raw license {activeLicenseEntity.type}
+        <ReactJson
+          src={activeLicenseEntity.license}
+          enableClipboard={false}
+          displayDataTypes={false}
+          collapsed={0}
+        />
+      </div>
     </div>
   );
 };
