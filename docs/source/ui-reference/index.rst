@@ -9,6 +9,7 @@
 
    directory-tree
    table-view
+   pie-charts
    file-info-dashboard
    license-info-dashboard
    copyright-info-dashboard

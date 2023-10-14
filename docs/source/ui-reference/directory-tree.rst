@@ -18,3 +18,5 @@ Demo of filetree on different views:
 .. image:: data/directory-tree/directory-tree-copyright.gif
 
 .. image:: data/directory-tree/directory-tree-chartview.gif
+
+.. include:: ../rst_snippets/scans-used.rst

@@ -16,6 +16,8 @@ Summary of Packages:
     - Package Languages
     - Package Licenses
 
-Tip - Slices of pie-chart can be hidden/shown by clicking on the corresponding legend below charts
+.. include::  /rst_snippets/refer-pie-charts.rst
 
-.. image:: data/package-info/package-info.gif
+.. image:: data/package-info/package-info.png
+
+.. include:: ../rst_snippets/scans-used.rst

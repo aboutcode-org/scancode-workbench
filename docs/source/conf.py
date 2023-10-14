@@ -20,6 +20,9 @@
 project = 'ScanCode Workbench Documentation'
 copyright = 'nexB Inc. and others'
 author = 'nexB Inc. and others'
+github_user = "nexB"
+github_repo = "scancode-workbench"
+github_branch = "update/docs"
 
 
 # -- General configuration ---------------------------------------------------
@@ -30,7 +33,10 @@ author = 'nexB Inc. and others'
 extensions = [
     "sphinx.ext.intersphinx",
     'sphinx_rtd_theme',
-    "sphinx_reredirects"
+    "sphinx_rtd_dark_mode",
+    "sphinx_reredirects",
+    "sphinx.ext.extlinks",
+    "sphinx_copybutton",
 ]
 
 
@@ -73,9 +79,9 @@ master_doc = "index"
 
 html_context = {
     "display_github": True,
-    "github_user": "nexB",
-    "github_repo": "scancode-workbench",
-    "github_version": "develop",  # branch
+    "github_user": github_user,
+    "github_repo": github_repo,
+    "github_version": github_branch,  # branch
     "conf_py_path": "/docs/source/",  # path in the checkout to the docs root
 }
 
@@ -102,6 +108,12 @@ rst_prolog = """
 .. role:: img-title-para
 
 """
+
+# Define reusable URLs using extlinks
+extlinks = {
+    'github_repo': (f"https://github.com/{github_user}/{github_repo}/%s", '%s'),
+    'scan_samples': (f"https://github.com/{github_user}/{github_repo}/tree/{github_branch}/samples/%s", '%s'),
+}
 
 # -- Options for LaTeX output -------------------------------------------------
 

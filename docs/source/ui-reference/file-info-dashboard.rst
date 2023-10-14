@@ -17,6 +17,8 @@ Summary of files:
     - File Types
     - Mime Types
 
-Tip - Slices of pie-chart can be hidden/shown by clicking on the corresponding legend below charts
+.. include::  /rst_snippets/refer-pie-charts.rst
 
-.. image:: data/file-info/file-info.gif
+.. image:: data/file-info/file-info.png
+
+.. include:: ../rst_snippets/scans-used.rst

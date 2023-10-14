@@ -4,7 +4,13 @@
 :index:`License Explorer`
 ============================
 
-Details of Top level License detections and clues
+Details of all the License detections and clues including Matches as well as files in which they were detected can be viewed using the License Explorer.
+
+Refer -
+:doc:`scancode-toolkit:reference/license-detection-reference`
+
+.. @TODO - Replace with anchored link after merging docs PR in scancode-toolkit
+.. :doc:`scancode-toolkit:reference/license-detection-reference#what-is-a-licensedetection`
 
 License Navigation Pane
 -------------------------------
@@ -22,7 +28,7 @@ License Details Pane
 User can see detailed information of the license selected in the navigation pane.
 Title of details pane - License Expression
 Instances - No. of times license is detected
-Score - Shown only for clues, indicating clue's confidence about the license
+Score - Clue's confidence about the license (Shown only for clues)
 
 Matches Table
 User can view the match details resulting the selected license
@@ -51,3 +57,5 @@ View Matched Text diff
 --------------------------------------------
 
 .. image:: data/license-explorer/license-explorer-matchedtext.gif
+
+.. include:: ../rst_snippets/scans-used.rst

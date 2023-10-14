@@ -1,3 +1,5 @@
+.. _copyright-info-dashboard:
+
 ===================================
 :index:`Copyright Info Dashboard`
 ===================================
@@ -16,6 +18,10 @@ Summary of Licenses:
     - Copyright Notices
     - Copyright Authors
 
-Note - Legends are not shown for copyright charts due to large length of copyright statements
+.. include::  /rst_snippets/refer-pie-charts.rst
 
-.. image:: data/copyright-info/copyright-info.gif
+.. include::  /rst_snippets/copyright-pie-charts-notice.rst
+
+.. image:: data/copyright-info/copyright-info.png
+
+.. include:: ../rst_snippets/scans-used.rst

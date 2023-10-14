@@ -1,3 +1,5 @@
+.. _dependency-info-dashboard:
+
 =====================================
 :index:`Dependency Info Dashboard`
 =====================================
@@ -19,6 +21,20 @@ Summary of Dependencys:
     - Resolved dependencies
     - Optional dependencies
 
-Tip - Slices of pie-chart can be hidden/shown by clicking on the corresponding legend below charts
+.. include::  /rst_snippets/refer-pie-charts.rst
 
-.. image:: data/dependency-info/dependency-info.gif
+************************************************************
+Package type wise Scope  summary
+************************************************************
+.. image:: data/dependency-info/dependency-info-scope-table.png
+
+
+************************************************************
+Charts
+************************************************************
+
+.. image:: data/dependency-info/dependency-info-charts_1.png
+
+.. image:: data/dependency-info/dependency-info-charts_2.png
+
+.. include:: ../rst_snippets/scans-used.rst

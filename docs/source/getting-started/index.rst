@@ -16,13 +16,23 @@ Download and Install
 
 -  Note - For CentOS (or linux distros without the new libstdc++):
 
-   -  Install the new libstdc++ library: ``yum provides libstdc++``.
+   -  Install the new libstdc++ library:
+   
+      .. code-block:: bash
+         
+         yum provides libstdc++
+
    -  Update LD_LIBRARY_PATH:
       
-      ``export LD_LIBRARY_PATH="/usr/local/lib64/:$LD_LIBRARY_PATH"``
+      .. code-block:: bash
+
+         export LD_LIBRARY_PATH="/usr/local/lib64/:$LD_LIBRARY_PATH"
+
    -  Run the application with ``no-sandbox`` option:
    
-      ``./ScanCode\ Workbench-linux-x64/ScanCode\ Workbench --no-sandbox``
+      .. code-block:: bash
+
+         ./ScanCode\ Workbench-linux-x64/ScanCode\ Workbench --no-sandbox
 
 -  If you're interested in digging into the code, you can also use ScanCode Workbench by cloning
    the GitHub repository and building it yourself -- see the :ref:`Contribute/Building<building>`

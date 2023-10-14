@@ -1,3 +1,5 @@
+.. _license-info-dashboard:
+
 ================================
 :index:`License Info Dashboard`
 ================================
@@ -16,7 +18,9 @@ Summary of Licenses:
     - License keys
     - License policies
 
-Tip - Slices of pie-chart can be hidden/shown by clicking on the corresponding legend below charts
+.. include::  /rst_snippets/refer-pie-charts.rst
 
-.. image:: data/license-info/license-info.gif
+.. image:: data/license-info/license-info.png
 .. image:: data/license-info/license-info-with-policies.png
+
+.. include:: ../rst_snippets/scans-used.rst
