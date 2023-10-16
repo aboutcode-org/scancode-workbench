@@ -108,7 +108,7 @@
     "nock": "^13.3.0",
     "pg": "^8.10.0",
     "pg-hstore": "^2.3.4",
-    "rc-tree": "^5.7.0",
+    "rc-tree": "^5.7.12",
     "react": "^18.2.0",
     "react-bootstrap": "^2.5.0",
     "react-chartjs-2": "^5.2.0",
