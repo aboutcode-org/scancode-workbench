@@ -4,10 +4,10 @@
 :index:`Copyright Info Dashboard`
 ===================================
 
-License info dashboard summarizes the license information detected in scan for files under the selected path.
-Scan must have ``--license`` option for License Info Dashboard.
+Copyright info dashboard summarizes the copyright information detected in scan for files under the selected path.
+Scan must have ``--copyright`` option for Copyright Info Dashboard.
 
-Summary of Licenses:
+Summary of Copyrights:
 
 - Unique holders
     No. of unique copyright holders detected.

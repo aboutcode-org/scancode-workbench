@@ -30,8 +30,9 @@ Title of details pane - License Expression
 Instances - No. of times license is detected
 Score - Clue's confidence about the license (Shown only for clues)
 
-Matches Table
-User can view the match details resulting the selected license
+Matches Table:
+
+User can view the match details resulting the selected license :
 
 - ``Score``
 - ``Matched length``
@@ -43,8 +44,10 @@ User can view the match details resulting the selected license
 - ``Rule`` - User can click on the Rule to open the rule used by scancode-toolkit in browser
 - ``SPDX License expression``
 
-File Regions Table
-User can view the files in which selected license was detected
+File Regions Table:
+
+User can view the files in which selected license was detected:
+
 - ``Path`` - Path of file, User can click on it to view the specific file in TableView
 - ``Lines`` - Specific lines in the file at which license was detected
 - ``Detection origin`` - Type of file

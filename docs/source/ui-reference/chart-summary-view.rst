@@ -6,7 +6,7 @@
 
 With the chart summary view, a user can select a node in the directory tree (i.e., a directory,
 folder or file) and display a horizontal bar chart listing the values identified in the scanned
-codebase -- that is, the clues detected by ScanCode Toolkit -- for a number of different
+codebase, i.e. the ScanCode Toolkit detections, for a number of different
 attributes.
 
 The attributes are a subset of the columns displayed in the table view, and can be

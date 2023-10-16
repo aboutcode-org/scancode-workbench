@@ -10,8 +10,9 @@ information detected by ScanCode. A user can also see the file information (e.g.
 file size, etc) and package information (package type, primary language of package) that was
 detected.
 
-The columns can be sorted as well as shown or hidden based on what the user’s
-preferences or using preset groups. Searching for specific clues (license names, copyrights, etc.) is also available in this view.
+The columns can be sorted as well as shown or hidden based on what the user
+preference is. Searching for specific clues (license names, copyrights, etc.)
+is also available in this view.
 
 .. Note::
   The data in tableview is only available if corresponding options were enabled when performing the scan.
