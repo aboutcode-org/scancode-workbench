@@ -24,7 +24,6 @@ github_user = "nexB"
 github_repo = "scancode-workbench"
 github_branch = "update/docs"
 
-
 # -- General configuration ---------------------------------------------------
 
 # Add any Sphinx extension module names here, as strings. They can be
@@ -53,6 +52,7 @@ intersphinx_mapping = {
     'scancode-toolkit': ('https://scancode-toolkit.readthedocs.io/en/latest/', None),
 }
 
+default_dark_mode = False
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ["_templates"]

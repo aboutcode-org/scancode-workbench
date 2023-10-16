@@ -16,7 +16,4 @@ in the scanned codebase.
 
 .. image:: data/chart-summary-view.gif
 
-.. refer-scans:: Refer these scans
-         :items: item1, item2, item3
-
 .. include:: ../rst_snippets/scans-used.rst

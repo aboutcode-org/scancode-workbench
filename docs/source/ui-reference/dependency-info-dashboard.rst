@@ -4,12 +4,12 @@
 :index:`Dependency Info Dashboard`
 =====================================
 
+Dependency info dashboard summarizes the dependencies information detected in scan for files under the selected path.
 Scan must have ``--package`` option for Dependency Info Dashboard
 
 Summary of Dependencys:
 
-- Count of
-    - Dependencies
+- Total number of Dependencies detected
 
 - Summary table
     - Dependencies per Scope (Runtime, Optional, Resolved) for each Package Type
@@ -17,6 +17,7 @@ Summary of Dependencys:
 - Pie charts
     - Dependencies for each Package type
     - Data source IDs
+        Distribution of Unique data source IDs. eg. ``maven_pom``, ``pipfile_lock``, etc
     - Runtime dependencies
     - Resolved dependencies
     - Optional dependencies

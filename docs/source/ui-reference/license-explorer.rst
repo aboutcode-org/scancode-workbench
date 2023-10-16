@@ -18,10 +18,10 @@ User can scroll through the licenses and select particular license to see detail
 - License Detections
 - License Clues
 
+User can search for a particular license using the search bar at the top.
 These sections' height & navigation pane's width can be adjusted as per convenience.
 
 .. image:: data/license-explorer/license-explorer.gif
-
 
 License Details Pane
 ------------------------------------------

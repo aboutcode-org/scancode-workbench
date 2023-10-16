@@ -4,19 +4,25 @@
 :index:`Copyright Info Dashboard`
 ===================================
 
-Scan must have ``--license`` option for License Info Dashboard
+License info dashboard summarizes the license information detected in scan for files under the selected path.
+Scan must have ``--license`` option for License Info Dashboard.
 
 Summary of Licenses:
 
-- Count of
-    - Unique holders
-    - Unique notices
-    - Unique authors
+- Unique holders
+    No. of unique copyright holders detected.
+- Unique notices
+    No. of unique copyright notices detected.
+- Unique authors
+    No. of unique copyright authors detected.
 
 - Pie charts
     - Copyright Holders
+        Distribution of unique copyright holders indicating the number of files in which each copyright holder was detected.
     - Copyright Notices
+        Distribution of unique copyright notices indicating the number of files in which each copyright notice was detected.
     - Copyright Authors
+        Distribution of unique copyright authors indicating the number of files in which copyrights were authored by each author.
 
 .. include::  /rst_snippets/refer-pie-charts.rst
 

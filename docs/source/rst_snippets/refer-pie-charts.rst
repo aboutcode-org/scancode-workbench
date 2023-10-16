@@ -1,2 +1,2 @@
 .. note::
-    Refer :ref:`pie-charts` for chart specific features.
+    Refer :ref:`pie-charts` for UI features in charts

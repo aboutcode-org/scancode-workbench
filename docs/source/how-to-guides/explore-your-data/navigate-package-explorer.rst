@@ -2,8 +2,12 @@
 :index:`How-To: Navigate the Package Explorer View`
 ====================================================
 
+.. include:: ../definitions.rst
+
 Display the Package Explorer view
 ===================================
+
+Packages are uniquely identified using PURLs. ||purl_description|
 
 Once you have a SQLite file loaded into ScanCode Workbench,
 
@@ -41,4 +45,4 @@ You can click on the :kbd:`Data file path` to see that file in the TableView
 .. figure:: data/package-explorer-deps.gif
 
 
-For entire UI reference, Read :ref:`package-explorer` 
+For entire UI reference, See :ref:`package-explorer` 

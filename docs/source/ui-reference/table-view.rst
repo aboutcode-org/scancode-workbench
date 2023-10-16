@@ -11,8 +11,11 @@ file size, etc) and package information (package type, primary language of packa
 detected.
 
 The columns can be sorted as well as shown or hidden based on what the user’s
-preferences. Searching for specific clues (license names, copyrights, etc.) is also available in
-this view.
+preferences or using preset groups. Searching for specific clues (license names, copyrights, etc.) is also available in this view.
+
+.. Note::
+  The data in tableview is only available if corresponding options were enabled when performing the scan.
+  Refer - :doc:`scancode-toolkit:cli-reference/list-options`.
 
 ----------------
 Column groups
@@ -109,6 +112,19 @@ Use the ``Search`` bar in the top-right corner to perform searches within the sp
 
 .. image:: data/tableview/tableview-search.gif
 
+Go to License Explorer
+------------------------
+User can go to specific licenses in the licenses explorer by the clickable links in ``License Detections`` column (Grouped under `License cols`). This will open the license explorer with the target license selected.
+Similarly, ``Path`` column in the File regions table in license details pane also provide links which navigate back to the Table view with that File path selected
+
+.. image:: data/tableview/tableview-to-license.gif
+
+Go to Package Explorer
+------------------------
+User can go to specific package in the package explorer by the clickable links in ``For Packages`` column (Grouped under `Package cols`). This will open the package explorer with the target package selected.
+Similarly, Datafile paths in package/dependency details pane as well as dependency table also provide links which navigate back to the Table view with that File path selected
+
+.. image:: data/tableview/tableview-to-package.gif
 
 Pagination
 ------------------------
