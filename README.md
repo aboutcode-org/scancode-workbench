@@ -11,7 +11,7 @@ license and other notices identified by
 and other interesting information in your code.
 
 ScanCode Workbench is based on
-[Electron](https://electron.atom.io/) and will be the primary desktop/GUI tool 
+[Electron](https://www.electronjs.org/) and will be the primary desktop/GUI tool 
 for using nexB’s [AboutCode tools](https://github.com/nexB/aboutcode). This app 
 works on Windows, OS X and Linux operating systems.
 
@@ -96,6 +96,6 @@ See the NOTICE file for more details.
 
 If you have a question, a suggestion or find a bug, enter an issue.
 
-[![Gitter chat](https://badges.gitter.im/aboutcode-org/gitter.png)](https://gitter.im/aboutcode-org/discuss)
+[![Gitter chat](https://badges.gitter.im/aboutcode-org/gitter.png)](https://matrix.to/#/#aboutcode-org_discuss:gitter.im)
 
-For questions and chats, you can join the Gitter channel at https://gitter.im/aboutcode-org/discuss
+For questions and chats, you can join the Gitter channel at https://matrix.to/#/#aboutcode-org_discuss:gitter.im

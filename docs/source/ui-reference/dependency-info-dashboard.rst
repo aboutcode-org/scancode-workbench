@@ -4,7 +4,8 @@
 :index:`Dependency Info Dashboard`
 =====================================
 
-Dependency info dashboard summarizes the dependencies information detected in scan for files under the selected path.
+Dependency info dashboard summarizes the dependencies information detected
+in scan for files under the selected path.
 Scan must have ``--package`` option for Dependency Info Dashboard
 
 Summary of Dependencys:

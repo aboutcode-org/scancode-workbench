@@ -5,7 +5,8 @@
 Open a SQLite File
 ==================
 
-Once you've imported your JSON scan it is parsed & saved as a SQLite file, which can be later imported quickly compared to opening json scan again
+Once you've imported your JSON scan it is parsed & saved as a SQLite file,
+which can be later imported quickly compared to opening json scan again
 
 * To open a SQLite File:
 

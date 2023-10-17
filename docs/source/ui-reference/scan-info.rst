@@ -5,10 +5,8 @@
 ============================
 
 Scan Info provides information about the scan available in ``headers`` in the scan.
-It provides information about the environment & configuration on host machine when performing the scan. You can also see the raw header JSON at the bottom
-
-:github_repo:`1.0.1`
-:docs:`1.0.1`
+It provides information about the environment & configuration on host machine
+when performing the scan. You can also see the raw header JSON at the bottom
 
 Fields:
 
@@ -28,7 +26,7 @@ Fields:
 - ``Tool notice`` - Notice of the tool which generated this scan
 - ``Errors`` (if any)
 - ``Raw header``
-  
+
 
 .. image:: data/scan-info/scan-info_1.png
 .. image:: data/scan-info/scan-info_2.png

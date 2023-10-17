@@ -112,7 +112,7 @@ rst_prolog = """
 # Define reusable URLs using extlinks
 extlinks = {
     'github_repo': (f"https://github.com/{github_user}/{github_repo}/%s", '%s'),
-    'scan_samples': (f"https://github.com/{github_user}/{github_repo}/tree/{github_branch}/samples/%s", '%s'),
+    'scan_samples': (f"https://github.com/{github_user}/{github_repo}/blob/{github_branch}/samples/%s", '%s'),
 }
 
 # -- Options for LaTeX output -------------------------------------------------

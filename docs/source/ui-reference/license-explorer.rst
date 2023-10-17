@@ -4,7 +4,8 @@
 :index:`License Explorer`
 ============================
 
-Details of all the License detections and clues including Matches as well as files in which they were detected can be viewed using the License Explorer.
+Details of all the License detections and clues including Matches as well as files in which they
+were detected can be viewed using the License Explorer.
 
 Refer -
 :doc:`scancode-toolkit:reference/license-detection-reference`
@@ -14,7 +15,8 @@ Refer -
 
 License Navigation Pane
 -------------------------------
-User can scroll through the licenses and select particular license to see detailed information in the License details pane. Licenses are divided into two sections:
+User can scroll through the licenses and select particular license to see
+detailed information in the License details pane. Licenses are divided into two sections:
 - License Detections
 - License Clues
 

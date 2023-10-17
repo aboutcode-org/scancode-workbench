@@ -9,26 +9,30 @@ Download and Install
 
 - ScanCode Workbench is available for Windows, macOS and Linux -
    `ScanCode Workbench releases <https://github.com/nexB/scancode-workbench/releases>`__.
-   
-- Once downloaded, you'll find the ScanCode Workbench executable inside the ``ScanCode Workbench-<os>-<arch>`` folder. On Windows 10, for example, the executable will be named `ScanCode-Workbench.exe`.
+
+-
+   Once downloaded, you'll find the ScanCode Workbench executable inside the
+   ``ScanCode Workbench-<os>-<arch>`` folder.
+
+   On Windows 10, for example, the executable will be named `ScanCode-Workbench.exe`.
 
 .. Note::
    For CentOS (or linux distros without the new libstdc++), follow these steps:
 
    -  Install the new libstdc++ library:
-   
+
       .. code-block:: bash
-         
+
          yum provides libstdc++
 
    -  Update LD_LIBRARY_PATH:
-      
+
       .. code-block:: bash
 
          export LD_LIBRARY_PATH="/usr/local/lib64/:$LD_LIBRARY_PATH"
 
    -  Run the application with ``no-sandbox`` option:
-   
+
       .. code-block:: bash
 
          ./ScanCode\ Workbench-linux-x64/ScanCode\ Workbench --no-sandbox

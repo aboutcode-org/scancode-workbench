@@ -7,7 +7,7 @@
 Underlying Technology
 =====================
 
--  ScanCode Workbench is based on `Electron <https://electron.atom.io/>`__ and works on
+-  ScanCode Workbench is based on `Electron <https://www.electronjs.org/>`__ and works on
    Windows, OS X and Linux operating systems.
 
 Platform Support

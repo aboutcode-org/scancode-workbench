@@ -9,7 +9,10 @@ Once you have a SQLite file loaded into ScanCode Workbench, displaying the Chart
 Summary View is easy:
 
 * Select a file or directory in the Tree View on the left.
-* Click on `Chart Summary View` in the sidebar or open the :kbd:`View` menu and select :kbd:`Chart Summary View` (keyboard shortcut: :kbd:`Ctrl+Shift+D` or :kbd:`⌘+Shift+D`).
+*
+  Click on `Chart Summary View` in the sidebar or open the
+  :kbd:`View` menu and select :kbd:`Chart Summary View`
+  (keyboard shortcut: :kbd:`Ctrl+Shift+D` or :kbd:`⌘+Shift+D`).
 
 Select an attribute
 ===================
@@ -36,4 +39,4 @@ directory or file.
 
 .. figure:: data/chart-summary-filetree.gif
 
-For entire UI reference, Read :ref:`chart-summary-view` 
+For entire UI reference, Read :ref:`chart-summary-view`

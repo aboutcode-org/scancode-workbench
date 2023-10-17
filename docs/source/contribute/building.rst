@@ -7,7 +7,7 @@
 Clone, Install, Build and Run
 =============================
 
-You'll need `Node.js <https://nodejs.org/>`__ (which comes with `npm <http://npmjs.com/>`__) installed on your computer in order to build this app. (See below for a list of platform-specific requirements.) Then, from your command line:
+You'll need `Node.js <https://nodejs.org/en>`__ (which comes with `npm <https://www.npmjs.com/>`__) installed on your computer in order to build this app. (See below for a list of platform-specific requirements.) Then, from your command line:
 
 .. code-block:: bash
 
@@ -33,23 +33,23 @@ Linux
 - `Node.js <https://nodejs.org/en/download/package-manager/>`__ 12.x or later
 - npm 6.14.x or later
 - For CentOS (or linux distros without the new libstdc++) -
-   
-   -  Install the new libstdc++ library: 
+
+   -  Install the new libstdc++ library:
 
       .. code-block:: bash
-      
+
          yum provides libstdc++
-         
+
    -  Update LD_LIBRARY_PATH:
-      
+
       .. code-block:: bash
-      
+
          export LD_LIBRARY_PATH="/usr/local/lib64/:$LD_LIBRARY_PATH"
 
    -  Run the application with ``no-sandbox`` option:
-   
+
       .. code-block:: bash
-      
+
          ./ScanCode\ Workbench-linux-x64/ScanCode\ Workbench --no-sandbox
 
 MacOS
@@ -58,11 +58,11 @@ MacOS
 - Python 3.7 or later
 - `Node.js <https://nodejs.org/en/>`__ 12.x or later
 - npm 6.14.x or later
-- Command Line Tools for `Xcode <https://developer.apple.com/xcode/downloads/>`_
+- Command Line Tools for `Xcode <https://developer.apple.com/xcode/resources/>`_
    Install using:
 
    .. code-block:: bash
-   
+
       xcode-select --install
 
 Windows
@@ -73,7 +73,7 @@ Windows
   * Make sure your Python path is set. To verify, open a command prompt and see the python version:
 
    .. code-block:: bash
-   
+
       python --version
 
 - `Node.js <https://nodejs.org/en/>`__ 12.x or later

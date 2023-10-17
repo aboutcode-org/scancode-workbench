@@ -4,7 +4,8 @@
 :index:`Copyright Info Dashboard`
 ===================================
 
-Copyright info dashboard summarizes the copyright information detected in scan for files under the selected path.
+Copyright info dashboard summarizes the copyright information detected
+in scan for files under the selected path.
 Scan must have ``--copyright`` option for Copyright Info Dashboard.
 
 Summary of Copyrights:
@@ -18,11 +19,14 @@ Summary of Copyrights:
 
 - Pie charts
     - Copyright Holders
-        Distribution of unique copyright holders indicating the number of files in which each copyright holder was detected.
+        Distribution of unique copyright holders indicating the number of files
+        in which each copyright holder was detected.
     - Copyright Notices
-        Distribution of unique copyright notices indicating the number of files in which each copyright notice was detected.
+        Distribution of unique copyright notices indicating the number of files
+        in which each copyright notice was detected.
     - Copyright Authors
-        Distribution of unique copyright authors indicating the number of files in which copyrights were authored by each author.
+        Distribution of unique copyright authors indicating the number of files
+        in which copyrights were authored by each author.
 
 .. include::  /rst_snippets/refer-pie-charts.rst
 

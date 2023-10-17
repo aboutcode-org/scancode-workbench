@@ -6,13 +6,15 @@
 
 .. include:: ../definitions.rst
 
-Details of all the Packages & dependencies as well as files in which they were detected can be viewed using the Package Explorer.
+Details of all the Packages & dependencies as well as files in which
+they were detected can be viewed using the Package Explorer.
 
 Refer - :doc:`scancode-toolkit:reference/available_package_parsers`.
 
 Package Navigation Pane
 --------------------------------
-User can scroll through the packages & dependencies and select particular package to see detailed information in the Details pane.
+User can scroll through the packages & dependencies and select particular package
+to see detailed information in the Details pane.
 Packages and dependencies are organised in a hierarchical structure as shown below.
 
 > ``Package Type``
@@ -24,7 +26,7 @@ User can select different filters:
 - Data sources - ``maven_pom``, ``go_mod``, ``npm_package_lock_json``, etc
 - Dependency flags - ``Runtime``, ``Resolved``, ``Optional``
 
-  Tip - You can click on the tag on the right side of the dependency to toggle that flag
+  Tip - You can click on the tag on the right side of the dependency to toggle that flag.
 
 The navigation pane's width can also be adjusted as per convenience.
 
@@ -37,7 +39,7 @@ Package Details
 User can see following information of the selected package:
 
 - ``Title of details pane``- PURL
-    
+
   |purl_description|
 - ``Type``
 - ``Namespace``
@@ -56,7 +58,8 @@ User can see following information of the selected package:
 Datafile paths
 ***************************
 List of paths of datafiles in which the selected package/dependency was detected.
-User can click on the datafile paths to open that path in the Tableview the match details resulting the selected license 
+User can click on the datafile paths to open that path in the Tableview the match details
+resulting the selected license.
 
 ***************************
 Dependencies table
