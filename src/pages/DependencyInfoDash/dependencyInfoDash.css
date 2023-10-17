@@ -1,5 +1,5 @@
 :root {
-  --min-scope-summary-table-height: 100px;
+  --min-scope-summary-table-height: 90px;
   --max-scope-summary-table-height: 40vh;
   --scope-summary-table-header-height: 49px;
   --scope-summary-table-height: 5px;
@@ -14,6 +14,7 @@
   min-height: var(--min-scope-summary-table-height);
   height: auto !important;
 }
+
 .scope-summary-table .ag-overlay-wrapper {
   max-height: var(--max-scope-summary-table-height);
   align-items: flex-end;

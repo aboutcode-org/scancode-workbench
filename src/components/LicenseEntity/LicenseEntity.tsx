@@ -129,6 +129,7 @@ const LicenseEntity = (props: LicenseDetectionEntityProps) => {
         onGridSizeChanged={(params) => params.api.sizeColumnsToFit()}
         className="ag-theme-alpine ag-grid-customClass entity-table"
         ensureDomOrder
+        suppressHorizontalScroll
         enableCellTextSelection
         pagination={false}
         defaultColDef={DEFAULT_FILE_REGION_COL_DEF}

@@ -29,36 +29,36 @@ export const DependenciesTableCols: DepsColDef[] = [
   {
     headerName: "Scope",
     field: "scope",
-    width: 130,
+    width: 160,
   },
   {
     headerName: "Resolved",
     field: "is_resolved",
     cellRenderer: TickRenderer,
-    maxWidth: 95,
+    maxWidth: 92,
   },
   {
     headerName: "Runtime",
     field: "is_runtime",
     cellRenderer: TickRenderer,
-    maxWidth: 95,
+    maxWidth: 92,
   },
   {
     headerName: "Optional",
     field: "is_optional",
     cellRenderer: TickRenderer,
-    maxWidth: 95,
+    maxWidth: 92,
   },
   {
     headerName: "Data source ID",
     field: "datasource_id",
-    width: 130,
+    width: 165,
   },
   {
     headerName: "Data file",
     field: "datafile_path",
     cellRenderer: FilePathRenderer,
-    width: 200,
+    width: 400,
   },
   {
     headerName: "Extracted requirement",

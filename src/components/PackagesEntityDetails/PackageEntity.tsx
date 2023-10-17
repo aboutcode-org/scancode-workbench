@@ -18,11 +18,11 @@ import "../../styles/entityCommonStyles.css";
 import "./packageEntity.css";
 
 interface PackageEntityProps {
-  package: PackageDetails;
+  activePackage: PackageDetails;
   goToDependency: (dependency: DependencyDetails) => void;
 }
 const PackageEntity = (props: PackageEntityProps) => {
-  const { package: activePackage } = props;
+  const { activePackage } = props;
   const { goToFileInTableView } = useWorkbenchDB();
 
   if (!activePackage) {
