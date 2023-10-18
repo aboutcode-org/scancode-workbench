@@ -2,7 +2,7 @@
 :index:`Directory Tree`
 =======================
 
-An interactive Directory tree is present on the left side of the application for resource-focused
+An interactive directory tree is present on the left side of the application for resource-focused
 views. This allows the user to navigate the codebase structure.
 
 If a directory is selected, only the information for that directory and its sub-files and folders

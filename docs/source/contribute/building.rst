@@ -32,25 +32,8 @@ Linux
 - Python 3.7 or later
 - `Node.js <https://nodejs.org/en/download/package-manager/>`__ 12.x or later
 - npm 6.14.x or later
-- For CentOS (or linux distros without the new libstdc++) -
 
-   -  Install the new libstdc++ library:
-
-      .. code-block:: bash
-
-         yum provides libstdc++
-
-   -  Update LD_LIBRARY_PATH:
-
-      .. code-block:: bash
-
-         export LD_LIBRARY_PATH="/usr/local/lib64/:$LD_LIBRARY_PATH"
-
-   -  Run the application with ``no-sandbox`` option:
-
-      .. code-block:: bash
-
-         ./ScanCode\ Workbench-linux-x64/ScanCode\ Workbench --no-sandbox
+.. include:: ../rst_snippets/centos-note.rst
 
 MacOS
 -----

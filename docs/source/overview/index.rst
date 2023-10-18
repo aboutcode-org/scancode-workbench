@@ -26,13 +26,23 @@ This documentation is organized in six sections:
 
 -  The :ref:`ui-reference` section provides an overview of each of ScanCode Workbench's data views.
 
--  The :ref:`technical-reference` section summarizes ScanCode Workbench's underlying technology
-   and platform support.
-
 -  The :ref:`contribute` section is intended for advanced users and contributors to ScanCode
    Workbench development.
 
 -  The :ref:`license` section provides summary licensing information for ScanCode Workbench.
+
+Underlying Technology
+=====================
+
+-  ScanCode Workbench is based on `Electron <https://www.electronjs.org/>`__ and works on
+   Windows, OS X and Linux operating systems.
+
+Platform Support
+================
+
+* Linux - ``x64``
+* Windows 10/11 - ``x64``
+* MacOS - ``x64``, ``arm64``
 
 Important Links
 ===============

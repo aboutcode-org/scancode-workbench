@@ -16,26 +16,7 @@ Download and Install
 
    On Windows 10, for example, the executable will be named `ScanCode-Workbench.exe`.
 
-.. Note::
-   For CentOS (or linux distros without the new libstdc++), follow these steps:
-
-   -  Install the new libstdc++ library:
-
-      .. code-block:: bash
-
-         yum provides libstdc++
-
-   -  Update LD_LIBRARY_PATH:
-
-      .. code-block:: bash
-
-         export LD_LIBRARY_PATH="/usr/local/lib64/:$LD_LIBRARY_PATH"
-
-   -  Run the application with ``no-sandbox`` option:
-
-      .. code-block:: bash
-
-         ./ScanCode\ Workbench-linux-x64/ScanCode\ Workbench --no-sandbox
+.. include:: ../rst_snippets/centos-note.rst
 
 -  If you're interested in digging into the code, you can also use ScanCode Workbench by cloning
    the GitHub repository and building it yourself -- see the :ref:`Contribute/Building<building>`
@@ -44,15 +25,19 @@ Download and Install
 ScanCode Workbench-ScanCode Toolkit Compatibility
 =================================================
 
--  ScanCode Workbench >= v4.0.0 is only compatible with scans from ScanCode v32.x and above
-   that have been run with the ScanCode Toolkit ``-i`` option.
+-  ScanCode Workbench v4.x is only compatible with scans from ScanCode v32.x and above
+   that have been run with ScanCode Toolkit.
 
-   -  A list of available ScanCode Toolkit options is available in the ScanCode Toolkit
-      documentation:
-      :doc:`scancode-toolkit:tutorials/how_to_set_what_will_be_detected_in_a_scan`.
+- You would typically create your scan with the following command::
 
-- You would typically create your scan with the following command:
-  ``./scancode -clipeu <input> <output_file>``
+   scancode -clipeu <input> --json-pp <output_file>
+
+.. Note::
+   A list of available ScanCode Toolkit options is available in the ScanCode Toolkit
+   documentation:
+   :doc:`scancode-toolkit:tutorials/how_to_set_what_will_be_detected_in_a_scan`.
+   Also see :doc:`scancode-toolkit:tutorials/how_to_run_a_scan` for more details
+   on running a ScanCode Toolkit scan.
 
 Open ScanCode Workbench and Load a ScanCode Toolkit Scan
 ========================================================

@@ -10,7 +10,7 @@ were detected can be viewed using the License Explorer.
 Refer -
 :doc:`scancode-toolkit:reference/license-detection-reference`
 
-.. @TODO - Replace with anchored link after merging docs PR in scancode-toolkit
+.. @TODO - Replace with anchored link after merging docs PR inScanCode Toolkit
 .. :doc:`scancode-toolkit:reference/license-detection-reference#what-is-a-licensedetection`
 
 License Navigation Pane
@@ -43,7 +43,7 @@ User can view the match details resulting the selected license :
 - ``Matched Text``
     | User can click on the text to view a diff of Matched & Rule text
     | (Requires ``--license-references`` flag)
-- ``Rule`` - User can click on the Rule to open the rule used by scancode-toolkit in browser
+- ``Rule`` - User can click on the Rule to open the rule used byScanCode Toolkit in browser
 - ``SPDX License expression``
 
 File Regions Table:
