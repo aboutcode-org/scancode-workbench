@@ -55,6 +55,7 @@ const FileTree = (props: React.HTMLProps<HTMLDivElement>) => {
     if (alreadyRenderedTargetNode) {
       // Immediate scroll possible
       scrollTreeNode(alreadyRenderedTargetNode);
+      endProcessing();
     } else {
       // Wait for target node to render
       pendingScrollerTimeoutId = setTimeout(() => {

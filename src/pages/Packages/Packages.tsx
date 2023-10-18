@@ -589,7 +589,7 @@ const Packages = () => {
           {activeEntityType ? (
             activeEntityType === "package" && activePackage ? (
               <PackageEntity
-                package={activePackage}
+                activePackage={activePackage}
                 goToDependency={activateDependency}
               />
             ) : activeEntityType === "dependency" && activeDependency ? (
