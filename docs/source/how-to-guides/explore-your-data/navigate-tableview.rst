@@ -32,3 +32,5 @@ nature such as ``Copyright Cols``, ``Origin Cols``, ``License Cols``
 
 
 For entire UI reference, Read :ref:`table-view`
+
+.. include:: ../../rst_snippets/scans-used.rst

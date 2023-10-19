@@ -40,3 +40,5 @@ directory or file.
 .. figure:: data/chart-summary-filetree.gif
 
 For entire UI reference, Read :ref:`chart-summary-view`
+
+.. include:: ../../rst_snippets/scans-used.rst

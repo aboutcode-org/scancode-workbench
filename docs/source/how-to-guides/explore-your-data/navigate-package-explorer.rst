@@ -52,3 +52,5 @@ You can click on the :kbd:`Data file path` to see that file in the TableView
 
 
 For entire UI reference, See :ref:`package-explorer`
+
+.. include:: ../../rst_snippets/scans-used.rst

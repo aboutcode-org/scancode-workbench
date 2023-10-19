@@ -50,3 +50,5 @@ are located at `https://github.com/nexB/scancode-workbench/tree/develop/samples 
      ..
 
      The SQLite version of your JSON scan is ready for your analysis.
+
+.. include:: ../../rst_snippets/scans-used.rst

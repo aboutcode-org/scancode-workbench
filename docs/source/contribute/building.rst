@@ -29,18 +29,18 @@ Building Requirements
 Linux
 -----
 
-- Python 3.7 or later
-- `Node.js <https://nodejs.org/en/download/package-manager/>`__ 12.x or later
-- npm 6.14.x or later
+- `Python <https://www.python.org/>`__ v3.7 or later
+- `Node.js <https://nodejs.org/en//>`__ 14.x or later
+- `npm <https://www.npmjs.com/>`__ v6.14.4 or later
 
 .. include:: ../rst_snippets/centos-note.rst
 
 MacOS
 -----
 
-- Python 3.7 or later
-- `Node.js <https://nodejs.org/en/>`__ 12.x or later
-- npm 6.14.x or later
+- `Python <https://www.python.org/>`__ v3.7 or later
+- `Node.js <https://nodejs.org/en/>`__ 14.x or later
+- `npm <https://www.npmjs.com/>`__ v6.14.4 or later
 - Command Line Tools for `Xcode <https://developer.apple.com/xcode/resources/>`_
    Install using:
 
@@ -51,7 +51,7 @@ MacOS
 Windows
 -------
 
-- Python v3.7 or later
+- `Python <https://www.python.org/>`__ v3.7 or later
 
   * Make sure your Python path is set. To verify, open a command prompt and see the python version:
 
@@ -59,8 +59,8 @@ Windows
 
       python --version
 
-- `Node.js <https://nodejs.org/en/>`__ 12.x or later
-- npm 6.14.x or later
+- `Node.js <https://nodejs.org/en/>`__ v14.x or later
+- `npm <https://www.npmjs.com/>`__ v6.14.4 or later
 
 
 Release Instructions

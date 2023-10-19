@@ -392,13 +392,20 @@ export function flattenFile(file: any): FlattenedFile {
   };
 }
 
-function getLicensePolicyLabel(policy: any) {
+function getLicensePolicyLabel(policy: any[]) {
   if (!policy) {
-    return;
-  } else if (!policy["label"]) {
-    return;
+    return [];
   }
-  return [policy["label"]];
+
+  // @TODO - Support Comprehensive renderer in Tableview
+  // return policy.map((policy) => ({
+  //   label: policy["label"],
+  //   license_key: policy["license_key"],
+  // }));
+
+  return policy.map(
+    (policy) => `${policy["license_key"]} - ${policy["label"]}`
+  );
 }
 
 function getCopyrightValues(

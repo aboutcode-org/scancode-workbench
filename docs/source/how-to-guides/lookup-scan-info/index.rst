@@ -15,3 +15,5 @@ or, open the :kbd:`View` menu and select :kbd:`Scan Info`
 
 You can view various details about the scan like scan tool name & version, options, platform etc.
 More detailed explanation about the view can be found at :ref:`scan-info`
+
+.. include:: ../../rst_snippets/scans-used.rst

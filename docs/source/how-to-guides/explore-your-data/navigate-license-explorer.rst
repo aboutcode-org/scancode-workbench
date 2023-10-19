@@ -37,3 +37,5 @@ You can click on the data file path to view that path in Tableview
 .. figure:: data/license-explorer-table.gif
 
 For entire UI reference, Read :ref:`license-explorer`
+
+.. include:: ../../rst_snippets/scans-used.rst
