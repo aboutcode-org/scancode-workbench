@@ -49,6 +49,7 @@ import {
   ResourceLicenseDetection,
   TopLevelLicenseDetection,
 } from "./importedJsonTypes";
+import { LicenseTypes } from "./workbenchDB.types";
 import { LicenseDetectionAttributes } from "./models/licenseDetections";
 import { LicenseClueAttributes } from "./models/licenseClues";
 import packageJson from "../../package.json";
@@ -444,6 +445,34 @@ export class WorkbenchDB {
             });
         })
     );
+  }
+
+  toggleLicenseVettedStatus(
+    licenseId: number,
+    licenseType: LicenseTypes,
+    vetted: boolean
+  ) {
+    return this.sync.then((db) => {
+      if (licenseType === LicenseTypes.DETECTION) {
+        db.LicenseDetections.update(
+          { vetted },
+          {
+            where: {
+              id: licenseId,
+            },
+          }
+        );
+      } else if (licenseType === LicenseTypes.CLUE) {
+        db.LicenseClues.update(
+          { vetted },
+          {
+            where: {
+              id: licenseId,
+            },
+          }
+        );
+      }
+    });
   }
 
   // Helper function for parsing Toplevel data

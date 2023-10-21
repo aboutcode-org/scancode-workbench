@@ -17,7 +17,10 @@ a:not([href]):not([class]):hover {
   color: #0a58ca;
 }
 
-input[type="text"] {
+input[type="checkbox"] {
+  cursor: pointer;
+}
+  input[type="text"] {
   font-size: 14px;
 }
 input[type="search"]::-webkit-search-results-button {

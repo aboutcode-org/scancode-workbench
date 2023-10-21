@@ -28,9 +28,13 @@
   padding-right: 12px;
 }
 
-.licenses-navigator-container .search-box {
-  width: 98%;
-  margin-bottom: 12px;
+.licenses-navigator-container .filter-group {
+  margin-bottom: 10px;
+  padding-right: 5px;
+}
+
+.licenses-navigator-container .filter-group>div {
+  margin-bottom: 4px;
 }
 
 .licenses-navigator-container .search-box input {
@@ -89,7 +93,8 @@
 
 .license-item>div {
   padding: 2px;
-  padding-right: 4px;
+  padding-top: 4px;
+  padding-bottom: 0;
   display: table-cell;
   vertical-align: top;
 }
@@ -100,11 +105,22 @@
   word-break: break-word;
 }
 
+
+.license-item>.vet-toggle,
 .license-item>.license-count {
-  padding-top: 2px;
-  padding-right: 7px;
+  width: 38px;
 }
 
+.license-item>.vet-toggle {
+  padding-top: 2px;
+  padding-right: 10px;
+}
+
+.license-item>.license-count {
+  padding-top: 6px;
+}
+
+.license-item>.vet-toggle>*,
 .license-item>.license-count>* {
   float: right;
 }
