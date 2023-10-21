@@ -7,8 +7,10 @@ import {
   ListGroup,
   ListGroupItem,
 } from "react-bootstrap";
+import { toast } from "react-toastify";
 import { ThreeDots } from "react-loader-spinner";
 import { useSearchParams } from "react-router-dom";
+import Select from "react-select";
 
 import LicenseEntity from "../../components/LicenseEntity/LicenseEntity";
 import NoDataFallback from "../../components/NoDataSection";
@@ -18,16 +20,20 @@ import {
   ActiveLicenseEntity,
   LicenseClueDetails,
   LicenseDetectionDetails,
+  VET_OPTIONS,
+  VetOption,
 } from "./licenseDefinitions";
+import { LicenseTypes } from "../../services/workbenchDB.types";
 
 import "./Licenses.css";
 
 const LicenseDetections = () => {
   const [searchParams] = useSearchParams();
-  const [activeLicense, setActiveLicense] = useState<ActiveLicenseEntity | null>(
-    null
-  );
+  const [activeLicense, setActiveLicense] =
+    useState<ActiveLicenseEntity | null>(null);
   const [searchedLicense, setSearchedLicense] = useState("");
+  const [vetFilter, setVetFilter] = useState<VetOption>(VET_OPTIONS.ALL);
+  const [vettedLicenses, setVettedLicenses] = useState<Set<string>>(new Set());
 
   function activateLicenseDetection(licenseDetection: LicenseDetectionDetails) {
     if (!licenseDetection) return;
@@ -59,17 +65,15 @@ const LicenseDetections = () => {
       const newLicenseDetections: LicenseDetectionDetails[] = (
         await db.getAllLicenseDetections()
       ).map((detection) => ({
+        id: Number(detection.getDataValue("id")),
+        vetted: detection.getDataValue("vetted"),
         detection_count: Number(detection.getDataValue("detection_count")),
         identifier: detection.getDataValue("identifier") || null,
-        license_expression: detection
-          .getDataValue("license_expression")
-          ,
+        license_expression: detection.getDataValue("license_expression"),
         detection_log: JSON.parse(
           detection.getDataValue("detection_log") || "[]"
         ),
-        matches: JSON.parse(
-          detection.getDataValue("matches") || "[]"
-        ),
+        matches: JSON.parse(detection.getDataValue("matches") || "[]"),
         file_regions: JSON.parse(
           detection.getDataValue("file_regions") || "[]"
         ),
@@ -81,6 +85,11 @@ const LicenseDetections = () => {
       ).map((clue) => {
         return {
           id: Number(clue.getDataValue("id")),
+          // @TODO - Find better way to have unique identifier for each clue
+          identifier: `clue-${
+            clue.getDataValue("license_expression") || ""
+          }-${Number(clue.getDataValue("id"))}`,
+          vetted: clue.getDataValue("vetted"),
           fileId: Number(clue.getDataValue("fileId")),
           filePath: clue.getDataValue("filePath") || "",
           fileClueIdx: Number(clue.getDataValue("fileClueIdx")),
@@ -88,19 +97,26 @@ const LicenseDetections = () => {
             clue.getDataValue("score") !== null
               ? Number(clue.getDataValue("score"))
               : null,
-          license_expression:
-            clue.getDataValue("license_expression") || null,
-          rule_identifier:
-            clue.getDataValue("rule_identifier") || null,
-          matches: JSON.parse(
-            clue.getDataValue("matches") || "[]"
-          ),
-          file_regions: JSON.parse(
-            clue.getDataValue("file_regions") || "[]"
-          ),
+          license_expression: clue.getDataValue("license_expression") || null,
+          rule_identifier: clue.getDataValue("rule_identifier") || null,
+          matches: JSON.parse(clue.getDataValue("matches") || "[]"),
+          file_regions: JSON.parse(clue.getDataValue("file_regions") || "[]"),
         };
       });
       setLicenseClues(newLicenseClues);
+
+      const newVettedLicenses = new Set<string>();
+      newLicenseDetections.forEach((detection) => {
+        if (detection.vetted) {
+          newVettedLicenses.add(detection.identifier);
+        }
+      });
+      newLicenseClues.forEach((clue) => {
+        if (clue.vetted) {
+          newVettedLicenses.add(clue.identifier);
+        }
+      });
+      setVettedLicenses(newVettedLicenses);
 
       const queriedDetectionIdentifier: string | null = searchParams.get(
         QUERY_KEYS.LICENSE_DETECTION
@@ -154,6 +170,46 @@ const LicenseDetections = () => {
     })().then(endProcessing);
   }, []);
 
+  const handleItemToggle = (
+    license: LicenseDetectionDetails | LicenseClueDetails,
+    licenseType: LicenseTypes,
+    newVettedStatus: boolean
+  ) => {
+    function updateVettedLicenseStatus(identifier: string, newStatus: boolean) {
+      setVettedLicenses((prevVettedLicenses) => {
+        const newVettedLicenses = new Set(prevVettedLicenses);
+        if (newStatus) newVettedLicenses.add(identifier);
+        else newVettedLicenses.delete(identifier);
+        return newVettedLicenses;
+      });
+    }
+
+    // const newVettedStatus = !vettedLicenses.has(license.identifier);
+    db.toggleLicenseVettedStatus(
+      license.id,
+      licenseType,
+      newVettedStatus
+    ).catch((err) => {
+      // Revert vetted status in UI if DB update fails
+      updateVettedLicenseStatus(license.identifier, !newVettedStatus);
+      console.log("Error updating vetted status: ", err);
+      toast.error("Couldn't update vetted license status!");
+    });
+
+    updateVettedLicenseStatus(license.identifier, newVettedStatus);
+  };
+
+  const shownByVetFilter = (
+    license: LicenseDetectionDetails | LicenseClueDetails
+  ) => {
+    if (vetFilter === VET_OPTIONS.ALL) return true;
+    if (vetFilter === VET_OPTIONS.VETTED)
+      return vettedLicenses.has(license.identifier);
+    if (vetFilter === VET_OPTIONS.UNVETTED)
+      return !vettedLicenses.has(license.identifier);
+    return true;
+  };
+
   if (!licenseDetections || !licenseClues) {
     return (
       <ThreeDots
@@ -169,7 +225,7 @@ const LicenseDetections = () => {
   }
 
   const totalLicenses = licenseDetections.length + licenseClues.length;
-  const DEFAULT_SECTION_HEIGHT_CAP = 0.8;
+  const DEFAULT_SECTION_HEIGHT_CAP = 0.75;
   const capSectionSize = (ratio: number) => {
     return (
       Math.max(
@@ -191,7 +247,6 @@ const LicenseDetections = () => {
 
   return (
     <div>
-      <h4 className="licenses-title">License explorer</h4>
       <Allotment className="license-container">
         <Allotment.Pane
           snap
@@ -199,14 +254,22 @@ const LicenseDetections = () => {
           preferredSize="30%"
           className="licenses-navigator-container"
         >
-          <InputGroup className="search-box">
-            <Form.Control
-              aria-label="Search"
-              type="search"
-              placeholder="Search licenses"
-              onChange={(e) => setSearchedLicense(e.target.value)}
+          <div className="filter-group">
+            <Select
+              defaultValue={VET_OPTIONS.ALL}
+              onChange={(newVetFilter) => setVetFilter(newVetFilter)}
+              isMulti={false}
+              options={Object.values(VET_OPTIONS)}
             />
-          </InputGroup>
+            <InputGroup className="search-box">
+              <Form.Control
+                aria-label="Search"
+                type="search"
+                placeholder="Search licenses"
+                onChange={(e) => setSearchedLicense(e.target.value)}
+              />
+            </InputGroup>
+          </div>
           <Allotment vertical snap={false} minSize={90}>
             <Allotment.Pane
               preferredSize={licenseDetectionsSectionSize}
@@ -226,9 +289,11 @@ const LicenseDetections = () => {
                     activeLicense &&
                     activeLicense.type === "detection" &&
                     activeLicense.license === licenseDetection;
-                  const showDetection = licenseDetection.license_expression
-                    .toLowerCase()
-                    .includes(searchedLicense.toLowerCase());
+                  const showDetection =
+                    shownByVetFilter(licenseDetection) &&
+                    licenseDetection.license_expression
+                      .toLowerCase()
+                      .includes(searchedLicense.toLowerCase());
 
                   return (
                     <ListGroupItem
@@ -258,6 +323,22 @@ const LicenseDetections = () => {
                             {licenseDetection.detection_count}
                           </Badge>
                         </div>
+                        <div className="vet-toggle">
+                          <Form.Check
+                            type="checkbox"
+                            checked={vettedLicenses.has(
+                              licenseDetection.identifier
+                            )}
+                            onChange={(e) =>
+                              handleItemToggle(
+                                licenseDetection,
+                                LicenseTypes.DETECTION,
+                                e.target.checked
+                              )
+                            }
+                            onClick={(e) => e.stopPropagation()}
+                          ></Form.Check>
+                        </div>
                       </div>
                     </ListGroupItem>
                   );
@@ -277,14 +358,16 @@ const LicenseDetections = () => {
                     activeLicense &&
                     activeLicense.type === "clue" &&
                     activeLicense.license === licenseClue;
-                  const showClue = licenseClue.license_expression
-                    .toLowerCase()
-                    .includes(searchedLicense.toLowerCase());
+                  const showClue =
+                    shownByVetFilter(licenseClue) &&
+                    licenseClue.license_expression
+                      .toLowerCase()
+                      .includes(searchedLicense.toLowerCase());
 
                   return (
                     <ListGroupItem
                       onClick={() => activateLicenseClue(licenseClue)}
-                      key={licenseClue.id}
+                      key={licenseClue.identifier}
                       className="license-group-item"
                       style={{
                         display: showClue ? "block" : "none",
@@ -298,6 +381,20 @@ const LicenseDetections = () => {
                       >
                         <div className="expression">
                           {licenseClue.license_expression}
+                        </div>
+                        <div className="vet-toggle">
+                          <Form.Check
+                            type="checkbox"
+                            checked={vettedLicenses.has(licenseClue.identifier)}
+                            onChange={(e) =>
+                              handleItemToggle(
+                                licenseClue,
+                                LicenseTypes.CLUE,
+                                e.target.checked
+                              )
+                            }
+                            onClick={(e) => e.stopPropagation()}
+                          ></Form.Check>
                         </div>
                       </div>
                     </ListGroupItem>

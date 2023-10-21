@@ -60,7 +60,16 @@ const Home = () => {
   }
 
   function historyItemParser(historyItem: HistoryItem) {
-    if (historyItem.json_path) {
+    // During development, re-parse JSON file (Possible schema changes)
+    // Toggle this if you don't have schema changes & wish to save time in imports
+    const REIMPORT_JSON_IN_DEV = true;
+
+    if (
+      REIMPORT_JSON_IN_DEV &&
+      process.env.NODE_ENV === "development" &&
+      historyItem.json_path
+    ) {
+      console.log("Re-import JSON file (Dev mode)");
       if (!electronFs.existsSync(historyItem.json_path)) {
         return reportInvalidEntry(historyItem, "JSON");
       }

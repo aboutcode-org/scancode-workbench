@@ -17,6 +17,7 @@
 import Sequelize from "sequelize";
 // eslint-disable-next-line import/no-unresolved
 import { parse } from "license-expressions";
+import { parseIfValidJson } from "../../utils/parsers";
 
 // @TODO
 // Store an object as a json string internally, but as an object externally
@@ -25,7 +26,7 @@ export function jsonDataType(attributeName: string) {
   return {
     type: Sequelize.STRING,
     get: function () {
-      return JSON.parse(this.getDataValue(attributeName));
+      return parseIfValidJson(this.getDataValue(attributeName));
     },
     set: function (val: any) {
       return this.setDataValue(attributeName, JSON.stringify(val));

@@ -18,9 +18,11 @@ import { Sequelize, DataTypes, Model } from "sequelize";
 import { jsonDataType, JSON_Type } from "./databaseUtils";
 
 export interface LicenseDetectionAttributes {
+  id: number;
   identifier: string;
   license_expression: string;
   detection_count: number;
+  vetted: boolean;
   detection_log: JSON_Type;
   matches: JSON_Type;
   file_regions: JSON_Type;
@@ -30,13 +32,22 @@ export default function licenseDetectionModel(sequelize: Sequelize) {
   return sequelize.define<Model<LicenseDetectionAttributes>>(
     "license_detections",
     {
+      id: {
+        allowNull: false,
+        autoIncrement: true,
+        primaryKey: true,
+        type: DataTypes.INTEGER,
+      },
       identifier: {
         type: DataTypes.STRING,
         allowNull: false,
-        primaryKey: true,
       },
       license_expression: DataTypes.STRING,
       detection_count: DataTypes.NUMBER,
+      vetted: {
+        defaultValue: false,
+        type: DataTypes.BOOLEAN,
+      },
       detection_log: jsonDataType("detection_log"),
       matches: jsonDataType("matches"),
       file_regions: jsonDataType("file_regions"),
