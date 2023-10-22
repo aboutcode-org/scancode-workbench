@@ -2,5 +2,6 @@
 module.exports = {
   preset: 'ts-jest',
   testEnvironment: 'node',
-  modulePathIgnorePatterns: ["test-old"]
+  modulePathIgnorePatterns: ["test-old", "dist"],
+  testPathIgnorePatterns: ["node_modules", "dist", "test-old"]
 };
