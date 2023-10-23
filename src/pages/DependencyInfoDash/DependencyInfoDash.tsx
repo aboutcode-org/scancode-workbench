@@ -60,7 +60,7 @@ const DependencyInfoDash = () => {
     >();
     packagesData.forEach((packageData) => {
       // Package data having PURL as null are invalid & will have no dependency
-      // Hence, don't consider such package data (will be fixed in further toolkit version)
+      // Hence, don't consider such package data (will be fixed in further scancode-toolkit version)
       if (!packageData.getDataValue("purl")) return;
 
       const packageDataType = packageData.getDataValue("type");
@@ -94,11 +94,15 @@ const DependencyInfoDash = () => {
       }, 0);
     });
 
-    return Array.from(packageTypeToSummaryMapping.values()).sort(
-      (packageTypeSummary1, packageTypeSummary2) =>
-        packageTypeSummary2.packageTypeDetails.total -
-        packageTypeSummary1.packageTypeDetails.total
-    );
+    return Array.from(packageTypeToSummaryMapping.values())
+      .filter(
+        (packageTypeSummary) => packageTypeSummary.packageTypeDetails.total > 0
+      )
+      .sort(
+        (packageTypeSummary1, packageTypeSummary2) =>
+          packageTypeSummary2.packageTypeDetails.total -
+          packageTypeSummary1.packageTypeDetails.total
+      );
   }
 
   useEffect(() => {
@@ -217,17 +221,22 @@ const DependencyInfoDash = () => {
         </Col>
       </Row>
       <br />
-      Dependency Scope summary by Package Type
-      <AgGridReact
-        rowData={Object.values(packageTypeSummaryData || {})}
-        columnDefs={DependencySummaryTableCols}
-        defaultColDef={DEFAULT_DEPS_SUMMARY_COL_DEF}
-        ensureDomOrder
-        enableCellTextSelection
-        onGridReady={(params) => params.api.sizeColumnsToFit()}
-        onGridSizeChanged={(params) => params.api.sizeColumnsToFit()}
-        className="ag-theme-alpine ag-grid-customClass scope-summary-table"
-      />
+      {packageTypeSummaryData.length > 0 && (
+        <>
+        <h6>Dependency Scope summary by Package Type</h6>
+          <AgGridReact
+            rowData={Object.values(packageTypeSummaryData || {})}
+            columnDefs={DependencySummaryTableCols}
+            defaultColDef={DEFAULT_DEPS_SUMMARY_COL_DEF}
+            ensureDomOrder
+            enableCellTextSelection
+            suppressHorizontalScroll
+            onGridReady={(params) => params.api.sizeColumnsToFit()}
+            onGridSizeChanged={(params) => params.api.sizeColumnsToFit()}
+            className="ag-theme-alpine ag-grid-customClass scope-summary-table"
+          />
+        </>
+      )}
       <br />
       <Row className="dash-cards">
         <Col sm={4}>

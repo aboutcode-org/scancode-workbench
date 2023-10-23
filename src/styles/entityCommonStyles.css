@@ -1,3 +1,9 @@
+:root {
+  --max-entity-table-height: 35vh;
+  --entity-table-header-height: 49px;
+  --entity-table-height: 5px;
+}
+
 .entity-properties {
   font-size: 14px;
 }
@@ -16,5 +22,33 @@
 .license-detecion-entity .react-json-view {
   max-height: 75vh;
   overflow: auto;
-  margin-bottom: 15px;
+}
+
+.package-entity .raw-info-section,
+.dependency-entity .raw-info-section,
+.license-detecion-entity .raw-info-section {
+  margin-top: 15px;
+  margin-bottom: 25px;
+}
+
+.entity-table {
+  /* max-height: 250px; */
+  max-height: var(--max-entity-table-height);
+  height: auto !important;
+}
+
+.entity-table .ag-root-wrapper-body.ag-layout-normal {
+  flex: none;
+  height: auto;
+}
+
+.entity-table .ag-body-viewport {
+  height: auto;
+  /* Subtract height of horizontal scroll and header from table height */
+  max-height: calc(var(--max-entity-table-height) - var(--entity-table-header-height) - var(--entity-table-height));
+  flex: none;
+}
+
+.entity-table .ag-center-cols-viewport {
+  height: auto;
 }
