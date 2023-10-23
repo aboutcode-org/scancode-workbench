@@ -123,6 +123,10 @@ export interface TopLevelLicenseDetection {
   // Legacy output version fields
   count?: number;
 }
+export interface Todo {
+  detection_id: string;
+  issues: string;
+}
 export interface ResourceLicenseDetection {
   license_expression: string;
   matches: LicenseDetectionMatch[];

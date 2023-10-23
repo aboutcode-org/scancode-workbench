@@ -7,7 +7,7 @@ import {
 export interface LicenseDetectionDetails {
   id: number;
   identifier: string;
-  vetted: boolean;
+  reviewed: boolean;
   license_expression: string;
   detection_count: number;
   detection_log: string[];
@@ -20,12 +20,18 @@ export interface LicenseClueDetails {
   filePath: string;
   fileClueIdx: number;
   score: number | null;
-  vetted: boolean;
+  reviewed: boolean;
   identifier: string;
   license_expression: string | null;
   rule_identifier: string | null;
   matches: LicenseMatch[];
   file_regions: LicenseFileRegion[];
+}
+
+export interface TodoDetails {
+  id: number;
+  detection_id: string;
+  issues: Record<string, string>;
 }
 
 export type ActiveLicenseEntity =
@@ -38,12 +44,12 @@ export type ActiveLicenseEntity =
       license: LicenseClueDetails;
     };
 
-export interface VetOption {
+export interface ReviewOption {
   value: string;
   label: string;
 }
-export const VET_OPTIONS: Record<string, VetOption> = {
+export const REVIEW_STATUS_OPTIONS: Record<string, ReviewOption> = {
   ALL: { value: "ALL", label: "All" },
-  VETTED: { value: "VETTED", label: "Vetted" },
-  UNVETTED: { value: "UNVETTED", label: "Unvetted" },
+  REVIEWED: { value: "REVIEWED", label: "Reviewed" },
+  UNREVIEWED: { value: "UNREVIEWED", label: "Unreviewed" },
 };

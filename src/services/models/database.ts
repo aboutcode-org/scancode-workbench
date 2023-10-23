@@ -38,6 +38,7 @@ import licenseClueModel, { LicenseClueAttributes } from "./licenseClues";
 import licenseRuleReferenceModel, {
   LicenseRuleReferenceAttributes,
 } from "./licenseRuleReference";
+import todoModel, { TodoAttributes } from "./todo";
 
 // let Header;
 // let File;
@@ -66,6 +67,7 @@ export interface DatabaseStructure {
   LicenseClues: ModelStatic<
     Model<LicenseClueAttributes, LicenseClueAttributes>
   >;
+  Todo: ModelStatic<Model<TodoAttributes, TodoAttributes>>;
 
   File: ModelStatic<Model<FileAttributes>>;
   LicenseExpression: ModelStatic<
@@ -94,6 +96,7 @@ export function newDatabase(sequelize: Sequelize): DatabaseStructure {
     LicenseDetections: licenseDetectionModel(sequelize),
     LicenseRuleReferences: licenseRuleReferenceModel(sequelize),
     LicenseClues: licenseClueModel(sequelize),
+    Todo: todoModel(sequelize),
 
     File: fileModel(sequelize),
     LicenseExpression: licenseExpressionModel(sequelize),

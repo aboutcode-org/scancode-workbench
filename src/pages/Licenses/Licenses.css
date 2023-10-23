@@ -105,10 +105,22 @@
   word-break: break-word;
 }
 
-
+.license-item>.todo-indicator,
 .license-item>.vet-toggle,
 .license-item>.license-count {
-  width: 38px;
+  width: 30px;
+}
+
+.license-item>.todo-indicator>*,
+.license-item>.vet-toggle>*,
+.license-item>.license-count>* {
+  float: right;
+}
+
+.license-item>.todo-indicator {
+  color: #FF0000;
+  font-size: 20px;
+  width: 20px;
 }
 
 .license-item>.vet-toggle {
@@ -118,9 +130,4 @@
 
 .license-item>.license-count {
   padding-top: 6px;
-}
-
-.license-item>.vet-toggle>*,
-.license-item>.license-count>* {
-  float: right;
 }

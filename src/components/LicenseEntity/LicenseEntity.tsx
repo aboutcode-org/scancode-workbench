@@ -2,7 +2,10 @@ import ReactJson from "@microlink/react-json-view";
 import { AgGridReact } from "ag-grid-react";
 import React, { useEffect, useState } from "react";
 
-import { ActiveLicenseEntity } from "../../pages/Licenses/licenseDefinitions";
+import {
+  ActiveLicenseEntity,
+  TodoDetails,
+} from "../../pages/Licenses/licenseDefinitions";
 import {
   DEFAULT_FILE_REGION_COL_DEF,
   DetectionFileRegionCols,
@@ -23,9 +26,10 @@ import "../../styles/entityCommonStyles.css";
 
 interface LicenseDetectionEntityProps {
   activeLicenseEntity: ActiveLicenseEntity | null;
+  activeLicenseTodo: TodoDetails | null;
 }
 const LicenseEntity = (props: LicenseDetectionEntityProps) => {
-  const { activeLicenseEntity } = props;
+  const { activeLicenseEntity, activeLicenseTodo } = props;
   const { scanInfo } = useWorkbenchDB();
   const [matchesTableColumnApi, setMatchesTableColumnApi] =
     useState<ColumnApi | null>(null);
@@ -100,10 +104,27 @@ const LicenseEntity = (props: LicenseDetectionEntityProps) => {
             <br />
           </React.Fragment>
         ))}
+        <br />
+        {activeLicenseTodo && (
+          <div>
+            <b>Issues</b>
+            <br />
+            <ul>
+              {Object.entries(activeLicenseTodo.issues).map(
+                ([issue_type, issue_description]) => (
+                  <li key={issue_type}>
+                    <div className="property">{issue_type}</div>
+                    <div>{issue_description}</div>
+                  </li>
+                )
+              )}
+            </ul>
+          </div>
+        )}
       </div>
       <br />
       <MatchedTextProvider>
-        Matches
+        <b>Matches</b>
         <AgGridReact
           rowData={matches}
           columnDefs={
@@ -121,7 +142,7 @@ const LicenseEntity = (props: LicenseDetectionEntityProps) => {
       </MatchedTextProvider>
       <br />
       <br />
-      File regions
+      <b>File regions</b>
       <AgGridReact
         rowData={file_regions}
         columnDefs={DetectionFileRegionCols}
