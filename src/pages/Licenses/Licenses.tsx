@@ -7,10 +7,12 @@ import {
   ListGroup,
   ListGroupItem,
 } from "react-bootstrap";
+import Select from "react-select";
 import { toast } from "react-toastify";
 import { ThreeDots } from "react-loader-spinner";
 import { useSearchParams } from "react-router-dom";
-import Select from "react-select";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faExclamation } from "@fortawesome/free-solid-svg-icons";
 
 import LicenseEntity from "../../components/LicenseEntity/LicenseEntity";
 import NoDataFallback from "../../components/NoDataSection";
@@ -20,10 +22,12 @@ import {
   ActiveLicenseEntity,
   LicenseClueDetails,
   LicenseDetectionDetails,
-  VET_OPTIONS,
-  VetOption,
+  TodoDetails,
+  REVIEW_STATUS_OPTIONS,
+  ReviewOption,
 } from "./licenseDefinitions";
 import { LicenseTypes } from "../../services/workbenchDB.types";
+import { parseIfValidJson } from "../../utils/parsers";
 
 import "./Licenses.css";
 
@@ -32,8 +36,12 @@ const LicenseDetections = () => {
   const [activeLicense, setActiveLicense] =
     useState<ActiveLicenseEntity | null>(null);
   const [searchedLicense, setSearchedLicense] = useState("");
-  const [vetFilter, setVetFilter] = useState<VetOption>(VET_OPTIONS.ALL);
-  const [vettedLicenses, setVettedLicenses] = useState<Set<string>>(new Set());
+  const [reviewFilter, setReviewFilter] = useState<ReviewOption>(
+    REVIEW_STATUS_OPTIONS.ALL
+  );
+  const [reviewedLicenses, setReviewedLicenses] = useState<Set<string>>(
+    new Set()
+  );
 
   function activateLicenseDetection(licenseDetection: LicenseDetectionDetails) {
     if (!licenseDetection) return;
@@ -56,6 +64,7 @@ const LicenseDetections = () => {
   const [licenseClues, setLicenseClues] = useState<LicenseClueDetails[] | null>(
     null
   );
+  const [todos, setTodos] = useState<Map<string, TodoDetails>>(new Map());
   const { db, startProcessing, endProcessing } = useWorkbenchDB();
 
   useEffect(() => {
@@ -66,7 +75,7 @@ const LicenseDetections = () => {
         await db.getAllLicenseDetections()
       ).map((detection) => ({
         id: Number(detection.getDataValue("id")),
-        vetted: detection.getDataValue("vetted"),
+        reviewed: detection.getDataValue("vetted"),
         detection_count: Number(detection.getDataValue("detection_count")),
         identifier: detection.getDataValue("identifier") || null,
         license_expression: detection.getDataValue("license_expression"),
@@ -89,7 +98,7 @@ const LicenseDetections = () => {
           identifier: `clue-${
             clue.getDataValue("license_expression") || ""
           }-${Number(clue.getDataValue("id"))}`,
-          vetted: clue.getDataValue("vetted"),
+          reviewed: clue.getDataValue("vetted"),
           fileId: Number(clue.getDataValue("fileId")),
           filePath: clue.getDataValue("filePath") || "",
           fileClueIdx: Number(clue.getDataValue("fileClueIdx")),
@@ -107,16 +116,28 @@ const LicenseDetections = () => {
 
       const newVettedLicenses = new Set<string>();
       newLicenseDetections.forEach((detection) => {
-        if (detection.vetted) {
+        if (detection.reviewed) {
           newVettedLicenses.add(detection.identifier);
         }
       });
       newLicenseClues.forEach((clue) => {
-        if (clue.vetted) {
+        if (clue.reviewed) {
           newVettedLicenses.add(clue.identifier);
         }
       });
-      setVettedLicenses(newVettedLicenses);
+      setReviewedLicenses(newVettedLicenses);
+
+      const newTodos = new Map<string, TodoDetails>();
+      await db.getAllTodos().then((todosList) =>
+        todosList.forEach((todo) =>
+          newTodos.set(todo.getDataValue("detection_id"), {
+            id: Number(todo.getDataValue("id")),
+            detection_id: todo.getDataValue("detection_id"),
+            issues: parseIfValidJson(todo.getDataValue("issues")) || {},
+          })
+        )
+      );
+      setTodos(newTodos);
 
       const queriedDetectionIdentifier: string | null = searchParams.get(
         QUERY_KEYS.LICENSE_DETECTION
@@ -176,7 +197,7 @@ const LicenseDetections = () => {
     newVettedStatus: boolean
   ) => {
     function updateVettedLicenseStatus(identifier: string, newStatus: boolean) {
-      setVettedLicenses((prevVettedLicenses) => {
+      setReviewedLicenses((prevVettedLicenses) => {
         const newVettedLicenses = new Set(prevVettedLicenses);
         if (newStatus) newVettedLicenses.add(identifier);
         else newVettedLicenses.delete(identifier);
@@ -202,11 +223,11 @@ const LicenseDetections = () => {
   const shownByVetFilter = (
     license: LicenseDetectionDetails | LicenseClueDetails
   ) => {
-    if (vetFilter === VET_OPTIONS.ALL) return true;
-    if (vetFilter === VET_OPTIONS.VETTED)
-      return vettedLicenses.has(license.identifier);
-    if (vetFilter === VET_OPTIONS.UNVETTED)
-      return !vettedLicenses.has(license.identifier);
+    if (reviewFilter === REVIEW_STATUS_OPTIONS.ALL) return true;
+    if (reviewFilter === REVIEW_STATUS_OPTIONS.VETTED)
+      return reviewedLicenses.has(license.identifier);
+    if (reviewFilter === REVIEW_STATUS_OPTIONS.UNVETTED)
+      return !reviewedLicenses.has(license.identifier);
     return true;
   };
 
@@ -256,10 +277,10 @@ const LicenseDetections = () => {
         >
           <div className="filter-group">
             <Select
-              defaultValue={VET_OPTIONS.ALL}
-              onChange={(newVetFilter) => setVetFilter(newVetFilter)}
+              defaultValue={REVIEW_STATUS_OPTIONS.ALL}
+              onChange={(newVetFilter) => setReviewFilter(newVetFilter)}
               isMulti={false}
-              options={Object.values(VET_OPTIONS)}
+              options={Object.values(REVIEW_STATUS_OPTIONS)}
             />
             <InputGroup className="search-box">
               <Form.Control
@@ -313,6 +334,11 @@ const LicenseDetections = () => {
                         <div className="expression">
                           {licenseDetection.license_expression}
                         </div>
+                        {todos.has(licenseDetection.identifier) && (
+                          <div className="todo-indicator">
+                            <FontAwesomeIcon icon={faExclamation} />
+                          </div>
+                        )}
                         <div className="license-count">
                           <Badge
                             pill
@@ -326,7 +352,7 @@ const LicenseDetections = () => {
                         <div className="vet-toggle">
                           <Form.Check
                             type="checkbox"
-                            checked={vettedLicenses.has(
+                            checked={reviewedLicenses.has(
                               licenseDetection.identifier
                             )}
                             onChange={(e) =>
@@ -382,10 +408,17 @@ const LicenseDetections = () => {
                         <div className="expression">
                           {licenseClue.license_expression}
                         </div>
+                        {todos.has(licenseClue.identifier) && (
+                          <div className="todo-indicator">
+                            <FontAwesomeIcon icon={faExclamation} />
+                          </div>
+                        )}
                         <div className="vet-toggle">
                           <Form.Check
                             type="checkbox"
-                            checked={vettedLicenses.has(licenseClue.identifier)}
+                            checked={reviewedLicenses.has(
+                              licenseClue.identifier
+                            )}
                             onChange={(e) =>
                               handleItemToggle(
                                 licenseClue,
@@ -409,7 +442,10 @@ const LicenseDetections = () => {
           minSize={500}
           className="license-entity-pane overflow-scroll"
         >
-          <LicenseEntity activeLicenseEntity={activeLicense} />
+          <LicenseEntity
+            activeLicenseEntity={activeLicense}
+            activeLicenseTodo={todos.get(activeLicense?.license.identifier)}
+          />
         </Allotment.Pane>
       </Allotment>
     </div>

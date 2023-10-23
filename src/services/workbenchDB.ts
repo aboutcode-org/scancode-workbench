@@ -47,6 +47,7 @@ import {
   ParsedJsonHeader,
   Resource,
   ResourceLicenseDetection,
+  Todo,
   TopLevelLicenseDetection,
 } from "./importedJsonTypes";
 import { LicenseTypes } from "./workbenchDB.types";
@@ -89,6 +90,7 @@ interface TopLevelDataFormat {
   license_references_map: Map<string, LicenseReference>;
   license_references_spdx_map: Map<string, LicenseReference>;
   license_rule_references: unknown[];
+  todo: Todo[];
 }
 export interface FileDataNode extends DataNode {
   id: number;
@@ -194,6 +196,10 @@ export class WorkbenchDB {
 
   getAllDependencies() {
     return this.sync.then((db) => db.Dependencies.findAll());
+  }
+
+  getAllTodos() {
+    return this.sync.then((db) => db.Todo.findAll());
   }
 
   getLicenseRuleReference(identifier: string, attributes?: string[]) {
@@ -315,6 +321,7 @@ export class WorkbenchDB {
             license_references_map: new Map(),
             license_references_spdx_map: new Map(),
             license_rule_references: [],
+            todo: [],
           };
 
           stream
@@ -327,6 +334,7 @@ export class WorkbenchDB {
 
               files_count = Number(TopLevelData.parsedHeader.files_count);
               promiseChain = promiseChain
+                .then(() => this.db.Todo.bulkCreate(TopLevelData.todo))
                 .then(() => this.db.Packages.bulkCreate(TopLevelData.packages))
                 .then(() =>
                   this.db.Dependencies.bulkCreate(TopLevelData.dependencies)
@@ -518,6 +526,15 @@ export class WorkbenchDB {
     const license_rule_references: any[] =
       rawTopLevelData.license_rule_references || [];
 
+    // @TODO - ToDo in scans have a field review_comments, which is ideally an issue
+    // It will be changed in the schema in future
+    const todo: Todo[] = (rawTopLevelData.todo || []).map((todo: any) => {
+      return {
+        detection_id: todo.detection_id,
+        issues: todo.review_comments,
+      };
+    });
+
     return {
       header,
       parsedHeader,
@@ -530,6 +547,7 @@ export class WorkbenchDB {
       license_detections_map,
       license_references,
       license_rule_references,
+      todo,
     };
   }
 
