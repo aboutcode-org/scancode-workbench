@@ -15,8 +15,7 @@ ScanCode Workbench is based on
 for using nexB’s [AboutCode tools](https://github.com/nexB/aboutcode). This app 
 works on Windows, OS X and Linux operating systems.
 
-![ScanCode Workbench](https://user-images.githubusercontent.com/48476025/185114433-7340ee70-57cd-4586-b7e7-964fe736451a.gif)
-
+![ScanCode Workbench](/src/assets/images/workbench_intro.gif)
 
 ## Using
 
