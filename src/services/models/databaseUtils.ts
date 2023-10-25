@@ -1,6 +1,6 @@
 /*
  #
- # Copyright (c) 2018 nexB Inc. and others. All rights reserved.
+ # Copyright (c) nexB Inc. and others. All rights reserved.
  # https://nexb.com and https://github.com/nexB/scancode-workbench/
  # The ScanCode Workbench software is licensed under the Apache License version 2.0.
  # ScanCode is a trademark of nexB Inc.
@@ -14,12 +14,13 @@
  #
  */
 
-import Sequelize, { AbstractDataType } from "sequelize";
+import Sequelize from "sequelize";
 // eslint-disable-next-line import/no-unresolved
 import { parse } from "license-expressions";
 
-// Stores an object as a json string internally, but as an object externally
-export type JSON_Type = AbstractDataType;
+// @TODO
+// Store an object as a json string internally, but as an object externally
+export type JSON_Type = string;
 export function jsonDataType(attributeName: string) {
   return {
     type: Sequelize.STRING,

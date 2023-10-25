@@ -1,10 +1,12 @@
-import { ColDef } from 'ag-grid-community';
+import { ColDef } from "ag-grid-community";
 
-import { ALL_COLUMNS } from './columnDefs';
+import { ALL_COLUMNS } from "./columnDefs";
 
-// NOTE --- 
 export const DEFAULT_EMPTY_VALUES = new Set<string | null>([
-  '', null, '[]', '[[]]'
+  "",
+  null,
+  "[]",
+  "[[]]",
 ]);
 
 export const SET_FILTERED_COLUMNS = new Set<string>([
@@ -12,12 +14,10 @@ export const SET_FILTERED_COLUMNS = new Set<string>([
   ALL_COLUMNS.extension.field || "",
   ALL_COLUMNS.programming_language.field || "",
   ALL_COLUMNS.file_type.field || "",
-
+  ALL_COLUMNS.mime_type.field || "",
   ALL_COLUMNS.copyright_holders.field || "",
   ALL_COLUMNS.copyright_authors.field || "",
-  // ALL_COLUMNS..field || "",
-  // ALL_COLUMNS..field || "",
-])
+]);
 
 const FILE_COLUMN_GROUP: ColDef[] = [
   ALL_COLUMNS.type,
@@ -42,7 +42,6 @@ const COPYRIGHT_COLUMN_GROUP: ColDef[] = [
   ALL_COLUMNS.copyright_start_line,
   ALL_COLUMNS.copyright_end_line,
 ];
-
 
 const LICENSE_COLUMN_GROUP: ColDef[] = [
   ALL_COLUMNS.detected_license_expression,
@@ -74,14 +73,11 @@ const PACKAGE_COLUMN_GROUP: ColDef[] = [
   ALL_COLUMNS.for_packages,
 ];
 
-
-
 const DEFAULT_COLUMN_GROUP: ColDef[] = [
   ALL_COLUMNS.path,
   ...FILE_COLUMN_GROUP,
-  ALL_COLUMNS.scan_error,
+  ALL_COLUMNS.scan_errors,
 ];
-
 
 export const COLUMN_GROUPS = {
   DEFAULT: DEFAULT_COLUMN_GROUP,
@@ -95,4 +91,4 @@ export const COLUMN_GROUPS = {
   ALL: Object.values(ALL_COLUMNS),
 
   NONE: [] as ColDef[],
-}
+};

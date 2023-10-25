@@ -1,10 +1,28 @@
 import { diff_match_patch } from "diff-match-patch";
 
+// Convert stringified nested list to comma separated string for Filters
+export function parseProbableStringifiedArray(str: string, maxLength: number) {
+  try {
+    const result = JSON.parse(str);
+    if (Array.isArray(result)) {
+      const parseableResultArray = result as string[][];
+      return trimStringWithEllipsis(
+        parseableResultArray.map((subEntry) => subEntry.join(",")).join(","),
+        maxLength
+      );
+    }
+    return trimStringWithEllipsis(str, maxLength);
+  } catch (e) {
+    return trimStringWithEllipsis(str, maxLength);
+  }
+}
+
 // Trim string to specified length & add ellipsis if required
 export function trimStringWithEllipsis(
   str: string,
   maxLengthInclusive: number
 ) {
+  if (!str) return "";
   if (str.length > maxLengthInclusive) {
     return str.trimEnd().slice(0, maxLengthInclusive - 3) + "...";
   }
@@ -12,7 +30,7 @@ export function trimStringWithEllipsis(
 }
 
 // Removes symbols & extra spaces from given string.
-export function normalizeString(str: string) {
+export function normalizeDiffString(str: string) {
   return str
     .replace(/[.,/#!$%^&*;:[{}\]=\-_'"`~()]/g, "")
     .replace(/\s{2,}/g, " ")
@@ -34,9 +52,11 @@ export interface DiffComponents {
 
 const diffMatcher = new diff_match_patch();
 
-export function diffStrings(text1: string, text2: string) {
-  const diffs = diffMatcher.diff_main(text1, text2);
-  const diffsWithIgnoredLetterCases: DiffComponents[] = [];
+// Parse diffs from diff_match_patch & filter out trivial diffs
+// symbols, extra spaces newlines, etc need not be tracked for license diffs
+export function diffStrings(sourceText: string, modifiedText: string) {
+  const diffs = diffMatcher.diff_main(sourceText, modifiedText);
+  const normalizedDiffs: DiffComponents[] = [];
 
   for (let i = 0; i < diffs.length; i++) {
     const currentDiff = diffs[i];
@@ -47,15 +67,15 @@ export function diffStrings(text1: string, text2: string) {
       nextDiff &&
       currentDiff[0] === -1 &&
       nextDiff[0] === 1 &&
-      normalizeString(currentDiff[1]).toLowerCase() ===
-        normalizeString(nextDiff[1]).toLowerCase()
+      normalizeDiffString(currentDiff[1]).toLowerCase() ===
+        normalizeDiffString(nextDiff[1]).toLowerCase()
     ) {
       // Add both to their respective diff category without identifying as diffComponent
-      diffsWithIgnoredLetterCases.push({
+      normalizedDiffs.push({
         belongsTo: BelongsIndicator.ORIGINAL,
         value: currentDiff[1],
       });
-      diffsWithIgnoredLetterCases.push({
+      normalizedDiffs.push({
         belongsTo: BelongsIndicator.MODIFIED,
         value: nextDiff[1],
       });
@@ -63,7 +83,7 @@ export function diffStrings(text1: string, text2: string) {
       continue;
     }
 
-    diffsWithIgnoredLetterCases.push({
+    normalizedDiffs.push({
       ...{
         diffComponent:
           currentDiff[0] === 1
@@ -82,10 +102,11 @@ export function diffStrings(text1: string, text2: string) {
     });
   }
 
-  return diffsWithIgnoredLetterCases;
+  return normalizedDiffs;
 }
 
-export function normalizeAndSplitDiffIntoLines(diffs: DiffComponents[]) {
+// Based on presence of '\n' group the diffs corresponding to each line
+export function splitDiffIntoLines(diffs: DiffComponents[]) {
   const lines: DiffComponents[][] = [[]];
 
   for (const diff of diffs) {
@@ -101,7 +122,7 @@ export function normalizeAndSplitDiffIntoLines(diffs: DiffComponents[]) {
     const subLines = splitLines.slice(idx);
 
     for (const subLine of subLines) {
-      const isTrivialDiff = normalizeString(subLine).length === 0;
+      const isTrivialDiff = normalizeDiffString(subLine).length === 0;
 
       // Append to last line only if it is non-empty string
       if (subLine.length > 0) {
@@ -125,6 +146,11 @@ export function normalizeAndSplitDiffIntoLines(diffs: DiffComponents[]) {
       }
     }
   }
+
+  // console.log("Line splitter", {
+  //   diffs,
+  //   lines: lines.filter((diffLine) => diffLine.length > 0),
+  // });
 
   // Filter out empty lines before returning;
   return lines.filter((diffLine) => diffLine.length > 0);

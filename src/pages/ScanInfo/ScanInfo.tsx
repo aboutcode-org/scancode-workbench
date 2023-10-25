@@ -19,6 +19,8 @@ const ScanInfo = () => {
       {scanInfo ? (
         <table border={1} className="overview-table">
           <tbody>
+            <InfoEntry name="Scan">{scanInfo.json_file_name}</InfoEntry>
+
             <InfoEntry name="Tool">{scanInfo.tool_name}</InfoEntry>
 
             <InfoEntry name="Tool version">{scanInfo.tool_version}</InfoEntry>
@@ -28,8 +30,8 @@ const ScanInfo = () => {
               show={scanInfo.input && scanInfo.input.length > 0}
             >
               <ul>
-                {(scanInfo.input || []).map((value: string, idx: number) => (
-                  <li key={value + idx}>{value}</li>
+                {(scanInfo.input || []).map((inputPath: string) => (
+                  <li key={inputPath}>{inputPath}</li>
                 ))}
               </ul>
             </InfoEntry>
@@ -40,7 +42,7 @@ const ScanInfo = () => {
             >
               <table className="options-table">
                 <tbody>
-                  {scanInfo.optionsList.map(([key, value]) => (
+                  {(scanInfo.optionsList || []).map(([key, value]) => (
                     <tr key={key}>
                       <td>{key}</td>
                       {typeof value !== "boolean" && <td>{String(value)}</td>}
@@ -79,10 +81,26 @@ const ScanInfo = () => {
             </InfoEntry>
 
             <InfoEntry name="Scan duration">
-              {scanInfo.duration} seconds
+              {scanInfo.duration && `${scanInfo.duration} seconds`}
             </InfoEntry>
 
             <InfoEntry name="Tool notice">{scanInfo.notice}</InfoEntry>
+
+            <InfoEntry
+              name="Errors"
+              show={scanInfo.errors && scanInfo.errors.length > 0}
+            >
+              <ul>
+                {(scanInfo.errors || []).map((error: string) => (
+                  <li key={error}>
+                    {/* <CoreLink onClick={() => goToFileInTableView(error)}>
+                      {error}
+                    </CoreLink> */}
+                    {error}
+                  </li>
+                ))}
+              </ul>
+            </InfoEntry>
 
             <InfoEntry name=" Raw header">
               <ReactJson

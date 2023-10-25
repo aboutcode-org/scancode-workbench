@@ -7,15 +7,12 @@ import {
   BelongsIndicator,
   DiffComponents,
   diffStrings,
-  normalizeAndSplitDiffIntoLines,
+  splitDiffIntoLines,
 } from "../../utils/text";
 import { ScanOptionKeys } from "../../utils/parsers";
+import { SYNTHETIC_RULE_PREFIXES } from "../../constants/licenseRules";
 
-const SYNTHETIC_RULE_PREFIXES = [
-  "spdx-license-identifier",
-  "license-detection-unknown",
-  "package-manifest-unknown",
-];
+import "./matchedText.css";
 
 interface MatchedTextContextProperties {
   showDiffWindow: boolean;
@@ -77,18 +74,18 @@ export const MatchedTextProvider = (
           });
         }
 
-        const ruleText = ruleRef.getDataValue("text")?.toString({}) || "";
+        const ruleText = ruleRef.getDataValue("text") || "";
         const matchedText = matchDetails.matched_text;
 
         const diffs = diffStrings(ruleText, matchedText);
-        const normalizedRuleTextLines = normalizeAndSplitDiffIntoLines(
+        const newRuleTextLines = splitDiffIntoLines(
           diffs.filter(
             (diff) =>
               diff.belongsTo === BelongsIndicator.BOTH ||
               diff.belongsTo === BelongsIndicator.ORIGINAL
           )
         );
-        const normalizedModifiedTextLines = normalizeAndSplitDiffIntoLines(
+        const newModifiedTextLines = splitDiffIntoLines(
           diffs.filter(
             (diff) =>
               diff.belongsTo === BelongsIndicator.BOTH ||
@@ -96,11 +93,11 @@ export const MatchedTextProvider = (
           )
         );
 
-        setRuleDiffLines(normalizedRuleTextLines);
-        setModifiedDiffLines(normalizedModifiedTextLines);
+        setRuleDiffLines(newRuleTextLines);
+        setModifiedDiffLines(newModifiedTextLines);
         setRuleDetails({
           processing: false,
-          ruleText: ruleRef.getDataValue("text").toString({}),
+          ruleText,
         });
       }
     );
@@ -108,7 +105,7 @@ export const MatchedTextProvider = (
 
   function closeDiffWindow() {
     setShowDiffWindow(false);
-    // Prevents showing fallbacks inside modal, for the transition period
+    // Hiding diff winodw first, ensures fallbacks inside modal are hidden during the transition
     setTimeout(() => {
       setRuleDiffLines(null);
       setModifiedDiffLines(null);
@@ -122,7 +119,7 @@ export const MatchedTextProvider = (
         ruleText: null,
         processing: false,
       });
-    }, 200);
+    }, 100);
   }
 
   const isSyntheticRule =

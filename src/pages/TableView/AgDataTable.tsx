@@ -1,14 +1,11 @@
-import React, { useEffect } from 'react'
-import { AgGridReact, AgGridReactProps } from 'ag-grid-react';
-import {
-  ColDef,
-  GridApi,
-} from 'ag-grid-community';
+import React, { useEffect } from "react";
+import { AgGridReact, AgGridReactProps } from "ag-grid-react";
+import { ColDef, GridApi } from "ag-grid-community";
 
-import { frameworkComponents } from './columnDefs';
+import { frameworkComponents } from "./columnDefs";
 
-import 'ag-grid-community/styles/ag-grid.css';
-import 'ag-grid-community/styles/ag-theme-alpine.css';
+import "ag-grid-community/styles/ag-grid.css";
+import "ag-grid-community/styles/ag-theme-alpine.css";
 
 // Config for Ag DataTable
 const defaultColDef: ColDef = {
@@ -22,40 +19,35 @@ const defaultColDef: ColDef = {
 const paginationOptions = [25, 50, 100, 200];
 const defaultPaginationOption = paginationOptions[0];
 
-
 interface AgDataTableProps extends AgGridReactProps {
-  tableData: unknown[],
-  columnDefs: ColDef[],
-  gridApi: GridApi | null,
+  tableData: unknown[];
+  columnDefs: ColDef[];
+  gridApi: GridApi | null;
 }
 
 const AgDataTable = (props: AgDataTableProps) => {
-  const {
-    tableData, columnDefs, gridApi,
-  } = props;
-
+  const { tableData, columnDefs, gridApi } = props;
 
   const changePaginationSize = (newValue: string | number) => {
-    if(gridApi){
+    if (gridApi) {
       gridApi.paginationSetPageSize(Number(newValue));
     }
-  }
+  };
 
   useEffect(() => {
-    if(gridApi){
+    if (gridApi) {
       gridApi.setFilterModel(null);
 
       // Setting column defs manually to lazily update columns
       gridApi.setColumnDefs(columnDefs);
     }
-  }, [columnDefs])
-
+  }, [columnDefs]);
 
   return (
     <div
       style={{
-        height: 'calc(90vh - 50px)',
-        width: '100%',
+        height: "calc(90vh - 50px)",
+        width: "100%",
       }}
     >
       <AgGridReact
@@ -64,18 +56,15 @@ const AgDataTable = (props: AgDataTableProps) => {
         className="ag-theme-alpine ag-grid-customClass"
         ensureDomOrder
         enableCellTextSelection
-
         pagination={true}
         defaultColDef={defaultColDef}
         paginationPageSize={defaultPaginationOption}
-
         // Performance options
         rowBuffer={200}
         animateRows={false}
         suppressColumnMoveAnimation
         suppressRowVirtualisation
         suppressColumnVirtualisation
-
         {...props}
       />
 
@@ -83,19 +72,17 @@ const AgDataTable = (props: AgDataTableProps) => {
         Page Size:
         <select
           defaultValue={defaultPaginationOption}
-          onChange={e => changePaginationSize(e.target.value)}
+          onChange={(e) => changePaginationSize(e.target.value)}
         >
-          {
-            paginationOptions.map(optionValue => (
-              <option value={optionValue} key={optionValue}>
-                { optionValue }
-              </option>
-            ))
-          }
+          {paginationOptions.map((optionValue) => (
+            <option value={optionValue} key={optionValue}>
+              {optionValue}
+            </option>
+          ))}
         </select>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default AgDataTable
+export default AgDataTable;

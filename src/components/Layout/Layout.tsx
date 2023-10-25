@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useLocation } from "react-router-dom";
 
 // eslint-disable-next-line import/namespace
@@ -29,10 +29,6 @@ const Layout = (props: React.PropsWithChildren) => {
     undefined;
   const showFileTree =
     FILE_TREE_ROUTES.find((route) => pathname.includes(route)) !== undefined;
-
-  // useEffect(() => {
-  //   console.log("Loader status", processingQuery ? "Showing" : "Hiding");
-  // }, [processingQuery]);
 
   return (
     <div className="d-flex flex-row">

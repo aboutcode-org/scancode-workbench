@@ -1,7 +1,6 @@
-import { Model } from 'sequelize';
 /*
  #
- # Copyright (c) 2018 nexB Inc. and others. All rights reserved.
+ # Copyright (c) nexB Inc. and others. All rights reserved.
  # https://nexb.com and https://github.com/nexB/scancode-workbench/
  # The ScanCode Workbench software is licensed under the Apache License version 2.0.
  # ScanCode is a trademark of nexB Inc.
@@ -15,19 +14,19 @@ import { Model } from 'sequelize';
  #
  */
 
-import { Sequelize, StringDataType, IntegerDataType, DataTypes } from 'sequelize';
+import { Sequelize, DataTypes, Model } from "sequelize";
 
 export interface UrlAttributes {
-  id: IntegerDataType,
-  fileId: IntegerDataType,
-  url: StringDataType,
-  start_line: IntegerDataType,
-  end_line: IntegerDataType,
+  id: number;
+  fileId: number;
+  url: string;
+  start_line: number;
+  end_line: number;
 }
 
 export default function urlModel(sequelize: Sequelize) {
   return sequelize.define<Model<UrlAttributes>>(
-    'urls',
+    "urls",
     {
       id: {
         allowNull: false,
@@ -38,9 +37,10 @@ export default function urlModel(sequelize: Sequelize) {
       fileId: DataTypes.INTEGER,
       url: DataTypes.STRING,
       start_line: DataTypes.INTEGER,
-      end_line: DataTypes.INTEGER
+      end_line: DataTypes.INTEGER,
     },
     {
-      timestamps: false
-    });
+      timestamps: false,
+    }
+  );
 }

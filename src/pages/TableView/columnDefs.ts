@@ -104,7 +104,7 @@ interface COLUMNS_LIST {
   package_data_primary_language: ColDef;
   for_packages: ColDef;
 
-  scan_error: ColDef;
+  scan_errors: ColDef;
 }
 
 export const ALL_COLUMNS: COLUMNS_LIST = {
@@ -409,18 +409,19 @@ export const ALL_COLUMNS: COLUMNS_LIST = {
     initialWidth: 320,
   },
 
-  scan_error: {
-    field: "scan_error",
-    colId: "scan_error",
-    headerName: "Scan Error",
+  scan_errors: {
+    field: "scan_errors",
+    colId: "scan_errors",
+    headerName: "Scan Errors",
     filterParams: {
       filterOptions: FILTER_OPTIONS.LIST_FILTERS,
     },
+    cellRenderer: CustomComponentKeys.ListCellRenderer,
     initialWidth: 130,
   },
 };
 
-// Set Sorting order index
+// Set Sorting order index the same as the order in which columns are defined
 Object.values(ALL_COLUMNS).forEach((col, idx) => (col.sortIndex = idx));
 
 export const ALL_COLUMNS_MAP = new Map(

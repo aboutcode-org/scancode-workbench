@@ -1,6 +1,6 @@
 /*
  #
- # Copyright (c) 2019 nexB Inc. and others. All rights reserved.
+ # Copyright (c) nexB Inc. and others. All rights reserved.
  # https://nexb.com and https://github.com/nexB/scancode-workbench/
  # The ScanCode Workbench software is licensed under the Apache License version 2.0.
  # ScanCode is a trademark of nexB Inc.
@@ -14,20 +14,20 @@
  #
  */
 
-import { Sequelize, DataTypes, IntegerDataType, StringDataType, Model } from 'sequelize';
+import { Sequelize, DataTypes, Model } from "sequelize";
 
 export interface LicensePolicyAttributes {
-  id: IntegerDataType,
-  fileId: IntegerDataType,
-  license_key: StringDataType,
-  label: StringDataType,
-  color_code: StringDataType,
-  icon: StringDataType,
+  id: number;
+  fileId: number;
+  license_key: string;
+  label: string;
+  color_code: string;
+  icon: string;
 }
 
 export default function licensePolicyModel(sequelize: Sequelize) {
   return sequelize.define<Model<LicensePolicyAttributes>>(
-    'license_policy',
+    "license_policy",
     {
       id: {
         allowNull: false,
@@ -39,9 +39,10 @@ export default function licensePolicyModel(sequelize: Sequelize) {
       license_key: DataTypes.STRING,
       label: DataTypes.STRING,
       color_code: DataTypes.STRING,
-      icon: DataTypes.STRING
+      icon: DataTypes.STRING,
     },
     {
-      timestamps: false
-    });
+      timestamps: false,
+    }
+  );
 }

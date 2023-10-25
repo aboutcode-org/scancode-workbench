@@ -13,7 +13,7 @@ const DetectionOriginRenderer = (props: DetectionOriginRendererProps) => {
 
   return (
     <OverlayTrigger
-      placement="auto"
+      placement="left"
       delay={{ show: 200, hide: 50 }}
       overlay={
         <Tooltip>

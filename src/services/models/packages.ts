@@ -1,6 +1,6 @@
 /*
  #
- # Copyright (c) 2018 nexB Inc. and others. All rights reserved.
+ # Copyright (c) nexB Inc. and others. All rights reserved.
  # https://nexb.com and https://github.com/nexB/scancode-workbench/
  # The ScanCode Workbench software is licensed under the Apache License version 2.0.
  # ScanCode is a trademark of nexB Inc.
@@ -14,56 +14,50 @@
  #
  */
 
-import {
-  Sequelize,
-  StringDataType,
-  IntegerDataType,
-  DataTypes,
-  Model,
-} from "sequelize";
+import { Sequelize, DataTypes, Model } from "sequelize";
 import { jsonDataType, JSON_Type } from "./databaseUtils";
 
 export interface PackagesAttributes {
-  id: IntegerDataType;
-  type: StringDataType;
-  namespace: StringDataType | null;
-  name: StringDataType;
-  version: StringDataType | null;
+  id: number;
+  type: string;
+  namespace: string;
+  name: string;
+  version: string;
   qualifiers: JSON_Type;
-  subpath: StringDataType | null;
-  primary_language: StringDataType | null;
-  description: StringDataType | null;
-  release_date: StringDataType | null;
+  subpath: string;
+  primary_language: string;
+  description: string;
+  release_date: string;
   parties: JSON_Type;
   keywords: JSON_Type;
-  homepage_url: StringDataType | null;
-  download_url: StringDataType | null;
-  size: StringDataType | null;
-  sha1: StringDataType | null;
-  md5: StringDataType | null;
-  sha256: StringDataType | null;
-  sha512: StringDataType | null;
-  bug_tracking_url: StringDataType | null;
-  code_view_url: StringDataType | null;
-  vcs_url: StringDataType | null;
-  copyright: StringDataType | null;
-  declared_license_expression: StringDataType | null;
-  declared_license_expression_spdx: StringDataType | null;
+  homepage_url: string;
+  download_url: string;
+  size: string;
+  sha1: string;
+  md5: string;
+  sha256: string;
+  sha512: string;
+  bug_tracking_url: string;
+  code_view_url: string;
+  vcs_url: string;
+  copyright: string;
+  declared_license_expression: string;
+  declared_license_expression_spdx: string;
   license_detections: JSON_Type;
-  other_license_expression: StringDataType | null;
-  other_license_expression_spdx: StringDataType | null;
+  other_license_expression: string;
+  other_license_expression_spdx: string;
   other_license_detections: JSON_Type;
-  extracted_license_statement: StringDataType | null;
-  notice_text: StringDataType | null;
+  extracted_license_statement: string;
+  notice_text: string;
   source_packages: JSON_Type;
   extra_data: JSON_Type;
-  repository_homepage_url: StringDataType | null;
-  repository_download_url: StringDataType | null;
-  api_data_url: StringDataType | null;
-  package_uid: StringDataType;
+  repository_homepage_url: string;
+  repository_download_url: string;
+  api_data_url: string;
+  package_uid: string;
   datafile_paths: JSON_Type;
   datasource_ids: JSON_Type;
-  purl: StringDataType;
+  purl: string;
 }
 
 export default function packagesModel(sequelize: Sequelize) {

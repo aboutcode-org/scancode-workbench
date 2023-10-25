@@ -3,7 +3,7 @@ import { Tooltip } from "react-tooltip";
 import { Row, Col, Card } from "react-bootstrap";
 import React, { useEffect, useState } from "react";
 
-import { FormattedEntry, formatChartData } from "../../utils/pie";
+import { FormattedEntry, formatPieChartData } from "../../utils/pie";
 import { useWorkbenchDB } from "../../contexts/dbContext";
 import PieChart from "../../components/PieChart/PieChart";
 import EllipticLoader from "../../components/EllipticLoader";
@@ -57,8 +57,6 @@ const LicenseInfoDash = () => {
           attributes: ["fileId", "license_detections"],
         })
       )
-      // @REMOVE_THIS
-      // .then((flatFiles) => new Promise(resolve => setTimeout(()=>resolve(flatFiles), 4000)))
       .then((flatFiles) => {
         const fileIDs = flatFiles.map((flatFile) =>
           flatFile.getDataValue("fileId")
@@ -67,7 +65,7 @@ const LicenseInfoDash = () => {
         const filesWithDetections = flatFiles
           .map((flatFile) =>
             JSON.parse(
-              flatFile.getDataValue("license_detections")?.toString({}) || "[]"
+              flatFile.getDataValue("license_detections") || "[]"
             )
           )
           .filter((detections) => detections.length);
@@ -89,7 +87,7 @@ const LicenseInfoDash = () => {
                 NO_VALUE_DETECTED_LABEL
             );
             // Prepare chart for license expressions
-            const { chartData } = formatChartData(expressions);
+            const { chartData } = formatPieChartData(expressions);
             setLicenseExpressionData(chartData);
 
             const license_keys: string[] = [];
@@ -97,14 +95,14 @@ const LicenseInfoDash = () => {
             license_expressions.forEach((expression) => {
               license_keys.push(
                 ...JSON.parse(
-                  (expression.getDataValue("license_keys") || "[]").toString({})
+                  (expression.getDataValue("license_keys") || "[]")
                 )
               );
               license_keys_spdx.push(
                 ...JSON.parse(
                   (
                     expression.getDataValue("license_keys_spdx") || "[]"
-                  ).toString({})
+                  )
                 )
               );
             });
@@ -117,7 +115,7 @@ const LicenseInfoDash = () => {
             }));
 
             const { chartData: licenseKeysChartData } =
-              formatChartData(license_keys);
+              formatPieChartData(license_keys);
             setLicenseKeyData(licenseKeysChartData);
           });
 
@@ -133,7 +131,7 @@ const LicenseInfoDash = () => {
           )
           .then((labels) => {
             // @TODO - Set pie chart color based on the received color_code in policies
-            const { chartData } = formatChartData(labels);
+            const { chartData } = formatPieChartData(labels);
             setLicensePolicyData(chartData);
           });
 

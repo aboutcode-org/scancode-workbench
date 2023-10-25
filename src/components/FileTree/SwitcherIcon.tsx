@@ -1,14 +1,14 @@
 import React from 'react';
-import { DataNode } from 'rc-tree/lib/interface';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { faFileLines } from '@fortawesome/free-regular-svg-icons';
 import { faFolder, faFolderOpen } from '@fortawesome/free-solid-svg-icons';
 
+import { FileDataNode } from '../../services/workbenchDB';
 import { FontAwesomeTreeNodeStyles } from './iconGenerators';
 
 const SwitcherIcon = (obj: unknown) => {
-  const node = obj as DataNode & { expanded: boolean };
+  const node = obj as FileDataNode & { expanded: boolean };
   
   if (node.isLeaf) {
     // return <i></i>

@@ -1,19 +1,19 @@
-import { StringDataType } from "sequelize";
-import { LEGEND_LIMIT } from "../constants/data";
+import { LEGEND_LIMIT, NO_VALUE_DETECTED_LABEL } from "../constants/data";
 
 export type FormattedEntry = [string, number];
 
-const ascendingComparatorFunction = (a: FormattedEntry, b: FormattedEntry) =>
-  a[1] > b[1] ? 1 : -1;
-const descendingComparatorFunction = (a: FormattedEntry, b: FormattedEntry) =>
-  a[1] < b[1] ? 1 : -1;
+const ascendingFrequencyComparator = (a: FormattedEntry, b: FormattedEntry) =>
+  a[1] == b[1] ? (a[0] < b[0] ? -1 : 1) : a[1] < b[1] ? -1 : 1;
 
-// Limit data to n-highest values in the chart
-export function limitChartData(data: FormattedEntry[], limit: number) {
-  if (data.length <= limit) return data.sort(ascendingComparatorFunction);
+const descendingFrequencyComparator = (a: FormattedEntry, b: FormattedEntry) =>
+  a[1] == b[1] ? (a[0] < b[0] ? -1 : 1) : a[1] < b[1] ? 1 : -1;
+
+// Limit data to n-highest values in charts
+export function limitPieChartData(data: FormattedEntry[], limit: number) {
+  if (data.length <= limit) return data.sort(ascendingFrequencyComparator);
 
   // Bring larger entries to the top
-  const limitedData = data.sort(descendingComparatorFunction);
+  const limitedData = data.sort(descendingFrequencyComparator);
 
   // Sum up the entries to be excluded
   let otherCount = 0;
@@ -25,37 +25,31 @@ export function limitChartData(data: FormattedEntry[], limit: number) {
 
   // Add entry 'other' representing sum of excluded entries
   if (otherCount > 0) limitedData.unshift(["other", otherCount]);
-
-  return limitedData.sort(ascendingComparatorFunction);
+  return limitedData.sort(ascendingFrequencyComparator);
 }
 
-// Formats data suitable for Pie chart
-export function formatChartData(
-  names: (string | StringDataType)[],
+// Counts occurences for unique entries & return formatted object required to draw the Pie chart
+export function formatPieChartData(
+  entries: string[],
   limit?: number
 ): {
   chartData: FormattedEntry[];
   untrimmedLength: number;
 } {
-  // Sum the total number of times the name appears
+  // Sum the total number of times the entry appears
   const count = new Map<string, number>();
 
-  names.forEach((name) =>
-    count.set(
-      name?.toString({}) || (name as string),
-      (count.get(name.toString({})) || 0) + 1
-    )
-  );
-  // $.each(names, (i, name) => {
-  //   count.set(name.toString({}), (count.get(name.toString({})) || 0) + 1);
-  // });
+  entries.forEach((entry) => {
+    const entryLabel = entry || NO_VALUE_DETECTED_LABEL;
+    count.set(entryLabel, (count.get(entryLabel) || 0) + 1);
+  });
 
   const chartData = Array.from(count.entries());
   const untrimmedLength = chartData.length;
   const chartDataLimit = limit || LEGEND_LIMIT;
-  
+
   return {
-    chartData: limitChartData(chartData, chartDataLimit),
+    chartData: limitPieChartData(chartData, chartDataLimit),
     untrimmedLength,
   };
 }

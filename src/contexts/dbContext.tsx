@@ -22,7 +22,7 @@ import {
 import { DEFAULT_ROUTE_ON_IMPORT, ROUTES } from "../constants/routes";
 import { AddEntry, GetHistory, RemoveEntry } from "../services/historyStore";
 import { WorkbenchDB } from "../services/workbenchDB";
-import { isSchemaChanged } from "../utils/checks";
+import { isSqliteSchemaOutdated } from "../utils/checks";
 import { ScanInfo, parseScanInfo } from "../utils/parsers";
 
 const { version: workbenchVersion } = packageJson;
@@ -42,6 +42,7 @@ interface WorkbenchContextProperties extends BasicValueState {
   processingQuery: boolean;
   startImport: () => void;
   abortImport: () => void;
+  closeFile: () => void;
   startProcessing: () => void;
   endProcessing: () => void;
   sqliteParser: (sqliteFilePath: string, preventNavigation?: boolean) => void;
@@ -71,6 +72,7 @@ export const defaultWorkbenchContextValue: WorkbenchContextProperties = {
   updateLoadingStatus: () => null,
   startImport: () => null,
   abortImport: () => null,
+  closeFile: () => null,
   startProcessing: () => null,
   endProcessing: () => null,
   updateCurrentPath: () => null,
@@ -94,7 +96,7 @@ export const WorkbenchDBProvider = (
     importedSqliteFilePath: null,
     scanInfo: null,
   });
-  const [currentPath, setCurrentPath] = useState<string | null>("");
+  const [currentPath, setCurrentPath] = useState<string>("");
   const [currentPathType, setCurrentPathType] = useState<PathType>("directory");
 
   function updateCurrentPath(path: string, pathType: PathType) {
@@ -113,6 +115,7 @@ export const WorkbenchDBProvider = (
 
   const startImport = () => {
     updateLoadingStatus(0);
+    setProcessingQuery(false);
     setValue({
       db: null,
       initialized: false,
@@ -122,6 +125,19 @@ export const WorkbenchDBProvider = (
   };
 
   const abortImport = () => updateLoadingStatus(null);
+
+  const closeFile = () => {
+    updateLoadingStatus(null);
+    setProcessingQuery(false);
+    setValue({
+      db: null,
+      initialized: false,
+      importedSqliteFilePath: null,
+      scanInfo: null,
+    });
+    navigate(ROUTES.HOME);
+    ipcRenderer.send(UTIL_CHANNEL.RESET_FILE_TITLE);
+  };
 
   const updateWorkbenchDB = async (db: WorkbenchDB, sqliteFilePath: string) => {
     updateLoadingStatus(100);
@@ -136,22 +152,20 @@ export const WorkbenchDBProvider = (
   function sqliteParser(sqliteFilePath: string, preventNavigation?: boolean) {
     startImport();
 
-    // Create a new database when importing a sqlite file
+    // Create connection to existing database when importing a sqlite file
     const newWorkbenchDB = new WorkbenchDB({
       dbName: "workbench_db",
-      dbStorage: sqliteFilePath,
+      dbStoragePath: sqliteFilePath,
     });
 
     updateLoadingStatus(25);
 
     // Check that that the database schema matches current schema.
-    newWorkbenchDB.sync
-      .then((db) => db.Header.findAll())
-      .then((headers) => {
-        const infoHeader = headers[0];
-
+    newWorkbenchDB
+      .getScanInfo()
+      .then((infoHeader) => {
         // Check that the database has the correct header information.
-        if (!headers || headers.length === 0 || !infoHeader) {
+        if (!infoHeader) {
           const errTitle = "Invalid SQLite file";
           const errMessage =
             "Invalid SQLite file: " +
@@ -176,11 +190,8 @@ export const WorkbenchDBProvider = (
 
         updateLoadingStatus(50);
 
-        const dbVersion = infoHeader
-          .getDataValue("workbench_version")
-          .toString({});
-
-        if (!dbVersion || isSchemaChanged(dbVersion, workbenchVersion)) {
+        const dbVersion = infoHeader.getDataValue("workbench_version");
+        if (!dbVersion || isSqliteSchemaOutdated(dbVersion, workbenchVersion)) {
           const errTitle = "Old SQLite schema found";
           const errMessage =
             "Old SQLite schema found at file: " +
@@ -225,10 +236,10 @@ export const WorkbenchDBProvider = (
 
             await updateWorkbenchDB(newWorkbenchDB, sqliteFilePath);
 
-            if (defaultPath){
+            if (defaultPath) {
               updateCurrentPath(
                 defaultPath,
-                root.getDataValue("type").toString({}) as PathType
+                root.getDataValue("type") as PathType
               );
             }
 
@@ -288,31 +299,18 @@ export const WorkbenchDBProvider = (
 
     startImport();
 
-    // Overwrite existing sqlite file
-    if (electronFs.existsSync(sqliteFilePath)) {
-      electronFs.unlink(sqliteFilePath, (err: Error) => {
-        if (err) {
-          throw err;
-        }
-        console.info(`Deleted ${sqliteFilePath}`);
-      });
-    }
-
-    // Create a new database when importing a json file
+    // Create a new database when importing a json file (Delete any existing data in the sqlite file)
     const newWorkbenchDB = new WorkbenchDB({
-      dbName: "demo_schema",
-      dbStorage: sqliteFilePath,
+      dbName: "workbench_db",
+      dbStoragePath: sqliteFilePath,
+      deleteExisting: true,
     });
 
     newWorkbenchDB.sync
       .then(() =>
-        newWorkbenchDB.addFromJson(
-          jsonFilePath,
-          workbenchVersion,
-          (progress: number) => {
-            updateLoadingStatus(progress);
-          }
-        )
+        newWorkbenchDB.addFromJson(jsonFilePath, (progress: number) => {
+          updateLoadingStatus(progress);
+        })
       )
       .then(() => {
         console.log("JSON parsing completed");
@@ -336,10 +334,10 @@ export const WorkbenchDBProvider = (
 
             await updateWorkbenchDB(newWorkbenchDB, sqliteFilePath);
 
-            if (defaultPath){
+            if (defaultPath) {
               updateCurrentPath(
                 defaultPath,
-                root.getDataValue("type").toString({}) as PathType
+                root.getDataValue("type") as PathType
               );
             }
 
@@ -458,6 +456,7 @@ export const WorkbenchDBProvider = (
         }
       }
     );
+    ipcRenderer.on(UTIL_CHANNEL.CLOSE_FILE, closeFile);
 
     // Remove all listeners on window unmount
     return () => {
@@ -479,6 +478,7 @@ export const WorkbenchDBProvider = (
         importJsonFile,
         startImport,
         abortImport,
+        closeFile,
         startProcessing: () => setProcessingQuery(true),
         endProcessing: () => setProcessingQuery(false),
         updateCurrentPath,

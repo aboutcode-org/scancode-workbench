@@ -1,0 +1,459 @@
+{
+  "packages": [
+    {
+      "type": "about",
+      "namespace": null,
+      "name": "scancode-toolkit",
+      "version": null,
+      "qualifiers": {},
+      "subpath": null,
+      "primary_language": null,
+      "description": null,
+      "release_date": null,
+      "parties": [
+        {
+          "type": "person",
+          "role": "owner",
+          "name": "None",
+          "email": null,
+          "url": null
+        }
+      ],
+      "keywords": [],
+      "homepage_url": "https://www.aboutcode.org/",
+      "download_url": null,
+      "size": null,
+      "sha1": null,
+      "md5": null,
+      "sha256": null,
+      "sha512": null,
+      "bug_tracking_url": null,
+      "code_view_url": null,
+      "vcs_url": null,
+      "copyright": "Copyright (c) nexB Inc. and others.",
+      "holder": "nexB Inc. and others",
+      "declared_license_expression": "apache-2.0 AND cc-by-4.0",
+      "declared_license_expression_spdx": "Apache-2.0 AND CC-BY-4.0",
+      "license_detections": [
+        {
+          "license_expression": "apache-2.0 AND cc-by-4.0",
+          "matches": [
+            {
+              "score": 100.0,
+              "start_line": 1,
+              "end_line": 1,
+              "matched_length": 3,
+              "match_coverage": 100.0,
+              "matcher": "2-aho",
+              "license_expression": "apache-2.0",
+              "rule_identifier": "spdx_license_id_apache-2.0_for_apache-2.0.RULE",
+              "rule_relevance": 100,
+              "rule_url": "https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/rules/spdx_license_id_apache-2.0_for_apache-2.0.RULE",
+              "matched_text": "apache-2.0 AND cc-by-4.0 AND other-permissive AND other-copyleft"
+            },
+            {
+              "score": 50.0,
+              "start_line": 1,
+              "end_line": 1,
+              "matched_length": 4,
+              "match_coverage": 100.0,
+              "matcher": "2-aho",
+              "license_expression": "cc-by-4.0",
+              "rule_identifier": "spdx_license_id_cc-by-4.0_for_cc-by-4.0.RULE",
+              "rule_relevance": 50,
+              "rule_url": "https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/rules/spdx_license_id_cc-by-4.0_for_cc-by-4.0.RULE",
+              "matched_text": "apache-2.0 AND cc-by-4.0 AND other-permissive AND other-copyleft"
+            }
+          ],
+          "identifier": "apache_2_0_and_cc_by_4_0-9b136727-da14-7f8d-c7e5-319687ed57a5"
+        }
+      ],
+      "other_license_expression": null,
+      "other_license_expression_spdx": null,
+      "other_license_detections": [],
+      "extracted_license_statement": "apache-2.0 AND cc-by-4.0 AND other-permissive AND other-copyleft",
+      "notice_text": null,
+      "source_packages": [],
+      "extra_data": {
+        "missing_file_references": [
+          {
+            "path": ".",
+            "size": 0,
+            "sha1": null,
+            "md5": null,
+            "sha256": null,
+            "sha512": null,
+            "extra_data": {}
+          }
+        ]
+      },
+      "repository_homepage_url": null,
+      "repository_download_url": null,
+      "api_data_url": null,
+      "package_uid": "pkg:about/scancode-toolkit?uuid=3b5a9865-8101-430a-ac7c-9f184631b803",
+      "datafile_paths": ["python-sample-trimmed/scancode-toolkit.ABOUT"],
+      "datasource_ids": ["about_file"],
+      "purl": "pkg:about/scancode-toolkit"
+    }
+  ],
+  "dependencies": [
+    {
+      "purl": "pkg:pypi/aboutcode-toolkit@6.0.0",
+      "extracted_requirement": "aboutcode-toolkit==6.0.0",
+      "scope": "development",
+      "is_runtime": false,
+      "is_optional": true,
+      "is_resolved": true,
+      "resolved_package": {},
+      "extra_data": {
+        "is_editable": false,
+        "link": null,
+        "hash_options": [],
+        "is_constraint": false,
+        "is_archive": null,
+        "is_wheel": false,
+        "is_url": null,
+        "is_vcs_url": null,
+        "is_name_at_url": false,
+        "is_local_path": null
+      },
+      "dependency_uid": "pkg:pypi/aboutcode-toolkit@6.0.0?uuid=faa3b45c-2e04-4891-b854-52ed459a6b0a",
+      "for_package_uid": null,
+      "datafile_path": "python-sample-trimmed/requirements-dev.txt",
+      "datasource_id": "pip_requirements"
+    },
+    {
+      "purl": "pkg:pypi/py@1.10.0",
+      "extracted_requirement": "py==1.10.0",
+      "scope": "development",
+      "is_runtime": false,
+      "is_optional": true,
+      "is_resolved": true,
+      "resolved_package": {},
+      "extra_data": {
+        "is_editable": false,
+        "link": null,
+        "hash_options": [],
+        "is_constraint": false,
+        "is_archive": null,
+        "is_wheel": false,
+        "is_url": null,
+        "is_vcs_url": null,
+        "is_name_at_url": false,
+        "is_local_path": null
+      },
+      "dependency_uid": "pkg:pypi/py@1.10.0?uuid=b2cf6831-b0eb-4a30-98c3-3dac9202d639",
+      "for_package_uid": null,
+      "datafile_path": "python-sample-trimmed/requirements-dev.txt",
+      "datasource_id": "pip_requirements"
+    },
+    {
+      "purl": "pkg:pypi/pytest@6.2.4",
+      "extracted_requirement": "pytest==6.2.4",
+      "scope": "development",
+      "is_runtime": false,
+      "is_optional": true,
+      "is_resolved": true,
+      "resolved_package": {},
+      "extra_data": {
+        "is_editable": false,
+        "link": null,
+        "hash_options": [],
+        "is_constraint": false,
+        "is_archive": null,
+        "is_wheel": false,
+        "is_url": null,
+        "is_vcs_url": null,
+        "is_name_at_url": false,
+        "is_local_path": null
+      },
+      "dependency_uid": "pkg:pypi/pytest@6.2.4?uuid=1c719652-292f-419c-a7a4-164c39296661",
+      "for_package_uid": null,
+      "datafile_path": "python-sample-trimmed/requirements-dev.txt",
+      "datasource_id": "pip_requirements"
+    }
+  ],
+  "files": [
+    {
+      "path": "python-sample-trimmed",
+      "type": "directory",
+      "package_data": [],
+      "for_packages": [],
+      "scan_errors": []
+    },
+    {
+      "path": "python-sample-trimmed/.DS_Store",
+      "type": "file",
+      "package_data": [],
+      "for_packages": [],
+      "scan_errors": []
+    },
+    {
+      "path": "python-sample-trimmed/pyproject.toml",
+      "type": "file",
+      "package_data": [
+        {
+          "type": "pypi",
+          "namespace": null,
+          "name": null,
+          "version": null,
+          "qualifiers": {},
+          "subpath": null,
+          "primary_language": "Python",
+          "description": null,
+          "release_date": null,
+          "parties": [],
+          "keywords": [],
+          "homepage_url": null,
+          "download_url": null,
+          "size": null,
+          "sha1": null,
+          "md5": null,
+          "sha256": null,
+          "sha512": null,
+          "bug_tracking_url": null,
+          "code_view_url": null,
+          "vcs_url": null,
+          "copyright": null,
+          "holder": null,
+          "declared_license_expression": null,
+          "declared_license_expression_spdx": null,
+          "license_detections": [],
+          "other_license_expression": null,
+          "other_license_expression_spdx": null,
+          "other_license_detections": [],
+          "extracted_license_statement": null,
+          "notice_text": null,
+          "source_packages": [],
+          "file_references": [],
+          "extra_data": {},
+          "dependencies": [],
+          "repository_homepage_url": null,
+          "repository_download_url": null,
+          "api_data_url": null,
+          "datasource_id": "pypi_pyproject_toml",
+          "purl": null
+        }
+      ],
+      "for_packages": [],
+      "scan_errors": []
+    },
+    {
+      "path": "python-sample-trimmed/requirements-dev.txt",
+      "type": "file",
+      "package_data": [
+        {
+          "type": "pypi",
+          "namespace": null,
+          "name": null,
+          "version": null,
+          "qualifiers": {},
+          "subpath": null,
+          "primary_language": "Python",
+          "description": null,
+          "release_date": null,
+          "parties": [],
+          "keywords": [],
+          "homepage_url": null,
+          "download_url": null,
+          "size": null,
+          "sha1": null,
+          "md5": null,
+          "sha256": null,
+          "sha512": null,
+          "bug_tracking_url": null,
+          "code_view_url": null,
+          "vcs_url": null,
+          "copyright": null,
+          "holder": null,
+          "declared_license_expression": null,
+          "declared_license_expression_spdx": null,
+          "license_detections": [],
+          "other_license_expression": null,
+          "other_license_expression_spdx": null,
+          "other_license_detections": [],
+          "extracted_license_statement": null,
+          "notice_text": null,
+          "source_packages": [],
+          "file_references": [],
+          "extra_data": {},
+          "dependencies": [
+            {
+              "purl": "pkg:pypi/aboutcode-toolkit@6.0.0",
+              "extracted_requirement": "aboutcode-toolkit==6.0.0",
+              "scope": "development",
+              "is_runtime": false,
+              "is_optional": true,
+              "is_resolved": true,
+              "resolved_package": {},
+              "extra_data": {
+                "is_editable": false,
+                "link": null,
+                "hash_options": [],
+                "is_constraint": false,
+                "is_archive": null,
+                "is_wheel": false,
+                "is_url": null,
+                "is_vcs_url": null,
+                "is_name_at_url": false,
+                "is_local_path": null
+              }
+            },
+            {
+              "purl": "pkg:pypi/py@1.10.0",
+              "extracted_requirement": "py==1.10.0",
+              "scope": "development",
+              "is_runtime": false,
+              "is_optional": true,
+              "is_resolved": true,
+              "resolved_package": {},
+              "extra_data": {
+                "is_editable": false,
+                "link": null,
+                "hash_options": [],
+                "is_constraint": false,
+                "is_archive": null,
+                "is_wheel": false,
+                "is_url": null,
+                "is_vcs_url": null,
+                "is_name_at_url": false,
+                "is_local_path": null
+              }
+            },
+            {
+              "purl": "pkg:pypi/pytest@6.2.4",
+              "extracted_requirement": "pytest==6.2.4",
+              "scope": "development",
+              "is_runtime": false,
+              "is_optional": true,
+              "is_resolved": true,
+              "resolved_package": {},
+              "extra_data": {
+                "is_editable": false,
+                "link": null,
+                "hash_options": [],
+                "is_constraint": false,
+                "is_archive": null,
+                "is_wheel": false,
+                "is_url": null,
+                "is_vcs_url": null,
+                "is_name_at_url": false,
+                "is_local_path": null
+              }
+            }
+          ],
+          "repository_homepage_url": null,
+          "repository_download_url": null,
+          "api_data_url": null,
+          "datasource_id": "pip_requirements",
+          "purl": null
+        }
+      ],
+      "for_packages": [],
+      "scan_errors": []
+    },
+    {
+      "path": "python-sample-trimmed/scancode-toolkit.ABOUT",
+      "type": "file",
+      "package_data": [
+        {
+          "type": "about",
+          "namespace": null,
+          "name": "scancode-toolkit",
+          "version": null,
+          "qualifiers": {},
+          "subpath": null,
+          "primary_language": null,
+          "description": null,
+          "release_date": null,
+          "parties": [
+            {
+              "type": "person",
+              "role": "owner",
+              "name": "None",
+              "email": null,
+              "url": null
+            }
+          ],
+          "keywords": [],
+          "homepage_url": "https://www.aboutcode.org/",
+          "download_url": null,
+          "size": null,
+          "sha1": null,
+          "md5": null,
+          "sha256": null,
+          "sha512": null,
+          "bug_tracking_url": null,
+          "code_view_url": null,
+          "vcs_url": null,
+          "copyright": "Copyright (c) nexB Inc. and others.",
+          "holder": "nexB Inc. and others",
+          "declared_license_expression": "apache-2.0 AND cc-by-4.0",
+          "declared_license_expression_spdx": "Apache-2.0 AND CC-BY-4.0",
+          "license_detections": [
+            {
+              "license_expression": "apache-2.0 AND cc-by-4.0",
+              "matches": [
+                {
+                  "score": 100.0,
+                  "start_line": 1,
+                  "end_line": 1,
+                  "matched_length": 3,
+                  "match_coverage": 100.0,
+                  "matcher": "2-aho",
+                  "license_expression": "apache-2.0",
+                  "rule_identifier": "spdx_license_id_apache-2.0_for_apache-2.0.RULE",
+                  "rule_relevance": 100,
+                  "rule_url": "https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/rules/spdx_license_id_apache-2.0_for_apache-2.0.RULE",
+                  "matched_text": "apache-2.0 AND cc-by-4.0 AND other-permissive AND other-copyleft"
+                },
+                {
+                  "score": 50.0,
+                  "start_line": 1,
+                  "end_line": 1,
+                  "matched_length": 4,
+                  "match_coverage": 100.0,
+                  "matcher": "2-aho",
+                  "license_expression": "cc-by-4.0",
+                  "rule_identifier": "spdx_license_id_cc-by-4.0_for_cc-by-4.0.RULE",
+                  "rule_relevance": 50,
+                  "rule_url": "https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/rules/spdx_license_id_cc-by-4.0_for_cc-by-4.0.RULE",
+                  "matched_text": "apache-2.0 AND cc-by-4.0 AND other-permissive AND other-copyleft"
+                }
+              ],
+              "identifier": "apache_2_0_and_cc_by_4_0-9b136727-da14-7f8d-c7e5-319687ed57a5"
+            }
+          ],
+          "other_license_expression": null,
+          "other_license_expression_spdx": null,
+          "other_license_detections": [],
+          "extracted_license_statement": "apache-2.0 AND cc-by-4.0 AND other-permissive AND other-copyleft",
+          "notice_text": null,
+          "source_packages": [],
+          "file_references": [
+            {
+              "path": ".",
+              "size": 0,
+              "sha1": null,
+              "md5": null,
+              "sha256": null,
+              "sha512": null,
+              "extra_data": {}
+            }
+          ],
+          "extra_data": {},
+          "dependencies": [],
+          "repository_homepage_url": null,
+          "repository_download_url": null,
+          "api_data_url": null,
+          "datasource_id": "about_file",
+          "purl": "pkg:about/scancode-toolkit"
+        }
+      ],
+      "for_packages": [
+        "pkg:about/scancode-toolkit?uuid=3b5a9865-8101-430a-ac7c-9f184631b803"
+      ],
+      "scan_errors": []
+    }
+  ]
+}

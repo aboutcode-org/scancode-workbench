@@ -1,5 +1,5 @@
 # name of your github action
-name: Release
+name: Release CI
 
 # this will help you specify when & which branch to run deployment
 on:

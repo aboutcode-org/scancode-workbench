@@ -1,6 +1,6 @@
 /*
  #
- # Copyright (c) 2017 - 2019 nexB Inc. and others. All rights reserved.
+ # Copyright (c) nexB Inc. and others. All rights reserved.
  # https://nexb.com and https://github.com/nexB/scancode-workbench/
  # The ScanCode Workbench software is licensed under the Apache License version 2.0.
  # ScanCode is a trademark of nexB Inc.
@@ -15,19 +15,15 @@
  */
 
 import fs from "fs";
-import $ from "jquery";
 import JSONStream from "JSONStream";
 import path from "path";
 import { DataNode } from "rc-tree/lib/interface";
 import { toast } from "react-toastify";
 import {
   BulkCreateOptions,
-  DataTypes,
   FindOptions,
-  IntegerDataType,
   Model,
   Sequelize,
-  StringDataType,
   Transaction,
   TransactionOptions,
 } from "sequelize";
@@ -38,7 +34,6 @@ import { DebugLogger } from "../utils/logger";
 import { DatabaseStructure, newDatabase } from "./models/database";
 import {
   filterSpdxKeys,
-  JSON_Type,
   parentPath,
   parseSubExpressions,
   parseTokenKeysFromExpression,
@@ -49,12 +44,16 @@ import {
   LicenseClue,
   LicenseExpressionKey,
   LicenseReference,
+  ParsedJsonHeader,
   Resource,
   ResourceLicenseDetection,
   TopLevelLicenseDetection,
 } from "./importedJsonTypes";
 import { LicenseDetectionAttributes } from "./models/licenseDetections";
 import { LicenseClueAttributes } from "./models/licenseClues";
+import packageJson from "../../package.json";
+
+const { version: workbenchVersion } = packageJson;
 
 /**
  * Manages the database created from a ScanCode JSON input.
@@ -62,7 +61,7 @@ import { LicenseClueAttributes } from "./models/licenseClues";
  *
  * The config will load an existing database or will create a new, empty
  * database if none exists. For a new database, the data is loaded from a JSON
- * file by calling addFromJson(jsonFileName).
+ * file by calling addFromJson(jsonFilePath).
  *
  * @param config
  * @param config.dbName
@@ -73,13 +72,13 @@ import { LicenseClueAttributes } from "./models/licenseClues";
 
 interface WorkbenchDbConfig {
   dbName: string;
-  dbStorage: string;
+  dbStoragePath: string;
   dbUser?: string;
   dbPassword?: string;
 }
 interface TopLevelDataFormat {
   header: unknown;
-  parsedHeader: unknown;
+  parsedHeader: ParsedJsonHeader;
   packages: unknown[];
   dependencies: unknown[];
   license_clues: LicenseClue[];
@@ -90,7 +89,14 @@ interface TopLevelDataFormat {
   license_references_spdx_map: Map<string, LicenseReference>;
   license_rule_references: unknown[];
 }
-type FileDataNode = Model<FileAttributes, FileAttributes> & DataNode;
+export interface FileDataNode extends DataNode {
+  id: number;
+  path: string;
+  parent: string;
+  name: string;
+  type: string;
+  children?: FileDataNode[];
+}
 
 // @TODO
 // function sortChildren(node: Model<FileAttributes, FileAttributes>){
@@ -110,26 +116,30 @@ export class WorkbenchDB {
   sync: Promise<DatabaseStructure>;
   config: WorkbenchDbConfig;
 
-  constructor(config: WorkbenchDbConfig) {
+  constructor(config?: WorkbenchDbConfig & { deleteExisting?: boolean }) {
     // Constructor returns an object which effectively represents a connection
     // to the db arguments (name of db, username for db, pw for that user)
     const name = config && config.dbName ? config.dbName : "tmp";
     const user = config && config.dbUser ? config.dbUser : null;
     const password = config && config.dbPassword ? config.dbPassword : null;
-    const storage = config && config.dbStorage ? config.dbStorage : ":memory:";
+    const storagePath =
+      config && config.dbStoragePath ? config.dbStoragePath : ":memory:";
     this.config = {
       dbName: name,
-      dbStorage: storage,
+      dbStoragePath: storagePath,
       dbUser: user,
       dbPassword: password,
-    }
+    };
 
-    // console.log("Sequelize DB details", {
-    //   name,
-    //   user,
-    //   password,
-    //   storage,
-    // });
+    // Clear existing data in sqlite file (if any)
+    if (config.deleteExisting && fs.existsSync(storagePath)) {
+      fs.unlink(storagePath, (err: Error) => {
+        if (err) {
+          throw err;
+        }
+        console.info(`Deleted existing db: ${storagePath}`);
+      });
+    }
 
     this.sequelize = new Sequelize(name, user, password, {
       dialect: "sqlite",
@@ -137,7 +147,7 @@ export class WorkbenchDB {
       // dialectOptions: {
       //   sqlite3: Database,
       // },
-      storage: storage,
+      storage: storagePath,
       logging: false,
     });
     this.db = newDatabase(this.sequelize);
@@ -153,15 +163,6 @@ export class WorkbenchDB {
     return this.sync.then((db) =>
       db.Header.findOne({
         attributes: ["workbench_notice", "workbench_version"],
-      })
-    );
-  }
-
-  // Get ScanCode Toolkit information
-  getScanCodeInfo() {
-    return this.sync.then((db) =>
-      db.Header.findOne({
-        attributes: ["scancode_notice", "scancode_version", "scancode_options"],
       })
     );
   }
@@ -202,18 +203,22 @@ export class WorkbenchDB {
 
   // Uses the files table to do a findOne query
   findOne(query: FindOptions) {
-    query = $.extend(query, {
-      include: this.db.fileIncludes,
-    });
-    return this.sync.then((db) => db.File.findOne(query));
+    return this.sync.then((db) =>
+      db.File.findOne({
+        ...query,
+        include: this.db.fileIncludes,
+      })
+    );
   }
 
   // Uses the files table to do a findAll query
   findAll(query: FindOptions) {
-    query = $.extend(query, {
-      include: this.db.fileIncludes,
-    });
-    return this.sync.then((db) => db.File.findAll(query));
+    return this.sync.then((db) =>
+      db.File.findAll({
+        ...query,
+        include: this.db.fileIncludes,
+      })
+    );
   }
 
   // Uses findAll to return JSTree format from the File Table
@@ -223,56 +228,42 @@ export class WorkbenchDB {
     };
     return this.sync
       .then((db) => db.File.findAll(fileQuery))
-      .then((files) => {
-        const result = this.listToTreeData(files as FileDataNode[]);
-        return result;
-      });
+      .then((files) => this.listToTreeData(files));
   }
 
-  listToTreeData(
-    fileList: FileDataNode[] & Model<FileAttributes, FileAttributes>[]
-  ) {
-    const pathToIndexMap = new Map<string, number>();
+  listToTreeData(fileList: Model<FileAttributes, FileAttributes>[]) {
+    const pathToNodeMap = new Map<string, FileDataNode>();
     const roots: FileDataNode[] = [];
 
     fileList.forEach((file) => {
-      // Maintain path mapping for each file
-      pathToIndexMap.set(
-        file.getDataValue("path"),
-        Number(file.getDataValue("id"))
-      );
-
-      // Setup DataNode properties
-      file.key = file.getDataValue("path");
-      file.children = [];
-      file.title = path.basename(file.getDataValue("path"));
+      // Maintain path mapping for each file to DataNode properties
+      const filePath = file.getDataValue("path");
+      const fileType = file.getDataValue("type") || "file";
+      pathToNodeMap.set(filePath, {
+        id: file.getDataValue("id"),
+        key: filePath,
+        title: path.basename(filePath),
+        path: filePath,
+        parent: file.getDataValue("parent"),
+        name: file.getDataValue("name"),
+        type: fileType,
+        isLeaf: fileType == "file",
+        ...(fileType == "directory" && { children: [] }),
+        // @TODO - Trial to fix rc-tree showing file icon instead of empty directory https://github.com/nexB/scancode-workbench/issues/542
+        // isLeaf: fileType == "file",
+      });
     });
 
     fileList.forEach((file) => {
-      const fileParentPath = file.getDataValue("parent").toString({});
+      const fileParentPath = file.getDataValue("parent");
+      const fileNode = pathToNodeMap.get(file.getDataValue("path"));
       if (Number(file.getDataValue("id")) !== 0) {
-        if (pathToIndexMap.has(fileParentPath)) {
-          // @TODO
-          // if you have dangling branches check that map[node.parentId] exists
-          fileList[pathToIndexMap.get(fileParentPath)].children.push(file);
+        if (pathToNodeMap.has(fileParentPath)) {
+          pathToNodeMap.get(fileParentPath).children?.push(fileNode);
         }
       } else {
-        roots.push(file);
+        roots.push(fileNode);
       }
-
-      // @TODO - Trial to fix rc-tree showing file icon instead of directory https://github.com/nexB/scancode-workbench/issues/542
-      // fileList.forEach(file => {
-      //   if(file.getDataValue('type').toString({}) === 'directory' && !file.children){
-      //     file.children=[];
-      //     file.isLeaf=true;
-      //   }
-      //   file.children?.forEach((file: any) => {
-      //     if(file.getDataValue('type').toString({}) === 'directory' && !file.children){
-      //       file.children=[];
-      //       file.isLeaf=true;
-      //     }
-      //   })
-      // })
     });
 
     roots.forEach(sortChildren);
@@ -281,17 +272,16 @@ export class WorkbenchDB {
 
   // Add rows to the flattened files table from a ScanCode json object
   addFromJson(
-    jsonFileName: string,
-    workbenchVersion: string,
+    jsonFilePath: string,
     onProgressUpdate: (progress: number) => void
   ): Promise<void> {
-    if (!jsonFileName) {
-      throw new Error("Invalid json file name: " + jsonFileName);
+    if (!jsonFilePath) {
+      throw new Error("Invalid json file name: " + jsonFilePath);
     }
-    // console.log("Adding from json with params", { jsonFileName, workbenchVersion, onProgressUpdate });
 
-    const stream = fs.createReadStream(jsonFileName, { encoding: "utf8" });
-    let headerId: number | null = null;
+    // console.log("Adding from json with params", { jsonFilePath, workbenchVersion, onProgressUpdate });
+
+    const stream = fs.createReadStream(jsonFilePath, { encoding: "utf8" });
     let files_count = 0;
     let dirs_count = 0;
     let index = 0;
@@ -300,232 +290,225 @@ export class WorkbenchDB {
     const batchSize = 1000;
     let files: Resource[] = [];
     let progress = 0;
-    let promiseChain: Promise<void | DatabaseStructure | number> = this.sync;
+    let promiseChain: Promise<unknown> = this.sync;
 
-    console.log("JSON parse started (step 1)");
+    console.info("JSON parse started (step 1)");
     console.time("json-parse-time");
 
-    return new Promise((resolve, reject) => {
-      // eslint-disable-next-line @typescript-eslint/no-this-alias
-      const primaryPromise = this;
+    return this.sync.then(
+      () =>
+        new Promise((resolve, reject) => {
+          // eslint-disable-next-line @typescript-eslint/no-this-alias
+          const primaryPromise = this;
 
-      let batchCount = 0;
-
-      let TopLevelData: TopLevelDataFormat = null;
-
-      stream
-        .pipe(JSONStream.parse("files.*")) // files field is piped to 'data' & rest to 'header'
-        .on("header", (topLevelData: any) => {
-          console.log(
-            "\n----------------------------------------------------------------\n"
-          );
-          const header = topLevelData.headers
-            ? topLevelData.headers[0] || {}
-            : {};
-          const parsedHeader = this._parseHeader(workbenchVersion, header);
-          const packages = topLevelData.packages || [];
-          const dependencies = topLevelData.dependencies || [];
-          const license_detections: TopLevelLicenseDetection[] = (
-            topLevelData.license_detections || []
-          ).map((detection: TopLevelLicenseDetection) => {
-            // Handle duplicated match_data present at top level in prev toolkit versions
-            // upto v32.0.0rc2
-            return {
-              identifier: detection.identifier,
-              license_expression: detection.license_expression,
-              detection_count:
-                detection.detection_count !== undefined
-                  ? detection.detection_count
-                  : detection.count || 0,
-            };
-          });
-          const license_detections_map = new Map<
-            string,
-            TopLevelLicenseDetection
-          >(
-            license_detections.map((detection) => [
-              detection.identifier,
-              detection,
-            ])
-          );
-          const license_references: LicenseReference[] =
-            topLevelData.license_references || [];
-          const license_references_mapping = new Map(
-            license_references.map((ref) => [ref.key, ref])
-          );
-          const license_references_mapping_spdx = new Map(
-            license_references.map((ref) => [ref.spdx_license_key, ref])
-          );
-          const license_rule_references: any[] =
-            topLevelData.license_rule_references || [];
-
-          TopLevelData = {
-            header,
-            parsedHeader,
-            packages,
-            dependencies,
-            license_detections,
+          let batchCount = 0;
+          let TopLevelData: TopLevelDataFormat = {
+            header: null,
+            parsedHeader: this._parseHeader(jsonFilePath, workbenchVersion, {}),
+            packages: [],
+            dependencies: [],
             license_clues: [],
-            license_references_map: license_references_mapping,
-            license_references_spdx_map: license_references_mapping_spdx,
-            license_detections_map,
-            license_references,
-            license_rule_references,
+            license_detections: [],
+            license_detections_map: new Map(),
+            license_references: [],
+            license_references_map: new Map(),
+            license_references_spdx_map: new Map(),
+            license_rule_references: [],
           };
 
-          console.log("Parsed Top level data", TopLevelData);
-
-          files_count = Number(parsedHeader.files_count);
-          promiseChain = promiseChain
-          .then(() => this.db.Packages.bulkCreate(packages))
-            .then(() => this.db.Dependencies.bulkCreate(dependencies))
-            .then(() =>
-              this.db.LicenseRuleReferences.bulkCreate(license_rule_references)
-            )
-            .then(() => this.db.Header.create(parsedHeader))
-            .then((header) => (headerId = Number(header.getDataValue("id"))))
-            .catch((err: unknown) => {
-              console.error(
-                "Some error parsing Top level data (caught in workbenchDB) !!",
-                err,
-                TopLevelData
+          stream
+            .pipe(JSONStream.parse("files.*")) // files field is piped to 'data' & rest to 'header' (Includes other top level fields)
+            .on("header", (rawTopLevelData: any) => {
+              TopLevelData = this._parseTopLevelFields(
+                jsonFilePath,
+                rawTopLevelData
               );
-              reject(err);
-            });
 
-          console.log(
-            "\n----------------------------------------------------------------\n"
-          );
-        })
-        .on("data", function (file?: Resource) {
-          if (!file) return;
+              files_count = Number(TopLevelData.parsedHeader.files_count);
+              promiseChain = promiseChain
+                .then(() => this.db.Packages.bulkCreate(TopLevelData.packages))
+                .then(() =>
+                  this.db.Dependencies.bulkCreate(TopLevelData.dependencies)
+                )
+                .then(() =>
+                  this.db.LicenseRuleReferences.bulkCreate(
+                    TopLevelData.license_rule_references
+                  )
+                )
+                .catch((err: unknown) => {
+                  console.error(
+                    "Some error parsing Top level data (caught in workbenchDB) !!",
+                    err,
+                    TopLevelData
+                  );
+                  reject(err);
+                });
+            })
+            .on("data", function (file?: Resource) {
+              if (!file) return;
 
-          if (!rootPath) {
-            rootPath = file.path.split("/")[0];
-          }
-          if (rootPath === file.path) {
-            hasRootPath = true;
-          }
-          // @TODO: When/if scancode reports directories in its header, this needs
-          //       to be replaced.
-          if (index === 0) {
-            dirs_count = file.dirs_count;
-          }
-          file.id = index++;
+              if (!rootPath) {
+                rootPath = file.path.split("/")[0];
+              }
+              if (rootPath === file.path) {
+                hasRootPath = true;
+              }
+              // @TODO: When/if scancode reports directories in its header, this needs
+              //       to be replaced.
+              if (index === 0) {
+                dirs_count = file.dirs_count;
+              }
+              file.id = index++;
 
-          primaryPromise._parseLicenseDetections(file, TopLevelData);
-          primaryPromise._parseLicenseClues(file, TopLevelData);
+              primaryPromise._parseLicenseDetections(file, TopLevelData);
+              primaryPromise._parseLicenseClues(file, TopLevelData);
 
-          files.push(file);
-          if (files.length >= batchSize) {
-            // Need to set a new variable before handing to promise
-            this.pause();
+              files.push(file);
+              if (files.length >= batchSize) {
+                // Need to set a new variable before handing to promise
+                this.pause();
 
-            promiseChain = promiseChain
-              .then(() => primaryPromise._batchCreateFiles(files, headerId))
-              .then(() => {
-                const currentProgress = Math.round(
-                  (index / (files_count + dirs_count)) * 100
-                );
-                if (currentProgress > progress) {
-                  progress = currentProgress;
-                  console.log(
+                promiseChain = promiseChain
+                  .then(() => primaryPromise._batchCreateFiles(files))
+                  .then(() => {
+                    const currentProgress = Math.round(
+                      (index / (files_count + dirs_count)) * 100
+                    );
+                    if (currentProgress > progress) {
+                      progress = currentProgress;
+                      console.info(
+                        `Batch-${++batchCount} completed, \n`,
+                        `JSON Import progress @ ${progress} % -- ${index}/${files_count}+${dirs_count}`
+                      );
+                      onProgressUpdate(progress);
+                    }
+                  })
+                  .then(() => {
+                    files = [];
+                    this.resume();
+                  })
+                  .catch((e: unknown) => reject(e));
+              }
+            })
+            .on("end", () => {
+              // Add root directory into data
+              // See https://github.com/nexB/scancode-toolkit/issues/543
+              promiseChain
+                .then(() => {
+                  if (rootPath && !hasRootPath) {
+                    files.push({
+                      path: rootPath,
+                      name: rootPath,
+                      type: "directory",
+                      files_count: files_count,
+                    });
+                  }
+                })
+                .then(() => this._batchCreateFiles(files))
+                .then(() => this.db.Header.create(TopLevelData.parsedHeader))
+                .then(() => {
+                  console.info(
                     `Batch-${++batchCount} completed, \n`,
                     `JSON Import progress @ ${progress} % -- ${index}/${files_count}+${dirs_count}`
                   );
-                  onProgressUpdate(progress);
-                }
-              })
-              .then(() => {
-                files = [];
-                this.resume();
-              })
-              .catch((e: unknown) => reject(e));
-          }
-        })
-        .on("end", () => {
-          console.log(
-            "\n----------------------------------------------------------------\n"
-          );
-
-          // Add root directory into data
-          // See https://github.com/nexB/scancode-toolkit/issues/543
-          promiseChain
-            .then(() => {
-              if (rootPath && !hasRootPath) {
-                files.push({
-                  path: rootPath,
-                  name: rootPath,
-                  type: "directory",
-                  files_count: files_count,
-                });
-              }
+                  onProgressUpdate(90);
+                })
+                .then(() =>
+                  this.db.LicenseDetections.bulkCreate(
+                    TopLevelData.license_detections as any as LicenseDetectionAttributes[]
+                  )
+                )
+                .then(() =>
+                  this.db.LicenseClues.bulkCreate(
+                    TopLevelData.license_clues as any as LicenseClueAttributes[]
+                  )
+                )
+                .then(() => {
+                  onProgressUpdate(100);
+                  console.info("JSON parse completed (final step)");
+                  console.timeEnd("json-parse-time");
+                  resolve();
+                })
+                .catch((e: unknown) => reject(e));
             })
-            .then(() => this._batchCreateFiles(files, headerId))
-            .then(() => {
-              console.log(
-                `Batch-${++batchCount} completed, \n`,
-                `JSON Import progress @ ${progress} % -- ${index}/${files_count}+${dirs_count}`
+            .on("error", (err: unknown) => {
+              console.error(
+                "Some error parsing data (caught in workbenchDB) !!",
+                err
               );
-              onProgressUpdate(90);
-              console.log("Resource data updated");
-              resolve();
-            })
-            .then(() =>
-              this.db.LicenseDetections.bulkCreate(
-                TopLevelData.license_detections as any as LicenseDetectionAttributes[]
-              )
-            )
-            .then(() =>
-              this.db.LicenseClues.bulkCreate(
-                TopLevelData.license_clues as any as LicenseClueAttributes[]
-              )
-            )
-            .then(() => {
-              onProgressUpdate(100);
-              console.log("JSON parse completed (final step)");
-              console.timeEnd("json-parse-time");
-            })
-            .catch((e: unknown) => reject(e));
+              toast.error(
+                "Some error parsing data !! \nPlease check console for more info"
+              );
+              logDependenciesOnError();
+              reject(err);
+            });
         })
-        .on("error", (err: unknown) => {
-          console.error(
-            "Some error parsing data (caught in workbenchDB) !!",
-            err
-          );
-          toast.error(
-            "Some error parsing data !! \nPlease check console for more info"
-          );
-          logDependenciesOnError();
-          reject(err);
-        });
-    });
+    );
   }
 
-  _parseHeader(workbenchVersion: string, header: any) {
-    interface ParsedJsonHeader {
-      tool_name: StringDataType;
-      tool_version: StringDataType;
-      notice: StringDataType;
-      duration: DataTypes.DoubleDataType;
-      options: JSON_Type;
-      input: JSON_Type;
-      files_count: IntegerDataType;
-      output_format_version: StringDataType;
-      spdx_license_list_version: StringDataType; // @QUERY - Justify need for this
-      operating_system: StringDataType;
-      cpu_architecture: StringDataType;
-      platform: StringDataType;
-      platform_version: StringDataType;
-      python_version: StringDataType;
-      workbench_version: StringDataType;
-      workbench_notice: StringDataType;
-      header_content: StringDataType;
-    }
+  // Helper function for parsing Toplevel data
+  _parseTopLevelFields(
+    jsonFilePath: string,
+    rawTopLevelData: any
+  ): TopLevelDataFormat {
+    const header = rawTopLevelData.headers
+      ? rawTopLevelData.headers[0] || {}
+      : {};
+    const parsedHeader = this._parseHeader(
+      jsonFilePath,
+      workbenchVersion,
+      header
+    );
+    const packages = rawTopLevelData.packages || [];
+    const dependencies = rawTopLevelData.dependencies || [];
+    const license_detections: TopLevelLicenseDetection[] = (
+      rawTopLevelData.license_detections || []
+    ).map((detection: TopLevelLicenseDetection) => {
+      // Handle duplicated match_data present at top level in prev toolkit versions
+      // upto v32.0.0rc2
+      return {
+        identifier: detection.identifier,
+        license_expression: detection.license_expression,
+        detection_count:
+          detection.detection_count !== undefined
+            ? detection.detection_count
+            : detection.count || 0,
+      };
+    });
+    const license_detections_map = new Map<string, TopLevelLicenseDetection>(
+      license_detections.map((detection) => [detection.identifier, detection])
+    );
+    const license_references: LicenseReference[] =
+      rawTopLevelData.license_references || [];
+    const license_references_mapping = new Map(
+      license_references.map((ref) => [ref.key, ref])
+    );
+    const license_references_mapping_spdx = new Map(
+      license_references.map((ref) => [ref.spdx_license_key, ref])
+    );
+    const license_rule_references: any[] =
+      rawTopLevelData.license_rule_references || [];
 
+    return {
+      header,
+      parsedHeader,
+      packages,
+      dependencies,
+      license_detections,
+      license_clues: [],
+      license_references_map: license_references_mapping,
+      license_references_spdx_map: license_references_mapping_spdx,
+      license_detections_map,
+      license_references,
+      license_rule_references,
+    };
+  }
+
+  _parseHeader(jsonFilePath: string, workbenchVersion: string, header: any) {
     const input = header.options?.input || [];
     delete header.options?.input;
     const parsedHeader: ParsedJsonHeader = {
+      json_file_name: path.basename(jsonFilePath),
       tool_name: header.tool_name,
       tool_version: header.tool_version,
       notice: header.notice,
@@ -540,14 +523,11 @@ export class WorkbenchDB {
       platform: header.extra_data?.system_environment?.platform,
       platform_version: header.extra_data?.system_environment?.platform_version,
       python_version: header.extra_data?.system_environment?.python_version,
-      workbench_version: workbenchVersion as unknown as StringDataType,
+      workbench_version: workbenchVersion,
       workbench_notice:
-        'Exported from ScanCode Workbench and provided on an "AS IS" BASIS, WITHOUT WARRANTIES\\nOR CONDITIONS OF ANY KIND, either express or implied. No content created from\\nScanCode Workbench should be considered or used as legal advice. Consult an Attorney\\nfor any legal advice.\\nScanCode Workbench is a free software analysis application from nexB Inc. and others.\\nVisit https://github.com/nexB/scancode-workbench/ for support and download.' as unknown as StringDataType,
-      header_content: JSON.stringify(
-        header,
-        undefined,
-        2
-      ) as unknown as StringDataType, // FIXME
+        'Exported from ScanCode Workbench and provided on an "AS IS" BASIS, WITHOUT WARRANTIES\\nOR CONDITIONS OF ANY KIND, either express or implied. No content created from\\nScanCode Workbench should be considered or used as legal advice. Consult an Attorney\\nfor any legal advice.\\nScanCode Workbench is a free software analysis application from nexB Inc. and others.\\nVisit https://github.com/nexB/scancode-workbench/ for support and download.',
+      header_content: JSON.stringify(header, undefined, 2),
+      errors: header.errors,
     };
     return parsedHeader;
   }
@@ -757,16 +737,14 @@ export class WorkbenchDB {
     });
   }
 
-  _batchCreateFiles(files: Resource[], headerId: number) {
+  _batchCreateFiles(files: Resource[]) {
     // Add batched files to the DB
-    return this._addFlattenedFiles(files).then(() =>
-      this._addFiles(files, headerId)
-    );
+    return this._addFlattenedFiles(files).then(() => this._addFiles(files));
   }
 
   _addFlattenedFiles(files: Resource[]) {
     // Fix for issue #232
-    $.each(files, (i, file) => {
+    files.forEach((file) => {
       if (
         file.type === "directory" &&
         Object.prototype.hasOwnProperty.call(file, "size_count")
@@ -777,12 +755,12 @@ export class WorkbenchDB {
 
     const flattenedFiles = files.map((file) => flattenFile(file));
 
-    return this.db.FlatFile.bulkCreate(flattenedFiles as any, {
+    return this.db.FlatFile.bulkCreate(flattenedFiles as any[], {
       logging: false,
     });
   }
 
-  _addFiles(files: Resource[], headerId: number) {
+  _addFiles(files: Resource[]) {
     const transactionOptions: TransactionOptions = {
       autocommit: false,
       isolationLevel: Transaction.ISOLATION_LEVELS.READ_COMMITTED,
@@ -792,7 +770,7 @@ export class WorkbenchDB {
         // logging: () => DebugLogger("add file", "AddFiles transaction executed !"),
         transaction: t,
       };
-      $.each(files, (_, file) => {
+      files.forEach((file) => {
         // Fix for issue #232
         if (
           file.type === "directory" &&
@@ -801,7 +779,6 @@ export class WorkbenchDB {
           file.size = file.size_count;
         }
         file.parent = parentPath(file.path);
-        file.headerId = headerId;
       });
 
       return this.db.File.bulkCreate(files as any, options)
@@ -957,10 +934,8 @@ export class WorkbenchDB {
   }
 
   _getLicensePolicy(file: Resource) {
-    // if ($.isEmptyObject(file.license_policy)) {
     if (!file.license_policy || !Object.keys(file.license_policy).length) {
-      // if ($.isEmptyObject(file.license_policy)) {
-      return null;
+      return [];
     }
     const license_policies = file.license_policy;
     license_policies.forEach((policy) => (policy.fileId = file.id));
@@ -968,9 +943,9 @@ export class WorkbenchDB {
   }
 
   _getNewCopyrights(file: Resource) {
-    const statements = file.copyrights;
-    const holders = file.holders;
-    const authors = file.authors;
+    const statements = file.copyrights || [];
+    const holders = file.holders || [];
+    const authors = file.authors || [];
 
     const newLines: { start_line: number; end_line: number }[] = [];
     const newStatements: string[] = [];

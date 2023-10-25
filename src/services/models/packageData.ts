@@ -1,6 +1,6 @@
 /*
  #
- # Copyright (c) 2018 nexB Inc. and others. All rights reserved.
+ # Copyright (c) nexB Inc. and others. All rights reserved.
  # https://nexb.com and https://github.com/nexB/scancode-workbench/
  # The ScanCode Workbench software is licensed under the Apache License version 2.0.
  # ScanCode is a trademark of nexB Inc.
@@ -14,46 +14,46 @@
  #
  */
 
-import { Sequelize, DataTypes, IntegerDataType, StringDataType, Model } from 'sequelize';
-import { jsonDataType, JSON_Type } from './databaseUtils';
+import { Sequelize, DataTypes, Model } from "sequelize";
+import { jsonDataType, JSON_Type } from "./databaseUtils";
 
 export interface PackageDataAttributes {
-  id: IntegerDataType,
-  fileId: IntegerDataType,
-  type: StringDataType,
-  namespace: StringDataType,
-  name: StringDataType,
-  version: StringDataType,
-  qualifiers: JSON_Type,
-  subpath: StringDataType,
-  purl: StringDataType,
-  primary_language: StringDataType,
-  code_type: StringDataType,  // @QUERY - Does exist ?
-  description: StringDataType,
-  size: IntegerDataType,
-  release_date: StringDataType,
-  parties: JSON_Type,
-  keywords: JSON_Type,
-  homepage_url: StringDataType,
-  download_url: StringDataType,
-  download_checksums: JSON_Type,
-  bug_tracking_url: StringDataType,
-  code_view_url: StringDataType,
-  vcs_tool: StringDataType,
-  vcs_repository: StringDataType,
-  vcs_revision: StringDataType,
-  copyright: StringDataType,
-  declared_license_expression: StringDataType,
-  declared_license_expression_spdx: StringDataType,
-  extracted_license_statement: StringDataType,
-  notice_text: StringDataType,
-  dependencies: JSON_Type,
-  related_packages: JSON_Type,  // @QUERY - Does exist ?
+  id: number;
+  fileId: number;
+  type: string;
+  namespace: string;
+  name: string;
+  version: string;
+  qualifiers: JSON_Type;
+  subpath: string;
+  purl: string;
+  primary_language: string;
+  code_type: string; // @QUERY - Does exist ?
+  description: string;
+  size: number;
+  release_date: string;
+  parties: JSON_Type;
+  keywords: JSON_Type;
+  homepage_url: string;
+  download_url: string;
+  download_checksums: JSON_Type;
+  bug_tracking_url: string;
+  code_view_url: string;
+  vcs_tool: string;
+  vcs_repository: string;
+  vcs_revision: string;
+  copyright: string;
+  declared_license_expression: string;
+  declared_license_expression_spdx: string;
+  extracted_license_statement: string;
+  notice_text: string;
+  dependencies: JSON_Type;
+  related_packages: JSON_Type; // @QUERY - Does exist ?
 }
 
 export default function packageDataModel(sequelize: Sequelize) {
   return sequelize.define<Model<PackageDataAttributes>>(
-    'package_data',
+    "package_data",
     {
       id: {
         allowNull: false,
@@ -66,7 +66,7 @@ export default function packageDataModel(sequelize: Sequelize) {
       namespace: DataTypes.STRING,
       name: DataTypes.STRING,
       version: DataTypes.STRING,
-      qualifiers: jsonDataType('qualifiers'),
+      qualifiers: jsonDataType("qualifiers"),
       subpath: DataTypes.STRING,
       purl: DataTypes.STRING,
       primary_language: DataTypes.STRING,
@@ -74,11 +74,11 @@ export default function packageDataModel(sequelize: Sequelize) {
       description: DataTypes.STRING,
       size: DataTypes.INTEGER,
       release_date: DataTypes.STRING,
-      parties: jsonDataType('parties'),
-      keywords: jsonDataType('keywords'),
+      parties: jsonDataType("parties"),
+      keywords: jsonDataType("keywords"),
       homepage_url: DataTypes.STRING,
       download_url: DataTypes.STRING,
-      download_checksums: jsonDataType('download_checksums'),
+      download_checksums: jsonDataType("download_checksums"),
       bug_tracking_url: DataTypes.STRING,
       code_view_url: DataTypes.STRING,
       vcs_tool: DataTypes.STRING,
@@ -89,10 +89,11 @@ export default function packageDataModel(sequelize: Sequelize) {
       declared_license_expression_spdx: DataTypes.STRING,
       extracted_license_statement: DataTypes.STRING,
       notice_text: DataTypes.STRING,
-      dependencies: jsonDataType('dependencies'),
-      related_packages: jsonDataType('related_packages')    // @QUERY - Does exist ?
+      dependencies: jsonDataType("dependencies"),
+      related_packages: jsonDataType("related_packages"), // @QUERY - Does exist ?
     },
     {
-      timestamps: false
-    });
+      timestamps: false,
+    }
+  );
 }

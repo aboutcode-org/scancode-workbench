@@ -1,6 +1,6 @@
 /*
  #
- # Copyright (c) 2019 nexB Inc. and others. All rights reserved.
+ # Copyright (c) nexB Inc. and others. All rights reserved.
  # https://nexb.com and https://github.com/nexB/scancode-workbench/
  # The ScanCode Workbench software is licensed under the Apache License version 2.0.
  # ScanCode is a trademark of nexB Inc.
@@ -14,45 +14,45 @@
  #
  */
 
-import {
-  Sequelize,
-  DataTypes,
-  StringDataType,
-  Model,
-  NumberDataType,
-} from "sequelize";
+import { Sequelize, DataTypes, Model } from "sequelize";
 import { JSON_Type, jsonDataType } from "./databaseUtils";
 
 export interface LicenseClueAttributes {
-  id: NumberDataType;
-  fileId: NumberDataType;
-  filePath: StringDataType;
-  fileClueIdx: NumberDataType;
-  score: NumberDataType;
-  license_expression: StringDataType;
-  rule_identifier: StringDataType;
+  id: number;
+  fileId: number;
+  filePath: string;
+  fileClueIdx: number;
+  score: number;
+  license_expression: string;
+  rule_identifier: string;
   matches: JSON_Type;
   file_regions: JSON_Type;
 }
 
 export default function licenseClueModel(sequelize: Sequelize) {
-  return sequelize.define<Model<LicenseClueAttributes>>("license_clues", {
-    id: {
-      allowNull: false,
-      autoIncrement: true,
-      primaryKey: true,
-      type: DataTypes.INTEGER,
+  return sequelize.define<Model<LicenseClueAttributes>>(
+    "license_clues",
+    {
+      id: {
+        allowNull: false,
+        autoIncrement: true,
+        primaryKey: true,
+        type: DataTypes.INTEGER,
+      },
+      fileId: DataTypes.NUMBER,
+      filePath: DataTypes.STRING,
+      fileClueIdx: {
+        type: DataTypes.INTEGER,
+        defaultValue: 0,
+      },
+      score: DataTypes.NUMBER,
+      license_expression: DataTypes.STRING,
+      rule_identifier: DataTypes.STRING,
+      matches: jsonDataType("matches"),
+      file_regions: jsonDataType("file_regions"),
     },
-    fileId: DataTypes.NUMBER,
-    filePath: DataTypes.STRING,
-    fileClueIdx: {
-      type: DataTypes.INTEGER,
-      defaultValue: 0,
-    },
-    score: DataTypes.NUMBER,
-    license_expression: DataTypes.STRING,
-    rule_identifier: DataTypes.STRING,
-    matches: jsonDataType("matches"),
-    file_regions: jsonDataType("file_regions"),
-  });
+    {
+      timestamps: false,
+    }
+  );
 }

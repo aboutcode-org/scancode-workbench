@@ -1,0 +1,1 @@
+.. |purl_description| replace:: A package URL is used to identify and locate a software package in a mostly universal and uniform way across programing languages, package managers, packaging conventions, tools, APIs and databases.

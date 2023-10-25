@@ -33,10 +33,11 @@ export enum ScanOptionKeys {
 }
 
 export interface ScanInfo {
+  json_file_name: string;
   tool_name: string;
   tool_version: string;
   notice: string;
-  duration: number;
+  duration: string;
   optionsList: [string, unknown][];
   optionsMap: Map<ScanOptionKeys, unknown>;
   input: string[];
@@ -51,45 +52,43 @@ export interface ScanInfo {
   workbench_version: string;
   workbench_notice: string;
   raw_header_content: string;
+  errors: string[];
 }
 
-export function parseScanInfo(rawInfo: Model<HeaderAttributes, HeaderAttributes>){
-  const optionsList = Object.entries(
-    parseIfValidJson(rawInfo.getDataValue("options")?.toString({})) ||
-      []
-  ) || [];
-  const optionsMap = new Map<ScanOptionKeys, unknown>(optionsList.map(([k,v]) => [k as ScanOptionKeys, v]));
+export function parseScanInfo(
+  rawInfo: Model<HeaderAttributes, HeaderAttributes>
+): ScanInfo {
+  const optionsList =
+    Object.entries(parseIfValidJson(rawInfo.getDataValue("options")) || []) ||
+    [];
+  const optionsMap = new Map<ScanOptionKeys, unknown>(
+    optionsList.map(([k, v]) => [k as ScanOptionKeys, v])
+  );
 
   const parsedScanInfo: ScanInfo = {
-    tool_name: rawInfo.getDataValue("tool_name")?.toString({}) || "",
-    tool_version: rawInfo.getDataValue("tool_version")?.toString({}) || "",
-    notice: rawInfo.getDataValue("notice")?.toString({}) || "",
-    duration: Number(rawInfo.getDataValue("duration")),
+    json_file_name: rawInfo.getDataValue("json_file_name") || "Not available",
+    tool_name: rawInfo.getDataValue("tool_name") || "",
+    tool_version: rawInfo.getDataValue("tool_version") || "",
+    notice: rawInfo.getDataValue("notice") || "",
+    duration: rawInfo.getDataValue("duration")
+      ? Number(rawInfo.getDataValue("duration")).toFixed(2)
+      : null,
     optionsList,
     optionsMap,
-    input:
-      parseIfValidJson(rawInfo.getDataValue("input")?.toString({})) || [],
+    input: parseIfValidJson(rawInfo.getDataValue("input")) || [],
     files_count: Number(rawInfo.getDataValue("files_count")),
-    output_format_version:
-      rawInfo.getDataValue("output_format_version")?.toString({}) || "",
+    output_format_version: rawInfo.getDataValue("output_format_version") || "",
     spdx_license_list_version:
-      rawInfo.getDataValue("spdx_license_list_version")?.toString({}) ||
-      "",
-    operating_system:
-      rawInfo.getDataValue("operating_system")?.toString({}) || "",
-    cpu_architecture:
-      rawInfo.getDataValue("cpu_architecture")?.toString({}) || "",
-    platform: rawInfo.getDataValue("platform")?.toString({}) || "",
-    platform_version:
-      rawInfo.getDataValue("platform_version")?.toString({}) || "",
-    python_version:
-      rawInfo.getDataValue("python_version")?.toString({}) || "",
-    workbench_version:
-      rawInfo.getDataValue("workbench_version")?.toString({}) || "",
-    workbench_notice:
-      rawInfo.getDataValue("workbench_notice")?.toString({}) || "",
-    raw_header_content:
-      rawInfo.getDataValue("header_content")?.toString({}) || "",
+      rawInfo.getDataValue("spdx_license_list_version") || "",
+    operating_system: rawInfo.getDataValue("operating_system") || "",
+    cpu_architecture: rawInfo.getDataValue("cpu_architecture") || "",
+    platform: rawInfo.getDataValue("platform") || "",
+    platform_version: rawInfo.getDataValue("platform_version") || "",
+    python_version: rawInfo.getDataValue("python_version") || "",
+    workbench_version: rawInfo.getDataValue("workbench_version") || "",
+    workbench_notice: rawInfo.getDataValue("workbench_notice") || "",
+    raw_header_content: rawInfo.getDataValue("header_content") || "",
+    errors: parseIfValidJson(rawInfo.getDataValue("errors")) || [],
   };
   return parsedScanInfo;
 }

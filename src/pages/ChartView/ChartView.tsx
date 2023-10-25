@@ -20,7 +20,10 @@ import {
 import { BAR_CHART_COLUMN_GROUPS } from "../../constants/barChartColumns";
 
 import { useWorkbenchDB } from "../../contexts/dbContext";
-import { formatBarchartData, getAttributeValues } from "../../utils/bar";
+import {
+  formatBarchartData,
+  getValidatedAttributeValues,
+} from "../../utils/bar";
 import { FlatFileAttributes } from "../../services/models/flatFile";
 import { trimStringWithEllipsis } from "../../utils/text";
 
@@ -79,12 +82,11 @@ const ChartView = () => {
         Sequelize.fn("TRIM", Sequelize.col(selectedAttribute)),
         selectedAttribute,
       ] as FindAttributeOptions,
-      // attributes: [Sequelize.fn('TRIM', Sequelize.col(selectedAttribute)), selectedAttribute],
     };
 
     db.sync
       .then((db) => db.FlatFile.findAll(query))
-      .then((values) => getAttributeValues(values, selectedAttribute))
+      .then((values) => getValidatedAttributeValues(values, selectedAttribute))
       .then((values) => {
         const { noValueEntriesCount, formattedChartData } =
           formatBarchartData(values);

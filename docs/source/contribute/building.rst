@@ -7,27 +7,21 @@
 Clone, Install, Build and Run
 =============================
 
-You'll need `Node.js <https://nodejs.org/>`__ (which comes with `npm <http://npmjs.com/>`__) installed on your computer in order to build this app. (See below for a list of platform-specific requirements.) Then, from your command line:
+You'll need `Node.js <https://nodejs.org/en>`__ (which comes with `npm <https://www.npmjs.com/>`__) installed on your computer in order to build this app. (See below for a list of platform-specific requirements.) Then, from your command line:
 
-.. code-block:: none
+.. code-block:: bash
 
    # Clone this repository
-   $ git clone https://github.com/nexB/scancode-workbench.git
+   git clone https://github.com/nexB/scancode-workbench.git
 
    # Go into the repository
-   $ cd scancode-workbench
+   cd scancode-workbench
 
-   # Install dependencies and run the app
-   $ npm install
-
-   # Rebuild native Node.js modules against the app version of Node.js
-   # MacOS, Linux and Git Bash on Windows
-   $ $(npm bin)/electron-rebuild
-   # Windows except for Git Bash
-   > .\node_modules\.bin\electron-rebuild.cmd
+   # Install dependencies and run the app (Native dependencies are handled automatically)
+   npm install
 
    # Run the app
-   $ npm start
+   npm start
 
 Building Requirements
 =====================
@@ -35,53 +29,82 @@ Building Requirements
 Linux
 -----
 
-- Python 3.7
-- `Node.js version <https://nodejs.org/en/download/package-manager/>`_ 6.x or later
-- npm 3.10.x or later but <= 5.2.0 (run ``npm install npm@5.2.0 -g``)
+- `Python <https://www.python.org/>`__ v3.7 or later
+- `Node.js <https://nodejs.org/en//>`__ 14.x or later
+- `npm <https://www.npmjs.com/>`__ v6.14.4 or later
+
+.. include:: ../rst_snippets/centos-note.rst
 
 MacOS
 -----
 
-- Python 3.7
-- `Node.js <https://nodejs.org/en/>`_ >=6.x or later but <=8.9.4
-- npm 3.10.x or later but <= 5.2.0 (run ``npm install npm@5.2.0 -g``)
-- Command Line Tools for `Xcode <https://developer.apple.com/xcode/downloads/>`_
-  (run ``xcode-select --install`` to install)
+- `Python <https://www.python.org/>`__ v3.7 or later
+- `Node.js <https://nodejs.org/en/>`__ 14.x or later
+- `npm <https://www.npmjs.com/>`__ v6.14.4 or later
+- Command Line Tools for `Xcode <https://developer.apple.com/xcode/resources/>`_
+   Install using:
+
+   .. code-block:: bash
+
+      xcode-select --install
 
 Windows
 -------
 
-- `Node.js <https://nodejs.org/en/>`_ 6.x or later
-- npm 3.10.x or later but <= 5.2.0 (``run npm install npm@5.2.0 -g``)
-- Python v3.7.x
+- `Python <https://www.python.org/>`__ v3.7 or later
 
-  * Make sure your Python path is set. To verify, open a command prompt and type
-    ``python --version``. Then, the version of python will be displayed.
+  * Make sure your Python path is set. To verify, open a command prompt and see the python version:
 
-- Visual C++ Build Environment:
+   .. code-block:: bash
 
-  * Either:
+      python --version
 
-  - Option 1: Install `Visual C++ Build Tools 2015 <https://www.microsoft.com/en-in/download/details.aspx?id=48159>`_
-    (or modify an existing installation) and select Common Tools for Visual C++ during setup.
-    This also works with the free Community and Express for Desktop editions.
-  - Option 2: `Visual Studio 2015 <https://visualstudio.microsoft.com/vs/older-downloads/>`_ (Community Edition or better)
+- `Node.js <https://nodejs.org/en/>`__ v14.x or later
+- `npm <https://www.npmjs.com/>`__ v6.14.4 or later
 
-  * Note: Windows 7 requires `.NET Framework 4.5.1 <http://www.microsoft.com/en-us/download/details.aspx?id=40773>`_
-  * Launch cmd, ``npm config set msvs_version 2015``
 
 Release Instructions
 ====================
 
-You can build a ``dist`` directory containing executables for any one of three target platforms
+You can build a ``dist`` directory and a ``tar/zip`` file containing executable for your platform
 by running:
+
+.. code-block:: bash
+
+   npm run publish
+
+After building is done, you can find ScanCode-Workbench under
+``dist/ScanCode-Workbench-<os>-<arch>-<version>``.
+
+Archives are also built as:
+   - ``tar.gz`` - Linux / MacOS
+   - ``.zip`` - Windows
+
+.. Note:: A build for any of the three target platforms must be executed on the targeted platform.
+
+Building Documentation
+======================
+
+Create python environment, make docs
+
 
 .. code-block:: none
 
-   $ python build.py
+   # Clone this repository
+   git clone https://github.com/nexB/scancode-workbench.git
 
-After building is done, you can find ScanCode-Workbench under
-``dist/ScanCode-Workbench-<os>-x64-<version>``. Archives (``tar.gz`` and ``.zip``)
-are also built.
+   # Go into the docs directory
+   cd docs/
 
-.. Note:: A build for any of the three target platforms must be executed on the targeted platform.
+   # Setup virtual environment for python dependencies
+   python3 -m venv venv
+   source venv/bin/activate
+
+   # Install dependencies
+   pip install -r requirements.txt
+
+   # Build Documentation
+   make html
+
+   # Run Documentation server
+   make docs

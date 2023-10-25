@@ -1,6 +1,6 @@
-import * as React from 'react';
-import { createRoot } from 'react-dom/client';
-import App from './App';
+import * as React from "react";
+import { createRoot } from "react-dom/client";
+import App from "./App";
 
 // For previous react versions
 // import * as ReactDOM from 'react-dom';
@@ -12,8 +12,8 @@ import App from './App';
 
 // For react 18 onwards
 export function renderReactApp() {
-  const container = document.getElementById('app');
-  if(container){
+  const container = document.getElementById("app");
+  if (container) {
     const root = createRoot(container);
     root.render(<App />);
   } else {

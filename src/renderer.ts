@@ -26,12 +26,13 @@
  * ```
  */
 
-import { ipcRenderer, webFrame } from 'electron';
-import { renderReactApp } from './reactApp';
+import { ipcRenderer, webFrame } from "electron";
+import { renderReactApp } from "./reactApp";
 
-import './index.css';
-import './colors.css';
-import { GENERAL_ACTIONS } from './constants/IpcConnection';
+import { GENERAL_ACTIONS } from "./constants/IpcConnection";
+
+import "./styles/index.css";
+import "./styles/colors.css";
 
 // Setup general actions
 ipcRenderer.on(GENERAL_ACTIONS.ZOOM_IN, () => {
@@ -43,6 +44,5 @@ ipcRenderer.on(GENERAL_ACTIONS.ZOOM_OUT, () => {
 ipcRenderer.on(GENERAL_ACTIONS.ZOOM_RESET, () => {
   webFrame.setZoomLevel(0);
 });
-
 
 renderReactApp();

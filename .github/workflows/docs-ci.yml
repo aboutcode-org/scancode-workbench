@@ -1,0 +1,36 @@
+name: CI Documentation
+
+on: [push, pull_request]
+
+permissions:
+  contents: read # to fetch code (actions/checkout)
+
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+
+    strategy:
+      max-parallel: 4
+      matrix:
+        python-version: [3.9]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install Dependencies
+        run:  pip install -r docs/requirements.txt
+
+      - name: Check Sphinx Documentation build minimally
+        working-directory: ./docs
+        run: sphinx-build -E -W source build
+
+      - name: Check for documentation style errors
+        working-directory: ./docs
+        run: ./scripts/doc8_style_check.sh
+

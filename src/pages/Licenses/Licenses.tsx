@@ -15,7 +15,7 @@ import NoDataFallback from "../../components/NoDataSection";
 import { QUERY_KEYS } from "../../constants/params";
 import { useWorkbenchDB } from "../../contexts/dbContext";
 import {
-  ActiveLicense,
+  ActiveLicenseEntity,
   LicenseClueDetails,
   LicenseDetectionDetails,
 } from "./licenseDefinitions";
@@ -24,7 +24,7 @@ import "./Licenses.css";
 
 const LicenseDetections = () => {
   const [searchParams] = useSearchParams();
-  const [activeLicense, setActiveLicense] = useState<ActiveLicense | null>(
+  const [activeLicense, setActiveLicense] = useState<ActiveLicenseEntity | null>(
     null
   );
   const [searchedLicense, setSearchedLicense] = useState("");
@@ -60,18 +60,18 @@ const LicenseDetections = () => {
         await db.getAllLicenseDetections()
       ).map((detection) => ({
         detection_count: Number(detection.getDataValue("detection_count")),
-        identifier: detection.getDataValue("identifier")?.toString({}) || null,
+        identifier: detection.getDataValue("identifier") || null,
         license_expression: detection
           .getDataValue("license_expression")
-          ?.toString({}),
+          ,
         detection_log: JSON.parse(
-          detection.getDataValue("detection_log")?.toString({}) || "[]"
+          detection.getDataValue("detection_log") || "[]"
         ),
         matches: JSON.parse(
-          detection.getDataValue("matches")?.toString({}) || "[]"
+          detection.getDataValue("matches") || "[]"
         ),
         file_regions: JSON.parse(
-          detection.getDataValue("file_regions")?.toString({}) || "[]"
+          detection.getDataValue("file_regions") || "[]"
         ),
       }));
       setLicenseDetections(newLicenseDetections);
@@ -82,21 +82,21 @@ const LicenseDetections = () => {
         return {
           id: Number(clue.getDataValue("id")),
           fileId: Number(clue.getDataValue("fileId")),
-          filePath: clue.getDataValue("filePath").toString({}) || "",
+          filePath: clue.getDataValue("filePath") || "",
           fileClueIdx: Number(clue.getDataValue("fileClueIdx")),
           score:
             clue.getDataValue("score") !== null
               ? Number(clue.getDataValue("score"))
               : null,
           license_expression:
-            clue.getDataValue("license_expression")?.toString({}) || null,
+            clue.getDataValue("license_expression") || null,
           rule_identifier:
-            clue.getDataValue("rule_identifier")?.toString({}) || null,
+            clue.getDataValue("rule_identifier") || null,
           matches: JSON.parse(
-            clue.getDataValue("matches")?.toString({}) || "[]"
+            clue.getDataValue("matches") || "[]"
           ),
           file_regions: JSON.parse(
-            clue.getDataValue("file_regions")?.toString({}) || "[]"
+            clue.getDataValue("file_regions") || "[]"
           ),
         };
       });
@@ -312,7 +312,7 @@ const LicenseDetections = () => {
           minSize={500}
           className="license-entity-pane overflow-scroll"
         >
-          <LicenseEntity activeLicense={activeLicense} />
+          <LicenseEntity activeLicenseEntity={activeLicense} />
         </Allotment.Pane>
       </Allotment>
     </div>

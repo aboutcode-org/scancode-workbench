@@ -1,0 +1,13 @@
+{
+  "files": [
+    {
+      "path": "manifests"
+    },
+    {
+      "path": "manifests/copyright"
+    },
+    {
+      "path": "manifests/FirebaseAnalytics.podspec.json"
+    }
+  ]
+}

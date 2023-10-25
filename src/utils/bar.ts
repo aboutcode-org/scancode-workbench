@@ -4,21 +4,31 @@ export function isValid(value: unknown): boolean {
   if (Array.isArray(value)) {
     return value.length > 0 && value.every((element) => isValid(element));
   } else {
-    return value !== null;
+    return value !== null && value !== undefined;
   }
 }
 
-export function getAttributeValues(values: any[], attribute: any) {
-  const validatedValues = [];
+/**
+ *
+ * @param values - List of Model objects returned by any Sequelize queries
+ * @param attribute - Attribute of Model object to be obtained
+ */
+export function getValidatedAttributeValues(
+  values: { dataValues: any }[],
+  attribute: string
+) {
+  const validatedAttributeValues = [];
   let attributeValue = null;
 
   for (let i = 0; i < values.length; i++) {
-    attributeValue = values[i][attribute];
-    const fileType = values[i].type;
+    attributeValue = values[i].dataValues[attribute];
 
     // dedupe entries to prevent overcounting files. See https://github.com/nexB/scancode-workbench/issues/285
-    if (Array.isArray(attributeValue)) {
-      attributeValue = Array.from(new Set(attributeValue));
+    try {
+      const parsed = JSON.parse(attributeValue);
+      if (Array.isArray(parsed)) attributeValue = parsed;
+    } catch (e) {
+      /* empty */
     }
 
     if (!Array.isArray(attributeValue) || attributeValue.length === 0) {
@@ -27,25 +37,27 @@ export function getAttributeValues(values: any[], attribute: any) {
 
     for (let j = 0; j < attributeValue.length; j++) {
       const val = attributeValue[j];
-      if (
-        !isValid(val) &&
-        attribute === "package_data_type" &&
-        fileType === "directory"
-      ) {
+      if (!isValid(val) && attribute === "package_data_type") {
         continue;
       }
-      validatedValues.push(isValid(val) ? val : NO_VALUE_DETECTED_LABEL);
+      validatedAttributeValues.push(
+        isValid(val) ? val : NO_VALUE_DETECTED_LABEL
+      );
     }
   }
-  return validatedValues;
+
+  return validatedAttributeValues;
 }
 
+// Counts occurences for unique entries & return formatted object required to draw the Bar chart
 export function formatBarchartData(data: unknown[]) {
   const counterMapping = new Map<string, number>();
   let existingCount = 0;
   data.forEach((entry: string | string[]) => {
     const entryString =
-      typeof entry === "string"
+      entry == null || entry == undefined
+        ? NO_VALUE_DETECTED_LABEL
+        : typeof entry === "string"
         ? entry
         : Array.isArray(entry)
         ? entry.join(",")

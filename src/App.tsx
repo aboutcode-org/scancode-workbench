@@ -28,9 +28,9 @@ import "rc-tree/assets/index.css";
 import "react-toastify/dist/ReactToastify.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "react-tooltip/dist/react-tooltip.css";
-import "./app.css";
-import "./dashStyles.css";
-import "./customFaColors.css";
+import "./styles/app.css";
+import "./styles/dashStyles.css";
+import "./styles/customFaColors.css";
 
 const App = () => {
   return (

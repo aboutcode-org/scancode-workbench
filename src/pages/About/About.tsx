@@ -1,6 +1,6 @@
 import React from "react";
-import PackageJson from "../../../package.json";
 import CoreLink from "../../components/CoreLink/CoreLink";
+import { WORKBENCH_VERSION } from "../../constants/general";
 
 import "./about.css";
 
@@ -9,7 +9,7 @@ const About = () => {
     <div className="about">
       <h3>
         About ScanCode Workbench
-        <span className="app-version">v{PackageJson.version}</span>
+        <span className="app-version">v{WORKBENCH_VERSION}</span>
       </h3>
       <br />
       <h4>Overview</h4>

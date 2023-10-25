@@ -1,6 +1,6 @@
 /*
  #
- # Copyright (c) 2018 nexB Inc. and others. All rights reserved.
+ # Copyright (c) nexB Inc. and others. All rights reserved.
  # https://nexb.com and https://github.com/nexB/scancode-workbench/
  # The ScanCode Workbench software is licensed under the Apache License version 2.0.
  # ScanCode is a trademark of nexB Inc.
@@ -15,61 +15,55 @@
  */
 
 import path from "path";
-import {
-  Sequelize,
-  DataTypes,
-  IntegerDataType,
-  StringDataType,
-  Model,
-  NumberDataType,
-} from "sequelize";
+import { Sequelize, DataTypes, Model } from "sequelize";
 import { JSON_Type, jsonDataType, parentPath } from "./databaseUtils";
 
-export interface FlatFileAttributes {
-  id: IntegerDataType;
-  fileId: IntegerDataType;
-  path: string;
-  parent: StringDataType;
-  copyright_statements: JSON_Type;
-  copyright_holders: JSON_Type;
-  copyright_authors: JSON_Type;
-  copyright_start_line: JSON_Type;
-  copyright_end_line: JSON_Type;
-
-  detected_license_expression: StringDataType;
-  detected_license_expression_spdx: StringDataType;
-  percentage_of_license_text: NumberDataType;
-  license_policy: JSON_Type;
-  license_clues: JSON_Type;
-  license_detections: JSON_Type;
-
-  email: JSON_Type;
-  email_start_line: JSON_Type;
-  email_end_line: JSON_Type;
-  url: JSON_Type;
-  url_start_line: JSON_Type;
-  url_end_line: JSON_Type;
-
-  type: StringDataType;
-  name: StringDataType;
-  extension: StringDataType;
-  date: StringDataType;
-  size: IntegerDataType;
-  sha1: StringDataType;
-  md5: StringDataType;
-  file_count: IntegerDataType;
-  mime_type: StringDataType;
-  file_type: StringDataType;
-  programming_language: StringDataType;
-  for_packages: JSON_Type;
+export interface InfoFlatFileAttributes {
+  type: string;
+  name: string;
+  extension: string;
+  date: string;
+  size: number;
+  sha1: string;
+  md5: string;
+  file_count: number;
+  mime_type: string;
+  file_type: string;
+  programming_language: string;
   is_binary: boolean;
   is_text: boolean;
   is_archive: boolean;
   is_media: boolean;
   is_source: boolean;
   is_script: boolean;
-  scan_errors: JSON_Type;
-
+}
+export interface EmailUrlFlatFileAttributes {
+  email: JSON_Type;
+  email_start_line: JSON_Type;
+  email_end_line: JSON_Type;
+  url: JSON_Type;
+  url_start_line: JSON_Type;
+  url_end_line: JSON_Type;
+}
+export interface LicenseFlatFileAttributes {
+  detected_license_expression: string;
+  detected_license_expression_spdx: string;
+  percentage_of_license_text: number;
+  license_policy: JSON_Type;
+  license_clues: JSON_Type;
+  license_detections: JSON_Type;
+}
+export interface CopyrightFlatFileAttributes {
+  copyright_statements: JSON_Type;
+  copyright_holders: JSON_Type;
+  copyright_authors: JSON_Type;
+  copyright_start_line: JSON_Type;
+  copyright_end_line: JSON_Type;
+}
+export interface PackageFlatFileAttributes {
+  for_packages: JSON_Type;
+}
+export interface PackageDataFlatFileAttributes {
   package_data_type: JSON_Type;
   package_data_namespace: JSON_Type;
   package_data_name: JSON_Type;
@@ -98,6 +92,23 @@ export interface FlatFileAttributes {
   package_data_notice_text: JSON_Type;
   package_data_dependencies: JSON_Type;
   package_data_related_packages: JSON_Type;
+}
+export interface ErrorsFlatFileAttributes {
+  scan_errors: JSON_Type;
+}
+
+export interface FlatFileAttributes
+  extends InfoFlatFileAttributes,
+    EmailUrlFlatFileAttributes,
+    LicenseFlatFileAttributes,
+    CopyrightFlatFileAttributes,
+    PackageFlatFileAttributes,
+    PackageDataFlatFileAttributes,
+    ErrorsFlatFileAttributes {
+  id: number;
+  fileId: number;
+  path: string;
+  parent: string;
 }
 
 export default function flatFileModel(sequelize: Sequelize) {
@@ -141,10 +152,10 @@ export default function flatFileModel(sequelize: Sequelize) {
       name: { type: DataTypes.STRING, defaultValue: "" },
       extension: { type: DataTypes.STRING, defaultValue: "" },
       date: { type: DataTypes.STRING, defaultValue: "" },
-      size: { type: DataTypes.INTEGER, defaultValue: "" },
+      size: { type: DataTypes.INTEGER, defaultValue: null },
       sha1: { type: DataTypes.STRING, defaultValue: "" },
       md5: { type: DataTypes.STRING, defaultValue: "" },
-      file_count: { type: DataTypes.INTEGER, defaultValue: "" },
+      file_count: { type: DataTypes.INTEGER, defaultValue: null },
       mime_type: { type: DataTypes.STRING, defaultValue: "" },
       file_type: { type: DataTypes.STRING, defaultValue: "" },
       programming_language: { type: DataTypes.STRING, defaultValue: "" },
@@ -215,15 +226,15 @@ interface FlattenedFile {
   id: number;
   fileId: number;
   path: string;
-  parent: StringDataType;
+  parent: string;
   copyright_statements: unknown[];
   copyright_holders: unknown[];
   copyright_authors: unknown[];
   copyright_start_line: unknown[];
   copyright_end_line: unknown[];
 
-  detected_license_expression: StringDataType;
-  detected_license_expression_spdx: StringDataType;
+  detected_license_expression: string;
+  detected_license_expression_spdx: string;
   percentage_of_license_text: number;
   license_policy: unknown[];
   license_clues: unknown[];
@@ -236,17 +247,17 @@ interface FlattenedFile {
   url_start_line: unknown[];
   url_end_line: unknown[];
 
-  type: StringDataType;
-  name: StringDataType;
-  extension: StringDataType;
-  date: StringDataType;
-  size: StringDataType;
-  sha1: StringDataType;
-  md5: StringDataType;
-  file_count: IntegerDataType;
-  mime_type: StringDataType;
-  file_type: StringDataType;
-  programming_language: StringDataType;
+  type: string;
+  name: string;
+  extension: string;
+  date: string;
+  size: string;
+  sha1: string;
+  md5: string;
+  file_count: number;
+  mime_type: string;
+  file_type: string;
+  programming_language: string;
   for_packages: unknown[];
   is_binary: boolean;
   is_text: boolean;
@@ -254,7 +265,7 @@ interface FlattenedFile {
   is_media: boolean;
   is_source: boolean;
   is_script: boolean;
-  scan_errors: StringDataType[];
+  scan_errors: string[];
 
   package_data_type: unknown[];
   package_data_namespace: unknown[];
@@ -381,13 +392,20 @@ export function flattenFile(file: any): FlattenedFile {
   };
 }
 
-function getLicensePolicyLabel(policy: any) {
+function getLicensePolicyLabel(policy: any[]) {
   if (!policy) {
-    return;
-  } else if (!policy["label"]) {
-    return;
+    return [];
   }
-  return [policy["label"]];
+
+  // @TODO - Support Comprehensive renderer in Tableview
+  // return policy.map((policy) => ({
+  //   label: policy["label"],
+  //   license_key: policy["license_key"],
+  // }));
+
+  return policy.map(
+    (policy) => `${policy["license_key"]} - ${policy["label"]}`
+  );
 }
 
 function getCopyrightValues(

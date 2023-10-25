@@ -1,7 +1,6 @@
-import { Model } from 'sequelize';
 /*
  #
- # Copyright (c) 2018 nexB Inc. and others. All rights reserved.
+ # Copyright (c) nexB Inc. and others. All rights reserved.
  # https://nexb.com and https://github.com/nexB/scancode-workbench/
  # The ScanCode Workbench software is licensed under the Apache License version 2.0.
  # ScanCode is a trademark of nexB Inc.
@@ -15,19 +14,20 @@ import { Model } from 'sequelize';
  #
  */
 
-import { Sequelize, StringDataType, DataTypes } from 'sequelize';
+import { Sequelize, DataTypes, Model } from "sequelize";
 
 export interface ScanErrorAttributes {
-  scan_error: StringDataType
+  scan_error: string;
 }
 
 export default function scanErrorModel(sequelize: Sequelize) {
   return sequelize.define<Model<ScanErrorAttributes>>(
-    'scan_errors',
+    "scan_errors",
     {
-      scan_error: DataTypes.STRING
+      scan_error: DataTypes.STRING,
     },
     {
-      timestamps: false
-    });
+      timestamps: false,
+    }
+  );
 }

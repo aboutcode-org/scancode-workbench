@@ -1,6 +1,6 @@
 /*
  #
- # Copyright (c) 2018 nexB Inc. and others. All rights reserved.
+ # Copyright (c) nexB Inc. and others. All rights reserved.
  # https://nexb.com and https://github.com/nexB/scancode-workbench/
  # The ScanCode Workbench software is licensed under the Apache License version 2.0.
  # ScanCode is a trademark of nexB Inc.
@@ -81,11 +81,12 @@ export interface DatabaseStructure {
   FlatFile: ModelStatic<Model<FlatFileAttributes>>;
 
   fileIncludes: { model: ModelStatic<Model<unknown>>; separate: boolean }[];
+  allTables: ModelStatic<Model<unknown>>[];
 }
 
 export function newDatabase(sequelize: Sequelize): DatabaseStructure {
   // Define the models
-  const result = {
+  const tables = {
     // Top  level entities
     Header: headerModel(sequelize),
     Packages: packagesModel(sequelize),
@@ -106,21 +107,21 @@ export function newDatabase(sequelize: Sequelize): DatabaseStructure {
   };
 
   // Define the relations
-  result.Header.hasMany(result.File);
-  result.File.hasMany(result.LicenseExpression);
-  result.File.hasMany(result.LicenseClues);
-  result.File.hasMany(result.LicensePolicy);
-  result.File.hasMany(result.Copyright);
-  result.File.hasMany(result.PackageData);
-  result.File.hasMany(result.Email);
-  result.File.hasMany(result.Url);
-  result.File.hasMany(result.ScanError);
-  result.Packages.hasMany(result.Dependencies, {
+  tables.Header.hasMany(tables.File);
+  tables.File.hasMany(tables.LicenseExpression);
+  tables.File.hasMany(tables.LicenseClues);
+  tables.File.hasMany(tables.LicensePolicy);
+  tables.File.hasMany(tables.Copyright);
+  tables.File.hasMany(tables.PackageData);
+  tables.File.hasMany(tables.Email);
+  tables.File.hasMany(tables.Url);
+  tables.File.hasMany(tables.ScanError);
+  tables.Packages.hasMany(tables.Dependencies, {
     sourceKey: "package_uid",
     foreignKey: "for_package_uid",
     as: "dependencies",
   });
-  result.Dependencies.belongsTo(result.Packages, {
+  tables.Dependencies.belongsTo(tables.Packages, {
     foreignKey: "for_package_uid",
     as: "package",
     targetKey: "package_uid",
@@ -128,17 +129,18 @@ export function newDatabase(sequelize: Sequelize): DatabaseStructure {
 
   // Include Array for queries
   const fileIncludes = [
-    { model: result.LicenseExpression, separate: true },
-    { model: result.LicensePolicy, separate: true },
-    { model: result.Copyright, separate: true },
-    { model: result.PackageData, separate: true },
-    { model: result.Email, separate: true },
-    { model: result.Url, separate: true },
-    { model: result.ScanError, separate: true },
+    { model: tables.LicenseExpression, separate: true },
+    { model: tables.LicensePolicy, separate: true },
+    { model: tables.Copyright, separate: true },
+    { model: tables.PackageData, separate: true },
+    { model: tables.Email, separate: true },
+    { model: tables.Url, separate: true },
+    { model: tables.ScanError, separate: true },
   ];
 
   return {
-    ...result,
+    ...tables,
     fileIncludes,
+    allTables: Object.values(tables),
   };
 }

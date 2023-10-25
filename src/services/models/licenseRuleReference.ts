@@ -1,6 +1,6 @@
 /*
  #
- # Copyright (c) 2019 nexB Inc. and others. All rights reserved.
+ # Copyright (c) nexB Inc. and others. All rights reserved.
  # https://nexb.com and https://github.com/nexB/scancode-workbench/
  # The ScanCode Workbench software is licensed under the Apache License version 2.0.
  # ScanCode is a trademark of nexB Inc.
@@ -14,21 +14,15 @@
  #
  */
 
-import {
-  Sequelize,
-  DataTypes,
-  IntegerDataType,
-  StringDataType,
-  Model,
-} from "sequelize";
+import { Sequelize, DataTypes, Model } from "sequelize";
 // import { JSON_Type, jsonDataType } from "./databaseUtils";
 
 export interface LicenseRuleReferenceAttributes {
-  id: IntegerDataType;
-  license_expression: StringDataType;
-  identifier: StringDataType;
-  language: StringDataType;
-  rule_url: StringDataType;
+  id: number;
+  license_expression: string;
+  identifier: string;
+  language: string;
+  rule_url: string;
   is_license_text: boolean;
   is_license_notice: boolean;
   is_license_reference: boolean;
@@ -42,13 +36,13 @@ export interface LicenseRuleReferenceAttributes {
   relevance: number;
   minimum_coverage: number;
   // referenced_filenames: JSON_Type;
-  // notes: StringDataType;
+  // notes: string;
   // ignorable_copyrights: JSON_Type;
   // ignorable_holders: JSON_Type;
   // ignorable_authors: JSON_Type;
   // ignorable_urls: JSON_Type;
   // ignorable_emails: JSON_Type;
-  text: StringDataType;
+  text: string;
 }
 
 export default function licenseRuleReferenceModel(sequelize: Sequelize) {

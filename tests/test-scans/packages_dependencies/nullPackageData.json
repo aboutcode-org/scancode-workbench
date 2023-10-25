@@ -1,0 +1,207 @@
+{
+  "packages": [
+    {
+      "type": "maven",
+      "namespace": "org.elasticsearch",
+      "name": "elasticsearch",
+      "version": "7.16.3",
+      "qualifiers": {},
+      "subpath": null,
+      "primary_language": "Java",
+      "description": "server\nElasticsearch subproject :server",
+      "release_date": null,
+      "parties": [
+        {
+          "type": "person",
+          "role": "developper",
+          "name": "Elastic",
+          "email": null,
+          "url": "https://www.elastic.co"
+        }
+      ],
+      "keywords": [],
+      "homepage_url": "https://github.com/elastic/elasticsearch",
+      "download_url": null,
+      "size": null,
+      "sha1": null,
+      "md5": null,
+      "sha256": null,
+      "sha512": null,
+      "bug_tracking_url": null,
+      "code_view_url": "https://github.com/elastic/elasticsearch.git",
+      "vcs_url": "https://github.com/elastic/elasticsearch.git",
+      "copyright": null,
+      "holder": null,
+      "declared_license_expression": "elastic-license-v2 AND mongodb-sspl-1.0",
+      "declared_license_expression_spdx": "Elastic-2.0 AND SSPL-1.0",
+      "license_detections": [
+        {
+          "license_expression": "elastic-license-v2",
+          "matches": [
+            {
+              "score": 100.0,
+              "start_line": 1,
+              "end_line": 1,
+              "matched_length": 4,
+              "match_coverage": 100.0,
+              "matcher": "1-hash",
+              "license_expression": "elastic-license-v2",
+              "rule_identifier": "elastic-license-v2_3.RULE",
+              "rule_relevance": 100,
+              "rule_url": "https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/rules/elastic-license-v2_3.RULE",
+              "matched_text": "Elastic License 2.0"
+            }
+          ],
+          "identifier": "elastic_license_v2-6c37b8f5-5040-e1bb-0317-f206f4c3bf1e"
+        },
+        {
+          "license_expression": "elastic-license-v2",
+          "matches": [
+            {
+              "score": 100.0,
+              "start_line": 1,
+              "end_line": 1,
+              "matched_length": 6,
+              "match_coverage": 100.0,
+              "matcher": "2-aho",
+              "license_expression": "elastic-license-v2",
+              "rule_identifier": "elastic-license-v2_2.RULE",
+              "rule_relevance": 100,
+              "rule_url": "https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/rules/elastic-license-v2_2.RULE",
+              "matched_text": "https://raw.githubusercontent.com/elastic/elasticsearch/v7.16.3/licenses/ELASTIC-LICENSE-2.0.txt"
+            }
+          ],
+          "identifier": "elastic_license_v2-b6912041-a97e-92aa-9086-3b2dad5c3f7a"
+        },
+        {
+          "license_expression": "mongodb-sspl-1.0",
+          "matches": [
+            {
+              "score": 100.0,
+              "start_line": 1,
+              "end_line": 1,
+              "matched_length": 5,
+              "match_coverage": 100.0,
+              "matcher": "1-hash",
+              "license_expression": "mongodb-sspl-1.0",
+              "rule_identifier": "mongodb-sspl-1.0_12.RULE",
+              "rule_relevance": 100,
+              "rule_url": "https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/rules/mongodb-sspl-1.0_12.RULE",
+              "matched_text": "Server Side Public License, v 1"
+            }
+          ],
+          "identifier": "mongodb_sspl_1_0-40b027d1-15f0-7f38-f6e5-0c4a6824884e"
+        },
+        {
+          "license_expression": "mongodb-sspl-1.0",
+          "matches": [
+            {
+              "score": 100.0,
+              "start_line": 1,
+              "end_line": 1,
+              "matched_length": 8,
+              "match_coverage": 100.0,
+              "matcher": "1-hash",
+              "license_expression": "mongodb-sspl-1.0",
+              "rule_identifier": "mongodb-sspl-1.0_7.RULE",
+              "rule_relevance": 100,
+              "rule_url": "https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/rules/mongodb-sspl-1.0_7.RULE",
+              "matched_text": "https://www.mongodb.com/licensing/server-side-public-license"
+            }
+          ],
+          "identifier": "mongodb_sspl_1_0-ed7798b8-5fa4-d992-84da-b64833db315c"
+        }
+      ],
+      "other_license_expression": null,
+      "other_license_expression_spdx": null,
+      "other_license_detections": [],
+      "extracted_license_statement": "[{'name': 'Elastic License 2.0', 'url': 'https://raw.githubusercontent.com/elastic/elasticsearch/v7.16.3/licenses/ELASTIC-LICENSE-2.0.txt', 'comments': None, 'distribution': 'repo'}, {'name': 'Server Side Public License, v 1', 'url': 'https://www.mongodb.com/licensing/server-side-public-license', 'comments': None, 'distribution': 'repo'}]",
+      "notice_text": null,
+      "source_packages": [
+        "pkg:maven/org.elasticsearch/elasticsearch@7.16.3?classifier=sources"
+      ],
+      "extra_data": {},
+      "repository_homepage_url": "https://repo1.maven.org/maven2/org/elasticsearch/elasticsearch/7.16.3/",
+      "repository_download_url": "https://repo1.maven.org/maven2/org/elasticsearch/elasticsearch/7.16.3/elasticsearch-7.16.3.jar",
+      "api_data_url": "https://repo1.maven.org/maven2/org/elasticsearch/elasticsearch/7.16.3/elasticsearch-7.16.3.pom",
+      "package_uid": "pkg:maven/org.elasticsearch/elasticsearch@7.16.3?uuid=f9eb7144-715b-4293-8eb4-826897071e83",
+      "datafile_paths": [
+        "elasticsearch/elasticsearch/7.16.3/elasticsearch-7.16.3.pom"
+      ],
+      "datasource_ids": ["maven_pom"],
+      "purl": "pkg:maven/org.elasticsearch/elasticsearch@7.16.3"
+    }
+  ],
+  "dependencies": [],
+  "files": [
+    {
+      "path": "elasticsearch",
+      "type": "directory",
+      "package_data": [],
+      "for_packages": [],
+      "detected_license_expression": null,
+      "detected_license_expression_spdx": null,
+      "license_detections": [],
+      "license_clues": [],
+      "percentage_of_license_text": 0,
+      "scan_errors": []
+    },
+    {
+      "path": "elasticsearch/elasticsearch-7.16.3-sources.jar",
+      "type": "file",
+      "package_data": [
+        {
+          "type": null,
+          "namespace": null,
+          "name": null,
+          "version": null,
+          "qualifiers": {},
+          "subpath": null,
+          "primary_language": null,
+          "description": null,
+          "release_date": null,
+          "parties": [],
+          "keywords": [],
+          "homepage_url": null,
+          "download_url": null,
+          "size": null,
+          "sha1": null,
+          "md5": null,
+          "sha256": null,
+          "sha512": null,
+          "bug_tracking_url": null,
+          "code_view_url": null,
+          "vcs_url": null,
+          "copyright": null,
+          "holder": null,
+          "declared_license_expression": null,
+          "declared_license_expression_spdx": null,
+          "license_detections": [],
+          "other_license_expression": null,
+          "other_license_expression_spdx": null,
+          "other_license_detections": [],
+          "extracted_license_statement": null,
+          "notice_text": null,
+          "source_packages": [],
+          "file_references": [],
+          "extra_data": {},
+          "dependencies": [],
+          "repository_homepage_url": null,
+          "repository_download_url": null,
+          "api_data_url": null,
+          "datasource_id": "java_jar",
+          "purl": null
+        }
+      ],
+      "for_packages": [
+        "pkg:maven/org.elasticsearch/elasticsearch@7.16.3?uuid=f9eb7144-715b-4293-8eb4-826897071e83"
+      ],
+      "detected_license_expression": null,
+      "detected_license_expression_spdx": null,
+      "license_detections": [],
+      "license_clues": [],
+      "percentage_of_license_text": 0,
+      "scan_errors": []
+    }
+  ]
+}

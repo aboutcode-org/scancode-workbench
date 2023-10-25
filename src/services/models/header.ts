@@ -1,6 +1,6 @@
 /*
  #
- # Copyright (c) 2018 nexB Inc. and others. All rights reserved.
+ # Copyright (c) nexB Inc. and others. All rights reserved.
  # https://nexb.com and https://github.com/nexB/scancode-workbench/
  # The ScanCode Workbench software is licensed under the Apache License version 2.0.
  # ScanCode is a trademark of nexB Inc.
@@ -14,33 +14,35 @@
  #
  */
 
-import { Sequelize, DataTypes, IntegerDataType, StringDataType, Model } from 'sequelize';
-import { JSON_Type, jsonDataType } from './databaseUtils';
+import { Sequelize, DataTypes, Model } from "sequelize";
+import { JSON_Type, jsonDataType } from "./databaseUtils";
 
 export interface HeaderAttributes {
-  id: IntegerDataType,
-  tool_name: StringDataType,
-  tool_version: StringDataType,
-  notice: StringDataType,
-  duration: DataTypes.DoubleDataType,
-  header_content: StringDataType,
-  options: JSON_Type,
-  input: JSON_Type,
-  files_count: IntegerDataType,
-  output_format_version: StringDataType,
-  spdx_license_list_version: StringDataType,
-  operating_system: StringDataType,
-  cpu_architecture: StringDataType,
-  platform: StringDataType,
-  platform_version: StringDataType,
-  python_version: StringDataType,
-  workbench_version: StringDataType,
-  workbench_notice: StringDataType,
+  id: number;
+  json_file_name: string;
+  tool_name: string;
+  tool_version: string;
+  notice: string;
+  duration: number;
+  header_content: string;
+  options: JSON_Type;
+  input: JSON_Type;
+  files_count: number;
+  output_format_version: string;
+  spdx_license_list_version: string;
+  operating_system: string;
+  cpu_architecture: string;
+  platform: string;
+  platform_version: string;
+  python_version: string;
+  workbench_version: string;
+  workbench_notice: string;
+  errors: JSON_Type;
 }
 
 export default function headerModel(sequelize: Sequelize) {
   return sequelize.define<Model<HeaderAttributes>>(
-    'headers',
+    "headers",
     {
       // @TODO: The notices and versions should be in their own table
       // See https://github.com/nexB/aboutcode/issues/7
@@ -51,21 +53,22 @@ export default function headerModel(sequelize: Sequelize) {
         primaryKey: true,
         type: DataTypes.INTEGER,
       },
+      json_file_name: DataTypes.STRING,
       tool_name: DataTypes.STRING,
       tool_version: DataTypes.STRING,
       notice: DataTypes.STRING,
       duration: DataTypes.DOUBLE,
-      options: jsonDataType('options'),
-      input: jsonDataType('input'),
+      options: jsonDataType("options"),
+      input: jsonDataType("input"),
       header_content: DataTypes.STRING,
       files_count: DataTypes.INTEGER,
       output_format_version: {
         type: DataTypes.STRING,
-        defaultValue: '0.1.0',
+        defaultValue: null,
       },
       spdx_license_list_version: {
         type: DataTypes.STRING,
-        defaultValue: '1.00',
+        defaultValue: null,
       },
       operating_system: {
         type: DataTypes.STRING,
@@ -90,7 +93,12 @@ export default function headerModel(sequelize: Sequelize) {
       workbench_version: DataTypes.STRING,
       workbench_notice: {
         type: DataTypes.STRING,
-        defaultValue: 'None',
+        defaultValue: "None",
       },
-    });
+      errors: jsonDataType("errors"),
+    },
+    {
+      timestamps: false,
+    }
+  );
 }

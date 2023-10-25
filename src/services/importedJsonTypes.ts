@@ -1,3 +1,27 @@
+import { JSON_Type } from "./models/databaseUtils";
+
+export interface ParsedJsonHeader {
+  json_file_name: string;
+  tool_name: string;
+  tool_version: string;
+  notice: string;
+  duration: number;
+  options: JSON_Type;
+  input: JSON_Type;
+  files_count: number;
+  output_format_version: string;
+  spdx_license_list_version: string; // @QUERY - Justify need for this
+  operating_system: string;
+  cpu_architecture: string;
+  platform: string;
+  platform_version: string;
+  python_version: string;
+  workbench_version: string;
+  workbench_notice: string;
+  header_content: string;
+  errors: JSON_Type;
+}
+
 export interface LicenseReference {
   key: string;
   language: string;
@@ -164,5 +188,4 @@ export interface Resource {
 
   // Parser-added fields
   parent?: string;
-  headerId?: number;
 }

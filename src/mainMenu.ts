@@ -1,9 +1,14 @@
 import { GENERAL_ACTIONS, NAVIGATION_CHANNEL } from "./constants/IpcConnection";
-import packageJson from "../package.json";
 import { app, BrowserWindow, MenuItem, shell } from "electron";
-import { importJsonFile, openSqliteFile, saveSqliteFile } from "./mainActions";
+import {
+  closeFile,
+  importJsonFile,
+  openSqliteFile,
+  saveSqliteFile,
+} from "./mainActions";
 import { ROUTES } from "./constants/routes";
 import { createWindow } from "./main";
+import { WORKBENCH_VERSION } from "./constants/general";
 
 /** Returns a 'lambda' that sends the event to the renderer process. */
 export function sendNavEventToRenderer(route: string) {
@@ -45,6 +50,12 @@ function getTemplate() {
           accelerator: "CmdOrCtrl+I",
           click: (_: MenuItem, currentWindow: BrowserWindow) =>
             importJsonFile(currentWindow),
+        },
+        {
+          label: "Close File",
+          // accelerator: "CmdOrCtrl+",
+          click: (_: MenuItem, currentWindow: BrowserWindow) =>
+            closeFile(currentWindow),
         },
         // @TODO-discuss This is duplicated in App's menu tab, is it necessary under file tab also ??
         // ...(
@@ -123,11 +134,11 @@ function getTemplate() {
           type: "separator",
         },
         {
-          label: "Licenses Explorer",
+          label: "License Explorer",
           click: sendNavEventToRenderer(ROUTES.LICENSES),
         },
         {
-          label: "Packages Explorer",
+          label: "Package Explorer",
           click: sendNavEventToRenderer(ROUTES.PACKAGES),
         },
         {
@@ -218,7 +229,7 @@ function getTemplate() {
       role: "help",
       submenu: [
         {
-          label: `ScanCode Workbench Version ${packageJson.version}`,
+          label: `ScanCode Workbench Version ${WORKBENCH_VERSION}`,
           enabled: false,
         },
         {
@@ -272,7 +283,7 @@ function getTemplate() {
           click: sendNavEventToRenderer(ROUTES.ABOUT),
         },
         {
-          label: `Version ${packageJson.version}`,
+          label: `Version ${WORKBENCH_VERSION}`,
           enabled: false,
         },
         {

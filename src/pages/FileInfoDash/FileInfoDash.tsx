@@ -2,7 +2,7 @@ import { Op } from "sequelize";
 import { Row, Col, Card } from "react-bootstrap";
 import React, { useEffect, useState } from "react";
 
-import { FormattedEntry, formatChartData } from "../../utils/pie";
+import { FormattedEntry, formatPieChartData } from "../../utils/pie";
 import { useWorkbenchDB } from "../../contexts/dbContext";
 import PieChart from "../../components/PieChart/PieChart";
 import EllipticLoader from "../../components/EllipticLoader";
@@ -43,11 +43,11 @@ const FileInfoDash = () => {
       .then((db) => db.File.findOne({ where: { path: currentPath } }))
       .then((root) => {
         const filesCount =
-          root.getDataValue("type").toString({}) === "directory"
+          root.getDataValue("type") === "directory"
             ? root.getDataValue("files_count") || 0
             : 1;
         const dirsCount =
-          root.getDataValue("type").toString({}) === "directory"
+          root.getDataValue("type") === "directory"
             ? root.getDataValue("dirs_count") || 0
             : 0;
 
@@ -79,14 +79,14 @@ const FileInfoDash = () => {
           (file) =>
             file.getDataValue("programming_language") || NO_VALUE_DETECTED_LABEL
         );
-        const { chartData: langsChartData } = formatChartData(langs);
+        const { chartData: langsChartData } = formatPieChartData(langs);
         setProgLangsData(langsChartData);
 
         // Prepare chart for file types
         const fileTypes = files.map(
           (file) => file.getDataValue("file_type") || NO_VALUE_DETECTED_LABEL
         );
-        const { chartData: fileTypesChartData } = formatChartData(fileTypes);
+        const { chartData: fileTypesChartData } = formatPieChartData(fileTypes);
         setFileTypesData(fileTypesChartData);
 
         // Prepare chart for mime types
@@ -94,7 +94,7 @@ const FileInfoDash = () => {
           (file) => file.getDataValue("mime_type") || NO_VALUE_DETECTED_LABEL
         );
         const { chartData: mimeTypesChartData } =
-          formatChartData(fileMimeTypes);
+          formatPieChartData(fileMimeTypes);
         setMimeTypesData(mimeTypesChartData);
       })
       .then(endProcessing);

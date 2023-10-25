@@ -87,7 +87,6 @@ export const MATCH_COLS: MatchColumns = {
     width: 250,
   },
 };
-
 export const LicenseDetectionMatchCols: ColDef[] = [
   MATCH_COLS.license_expression,
   MATCH_COLS.score,
