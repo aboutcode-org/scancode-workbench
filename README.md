@@ -11,7 +11,7 @@ license and other notices identified by
 and other interesting information in your code.
 
 ScanCode Workbench is based on
-[Electron](https://electron.atom.io/) and will be the primary desktop/GUI tool 
+[Electron](https://www.electronjs.org/) and will be the primary desktop/GUI tool 
 for using nexB’s [AboutCode tools](https://github.com/nexB/aboutcode). This app 
 works on Windows, OS X and Linux operating systems.
 
@@ -23,8 +23,8 @@ works on Windows, OS X and Linux operating systems.
 * You can [download the latest release](https://github.com/nexB/scancode-workbench/releases) 
 for your operating system or build it yourself (see below). Once downloaded, you 
 can find `ScanCode-Workbench` under `dist/ScanCode-Workbench-<os>-<arch>-<version>`
-* ScanCode Workbench >= v2 is only compatible with scans from 
-[ScanCode v2.0.0](https://github.com/nexB/scancode-toolkit/releases) and 
+* ScanCode Workbench >= v4 is only compatible with scans from 
+[ScanCode v32.0.0](https://github.com/nexB/scancode-toolkit/releases) and 
 above which are run with the ScanCode `-i` option. For a list of available ScanCode 
 options see [How To: Set what will be detected in a scan](https://scancode-toolkit.readthedocs.io/en/latest/tutorials/how_to_set_what_will_be_detected_in_a_scan.html)
 
@@ -96,6 +96,6 @@ See the NOTICE file for more details.
 
 If you have a question, a suggestion or find a bug, enter an issue.
 
-[![Gitter chat](https://badges.gitter.im/aboutcode-org/gitter.png)](https://gitter.im/aboutcode-org/discuss)
+[![Gitter chat](https://badges.gitter.im/aboutcode-org/gitter.png)](https://matrix.to/#/#aboutcode-org_discuss:gitter.im)
 
-For questions and chats, you can join the Gitter channel at https://gitter.im/aboutcode-org/discuss
+For questions and chats, you can join the Gitter channel at https://matrix.to/#/#aboutcode-org_discuss:gitter.im

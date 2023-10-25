@@ -7,11 +7,16 @@
 Download and Install
 =======================
 
--  You can download the latest ScanCode Workbench release for your Windows, OS X or Linux
-   operating system from the `ScanCode Workbench releases page <https://github.com/nexB/scancode-workbench/releases>`__.
-   Once downloaded, you'll find the ScanCode Workbench executable in the
-   ``ScanCode-Workbench-<os>-x64-<version>`` folder.
+- ScanCode Workbench is available for Windows, macOS and Linux -
+   `ScanCode Workbench releases <https://github.com/nexB/scancode-workbench/releases>`__.
+
+-
+   Once downloaded, you'll find the ScanCode Workbench executable inside the
+   ``ScanCode Workbench-<os>-<arch>`` folder.
+
    On Windows 10, for example, the executable will be named `ScanCode-Workbench.exe`.
+
+.. include:: ../rst_snippets/centos-note.rst
 
 -  If you're interested in digging into the code, you can also use ScanCode Workbench by cloning
    the GitHub repository and building it yourself -- see the :ref:`Contribute/Building<building>`
@@ -20,15 +25,19 @@ Download and Install
 ScanCode Workbench-ScanCode Toolkit Compatibility
 =================================================
 
--  ScanCode Workbench >= v3.1.1 is only compatible with scans from ScanCode v3.1.1 and above
-   that have been run with the ScanCode Toolkit ``-i`` option.
+-  ScanCode Workbench v4.x is only compatible with scans from ScanCode v32.x and above
+   that have been run with ScanCode Toolkit.
 
-   -  A list of available ScanCode Toolkit options is available in the ScanCode Toolkit
-      documentation:
-      :doc:`scancode-toolkit:tutorials/how_to_set_what_will_be_detected_in_a_scan`.
+- You would typically create your scan with the following command::
 
-- You would typically create your scan with the following command:
-  ``./scancode -clipeu <input> <output_file>``
+   scancode -clipeu <input> --json-pp <output_file>
+
+.. Note::
+   A list of available ScanCode Toolkit options is available in the ScanCode Toolkit
+   documentation:
+   :doc:`scancode-toolkit:tutorials/how_to_set_what_will_be_detected_in_a_scan`.
+   Also see :doc:`scancode-toolkit:tutorials/how_to_run_a_scan` for more details
+   on running a ScanCode Toolkit scan.
 
 Open ScanCode Workbench and Load a ScanCode Toolkit Scan
 ========================================================
@@ -47,7 +56,7 @@ Open ScanCode Workbench and Load a ScanCode Toolkit Scan
    -  Keep or modify the default SQLite filename and click :kbd:`Save`.
 
 -  You're now looking at your scan data displayed in the Table View -- the Table View itself is on
-   the right, and the Directory Tree (which is visible in all views) is on the left.
+   the right, and the Directory Tree (shown in resource level views) is on the left.
 
    .. figure:: data/initial_load_getting_started.png
       :class: with-border

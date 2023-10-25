@@ -19,7 +19,7 @@ const ProgressLoader = (props: ProgressLoaderProps) => {
         visible={true}
         ariaLabel="oval-loading"
       />
-      <h4>{props.progress} %</h4>
+      <h4>Processing scan  - {props.progress} %</h4>
       <ProgressBar animated now={props.progress} />
     </div>
   );

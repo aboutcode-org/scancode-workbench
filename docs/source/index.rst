@@ -12,6 +12,11 @@ Welcome to the documentation for ScanCode Workbench!
    getting-started/index
    how-to-guides/index
    ui-reference/index
-   technical-reference/index
    contribute/index
    license
+
+Indices and tables
+==================
+
+* :ref:`genindex`
+* :ref:`search`

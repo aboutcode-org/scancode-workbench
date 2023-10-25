@@ -4,14 +4,18 @@
 :index:`UI Reference`
 =====================
 
-:guilabel:`[Intro to come.]`
-
 .. toctree::
    :maxdepth: 3
 
    directory-tree
    table-view
+   pie-charts
    file-info-dashboard
    license-info-dashboard
+   copyright-info-dashboard
    package-info-dashboard
+   dependency-info-dashboard
+   license-explorer
+   package-explorer
    chart-summary-view
+   scan-info
