@@ -14,7 +14,7 @@ import json
 import platform
 
 # Expected output file name: ScanCode-Workbench-{platform}-{arch}-{version}.tar.gz
-# Example: ScanCode-Workbench-linux-x64-3.1.1.tar.gz
+# Example: ScanCode-Workbench-linux-x64-4.0.0.tar.gz
 
 # Archive properties
 APP_NAME = 'ScanCode-Workbench'

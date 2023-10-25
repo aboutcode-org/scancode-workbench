@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 The format is based on `Keep a                                                               
 Changelog <https://keepachangelog.com/en/1.0.0/>`__
 
-[Unreleased (v4.0.0)]
+[v4.0.0] - 2023-10-26
 --------------------------
 
 **This ScanCode-Workbench release contains schema changes: scans will have to be re-imported**
@@ -20,6 +20,7 @@ Entire source code is refactored to TypeScript + React
 New Features
 ~~~~~~~~~~~~
 
+- Add support for ScanCode Toolkit v32.x
 - Maintain history of imports for quick access
 - Updated dependencies
 - Support for top level packages-deps obtained in latest scans
@@ -43,7 +44,14 @@ New Features
 - Remove ability to edit conclusions & remove conclusions view
 - Search in licenses explorer
 - Filters for packages based on dependencies flags & data_source_id
+- License clues section in Licenses explorer  view
 - Normalize Chart summary data
+- Close file & cleanup option
+- Unit tests
+- Dependency Info dashboard - Dependency Scope summary by Package Type
+- Working indicator for queries
+- Diff modal for Matched text & Rule text in Matches table
+
 
 Bug Fixes
 ~~~~~~~~~

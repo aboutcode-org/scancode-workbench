@@ -260,7 +260,7 @@ function getTemplate() {
         {
           label: "Documentation",
           click: () =>
-            shell.openExternal(`https://scancode-workbench.readthedocs.io`),
+            shell.openExternal(`https://scancode-workbench.readthedocs.io/en/latest/`),
         },
         {
           label: "Issue Tracker",

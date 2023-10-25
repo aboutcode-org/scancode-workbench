@@ -204,7 +204,7 @@ const Home = () => {
                 </CoreButton>
                 <CoreButton
                   large
-                  href="https://scancode-workbench.readthedocs.io/"
+                  href="https://scancode-workbench.readthedocs.io/en/latest"
                 >
                   Getting Started with Scancode Workbench
                 </CoreButton>

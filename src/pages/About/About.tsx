@@ -27,7 +27,7 @@ const About = () => {
       <h4>Learn More:</h4>
       <p>
         Check out the ScanCode-Workbench
-        <CoreLink href="https://scancode-workbench.readthedocs.io" external>
+        <CoreLink href="https://scancode-workbench.readthedocs.io/en/latest" external>
           Documentation
         </CoreLink>
         .

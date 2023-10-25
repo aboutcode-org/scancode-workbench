@@ -1,4 +1,4 @@
-# <p align="center"><img src="src/assets/images/scancode-workbench-logo.png" align="center" alt="ScanCode Workbench">
+<p align="center"><img src="src/assets/images/scancode-workbench-logo.png" align="center" alt="ScanCode Workbench">
 </p>
 
 [![Test CI](https://github.com/nexB/scancode-workbench/actions/workflows/Test.yml/badge.svg)](https://github.com/nexB/scancode-workbench/actions/workflows/Test.yml)
@@ -13,7 +13,7 @@ and other interesting information in your code.
 ScanCode Workbench is based on
 [Electron](https://www.electronjs.org/) and will be the primary desktop/GUI tool 
 for using nexB’s [AboutCode tools](https://github.com/nexB/aboutcode). This app 
-works on Windows, OS X and Linux operating systems.
+works on Windows, macOS and Linux operating systems.
 
 ![ScanCode Workbench](/src/assets/images/workbench_intro.gif)
 
@@ -39,13 +39,13 @@ information captured by a scan.  The samples are located at
 the [documentation](https://scancode-workbench.readthedocs.io) for more 
 information on how to use ScanCode Workbench.
 
-[Import a JSON file](https://scancode-workbench.readthedocs.io/en/develop/how-to-guides/load-your-data/import-json.html)
+[Import a JSON file](https://scancode-workbench.readthedocs.io/en/latest/how-to-guides/load-your-data/import-json.html)
 
 ## Running locally
 
 You'll need [Node.js](https://nodejs.org) (which comes with [npm](http://npmjs.com)) 
 installed on your computer in order to build this app. For a list of platform 
-specific requirements, see the Building section of the [documentation](https://scancode-workbench.readthedocs.io/en/develop/contribute/building.html).
+specific requirements, see the Building section of the [documentation](https://scancode-workbench.readthedocs.io/en/latest/contribute/building.html).
 Then, from your command line:
 
 ```bash

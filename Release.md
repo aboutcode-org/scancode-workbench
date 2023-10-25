@@ -17,9 +17,13 @@
 - Diff modal for Matched text & Rule text in Matches table https://github.com/nexB/scancode-workbench/pull/577
 - Working indicator for queries https://github.com/nexB/scancode-workbench/pull/583
 - Dashboard updates https://github.com/nexB/scancode-workbench/pull/585
+- Close file & cleanup https://github.com/nexB/scancode-workbench/pull/600
+- Unit tests https://github.com/nexB/scancode-workbench/pull/591
+- Dependency Info dashboard updates https://github.com/nexB/scancode-workbench/pull/594
+- Updated documentation https://github.com/nexB/scancode-workbench/pull/602
 
 ## ScanCode Toolkit Compatibility
-This beta version of ScanCode Workbench is compatible with scans from any [ScanCode Toolkit](https://github.com/nexB/scancode-toolkit/) releases at or after [`v32.0.0rc4`](https://github.com/nexB/scancode-toolkit/releases/tag/v32.0.0rc4) and also from the latest develop, but using the latest `v32.x` stable releases is recommended: [latest SCTK release](https://github.com/nexB/scancode-toolkit/releases/latest).
+This v4.0.0 of ScanCode Workbench is compatible with scans from any [ScanCode Toolkit](https://github.com/nexB/scancode-toolkit/) releases at or after [`v32.0.0`](https://github.com/nexB/scancode-toolkit/releases/tag/v32.0.0rc4) and also from the latest develop, but using the latest `v32.x` stable releases is recommended: [latest SCTK release](https://github.com/nexB/scancode-toolkit/releases/latest).
 
 ## Bug fixes
 - Prevent crashes on unsupported scans
@@ -31,3 +35,6 @@ This beta version of ScanCode Workbench is compatible with scans from any [ScanC
 - license detection parser issues, trimmed filter options, hide empty 'other dependencies'  https://github.com/nexB/scancode-workbench/pull/569
 - Refined UX including consistent scrollbars, tooltips, Search in licenses, filters for dependencies https://github.com/nexB/scancode-workbench/pull/587
 - Updated piechart tooltip https://github.com/nexB/scancode-workbench/pull/582
+- Automatic height for tables https://github.com/nexB/scancode-workbench/pull/606
+- Fixed Empty directory being shown with file icon https://github.com/nexB/scancode-workbench/pull/604
+- Fix irregular scroll behavior for files in deeply nested FileTree https://github.com/nexB/scancode-workbench/pull/599
