@@ -1,0 +1,50 @@
+.fallback-container {
+  padding: 20px;
+  padding-top: 35%;
+  display: flex;
+  vertical-align: middle;
+  align-items: center;
+  justify-content: center;
+}
+
+.fallback-container img {
+  max-height: 200px;
+  max-width: 150px;
+}
+
+.c3-tooltip-container {
+  z-index: 10
+}
+
+.c3-tooltip {
+  border-collapse: collapse;
+  border-spacing: 0;
+  background-color: #fff;
+  empty-cells: show;
+  -webkit-box-shadow: 7px 7px 12px -9px #777;
+  -moz-box-shadow: 7px 7px 12px -9px #777;
+  box-shadow: 7px 7px 12px -9px #777;
+}
+
+.c3-tooltip tr {
+  border: 1px solid rgb(255, 255, 255)
+}
+
+.c3-tooltip td {
+  font-size: 12px;
+  padding: 3px 6px;
+  background-color: #fff;
+  border-left: 1px dotted #999
+}
+
+.c3-tooltip td>span {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  margin-right: 6px
+}
+
+.c3-tooltip td.value {
+  text-align: right;
+  white-space: pre-wrap;
+}

@@ -1,0 +1,17 @@
+.license-detecion-entity {
+  height: 100%;
+}
+
+.license-entity-properties .property {
+  font-weight: 500;
+}
+
+.license-entity-properties .value {
+  padding-left: 5px;
+}
+
+.license-detecion-entity .badge,
+.dependency-entity .badge {
+  margin-right: 5px;
+}
+

@@ -1,0 +1,23 @@
+.app-version {
+  font-size: 19px;
+  margin-left: 15px;
+  color: var(--lightTextColor);
+}
+
+.about {
+  padding: 15px;
+}
+
+.about h3 {
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+.about p {
+  margin-top: 10px;
+}
+
+.about a {
+  margin-left: 5px;
+  text-decoration: none;
+}

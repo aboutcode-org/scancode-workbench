@@ -4,20 +4,16 @@
 :index:`How-To Guides`
 ======================
 
-The ScanCode Workbench How-To Guides will walk you through loading and analyzing
-a ``-clipeu`` scan of ``e2fsprogs-1.45.6.tar.gz``.
+The ScanCode Workbench How-To Guides will walk you through loading and analyzing a `-clipeu` scan.
+The guides are not meant to be exhaustive, but rather to give you a taste of
+what you can do with the Workbench.
 
-.. Note:: If you'd like to follow along, you can download a copy of the ``e2fsprogs-1.45.6``
-   package from `SourceForge <https://sourceforge.net/projects/e2fsprogs/files/e2fsprogs/v1.45.6/>`__,
-   run a ``-clipeu`` scan with `ScanCode Toolkit <https://github.com/nexB/scancode-toolkit>`__,
-   load the ``.json`` output into ScanCode Workbench and work your way through the How-To Guides.
+For full set of features, please refer to the :ref:`ui-reference`.
 
 .. toctree::
    :maxdepth: 3
 
    load-your-data/index
-   lookup-scan-version/index
+   lookup-scan-info/index
    explore-your-data/index
-   export-json-records/index
    troubleshooting/index
-   special-topics/index

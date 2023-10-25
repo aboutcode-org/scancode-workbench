@@ -8,4 +8,7 @@ Test ABCM functionality using:
 
    $ npm test
 
-:guilabel:`[Maybe add details about location of tests, examples of how to create?]`
+Tests are written in folder ``tests/`` utilising the sample scans in ``tests/test-scans``
+
+- ``file.test.ts`` - Test assertions
+- ``file.test.data.ts`` - Data samples per test file

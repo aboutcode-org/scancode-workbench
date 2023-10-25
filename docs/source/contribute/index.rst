@@ -4,8 +4,6 @@
 :index:`Contribute`
 ===================
 
-:guilabel:`[Intro to come.]`
-
 .. toctree::
    :maxdepth: 3
 

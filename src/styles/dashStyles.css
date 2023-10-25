@@ -1,0 +1,22 @@
+.dash-cards {
+  justify-content: space-around;
+  text-align: center;
+}
+
+.dash-cards .card {
+  background-color: #fff;
+  padding: 7px;
+}
+
+.counter-card {
+  min-height: 100px;
+}
+
+.chart-card {
+  min-height: 410px;
+}
+
+.chart-card .title {
+  margin-top: 10px;
+  margin-bottom: 15px;
+}

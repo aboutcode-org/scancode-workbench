@@ -1,0 +1,110 @@
+.licenses-title {
+  text-align: center;
+  margin: 5px;
+  margin-top: 5px;
+  width: 100%;
+}
+
+.license-detections-loader {
+  display: flex;
+  margin: auto;
+  margin-top: calc(45vh - 150px);
+  margin-top: 200px;
+  justify-content: center;
+}
+
+.license-container {
+  height: calc(100vh - 30px);
+  margin-top: 15px;
+}
+
+.licenses-navigator-container {
+  padding: 0;
+}
+
+.license-entity-pane {
+  overflow: auto !important;
+  padding-left: 14px;
+  padding-right: 12px;
+}
+
+.licenses-navigator-container .search-box {
+  width: 98%;
+  margin-bottom: 12px;
+}
+
+.licenses-navigator-container .search-box input {
+  font-size: 14px;
+}
+
+.licenses-navigator-pane {
+  overflow: auto !important;
+  padding-right: 4px;
+}
+
+.licenses-navigator-pane .licenses-list {
+  height: calc(100% - 30px);
+  overflow: auto;
+}
+
+.licenses-navigator-pane-title {
+  padding: 1px;
+  padding-left: 7px;
+  font-weight: 700;
+}
+
+.license-item {
+  border: 0 !important;
+  cursor: pointer;
+  width: 100%;
+  padding: 2px;
+  padding-left: 6px;
+  margin: 0 !important;
+  display: table;
+  align-items: center;
+}
+
+.license-item:hover {
+  background-color: var(--listHoverColor);
+}
+
+.selected-license {
+  background-color: var(--listSelectionColor) !important;
+}
+
+
+.license-group-item {
+  padding: 0 !important;
+  border-width: 0 !important;
+}
+
+.license-item .expression {
+  padding-left: 2px;
+  padding-right: 5px;
+}
+
+.license-item .expression .badge {
+  margin-left: 10px;
+}
+
+.license-item>div {
+  padding: 2px;
+  padding-right: 4px;
+  display: table-cell;
+  vertical-align: top;
+}
+
+.license-item>div>div {
+  padding: 3px;
+  display: table-cell !important;
+  word-break: break-word;
+}
+
+.license-item>.license-count {
+  padding-top: 2px;
+  padding-right: 7px;
+}
+
+.license-item>.license-count>* {
+  float: right;
+}

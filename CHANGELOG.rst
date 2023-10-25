@@ -5,22 +5,60 @@ All notable changes to this project will be documented in this file.
 The format is based on `Keep a                                                               
 Changelog <https://keepachangelog.com/en/1.0.0/>`__
 
-[Unreleased]
+[v4.0.0] - 2023-10-26
+--------------------------
+
+**This ScanCode-Workbench release contains schema changes: scans will have to be re-imported**
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
 ------------
+Refactoring
+~~~~~~~~~~~~
+Entire source code is refactored to TypeScript + React
+
+--------------------
 New Features
 ~~~~~~~~~~~~
 
+- Add support for ScanCode Toolkit v32.x
+- Maintain history of imports for quick access
+- Updated dependencies
+- Support for top level packages-deps obtained in latest scans
+- Scan Info page to present header info
+- Support Drag & drop JSON/SQLite files
+- Github actions to create automated releases
 - Remove the ability to upload Conclusions to DejaCode #413
+- Remove ability to edit conclusions & remove conclusions view
+- New top-level views: Packages Explorer & Licenses Explorer
 - Update in-app help links #412
 - Add source controlled documentation #411
 - Update app icon to a more visible one #382
 - Add color to DataTables "Progress..." pop-up #407
 - Update the display of scan headers #400
+- New views:
+   - Licenses Explorer
+   - Packages Explorer
+   - Dependencies Info Dashboard
+   - Scan Info
+- Inter-view links for 'for_packages' & 'license_detections'
 - Remove ability to edit conclusions & remove conclusions view
+- Search in licenses explorer
+- Filters for packages based on dependencies flags & data_source_id
+- License clues section in Licenses explorer  view
+- Normalize Chart summary data
+- Close file & cleanup option
+- Unit tests
+- Dependency Info dashboard - Dependency Scope summary by Package Type
+- Working indicator for queries
+- Diff modal for Matched text & Rule text in Matches table
+
 
 Bug Fixes
 ~~~~~~~~~
 
+- Fixed table column inconsistencies
+- Fixed UI anomalies
+- Invalid path query fix (Data for files with similar prefix were colliding)
 - license_expression values now being uploaded correctly #403
 
 [v3.1.1] - 2019-9-27

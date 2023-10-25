@@ -26,13 +26,27 @@ This documentation is organized in six sections:
 
 -  The :ref:`ui-reference` section provides an overview of each of ScanCode Workbench's data views.
 
--  The :ref:`technical-reference` section summarizes ScanCode Workbench's underlying technology
-   and platform support.
-
 -  The :ref:`contribute` section is intended for advanced users and contributors to ScanCode
    Workbench development.
 
 -  The :ref:`license` section provides summary licensing information for ScanCode Workbench.
+
+Underlying Technology
+=====================
+
+-  ScanCode Workbench is a cross-platform application built using the `Electron <https://www.electronjs.org/>`__  framework that works on Windows, macOS and Linux operating systems.
+- It uses
+   - `TypeScript <https://www.typescriptlang.org/>`__ as the primary language.
+   - `React <https://reactjs.org/>`__  for user interface.
+   - `Sequelize <https://sequelize.org/>`__  ORM for database access.
+   - `Sqlite3 <https://www.sqlite.org/index.html>`__  for managing sqlite database.
+
+Platform Support
+================
+
+* Linux - ``x64``
+* Windows 10/11 - ``x64``
+* MacOS - ``x64``, ``arm64``
 
 Important Links
 ===============

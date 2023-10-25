@@ -1,9 +1,0 @@
-about_resource: electron-quick-start
-name: electron-quick-start
-version: 3254071d5810bd6499ec662028d16cbc876d4ac2
-license: cc0-1.0
-owner: GitHub
-homepage_url: https://github.com/electron/electron-quick-start
-
-license_file: electron-quick-start.LICENSE
-notes: ScanCode Workbench is licensed under Apache 2.0. Some example code from electron-quickstart is used and is licensed under CC0-1.0.

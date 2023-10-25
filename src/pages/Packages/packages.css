@@ -1,0 +1,165 @@
+.packages-title {
+  text-align: center;
+  margin: 7px;
+  margin-top: 5px;
+  width: 100%;
+}
+
+.packages-loader {
+  display: flex;
+  margin: auto;
+  margin-top: calc(45vh - 150px);
+  margin-top: 200px;
+  justify-content: center;
+}
+
+.packages-container {
+  height: calc(100vh - 60px);
+}
+
+.packages-filter-bar {
+  width: 98%;
+}
+
+.packages-list-container {
+  overflow: auto;
+  width: 99%;
+  height: calc(100% - 50px);
+}
+
+.package-type {
+  cursor: pointer;
+  padding: 4px;
+}
+
+.package-type .label {
+  margin-left: 5px;
+}
+
+.details-pane {
+  padding: 10px;
+  padding-left: 14px;
+  padding-right: 12px;
+  overflow: auto !important;
+}
+
+.package-group-list {
+  border: 0 !important;
+  padding: 0 !important;
+  padding-bottom: 5px !important;
+}
+
+.package-list {
+  border: 0;
+}
+
+.entity {
+  width: 100%;
+  overflow-x: clip;
+  padding: 0 !important;
+  cursor: pointer;
+}
+
+.packages-list {
+  border: 0 !important;
+}
+
+.package-entry {
+  border: 0 !important;
+}
+
+.package-entry>.entity-info {
+  font-weight: 550;
+}
+
+.package-entry>.collapsed-body .entity {
+  border: 0 !important;
+}
+
+.package-entry>.collapsed-body .entity-info {
+  padding-left: 30px;
+}
+
+.entity-info {
+  width: 100%;
+  padding: 5px;
+  margin: 0 !important;
+  display: flex;
+  align-items: center;
+  padding: 2px;
+  padding-left: 10px;
+}
+
+.entity-type-badges {
+  float: right;
+  margin-right: 0;
+}
+
+.entity-type-badges .badge {
+  min-width: 65px;
+  font-weight: 625;
+}
+
+.entity-type-badges .badge:hover {
+  font-weight: 750;
+}
+
+.entity-info .entity-name {
+  padding-left: 2px;
+  padding-right: 2px;
+}
+
+.entity-info .entity-name .badge {
+  margin-left: 10px;
+}
+
+.entity-info>div {
+  padding: 2px;
+  padding-right: 4px;
+  display: flex;
+}
+
+.entity-info>div:last-child {
+  margin-left: auto;
+}
+
+.entity-info>div>div {
+  padding: 3px;
+  display: table-cell;
+  word-break: break-word;
+}
+
+.expand-indicator {
+  display: inline-block;
+  cursor: pointer;
+  width: 20px;
+  height: 20%;
+  font-size: 15px;
+  padding-left: 5px;
+}
+
+.expand-indicator svg {
+  transition: transform 100ms ease-in;
+}
+
+.expand-indicator:active,
+.expand-indicator:hover {
+  font-weight: 500;
+}
+
+.entity-info>.total-deps {
+  padding-top: 7px;
+  padding-right: 7px;
+}
+
+.entity-info>.total-deps>* {
+  float: right;
+}
+
+.entity-info:hover {
+  background-color: var(--listHoverColor);
+}
+
+.selected-entity>.entity-info {
+  background-color: var(--listSelectionColor);
+}
