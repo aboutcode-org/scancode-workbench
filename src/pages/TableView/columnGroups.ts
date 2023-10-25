@@ -2,7 +2,7 @@ import { ColDef } from "ag-grid-community";
 
 import { ALL_COLUMNS } from "./columnDefs";
 
-export const DEFAULT_EMPTY_VALUES = new Set<string | null>([
+export const PLACEHOLDER_EMPTY_VALUES = new Set<string | null>([
   "",
   null,
   "[]",

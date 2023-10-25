@@ -1,10 +1,7 @@
-import React, {
-  forwardRef,
-  useImperativeHandle,
-  useRef,
-} from "react";
+import React, { forwardRef, useImperativeHandle, useRef } from "react";
 import { IFloatingFilterParams, TextFilterModel } from "ag-grid-community";
-import { DEFAULT_EMPTY_VALUES } from "./columnGroups";
+
+import { PLACEHOLDER_EMPTY_VALUES } from "./columnGroups";
 import { parseProbableStringifiedArray } from "../../utils/text";
 
 export interface CustomParams extends IFloatingFilterParams {
@@ -52,7 +49,6 @@ const CustomFilterComponent = forwardRef((props: CustomParams, ref) => {
     });
   }
 
-
   return (
     <select
       ref={selectRef}
@@ -70,7 +66,9 @@ const CustomFilterComponent = forwardRef((props: CustomParams, ref) => {
             value={parsedOptionValue || optionValue}
             key={optionValue + idx}
           >
-            {DEFAULT_EMPTY_VALUES.has(optionValue) ? "All" : parsedOptionValue}
+            {PLACEHOLDER_EMPTY_VALUES.has(optionValue)
+              ? "All"
+              : parsedOptionValue}
           </option>
         );
       })}

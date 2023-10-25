@@ -9,7 +9,7 @@ import CustomFilterComponent from "./CustomFilterComponent";
 import { ALL_COLUMNS } from "./columnDefs";
 import {
   COLUMN_GROUPS,
-  DEFAULT_EMPTY_VALUES,
+  PLACEHOLDER_EMPTY_VALUES,
   SET_FILTERED_COLUMNS,
 } from "./columnGroups";
 
@@ -129,10 +129,19 @@ const TableView = () => {
             },
           }
         ).then((uniqueValues: { DISTINCT: string }[]) => {
-          const parsedUniqueValues = uniqueValues.map((val) => val.DISTINCT);
+          const parsedUniqueValues = uniqueValues
+            .map((val) => val.DISTINCT)
+            .sort((a, b) =>
+              a === "[[]]" || !a
+                ? -1
+                : b === "[[]]" || !b
+                ? 1
+                : a.localeCompare(b)
+            );
+
           if (!parsedUniqueValues[0]) parsedUniqueValues[0] = "";
 
-          if (!DEFAULT_EMPTY_VALUES.has(parsedUniqueValues[0]))
+          if (!PLACEHOLDER_EMPTY_VALUES.has(parsedUniqueValues[0]))
             parsedUniqueValues.unshift("");
 
           // console.log(
