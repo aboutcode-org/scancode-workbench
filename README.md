@@ -29,7 +29,7 @@ above which are run with the ScanCode `-i` option. For a list of available ScanC
 options see [How To: Set what will be detected in a scan](https://scancode-toolkit.readthedocs.io/en/latest/tutorials/how_to_set_what_will_be_detected_in_a_scan.html)
 
 ```bash
-./scancode -clipeu <input> <output_file>
+scancode -clipeu <input> <output_file>
 ```
 
 * We have provided a set of sample scans that you can quickly review in 
@@ -40,7 +40,7 @@ information captured by a scan.  The samples are located at
 the [documentation](https://scancode-workbench.readthedocs.io) for more 
 information on how to use ScanCode Workbench.
 
-[Import a JSON file](https://scancode-workbench.readthedocs.io/en/develop/_images/import-json-file.gif)
+[Import a JSON file](https://scancode-workbench.readthedocs.io/en/develop/how-to-guides/load-your-data/import-json.html)
 
 ## Running locally
 
@@ -96,6 +96,6 @@ See the NOTICE file for more details.
 
 If you have a question, a suggestion or find a bug, enter an issue.
 
-[![Gitter chat](https://badges.gitter.im/aboutcode-org/gitter.png)](https://matrix.to/#/#aboutcode-org_discuss:gitter.im)
+[![Gitter chat](https://badges.gitter.im/aboutcode-org/gitter.png)](https://matrix.to/#/#aboutcode-org_scancode-workbench:gitter.im)
 
-For questions and chats, you can join the Gitter channel at https://matrix.to/#/#aboutcode-org_discuss:gitter.im
+For questions and chats, you can join the Gitter channel at https://matrix.to/#/#aboutcode-org_scancode-workbench:gitter.im
