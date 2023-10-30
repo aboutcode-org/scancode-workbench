@@ -10,6 +10,7 @@ import { LicenseSamples } from "./test-scans/licenses/expectedLicenses";
 import { SanitySamples } from "./test-scans/sanity/sanitySamples";
 import { ErrorSamples } from "./test-scans/scan-errors/expectedErrors";
 import { PackageDepsSamples } from "./test-scans/packages_dependencies/expectedPackagesDeps";
+import { TodoSamples } from "./test-scans/todos/todoSamples";
 
 // Avoid logging scan-parser checkpoints during tests
 beforeEach(() => {
@@ -338,3 +339,29 @@ describe("Parse Packages & Dependencies", () => {
     }
   );
 });
+
+describe("Parse Todos", () => {
+  it.each(TodoSamples)(
+    "Parses $jsonFileName",
+    async ({ jsonFileName, expectedTodos }) => {
+      const jsonFilePath = path.join(
+        __dirname,
+        "test-scans/todos/",
+        jsonFileName
+      );
+
+      const newWorkbenchDB = new WorkbenchDB({
+        dbName: "workbench_db",
+        dbStoragePath: figureOutDefaultSqliteFilePath(jsonFilePath),
+        deleteExisting: true,
+      });
+      await newWorkbenchDB.addFromJson(jsonFilePath, () => null);
+
+      const todos = (await newWorkbenchDB.db.Todo.findAll()).map(
+        (todo) => todo.dataValues
+      );
+
+      assert.deepEqual(todos, expectedTodos);
+    }
+    )
+})
