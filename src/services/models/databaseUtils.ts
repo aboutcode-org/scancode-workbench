@@ -16,7 +16,6 @@
 
 import Sequelize from "sequelize";
 // eslint-disable-next-line import/no-unresolved
-import { parse } from "license-expressions";
 import { parseIfValidJson } from "../../utils/parsers";
 
 // @TODO
@@ -110,58 +109,4 @@ export function filterSpdxKeys(keys: string[]) {
     }
     return true;
   });
-}
-
-// To test 'license-expressions' library
-function flattenIntoLicenseKeysUtil(parsedExpression: any, licenses: string[]) {
-  // LicenseInfo & ConjunctionInfo & LicenseRef
-  if (parsedExpression.license) {
-    licenses.push(parsedExpression.license);
-  }
-  if (parsedExpression.licenseRef) {
-    licenses.push(parsedExpression.licenseRef);
-  }
-  if (parsedExpression.exception) {
-    licenses.push(parsedExpression.exception);
-  }
-
-  if (parsedExpression.conjunction) {
-    flattenIntoLicenseKeysUtil(parsedExpression.left, licenses);
-    if (
-      parsedExpression.conjunction === "or" ||
-      parsedExpression.conjunction === "and"
-    ) {
-      flattenIntoLicenseKeysUtil(parsedExpression.right, licenses);
-    }
-  }
-}
-function parseKeysFromLibraryExpression(expression: string) {
-  const keys: string[] = [];
-  flattenIntoLicenseKeysUtil(
-    parse(expression, { upgradeGPLVariants: false, strictSyntax: false }),
-    keys
-  );
-  return keys;
-}
-
-const TEST_LICENSE_EXPRESSIONS_PARSER = false;
-const testCases = [
-  "GPL-3.0+",
-  "MIT OR (Apache-2.0 AND 0BSD)",
-  "gpl-2.0-plus WITH ada-linking-exception",
-  "zlib",
-  "lgpl-2.1",
-  "apache-1.1", // not compatible for our use case
-];
-if (TEST_LICENSE_EXPRESSIONS_PARSER) {
-  testCases.forEach((expression) => {
-    // console.log(expression, { tokens: parseTokensFromExpression(expression), keys: parseTokenKeysFromExpression(expression)});
-    console.log("Parsers", {
-      expectedKeys: parseTokenKeysFromExpression(expression),
-      parsedKeysUsingLibraryParser: parseKeysFromLibraryExpression(expression),
-    });
-  });
-  // console.log(parse('GPL-3.0+'));
-  // console.log(parse('apache-1.1', { strictSyntax: false, upgradeGPLVariants: false }));
-  // console.log(parse('lgpl-2.1'));
 }
