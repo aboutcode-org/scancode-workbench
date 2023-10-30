@@ -64,7 +64,7 @@ export const MATCH_COLS: MatchColumns = {
     field: "matched_text",
     headerName: "Matched Text",
     cellRenderer: MatchedTextRenderer,
-    width: 150,
+    width: 300,
   },
   rule_url: {
     colId: "rule_url",
@@ -90,10 +90,10 @@ export const MATCH_COLS: MatchColumns = {
 export const LicenseDetectionMatchCols: ColDef[] = [
   MATCH_COLS.license_expression,
   MATCH_COLS.score,
+  MATCH_COLS.matched_text,
   MATCH_COLS.matched_length,
   MATCH_COLS.match_coverage,
   MATCH_COLS.matcher,
-  MATCH_COLS.matched_text,
   MATCH_COLS.rule_url,
   MATCH_COLS.license_expression_spdx,
 ];

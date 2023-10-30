@@ -1,6 +1,7 @@
-import ReactJson from "@microlink/react-json-view";
 import { AgGridReact } from "ag-grid-react";
-import React, { useEffect, useState } from "react";
+import { ColDef, ColumnApi } from "ag-grid-community";
+import ReactJson from "@microlink/react-json-view";
+import React, { useEffect, useMemo, useState } from "react";
 
 import {
   ActiveLicenseEntity,
@@ -19,7 +20,10 @@ import {
 import { MatchedTextProvider } from "./MatchedTextContext";
 import { useWorkbenchDB } from "../../contexts/dbContext";
 import { ScanOptionKeys } from "../../utils/parsers";
-import { ColumnApi } from "ag-grid-community";
+import {
+  LicenseDetectionMatch,
+  LicenseMatch,
+} from "../../services/importedJsonTypes";
 
 import "./licenseEntity.css";
 import "../../styles/entityCommonStyles.css";
@@ -47,6 +51,82 @@ const LicenseEntity = (props: LicenseDetectionEntityProps) => {
   const license = activeLicenseEntity?.license;
   const matches = activeLicenseEntity?.license?.matches;
   const file_regions = activeLicenseEntity?.license?.file_regions;
+
+  const matchesTransposedRows = useMemo(() => {
+    if (!matches) return [];
+
+    if (activeLicenseEntity.type === "detection") {
+      const matches = activeLicenseEntity?.license?.matches;
+      const fields: (keyof LicenseDetectionMatch)[] = [
+        "license_expression",
+        "score",
+        "matched_length",
+        "match_coverage",
+        "matcher",
+        "matched_text",
+        "rule_url",
+        "license_expression_spdx",
+      ];
+
+      const rowData = fields.map((field) => ({
+        field,
+        ...Object.fromEntries(
+          matches.map((match, idx) => [String(idx), match[field]])
+        ),
+      }));
+      return rowData;
+    } else {
+      const matches = activeLicenseEntity?.license?.matches;
+      const fields: (keyof LicenseMatch)[] = [
+        "license_expression",
+        "score",
+        "matched_length",
+        "match_coverage",
+        "matcher",
+        "matched_text",
+        "rule_url",
+      ];
+
+      const rowData = fields.map((field) => ({
+        field,
+        ...Object.fromEntries(
+          matches.map((match, idx) => [String(idx), match[field]])
+        ),
+      }));
+      return rowData;
+    }
+  }, [matches]);
+
+  // Transpose table
+  const matchesTransposedColumnDefs = useMemo(() => {
+    const matches = activeLicenseEntity?.license?.matches;
+
+    if (!matches) return [];
+
+    const TransposedDefaultColDef: ColDef = {
+      resizable: true,
+      sortable: false,
+      filter: false,
+      flex: 1,
+      minWidth: 200,
+    };
+    return [
+      {
+        ...TransposedDefaultColDef,
+        headerName: "License Expression",
+        field: "field",
+        width: 200,
+        maxWidth: 200,
+      },
+      ...matches.map((match, idx) => {
+        return {
+          headerName: match.license_expression,
+          field: String(idx),
+          ...TransposedDefaultColDef,
+        };
+      }),
+    ];
+  }, [matches]);
 
   if (!activeLicenseEntity) {
     return (
@@ -126,13 +206,33 @@ const LicenseEntity = (props: LicenseDetectionEntityProps) => {
       <MatchedTextProvider>
         <b>Matches</b>
         <AgGridReact
+          rowData={matchesTransposedRows}
+          columnDefs={matchesTransposedColumnDefs}
+          // rowData={matches}
+          // columnDefs={
+          //   activeLicenseEntity.type === "detection"
+          //     ? LicenseDetectionMatchCols
+          //     : LicenseClueMatchCols
+          // }
+          onGridReady={(params) => {
+            params.api.sizeColumnsToFit();
+            setMatchesTableColumnApi(params.columnApi);
+          }}
+          onGridSizeChanged={(params) => params.api.sizeColumnsToFit()}
+          className="ag-theme-alpine ag-grid-customClass entity-table"
+          ensureDomOrder
+          enableCellTextSelection
+          pagination={false}
+          defaultColDef={DEFAULT_MATCHES_COL_DEF}
+        />
+        <br />
+        <AgGridReact
           rowData={matches}
           columnDefs={
             activeLicenseEntity.type === "detection"
               ? LicenseDetectionMatchCols
               : LicenseClueMatchCols
           }
-          onGridReady={(params) => setMatchesTableColumnApi(params.columnApi)}
           className="ag-theme-alpine ag-grid-customClass entity-table"
           ensureDomOrder
           enableCellTextSelection

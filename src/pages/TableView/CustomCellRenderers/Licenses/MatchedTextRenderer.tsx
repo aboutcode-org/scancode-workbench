@@ -13,7 +13,7 @@ const MatchedTextRenderer = (props: MatchedTextRendererProps) => {
   const { openDiffWindow } = useMatchedTextContext();
 
   const trimmedText = useMemo(
-    () => trimStringWithEllipsis(value || "", 30),
+    () => trimStringWithEllipsis(value || "", 150),
     [value]
   );
 
