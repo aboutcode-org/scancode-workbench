@@ -2,7 +2,6 @@
   "appId": "com.electron.scancode-workbench",
   "productName": "ScanCode Workbench",
   "directories": {
-    "app": ".",
     "output": "out",
     "buildResources": "build-res"
   },
