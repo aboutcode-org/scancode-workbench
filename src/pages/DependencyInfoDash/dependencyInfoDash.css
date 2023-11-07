@@ -26,7 +26,8 @@
   height: auto;
 }
 
-.scope-summary-table .ag-body-viewport {
+.scope-summary-table .ag-body-viewport,
+.scope-summary-table .ag-body {
   height: auto;
   /* Subtract height of horizontal scroll and header from table height */
   max-height: calc(var(--max-scope-summary-table-height) - var(--scope-summary-table-header-height) - var(--scope-summary-table-height));

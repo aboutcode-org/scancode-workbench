@@ -42,7 +42,8 @@
   height: auto;
 }
 
-.entity-table .ag-body-viewport {
+.entity-table .ag-body-viewport,
+.entity-table .ag-body {
   height: auto;
   /* Subtract height of horizontal scroll and header from table height */
   max-height: calc(var(--max-entity-table-height) - var(--entity-table-header-height) - var(--entity-table-height));
