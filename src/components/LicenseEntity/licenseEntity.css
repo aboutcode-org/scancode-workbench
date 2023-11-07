@@ -15,3 +15,25 @@
   margin-right: 5px;
 }
 
+.matches-table-container {
+  border: 1px solid rgb(100 98 98 / 60%);
+  padding: 0;
+  margin-bottom: 1.5rem !important;
+}
+
+.matches-table-container table {
+  margin: 0;
+}
+
+.matches-table-container table tr td:first-child {
+  font-weight: 500;
+  width: 190px;
+}
+
+.matches-table-container .matched-text-row a {
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

@@ -1,6 +1,6 @@
 import ReactJson from "@microlink/react-json-view";
 import { AgGridReact } from "ag-grid-react";
-import React, { useEffect, useState } from "react";
+import React from "react";
 
 import {
   ActiveLicenseEntity,
@@ -10,16 +10,10 @@ import {
   DEFAULT_FILE_REGION_COL_DEF,
   DetectionFileRegionCols,
 } from "./FileRegionTableCols";
-import {
-  DEFAULT_MATCHES_COL_DEF,
-  LicenseDetectionMatchCols,
-  LicenseClueMatchCols,
-  MATCH_COLS,
-} from "./MatchesTableCols";
-import { MatchedTextProvider } from "./MatchedTextContext";
-import { useWorkbenchDB } from "../../contexts/dbContext";
 import { ScanOptionKeys } from "../../utils/parsers";
-import { ColumnApi } from "ag-grid-community";
+import LicenseMatchesTable from "./LicenseMatchesTable";
+import { LicenseTypes } from "../../services/workbenchDB.types";
+import { useWorkbenchDB } from "../../contexts/dbContext";
 
 import "./licenseEntity.css";
 import "../../styles/entityCommonStyles.css";
@@ -30,19 +24,8 @@ interface LicenseDetectionEntityProps {
 }
 const LicenseEntity = (props: LicenseDetectionEntityProps) => {
   const { activeLicenseEntity, activeLicenseTodo } = props;
-  const { scanInfo } = useWorkbenchDB();
-  const [matchesTableColumnApi, setMatchesTableColumnApi] =
-    useState<ColumnApi | null>(null);
 
-  useEffect(() => {
-    if (!scanInfo || !matchesTableColumnApi) return;
-    matchesTableColumnApi.setColumnVisible(
-      MATCH_COLS.matched_text.colId,
-      Boolean(scanInfo.optionsMap.get(ScanOptionKeys.LICENSE_TEXT)) ||
-        matches[0]?.matched_text?.length > 0 ||
-        false
-    );
-  }, [scanInfo, matchesTableColumnApi]);
+  const { scanInfo } = useWorkbenchDB();
 
   const license = activeLicenseEntity?.license;
   const matches = activeLicenseEntity?.license?.matches;
@@ -122,26 +105,6 @@ const LicenseEntity = (props: LicenseDetectionEntityProps) => {
           </div>
         )}
       </div>
-      <br />
-      <MatchedTextProvider>
-        <b>Matches</b>
-        <AgGridReact
-          rowData={matches}
-          columnDefs={
-            activeLicenseEntity.type === "detection"
-              ? LicenseDetectionMatchCols
-              : LicenseClueMatchCols
-          }
-          onGridReady={(params) => setMatchesTableColumnApi(params.columnApi)}
-          className="ag-theme-alpine ag-grid-customClass entity-table"
-          ensureDomOrder
-          enableCellTextSelection
-          pagination={false}
-          defaultColDef={DEFAULT_MATCHES_COL_DEF}
-        />
-      </MatchedTextProvider>
-      <br />
-      <br />
       <b>File regions</b>
       <AgGridReact
         rowData={file_regions}
@@ -156,6 +119,21 @@ const LicenseEntity = (props: LicenseDetectionEntityProps) => {
         defaultColDef={DEFAULT_FILE_REGION_COL_DEF}
       />
       <br />
+      <b>Matches</b>
+      <LicenseMatchesTable
+        matchesInfo={{
+          licenseType:
+            activeLicenseEntity.type === "detection"
+              ? LicenseTypes.DETECTION
+              : LicenseTypes.CLUE,
+          matches: matches,
+        }}
+        showLIcenseText={
+          Boolean(scanInfo.optionsMap.get(ScanOptionKeys.LICENSE_TEXT)) ||
+          matches[0]?.matched_text?.length > 0 ||
+          false
+        }
+      />
       <div className="raw-info-section">
         Raw license {activeLicenseEntity.type}
         <ReactJson

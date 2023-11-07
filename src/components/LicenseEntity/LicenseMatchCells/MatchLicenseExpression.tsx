@@ -1,28 +1,26 @@
 import React, { useMemo } from "react";
+import CoreLink from "../../CoreLink/CoreLink";
 import {
   LICENSE_EXPRESSIONS_CONJUNCTIONS,
   parseTokensFromExpression,
-} from "../../../../services/models/databaseUtils";
-import CoreLink from "../../../../components/CoreLink/CoreLink";
+} from "../../../services/models/databaseUtils";
+import {
+  LicenseClueMatch,
+  LicenseDetectionMatch,
+} from "../../../services/importedJsonTypes";
 
 const DEBUG_URLS = false;
 
-interface LicenseExpressionRendererProps {
-  value: string;
-  spdxLicense?: boolean;
-  data: {
-    license_expression: string;
-    license_expression_spdx: string;
-    license_expression_keys: {
-      key: string;
-      licensedb_url: string;
-      scancode_url: string;
-    }[];
-    license_expression_spdx_keys: {
-      key: string;
-      spdx_url: string;
-    }[];
-  };
+interface MatchLicenseExpressionRendererProps {
+  matchInfo:
+    | {
+        spdxLicense: false;
+        match: LicenseClueMatch;
+      }
+    | {
+        spdxLicense: true;
+        match: LicenseDetectionMatch;
+      };
 }
 
 interface ParsedTokens {
@@ -31,31 +29,26 @@ interface ParsedTokens {
 }
 
 const MatchLicenseExpressionRenderer = (
-  props: LicenseExpressionRendererProps
+  props: MatchLicenseExpressionRendererProps
 ) => {
-  const { spdxLicense, data } = props;
+  const { matchInfo } = props;
 
-  const {
-    license_expression,
-    license_expression_spdx,
-    license_expression_keys,
-    license_expression_spdx_keys,
-  } = data;
+  const { license_expression, license_expression_keys } = matchInfo.match;
 
   const parsedComponents = useMemo<ParsedTokens[]>(() => {
     if (!license_expression) return [];
 
     let newParsedComponents: ParsedTokens[];
-    if (spdxLicense) {
+    if (matchInfo.spdxLicense) {
       const licenseExpressionSpdxKeysMap = new Map(
         // Handle deferred state update to ag data grid
-        (license_expression_spdx_keys || []).map((expKey) => [
+        (matchInfo.match.license_expression_spdx_keys || []).map((expKey) => [
           expKey.key,
           expKey,
         ])
       );
       newParsedComponents = parseTokensFromExpression(
-        license_expression_spdx
+        matchInfo.match.license_expression_spdx
       ).map((token) => {
         const tokenInfo = licenseExpressionSpdxKeysMap.get(token);
         if (tokenInfo) {
@@ -84,7 +77,7 @@ const MatchLicenseExpressionRenderer = (
       );
     }
     return newParsedComponents;
-  }, [data]);
+  }, [matchInfo]);
 
   return (
     <>

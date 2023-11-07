@@ -10,7 +10,6 @@ import {
   FileLicenseDetectionsRenderer,
   FileLicenseCluesRenderer,
   ListCellRenderer,
-  MatchLicenseExpressionRenderer,
   UrlListCellRenderer,
 } from "./CustomCellRenderers";
 
@@ -25,8 +24,6 @@ enum CustomComponentKeys {
 export const frameworkComponents = {
   [CustomComponentKeys.ListCellRenderer]: ListCellRenderer,
   [CustomComponentKeys.UrlListCellRenderer]: UrlListCellRenderer,
-  [CustomComponentKeys.LicenseExpressionRenderer]:
-    MatchLicenseExpressionRenderer,
   [CustomComponentKeys.FileLicenseDetectionsRenderer]:
     FileLicenseDetectionsRenderer,
   [CustomComponentKeys.FileLicenseCluesRenderer]: FileLicenseCluesRenderer,

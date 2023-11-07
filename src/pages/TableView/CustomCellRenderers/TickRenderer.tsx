@@ -2,12 +2,12 @@ import React from "react";
 import { faCheck, faX } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-interface UrlRendererProps {
+interface TickRendererProps {
   value: boolean;
   data: unknown;
 }
 
-const TickRenderer = (props: UrlRendererProps) => {
+const TickRenderer = (props: TickRendererProps) => {
   const { value } = props;
 
   const icon = value ? faCheck : faX;

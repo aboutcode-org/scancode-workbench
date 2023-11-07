@@ -86,6 +86,8 @@ export interface LicenseDetectionMatch extends LicenseMatch {
   license_expression_spdx?: string;
   license_expression_spdx_keys?: LicenseExpressionSpdxKey[];
 }
+export type LicenseClueMatch = LicenseMatch;
+
 export interface LicenseFileRegion {
   path: string;
   start_line: number;
@@ -109,7 +111,7 @@ export interface LicenseClue {
   fileId?: number;
   filePath?: string;
   fileClueIdx: number;
-  matches?: LicenseMatch[];
+  matches?: LicenseClueMatch[];
   file_regions?: LicenseFileRegion[];
 }
 export interface TopLevelLicenseDetection {

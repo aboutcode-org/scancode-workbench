@@ -1,7 +1,7 @@
 import {
   LicenseFileRegion,
-  LicenseMatch,
   LicenseDetectionMatch,
+  LicenseClueMatch,
 } from "../../services/importedJsonTypes";
 
 export interface LicenseDetectionDetails {
@@ -24,7 +24,7 @@ export interface LicenseClueDetails {
   identifier: string;
   license_expression: string | null;
   rule_identifier: string | null;
-  matches: LicenseMatch[];
+  matches: LicenseClueMatch[];
   file_regions: LicenseFileRegion[];
 }
 
