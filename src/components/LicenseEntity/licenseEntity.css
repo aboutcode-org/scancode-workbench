@@ -25,6 +25,10 @@
   margin: 0;
 }
 
+.matches-table-container table tr td {
+  padding: 7px;
+}
+
 .matches-table-container table tr td:first-child {
   font-weight: 500;
   width: 190px;

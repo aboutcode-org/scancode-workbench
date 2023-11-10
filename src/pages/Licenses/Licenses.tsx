@@ -1,18 +1,20 @@
-import { Allotment } from "allotment";
 import React, { useEffect, useState } from "react";
+import { Allotment } from "allotment";
 import {
   Badge,
   Form,
   InputGroup,
   ListGroup,
   ListGroupItem,
+  OverlayTrigger,
+  Tooltip,
 } from "react-bootstrap";
 import Select from "react-select";
 import { toast } from "react-toastify";
 import { ThreeDots } from "react-loader-spinner";
 import { useSearchParams } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faExclamation } from "@fortawesome/free-solid-svg-icons";
+import { faExclamation, faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 
 import LicenseEntity from "../../components/LicenseEntity/LicenseEntity";
 import NoDataFallback from "../../components/NoDataSection";
@@ -224,9 +226,9 @@ const LicenseDetections = () => {
     license: LicenseDetectionDetails | LicenseClueDetails
   ) => {
     if (reviewFilter === REVIEW_STATUS_OPTIONS.ALL) return true;
-    if (reviewFilter === REVIEW_STATUS_OPTIONS.VETTED)
+    if (reviewFilter === REVIEW_STATUS_OPTIONS.REVIEWED)
       return reviewedLicenses.has(license.identifier);
-    if (reviewFilter === REVIEW_STATUS_OPTIONS.UNVETTED)
+    if (reviewFilter === REVIEW_STATUS_OPTIONS.UNREVIEWED)
       return !reviewedLicenses.has(license.identifier);
     return true;
   };
@@ -297,9 +299,26 @@ const LicenseDetections = () => {
               className="licenses-navigator-pane pb-2"
             >
               <div className="licenses-navigator-pane-title">
-                {licenseDetections.length > 0
-                  ? "License Detections"
-                  : "No license detections"}
+                <span>
+                  {licenseDetections.length > 0
+                    ? "License Detections"
+                    : "No license detections"}
+                </span>
+                <OverlayTrigger
+                  placement="left"
+                  trigger="click"
+                  overlay={
+                    <Tooltip>
+                      Tick the checkboxes below to mark licenses as reviewed
+                    </Tooltip>
+                  }
+                >
+                  <FontAwesomeIcon
+                    icon={faInfoCircle}
+                    width={200}
+                    className="info-icon"
+                  />
+                </OverlayTrigger>
               </div>
               <ListGroup
                 hidden={licenseDetections.length === 0}
@@ -437,11 +456,7 @@ const LicenseDetections = () => {
             </Allotment.Pane>
           </Allotment>
         </Allotment.Pane>
-        <Allotment.Pane
-          snap
-          minSize={500}
-          className="license-entity-pane overflow-scroll"
-        >
+        <Allotment.Pane snap minSize={500} className="license-entity-pane">
           <LicenseEntity
             activeLicenseEntity={activeLicense}
             activeLicenseTodo={todos.get(activeLicense?.license.identifier)}

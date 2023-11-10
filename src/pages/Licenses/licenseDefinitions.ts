@@ -44,11 +44,16 @@ export type ActiveLicenseEntity =
       license: LicenseClueDetails;
     };
 
+export enum ReviewOptionKeys {
+  ALL = "ALL",
+  REVIEWED = "REVIEWED",
+  UNREVIEWED = "UNREVIEWED",
+}
 export interface ReviewOption {
   value: string;
   label: string;
 }
-export const REVIEW_STATUS_OPTIONS: Record<string, ReviewOption> = {
+export const REVIEW_STATUS_OPTIONS: Record<ReviewOptionKeys, ReviewOption> = {
   ALL: { value: "ALL", label: "All" },
   REVIEWED: { value: "REVIEWED", label: "Reviewed" },
   UNREVIEWED: { value: "UNREVIEWED", label: "Unreviewed" },

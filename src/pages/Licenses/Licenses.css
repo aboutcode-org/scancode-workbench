@@ -55,6 +55,17 @@
   padding: 1px;
   padding-left: 7px;
   font-weight: 700;
+  display: flex;
+  justify-content: space-between;
+}
+
+.licenses-navigator-pane-title .info-icon {
+  display: flex;
+  cursor: pointer;
+  flex-direction: row-reverse;
+  width: fit-content;
+  margin-right: 20px;
+  margin-top: 2px;
 }
 
 .license-item {

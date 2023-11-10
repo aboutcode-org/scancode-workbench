@@ -42,6 +42,7 @@
   height: auto;
 }
 
+.entity-table .ag-center-cols-viewport .ag-center-cols-container,
 .entity-table .ag-body-viewport,
 .entity-table .ag-body {
   height: auto;
@@ -50,6 +51,7 @@
   flex: none;
 }
 
-.entity-table .ag-center-cols-viewport {
-  height: auto;
+.entity-table .ag-center-cols-viewport .ag-center-cols-container {
+  overflow-y: auto;
+  overflow-x: hidden;
 }

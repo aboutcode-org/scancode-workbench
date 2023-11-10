@@ -29,7 +29,10 @@ const LicenseMatchesTable = (props: LicenseMatchProps) => {
     <MatchedTextProvider>
       <div>
         {matchesInfo.matches.map((match) => (
-          <div className="matches-table-container">
+          <div
+            className="matches-table-container"
+            key={match.license_expression}
+          >
             <Table size="sm" bordered>
               <tbody>
                 <tr>
