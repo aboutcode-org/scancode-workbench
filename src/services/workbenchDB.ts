@@ -455,15 +455,15 @@ export class WorkbenchDB {
     );
   }
 
-  toggleLicenseVettedStatus(
+  toggleLicenseReviewedStatus(
     licenseId: number,
     licenseType: LicenseTypes,
-    vetted: boolean
+    reviewed: boolean
   ) {
     return this.sync.then((db) => {
       if (licenseType === LicenseTypes.DETECTION) {
         db.LicenseDetections.update(
-          { vetted },
+          { reviewed },
           {
             where: {
               id: licenseId,
@@ -472,7 +472,7 @@ export class WorkbenchDB {
         );
       } else if (licenseType === LicenseTypes.CLUE) {
         db.LicenseClues.update(
-          { vetted },
+          { reviewed },
           {
             where: {
               id: licenseId,

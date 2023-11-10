@@ -25,7 +25,7 @@ export const LicenseSamples: {
         score: 52,
         license_expression: "apache-2.0 OR gpl-2.0",
         rule_identifier: "apache-2.0_or_gpl-2.0_24.RULE",
-        vetted: false,
+        reviewed: false,
         matches:
           '[{"score":52,"start_line":56,"end_line":59,"matched_length":13,"match_coverage":52,"matcher":"3-seq","license_expression":"apache-2.0 OR gpl-2.0","rule_identifier":"apache-2.0_or_gpl-2.0_24.RULE","rule_relevance":100,"rule_url":"https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/rules/apache-2.0_or_gpl-2.0_24.RULE","path":"rx-lite/package.json","license_expression_keys":[{"key":"apache-2.0","licensedb_url":"https://scancode-licensedb.aboutcode.org/apache-2.0","scancode_url":"https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/licenses/apache-2.0.LICENSE"},{"key":"gpl-2.0","licensedb_url":"https://scancode-licensedb.aboutcode.org/gpl-2.0","scancode_url":"https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/licenses/gpl-2.0.LICENSE"}]}]',
         file_regions:
@@ -38,7 +38,7 @@ export const LicenseSamples: {
         identifier:
           "apache_2_0_and_gpl_3_0-494ca0ae-1282-09a2-139f-a52c04fde6dc",
         license_expression: "apache-2.0 AND gpl-3.0",
-        vetted: false,
+        reviewed: false,
         detection_count: 1,
         detection_log: null,
         matches:
@@ -50,7 +50,7 @@ export const LicenseSamples: {
         id: 2,
         identifier: "mit-b941df29-6c4b-fe7e-752f-a5fc7f9a28b5",
         license_expression: "mit",
-        vetted: false,
+        reviewed: false,
         detection_count: 1,
         detection_log: null,
         matches:
@@ -62,7 +62,7 @@ export const LicenseSamples: {
         id: 3,
         identifier: "mit-a822f434-d61f-f2b1-c792-8b8cb9e7b9bf",
         license_expression: "mit",
-        vetted: false,
+        reviewed: false,
         detection_count: 1,
         detection_log: null,
         matches:
@@ -74,7 +74,7 @@ export const LicenseSamples: {
         id: 4,
         identifier: "unknown-73f5f4e3-0fd7-c629-d3b0-a8bf52447aff",
         license_expression: "unknown",
-        vetted: false,
+        reviewed: false,
         detection_count: 4,
         detection_log: null,
         matches:
@@ -87,7 +87,7 @@ export const LicenseSamples: {
         identifier: "apache_2_0-428c1364-ecb5-f806-7a2e-77d10737a7ce",
         license_expression: "apache-2.0",
         detection_count: 1,
-        vetted: false,
+        reviewed: false,
         detection_log: null,
         matches:
           '[{"score":100,"start_line":1,"end_line":1,"matched_length":5,"match_coverage":100,"matcher":"1-hash","license_expression":"apache-2.0","rule_identifier":"apache-2.0_48.RULE","rule_relevance":100,"rule_url":"https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/rules/apache-2.0_48.RULE","matched_text":"Apache License, Version 2.0","license_expression_keys":[{"key":"apache-2.0","licensedb_url":"https://scancode-licensedb.aboutcode.org/apache-2.0","scancode_url":"https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/licenses/apache-2.0.LICENSE"}],"license_expression_spdx_keys":[],"path":"rx-lite/package.json"}]',
@@ -99,7 +99,7 @@ export const LicenseSamples: {
         identifier: "apache_2_0-9a5226a4-0901-7d18-06ae-49c1887ecbd7",
         license_expression: "apache-2.0",
         detection_count: 1,
-        vetted: false,
+        reviewed: false,
         detection_log: null,
         matches:
           '[{"score":100,"start_line":1,"end_line":1,"matched_length":9,"match_coverage":100,"matcher":"1-hash","license_expression":"apache-2.0","rule_identifier":"apache-2.0_20.RULE","rule_relevance":100,"rule_url":"https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/rules/apache-2.0_20.RULE","matched_text":"http://www.apache.org/licenses/LICENSE-2.0.html","license_expression_keys":[{"key":"apache-2.0","licensedb_url":"https://scancode-licensedb.aboutcode.org/apache-2.0","scancode_url":"https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/licenses/apache-2.0.LICENSE"}],"license_expression_spdx_keys":[],"path":"rx-lite/package.json"}]',

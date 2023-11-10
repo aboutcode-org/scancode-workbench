@@ -77,7 +77,7 @@ const LicenseDetections = () => {
         await db.getAllLicenseDetections()
       ).map((detection) => ({
         id: Number(detection.getDataValue("id")),
-        reviewed: detection.getDataValue("vetted"),
+        reviewed: detection.getDataValue("reviewed"),
         detection_count: Number(detection.getDataValue("detection_count")),
         identifier: detection.getDataValue("identifier") || null,
         license_expression: detection.getDataValue("license_expression"),
@@ -100,7 +100,7 @@ const LicenseDetections = () => {
           identifier: `clue-${
             clue.getDataValue("license_expression") || ""
           }-${Number(clue.getDataValue("id"))}`,
-          reviewed: clue.getDataValue("vetted"),
+          reviewed: clue.getDataValue("reviewed"),
           fileId: Number(clue.getDataValue("fileId")),
           filePath: clue.getDataValue("filePath") || "",
           fileClueIdx: Number(clue.getDataValue("fileClueIdx")),
@@ -116,18 +116,18 @@ const LicenseDetections = () => {
       });
       setLicenseClues(newLicenseClues);
 
-      const newVettedLicenses = new Set<string>();
+      const newReviewedLicenses = new Set<string>();
       newLicenseDetections.forEach((detection) => {
         if (detection.reviewed) {
-          newVettedLicenses.add(detection.identifier);
+          newReviewedLicenses.add(detection.identifier);
         }
       });
       newLicenseClues.forEach((clue) => {
         if (clue.reviewed) {
-          newVettedLicenses.add(clue.identifier);
+          newReviewedLicenses.add(clue.identifier);
         }
       });
-      setReviewedLicenses(newVettedLicenses);
+      setReviewedLicenses(newReviewedLicenses);
 
       const newTodos = new Map<string, TodoDetails>();
       await db.getAllTodos().then((todosList) =>
@@ -196,33 +196,35 @@ const LicenseDetections = () => {
   const handleItemToggle = (
     license: LicenseDetectionDetails | LicenseClueDetails,
     licenseType: LicenseTypes,
-    newVettedStatus: boolean
+    newReviewedtatus: boolean
   ) => {
-    function updateVettedLicenseStatus(identifier: string, newStatus: boolean) {
-      setReviewedLicenses((prevVettedLicenses) => {
-        const newVettedLicenses = new Set(prevVettedLicenses);
-        if (newStatus) newVettedLicenses.add(identifier);
-        else newVettedLicenses.delete(identifier);
-        return newVettedLicenses;
+    function updateReviewedLicenseStatus(
+      identifier: string,
+      newStatus: boolean
+    ) {
+      setReviewedLicenses((prevReviewedLicenses) => {
+        const newReviewedLicenses = new Set(prevReviewedLicenses);
+        if (newStatus) newReviewedLicenses.add(identifier);
+        else newReviewedLicenses.delete(identifier);
+        return newReviewedLicenses;
       });
     }
 
-    // const newVettedStatus = !vettedLicenses.has(license.identifier);
-    db.toggleLicenseVettedStatus(
+    db.toggleLicenseReviewedStatus(
       license.id,
       licenseType,
-      newVettedStatus
+      newReviewedtatus
     ).catch((err) => {
-      // Revert vetted status in UI if DB update fails
-      updateVettedLicenseStatus(license.identifier, !newVettedStatus);
-      console.log("Error updating vetted status: ", err);
-      toast.error("Couldn't update vetted license status!");
+      // Revert reviewed status in UI if DB update fails
+      updateReviewedLicenseStatus(license.identifier, !newReviewedtatus);
+      console.log("Error updating reviewed status: ", err);
+      toast.error("Couldn't update reviewed license status!");
     });
 
-    updateVettedLicenseStatus(license.identifier, newVettedStatus);
+    updateReviewedLicenseStatus(license.identifier, newReviewedtatus);
   };
 
-  const shownByVetFilter = (
+  const shownByReviewFilter = (
     license: LicenseDetectionDetails | LicenseClueDetails
   ) => {
     if (reviewFilter === REVIEW_STATUS_OPTIONS.ALL) return true;
@@ -280,7 +282,7 @@ const LicenseDetections = () => {
           <div className="filter-group">
             <Select
               defaultValue={REVIEW_STATUS_OPTIONS.ALL}
-              onChange={(newVetFilter) => setReviewFilter(newVetFilter)}
+              onChange={(newReviewFilter) => setReviewFilter(newReviewFilter)}
               isMulti={false}
               options={Object.values(REVIEW_STATUS_OPTIONS)}
             />
@@ -330,7 +332,7 @@ const LicenseDetections = () => {
                     activeLicense.type === "detection" &&
                     activeLicense.license === licenseDetection;
                   const showDetection =
-                    shownByVetFilter(licenseDetection) &&
+                    shownByReviewFilter(licenseDetection) &&
                     licenseDetection.license_expression
                       .toLowerCase()
                       .includes(searchedLicense.toLowerCase());
@@ -368,7 +370,7 @@ const LicenseDetections = () => {
                             {licenseDetection.detection_count}
                           </Badge>
                         </div>
-                        <div className="vet-toggle">
+                        <div className="review-toggle">
                           <Form.Check
                             type="checkbox"
                             checked={reviewedLicenses.has(
@@ -404,7 +406,7 @@ const LicenseDetections = () => {
                     activeLicense.type === "clue" &&
                     activeLicense.license === licenseClue;
                   const showClue =
-                    shownByVetFilter(licenseClue) &&
+                    shownByReviewFilter(licenseClue) &&
                     licenseClue.license_expression
                       .toLowerCase()
                       .includes(searchedLicense.toLowerCase());
@@ -432,7 +434,7 @@ const LicenseDetections = () => {
                             <FontAwesomeIcon icon={faExclamation} />
                           </div>
                         )}
-                        <div className="vet-toggle">
+                        <div className="review-toggle">
                           <Form.Check
                             type="checkbox"
                             checked={reviewedLicenses.has(

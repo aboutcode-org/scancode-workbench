@@ -117,13 +117,13 @@
 }
 
 .license-item>.todo-indicator,
-.license-item>.vet-toggle,
+.license-item>.review-toggle,
 .license-item>.license-count {
   width: 30px;
 }
 
 .license-item>.todo-indicator>*,
-.license-item>.vet-toggle>*,
+.license-item>.review-toggle>*,
 .license-item>.license-count>* {
   float: right;
 }
@@ -134,7 +134,7 @@
   width: 20px;
 }
 
-.license-item>.vet-toggle {
+.license-item>.review-toggle {
   padding-top: 2px;
   padding-right: 10px;
 }

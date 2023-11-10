@@ -22,7 +22,7 @@ export interface LicenseDetectionAttributes {
   identifier: string;
   license_expression: string;
   detection_count: number;
-  vetted: boolean;
+  reviewed: boolean;
   detection_log: JSON_Type;
   matches: JSON_Type;
   file_regions: JSON_Type;
@@ -44,7 +44,7 @@ export default function licenseDetectionModel(sequelize: Sequelize) {
       },
       license_expression: DataTypes.STRING,
       detection_count: DataTypes.NUMBER,
-      vetted: {
+      reviewed: {
         defaultValue: false,
         type: DataTypes.BOOLEAN,
       },

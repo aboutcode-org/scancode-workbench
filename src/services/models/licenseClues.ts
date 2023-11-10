@@ -25,7 +25,7 @@ export interface LicenseClueAttributes {
   score: number;
   license_expression: string;
   rule_identifier: string;
-  vetted: boolean;
+  reviewed: boolean;
   matches: JSON_Type;
   file_regions: JSON_Type;
 }
@@ -49,7 +49,7 @@ export default function licenseClueModel(sequelize: Sequelize) {
       score: DataTypes.NUMBER,
       license_expression: DataTypes.STRING,
       rule_identifier: DataTypes.STRING,
-      vetted: {
+      reviewed: {
         defaultValue: false,
         type: DataTypes.BOOLEAN,
       },
