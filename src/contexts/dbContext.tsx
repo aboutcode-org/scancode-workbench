@@ -24,6 +24,7 @@ import { AddEntry, GetHistory, RemoveEntry } from "../services/historyStore";
 import { WorkbenchDB } from "../services/workbenchDB";
 import { isSqliteSchemaOutdated } from "../utils/checks";
 import { ScanInfo, parseScanInfo } from "../utils/parsers";
+import { generateLicenseDetectionUrl } from "../utils/navigatorQueries";
 
 const { version: workbenchVersion } = packageJson;
 const { ipcRenderer } = electron;
@@ -55,6 +56,7 @@ interface WorkbenchContextProperties extends BasicValueState {
   updateLoadingStatus: React.Dispatch<React.SetStateAction<number | null>>;
   updateCurrentPath: (newPath: string, type: PathType) => void;
   goToFileInTableView: (path: string) => void;
+  goToLicenseDetection: (identifier: string) => void;
 }
 
 export const defaultWorkbenchContextValue: WorkbenchContextProperties = {
@@ -77,6 +79,7 @@ export const defaultWorkbenchContextValue: WorkbenchContextProperties = {
   endProcessing: () => null,
   updateCurrentPath: () => null,
   goToFileInTableView: () => null,
+  goToLicenseDetection: () => null,
 };
 
 const WorkbenchContext = createContext<WorkbenchContextProperties>(
@@ -111,6 +114,10 @@ export const WorkbenchDBProvider = (
   function goToFileInTableView(path: string) {
     updateCurrentPath(path, "file");
     navigate("/" + ROUTES.TABLE_VIEW);
+  }
+
+  function goToLicenseDetection(identifier: string) {
+    navigate(generateLicenseDetectionUrl(identifier));
   }
 
   const startImport = () => {
@@ -483,6 +490,7 @@ export const WorkbenchDBProvider = (
         endProcessing: () => setProcessingQuery(false),
         updateCurrentPath,
         goToFileInTableView,
+        goToLicenseDetection,
       }}
     >
       {props.children}

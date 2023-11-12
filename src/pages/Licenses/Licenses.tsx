@@ -28,13 +28,24 @@ import {
   REVIEW_STATUS_OPTIONS,
   ReviewOption,
 } from "./licenseDefinitions";
-import { LicenseTypes } from "../../services/workbenchDB.types";
 import { parseIfValidJson } from "../../utils/parsers";
+import { throttledScroller } from "../../utils/throttledScroll";
+import { LicenseTypes } from "../../services/workbenchDB.types";
 
 import "./Licenses.css";
 
 const LicenseDetections = () => {
   const [searchParams] = useSearchParams();
+  const { db, initialized, startProcessing, endProcessing } = useWorkbenchDB();
+
+  const [licenseDetections, setLicenseDetections] = useState<
+    LicenseDetectionDetails[] | null
+  >(null);
+  const [licenseClues, setLicenseClues] = useState<LicenseClueDetails[] | null>(
+    null
+  );
+  const [todos, setTodos] = useState<Map<string, TodoDetails>>(new Map());
+
   const [activeLicense, setActiveLicense] =
     useState<ActiveLicenseEntity | null>(null);
   const [searchedLicense, setSearchedLicense] = useState("");
@@ -60,16 +71,22 @@ const LicenseDetections = () => {
     });
   }
 
-  const [licenseDetections, setLicenseDetections] = useState<
-    LicenseDetectionDetails[] | null
-  >(null);
-  const [licenseClues, setLicenseClues] = useState<LicenseClueDetails[] | null>(
-    null
-  );
-  const [todos, setTodos] = useState<Map<string, TodoDetails>>(new Map());
-  const { db, startProcessing, endProcessing } = useWorkbenchDB();
+  useEffect(() => {
+    if (!activeLicense) return;
+
+    const clearThrottledScroll = throttledScroller(
+      `[data-license-identifier="${activeLicense.license.identifier}"]`
+    );
+
+    return () => {
+      // Clear any pending scroll timeout
+      clearThrottledScroll();
+    };
+  }, [activeLicense]);
 
   useEffect(() => {
+    if (!initialized || !db) return;
+
     startProcessing();
 
     (async () => {
@@ -144,10 +161,10 @@ const LicenseDetections = () => {
       const queriedDetectionIdentifier: string | null = searchParams.get(
         QUERY_KEYS.LICENSE_DETECTION
       );
-      const queriedClueExpression = searchParams.get(
+      const queriedClueExpression: string | null = searchParams.get(
         QUERY_KEYS.LICENSE_CLUE_EXPRESSION
       );
-      const queriedClueFilePath = searchParams.get(
+      const queriedClueFilePath: string | null = searchParams.get(
         QUERY_KEYS.LICENSE_CLUE_FILE_PATH
       );
       const queriedClueFileIdx = Number(
@@ -235,6 +252,22 @@ const LicenseDetections = () => {
     return true;
   };
 
+  const totalLicenses = licenseDetections?.length + licenseClues?.length || 0;
+  const DEFAULT_SECTION_HEIGHT_CAP = 0.75;
+  const capSectionSize = (ratio: number) => {
+    return (
+      Math.max(
+        1 - DEFAULT_SECTION_HEIGHT_CAP,
+        Math.min(DEFAULT_SECTION_HEIGHT_CAP, ratio)
+      ) *
+        100 +
+      "%"
+    );
+  };
+  const licenseDetectionsSectionSize = capSectionSize(
+    (licenseDetections?.length / totalLicenses) || 0
+  );
+
   if (!licenseDetections || !licenseClues) {
     return (
       <ThreeDots
@@ -248,22 +281,6 @@ const LicenseDetections = () => {
       />
     );
   }
-
-  const totalLicenses = licenseDetections.length + licenseClues.length;
-  const DEFAULT_SECTION_HEIGHT_CAP = 0.75;
-  const capSectionSize = (ratio: number) => {
-    return (
-      Math.max(
-        1 - DEFAULT_SECTION_HEIGHT_CAP,
-        Math.min(DEFAULT_SECTION_HEIGHT_CAP, ratio)
-      ) *
-        100 +
-      "%"
-    );
-  };
-  const licenseDetectionsSectionSize = capSectionSize(
-    licenseDetections.length / totalLicenses
-  );
 
   if (!licenseDetections.length && !licenseClues.length)
     return (
@@ -279,184 +296,194 @@ const LicenseDetections = () => {
           preferredSize="30%"
           className="licenses-navigator-container"
         >
-          <div className="filter-group">
-            <Select
-              defaultValue={REVIEW_STATUS_OPTIONS.ALL}
-              onChange={(newReviewFilter) => setReviewFilter(newReviewFilter)}
-              isMulti={false}
-              options={Object.values(REVIEW_STATUS_OPTIONS)}
-            />
-            <InputGroup className="search-box">
-              <Form.Control
-                aria-label="Search"
-                type="search"
-                placeholder="Search licenses"
-                onChange={(e) => setSearchedLicense(e.target.value)}
+          <div className="h-100 d-flex flex-column">
+            <div className="filter-group">
+              <Select
+                defaultValue={REVIEW_STATUS_OPTIONS.ALL}
+                onChange={(newReviewFilter) => setReviewFilter(newReviewFilter)}
+                isMulti={false}
+                options={Object.values(REVIEW_STATUS_OPTIONS)}
               />
-            </InputGroup>
-          </div>
-          <Allotment vertical snap={false} minSize={90}>
-            <Allotment.Pane
-              preferredSize={licenseDetectionsSectionSize}
-              className="licenses-navigator-pane pb-2"
-            >
-              <div className="licenses-navigator-pane-title">
-                <span>
-                  {licenseDetections.length > 0
-                    ? "License Detections"
-                    : "No license detections"}
-                </span>
-                <OverlayTrigger
-                  placement="left"
-                  trigger="click"
-                  overlay={
-                    <Tooltip>
-                      Tick the checkboxes below to mark licenses as reviewed
-                    </Tooltip>
-                  }
+              <InputGroup className="search-box">
+                <Form.Control
+                  aria-label="Search"
+                  type="search"
+                  placeholder="Search licenses"
+                  onChange={(e) => setSearchedLicense(e.target.value)}
+                />
+              </InputGroup>
+            </div>
+            <Allotment vertical snap={false} minSize={90}>
+              <Allotment.Pane
+                preferredSize={licenseDetectionsSectionSize}
+                className="licenses-navigator-pane pb-1"
+              >
+                <div className="licenses-navigator-pane-title">
+                  <span>
+                    {licenseDetections.length > 0
+                      ? "License Detections"
+                      : "No license detections"}
+                  </span>
+                  <OverlayTrigger
+                    placement="left"
+                    trigger="click"
+                    overlay={
+                      <Tooltip>
+                        Tick the checkboxes below to mark licenses as reviewed
+                      </Tooltip>
+                    }
+                  >
+                    <FontAwesomeIcon
+                      icon={faInfoCircle}
+                      width={200}
+                      className="info-icon"
+                    />
+                  </OverlayTrigger>
+                </div>
+                <ListGroup
+                  hidden={licenseDetections.length === 0}
+                  className="licenses-list"
                 >
-                  <FontAwesomeIcon
-                    icon={faInfoCircle}
-                    width={200}
-                    className="info-icon"
-                  />
-                </OverlayTrigger>
-              </div>
-              <ListGroup
-                hidden={licenseDetections.length === 0}
-                className="licenses-list"
-              >
-                {licenseDetections.map((licenseDetection) => {
-                  const isLicenseDetectionActive =
-                    activeLicense &&
-                    activeLicense.type === "detection" &&
-                    activeLicense.license === licenseDetection;
-                  const showDetection =
-                    shownByReviewFilter(licenseDetection) &&
-                    licenseDetection.license_expression
-                      .toLowerCase()
-                      .includes(searchedLicense.toLowerCase());
+                  {licenseDetections.map((licenseDetection) => {
+                    const isLicenseDetectionActive =
+                      activeLicense &&
+                      activeLicense.type === "detection" &&
+                      activeLicense.license === licenseDetection;
+                    const showDetection =
+                      shownByReviewFilter(licenseDetection) &&
+                      licenseDetection.license_expression
+                        .toLowerCase()
+                        .includes(searchedLicense.toLowerCase());
 
-                  return (
-                    <ListGroupItem
-                      onClick={() => activateLicenseDetection(licenseDetection)}
-                      key={licenseDetection.identifier}
-                      className="license-group-item"
-                      style={{
-                        display: showDetection ? "block" : "none",
-                      }}
-                    >
-                      <div
-                        className={
-                          "license-item " +
-                          (isLicenseDetectionActive ? "selected-license " : "")
+                    return (
+                      <ListGroupItem
+                        onClick={() =>
+                          activateLicenseDetection(licenseDetection)
                         }
+                        key={licenseDetection.identifier}
+                        className="license-group-item"
+                        data-license-identifier={licenseDetection.identifier}
+                        style={{
+                          display: showDetection ? "block" : "none",
+                        }}
                       >
-                        <div className="expression">
-                          {licenseDetection.license_expression}
-                        </div>
-                        {todos.has(licenseDetection.identifier) && (
-                          <div className="todo-indicator">
-                            <FontAwesomeIcon icon={faExclamation} />
+                        <div
+                          className={
+                            "license-item " +
+                            (isLicenseDetectionActive
+                              ? "selected-license "
+                              : "")
+                          }
+                        >
+                          <div className="expression">
+                            {licenseDetection.license_expression}
                           </div>
-                        )}
-                        <div className="license-count">
-                          <Badge
-                            pill
-                            bg="light"
-                            text="dark"
-                            className="license-count"
-                          >
-                            {licenseDetection.detection_count}
-                          </Badge>
+                          {todos.has(licenseDetection.identifier) && (
+                            <div className="todo-indicator">
+                              <FontAwesomeIcon icon={faExclamation} />
+                            </div>
+                          )}
+                          <div className="license-count">
+                            <Badge
+                              pill
+                              bg="light"
+                              text="dark"
+                              className="license-count"
+                            >
+                              {licenseDetection.detection_count}
+                            </Badge>
+                          </div>
+                          <div className="review-toggle">
+                            <Form.Check
+                              type="checkbox"
+                              checked={reviewedLicenses.has(
+                                licenseDetection.identifier
+                              )}
+                              onChange={(e) =>
+                                handleItemToggle(
+                                  licenseDetection,
+                                  LicenseTypes.DETECTION,
+                                  e.target.checked
+                                )
+                              }
+                              onClick={(e) => e.stopPropagation()}
+                            ></Form.Check>
+                          </div>
                         </div>
-                        <div className="review-toggle">
-                          <Form.Check
-                            type="checkbox"
-                            checked={reviewedLicenses.has(
-                              licenseDetection.identifier
-                            )}
-                            onChange={(e) =>
-                              handleItemToggle(
-                                licenseDetection,
-                                LicenseTypes.DETECTION,
-                                e.target.checked
-                              )
-                            }
-                            onClick={(e) => e.stopPropagation()}
-                          ></Form.Check>
-                        </div>
-                      </div>
-                    </ListGroupItem>
-                  );
-                })}
-              </ListGroup>
-            </Allotment.Pane>
-            <Allotment.Pane className="licenses-navigator-pane pt-2">
-              <div className="licenses-navigator-pane-title">
-                {licenseClues.length > 0 ? "License Clues" : "No License Clues"}
-              </div>
-              <ListGroup
-                hidden={licenseClues.length === 0}
-                className="licenses-list"
-              >
-                {licenseClues.map((licenseClue) => {
-                  const isLicenseClueActive =
-                    activeLicense &&
-                    activeLicense.type === "clue" &&
-                    activeLicense.license === licenseClue;
-                  const showClue =
-                    shownByReviewFilter(licenseClue) &&
-                    licenseClue.license_expression
-                      .toLowerCase()
-                      .includes(searchedLicense.toLowerCase());
+                      </ListGroupItem>
+                    );
+                  })}
+                </ListGroup>
+              </Allotment.Pane>
+              <Allotment.Pane className="licenses-navigator-pane pt-2">
+                <div className="licenses-navigator-pane-title">
+                  {licenseClues.length > 0
+                    ? "License Clues"
+                    : "No License Clues"}
+                </div>
+                <ListGroup
+                  hidden={licenseClues.length === 0}
+                  className="licenses-list"
+                >
+                  {licenseClues.map((licenseClue) => {
+                    const isLicenseClueActive =
+                      activeLicense &&
+                      activeLicense.type === "clue" &&
+                      activeLicense.license === licenseClue;
+                    const showClue =
+                      shownByReviewFilter(licenseClue) &&
+                      licenseClue.license_expression
+                        .toLowerCase()
+                        .includes(searchedLicense.toLowerCase());
 
-                  return (
-                    <ListGroupItem
-                      onClick={() => activateLicenseClue(licenseClue)}
-                      key={licenseClue.identifier}
-                      className="license-group-item"
-                      style={{
-                        display: showClue ? "block" : "none",
-                      }}
-                    >
-                      <div
-                        className={
-                          "license-item " +
-                          (isLicenseClueActive ? "selected-license" : "")
-                        }
+                    return (
+                      <ListGroupItem
+                        onClick={() => activateLicenseClue(licenseClue)}
+                        key={licenseClue.identifier}
+                        className="license-group-item"
+                        data-license-identifier={licenseClue.identifier}
+                        style={{
+                          display: showClue ? "block" : "none",
+                        }}
                       >
-                        <div className="expression">
-                          {licenseClue.license_expression}
-                        </div>
-                        {todos.has(licenseClue.identifier) && (
-                          <div className="todo-indicator">
-                            <FontAwesomeIcon icon={faExclamation} />
+                        <div
+                          className={
+                            "license-item " +
+                            (isLicenseClueActive ? "selected-license" : "")
+                          }
+                        >
+                          <div className="expression">
+                            {licenseClue.license_expression}
                           </div>
-                        )}
-                        <div className="review-toggle">
-                          <Form.Check
-                            type="checkbox"
-                            checked={reviewedLicenses.has(
-                              licenseClue.identifier
-                            )}
-                            onChange={(e) =>
-                              handleItemToggle(
-                                licenseClue,
-                                LicenseTypes.CLUE,
-                                e.target.checked
-                              )
-                            }
-                            onClick={(e) => e.stopPropagation()}
-                          ></Form.Check>
+                          {todos.has(licenseClue.identifier) && (
+                            <div className="todo-indicator">
+                              <FontAwesomeIcon icon={faExclamation} />
+                            </div>
+                          )}
+                          <div className="review-toggle">
+                            <Form.Check
+                              type="checkbox"
+                              checked={reviewedLicenses.has(
+                                licenseClue.identifier
+                              )}
+                              onChange={(e) =>
+                                handleItemToggle(
+                                  licenseClue,
+                                  LicenseTypes.CLUE,
+                                  e.target.checked
+                                )
+                              }
+                              onClick={(e) => e.stopPropagation()}
+                            ></Form.Check>
+                          </div>
                         </div>
-                      </div>
-                    </ListGroupItem>
-                  );
-                })}
-              </ListGroup>
-            </Allotment.Pane>
-          </Allotment>
+                      </ListGroupItem>
+                    );
+                  })}
+                </ListGroup>
+              </Allotment.Pane>
+            </Allotment>
+          </div>
         </Allotment.Pane>
         <Allotment.Pane snap minSize={500} className="license-entity-pane">
           <LicenseEntity

@@ -28,10 +28,10 @@ const LicenseMatchesTable = (props: LicenseMatchProps) => {
   return (
     <MatchedTextProvider>
       <div>
-        {matchesInfo.matches.map((match) => (
+        {matchesInfo.matches.map((match, idx) => (
           <div
             className="matches-table-container"
-            key={match.license_expression}
+            key={match.license_expression + "_" + idx}
           >
             <Table size="sm" bordered>
               <tbody>

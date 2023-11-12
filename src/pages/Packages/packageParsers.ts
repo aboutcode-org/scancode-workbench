@@ -60,6 +60,9 @@ export function generatePackagesMapping(
         datasource_ids:
           JSON.parse(packageInfo.getDataValue("datasource_ids") || "[]") || [],
         purl: packageInfo.getDataValue("purl"),
+        license_detections: JSON.parse(
+          packageInfo.getDataValue("license_detections")
+        ),
       },
     ])
   );

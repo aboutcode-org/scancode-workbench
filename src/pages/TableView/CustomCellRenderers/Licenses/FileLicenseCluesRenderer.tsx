@@ -1,19 +1,10 @@
 import React, { useMemo } from "react";
 import { Link } from "react-router-dom";
-import { QUERY_KEYS } from "../../../../constants/params";
-import { ROUTES } from "../../../../constants/routes";
 import { LicenseClueDetails } from "../../../Licenses/licenseDefinitions";
+import { generateLicenseClueUrl } from "../../../../utils/navigatorQueries";
 
 interface FileLicenseCluesRendererProps {
   value: LicenseClueDetails[];
-}
-
-function generateUrl(
-  clueExpression: string,
-  clueFilePath: string,
-  fileClueIdx: number
-) {
-  return `/${ROUTES.LICENSES}?${QUERY_KEYS.LICENSE_CLUE_EXPRESSION}=${clueExpression}&${QUERY_KEYS.LICENSE_CLUE_FILE_PATH}=${clueFilePath}&${QUERY_KEYS.LICENSE_CLUE_FILE_CLUE_IDX}=${fileClueIdx}`;
 }
 
 const FileLicenseCluesRenderer = (props: FileLicenseCluesRendererProps) => {
@@ -44,7 +35,7 @@ const FileLicenseCluesRenderer = (props: FileLicenseCluesRendererProps) => {
         return (
           <React.Fragment key={clue.license_expression + idx}>
             <Link
-              to={generateUrl(
+              to={generateLicenseClueUrl(
                 clue.license_expression,
                 clue.filePath,
                 clue.fileClueIdx

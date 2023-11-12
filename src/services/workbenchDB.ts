@@ -497,6 +497,20 @@ export class WorkbenchDB {
       header
     );
     const packages = rawTopLevelData.packages || [];
+    packages.forEach(
+      (pkg: {
+        license_detections: {
+          license_expression: string;
+          identifier: string;
+          match?: string; // Not required further, hence removing to reduce sqlite size
+        }[];
+      }) => {
+        pkg.license_detections = pkg.license_detections.map((detection) => ({
+          license_expression: detection.license_expression,
+          identifier: detection.identifier,
+        }));
+      }
+    );
     const dependencies = rawTopLevelData.dependencies || [];
     const license_detections: TopLevelLicenseDetection[] = (
       rawTopLevelData.license_detections || []

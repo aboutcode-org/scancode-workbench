@@ -1,16 +1,10 @@
 import React, { useMemo } from "react";
 import { Link } from "react-router-dom";
-import { QUERY_KEYS } from "../../../../constants/params";
-import { ROUTES } from "../../../../constants/routes";
 import { LicenseDetectionDetails } from "../../../Licenses/licenseDefinitions";
+import { generateLicenseDetectionUrl } from "../../../../utils/navigatorQueries";
 
 interface FileLicenseDetectionsRendererProps {
   value: LicenseDetectionDetails[];
-}
-
-const URL_PREFIX = `/${ROUTES.LICENSES}?${QUERY_KEYS.LICENSE_DETECTION}=`;
-function generateUrl(detectionIdentifier: string) {
-  return URL_PREFIX + detectionIdentifier;
 }
 
 const FileLicenseDetectionsRenderer = (
@@ -42,7 +36,7 @@ const FileLicenseDetectionsRenderer = (
       {parsedValue.map((detection, idx) => {
         return (
           <React.Fragment key={detection.license_expression + idx}>
-            <Link to={generateUrl(detection.identifier)}>
+            <Link to={generateLicenseDetectionUrl(detection.identifier)}>
               {detection.license_expression}
             </Link>
             <br />
