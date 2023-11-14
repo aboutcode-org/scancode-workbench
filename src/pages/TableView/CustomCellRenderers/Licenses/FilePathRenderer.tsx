@@ -4,15 +4,16 @@ import CoreLink from "../../../../components/CoreLink/CoreLink";
 
 interface FilePathRendererProps {
   value: string;
+  iconComponent?: React.ReactNode;
 }
 
 const FilePathRenderer = (props: FilePathRendererProps) => {
-  const { value } = props;
+  const { value, iconComponent } = props;
   const { goToFileInTableView } = useWorkbenchDB();
 
   return (
     <CoreLink key={value} onClick={() => goToFileInTableView(value)}>
-      {value}
+      {value} {iconComponent || <></>}
     </CoreLink>
   );
 };

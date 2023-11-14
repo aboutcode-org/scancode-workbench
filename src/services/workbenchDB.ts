@@ -609,7 +609,7 @@ export class WorkbenchDB {
     function addLicenseDetection(
       detection: ResourceLicenseDetection,
       detectionIdx: number,
-      from_package = false
+      from_package: string = null
     ) {
       const detectionIdentifier =
         detection.identifier || for_license_detections[detectionIdx];
@@ -739,11 +739,12 @@ export class WorkbenchDB {
     }
 
     (file?.license_detections || []).forEach((detection, idx) =>
-      addLicenseDetection(detection, idx, false)
+      addLicenseDetection(detection, idx)
     );
+    // @TODO - We need pkg.identifier instead of PURL here !!
     file?.package_data?.forEach((pkg) =>
       pkg.license_detections?.forEach((detection, idx) =>
-        addLicenseDetection(detection, idx, true)
+        addLicenseDetection(detection, idx, pkg.purl)
       )
     );
   }
@@ -792,7 +793,6 @@ export class WorkbenchDB {
           path: file.path,
           start_line: license_clue.start_line,
           end_line: license_clue.end_line,
-          // from_package: false,
         },
       ];
     });

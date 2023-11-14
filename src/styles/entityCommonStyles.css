@@ -50,8 +50,3 @@
   max-height: calc(var(--max-entity-table-height) - var(--entity-table-header-height) - var(--entity-table-height));
   flex: none;
 }
-
-.entity-table .ag-center-cols-viewport .ag-center-cols-container {
-  overflow-y: auto;
-  overflow-x: hidden;
-}

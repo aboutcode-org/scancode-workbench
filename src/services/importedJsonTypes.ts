@@ -92,7 +92,7 @@ export interface LicenseFileRegion {
   path: string;
   start_line: number;
   end_line: number;
-  from_package?: boolean;
+  from_package?: string;
 }
 export interface LicenseClue {
   score: number;
@@ -158,7 +158,61 @@ export interface Resource {
   is_source?: boolean;
   is_script?: boolean;
   package_data?: {
+    type: string;
+    namespace: string;
+    name: string;
+    version: string;
+    qualifiers: unknown;
+    subpath: string;
+    primary_language: string | null;
+    description: string;
+    release_date: null;
+    parties: {
+      type: string;
+      role: string;
+      name: string;
+      email: string;
+      url: string;
+    }[];
+    keywords: string[];
+    homepage_url: string;
+    download_url: string;
+    size: number;
+    sha1: string;
+    md5: string;
+    sha256: string;
+    sha512: string;
+    bug_tracking_url: string;
+    code_view_url: string;
+    vcs_url: string;
+    copyright: string;
+    holder: string;
+    declared_license_expression: string;
+    declared_license_expression_spdx: string;
     license_detections?: ResourceLicenseDetection[];
+    other_license_expression: string;
+    other_license_expression_spdx: string;
+    other_license_detections?: ResourceLicenseDetection[];
+    extracted_license_statement: string;
+    notice_text: string;
+    source_packages: string[];
+    file_references: unknown[];
+    extra_data: unknown;
+    dependencies: {
+      purl: string;
+      extracted_requirement: null;
+      scope: string | null;
+      is_runtime: boolean;
+      is_optional: boolean;
+      is_resolved: boolean;
+      resolved_package: unknown;
+      extra_data: unknown;
+    }[];
+    repository_homepage_url: string;
+    repository_download_url: string;
+    api_data_url: string;
+    datasource_id: string;
+    purl: string;
   }[];
   for_packages?: string[];
   detected_license_expression?: string | null;

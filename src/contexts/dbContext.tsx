@@ -24,7 +24,7 @@ import { AddEntry, GetHistory, RemoveEntry } from "../services/historyStore";
 import { WorkbenchDB } from "../services/workbenchDB";
 import { isSqliteSchemaOutdated } from "../utils/checks";
 import { ScanInfo, parseScanInfo } from "../utils/parsers";
-import { generateLicenseDetectionUrl } from "../utils/navigatorQueries";
+import { generateLicenseDetectionNavigationUrl, generatePackageNavigationUrl } from "../utils/navigatorQueries";
 
 const { version: workbenchVersion } = packageJson;
 const { ipcRenderer } = electron;
@@ -56,7 +56,8 @@ interface WorkbenchContextProperties extends BasicValueState {
   updateLoadingStatus: React.Dispatch<React.SetStateAction<number | null>>;
   updateCurrentPath: (newPath: string, type: PathType) => void;
   goToFileInTableView: (path: string) => void;
-  goToLicenseDetection: (identifier: string) => void;
+  goToLicenseDetection: (licenseDetectionIdentifier: string) => void;
+  goToPackage: (packageIdentifier: string) => void;
 }
 
 export const defaultWorkbenchContextValue: WorkbenchContextProperties = {
@@ -80,6 +81,7 @@ export const defaultWorkbenchContextValue: WorkbenchContextProperties = {
   updateCurrentPath: () => null,
   goToFileInTableView: () => null,
   goToLicenseDetection: () => null,
+  goToPackage: () => null,
 };
 
 const WorkbenchContext = createContext<WorkbenchContextProperties>(
@@ -116,8 +118,12 @@ export const WorkbenchDBProvider = (
     navigate("/" + ROUTES.TABLE_VIEW);
   }
 
-  function goToLicenseDetection(identifier: string) {
-    navigate(generateLicenseDetectionUrl(identifier));
+  function goToLicenseDetection(licenseDetectionIdentifier: string) {
+    navigate(generateLicenseDetectionNavigationUrl(licenseDetectionIdentifier));
+  }
+
+  function goToPackage(packageIdentifier: string) {
+    navigate(generatePackageNavigationUrl(packageIdentifier));
   }
 
   const startImport = () => {
@@ -491,6 +497,7 @@ export const WorkbenchDBProvider = (
         updateCurrentPath,
         goToFileInTableView,
         goToLicenseDetection,
+        goToPackage,
       }}
     >
       {props.children}

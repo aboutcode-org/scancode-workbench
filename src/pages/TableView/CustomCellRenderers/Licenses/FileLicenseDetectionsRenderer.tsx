@@ -1,7 +1,7 @@
 import React, { useMemo } from "react";
 import { Link } from "react-router-dom";
 import { LicenseDetectionDetails } from "../../../Licenses/licenseDefinitions";
-import { generateLicenseDetectionUrl } from "../../../../utils/navigatorQueries";
+import { generateLicenseDetectionNavigationUrl } from "../../../../utils/navigatorQueries";
 
 interface FileLicenseDetectionsRendererProps {
   value: LicenseDetectionDetails[];
@@ -36,7 +36,7 @@ const FileLicenseDetectionsRenderer = (
       {parsedValue.map((detection, idx) => {
         return (
           <React.Fragment key={detection.license_expression + idx}>
-            <Link to={generateLicenseDetectionUrl(detection.identifier)}>
+            <Link to={generateLicenseDetectionNavigationUrl(detection.identifier)}>
               {detection.license_expression}
             </Link>
             <br />

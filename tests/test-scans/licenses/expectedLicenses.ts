@@ -44,7 +44,7 @@ export const LicenseSamples: {
         matches:
           '[{"score":100,"start_line":1,"end_line":1,"matched_length":4,"match_coverage":100,"matcher":"2-aho","license_expression":"apache-2.0","rule_identifier":"apache-2.0_65.RULE","rule_relevance":100,"rule_url":"https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/rules/apache-2.0_65.RULE","license_expression_keys":[{"key":"apache-2.0","licensedb_url":"https://scancode-licensedb.aboutcode.org/apache-2.0","scancode_url":"https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/licenses/apache-2.0.LICENSE"}],"license_expression_spdx_keys":[{"key":"Apache-2.0","spdx_url":"https://spdx.org/licenses/Apache-2.0"}],"license_expression_spdx":"Apache-2.0","path":"anglesharp.css.0.16.4/file_with_multiple_licenses.txt"},{"score":100,"start_line":3,"end_line":3,"matched_length":4,"match_coverage":100,"matcher":"2-aho","license_expression":"gpl-3.0","rule_identifier":"gpl-3.0_173.RULE","rule_relevance":100,"rule_url":"https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/rules/gpl-3.0_173.RULE","license_expression_keys":[{"key":"gpl-3.0","licensedb_url":null,"scancode_url":null}],"license_expression_spdx_keys":[{"key":"GPL-3.0-only","spdx_url":null}],"license_expression_spdx":"GPL-3.0-only","path":"anglesharp.css.0.16.4/file_with_multiple_licenses.txt"}]',
         file_regions:
-          '[{"path":"anglesharp.css.0.16.4/file_with_multiple_licenses.txt","start_line":1,"end_line":3,"from_package":false}]',
+          '[{"path":"anglesharp.css.0.16.4/file_with_multiple_licenses.txt","start_line":1,"end_line":3,"from_package":null}]',
       },
       {
         id: 2,
@@ -56,7 +56,7 @@ export const LicenseSamples: {
         matches:
           '[{"score":100,"start_line":9,"end_line":9,"matched_length":2,"match_coverage":100,"matcher":"2-aho","license_expression":"mit","rule_identifier":"mit_14.RULE","rule_relevance":100,"rule_url":"https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/rules/mit_14.RULE","matched_text":"MIT</license>","license_expression_keys":[{"key":"mit","licensedb_url":"https://scancode-licensedb.aboutcode.org/mit","scancode_url":"https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/licenses/mit.LICENSE"}],"license_expression_spdx_keys":[{"key":"MIT","spdx_url":"https://spdx.org/licenses/MIT"}],"license_expression_spdx":"MIT","path":"anglesharp.css.0.16.4/AngleSharp.Css.nuspec"},{"score":100,"start_line":10,"end_line":10,"matched_length":5,"match_coverage":100,"matcher":"1-spdx-id","license_expression":"mit","rule_identifier":"spdx-license-identifier-mit-c02399fc3bda518cf5890c9587642a2525fce16b","rule_relevance":100,"rule_url":null,"matched_text":"licenses.nuget.org/MIT</licenseUrl>","license_expression_keys":[{"key":"mit","licensedb_url":"https://scancode-licensedb.aboutcode.org/mit","scancode_url":"https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/licenses/mit.LICENSE"}],"license_expression_spdx_keys":[{"key":"MIT","spdx_url":"https://spdx.org/licenses/MIT"}],"license_expression_spdx":"MIT","path":"anglesharp.css.0.16.4/AngleSharp.Css.nuspec"}]',
         file_regions:
-          '[{"path":"anglesharp.css.0.16.4/AngleSharp.Css.nuspec","start_line":9,"end_line":10,"from_package":false}]',
+          '[{"path":"anglesharp.css.0.16.4/AngleSharp.Css.nuspec","start_line":9,"end_line":10,"from_package":null}]',
       },
       {
         id: 3,
@@ -68,7 +68,7 @@ export const LicenseSamples: {
         matches:
           '[{"score":100,"start_line":1,"end_line":1,"matched_length":1,"match_coverage":100,"matcher":"1-spdx-id","license_expression":"mit","rule_identifier":"spdx-license-identifier-mit-5da48780aba670b0860c46d899ed42a0f243ff06","rule_relevance":100,"rule_url":null,"matched_text":"MIT","license_expression_keys":[{"key":"mit","licensedb_url":"https://scancode-licensedb.aboutcode.org/mit","scancode_url":"https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/licenses/mit.LICENSE"}],"license_expression_spdx_keys":[{"key":"MIT","spdx_url":"https://spdx.org/licenses/MIT"}],"license_expression_spdx":"MIT","path":"anglesharp.css.0.16.4/AngleSharp.Css.nuspec"}]',
         file_regions:
-          '[{"path":"anglesharp.css.0.16.4/AngleSharp.Css.nuspec","start_line":1,"end_line":1,"from_package":true}]',
+          '[{"path":"anglesharp.css.0.16.4/AngleSharp.Css.nuspec","start_line":1,"end_line":1,"from_package":"pkg:nuget/AngleSharp.Css@0.16.4"}]',
       },
       {
         id: 4,
@@ -80,7 +80,7 @@ export const LicenseSamples: {
         matches:
           '[{"score":77.78,"start_line":1,"end_line":1,"matched_length":7,"match_coverage":100,"matcher":"5-undetected","license_expression":"unknown","rule_identifier":"package-manifest-unknown-16117ed57856733eaaf6d91ea575b186a9dab3df","rule_relevance":100,"rule_url":"https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/rules/package-manifest-unknown-16117ed57856733eaaf6d91ea575b186a9dab3df","matched_text":"license {\'LegalCopyright\': \'Copyright © AngleSharp, 2013-2019\', \'LegalTrademarks\': \'\', \'License\': None}","license_expression_keys":[{"key":"unknown","licensedb_url":"https://scancode-licensedb.aboutcode.org/unknown","scancode_url":"https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/licenses/unknown.LICENSE"}],"license_expression_spdx_keys":[],"path":"anglesharp.css.0.16.4/AngleSharp.Css.dll"}]',
         file_regions:
-          '[{"path":"anglesharp.css.0.16.4/AngleSharp.Css.dll","start_line":1,"end_line":1,"from_package":true},{"path":"anglesharp.css.0.16.4/AngleSharpLib.Css.dll","start_line":1,"end_line":1,"from_package":true}]',
+          '[{"path":"anglesharp.css.0.16.4/AngleSharp.Css.dll","start_line":1,"end_line":1,"from_package":"pkg:winexe/AngleSharp.Css@0.16.4%2Ba754c9adb1d678341e9f489674a8ad7a7199eae8"},{"path":"anglesharp.css.0.16.4/AngleSharpLib.Css.dll","start_line":1,"end_line":1,"from_package":"pkg:winexe/AngleSharp.Css@0.16.4%2Ba754c9adb1d678341e9f489674a8ad7a7199eae8"}]',
       },
       {
         id: 5,
@@ -92,7 +92,7 @@ export const LicenseSamples: {
         matches:
           '[{"score":100,"start_line":1,"end_line":1,"matched_length":5,"match_coverage":100,"matcher":"1-hash","license_expression":"apache-2.0","rule_identifier":"apache-2.0_48.RULE","rule_relevance":100,"rule_url":"https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/rules/apache-2.0_48.RULE","matched_text":"Apache License, Version 2.0","license_expression_keys":[{"key":"apache-2.0","licensedb_url":"https://scancode-licensedb.aboutcode.org/apache-2.0","scancode_url":"https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/licenses/apache-2.0.LICENSE"}],"license_expression_spdx_keys":[],"path":"rx-lite/package.json"}]',
         file_regions:
-          '[{"path":"rx-lite/package.json","start_line":1,"end_line":1,"from_package":true}]',
+          '[{"path":"rx-lite/package.json","start_line":1,"end_line":1,"from_package":"pkg:npm/rx-lite@4.0.8"}]',
       },
       {
         id: 6,
@@ -104,7 +104,7 @@ export const LicenseSamples: {
         matches:
           '[{"score":100,"start_line":1,"end_line":1,"matched_length":9,"match_coverage":100,"matcher":"1-hash","license_expression":"apache-2.0","rule_identifier":"apache-2.0_20.RULE","rule_relevance":100,"rule_url":"https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/rules/apache-2.0_20.RULE","matched_text":"http://www.apache.org/licenses/LICENSE-2.0.html","license_expression_keys":[{"key":"apache-2.0","licensedb_url":"https://scancode-licensedb.aboutcode.org/apache-2.0","scancode_url":"https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/licenses/apache-2.0.LICENSE"}],"license_expression_spdx_keys":[],"path":"rx-lite/package.json"}]',
         file_regions:
-          '[{"path":"rx-lite/package.json","start_line":1,"end_line":1,"from_package":true}]',
+          '[{"path":"rx-lite/package.json","start_line":1,"end_line":1,"from_package":"pkg:npm/rx-lite@4.0.8"}]',
       },
     ],
     expectedLicenseExpressions: [

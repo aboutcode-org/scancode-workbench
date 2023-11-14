@@ -1,7 +1,7 @@
 import React, { useMemo } from "react";
 import { Link } from "react-router-dom";
 import { LicenseClueDetails } from "../../../Licenses/licenseDefinitions";
-import { generateLicenseClueUrl } from "../../../../utils/navigatorQueries";
+import { generateLicenseClueNavigationUrl } from "../../../../utils/navigatorQueries";
 
 interface FileLicenseCluesRendererProps {
   value: LicenseClueDetails[];
@@ -35,7 +35,7 @@ const FileLicenseCluesRenderer = (props: FileLicenseCluesRendererProps) => {
         return (
           <React.Fragment key={clue.license_expression + idx}>
             <Link
-              to={generateLicenseClueUrl(
+              to={generateLicenseClueNavigationUrl(
                 clue.license_expression,
                 clue.filePath,
                 clue.fileClueIdx
