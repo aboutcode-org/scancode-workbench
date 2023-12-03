@@ -40,7 +40,12 @@ const FileInfoDash = () => {
     startProcessing();
 
     db.sync
-      .then((db) => db.File.findOne({ where: { path: currentPath } }))
+      .then((db) =>
+        db.File.findOne({
+          where: { path: currentPath },
+          attributes: ["type", "files_count", "dirs_count"],
+        })
+      )
       .then((root) => {
         const filesCount =
           root.getDataValue("type") === "directory"

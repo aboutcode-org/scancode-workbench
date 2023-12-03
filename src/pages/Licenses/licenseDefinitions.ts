@@ -13,6 +13,7 @@ export interface LicenseDetectionDetails {
   detection_log: string[];
   matches: LicenseDetectionMatch[];
   file_regions: LicenseFileRegion[];
+  count?: number | null;
 }
 export interface LicenseClueDetails {
   id: number;

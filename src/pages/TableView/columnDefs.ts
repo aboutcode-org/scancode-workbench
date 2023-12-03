@@ -1,7 +1,6 @@
 import {
   ColDef,
   IFilterOptionDef,
-  ValueFormatterParams,
 } from "ag-grid-community";
 
 import { ROUTES } from "../../constants/routes";
@@ -52,8 +51,7 @@ export const FILTER_OPTIONS: FilterOptionsMap = {
   LIST_FILTERS: ["contains", "notContains"],
 };
 
-const BooleanValueFormatter = (cell: ValueFormatterParams) =>
-  cell.value ? "Yes" : "No";
+const BooleanValueRenderer = (value: boolean) => (value ? "Yes" : "No");
 
 interface COLUMNS_LIST {
   // Required to update select options by field string
@@ -159,42 +157,42 @@ export const ALL_COLUMNS: COLUMNS_LIST = {
     field: "is_binary",
     colId: "is_binary",
     headerName: "Binary File",
-    valueFormatter: BooleanValueFormatter,
+    cellRenderer: BooleanValueRenderer,
     initialWidth: 100,
   },
   is_text: {
     field: "is_text",
     colId: "is_text",
     headerName: "Text File",
-    valueFormatter: BooleanValueFormatter,
+    cellRenderer: BooleanValueRenderer,
     initialWidth: 100,
   },
   is_archive: {
     field: "is_archive",
     colId: "is_archive",
     headerName: "Archive File",
-    valueFormatter: BooleanValueFormatter,
+    cellRenderer: BooleanValueRenderer,
     initialWidth: 100,
   },
   is_media: {
     field: "is_media",
     colId: "is_media",
     headerName: "Media File",
-    valueFormatter: BooleanValueFormatter,
+    cellRenderer: BooleanValueRenderer,
     initialWidth: 100,
   },
   is_source: {
     field: "is_source",
     colId: "is_source",
     headerName: "Source File",
-    valueFormatter: BooleanValueFormatter,
+    cellRenderer: BooleanValueRenderer,
     initialWidth: 100,
   },
   is_script: {
     field: "is_script",
     colId: "is_script",
     headerName: "Script File",
-    valueFormatter: BooleanValueFormatter,
+    cellRenderer: BooleanValueRenderer,
     initialWidth: 100,
   },
 

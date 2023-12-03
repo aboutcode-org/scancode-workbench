@@ -3,12 +3,12 @@ import {
   LicenseClueMatch,
   LicenseDetectionMatch,
 } from "../../services/importedJsonTypes";
-import { Table } from "react-bootstrap";
+import { OverlayTrigger, Popover, Table } from "react-bootstrap";
 import MatchedTextRenderer from "./LicenseMatchCells/MatchedText";
 import MatchLicenseExpressionRenderer from "./LicenseMatchCells/MatchLicenseExpression";
-import CoreLink from "../CoreLink/CoreLink";
 import { LicenseTypes } from "../../services/workbenchDB.types";
 import { MatchedTextProvider } from "./MatchedTextContext";
+import MatchRuleDetails from "./MatchRuleDetails";
 
 interface LicenseMatchProps {
   showLIcenseText?: boolean;
@@ -37,7 +37,7 @@ const LicenseMatchesTable = (props: LicenseMatchProps) => {
               <tbody>
                 <tr>
                   <td>License Expression</td>
-                  <td>
+                  <td colSpan={3}>
                     <MatchLicenseExpressionRenderer
                       matchInfo={{
                         match: match,
@@ -46,10 +46,23 @@ const LicenseMatchesTable = (props: LicenseMatchProps) => {
                     />
                   </td>
                 </tr>
+                {matchesInfo.licenseType === LicenseTypes.DETECTION && (
+                  <tr>
+                    <td>License Expression SPDX</td>
+                    <td colSpan={3}>
+                      <MatchLicenseExpressionRenderer
+                        matchInfo={{
+                          match: match,
+                          spdxLicense: true,
+                        }}
+                      />
+                    </td>
+                  </tr>
+                )}
                 {showLIcenseText && (
                   <tr className="matched-text-row">
                     <td>Matched Text</td>
-                    <td>
+                    <td colSpan={3}>
                       <div>
                         <MatchedTextRenderer
                           match={match}
@@ -60,42 +73,40 @@ const LicenseMatchesTable = (props: LicenseMatchProps) => {
                   </tr>
                 )}
                 <tr>
-                  <td>Score</td>
-                  <td>{match.score}</td>
-                </tr>
-                <tr>
                   <td>Matched length</td>
                   <td>{match.matched_length}</td>
-                </tr>
-                <tr>
                   <td>Match Coverage</td>
                   <td>{match.match_coverage}</td>
                 </tr>
                 <tr>
+                  <td>Score</td>
+                  <td>{match.score}</td>
+                  <td>Rule Relevance</td>
+                  <td>{match.rule_relevance}</td>
+                </tr>
+                <tr>
+                  <td>Rule</td>
+                  <td>
+                    <span>
+                      <OverlayTrigger
+                        trigger={["hover", "focus"]}
+                        placement="right"
+                        delay={{ show: 200, hide: 300 }}
+                        overlay={
+                          <Popover className="rule-popover">
+                            <Popover.Body>
+                              <MatchRuleDetails match={match} />
+                            </Popover.Body>
+                          </Popover>
+                        }
+                      >
+                        <span>{match.rule_identifier}</span>
+                      </OverlayTrigger>
+                    </span>
+                  </td>
                   <td>Matcher</td>
                   <td>{match.matcher}</td>
                 </tr>
-                <tr>
-                  <td>Rule URL</td>
-                  <td>
-                    <CoreLink href={match.rule_url} external>
-                      {match.rule_identifier}
-                    </CoreLink>
-                  </td>
-                </tr>
-                {matchesInfo.licenseType === LicenseTypes.DETECTION && (
-                  <tr>
-                    <td>License Expression SPDX</td>
-                    <td>
-                      <MatchLicenseExpressionRenderer
-                        matchInfo={{
-                          match: match,
-                          spdxLicense: true,
-                        }}
-                      />
-                    </td>
-                  </tr>
-                )}
               </tbody>
             </Table>
           </div>

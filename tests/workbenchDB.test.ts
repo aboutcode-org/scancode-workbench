@@ -235,22 +235,22 @@ describe("Parse Licenses", () => {
             "license_detections",
           ],
         })
-      ).map((flatFile) => flatFile.dataValues);
+      ).map((flatFile) => flatFile.toJSON());
       const licenseDetections = (await db.LicenseDetections.findAll()).map(
-        (detection) => detection.dataValues
+        (detection) => detection.toJSON()
       );
-      const licenseClues = (await db.LicenseClues.findAll()).map(
-        (clue) => clue.dataValues
+      const licenseClues = (await db.LicenseClues.findAll()).map((clue) =>
+        clue.toJSON()
       );
       const licenseExpressions = (await db.LicenseExpression.findAll()).map(
-        (expression) => expression.dataValues
+        (expression) => expression.toJSON()
       );
-      const licensePolicies = (await db.LicensePolicy.findAll()).map(
-        (policy) => policy.dataValues
+      const licensePolicies = (await db.LicensePolicy.findAll()).map((policy) =>
+        policy.toJSON()
       );
       const licenseRuleReferences = (
         await db.LicenseRuleReferences.findAll()
-      ).map((ruleReference) => ruleReference.dataValues);
+      ).map((ruleReference) => ruleReference.toJSON());
 
       assert.deepEqual(flatFiles, expectedFlatFiles);
       assert.deepEqual(licenseDetections, expectedLicenseDetections);
@@ -363,5 +363,5 @@ describe("Parse Todos", () => {
 
       assert.deepEqual(todos, expectedTodos);
     }
-    )
-})
+  );
+});

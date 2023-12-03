@@ -61,7 +61,7 @@ export default function dependenciesModel(sequelize: Sequelize) {
       is_runtime: DataTypes.BOOLEAN,
       is_optional: DataTypes.BOOLEAN,
       is_resolved: DataTypes.BOOLEAN,
-      resolved_package: jsonDataType("resolved_package"),
+      resolved_package: jsonDataType("resolved_package", {}),
       dependency_uid: DataTypes.STRING,
       for_package_uid: {
         allowNull: true,

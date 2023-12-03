@@ -58,8 +58,8 @@ export default function headerModel(sequelize: Sequelize) {
       tool_version: DataTypes.STRING,
       notice: DataTypes.STRING,
       duration: DataTypes.DOUBLE,
-      options: jsonDataType("options"),
-      input: jsonDataType("input"),
+      options: jsonDataType("options", {}),
+      input: jsonDataType("input", []),
       header_content: DataTypes.STRING,
       files_count: DataTypes.INTEGER,
       output_format_version: {
@@ -95,7 +95,7 @@ export default function headerModel(sequelize: Sequelize) {
         type: DataTypes.STRING,
         defaultValue: "None",
       },
-      errors: jsonDataType("errors"),
+      errors: jsonDataType("errors", []),
     },
     {
       timestamps: false,

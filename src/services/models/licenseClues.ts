@@ -15,7 +15,8 @@
  */
 
 import { Sequelize, DataTypes, Model } from "sequelize";
-import { JSON_Type, jsonDataType } from "./databaseUtils";
+import { jsonDataType } from "./databaseUtils";
+import { LicenseClueMatch, LicenseFileRegion } from "../importedJsonTypes";
 
 export interface LicenseClueAttributes {
   id: number;
@@ -26,8 +27,8 @@ export interface LicenseClueAttributes {
   license_expression: string;
   rule_identifier: string;
   reviewed: boolean;
-  matches: JSON_Type;
-  file_regions: JSON_Type;
+  matches: LicenseClueMatch[];
+  file_regions: LicenseFileRegion[];
 }
 
 export default function licenseClueModel(sequelize: Sequelize) {
@@ -53,8 +54,8 @@ export default function licenseClueModel(sequelize: Sequelize) {
         defaultValue: false,
         type: DataTypes.BOOLEAN,
       },
-      matches: jsonDataType("matches"),
-      file_regions: jsonDataType("file_regions"),
+      matches: jsonDataType("matches", []),
+      file_regions: jsonDataType("file_regions", []),
     },
     {
       timestamps: false,

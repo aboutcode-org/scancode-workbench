@@ -105,7 +105,7 @@ export interface FileDataNode extends DataNode {
 // function sortChildren(node: Model<FileAttributes, FileAttributes>){
 function sortChildren(node: FileDataNode) {
   if (!node.children || !node.children.length) return;
-  node.children.sort((a: any, b: any) => {
+  node.children.sort((a, b) => {
     if (a.type === b.type) return 0;
     if (a.type === "file") return 1;
     return -1;
@@ -182,7 +182,12 @@ export class WorkbenchDB {
 
   getAllLicenseDetections() {
     return this.sync.then((db) =>
-      db.LicenseDetections.findAll({ order: ["license_expression"] })
+      db.LicenseDetections.findAll({
+        order: [
+          ["detection_count", "DESC"],
+          ["identifier", "ASC"],
+        ],
+      })
     );
   }
 
@@ -424,12 +429,12 @@ export class WorkbenchDB {
                 })
                 .then(() =>
                   this.db.LicenseDetections.bulkCreate(
-                    TopLevelData.license_detections as any as LicenseDetectionAttributes[]
+                    TopLevelData.license_detections
                   )
                 )
                 .then(() =>
                   this.db.LicenseClues.bulkCreate(
-                    TopLevelData.license_clues as any as LicenseClueAttributes[]
+                    TopLevelData.license_clues
                   )
                 )
                 .then(() => {

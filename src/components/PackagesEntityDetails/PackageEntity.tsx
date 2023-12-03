@@ -108,6 +108,7 @@ const PackageEntity = (props: PackageEntityProps) => {
         {activePackage.datafile_paths.map((datafile_path) => (
           <CoreLink
             key={datafile_path}
+            className="d-block"
             onClick={() => goToFileInTableView(datafile_path)}
           >
             <React.Fragment key={datafile_path}>{datafile_path}</React.Fragment>
@@ -126,6 +127,7 @@ const PackageEntity = (props: PackageEntityProps) => {
         {activePackage.license_detections.map((license_detection) => (
           <CoreLink
             key={license_detection.identifier}
+            className="d-block"
             onClick={() => goToLicenseDetection(license_detection.identifier)}
           >
             {license_detection.license_expression}

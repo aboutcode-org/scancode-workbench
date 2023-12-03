@@ -34,7 +34,7 @@ export default function todoModel(sequelize: Sequelize) {
         type: DataTypes.INTEGER,
       },
       detection_id: DataTypes.STRING,
-      issues: jsonDataType("issues"),
+      issues: jsonDataType("issues", {}),
     },
     {
       timestamps: false,

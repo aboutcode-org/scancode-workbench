@@ -26,7 +26,7 @@ export const DetectionFileRegionCols: ColDef[] = [
   {
     headerName: "Lines",
     cellRenderer: RegionLinesRenderer,
-    maxWidth: 85,
+    maxWidth: 100,
   },
   {
     headerName: "Detection origin",

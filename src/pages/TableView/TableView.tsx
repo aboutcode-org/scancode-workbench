@@ -32,7 +32,7 @@ const TableView = () => {
   // Necessary to keep coldef as empty array by default, to ensure filter set updates
   const [tableData, setTableData] = useState<FlatFileAttributes[]>([]);
   const [gridApi, setGridApi] = useState<GridApi | null>(null);
-  const [columnApi, setColumnApi] = useState<ColumnApi | null>(null);
+  const [, setColumnApi] = useState<ColumnApi | null>(null);
 
   const [searchText, setSearchText] = useState("");
   const [showColumnSelector, setShowColumnSelector] = useState(false);

@@ -15,7 +15,7 @@
  */
 
 import { Sequelize, DataTypes, Model } from "sequelize";
-import { jsonDataType, JSON_Type } from "./databaseUtils";
+import { jsonDataType } from "./databaseUtils";
 
 export interface LicenseDetectionAttributes {
   id: number;
@@ -23,9 +23,12 @@ export interface LicenseDetectionAttributes {
   license_expression: string;
   detection_count: number;
   reviewed: boolean;
-  detection_log: JSON_Type;
-  matches: JSON_Type;
-  file_regions: JSON_Type;
+  detection_log: string[];
+  matches: unknown[];
+  file_regions: unknown[];
+
+  // Legacy output version fields
+  count?: number;
 }
 
 export default function licenseDetectionModel(sequelize: Sequelize) {
@@ -48,9 +51,15 @@ export default function licenseDetectionModel(sequelize: Sequelize) {
         defaultValue: false,
         type: DataTypes.BOOLEAN,
       },
-      detection_log: jsonDataType("detection_log"),
-      matches: jsonDataType("matches"),
-      file_regions: jsonDataType("file_regions"),
+      detection_log: jsonDataType("detection_log", []),
+      matches: jsonDataType("matches", []),
+      file_regions: jsonDataType("file_regions", []),
+
+      // Legacy output version fields
+      count: {
+        type: DataTypes.NUMBER,
+        allowNull: true,
+      },
     },
     {
       timestamps: false,

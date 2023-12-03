@@ -23,15 +23,21 @@
 
 .matches-table-container table {
   margin: 0;
+  table-layout: fixed;
 }
 
 .matches-table-container table tr td {
   padding: 7px;
+  word-wrap: break-word;
 }
 
-.matches-table-container table tr td:first-child {
+.matches-table-container table tr td:nth-child(odd) {
   font-weight: 500;
-  width: 190px;
+  max-width: 190px;
+}
+
+.matches-table-container table tr td:nth-child(odd):not(:first-child) {
+  border-left: 1.5px double black;
 }
 
 .matches-table-container .matched-text-row a {
@@ -40,4 +46,16 @@
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.rule-popover {
+  max-width: 30% !important;
+}
+.rule-popover .popover-body{
+  padding: 12px;
+  word-wrap: break-word;
+}
+
+.rule-details .rule-detail-entry {
+  margin-bottom: 5px;
 }

@@ -74,7 +74,7 @@ export default function fileModel(sequelize: Sequelize) {
       mime_type: DataTypes.STRING,
       file_type: DataTypes.STRING,
       programming_language: DataTypes.STRING,
-      for_packages: jsonDataType("for_packages"),
+      for_packages: jsonDataType("for_packages", []),
       is_binary: DataTypes.BOOLEAN,
       is_text: DataTypes.BOOLEAN,
       is_archive: DataTypes.BOOLEAN,

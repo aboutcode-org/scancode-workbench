@@ -84,7 +84,7 @@ export default function packagesModel(sequelize: Sequelize) {
         allowNull: true,
         type: DataTypes.STRING,
       },
-      qualifiers: jsonDataType("qualifiers"),
+      qualifiers: jsonDataType("qualifiers", []),
       subpath: {
         allowNull: true,
         type: DataTypes.STRING,
@@ -101,8 +101,8 @@ export default function packagesModel(sequelize: Sequelize) {
         allowNull: true,
         type: DataTypes.STRING,
       },
-      parties: jsonDataType("parties"),
-      keywords: jsonDataType("keywords"),
+      parties: jsonDataType("parties", []),
+      keywords: jsonDataType("keywords", []),
       homepage_url: {
         allowNull: true,
         type: DataTypes.STRING,
@@ -155,7 +155,7 @@ export default function packagesModel(sequelize: Sequelize) {
         allowNull: true,
         type: DataTypes.STRING,
       },
-      license_detections: jsonDataType("license_detections"),
+      license_detections: jsonDataType("license_detections", []),
       other_license_expression: {
         allowNull: true,
         type: DataTypes.STRING,
@@ -164,7 +164,7 @@ export default function packagesModel(sequelize: Sequelize) {
         allowNull: true,
         type: DataTypes.STRING,
       },
-      other_license_detections: jsonDataType("other_license_detections"),
+      other_license_detections: jsonDataType("other_license_detections", []),
       extracted_license_statement: {
         allowNull: true,
         type: DataTypes.STRING,
@@ -173,8 +173,8 @@ export default function packagesModel(sequelize: Sequelize) {
         allowNull: true,
         type: DataTypes.STRING,
       },
-      source_packages: jsonDataType("source_packages"),
-      extra_data: jsonDataType("extra_data"),
+      source_packages: jsonDataType("source_packages", []),
+      extra_data: jsonDataType("extra_data", {}),
       repository_homepage_url: {
         allowNull: true,
         type: DataTypes.STRING,
@@ -187,8 +187,8 @@ export default function packagesModel(sequelize: Sequelize) {
         allowNull: true,
         type: DataTypes.STRING,
       },
-      datafile_paths: jsonDataType("datafile_paths"),
-      datasource_ids: jsonDataType("datasource_ids"),
+      datafile_paths: jsonDataType("datafile_paths", []),
+      datasource_ids: jsonDataType("datasource_ids", []),
       purl: {
         allowNull: true,
         type: DataTypes.STRING,

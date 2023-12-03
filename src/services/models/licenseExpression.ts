@@ -15,15 +15,15 @@
  */
 
 import { Sequelize, DataTypes, Model, Optional } from "sequelize";
-import { jsonDataType, JSON_Type } from "./databaseUtils";
+import { jsonDataType } from "./databaseUtils";
 
 export interface LicenseExpressionAttributes {
   id: number;
   fileId: number;
   license_expression: string;
   license_expression_spdx: string;
-  license_keys: JSON_Type;
-  license_keys_spdx: JSON_Type;
+  license_keys: string[];
+  license_keys_spdx: string[];
 }
 
 export type OptionalLicenseExpressionAttributes = Optional<
@@ -46,8 +46,8 @@ export default function licenseExpressionModel(sequelize: Sequelize) {
       fileId: DataTypes.INTEGER,
       license_expression: DataTypes.STRING,
       license_expression_spdx: DataTypes.STRING,
-      license_keys: jsonDataType("license_keys"),
-      license_keys_spdx: jsonDataType("license_keys_spdx"),
+      license_keys: jsonDataType("license_keys", []),
+      license_keys_spdx: jsonDataType("license_keys_spdx", []),
     },
     {
       timestamps: false,

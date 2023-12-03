@@ -92,43 +92,19 @@ const LicenseDetections = () => {
     (async () => {
       const newLicenseDetections: LicenseDetectionDetails[] = (
         await db.getAllLicenseDetections()
-      ).map((detection) => ({
-        id: Number(detection.getDataValue("id")),
-        reviewed: detection.getDataValue("reviewed"),
-        detection_count: Number(detection.getDataValue("detection_count")),
-        identifier: detection.getDataValue("identifier") || null,
-        license_expression: detection.getDataValue("license_expression"),
-        detection_log: JSON.parse(
-          detection.getDataValue("detection_log") || "[]"
-        ),
-        matches: JSON.parse(detection.getDataValue("matches") || "[]"),
-        file_regions: JSON.parse(
-          detection.getDataValue("file_regions") || "[]"
-        ),
-      }));
+      ).map((detection) => detection.toJSON());
       setLicenseDetections(newLicenseDetections);
 
       const newLicenseClues: LicenseClueDetails[] = (
         await db.getAllLicenseClues()
       ).map((clue) => {
+        const clueDetails = clue.toJSON();
         return {
-          id: Number(clue.getDataValue("id")),
+          ...clueDetails,
           // @TODO - Find better way to have unique identifier for each clue
-          identifier: `clue-${
-            clue.getDataValue("license_expression") || ""
-          }-${Number(clue.getDataValue("id"))}`,
-          reviewed: clue.getDataValue("reviewed"),
-          fileId: Number(clue.getDataValue("fileId")),
-          filePath: clue.getDataValue("filePath") || "",
-          fileClueIdx: Number(clue.getDataValue("fileClueIdx")),
-          score:
-            clue.getDataValue("score") !== null
-              ? Number(clue.getDataValue("score"))
-              : null,
-          license_expression: clue.getDataValue("license_expression") || null,
-          rule_identifier: clue.getDataValue("rule_identifier") || null,
-          matches: JSON.parse(clue.getDataValue("matches") || "[]"),
-          file_regions: JSON.parse(clue.getDataValue("file_regions") || "[]"),
+          identifier: `clue-${clueDetails.license_expression || ""}-${Number(
+            clueDetails.id
+          )}`,
         };
       });
       setLicenseClues(newLicenseClues);
@@ -265,7 +241,7 @@ const LicenseDetections = () => {
     );
   };
   const licenseDetectionsSectionSize = capSectionSize(
-    (licenseDetections?.length / totalLicenses) || 0
+    licenseDetections?.length / totalLicenses || 0
   );
 
   if (!licenseDetections || !licenseClues) {

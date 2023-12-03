@@ -105,20 +105,6 @@ const LicenseEntity = (props: LicenseDetectionEntityProps) => {
           </div>
         )}
       </div>
-      <b>File regions</b>
-      <AgGridReact
-        rowData={file_regions}
-        columnDefs={DetectionFileRegionCols}
-        onGridReady={(params) => params.api.sizeColumnsToFit()}
-        onGridSizeChanged={(params) => params.api.sizeColumnsToFit()}
-        className="ag-theme-alpine ag-grid-customClass entity-table"
-        ensureDomOrder
-        suppressHorizontalScroll
-        enableCellTextSelection
-        pagination={false}
-        defaultColDef={DEFAULT_FILE_REGION_COL_DEF}
-      />
-      <br />
       <b>Matches</b>
       <LicenseMatchesTable
         matchesInfo={{
@@ -133,6 +119,20 @@ const LicenseEntity = (props: LicenseDetectionEntityProps) => {
           matches[0]?.matched_text?.length > 0 ||
           false
         }
+      />
+      <br />
+      <b>File regions</b>
+      <AgGridReact
+        rowData={file_regions}
+        columnDefs={DetectionFileRegionCols}
+        onGridReady={(params) => params.api.sizeColumnsToFit()}
+        onGridSizeChanged={(params) => params.api.sizeColumnsToFit()}
+        className="ag-theme-alpine ag-grid-customClass entity-table"
+        ensureDomOrder
+        suppressHorizontalScroll
+        enableCellTextSelection
+        pagination={false}
+        defaultColDef={DEFAULT_FILE_REGION_COL_DEF}
       />
       <div className="raw-info-section">
         Raw license {activeLicenseEntity.type}

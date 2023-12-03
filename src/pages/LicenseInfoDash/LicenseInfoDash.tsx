@@ -20,8 +20,14 @@ import "./licenseInfoDash.css";
 
 const LicenseInfoDash = () => {
   const workbenchDB = useWorkbenchDB();
-  const { db, initialized, currentPath, scanInfo, startProcessing, endProcessing } =
-    workbenchDB;
+  const {
+    db,
+    initialized,
+    currentPath,
+    scanInfo,
+    startProcessing,
+    endProcessing,
+  } = workbenchDB;
 
   const [licenseExpressionData, setLicenseExpressionData] = useState<
     FormattedEntry[] | null
@@ -57,17 +63,12 @@ const LicenseInfoDash = () => {
           attributes: ["fileId", "license_detections"],
         })
       )
+      .then((rawFiles) => rawFiles.map((rawFile) => rawFile.toJSON()))
       .then((flatFiles) => {
-        const fileIDs = flatFiles.map((flatFile) =>
-          flatFile.getDataValue("fileId")
-        );
+        const fileIDs = flatFiles.map((flatFile) => flatFile.fileId);
 
         const filesWithDetections = flatFiles
-          .map((flatFile) =>
-            JSON.parse(
-              flatFile.getDataValue("license_detections") || "[]"
-            )
-          )
+          .map((flatFile) => flatFile.license_detections)
           .filter((detections) => detections.length);
 
         setScanData((oldScanData) => ({
@@ -80,11 +81,13 @@ const LicenseInfoDash = () => {
           .then((db) =>
             db.LicenseExpression.findAll({ where: { fileId: fileIDs } })
           )
+          .then((raw_license_expressions) =>
+            raw_license_expressions.map((expression) => expression.toJSON())
+          )
           .then((license_expressions) => {
             const expressions = license_expressions.map(
               (expression) =>
-                expression.getDataValue("license_expression") ||
-                NO_VALUE_DETECTED_LABEL
+                expression.license_expression || NO_VALUE_DETECTED_LABEL
             );
             // Prepare chart for license expressions
             const { chartData } = formatPieChartData(expressions);
@@ -93,18 +96,8 @@ const LicenseInfoDash = () => {
             const license_keys: string[] = [];
             const license_keys_spdx: string[] = [];
             license_expressions.forEach((expression) => {
-              license_keys.push(
-                ...JSON.parse(
-                  (expression.getDataValue("license_keys") || "[]")
-                )
-              );
-              license_keys_spdx.push(
-                ...JSON.parse(
-                  (
-                    expression.getDataValue("license_keys_spdx") || "[]"
-                  )
-                )
-              );
+              license_keys.push(...(expression.license_keys || []));
+              license_keys_spdx.push(...(expression.license_keys_spdx || []));
             });
 
             // Prepare chart for license & spdx keys
@@ -122,7 +115,10 @@ const LicenseInfoDash = () => {
         // Query and prepare chart for license policy
         const PolicyPromise = db.sync
           .then((db) =>
-            db.LicensePolicy.findAll({ where: { fileId: fileIDs } })
+            db.LicensePolicy.findAll({
+              where: { fileId: fileIDs },
+              attributes: ["label"],
+            })
           )
           .then((policies) =>
             policies.map(
