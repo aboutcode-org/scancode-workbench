@@ -75,7 +75,7 @@ const TableView = () => {
           },
         })
       )
-      .then((fileModels) => fileModels.map((fileModel) => fileModel.dataValues))
+      .then((fileModels) => fileModels.map((fileModel) => fileModel.toJSON()))
       .then((files) => {
         setTableData(files);
         let longestPathLength = 20;

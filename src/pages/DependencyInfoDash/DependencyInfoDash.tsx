@@ -1,4 +1,4 @@
-import { Model, Op } from "sequelize";
+import { Op } from "sequelize";
 import { Row, Col, Card } from "react-bootstrap";
 import React, { useEffect, useState } from "react";
 
@@ -52,7 +52,7 @@ const DependencyInfoDash = () => {
   >([]);
 
   function summarisePackageDataDeps(
-    packagesData: Model<PackageDataAttributes, PackageDataAttributes>[]
+    packagesData: PackageDataAttributes[],
   ) {
     const packageTypeToSummaryMapping = new Map<
       string,
@@ -61,12 +61,10 @@ const DependencyInfoDash = () => {
     packagesData.forEach((packageData) => {
       // Package data having PURL as null are invalid & will have no dependency
       // Hence, don't consider such package data (will be fixed in further scancode-toolkit version)
-      if (!packageData.getDataValue("purl")) return;
+      if (!packageData.purl) return;
 
-      const packageDataType = packageData.getDataValue("type");
-      const deps: DependencyDetails[] = JSON.parse(
-        packageData.getDataValue("dependencies") || "[]"
-      );
+      const packageDataType = packageData.type;
+      const deps: DependencyDetails[] = packageData.dependencies || [];
 
       if (!packageTypeToSummaryMapping.has(packageDataType)) {
         packageTypeToSummaryMapping.set(packageDataType, {
@@ -188,7 +186,9 @@ const DependencyInfoDash = () => {
       const packagesData = await db.PackageData.findAll({
         where: { fileId: fileIDs },
         attributes: ["type", "dependencies", "purl"],
-      });
+      }).then((packagesData) =>
+        packagesData.map((packageData) => packageData.toJSON())
+      );
 
       const depsSummaryData = summarisePackageDataDeps(packagesData);
       setPackageTypeDependenciesData(
@@ -223,7 +223,7 @@ const DependencyInfoDash = () => {
       <br />
       {packageTypeSummaryData.length > 0 && (
         <>
-        <h6>Dependency Scope summary by Package Type</h6>
+          <h6>Dependency Scope summary by Package Type</h6>
           <AgGridReact
             rowData={Object.values(packageTypeSummaryData || {})}
             columnDefs={DependencySummaryTableCols}

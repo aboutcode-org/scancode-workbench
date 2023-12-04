@@ -3,12 +3,15 @@ import {
   LicenseClueMatch,
   LicenseDetectionMatch,
 } from "../../services/importedJsonTypes";
-import { OverlayTrigger, Popover, Table } from "react-bootstrap";
+import { Button, OverlayTrigger, Popover, Table } from "react-bootstrap";
 import MatchedTextRenderer from "./LicenseMatchCells/MatchedText";
 import MatchLicenseExpressionRenderer from "./LicenseMatchCells/MatchLicenseExpression";
 import { LicenseTypes } from "../../services/workbenchDB.types";
 import { MatchedTextProvider } from "./MatchedTextContext";
 import MatchRuleDetails from "./MatchRuleDetails";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
+import CoreLink from "../CoreLink/CoreLink";
 
 interface LicenseMatchProps {
   showLIcenseText?: boolean;
@@ -46,19 +49,20 @@ const LicenseMatchesTable = (props: LicenseMatchProps) => {
                     />
                   </td>
                 </tr>
-                {matchesInfo.licenseType === LicenseTypes.DETECTION && (
-                  <tr>
-                    <td>License Expression SPDX</td>
-                    <td colSpan={3}>
-                      <MatchLicenseExpressionRenderer
-                        matchInfo={{
-                          match: match,
-                          spdxLicense: true,
-                        }}
-                      />
-                    </td>
-                  </tr>
-                )}
+                {matchesInfo.licenseType === LicenseTypes.DETECTION &&
+                  (match as LicenseDetectionMatch)?.license_expression_spdx && (
+                    <tr>
+                      <td>License Expression SPDX</td>
+                      <td colSpan={3}>
+                        <MatchLicenseExpressionRenderer
+                          matchInfo={{
+                            match: match,
+                            spdxLicense: true,
+                          }}
+                        />
+                      </td>
+                    </tr>
+                  )}
                 {showLIcenseText && (
                   <tr className="matched-text-row">
                     <td>Matched Text</td>
@@ -88,9 +92,20 @@ const LicenseMatchesTable = (props: LicenseMatchProps) => {
                   <td>Rule</td>
                   <td>
                     <span>
+                      <span>
+                        {match.rule_url ? (
+                          <CoreLink external href={match.rule_url || null}>
+                            {match.rule_identifier}
+                          </CoreLink>
+                        ) : (
+                          match.rule_identifier
+                        )}
+                      </span>
                       <OverlayTrigger
-                        trigger={["hover", "focus"]}
+                        trigger={["click"]}
                         placement="right"
+                        rootClose
+                        transition={false}
                         delay={{ show: 200, hide: 300 }}
                         overlay={
                           <Popover className="rule-popover">
@@ -100,7 +115,9 @@ const LicenseMatchesTable = (props: LicenseMatchProps) => {
                           </Popover>
                         }
                       >
-                        <span>{match.rule_identifier}</span>
+                        <Button className="ms-3 p-0 border-0 bg-transparent cursor-pointer rule-info-button">
+                          <FontAwesomeIcon icon={faInfoCircle} />
+                        </Button>
                       </OverlayTrigger>
                     </span>
                   </td>

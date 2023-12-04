@@ -1,10 +1,10 @@
 import React, { useMemo } from "react";
 import { Link } from "react-router-dom";
-import { LicenseDetectionDetails } from "../../../Licenses/licenseDefinitions";
 import { generateLicenseDetectionNavigationUrl } from "../../../../utils/navigatorQueries";
+import { LicenseDetectionAttributes } from "../../../../services/models/licenseDetections";
 
 interface FileLicenseDetectionsRendererProps {
-  value: LicenseDetectionDetails[];
+  value: LicenseDetectionAttributes[];
 }
 
 const FileLicenseDetectionsRenderer = (
@@ -12,7 +12,7 @@ const FileLicenseDetectionsRenderer = (
 ) => {
   const { value } = props;
 
-  const parsedValue: LicenseDetectionDetails[] = useMemo(() => {
+  const parsedValue: LicenseDetectionAttributes[] = useMemo(() => {
     if(Array.isArray(value))
       return value;
 

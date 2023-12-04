@@ -15,7 +15,7 @@
  */
 
 import { Sequelize, DataTypes, Model } from "sequelize";
-import { jsonDataType, JSON_Type } from "./databaseUtils";
+import { jsonDataType } from "./databaseUtils";
 
 export interface PackageDataAttributes {
   id: number;
@@ -24,7 +24,7 @@ export interface PackageDataAttributes {
   namespace: string;
   name: string;
   version: string;
-  qualifiers: JSON_Type;
+  qualifiers: unknown;
   subpath: string;
   purl: string;
   primary_language: string;
@@ -32,11 +32,17 @@ export interface PackageDataAttributes {
   description: string;
   size: number;
   release_date: string;
-  parties: JSON_Type;
-  keywords: JSON_Type;
+  parties: {
+    type: string;
+    role: string;
+    name: string;
+    email: string;
+    url: string;
+  }[];
+  keywords: string[];
   homepage_url: string;
   download_url: string;
-  download_checksums: JSON_Type;
+  download_checksums: string[];
   bug_tracking_url: string;
   code_view_url: string;
   vcs_tool: string;
@@ -47,8 +53,8 @@ export interface PackageDataAttributes {
   declared_license_expression_spdx: string;
   extracted_license_statement: string;
   notice_text: string;
-  dependencies: JSON_Type;
-  related_packages: JSON_Type; // @QUERY - Does exist ?
+  dependencies: any[];
+  related_packages: unknown[]; // @QUERY - Does exist ?
 }
 
 export default function packageDataModel(sequelize: Sequelize) {

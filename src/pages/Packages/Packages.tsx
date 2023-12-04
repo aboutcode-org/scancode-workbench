@@ -143,7 +143,7 @@ const Packages = () => {
 
   useEffect(() => {
     if (!activePackage && !activeDependency) return;
-  
+
     const clearThrottledScroll = throttledScroller(
       activePackage
         ? `[data-package-uid="${activePackage.package_uid}"]`
@@ -182,7 +182,7 @@ const Packages = () => {
         packageMapping.set(MISC_DEPS, getMiscPackage());
 
         const uniqueDataSourceIDs = new Set(
-          deps.map((dep) => dep.getDataValue("datasource_id"))
+          deps.map((dep) => dep.datasource_id)
         );
         setDataSourceIDs(
           Array.from(uniqueDataSourceIDs.values()).map((dataSourceID) => ({
@@ -194,24 +194,20 @@ const Packages = () => {
         // Group dependencies in their respective packages
         deps.forEach((dependencyInfo) => {
           const targetPackageUid: string | null =
-            dependencyInfo.getDataValue("for_package_uid");
+            dependencyInfo.for_package_uid || null;
           packageMapping.get(targetPackageUid || MISC_DEPS).dependencies.push({
             // ...dependencyInfo,     // For debugging
-            purl: dependencyInfo.getDataValue("purl"),
-            extracted_requirement:
-              dependencyInfo.getDataValue("extracted_requirement") || "",
-            scope: dependencyInfo.getDataValue("scope") as DEPENDENCY_SCOPES,
-            is_runtime: dependencyInfo.getDataValue("is_runtime"),
-            is_optional: dependencyInfo.getDataValue("is_optional"),
-            is_resolved: dependencyInfo.getDataValue("is_resolved"),
-            resolved_package: JSON.parse(
-              dependencyInfo.getDataValue("resolved_package") || "{}"
-            ),
-            dependency_uid: dependencyInfo.getDataValue("dependency_uid"),
-            for_package_uid:
-              dependencyInfo.getDataValue("for_package_uid") || null,
-            datafile_path: dependencyInfo.getDataValue("datafile_path"),
-            datasource_id: dependencyInfo.getDataValue("datasource_id"),
+            purl: dependencyInfo.purl,
+            extracted_requirement: dependencyInfo.extracted_requirement || "",
+            scope: dependencyInfo.scope as DEPENDENCY_SCOPES,
+            is_runtime: dependencyInfo.is_runtime,
+            is_optional: dependencyInfo.is_optional,
+            is_resolved: dependencyInfo.is_resolved,
+            resolved_package: dependencyInfo.resolved_package || {},
+            dependency_uid: dependencyInfo.dependency_uid,
+            for_package_uid: dependencyInfo.for_package_uid,
+            datafile_path: dependencyInfo.datafile_path,
+            datasource_id: dependencyInfo.datasource_id,
           });
         });
 

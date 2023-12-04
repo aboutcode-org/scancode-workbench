@@ -1,68 +1,55 @@
-import { Model } from "sequelize";
 import { PackagesAttributes } from "../../services/models/packages";
 import { PackageDetails } from "./packageDefinitions";
 
-export function generatePackagesMapping(
-  rawPackages: Model<PackagesAttributes, PackagesAttributes>[]
-) {
+export function generatePackagesMapping(packages: PackagesAttributes[]) {
   return new Map<string, PackageDetails>(
-    rawPackages.map((packageInfo): [string, PackageDetails] => [
-      packageInfo.getDataValue("package_uid"),
+    packages.map((packageInfo): [string, PackageDetails] => [
+      packageInfo.package_uid,
       {
-        package_uid: packageInfo.getDataValue("package_uid"),
-        name: packageInfo.getDataValue("name"),
-        type: packageInfo.getDataValue("type"),
+        package_uid: packageInfo.package_uid,
+        name: packageInfo.name,
+        type: packageInfo.type,
         dependencies: [],
-        namespace: packageInfo.getDataValue("namespace") || null,
-        version: packageInfo.getDataValue("version") || null,
-        qualifiers: JSON.parse(packageInfo.getDataValue("qualifiers")),
-        subpath: packageInfo.getDataValue("subpath") || null,
-        primary_language: packageInfo.getDataValue("primary_language") || null,
-        description: packageInfo.getDataValue("description") || null,
-        release_date: packageInfo.getDataValue("release_date") || null,
-        parties: JSON.parse(packageInfo.getDataValue("parties")),
-        keywords: JSON.parse(packageInfo.getDataValue("keywords")),
-        homepage_url: packageInfo.getDataValue("homepage_url") || null,
-        download_url: packageInfo.getDataValue("download_url") || null,
-        size: packageInfo.getDataValue("size") || null,
-        sha1: packageInfo.getDataValue("sha1") || null,
-        md5: packageInfo.getDataValue("md5") || null,
-        sha256: packageInfo.getDataValue("sha256") || null,
-        sha512: packageInfo.getDataValue("sha512") || null,
-        bug_tracking_url: packageInfo.getDataValue("bug_tracking_url") || null,
-        code_view_url: packageInfo.getDataValue("code_view_url") || null,
-        vcs_url: packageInfo.getDataValue("vcs_url") || null,
-        copyright: packageInfo.getDataValue("copyright") || null,
+        namespace: packageInfo.namespace || null,
+        version: packageInfo.version || null,
+        qualifiers: packageInfo.qualifiers || [],
+        subpath: packageInfo.subpath || null,
+        primary_language: packageInfo.primary_language || null,
+        description: packageInfo.description || null,
+        release_date: packageInfo.release_date || null,
+        parties: packageInfo.parties,
+        keywords: packageInfo.keywords,
+        homepage_url: packageInfo.homepage_url || null,
+        download_url: packageInfo.download_url || null,
+        size: packageInfo.size || null,
+        sha1: packageInfo.sha1 || null,
+        md5: packageInfo.md5 || null,
+        sha256: packageInfo.sha256 || null,
+        sha512: packageInfo.sha512 || null,
+        bug_tracking_url: packageInfo.bug_tracking_url || null,
+        code_view_url: packageInfo.code_view_url || null,
+        vcs_url: packageInfo.vcs_url || null,
+        copyright: packageInfo.copyright || null,
         declared_license_expression:
-          packageInfo.getDataValue("declared_license_expression") || null,
+          packageInfo.declared_license_expression || null,
         declared_license_expression_spdx:
-          packageInfo.getDataValue("declared_license_expression_spdx") || null,
-        other_license_expression:
-          packageInfo.getDataValue("other_license_expression") || null,
+          packageInfo.declared_license_expression_spdx || null,
+        other_license_expression: packageInfo.other_license_expression || null,
         other_license_expression_spdx:
-          packageInfo.getDataValue("other_license_expression_spdx") || null,
+          packageInfo.other_license_expression_spdx || null,
         extracted_license_statement:
-          packageInfo
-            .getDataValue("extracted_license_statement")
-            ?.replace(/(^"|"$)/g, "") || null,
-        notice_text: packageInfo.getDataValue("notice_text") || null,
-        source_packages: JSON.parse(
-          packageInfo.getDataValue("source_packages")
-        ),
-        extra_data: JSON.parse(packageInfo.getDataValue("extra_data")),
-        repository_homepage_url:
-          packageInfo.getDataValue("repository_homepage_url") || null,
-        repository_download_url:
-          packageInfo.getDataValue("repository_download_url") || null,
-        api_data_url: packageInfo.getDataValue("api_data_url") || null,
-        datafile_paths:
-          JSON.parse(packageInfo.getDataValue("datafile_paths") || "[]") || [],
-        datasource_ids:
-          JSON.parse(packageInfo.getDataValue("datasource_ids") || "[]") || [],
-        purl: packageInfo.getDataValue("purl"),
-        license_detections: JSON.parse(
-          packageInfo.getDataValue("license_detections")
-        ),
+          packageInfo.extracted_license_statement?.replace(/(^"|"$)/g, "") ||
+          null,
+        notice_text: packageInfo.notice_text || null,
+        source_packages: packageInfo.source_packages,
+        extra_data: packageInfo.extra_data || null,
+        repository_homepage_url: packageInfo.repository_homepage_url || null,
+        repository_download_url: packageInfo.repository_download_url || null,
+        api_data_url: packageInfo.api_data_url || null,
+        datafile_paths: packageInfo.datafile_paths || [],
+        datasource_ids: packageInfo.datasource_ids || [],
+        purl: packageInfo.purl,
+        license_detections: packageInfo.license_detections,
       },
     ])
   );

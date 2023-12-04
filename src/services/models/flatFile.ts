@@ -16,7 +16,7 @@
 
 import path from "path";
 import { Sequelize, DataTypes, Model } from "sequelize";
-import { JSON_Type, jsonDataType, parentPath } from "./databaseUtils";
+import { jsonDataType, parentPath } from "./databaseUtils";
 
 export interface InfoFlatFileAttributes {
   type: string;
@@ -38,12 +38,12 @@ export interface InfoFlatFileAttributes {
   is_script: boolean;
 }
 export interface EmailUrlFlatFileAttributes {
-  email: JSON_Type;
-  email_start_line: JSON_Type;
-  email_end_line: JSON_Type;
-  url: JSON_Type;
-  url_start_line: JSON_Type;
-  url_end_line: JSON_Type;
+  email: unknown[]
+  email_start_line: unknown[]
+  email_end_line: unknown[]
+  url: unknown[]
+  url_start_line: unknown[]
+  url_end_line: unknown[]
 }
 export interface LicenseFlatFileAttributes {
   detected_license_expression: string;
@@ -54,47 +54,48 @@ export interface LicenseFlatFileAttributes {
   license_detections: unknown[];
 }
 export interface CopyrightFlatFileAttributes {
-  copyright_statements: JSON_Type;
-  copyright_holders: JSON_Type;
-  copyright_authors: JSON_Type;
-  copyright_start_line: JSON_Type;
-  copyright_end_line: JSON_Type;
+  copyright_statements: unknown[];
+  copyright_holders: unknown[];
+  copyright_authors: unknown[];
+  copyright_start_line: number[][];
+  copyright_end_line: number[][];
 }
 export interface PackageFlatFileAttributes {
-  for_packages: JSON_Type;
+  for_packages: unknown[]
 }
 export interface PackageDataFlatFileAttributes {
-  package_data_type: JSON_Type;
-  package_data_namespace: JSON_Type;
-  package_data_name: JSON_Type;
-  package_data_version: JSON_Type;
-  package_data_qualifiers: JSON_Type;
-  package_data_subpath: JSON_Type;
-  package_data_purl: JSON_Type;
-  package_data_primary_language: JSON_Type;
-  package_data_code_type: JSON_Type;
-  package_data_description: JSON_Type;
-  package_data_size: JSON_Type;
-  package_data_release_date: JSON_Type;
-  package_data_keywords: JSON_Type;
-  package_data_homepage_url: JSON_Type;
-  package_data_download_url: JSON_Type;
-  package_data_download_checksums: JSON_Type;
-  package_data_bug_tracking_url: JSON_Type;
-  package_data_code_view_url: JSON_Type;
-  package_data_vcs_tool: JSON_Type;
-  package_data_vcs_url: JSON_Type;
-  package_data_vcs_repository: JSON_Type;
-  package_data_vcs_revision: JSON_Type;
-  package_data_extracted_license_statement: JSON_Type;
-  package_data_declared_license_expression: JSON_Type;
-  package_data_declared_license_expression_spdx: JSON_Type;
-  package_data_notice_text: JSON_Type;
-  package_data_dependencies: JSON_Type;
-  package_data_related_packages: JSON_Type;
+  package_data_type: unknown[];
+  package_data_namespace: unknown[];
+  package_data_name: unknown[];
+  package_data_version: unknown[];
+  package_data_qualifiers: unknown[];
+  package_data_subpath: unknown[];
+  package_data_purl: unknown[];
+  package_data_primary_language: unknown[];
+  package_data_code_type: unknown[];
+  package_data_description: unknown[];
+  package_data_size: unknown[];
+  package_data_release_date: unknown[];
+  package_data_keywords: unknown[];
+  package_data_homepage_url: unknown[];
+  package_data_download_url: unknown[];
+  package_data_download_checksums: unknown[];
+  package_data_bug_tracking_url: unknown[];
+  package_data_code_view_url: unknown[];
+  package_data_vcs_tool: unknown[];
+  package_data_vcs_url: unknown[];
+  package_data_vcs_repository: unknown[];
+  package_data_vcs_revision: unknown[];
+  package_data_extracted_license_statement: unknown[];
+  package_data_declared_license_expression: unknown[];
+  package_data_declared_license_expression_spdx: unknown[];
+  package_data_notice_text: unknown[];
+  package_data_dependencies: unknown[];
+  package_data_related_packages: unknown[];
 }
 export interface ErrorsFlatFileAttributes {
-  scan_errors: JSON_Type;
+  fileId: number;
+  scan_errors: string[];
 }
 
 export interface FlatFileAttributes

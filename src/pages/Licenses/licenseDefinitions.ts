@@ -1,44 +1,14 @@
-import {
-  LicenseFileRegion,
-  LicenseDetectionMatch,
-  LicenseClueMatch,
-} from "../../services/importedJsonTypes";
+import { LicenseClueAttributes } from "../../services/models/licenseClues";
+import { LicenseDetectionAttributes } from "../../services/models/licenseDetections";
 
-export interface LicenseDetectionDetails {
-  id: number;
+export interface LicenseClueDetails extends LicenseClueAttributes {
   identifier: string;
-  reviewed: boolean;
-  license_expression: string;
-  detection_count: number;
-  detection_log: string[];
-  matches: LicenseDetectionMatch[];
-  file_regions: LicenseFileRegion[];
-  count?: number | null;
-}
-export interface LicenseClueDetails {
-  id: number;
-  fileId: number;
-  filePath: string;
-  fileClueIdx: number;
-  score: number | null;
-  reviewed: boolean;
-  identifier: string;
-  license_expression: string | null;
-  rule_identifier: string | null;
-  matches: LicenseClueMatch[];
-  file_regions: LicenseFileRegion[];
-}
-
-export interface TodoDetails {
-  id: number;
-  detection_id: string;
-  issues: Record<string, string>;
 }
 
 export type ActiveLicenseEntity =
   | {
       type: "detection";
-      license: LicenseDetectionDetails;
+      license: LicenseDetectionAttributes;
     }
   | {
       type: "clue";

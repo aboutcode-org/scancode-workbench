@@ -15,7 +15,7 @@
  */
 
 import { Sequelize, DataTypes, Model } from "sequelize";
-import { jsonDataType, JSON_Type } from "./databaseUtils";
+import { jsonDataType } from "./databaseUtils";
 
 export interface PackagesAttributes {
   id: number;
@@ -23,13 +23,19 @@ export interface PackagesAttributes {
   namespace: string;
   name: string;
   version: string;
-  qualifiers: JSON_Type;
+  qualifiers: unknown;
   subpath: string;
   primary_language: string;
   description: string;
   release_date: string;
-  parties: JSON_Type;
-  keywords: JSON_Type;
+  parties: {
+    type: string;
+    role: string;
+    name: string;
+    email: string;
+    url: string;
+  }[];
+  keywords: string[];
   homepage_url: string;
   download_url: string;
   size: string;
@@ -43,20 +49,23 @@ export interface PackagesAttributes {
   copyright: string;
   declared_license_expression: string;
   declared_license_expression_spdx: string;
-  license_detections: JSON_Type;
+  license_detections: {
+    license_expression: string;
+    identifier: string;
+  }[];
   other_license_expression: string;
   other_license_expression_spdx: string;
-  other_license_detections: JSON_Type;
+  other_license_detections: unknown[];
   extracted_license_statement: string;
   notice_text: string;
-  source_packages: JSON_Type;
-  extra_data: JSON_Type;
+  source_packages: string[];
+  extra_data: unknown;
   repository_homepage_url: string;
   repository_download_url: string;
   api_data_url: string;
   package_uid: string;
-  datafile_paths: JSON_Type;
-  datasource_ids: JSON_Type;
+  datafile_paths: string[];
+  datasource_ids: string[];
   purl: string;
 }
 

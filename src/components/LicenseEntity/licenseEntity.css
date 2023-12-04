@@ -51,11 +51,23 @@
 .rule-popover {
   max-width: 30% !important;
 }
-.rule-popover .popover-body{
+
+.rule-popover .popover-body {
   padding: 12px;
   word-wrap: break-word;
+  text-wrap: balance;
 }
 
 .rule-details .rule-detail-entry {
   margin-bottom: 5px;
+}
+
+.rule-reference-fallback {
+  width: 250px;
+}
+
+.rule-info-button {
+  font-size: 14px !important;
+  color: #007bff !important;
+  vertical-align: bottom !important;
 }

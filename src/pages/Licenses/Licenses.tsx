@@ -23,14 +23,13 @@ import { useWorkbenchDB } from "../../contexts/dbContext";
 import {
   ActiveLicenseEntity,
   LicenseClueDetails,
-  LicenseDetectionDetails,
-  TodoDetails,
   REVIEW_STATUS_OPTIONS,
   ReviewOption,
 } from "./licenseDefinitions";
-import { parseIfValidJson } from "../../utils/parsers";
 import { throttledScroller } from "../../utils/throttledScroll";
+import { TodoAttributes } from "../../services/models/todo";
 import { LicenseTypes } from "../../services/workbenchDB.types";
+import { LicenseDetectionAttributes } from "../../services/models/licenseDetections";
 
 import "./Licenses.css";
 
@@ -39,12 +38,12 @@ const LicenseDetections = () => {
   const { db, initialized, startProcessing, endProcessing } = useWorkbenchDB();
 
   const [licenseDetections, setLicenseDetections] = useState<
-    LicenseDetectionDetails[] | null
+    LicenseDetectionAttributes[] | null
   >(null);
   const [licenseClues, setLicenseClues] = useState<LicenseClueDetails[] | null>(
     null
   );
-  const [todos, setTodos] = useState<Map<string, TodoDetails>>(new Map());
+  const [todos, setTodos] = useState<Map<string, TodoAttributes>>(new Map());
 
   const [activeLicense, setActiveLicense] =
     useState<ActiveLicenseEntity | null>(null);
@@ -56,7 +55,9 @@ const LicenseDetections = () => {
     new Set()
   );
 
-  function activateLicenseDetection(licenseDetection: LicenseDetectionDetails) {
+  function activateLicenseDetection(
+    licenseDetection: LicenseDetectionAttributes
+  ) {
     if (!licenseDetection) return;
     setActiveLicense({
       type: "detection",
@@ -90,20 +91,18 @@ const LicenseDetections = () => {
     startProcessing();
 
     (async () => {
-      const newLicenseDetections: LicenseDetectionDetails[] = (
-        await db.getAllLicenseDetections()
-      ).map((detection) => detection.toJSON());
+      const newLicenseDetections: LicenseDetectionAttributes[] =
+        await db.getAllLicenseDetections();
       setLicenseDetections(newLicenseDetections);
 
       const newLicenseClues: LicenseClueDetails[] = (
         await db.getAllLicenseClues()
       ).map((clue) => {
-        const clueDetails = clue.toJSON();
         return {
-          ...clueDetails,
+          ...clue,
           // @TODO - Find better way to have unique identifier for each clue
-          identifier: `clue-${clueDetails.license_expression || ""}-${Number(
-            clueDetails.id
+          identifier: `clue-${clue.license_expression || ""}-${Number(
+            clue.id
           )}`,
         };
       });
@@ -122,15 +121,8 @@ const LicenseDetections = () => {
       });
       setReviewedLicenses(newReviewedLicenses);
 
-      const newTodos = new Map<string, TodoDetails>();
-      await db.getAllTodos().then((todosList) =>
-        todosList.forEach((todo) =>
-          newTodos.set(todo.getDataValue("detection_id"), {
-            id: Number(todo.getDataValue("id")),
-            detection_id: todo.getDataValue("detection_id"),
-            issues: parseIfValidJson(todo.getDataValue("issues")) || {},
-          })
-        )
+      const newTodos = new Map(
+        (await db.getAllTodos()).map((todo) => [todo.detection_id, todo])
       );
       setTodos(newTodos);
 
@@ -148,7 +140,7 @@ const LicenseDetections = () => {
       );
 
       if (queriedDetectionIdentifier) {
-        const queriedDetection: LicenseDetectionDetails | null =
+        const queriedDetection: LicenseDetectionAttributes | null =
           queriedDetectionIdentifier
             ? newLicenseDetections.find(
                 (detection) =>
@@ -187,7 +179,7 @@ const LicenseDetections = () => {
   }, []);
 
   const handleItemToggle = (
-    license: LicenseDetectionDetails | LicenseClueDetails,
+    license: LicenseDetectionAttributes | LicenseClueDetails,
     licenseType: LicenseTypes,
     newReviewedtatus: boolean
   ) => {
@@ -218,7 +210,7 @@ const LicenseDetections = () => {
   };
 
   const shownByReviewFilter = (
-    license: LicenseDetectionDetails | LicenseClueDetails
+    license: LicenseDetectionAttributes | LicenseClueDetails
   ) => {
     if (reviewFilter === REVIEW_STATUS_OPTIONS.ALL) return true;
     if (reviewFilter === REVIEW_STATUS_OPTIONS.REVIEWED)

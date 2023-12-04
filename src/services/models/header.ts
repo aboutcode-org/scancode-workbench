@@ -15,7 +15,7 @@
  */
 
 import { Sequelize, DataTypes, Model } from "sequelize";
-import { JSON_Type, jsonDataType } from "./databaseUtils";
+import { jsonDataType } from "./databaseUtils";
 
 export interface HeaderAttributes {
   id: number;
@@ -25,8 +25,8 @@ export interface HeaderAttributes {
   notice: string;
   duration: number;
   header_content: string;
-  options: JSON_Type;
-  input: JSON_Type;
+  options: unknown;
+  input: string[];
   files_count: number;
   output_format_version: string;
   spdx_license_list_version: string;
@@ -37,7 +37,7 @@ export interface HeaderAttributes {
   python_version: string;
   workbench_version: string;
   workbench_notice: string;
-  errors: JSON_Type;
+  errors: string[];
 }
 
 export default function headerModel(sequelize: Sequelize) {

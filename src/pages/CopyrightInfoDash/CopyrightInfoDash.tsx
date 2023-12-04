@@ -61,10 +61,13 @@ const CopyrightInfoDash = () => {
           })
         )
       )
+      .then((rawCopyrights) =>
+        rawCopyrights.map((copyright) => copyright.toJSON())
+      )
       .then((copyrights) => {
         // Prepare chart for copyright holders
-        const copyrightHolders = copyrights.flatMap((copyright) =>
-          JSON.parse(copyright.getDataValue("holders") || "[]")
+        const copyrightHolders = copyrights.flatMap(
+          (copyright) => copyright.holders || []
         );
         const { chartData: copyrightHoldersChartData } =
           formatPieChartData(copyrightHolders);
@@ -72,8 +75,8 @@ const CopyrightInfoDash = () => {
         const totalUniqueCopyrightHolders = new Set(copyrightHolders).size;
 
         // Prepare chart for copyright holders
-        const copyrightNotices = copyrights.flatMap((copyright) =>
-          JSON.parse(copyright.getDataValue("statements") || "[]")
+        const copyrightNotices = copyrights.flatMap(
+          (copyright) => copyright.statements || []
         );
         const { chartData: copyrightNoticesChartData } =
           formatPieChartData(copyrightNotices);
@@ -81,8 +84,8 @@ const CopyrightInfoDash = () => {
         const totalUniqueCopyrightNotices = new Set(copyrightNotices).size;
 
         // Prepare chart for copyright authors
-        const copyrightAuthors = copyrights.flatMap((copyright) =>
-          JSON.parse(copyright.getDataValue("authors") || "[]")
+        const copyrightAuthors = copyrights.flatMap(
+          (copyright) => copyright.authors || []
         );
         const { chartData: copyrightAuthorsChartData } =
           formatPieChartData(copyrightAuthors);

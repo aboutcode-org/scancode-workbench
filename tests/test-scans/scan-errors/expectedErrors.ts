@@ -1,3 +1,5 @@
+import { ErrorsFlatFileAttributes } from "../../../src/services/models/flatFile";
+
 export const ErrorSamples: {
   jsonFileName: string;
   expectedScanErrors: {
@@ -5,10 +7,7 @@ export const ErrorSamples: {
     fileId: number;
     scan_error: string;
   }[];
-  expectedFlatFiles: {
-    fileId: number;
-    scan_errors: string;
-  }[];
+  expectedFlatFiles: ErrorsFlatFileAttributes[];
 }[] = [
   {
     jsonFileName: "withErrors.json",
@@ -41,22 +40,26 @@ export const ErrorSamples: {
     expectedFlatFiles: [
       {
         fileId: 0,
-        scan_errors: "[]",
+        scan_errors: [],
       },
       {
         fileId: 1,
-        scan_errors:
-          '["ERROR: for scanner: licenses:\\nERROR: Processing interrupted: timeout after 1 seconds."]',
+        scan_errors: [
+          "ERROR: for scanner: licenses:\nERROR: Processing interrupted: timeout after 1 seconds.",
+        ],
       },
       {
         fileId: 2,
-        scan_errors:
-          '["ERROR: for scanner: licenses:\\nERROR: Processing interrupted: timeout after 1 seconds.","ERROR: for scanner: copyrights:\\nERROR: Processing interrupted: timeout after 1 seconds."]',
+        scan_errors: [
+          "ERROR: for scanner: licenses:\nERROR: Processing interrupted: timeout after 1 seconds.",
+          "ERROR: for scanner: copyrights:\nERROR: Processing interrupted: timeout after 1 seconds.",
+        ],
       },
       {
         fileId: 3,
-        scan_errors:
-          '["ERROR: for scanner: licenses:\\nERROR: Processing interrupted: timeout after 1 seconds."]',
+        scan_errors: [
+          "ERROR: for scanner: licenses:\nERROR: Processing interrupted: timeout after 1 seconds.",
+        ],
       },
     ],
   },

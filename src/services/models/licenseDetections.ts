@@ -16,6 +16,7 @@
 
 import { Sequelize, DataTypes, Model } from "sequelize";
 import { jsonDataType } from "./databaseUtils";
+import { LicenseDetectionMatch, LicenseFileRegion } from "../importedJsonTypes";
 
 export interface LicenseDetectionAttributes {
   id: number;
@@ -24,8 +25,8 @@ export interface LicenseDetectionAttributes {
   detection_count: number;
   reviewed: boolean;
   detection_log: string[];
-  matches: unknown[];
-  file_regions: unknown[];
+  matches: LicenseDetectionMatch[];
+  file_regions: LicenseFileRegion[];
 
   // Legacy output version fields
   count?: number;

@@ -2,10 +2,7 @@ import ReactJson from "@microlink/react-json-view";
 import { AgGridReact } from "ag-grid-react";
 import React from "react";
 
-import {
-  ActiveLicenseEntity,
-  TodoDetails,
-} from "../../pages/Licenses/licenseDefinitions";
+import { ActiveLicenseEntity } from "../../pages/Licenses/licenseDefinitions";
 import {
   DEFAULT_FILE_REGION_COL_DEF,
   DetectionFileRegionCols,
@@ -14,13 +11,14 @@ import { ScanOptionKeys } from "../../utils/parsers";
 import LicenseMatchesTable from "./LicenseMatchesTable";
 import { LicenseTypes } from "../../services/workbenchDB.types";
 import { useWorkbenchDB } from "../../contexts/dbContext";
+import { TodoAttributes } from "../../services/models/todo";
 
 import "./licenseEntity.css";
 import "../../styles/entityCommonStyles.css";
 
 interface LicenseDetectionEntityProps {
   activeLicenseEntity: ActiveLicenseEntity | null;
-  activeLicenseTodo: TodoDetails | null;
+  activeLicenseTodo: TodoAttributes | null;
 }
 const LicenseEntity = (props: LicenseDetectionEntityProps) => {
   const { activeLicenseEntity, activeLicenseTodo } = props;

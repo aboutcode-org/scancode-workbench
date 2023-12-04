@@ -5,25 +5,26 @@ import { useWorkbenchDB } from "../../contexts/dbContext";
 import { Badge } from "react-bootstrap";
 import { faGithub } from "@fortawesome/free-brands-svg-icons";
 import { LicenseRuleReferenceAttributes } from "../../services/models/licenseRuleReference";
+import { ScanOptionKeys } from "../../utils/parsers";
 
 interface MatchRulePopoverProps {
   match: LicenseMatch;
 }
 const MatchRuleDetails = (props: MatchRulePopoverProps) => {
   const { match } = props;
-  const { db } = useWorkbenchDB();
+  const { db, scanInfo } = useWorkbenchDB();
 
   const [ruleReference, setRuleReference] =
     useState<LicenseRuleReferenceAttributes | null>(null);
 
   useEffect(() => {
     // @TODO - Handle cases when Rule
-    db.getLicenseRuleReference(match.rule_identifier).then(
-      (newRuleReferenceModel) => {
+    db.getLicenseRuleReference(match.rule_identifier)
+      .then((newRuleReferenceModel) => {
         const newRuleReference = newRuleReferenceModel.toJSON();
         setRuleReference(newRuleReference);
-      }
-    );
+      })
+      .catch(() => setRuleReference(null));
   }, [match]);
 
   const ruleReferenceDetails: {
@@ -56,6 +57,42 @@ const MatchRuleDetails = (props: MatchRulePopoverProps) => {
       ]
     : [];
 
+  const ruleReferenceFlags = ruleReference
+    ? [
+        {
+          flag: "is_license_text",
+          value: ruleReference.is_license_text,
+        },
+        {
+          flag: "is_license_notice",
+          value: ruleReference.is_license_notice,
+        },
+        {
+          flag: "is_license_reference",
+          value: ruleReference.is_license_reference,
+        },
+        {
+          flag: "is_license_tag",
+          value: ruleReference.is_license_tag,
+        },
+        {
+          flag: "is_license_intro",
+          value: ruleReference.is_license_intro,
+        },
+        {
+          flag: "is_license_clue",
+          value: ruleReference.is_license_clue,
+        },
+        { flag: "is_continuous", value: ruleReference.is_continuous },
+        { flag: "is_builtin", value: ruleReference.is_builtin },
+        {
+          flag: "is_from_license",
+          value: ruleReference.is_from_license,
+        },
+        { flag: "is_synthetic", value: ruleReference.is_synthetic },
+      ]
+    : [];
+
   return (
     <div>
       {ruleReference ? (
@@ -84,51 +121,13 @@ const MatchRuleDetails = (props: MatchRulePopoverProps) => {
               </b>
             </div>
           </div>
-          {/* <Table size="sm" bordered={false} cellPadding={1}> */}
-          {[
-            {
-              flag: "is_license_text",
-              value: ruleReference.is_license_text,
-            },
-            {
-              flag: "is_license_notice",
-              value: ruleReference.is_license_notice,
-            },
-            {
-              flag: "is_license_reference",
-              value: ruleReference.is_license_reference,
-            },
-            {
-              flag: "is_license_tag",
-              value: ruleReference.is_license_tag,
-            },
-            {
-              flag: "is_license_intro",
-              value: ruleReference.is_license_intro,
-            },
-            {
-              flag: "is_license_clue",
-              value: ruleReference.is_license_clue,
-            },
-            { flag: "is_continuous", value: ruleReference.is_continuous },
-            { flag: "is_builtin", value: ruleReference.is_builtin },
-            {
-              flag: "is_from_license",
-              value: ruleReference.is_from_license,
-            },
-            { flag: "is_synthetic", value: ruleReference.is_synthetic },
-          ].map(
+          {ruleReferenceFlags.map(
             ({ flag, value }) =>
-              // <tr>
-              //   <td>{flag}</td>
-              //   <td>{value ? "True" : "False"}</td>
-              // </tr>
-
               value && (
                 <Badge
                   pill
                   bg="primary"
-                  className="d-inline me-1"
+                  className="d-inline px-2 me-1"
                   text="light"
                   key={flag}
                 >
@@ -138,7 +137,19 @@ const MatchRuleDetails = (props: MatchRulePopoverProps) => {
           )}
         </div>
       ) : (
-        <div>No rule reference found</div>
+        <div className="text-break rule-reference-fallback">
+          {scanInfo.optionsMap.get(ScanOptionKeys.LICENSE_REFERENCES) ? (
+            "Rule reference not available"
+          ) : (
+            <span>
+              Enable{" "}
+              <CoreLink href="https://scancode-toolkit.readthedocs.io/en/latest/cli-reference/basic-options.html#all-basic-scan-options">
+                {ScanOptionKeys.LICENSE_REFERENCES}
+              </CoreLink>{" "}
+              option in scans to view rule references
+            </span>
+          )}
+        </div>
       )}
     </div>
   );

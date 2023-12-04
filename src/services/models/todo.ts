@@ -15,12 +15,12 @@
  */
 
 import { Sequelize, DataTypes, Model } from "sequelize";
-import { JSON_Type, jsonDataType } from "./databaseUtils";
+import { jsonDataType } from "./databaseUtils";
 
 export interface TodoAttributes {
   id: number;
   detection_id: string;
-  issues: JSON_Type;
+  issues: Record<string, string>;
 }
 
 export default function todoModel(sequelize: Sequelize) {

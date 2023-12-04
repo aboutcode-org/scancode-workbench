@@ -82,9 +82,9 @@ describe("Parse Errors", () => {
         await db.FlatFile.findAll({
           attributes: ["fileId", "scan_errors"],
         })
-      ).map((flatFile) => flatFile.dataValues);
+      ).map((flatFile) => flatFile.toJSON());
       const scanErrors = (await newWorkbenchDB.db.ScanError.findAll()).map(
-        (error) => error.dataValues
+        (error) => error.toJSON()
       );
 
       assert.deepEqual(flatFiles, expectedFlatFiles);
@@ -121,9 +121,9 @@ describe("Parse Copyrights", () => {
             "copyright_end_line",
           ],
         })
-      ).map((flatFile) => flatFile.dataValues);
+      ).map((flatFile) => flatFile.toJSON());
       const copyrights = (await newWorkbenchDB.db.Copyright.findAll()).map(
-        (copyright) => copyright.dataValues
+        (copyright) => copyright.toJSON()
       );
 
       assert.deepEqual(flatFiles, expectedFlatFiles);
@@ -184,11 +184,11 @@ describe("Parse Email, URL & Info", () => {
             "url_end_line",
           ],
         })
-      ).map((flatFile) => flatFile.dataValues);
+      ).map((flatFile) => flatFile.toJSON());
       const emails = (await db.Email.findAll()).map(
-        (email) => email.dataValues
+        (email) => email.toJSON()
       );
-      const urls = (await db.Url.findAll()).map((url) => url.dataValues);
+      const urls = (await db.Url.findAll()).map((url) => url.toJSON());
 
       assert.deepEqual(flatFiles, expectedFlatFiles);
       assert.deepEqual(emails, expectedEmails);
@@ -287,49 +287,48 @@ describe("Parse Packages & Dependencies", () => {
 
       await newWorkbenchDB.addFromJson(jsonFilePath, () => null);
 
+      const flatFileAttributes = [
+        "for_packages",
+        "package_data_type",
+        "package_data_namespace",
+        "package_data_name",
+        "package_data_version",
+        "package_data_qualifiers",
+        "package_data_subpath",
+        "package_data_purl",
+        "package_data_primary_language",
+        "package_data_code_type",
+        "package_data_description",
+        "package_data_size",
+        "package_data_release_date",
+        "package_data_keywords",
+        "package_data_homepage_url",
+        "package_data_download_url",
+        "package_data_download_checksums",
+        "package_data_bug_tracking_url",
+        "package_data_code_view_url",
+        "package_data_vcs_tool",
+        "package_data_vcs_url",
+        "package_data_vcs_repository",
+        "package_data_vcs_revision",
+        "package_data_extracted_license_statement",
+        "package_data_declared_license_expression",
+        "package_data_declared_license_expression_spdx",
+        "package_data_notice_text",
+        "package_data_dependencies",
+        "package_data_related_packages",
+      ];
       const flatFiles = (
         await db.FlatFile.findAll({
-          attributes: [
-            "for_packages",
-            "package_data_type",
-            "package_data_namespace",
-            "package_data_name",
-            "package_data_version",
-            "package_data_qualifiers",
-            "package_data_subpath",
-            "package_data_purl",
-            "package_data_primary_language",
-            "package_data_code_type",
-            "package_data_description",
-            "package_data_size",
-            "package_data_release_date",
-            "package_data_keywords",
-            "package_data_homepage_url",
-            "package_data_download_url",
-            "package_data_download_checksums",
-            "package_data_bug_tracking_url",
-            "package_data_code_view_url",
-            "package_data_vcs_tool",
-            "package_data_vcs_url",
-            "package_data_vcs_repository",
-            "package_data_vcs_revision",
-            "package_data_extracted_license_statement",
-            "package_data_declared_license_expression",
-            "package_data_declared_license_expression_spdx",
-            "package_data_notice_text",
-            "package_data_dependencies",
-            "package_data_related_packages",
-          ],
+          attributes: flatFileAttributes,
         })
-      ).map((flatFile) => flatFile.dataValues);
-      const packages = (await db.Packages.findAll()).map(
-        (pkg) => pkg.dataValues
+      ).map((flatFile) => flatFile.toJSON());
+      const packages = (await db.Packages.findAll()).map((pkg) => pkg.toJSON());
+      const packageData = (await db.PackageData.findAll()).map((pkgData) =>
+        pkgData.toJSON()
       );
-      const packageData = (await db.PackageData.findAll()).map(
-        (pkgData) => pkgData.dataValues
-      );
-      const dependencies = (await db.Dependencies.findAll()).map(
-        (dependency) => dependency.dataValues
+      const dependencies = (await db.Dependencies.findAll()).map((dependency) =>
+        dependency.toJSON()
       );
 
       assert.deepEqual(flatFiles, expectedFlatFiles);
@@ -357,8 +356,8 @@ describe("Parse Todos", () => {
       });
       await newWorkbenchDB.addFromJson(jsonFilePath, () => null);
 
-      const todos = (await newWorkbenchDB.db.Todo.findAll()).map(
-        (todo) => todo.dataValues
+      const todos = (await newWorkbenchDB.db.Todo.findAll()).map((todo) =>
+        todo.toJSON()
       );
 
       assert.deepEqual(todos, expectedTodos);

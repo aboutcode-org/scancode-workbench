@@ -44,16 +44,14 @@ import {
   LicenseClue,
   LicenseExpressionKey,
   LicenseReference,
-  ParsedJsonHeader,
   Resource,
   ResourceLicenseDetection,
-  Todo,
   TopLevelLicenseDetection,
 } from "./importedJsonTypes";
 import { LicenseTypes } from "./workbenchDB.types";
-import { LicenseDetectionAttributes } from "./models/licenseDetections";
-import { LicenseClueAttributes } from "./models/licenseClues";
 import packageJson from "../../package.json";
+import { TodoAttributes } from "./models/todo";
+import { HeaderAttributes } from "./models/header";
 
 const { version: workbenchVersion } = packageJson;
 
@@ -80,7 +78,7 @@ interface WorkbenchDbConfig {
 }
 interface TopLevelDataFormat {
   header: unknown;
-  parsedHeader: ParsedJsonHeader;
+  parsedHeader: HeaderAttributes;
   packages: unknown[];
   dependencies: unknown[];
   license_clues: LicenseClue[];
@@ -90,7 +88,7 @@ interface TopLevelDataFormat {
   license_references_map: Map<string, LicenseReference>;
   license_references_spdx_map: Map<string, LicenseReference>;
   license_rule_references: unknown[];
-  todo: Todo[];
+  todo: TodoAttributes[];
 }
 export interface FileDataNode extends DataNode {
   id: number;
@@ -181,30 +179,42 @@ export class WorkbenchDB {
   }
 
   getAllLicenseDetections() {
-    return this.sync.then((db) =>
-      db.LicenseDetections.findAll({
-        order: [
-          ["detection_count", "DESC"],
-          ["identifier", "ASC"],
-        ],
-      })
-    );
+    return this.sync
+      .then((db) =>
+        db.LicenseDetections.findAll({
+          order: [
+            ["detection_count", "DESC"],
+            ["identifier", "ASC"],
+          ],
+        })
+      )
+      .then((licenseDetectionModels) =>
+        licenseDetectionModels.map((detection) => detection.toJSON())
+      );
   }
 
   getAllLicenseClues() {
-    return this.sync.then((db) => db.LicenseClues.findAll());
+    return this.sync
+      .then((db) => db.LicenseClues.findAll())
+      .then((clues) => clues.map((clue) => clue.toJSON()));
   }
 
   getAllPackages() {
-    return this.sync.then((db) => db.Packages.findAll());
+    return this.sync
+      .then((db) => db.Packages.findAll())
+      .then((packages) => packages.map((pkg) => pkg.toJSON()));
   }
 
   getAllDependencies() {
-    return this.sync.then((db) => db.Dependencies.findAll());
+    return this.sync
+      .then((db) => db.Dependencies.findAll())
+      .then((deps) => deps.map((dep) => dep.toJSON()));
   }
 
   getAllTodos() {
-    return this.sync.then((db) => db.Todo.findAll());
+    return this.sync
+      .then((db) => db.Todo.findAll())
+      .then((todoModels) => todoModels.map((todo) => todo.toJSON()));
   }
 
   getLicenseRuleReference(identifier: string, attributes?: string[]) {
@@ -433,9 +443,7 @@ export class WorkbenchDB {
                   )
                 )
                 .then(() =>
-                  this.db.LicenseClues.bulkCreate(
-                    TopLevelData.license_clues
-                  )
+                  this.db.LicenseClues.bulkCreate(TopLevelData.license_clues)
                 )
                 .then(() => {
                   onProgressUpdate(100);
@@ -547,12 +555,14 @@ export class WorkbenchDB {
 
     // @TODO - ToDo in scans have a field review_comments, which is ideally an issue
     // It will be changed in the schema in future
-    const todo: Todo[] = (rawTopLevelData.todo || []).map((todo: any) => {
-      return {
-        detection_id: todo.detection_id,
-        issues: todo.review_comments,
-      };
-    });
+    const todo: TodoAttributes[] = (rawTopLevelData.todo || []).map(
+      (todo: any) => {
+        return {
+          detection_id: todo.detection_id,
+          issues: todo.review_comments,
+        };
+      }
+    );
 
     return {
       header,
@@ -573,7 +583,8 @@ export class WorkbenchDB {
   _parseHeader(jsonFilePath: string, workbenchVersion: string, header: any) {
     const input = header.options?.input || [];
     delete header.options?.input;
-    const parsedHeader: ParsedJsonHeader = {
+    const parsedHeader: HeaderAttributes = {
+      id: 1,
       json_file_name: path.basename(jsonFilePath),
       tool_name: header.tool_name,
       tool_version: header.tool_version,

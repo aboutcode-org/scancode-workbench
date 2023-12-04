@@ -32,7 +32,7 @@ describe("Parse flat files & create file tree", () => {
         await db.File.findAll({
           attributes: ["id", "path", "parent", "name", "type"],
         })
-      ).map((file) => file.dataValues);
+      ).map((file) => file.toJSON());
       assert.deepEqual(parsedFiles, flatData);
 
       const parsedFileTree = await newWorkbenchDB.findAllJSTree();

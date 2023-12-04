@@ -15,7 +15,7 @@
  */
 
 import { Sequelize, DataTypes, Model } from "sequelize";
-import { jsonDataType, JSON_Type } from "./databaseUtils";
+import { jsonDataType } from "./databaseUtils";
 
 export interface DependenciesAttributes {
   id: number;
@@ -25,7 +25,7 @@ export interface DependenciesAttributes {
   is_runtime: boolean;
   is_optional: boolean;
   is_resolved: boolean;
-  resolved_package: JSON_Type;
+  resolved_package: unknown;
   dependency_uid: string;
   for_package_uid: string;
   datafile_path: string;
