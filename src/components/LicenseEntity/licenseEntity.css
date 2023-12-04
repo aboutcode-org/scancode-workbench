@@ -31,6 +31,7 @@
   word-wrap: break-word;
 }
 
+/* Match property columns */
 .matches-table-container table tr td:nth-child(odd) {
   font-weight: 500;
   max-width: 190px;
@@ -67,7 +68,7 @@
 }
 
 .rule-info-button {
-  font-size: 14px !important;
+  font-size: 1.05em !important;
   color: #007bff !important;
   vertical-align: bottom !important;
 }

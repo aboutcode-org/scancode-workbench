@@ -294,7 +294,8 @@ const LicenseDetections = () => {
                   </span>
                   <OverlayTrigger
                     placement="left"
-                    trigger="click"
+                    trigger={["click"]}
+                    rootClose
                     overlay={
                       <Tooltip>
                         Tick the checkboxes below to mark licenses as reviewed

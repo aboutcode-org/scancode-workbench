@@ -1,7 +1,4 @@
-import {
-  ColDef,
-  IFilterOptionDef,
-} from "ag-grid-community";
+import { ColDef, IFilterOptionDef } from "ag-grid-community";
 
 import { ROUTES } from "../../constants/routes";
 import { QUERY_KEYS } from "./../../constants/params";

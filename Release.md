@@ -1,6 +1,7 @@
 ## Major changes
+
 - Ported to React + Typescript variant !!
-  Under GSoC by @OmkarPh 
+  Under GSoC by @OmkarPh
 - Support for scancode-toolkit v32.x output format v3.0.0
 - Updated Tableview library & columns
 - New sections: License Detections explorer, Packages explorer, ScanInfo, About
@@ -23,16 +24,18 @@
 - Updated documentation https://github.com/nexB/scancode-workbench/pull/602
 
 ## ScanCode Toolkit Compatibility
+
 This v4.0.0 of ScanCode Workbench is compatible with scans from any [ScanCode Toolkit](https://github.com/nexB/scancode-toolkit/) releases at or after [`v32.0.0`](https://github.com/nexB/scancode-toolkit/releases/tag/v32.0.0rc4) and also from the latest develop, but using the latest `v32.x` stable releases is recommended: [latest SCTK release](https://github.com/nexB/scancode-toolkit/releases/latest).
 
 ## Bug fixes
+
 - Prevent crashes on unsupported scans
 - Provision for header-less scans (Test scans)
 - Table column fixes
 - Fixed UI anomalies
 - Invalid path query fix (Data for files with similar prefix were colliding)
 - window title update & occasional sqlite error for packages https://github.com/nexB/scancode-workbench/pull/560
-- license detection parser issues, trimmed filter options, hide empty 'other dependencies'  https://github.com/nexB/scancode-workbench/pull/569
+- license detection parser issues, trimmed filter options, hide empty 'other dependencies' https://github.com/nexB/scancode-workbench/pull/569
 - Refined UX including consistent scrollbars, tooltips, Search in licenses, filters for dependencies https://github.com/nexB/scancode-workbench/pull/587
 - Updated piechart tooltip https://github.com/nexB/scancode-workbench/pull/582
 - Automatic height for tables https://github.com/nexB/scancode-workbench/pull/606

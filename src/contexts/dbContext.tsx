@@ -24,7 +24,10 @@ import { AddEntry, GetHistory, RemoveEntry } from "../services/historyStore";
 import { WorkbenchDB } from "../services/workbenchDB";
 import { isSqliteSchemaOutdated } from "../utils/checks";
 import { ScanInfo, parseScanInfo } from "../utils/parsers";
-import { generateLicenseDetectionNavigationUrl, generatePackageNavigationUrl } from "../utils/navigatorQueries";
+import {
+  generateLicenseDetectionNavigationUrl,
+  generatePackageNavigationUrl,
+} from "../utils/navigatorQueries";
 
 const { version: workbenchVersion } = packageJson;
 const { ipcRenderer } = electron;

@@ -45,4 +45,4 @@ export const getMiscPackage = (): PackageDetails => {
     datasource_ids: [],
     purl: "Misc Dependencies",
   };
-}
+};

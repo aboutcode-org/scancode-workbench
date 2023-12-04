@@ -84,7 +84,7 @@ const MatchRuleDetails = (props: MatchRulePopoverProps) => {
           value: ruleReference.is_license_clue,
         },
         { flag: "is_continuous", value: ruleReference.is_continuous },
-        { flag: "is_builtin", value: ruleReference.is_builtin },
+        // { flag: "is_builtin", value: ruleReference.is_builtin },
         {
           flag: "is_from_license",
           value: ruleReference.is_from_license,

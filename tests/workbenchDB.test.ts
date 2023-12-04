@@ -185,9 +185,7 @@ describe("Parse Email, URL & Info", () => {
           ],
         })
       ).map((flatFile) => flatFile.toJSON());
-      const emails = (await db.Email.findAll()).map(
-        (email) => email.toJSON()
-      );
+      const emails = (await db.Email.findAll()).map((email) => email.toJSON());
       const urls = (await db.Url.findAll()).map((url) => url.toJSON());
 
       assert.deepEqual(flatFiles, expectedFlatFiles);

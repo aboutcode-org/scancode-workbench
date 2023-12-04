@@ -11,23 +11,20 @@ const FileLicenseCluesRenderer = (props: FileLicenseCluesRendererProps) => {
   const { value } = props;
 
   const parsedValue: LicenseClueDetails[] = useMemo(() => {
-    if(Array.isArray(value))
-      return value;
+    if (Array.isArray(value)) return value;
 
     try {
-      const parsed = JSON.parse(value)
-      return parsed
-    } catch(err) {
+      const parsed = JSON.parse(value);
+      return parsed;
+    } catch (err) {
       console.log("Err parsing list cell, showing value as it is:", value);
-      return value
+      return value;
     }
   }, [value]);
 
-  if(!parsedValue)
-    return <></>;
-  
-  if(!Array.isArray(parsedValue))
-    return value;
+  if (!parsedValue) return <></>;
+
+  if (!Array.isArray(parsedValue)) return value;
 
   return (
     <>

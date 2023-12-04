@@ -38,12 +38,12 @@ export interface InfoFlatFileAttributes {
   is_script: boolean;
 }
 export interface EmailUrlFlatFileAttributes {
-  email: unknown[]
-  email_start_line: unknown[]
-  email_end_line: unknown[]
-  url: unknown[]
-  url_start_line: unknown[]
-  url_end_line: unknown[]
+  email: unknown[];
+  email_start_line: unknown[];
+  email_end_line: unknown[];
+  url: unknown[];
+  url_start_line: unknown[];
+  url_end_line: unknown[];
 }
 export interface LicenseFlatFileAttributes {
   detected_license_expression: string;
@@ -61,7 +61,7 @@ export interface CopyrightFlatFileAttributes {
   copyright_end_line: number[][];
 }
 export interface PackageFlatFileAttributes {
-  for_packages: unknown[]
+  for_packages: unknown[];
 }
 export interface PackageDataFlatFileAttributes {
   package_data_type: unknown[];

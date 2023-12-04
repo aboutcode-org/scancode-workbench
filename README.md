@@ -5,46 +5,46 @@
 [![Release](https://github.com/nexB/scancode-workbench/actions/workflows/Release.yml/badge.svg)](https://github.com/nexB/scancode-workbench/actions/workflows/Release.yml)
 
 ScanCode Workbench provides an advanced visual UI to help you quickly evaluate
-license and other notices identified by 
+license and other notices identified by
 [ScanCode](https://github.com/nexB/scancode-toolkit/).
-[ScanCode](https://github.com/nexB/scancode-toolkit/) detects licenses, copyrights 
+[ScanCode](https://github.com/nexB/scancode-toolkit/) detects licenses, copyrights
 and other interesting information in your code.
 
 ScanCode Workbench is based on
-[Electron](https://www.electronjs.org/) and will be the primary desktop/GUI tool 
-for using nexB’s [AboutCode tools](https://github.com/nexB/aboutcode). This app 
+[Electron](https://www.electronjs.org/) and will be the primary desktop/GUI tool
+for using nexB’s [AboutCode tools](https://github.com/nexB/aboutcode). This app
 works on Windows, macOS and Linux operating systems.
 
 ![ScanCode Workbench](/src/assets/images/workbench_intro.gif)
 
 ## Using
 
-* You can [download the latest release](https://github.com/nexB/scancode-workbench/releases) 
-for your operating system or build it yourself (see below). Once downloaded, you 
-can find `ScanCode-Workbench` under `dist/ScanCode-Workbench-<os>-<arch>-<version>`
-* ScanCode Workbench >= v4 is only compatible with scans from 
-[ScanCode v32.0.0](https://github.com/nexB/scancode-toolkit/releases) and 
-above which are run with the ScanCode `-i` option. For a list of available ScanCode 
-options see [How To: Set what will be detected in a scan](https://scancode-toolkit.readthedocs.io/en/latest/tutorials/how_to_set_what_will_be_detected_in_a_scan.html)
+- You can [download the latest release](https://github.com/nexB/scancode-workbench/releases)
+  for your operating system or build it yourself (see below). Once downloaded, you
+  can find `ScanCode-Workbench` under `dist/ScanCode-Workbench-<os>-<arch>-<version>`
+- ScanCode Workbench >= v4 is only compatible with scans from
+  [ScanCode v32.0.0](https://github.com/nexB/scancode-toolkit/releases) and
+  above which are run with the ScanCode `-i` option. For a list of available ScanCode
+  options see [How To: Set what will be detected in a scan](https://scancode-toolkit.readthedocs.io/en/latest/tutorials/how_to_set_what_will_be_detected_in_a_scan.html)
 
 ```bash
 scancode -clipeu <input> <output_file>
 ```
 
-* We have provided a set of sample scans that you can quickly review in 
-ScanCode Workbench in order to get a sense of its functionality and the types of 
-information captured by a scan.  The samples are located at 
-[https://github.com/nexB/scancode-workbench/tree/develop/samples](https://github.com/nexB/scancode-workbench/tree/develop/samples).
-* Import a ScanCode JSON file, and see what components are in your software! See 
-the [documentation](https://scancode-workbench.readthedocs.io) for more 
-information on how to use ScanCode Workbench.
+- We have provided a set of sample scans that you can quickly review in
+  ScanCode Workbench in order to get a sense of its functionality and the types of
+  information captured by a scan. The samples are located at
+  [https://github.com/nexB/scancode-workbench/tree/develop/samples](https://github.com/nexB/scancode-workbench/tree/develop/samples).
+- Import a ScanCode JSON file, and see what components are in your software! See
+  the [documentation](https://scancode-workbench.readthedocs.io) for more
+  information on how to use ScanCode Workbench.
 
 [Import a JSON file](https://scancode-workbench.readthedocs.io/en/latest/how-to-guides/load-your-data/import-json.html)
 
 ## Running locally
 
-You'll need [Node.js](https://nodejs.org) (which comes with [npm](http://npmjs.com)) 
-installed on your computer in order to build this app. For a list of platform 
+You'll need [Node.js](https://nodejs.org) (which comes with [npm](http://npmjs.com))
+installed on your computer in order to build this app. For a list of platform
 specific requirements, see the Building section of the [documentation](https://scancode-workbench.readthedocs.io/en/latest/contribute/building.html).
 Then, from your command line:
 
@@ -64,7 +64,7 @@ $ npm start
 
 ## Release Instructions
 
-You'll need python 3.x to run the build. You can build a `dist` directory containing executables for your platform 
+You'll need python 3.x to run the build. You can build a `dist` directory containing executables for your platform
 
 Note: Due to usage of native modules, a build must be done on target platform only.
 
@@ -72,8 +72,8 @@ Note: Due to usage of native modules, a build must be done on target platform on
 $ npm run publish
 ```
 
-After building is done, you can find `ScanCode-Workbench` under 
-`dist/ScanCode-Workbench-<os>-x64-<version>`. Archives (tar.gz and .zip) are 
+After building is done, you can find `ScanCode-Workbench` under
+`dist/ScanCode-Workbench-<os>-x64-<version>`. Archives (tar.gz and .zip) are
 also built.
 
 ## Testing
@@ -86,8 +86,8 @@ $ npm test
 
 ## License
 
-* Apache-2.0
-* Multiple licenses (LGPL, MIT, BSD, etc.) for third-party components.
+- Apache-2.0
+- Multiple licenses (LGPL, MIT, BSD, etc.) for third-party components.
 
 See the NOTICE file for more details.
 

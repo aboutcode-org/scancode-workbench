@@ -51,9 +51,7 @@ const DependencyInfoDash = () => {
     PackageTypeSummaryRow[]
   >([]);
 
-  function summarisePackageDataDeps(
-    packagesData: PackageDataAttributes[],
-  ) {
+  function summarisePackageDataDeps(packagesData: PackageDataAttributes[]) {
     const packageTypeToSummaryMapping = new Map<
       string,
       PackageTypeSummaryRow

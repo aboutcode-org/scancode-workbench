@@ -24,31 +24,31 @@ PACKAGE_DIR = 'out'   # @NOTE - PACKAGE_DIR must be same as 'out' property in pa
 
 # Get scancode workbench version from package.json
 with open('package.json') as json_file:
-  package_json_object = json.load(json_file)
-  APP_VERSION = package_json_object['version']
+    package_json_object = json.load(json_file)
+    APP_VERSION = package_json_object['version']
 
 # platform-specific properties
 ARCH = str(platform.machine())
 SYSTEM_PLATFORM = str(sys.platform).lower()
 on_linux = on_windows = on_mac = False
 
-if 'linux' in SYSTEM_PLATFORM :
-  PLATFORM_NAME = 'linux'
-  PLATFORM = 'linux'
-  on_linux = True
+if 'linux' in SYSTEM_PLATFORM:
+    PLATFORM_NAME = 'linux'
+    PLATFORM = 'linux'
+    on_linux = True
 
-elif 'win32' in SYSTEM_PLATFORM :
-  PLATFORM_NAME = 'windows'
-  PLATFORM = 'win32'
-  on_windows = True
+elif 'win32' in SYSTEM_PLATFORM:
+    PLATFORM_NAME = 'windows'
+    PLATFORM = 'win32'
+    on_windows = True
 
-elif 'darwin' in SYSTEM_PLATFORM :
-  PLATFORM_NAME = 'macos'
-  PLATFORM = 'darwin'
-  on_mac = True
+elif 'darwin' in SYSTEM_PLATFORM:
+    PLATFORM_NAME = 'macos'
+    PLATFORM = 'darwin'
+    on_mac = True
 
 else:
-  raise Exception('Unsupported OS/platform %r' % SYSTEM_PLATFORM)
+    raise Exception('Unsupported OS/platform %r' % SYSTEM_PLATFORM)
 
 # Prepare file name for archive using platform, architecture & app version
 archive_file_name = '-'.join([APP_NAME, PLATFORM_NAME, ARCH, APP_VERSION])
@@ -61,16 +61,16 @@ os.system(ensure_archive_directory)
 
 # Prepare .zip file for windows
 if on_windows:
-  zip_command = f"powershell Compress-Archive {PACKAGE_DIR}/* {ARCHIVE_DIR}/{archive_file_name}.zip"
-  print("Executing zip command on powershell:", zip_command)
-  os.system(zip_command)
-  print(f"Zip file ready: {ARCHIVE_DIR}/{archive_file_name}.zip")
+    zip_command = f"powershell Compress-Archive {PACKAGE_DIR}/* {ARCHIVE_DIR}/{archive_file_name}.zip"
+    print("Executing zip command on powershell:", zip_command)
+    os.system(zip_command)
+    print(f"Zip file ready: {ARCHIVE_DIR}/{archive_file_name}.zip")
 
 # Prepare .tar.gz file for mac & linux
 else:
-  tar_command = f"tar -czf {ARCHIVE_DIR}/{archive_file_name}.tar.gz -C {PACKAGE_DIR} ."
-  print("Executing tar command:", tar_command)
-  os.system(tar_command)
-  print(f"Tar file ready: {ARCHIVE_DIR}/{archive_file_name}.tar.gz")
+    tar_command = f"tar -czf {ARCHIVE_DIR}/{archive_file_name}.tar.gz -C {PACKAGE_DIR} ."
+    print("Executing tar command:", tar_command)
+    os.system(tar_command)
+    print(f"Tar file ready: {ARCHIVE_DIR}/{archive_file_name}.tar.gz")
 
 print("Build succeeded !!!")

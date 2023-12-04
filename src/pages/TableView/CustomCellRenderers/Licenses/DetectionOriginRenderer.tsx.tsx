@@ -21,7 +21,7 @@ const DetectionOriginRenderer = (props: DetectionOriginRendererProps) => {
   const { goToFileInTableView, goToPackage } = useWorkbenchDB();
 
   const origin = value && value.length ? ORIGIN.PACKAGE_DATA : ORIGIN.FILE;
-  
+
   return (
     <OverlayTrigger
       placement="left"

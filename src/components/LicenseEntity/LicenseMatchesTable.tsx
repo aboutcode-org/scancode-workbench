@@ -39,8 +39,8 @@ const LicenseMatchesTable = (props: LicenseMatchProps) => {
             <Table size="sm" bordered>
               <tbody>
                 <tr>
-                  <td>License Expression</td>
-                  <td colSpan={3}>
+                  <td colSpan={2}>License Expression</td>
+                  <td colSpan={7}>
                     <MatchLicenseExpressionRenderer
                       matchInfo={{
                         match: match,
@@ -52,8 +52,8 @@ const LicenseMatchesTable = (props: LicenseMatchProps) => {
                 {matchesInfo.licenseType === LicenseTypes.DETECTION &&
                   (match as LicenseDetectionMatch)?.license_expression_spdx && (
                     <tr>
-                      <td>License Expression SPDX</td>
-                      <td colSpan={3}>
+                      <td colSpan={2}>License Expression SPDX</td>
+                      <td colSpan={7}>
                         <MatchLicenseExpressionRenderer
                           matchInfo={{
                             match: match,
@@ -65,8 +65,8 @@ const LicenseMatchesTable = (props: LicenseMatchProps) => {
                   )}
                 {showLIcenseText && (
                   <tr className="matched-text-row">
-                    <td>Matched Text</td>
-                    <td colSpan={3}>
+                    <td colSpan={2}>Matched Text</td>
+                    <td colSpan={7}>
                       <div>
                         <MatchedTextRenderer
                           match={match}
@@ -77,20 +77,20 @@ const LicenseMatchesTable = (props: LicenseMatchProps) => {
                   </tr>
                 )}
                 <tr>
-                  <td>Matched length</td>
-                  <td>{match.matched_length}</td>
-                  <td>Match Coverage</td>
-                  <td>{match.match_coverage}</td>
+                  <td colSpan={2}>Matched length</td>
+                  <td colSpan={3}>{match.matched_length}</td>
+                  <td colSpan={2}>Match Coverage</td>
+                  <td colSpan={2}>{match.match_coverage}</td>
                 </tr>
                 <tr>
-                  <td>Score</td>
-                  <td>{match.score}</td>
-                  <td>Rule Relevance</td>
-                  <td>{match.rule_relevance}</td>
+                  <td colSpan={2}>Score</td>
+                  <td colSpan={3}>{match.score}</td>
+                  <td colSpan={2}>Rule Rele ance</td>
+                  <td colSpan={2}>{match.rule_relevance}</td>
                 </tr>
                 <tr>
-                  <td>Rule</td>
-                  <td>
+                  <td colSpan={2}>Rule</td>
+                  <td colSpan={3}>
                     <span>
                       <span>
                         {match.rule_url ? (
@@ -121,8 +121,8 @@ const LicenseMatchesTable = (props: LicenseMatchProps) => {
                       </OverlayTrigger>
                     </span>
                   </td>
-                  <td>Matcher</td>
-                  <td>{match.matcher}</td>
+                  <td colSpan={2}>Matcher</td>
+                  <td colSpan={2}>{match.matcher}</td>
                 </tr>
               </tbody>
             </Table>
