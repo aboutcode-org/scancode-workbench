@@ -298,7 +298,8 @@ const LicenseDetections = () => {
                     rootClose
                     overlay={
                       <Tooltip>
-                        Tick the checkboxes below to mark licenses as reviewed
+                        Tick the checkboxes below to mark license detections as
+                        reviewed
                       </Tooltip>
                     }
                   >

@@ -39,11 +39,11 @@ import {
   parseTokenKeysFromExpression,
 } from "./models/databaseUtils";
 import { FileAttributes } from "./models/file";
-import { flattenFile } from "./models/flatFile";
+import { FlatFileAttributes, flattenFile } from "./models/flatFile";
 import {
   LicenseClue,
   LicenseExpressionKey,
-  LicenseReference,
+  RawTopLevelTodo,
   Resource,
   ResourceLicenseDetection,
   TopLevelLicenseDetection,
@@ -52,6 +52,8 @@ import { LicenseTypes } from "./workbenchDB.types";
 import packageJson from "../../package.json";
 import { TodoAttributes } from "./models/todo";
 import { HeaderAttributes } from "./models/header";
+import { LicenseReferenceAttributes } from "./models/licenseReference";
+import { LicenseRuleReferenceAttributes } from "./models/licenseRuleReference";
 
 const { version: workbenchVersion } = packageJson;
 
@@ -84,9 +86,9 @@ interface TopLevelDataFormat {
   license_clues: LicenseClue[];
   license_detections: TopLevelLicenseDetection[];
   license_detections_map: Map<string, TopLevelLicenseDetection>;
-  license_references: LicenseReference[];
-  license_references_map: Map<string, LicenseReference>;
-  license_references_spdx_map: Map<string, LicenseReference>;
+  license_references: LicenseReferenceAttributes[];
+  license_references_map: Map<string, LicenseReferenceAttributes>;
+  license_references_spdx_map: Map<string, LicenseReferenceAttributes>;
   license_rule_references: unknown[];
   todo: TodoAttributes[];
 }
@@ -355,6 +357,11 @@ export class WorkbenchDB {
                   this.db.Dependencies.bulkCreate(TopLevelData.dependencies)
                 )
                 .then(() =>
+                  this.db.LicenseReferences.bulkCreate(
+                    TopLevelData.license_references
+                  )
+                )
+                .then(() =>
                   this.db.LicenseRuleReferences.bulkCreate(
                     TopLevelData.license_rule_references
                   )
@@ -542,7 +549,7 @@ export class WorkbenchDB {
     const license_detections_map = new Map<string, TopLevelLicenseDetection>(
       license_detections.map((detection) => [detection.identifier, detection])
     );
-    const license_references: LicenseReference[] =
+    const license_references: LicenseReferenceAttributes[] =
       rawTopLevelData.license_references || [];
     const license_references_mapping = new Map(
       license_references.map((ref) => [ref.key, ref])
@@ -550,13 +557,13 @@ export class WorkbenchDB {
     const license_references_mapping_spdx = new Map(
       license_references.map((ref) => [ref.spdx_license_key, ref])
     );
-    const license_rule_references: any[] =
+    const license_rule_references: LicenseRuleReferenceAttributes[] =
       rawTopLevelData.license_rule_references || [];
 
     // @TODO - ToDo in scans have a field review_comments, which is ideally an issue
     // It will be changed in the schema in future
     const todo: TodoAttributes[] = (rawTopLevelData.todo || []).map(
-      (todo: any) => {
+      (todo: RawTopLevelTodo) => {
         return {
           detection_id: todo.detection_id,
           issues: todo.review_comments,
@@ -715,9 +722,22 @@ export class WorkbenchDB {
                 )
               ];
           }
-          // Unknown
+          // Unknown reference
           if (match.license_expression == UNKNOWN_EXPRESSION) {
             match.license_expression_spdx = UNKNOWN_EXPRESSION_SPDX;
+          }
+
+          // Specifically useful for license clue matches, where SPDX expression is not available
+          // Find reference using license expression (if available)
+          // And set spdx expression available in reference
+          if (
+            !match.license_expression_spdx &&
+            TopLevelData.license_references_map.has(match.license_expression)
+          ) {
+            match.license_expression_spdx =
+              TopLevelData.license_references_map.get(
+                match.license_expression
+              ).spdx_license_key;
           }
 
           const parsedLicenseKeys = parseSubExpressions(
@@ -728,8 +748,7 @@ export class WorkbenchDB {
           );
 
           parsedLicenseKeys.forEach((key) => {
-            const license_reference: any = license_references_map.get(key);
-            // if (!license_reference) return;
+            const license_reference = license_references_map.get(key);
 
             match.license_expression_keys.push({
               key,
@@ -738,8 +757,7 @@ export class WorkbenchDB {
             });
           });
           parsedSpdxLicenseKeys.forEach((key) => {
-            const license_reference: any = license_references_spdx_map.get(key);
-            // if (!license_reference) return;
+            const license_reference = license_references_spdx_map.get(key);
 
             match.license_expression_spdx_keys.push({
               key,
@@ -832,7 +850,7 @@ export class WorkbenchDB {
 
     const flattenedFiles = files.map((file) => flattenFile(file));
 
-    return this.db.FlatFile.bulkCreate(flattenedFiles as any[], {
+    return this.db.FlatFile.bulkCreate(flattenedFiles as FlatFileAttributes[], {
       logging: false,
     });
   }
@@ -858,12 +876,12 @@ export class WorkbenchDB {
         file.parent = parentPath(file.path);
       });
 
-      return this.db.File.bulkCreate(files as any, options)
+      return this.db.File.bulkCreate(files, options)
         .then(() => DebugLogger("file processor", "Processed bulkcreate"))
 
         .then(() =>
           this.db.LicenseExpression.bulkCreate(
-            this._getLicenseExpressions(files) as any,
+            this._getLicenseExpressions(files),
             options
           )
         )

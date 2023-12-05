@@ -28,7 +28,7 @@
 .dependency-entity .raw-info-section,
 .license-detecion-entity .raw-info-section {
   margin-top: 15px;
-  margin-bottom: 25px;
+  padding-bottom: 20px;
 }
 
 .entity-table {

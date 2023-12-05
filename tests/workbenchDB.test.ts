@@ -205,6 +205,7 @@ describe("Parse Licenses", () => {
       expectedLicenseDetections,
       expectedLicenseExpressions,
       expectedLicensePolicies,
+      expectedLicenseReferences,
       expectedLicenseRuleReferences,
     }) => {
       const jsonFilePath = path.join(
@@ -246,6 +247,9 @@ describe("Parse Licenses", () => {
       const licensePolicies = (await db.LicensePolicy.findAll()).map((policy) =>
         policy.toJSON()
       );
+      const licenseReferences = (await db.LicenseReferences.findAll()).map(
+        (reference) => reference.toJSON()
+      );
       const licenseRuleReferences = (
         await db.LicenseRuleReferences.findAll()
       ).map((ruleReference) => ruleReference.toJSON());
@@ -255,6 +259,7 @@ describe("Parse Licenses", () => {
       assert.deepEqual(licenseClues, expectedLicenseClues);
       assert.deepEqual(licenseExpressions, expectedLicenseExpressions);
       assert.deepEqual(licensePolicies, expectedLicensePolicies);
+      assert.deepEqual(licenseReferences, expectedLicenseReferences);
       assert.deepEqual(licenseRuleReferences, expectedLicenseRuleReferences);
     }
   );

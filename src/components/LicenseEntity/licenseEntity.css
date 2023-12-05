@@ -69,6 +69,6 @@
 
 .rule-info-button {
   font-size: 1.05em !important;
-  color: #007bff !important;
+  color: var(--bs-btn-bg) !important;
   vertical-align: bottom !important;
 }

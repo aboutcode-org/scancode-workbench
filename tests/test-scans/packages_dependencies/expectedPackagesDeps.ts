@@ -1,4 +1,7 @@
-import { DEPENDENCY_SCOPES, DependenciesAttributes } from "../../../src/services/models/dependencies";
+import {
+  DEPENDENCY_SCOPES,
+  DependenciesAttributes,
+} from "../../../src/services/models/dependencies";
 import {
   PackageDataFlatFileAttributes,
   PackageFlatFileAttributes,

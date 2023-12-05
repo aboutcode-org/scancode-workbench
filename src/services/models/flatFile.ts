@@ -17,6 +17,7 @@
 import path from "path";
 import { Sequelize, DataTypes, Model } from "sequelize";
 import { jsonDataType, parentPath } from "./databaseUtils";
+import { LicensePolicy, Resource } from "../importedJsonTypes";
 
 export interface InfoFlatFileAttributes {
   type: string;
@@ -265,7 +266,7 @@ interface FlattenedFile {
   name: string;
   extension: string;
   date: string;
-  size: string;
+  size: number;
   sha1: string;
   md5: string;
   file_count: number;
@@ -310,7 +311,7 @@ interface FlattenedFile {
   package_data_dependencies: unknown[];
   package_data_related_packages: unknown[];
 }
-export function flattenFile(file: any): FlattenedFile {
+export function flattenFile(file: Resource): FlattenedFile {
   return {
     id: file.id,
     fileId: file.id,
@@ -406,7 +407,7 @@ export function flattenFile(file: any): FlattenedFile {
   };
 }
 
-function getLicensePolicyLabel(policy: any[]) {
+function getLicensePolicyLabel(policy: LicensePolicy[]) {
   if (!policy) {
     return [];
   }
@@ -429,7 +430,7 @@ function getCopyrightValues(
   if (!array || !Array.isArray(array)) {
     array = [];
   }
-  const values = array.map((val: any) => val[field]);
+  const values = array.map((val: Record<string, unknown>) => val[field]);
   // must wrap this in a list for datatables display; not sure why
   return [values];
 }

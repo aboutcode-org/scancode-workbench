@@ -1,36 +1,4 @@
-export interface LicenseReference {
-  key: string;
-  language: string;
-  short_name: string;
-  name: string;
-  category: string;
-  owner: string;
-  homepage_url: string;
-  notes: string;
-  is_builtin: boolean;
-  is_exception: boolean;
-  is_unknown: boolean;
-  is_generic: boolean;
-  spdx_license_key: string;
-  other_spdx_license_keys: string[];
-  osi_license_key: string | null;
-  text_urls: string[];
-  osi_url?: string;
-  faq_url?: string;
-  other_urls: string[];
-  key_aliases: string[];
-  minimum_coverage: number;
-  standard_notice: string | null;
-  ignorable_copyrights: string[];
-  ignorable_holders: string[];
-  ignorable_authors: string[];
-  ignorable_urls: string[];
-  ignorable_emails: string[];
-  text: string;
-  scancode_url: string | null;
-  licensedb_url: string | null;
-  spdx_url: string | null;
-}
+import { LicenseDetectionAttributes } from "./models/licenseDetections";
 
 export interface LicenseExpressionKey {
   key: string;
@@ -105,6 +73,22 @@ export interface ResourceLicenseDetection {
   license_expression: string;
   matches: LicenseDetectionMatch[];
   identifier: string;
+}
+
+export interface LicensePolicy {
+  license_key: string;
+  label: string;
+  color_code: string;
+  icon: string;
+
+  // Parser-added fields
+  fileId?: number;
+}
+
+export interface RawTopLevelTodo {
+  detection_id: string;
+  review_comments: Record<string, string>;
+  detection: LicenseDetectionAttributes;
 }
 
 export interface Resource {
@@ -192,6 +176,8 @@ export interface Resource {
   for_license_detections?: string[];
   license_detections?: ResourceLicenseDetection[];
   license_clues?: LicenseClue[];
+  emails?: unknown[];
+  urls?: unknown[];
   copyrights?: {
     copyright: string;
     start_line: number;
@@ -208,14 +194,7 @@ export interface Resource {
     end_line: number;
   }[];
   percentage_of_license_text?: number;
-  license_policy?: {
-    license_key: string;
-    label: string;
-    color_code: string;
-    icon: string;
-    // Parser-added fields
-    fileId?: number;
-  }[];
+  license_policy?: LicensePolicy[];
   scan_errors?: string[];
 
   // Parser-added fields
