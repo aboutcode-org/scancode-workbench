@@ -148,10 +148,6 @@ const LicenseDetections = () => {
               )
             : null;
         if (queriedDetection) {
-          console.log(
-            `Activate queried detection (${queriedDetectionIdentifier}): `,
-            queriedDetection
-          );
           activateLicenseDetection(queriedDetection);
         }
       } else if (queriedClueExpression && queriedClueFilePath) {

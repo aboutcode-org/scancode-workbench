@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useEffect, useMemo } from "react";
+import React, { FunctionComponent, useMemo } from "react";
 import { Link } from "react-router-dom";
 import CoreLink from "../../../components/CoreLink/CoreLink";
 
@@ -38,11 +38,6 @@ const UrlListCellRenderer: FunctionComponent<UrlListCellRendererProps> = (
       return value;
     }
   }, [value]);
-
-  useEffect(() => {
-    if (customUrlField)
-      console.log("Parsed: ", parsedValue, data[customUrlField][0]);
-  }, [customUrlField]);
 
   if (!parsedValue) return <></>;
 
