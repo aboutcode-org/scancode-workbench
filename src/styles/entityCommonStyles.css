@@ -28,7 +28,7 @@
 .dependency-entity .raw-info-section,
 .license-detecion-entity .raw-info-section {
   margin-top: 15px;
-  margin-bottom: 25px;
+  padding-bottom: 20px;
 }
 
 .entity-table {
@@ -42,14 +42,11 @@
   height: auto;
 }
 
+.entity-table .ag-center-cols-viewport .ag-center-cols-container,
 .entity-table .ag-body-viewport,
 .entity-table .ag-body {
   height: auto;
   /* Subtract height of horizontal scroll and header from table height */
   max-height: calc(var(--max-entity-table-height) - var(--entity-table-header-height) - var(--entity-table-height));
   flex: none;
-}
-
-.entity-table .ag-center-cols-viewport {
-  height: auto;
 }

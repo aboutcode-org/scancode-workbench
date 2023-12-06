@@ -15,31 +15,52 @@
  */
 
 import { Sequelize, DataTypes, Model } from "sequelize";
-import { jsonDataType, JSON_Type } from "./databaseUtils";
+import { jsonDataType } from "./databaseUtils";
+import { LicenseDetectionMatch, LicenseFileRegion } from "../importedJsonTypes";
 
 export interface LicenseDetectionAttributes {
+  id: number;
   identifier: string;
   license_expression: string;
   detection_count: number;
-  detection_log: JSON_Type;
-  matches: JSON_Type;
-  file_regions: JSON_Type;
+  reviewed: boolean;
+  detection_log: string[];
+  matches: LicenseDetectionMatch[];
+  file_regions: LicenseFileRegion[];
+
+  // Legacy output version fields
+  count?: number;
 }
 
 export default function licenseDetectionModel(sequelize: Sequelize) {
   return sequelize.define<Model<LicenseDetectionAttributes>>(
     "license_detections",
     {
+      id: {
+        allowNull: false,
+        autoIncrement: true,
+        primaryKey: true,
+        type: DataTypes.INTEGER,
+      },
       identifier: {
         type: DataTypes.STRING,
         allowNull: false,
-        primaryKey: true,
       },
       license_expression: DataTypes.STRING,
       detection_count: DataTypes.NUMBER,
-      detection_log: jsonDataType("detection_log"),
-      matches: jsonDataType("matches"),
-      file_regions: jsonDataType("file_regions"),
+      reviewed: {
+        defaultValue: false,
+        type: DataTypes.BOOLEAN,
+      },
+      detection_log: jsonDataType("detection_log", []),
+      matches: jsonDataType("matches", []),
+      file_regions: jsonDataType("file_regions", []),
+
+      // Legacy output version fields
+      count: {
+        type: DataTypes.NUMBER,
+        allowNull: true,
+      },
     },
     {
       timestamps: false,

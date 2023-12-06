@@ -1,5 +1,7 @@
 # Documentation development
+
 The first step you want to do is create the python virtual environment:
+
 ```
 $ cd docs/
 $ python3 -m venv venv
@@ -8,11 +10,13 @@ $ pip install -r requirements.txt
 ```
 
 Run Sphinx documentation server:
+
 ```
 $ make docs
 ```
 
 Build Sphinx documentation
+
 ```
 $ make html
 ```

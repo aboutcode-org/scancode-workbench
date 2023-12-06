@@ -15,7 +15,14 @@ interface ScanData {
 }
 
 const PackageInfoDash = () => {
-  const { db, initialized, currentPath, scanInfo, startProcessing, endProcessing } = useWorkbenchDB();
+  const {
+    db,
+    initialized,
+    currentPath,
+    scanInfo,
+    startProcessing,
+    endProcessing,
+  } = useWorkbenchDB();
   const [packageTypeData, setPackageTypeData] = useState<
     FormattedEntry[] | null
   >(null);
@@ -66,11 +73,13 @@ const PackageInfoDash = () => {
         // Query and prepare chart for package types
         const PackageDataPromise = db.sync
           .then((db) => db.PackageData.findAll({ where: { fileId: fileIDs } }))
+          .then((rawPackageData) =>
+            rawPackageData.map((rawPackage) => rawPackage.toJSON())
+          )
           .then((packageData) => {
             // Prepare chart for package types
             const packageTypes = packageData.map(
-              (packageEntry) =>
-                packageEntry.getDataValue("type") || NO_VALUE_DETECTED_LABEL
+              (packageEntry) => packageEntry.type || NO_VALUE_DETECTED_LABEL
             );
             const { chartData: packageTypesChartData } =
               formatPieChartData(packageTypes);
@@ -79,8 +88,7 @@ const PackageInfoDash = () => {
             // Prepare chart for package languages
             const packageLangs = packageData.map(
               (packageEntry) =>
-                packageEntry.getDataValue("primary_language") ||
-                NO_VALUE_DETECTED_LABEL
+                packageEntry.primary_language || NO_VALUE_DETECTED_LABEL
             );
             const { chartData: packageLangsChartData } =
               formatPieChartData(packageLangs);
@@ -89,7 +97,7 @@ const PackageInfoDash = () => {
             // Prepare chart for package license expression
             const packageLicenseExp = packageData.map(
               (packageEntry) =>
-                packageEntry.getDataValue("declared_license_expression") ||
+                packageEntry.declared_license_expression ||
                 NO_VALUE_DETECTED_LABEL
             );
             const { chartData: packageLicenseExpChartData } =

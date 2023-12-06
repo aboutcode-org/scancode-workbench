@@ -1,9 +1,7 @@
 import { ColDef } from "ag-grid-community";
 import { ALL_COLUMNS } from "../pages/TableView/columnDefs";
 
-export const LOCATION_COLUMN: ColDef[] = [
-  ALL_COLUMNS.path,
-];
+export const LOCATION_COLUMN: ColDef[] = [ALL_COLUMNS.path];
 
 export const COPYRIGHT_COLUMNS: ColDef[] = [
   ALL_COLUMNS.copyright_statements,
@@ -15,13 +13,9 @@ export const LICENSE_COLUMNS: ColDef[] = [
   ALL_COLUMNS.detected_license_expression,
 ];
 
-export const EMAIL_COLUMNS: ColDef[] = [
-  ALL_COLUMNS.email,
-];
+export const EMAIL_COLUMNS: ColDef[] = [ALL_COLUMNS.email];
 
-export const URL_COLUMNS: ColDef[] = [
-  ALL_COLUMNS.url
-];
+export const URL_COLUMNS: ColDef[] = [ALL_COLUMNS.url];
 
 export const FILE_COLUMNS: ColDef[] = [
   ALL_COLUMNS.type,
@@ -34,7 +28,7 @@ export const FILE_COLUMNS: ColDef[] = [
   ALL_COLUMNS.is_media,
   ALL_COLUMNS.is_source,
   ALL_COLUMNS.is_script,
-  
+
   // ALL_COLUMNS.scan_error,
 ];
 
@@ -47,40 +41,40 @@ export const PACKAGE_COLUMNS: ColDef[] = [
 ];
 
 interface BAR_CHART_GROUP {
-  label: string,
-  key: string,
-  cols: ColDef[],
+  label: string;
+  key: string;
+  cols: ColDef[];
 }
 
-export const BAR_CHART_COLUMN_GROUPS: {[key: string]: BAR_CHART_GROUP} = {
+export const BAR_CHART_COLUMN_GROUPS: { [key: string]: BAR_CHART_GROUP } = {
   Copyright: {
     label: "Copyright columns",
-    key: 'copyright_columns',
-    cols: COPYRIGHT_COLUMNS
+    key: "copyright_columns",
+    cols: COPYRIGHT_COLUMNS,
   },
-  License : {
+  License: {
     label: "License columns",
-    key: 'license_columns',
-    cols: LICENSE_COLUMNS
+    key: "license_columns",
+    cols: LICENSE_COLUMNS,
   },
   Email: {
     label: "Email columns",
-    key: 'email_columns',
-    cols: EMAIL_COLUMNS
+    key: "email_columns",
+    cols: EMAIL_COLUMNS,
   },
   Url: {
     label: "URL columns",
-    key: 'url_columns',
-    cols: URL_COLUMNS
+    key: "url_columns",
+    cols: URL_COLUMNS,
   },
   File: {
     label: "File columns",
-    key: 'file_columns',
-    cols: FILE_COLUMNS
+    key: "file_columns",
+    cols: FILE_COLUMNS,
   },
   Package: {
     label: "Package columns",
-    key: 'package_columns',
-    cols: PACKAGE_COLUMNS
+    key: "package_columns",
+    cols: PACKAGE_COLUMNS,
   },
-}
+};

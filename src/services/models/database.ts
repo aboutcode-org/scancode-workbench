@@ -38,17 +38,10 @@ import licenseClueModel, { LicenseClueAttributes } from "./licenseClues";
 import licenseRuleReferenceModel, {
   LicenseRuleReferenceAttributes,
 } from "./licenseRuleReference";
-
-// let Header;
-// let File;
-// let License;
-// let Copyright;
-// let Package;
-// let Email;
-// let Url;
-// let Scan;
-
-// type SupportedModels = <Model<HeaderAttributes, HeaderAttributes>>;
+import todoModel, { TodoAttributes } from "./todo";
+import licenseReferenceModel, {
+  LicenseReferenceAttributes,
+} from "./licenseReference";
 
 export interface DatabaseStructure {
   // Top level entities
@@ -60,12 +53,16 @@ export interface DatabaseStructure {
   LicenseDetections: ModelStatic<
     Model<LicenseDetectionAttributes, LicenseDetectionAttributes>
   >;
+  LicenseReferences: ModelStatic<
+    Model<LicenseReferenceAttributes, LicenseReferenceAttributes>
+  >;
   LicenseRuleReferences: ModelStatic<
     Model<LicenseRuleReferenceAttributes, LicenseRuleReferenceAttributes>
   >;
   LicenseClues: ModelStatic<
     Model<LicenseClueAttributes, LicenseClueAttributes>
   >;
+  Todo: ModelStatic<Model<TodoAttributes, TodoAttributes>>;
 
   File: ModelStatic<Model<FileAttributes>>;
   LicenseExpression: ModelStatic<
@@ -92,8 +89,10 @@ export function newDatabase(sequelize: Sequelize): DatabaseStructure {
     Packages: packagesModel(sequelize),
     Dependencies: dependenciesModel(sequelize),
     LicenseDetections: licenseDetectionModel(sequelize),
+    LicenseReferences: licenseReferenceModel(sequelize),
     LicenseRuleReferences: licenseRuleReferenceModel(sequelize),
     LicenseClues: licenseClueModel(sequelize),
+    Todo: todoModel(sequelize),
 
     File: fileModel(sequelize),
     LicenseExpression: licenseExpressionModel(sequelize),

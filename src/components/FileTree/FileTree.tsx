@@ -1,17 +1,15 @@
 import RcTree from "rc-tree";
 import { Key } from "rc-tree/lib/interface";
-import React, { useEffect, useLayoutEffect, useState } from "react";
 import { Element } from "react-scroll";
-import scrollIntoView from "scroll-into-view-if-needed";
+import React, { useEffect, useState } from "react";
 
-import EllipticLoader from "../EllipticLoader";
 import SwitcherIcon from "./SwitcherIcon";
-import { PathType, useWorkbenchDB } from "../../contexts/dbContext";
+import EllipticLoader from "../EllipticLoader";
+import { throttledScroller } from "../../utils/throttledScroll";
 import { FileDataNode } from "../../services/workbenchDB";
+import { PathType, useWorkbenchDB } from "../../contexts/dbContext";
 
 import "./FileTree.css";
-
-const FOCUS_ATTEMPT_DELAY = 500;
 
 const FileTree = (props: React.HTMLProps<HTMLDivElement>) => {
   const {
@@ -27,7 +25,7 @@ const FileTree = (props: React.HTMLProps<HTMLDivElement>) => {
   const [treeData, setTreeData] = useState<FileDataNode[] | null>(null);
   const [expandedKeys, setExpandedKeys] = useState<Key[]>([]);
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (currentPath.length === 0) return;
 
     // Show working indicator while the FileTree Node is being rendered and focused
@@ -37,43 +35,16 @@ const FileTree = (props: React.HTMLProps<HTMLDivElement>) => {
       return [...keys, currentPath.substring(0, currentPath.lastIndexOf("/"))];
     });
 
-    function scrollTreeNode(targetNode: HTMLElement) {
-      scrollIntoView(targetNode, {
-        scrollMode: "if-needed",
-        behavior: "smooth",
-        block: "center",
-        inline: "start",
-      });
-    }
-
-    // Timeout ensures that targetNode is accessed only after its rendered
-    let pendingScrollerTimeoutId: NodeJS.Timeout;
-
-    const alreadyRenderedTargetNode =
-      document.getElementsByName(currentPath)[0];
-      
-    if (alreadyRenderedTargetNode) {
-      // Immediate scroll possible
-      scrollTreeNode(alreadyRenderedTargetNode);
-      endProcessing();
-    } else {
-      // Wait for target node to render
-      pendingScrollerTimeoutId = setTimeout(() => {
-        const targetNode = document.getElementsByName(currentPath)[0];
-
-        if (targetNode) {
-          pendingScrollerTimeoutId = setTimeout(() => {
-            scrollTreeNode(targetNode);
-          }, FOCUS_ATTEMPT_DELAY);
-
-          // Hide working indicator after the FileTree Node is focused
-          endProcessing();
-        }
-      });
-    }
+    // Scroll to selected filetree node
+    // Hide working indicator after the FileTree Node is focused
+    const clearThrottledScroll = throttledScroller(
+      `[data-tree-node-id="${currentPath}"]`,
+      () => endProcessing()
+    );
 
     return () => {
-      clearTimeout(pendingScrollerTimeoutId);
+      // Clear any pending scroll timeout
+      clearThrottledScroll();
     };
   }, [currentPath]);
 
@@ -88,7 +59,12 @@ const FileTree = (props: React.HTMLProps<HTMLDivElement>) => {
       function wrapNode(node: FileDataNode) {
         const key = String(node.key);
         node.title = (
-          <Element key={key} name={key} className="filetree-node-wrapper">
+          <Element
+            key={key}
+            name={key}
+            className="filetree-node-wrapper"
+            data-tree-node-id={key}
+          >
             <span>{String(node.title)}</span>
           </Element>
         );
@@ -98,11 +74,6 @@ const FileTree = (props: React.HTMLProps<HTMLDivElement>) => {
       setTreeData(treeData);
     });
   }, [importedSqliteFilePath]);
-
-  function selectPath(path: string, pathType: PathType) {
-    if (!initialized) return;
-    updateCurrentPath(path, pathType);
-  }
 
   if (!treeData) {
     return (
@@ -138,7 +109,7 @@ const FileTree = (props: React.HTMLProps<HTMLDivElement>) => {
         selectedKeys={[currentPath]}
         onSelect={(keys, info) => {
           if (keys && keys[0]) {
-            selectPath(keys[0].toString(), info.node.type as PathType);
+            updateCurrentPath(keys[0].toString(), info.node.type as PathType);
           }
         }}
         motion={{

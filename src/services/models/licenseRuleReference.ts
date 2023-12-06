@@ -15,7 +15,7 @@
  */
 
 import { Sequelize, DataTypes, Model } from "sequelize";
-// import { JSON_Type, jsonDataType } from "./databaseUtils";
+import { jsonDataType } from "./databaseUtils";
 
 export interface LicenseRuleReferenceAttributes {
   id: number;
@@ -28,6 +28,7 @@ export interface LicenseRuleReferenceAttributes {
   is_license_reference: boolean;
   is_license_tag: boolean;
   is_license_intro: boolean;
+  is_license_clue: boolean;
   is_continuous: boolean;
   is_builtin: boolean;
   is_from_license: boolean;
@@ -35,13 +36,13 @@ export interface LicenseRuleReferenceAttributes {
   length: number;
   relevance: number;
   minimum_coverage: number;
-  // referenced_filenames: JSON_Type;
+  referenced_filenames: string[];
   // notes: string;
-  // ignorable_copyrights: JSON_Type;
-  // ignorable_holders: JSON_Type;
-  // ignorable_authors: JSON_Type;
-  // ignorable_urls: JSON_Type;
-  // ignorable_emails: JSON_Type;
+  // ignorable_copyrights: string[];
+  // ignorable_holders: string[];
+  // ignorable_authors: string[];
+  // ignorable_urls: string[];
+  // ignorable_emails: string[];
   text: string;
 }
 
@@ -64,6 +65,10 @@ export default function licenseRuleReferenceModel(sequelize: Sequelize) {
       is_license_reference: DataTypes.BOOLEAN,
       is_license_tag: DataTypes.BOOLEAN,
       is_license_intro: DataTypes.BOOLEAN,
+      is_license_clue: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
+      },
       is_continuous: DataTypes.BOOLEAN,
       is_builtin: DataTypes.BOOLEAN,
       is_from_license: DataTypes.BOOLEAN,
@@ -71,13 +76,13 @@ export default function licenseRuleReferenceModel(sequelize: Sequelize) {
       length: DataTypes.NUMBER,
       relevance: DataTypes.NUMBER,
       minimum_coverage: DataTypes.NUMBER,
-      // referenced_filenames: jsonDataType("referenced_filenames"),
+      referenced_filenames: jsonDataType("referenced_filenames", []),
       // notes: DataTypes.STRING,
-      // ignorable_copyrights: jsonDataType("ignorable_copyrights"),
-      // ignorable_holders: jsonDataType("ignorable_holders"),
-      // ignorable_authors: jsonDataType("ignorable_authors"),
-      // ignorable_urls: jsonDataType("ignorable_urls"),
-      // ignorable_emails: jsonDataType("ignorable_emails"),
+      // ignorable_copyrights: jsonDataType("ignorable_copyrights", []),
+      // ignorable_holders: jsonDataType("ignorable_holders", []),
+      // ignorable_authors: jsonDataType("ignorable_authors", []),
+      // ignorable_urls: jsonDataType("ignorable_urls", []),
+      // ignorable_emails: jsonDataType("ignorable_emails", []),
       text: DataTypes.STRING,
     },
     {

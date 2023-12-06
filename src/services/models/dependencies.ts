@@ -15,7 +15,7 @@
  */
 
 import { Sequelize, DataTypes, Model } from "sequelize";
-import { jsonDataType, JSON_Type } from "./databaseUtils";
+import { jsonDataType } from "./databaseUtils";
 
 export interface DependenciesAttributes {
   id: number;
@@ -25,7 +25,7 @@ export interface DependenciesAttributes {
   is_runtime: boolean;
   is_optional: boolean;
   is_resolved: boolean;
-  resolved_package: JSON_Type;
+  resolved_package: unknown;
   dependency_uid: string;
   for_package_uid: string;
   datafile_path: string;
@@ -61,7 +61,7 @@ export default function dependenciesModel(sequelize: Sequelize) {
       is_runtime: DataTypes.BOOLEAN,
       is_optional: DataTypes.BOOLEAN,
       is_resolved: DataTypes.BOOLEAN,
-      resolved_package: jsonDataType("resolved_package"),
+      resolved_package: jsonDataType("resolved_package", {}),
       dependency_uid: DataTypes.STRING,
       for_package_uid: {
         allowNull: true,

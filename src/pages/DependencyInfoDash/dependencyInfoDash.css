@@ -26,6 +26,8 @@
   height: auto;
 }
 
+
+.scope-summary-table .ag-center-cols-viewport .ag-center-cols-container,
 .scope-summary-table .ag-body-viewport,
 .scope-summary-table .ag-body {
   height: auto;
@@ -35,6 +37,7 @@
   flex: none;
 }
 
-.scope-summary-table .ag-center-cols-viewport {
-  height: auto;
+.scope-summary-table .ag-center-cols-viewport .ag-center-cols-container {
+  overflow-y: auto;
+  overflow-x: hidden;
 }

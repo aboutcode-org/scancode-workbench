@@ -18,6 +18,7 @@ export const getMiscPackage = (): PackageDetails => {
     release_date: null,
     parties: {},
     keywords: {},
+    license_detections: [],
     homepage_url: null,
     download_url: null,
     size: null,
@@ -44,4 +45,4 @@ export const getMiscPackage = (): PackageDetails => {
     datasource_ids: [],
     purl: "Misc Dependencies",
   };
-}
+};

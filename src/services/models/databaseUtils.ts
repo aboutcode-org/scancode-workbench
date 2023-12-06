@@ -19,15 +19,15 @@ import Sequelize from "sequelize";
 import { parseIfValidJson } from "../../utils/parsers";
 
 // @TODO
-// Store an object as a json string internally, but as an object externally
-export type JSON_Type = string;
-export function jsonDataType(attributeName: string) {
+// Store an object as a json string in DB, but expose as an object to APIs
+export function jsonDataType(attributeName: string, defaultValue: unknown) {
   return {
     type: Sequelize.STRING,
+    defaultValue: JSON.stringify(defaultValue),
     get: function () {
       return parseIfValidJson(this.getDataValue(attributeName));
     },
-    set: function (val: any) {
+    set: function (val: unknown) {
       return this.setDataValue(attributeName, JSON.stringify(val));
     },
   };

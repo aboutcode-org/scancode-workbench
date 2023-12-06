@@ -24,6 +24,10 @@ import { AddEntry, GetHistory, RemoveEntry } from "../services/historyStore";
 import { WorkbenchDB } from "../services/workbenchDB";
 import { isSqliteSchemaOutdated } from "../utils/checks";
 import { ScanInfo, parseScanInfo } from "../utils/parsers";
+import {
+  generateLicenseDetectionNavigationUrl,
+  generatePackageNavigationUrl,
+} from "../utils/navigatorQueries";
 
 const { version: workbenchVersion } = packageJson;
 const { ipcRenderer } = electron;
@@ -55,6 +59,8 @@ interface WorkbenchContextProperties extends BasicValueState {
   updateLoadingStatus: React.Dispatch<React.SetStateAction<number | null>>;
   updateCurrentPath: (newPath: string, type: PathType) => void;
   goToFileInTableView: (path: string) => void;
+  goToLicenseDetection: (licenseDetectionIdentifier: string) => void;
+  goToPackage: (packageIdentifier: string) => void;
 }
 
 export const defaultWorkbenchContextValue: WorkbenchContextProperties = {
@@ -77,6 +83,8 @@ export const defaultWorkbenchContextValue: WorkbenchContextProperties = {
   endProcessing: () => null,
   updateCurrentPath: () => null,
   goToFileInTableView: () => null,
+  goToLicenseDetection: () => null,
+  goToPackage: () => null,
 };
 
 const WorkbenchContext = createContext<WorkbenchContextProperties>(
@@ -111,6 +119,14 @@ export const WorkbenchDBProvider = (
   function goToFileInTableView(path: string) {
     updateCurrentPath(path, "file");
     navigate("/" + ROUTES.TABLE_VIEW);
+  }
+
+  function goToLicenseDetection(licenseDetectionIdentifier: string) {
+    navigate(generateLicenseDetectionNavigationUrl(licenseDetectionIdentifier));
+  }
+
+  function goToPackage(packageIdentifier: string) {
+    navigate(generatePackageNavigationUrl(packageIdentifier));
   }
 
   const startImport = () => {
@@ -483,6 +499,8 @@ export const WorkbenchDBProvider = (
         endProcessing: () => setProcessingQuery(false),
         updateCurrentPath,
         goToFileInTableView,
+        goToLicenseDetection,
+        goToPackage,
       }}
     >
       {props.children}

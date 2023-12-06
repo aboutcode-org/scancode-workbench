@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useEffect, useMemo } from "react";
+import React, { FunctionComponent, useMemo } from "react";
 import { Link } from "react-router-dom";
 import CoreLink from "../../../components/CoreLink/CoreLink";
 
@@ -15,7 +15,6 @@ interface UrlListCellRendererProps {
 const UrlListCellRenderer: FunctionComponent<UrlListCellRendererProps> = (
   props
 ) => {
-  // console.log("Got custom text field", data[customDisplayTextField]);
   const {
     data,
     value,
@@ -26,7 +25,6 @@ const UrlListCellRenderer: FunctionComponent<UrlListCellRendererProps> = (
     routerLink,
     urlPrefix,
   } = props;
-  // console.log(`Props for ${value}:`, props);
 
   const parsedValue: string[][] | string[] | string = useMemo(() => {
     if (Array.isArray(value)) return value;
@@ -40,11 +38,6 @@ const UrlListCellRenderer: FunctionComponent<UrlListCellRendererProps> = (
       return value;
     }
   }, [value]);
-
-  useEffect(() => {
-    if (customUrlField)
-      console.log("Parsed: ", parsedValue, data[customUrlField][0]);
-  }, [customUrlField]);
 
   if (!parsedValue) return <></>;
 

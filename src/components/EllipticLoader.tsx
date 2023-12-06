@@ -1,13 +1,13 @@
-import React from 'react'
-import { ThreeDots } from  'react-loader-spinner'
+import React from "react";
+import { ThreeDots } from "react-loader-spinner";
 
 interface EllipticLoaderProps {
-  color?: string,
-  width?: number,
-  radius?: number,
-  height?: number,
-  ariaLabel?: string,
-  wrapperClass?: string,
+  color?: string;
+  width?: number;
+  radius?: number;
+  height?: number;
+  ariaLabel?: string;
+  wrapperClass?: string;
 }
 
 const EllipticLoader = (props: EllipticLoaderProps) => {
@@ -20,7 +20,7 @@ const EllipticLoader = (props: EllipticLoaderProps) => {
       ariaLabel="loading data..."
       {...props}
     />
-  )
-}
+  );
+};
 
-export default EllipticLoader
+export default EllipticLoader;

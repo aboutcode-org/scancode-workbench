@@ -32,7 +32,7 @@ const TableView = () => {
   // Necessary to keep coldef as empty array by default, to ensure filter set updates
   const [tableData, setTableData] = useState<FlatFileAttributes[]>([]);
   const [gridApi, setGridApi] = useState<GridApi | null>(null);
-  const [columnApi, setColumnApi] = useState<ColumnApi | null>(null);
+  const [, setColumnApi] = useState<ColumnApi | null>(null);
 
   const [searchText, setSearchText] = useState("");
   const [showColumnSelector, setShowColumnSelector] = useState(false);
@@ -75,7 +75,7 @@ const TableView = () => {
           },
         })
       )
-      .then((fileModels) => fileModels.map((fileModel) => fileModel.dataValues))
+      .then((fileModels) => fileModels.map((fileModel) => fileModel.toJSON()))
       .then((files) => {
         setTableData(files);
         let longestPathLength = 20;

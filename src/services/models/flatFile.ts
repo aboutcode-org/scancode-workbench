@@ -16,7 +16,8 @@
 
 import path from "path";
 import { Sequelize, DataTypes, Model } from "sequelize";
-import { JSON_Type, jsonDataType, parentPath } from "./databaseUtils";
+import { jsonDataType, parentPath } from "./databaseUtils";
+import { LicensePolicy, Resource } from "../importedJsonTypes";
 
 export interface InfoFlatFileAttributes {
   type: string;
@@ -38,63 +39,64 @@ export interface InfoFlatFileAttributes {
   is_script: boolean;
 }
 export interface EmailUrlFlatFileAttributes {
-  email: JSON_Type;
-  email_start_line: JSON_Type;
-  email_end_line: JSON_Type;
-  url: JSON_Type;
-  url_start_line: JSON_Type;
-  url_end_line: JSON_Type;
+  email: unknown[];
+  email_start_line: unknown[];
+  email_end_line: unknown[];
+  url: unknown[];
+  url_start_line: unknown[];
+  url_end_line: unknown[];
 }
 export interface LicenseFlatFileAttributes {
   detected_license_expression: string;
   detected_license_expression_spdx: string;
   percentage_of_license_text: number;
-  license_policy: JSON_Type;
-  license_clues: JSON_Type;
-  license_detections: JSON_Type;
+  license_policy: string[];
+  license_clues: unknown[];
+  license_detections: unknown[];
 }
 export interface CopyrightFlatFileAttributes {
-  copyright_statements: JSON_Type;
-  copyright_holders: JSON_Type;
-  copyright_authors: JSON_Type;
-  copyright_start_line: JSON_Type;
-  copyright_end_line: JSON_Type;
+  copyright_statements: unknown[];
+  copyright_holders: unknown[];
+  copyright_authors: unknown[];
+  copyright_start_line: number[][];
+  copyright_end_line: number[][];
 }
 export interface PackageFlatFileAttributes {
-  for_packages: JSON_Type;
+  for_packages: unknown[];
 }
 export interface PackageDataFlatFileAttributes {
-  package_data_type: JSON_Type;
-  package_data_namespace: JSON_Type;
-  package_data_name: JSON_Type;
-  package_data_version: JSON_Type;
-  package_data_qualifiers: JSON_Type;
-  package_data_subpath: JSON_Type;
-  package_data_purl: JSON_Type;
-  package_data_primary_language: JSON_Type;
-  package_data_code_type: JSON_Type;
-  package_data_description: JSON_Type;
-  package_data_size: JSON_Type;
-  package_data_release_date: JSON_Type;
-  package_data_keywords: JSON_Type;
-  package_data_homepage_url: JSON_Type;
-  package_data_download_url: JSON_Type;
-  package_data_download_checksums: JSON_Type;
-  package_data_bug_tracking_url: JSON_Type;
-  package_data_code_view_url: JSON_Type;
-  package_data_vcs_tool: JSON_Type;
-  package_data_vcs_url: JSON_Type;
-  package_data_vcs_repository: JSON_Type;
-  package_data_vcs_revision: JSON_Type;
-  package_data_extracted_license_statement: JSON_Type;
-  package_data_declared_license_expression: JSON_Type;
-  package_data_declared_license_expression_spdx: JSON_Type;
-  package_data_notice_text: JSON_Type;
-  package_data_dependencies: JSON_Type;
-  package_data_related_packages: JSON_Type;
+  package_data_type: unknown[];
+  package_data_namespace: unknown[];
+  package_data_name: unknown[];
+  package_data_version: unknown[];
+  package_data_qualifiers: unknown[];
+  package_data_subpath: unknown[];
+  package_data_purl: unknown[];
+  package_data_primary_language: unknown[];
+  package_data_code_type: unknown[];
+  package_data_description: unknown[];
+  package_data_size: unknown[];
+  package_data_release_date: unknown[];
+  package_data_keywords: unknown[];
+  package_data_homepage_url: unknown[];
+  package_data_download_url: unknown[];
+  package_data_download_checksums: unknown[];
+  package_data_bug_tracking_url: unknown[];
+  package_data_code_view_url: unknown[];
+  package_data_vcs_tool: unknown[];
+  package_data_vcs_url: unknown[];
+  package_data_vcs_repository: unknown[];
+  package_data_vcs_revision: unknown[];
+  package_data_extracted_license_statement: unknown[];
+  package_data_declared_license_expression: unknown[];
+  package_data_declared_license_expression_spdx: unknown[];
+  package_data_notice_text: unknown[];
+  package_data_dependencies: unknown[];
+  package_data_related_packages: unknown[];
 }
 export interface ErrorsFlatFileAttributes {
-  scan_errors: JSON_Type;
+  fileId: number;
+  scan_errors: string[];
 }
 
 export interface FlatFileAttributes
@@ -128,25 +130,25 @@ export default function flatFileModel(sequelize: Sequelize) {
         allowNull: false,
       },
       parent: { type: DataTypes.STRING, defaultValue: "" },
-      copyright_statements: jsonDataType("copyright_statements"),
-      copyright_holders: jsonDataType("copyright_holders"),
-      copyright_authors: jsonDataType("copyright_authors"),
-      copyright_start_line: jsonDataType("copyright_start_line"),
-      copyright_end_line: jsonDataType("copyright_end_line"),
+      copyright_statements: jsonDataType("copyright_statements", []),
+      copyright_holders: jsonDataType("copyright_holders", []),
+      copyright_authors: jsonDataType("copyright_authors", []),
+      copyright_start_line: jsonDataType("copyright_start_line", []),
+      copyright_end_line: jsonDataType("copyright_end_line", []),
 
       detected_license_expression: DataTypes.STRING,
       detected_license_expression_spdx: DataTypes.STRING,
       percentage_of_license_text: DataTypes.NUMBER,
-      license_clues: jsonDataType("license_clues"),
-      license_policy: jsonDataType("license_policy"),
-      license_detections: jsonDataType("license_detections"),
+      license_clues: jsonDataType("license_clues", []),
+      license_policy: jsonDataType("license_policy", []),
+      license_detections: jsonDataType("license_detections", []),
 
-      email: jsonDataType("email"),
-      email_start_line: jsonDataType("email_start_line"),
-      email_end_line: jsonDataType("email_end_line"),
-      url: jsonDataType("url"),
-      url_start_line: jsonDataType("url_start_line"),
-      url_end_line: jsonDataType("url_end_line"),
+      email: jsonDataType("email", []),
+      email_start_line: jsonDataType("email_start_line", []),
+      email_end_line: jsonDataType("email_end_line", []),
+      url: jsonDataType("url", []),
+      url_start_line: jsonDataType("url_start_line", []),
+      url_end_line: jsonDataType("url_end_line", []),
 
       type: { type: DataTypes.STRING, defaultValue: "" },
       name: { type: DataTypes.STRING, defaultValue: "" },
@@ -159,56 +161,69 @@ export default function flatFileModel(sequelize: Sequelize) {
       mime_type: { type: DataTypes.STRING, defaultValue: "" },
       file_type: { type: DataTypes.STRING, defaultValue: "" },
       programming_language: { type: DataTypes.STRING, defaultValue: "" },
-      for_packages: jsonDataType("for_packages"),
+      for_packages: jsonDataType("for_packages", []),
       is_binary: DataTypes.BOOLEAN,
       is_text: DataTypes.BOOLEAN,
       is_archive: DataTypes.BOOLEAN,
       is_media: DataTypes.BOOLEAN,
       is_source: DataTypes.BOOLEAN,
       is_script: DataTypes.BOOLEAN,
-      scan_errors: jsonDataType("scan_errors"),
+      scan_errors: jsonDataType("scan_errors", []),
 
-      package_data_type: jsonDataType("package_data_type"),
-      package_data_namespace: jsonDataType("package_data_dataspace"),
-      package_data_name: jsonDataType("package_data_name"),
-      package_data_version: jsonDataType("package_data_version"),
-      package_data_qualifiers: jsonDataType("package_data_qualifiers"),
-      package_data_subpath: jsonDataType("package_data_subpath"),
-      package_data_purl: jsonDataType("package_data_purl"),
+      package_data_type: jsonDataType("package_data_type", []),
+      package_data_namespace: jsonDataType("package_data_dataspace", []),
+      package_data_name: jsonDataType("package_data_name", []),
+      package_data_version: jsonDataType("package_data_version", []),
+      package_data_qualifiers: jsonDataType("package_data_qualifiers", []),
+      package_data_subpath: jsonDataType("package_data_subpath", []),
+      package_data_purl: jsonDataType("package_data_purl", []),
       package_data_primary_language: jsonDataType(
-        "package_data_primary_language"
+        "package_data_primary_language",
+        []
       ),
-      package_data_code_type: jsonDataType("package_data_code_type"),
-      package_data_description: jsonDataType("package_data_description"),
-      package_data_size: jsonDataType("package_data_size"),
-      package_data_release_date: jsonDataType("package_data_release_date"),
-      package_data_keywords: jsonDataType("package_data_keywords"),
-      package_data_homepage_url: jsonDataType("package_data_homepage_url"),
-      package_data_download_url: jsonDataType("package_data_download_url"),
+      package_data_code_type: jsonDataType("package_data_code_type", []),
+      package_data_description: jsonDataType("package_data_description", []),
+      package_data_size: jsonDataType("package_data_size", []),
+      package_data_release_date: jsonDataType("package_data_release_date", []),
+      package_data_keywords: jsonDataType("package_data_keywords", []),
+      package_data_homepage_url: jsonDataType("package_data_homepage_url", []),
+      package_data_download_url: jsonDataType("package_data_download_url", []),
       package_data_download_checksums: jsonDataType(
-        "package_data_download_checksums"
+        "package_data_download_checksums",
+        []
       ),
       package_data_bug_tracking_url: jsonDataType(
-        "package_data_bug_tracking_url"
+        "package_data_bug_tracking_url",
+        []
       ),
-      package_data_code_view_url: jsonDataType("package_data_code_view_url"),
-      package_data_vcs_tool: jsonDataType("package_data_vcs_tool"),
-      package_data_vcs_url: jsonDataType("package_data_vcs_url"),
-      package_data_vcs_repository: jsonDataType("package_data_vcs_repository"),
-      package_data_vcs_revision: jsonDataType("package_data_vcs_revision"),
+      package_data_code_view_url: jsonDataType(
+        "package_data_code_view_url",
+        []
+      ),
+      package_data_vcs_tool: jsonDataType("package_data_vcs_tool", []),
+      package_data_vcs_url: jsonDataType("package_data_vcs_url", []),
+      package_data_vcs_repository: jsonDataType(
+        "package_data_vcs_repository",
+        []
+      ),
+      package_data_vcs_revision: jsonDataType("package_data_vcs_revision", []),
       package_data_extracted_license_statement: jsonDataType(
-        "package_data_extracted_license_statement"
+        "package_data_extracted_license_statement",
+        []
       ),
       package_data_declared_license_expression: jsonDataType(
-        "package_data_declared_license_expression"
+        "package_data_declared_license_expression",
+        []
       ),
       package_data_declared_license_expression_spdx: jsonDataType(
-        "package_data_declared_license_expression"
+        "package_data_declared_license_expression",
+        []
       ),
-      package_data_notice_text: jsonDataType("package_data_notice_text"),
-      package_data_dependencies: jsonDataType("package_data_dependencies"),
+      package_data_notice_text: jsonDataType("package_data_notice_text", []),
+      package_data_dependencies: jsonDataType("package_data_dependencies", []),
       package_data_related_packages: jsonDataType(
-        "package_data_related_packages"
+        "package_data_related_packages",
+        []
       ),
     },
     {
@@ -251,7 +266,7 @@ interface FlattenedFile {
   name: string;
   extension: string;
   date: string;
-  size: string;
+  size: number;
   sha1: string;
   md5: string;
   file_count: number;
@@ -296,12 +311,12 @@ interface FlattenedFile {
   package_data_dependencies: unknown[];
   package_data_related_packages: unknown[];
 }
-export function flattenFile(file: any): FlattenedFile {
+export function flattenFile(file: Resource): FlattenedFile {
   return {
     id: file.id,
     fileId: file.id,
     path: file.path,
-    parent: parentPath(file.path) as any,
+    parent: parentPath(file.path),
     copyright_statements: getCopyrightValues(file.copyrights, "copyright"),
     copyright_holders: getCopyrightValues(file.holders, "holder"),
     copyright_authors: getCopyrightValues(file.authors, "author"),
@@ -392,7 +407,7 @@ export function flattenFile(file: any): FlattenedFile {
   };
 }
 
-function getLicensePolicyLabel(policy: any[]) {
+function getLicensePolicyLabel(policy: LicensePolicy[]) {
   if (!policy) {
     return [];
   }
@@ -409,13 +424,13 @@ function getLicensePolicyLabel(policy: any[]) {
 }
 
 function getCopyrightValues(
-  array: any,
+  array: unknown[],
   field: "copyright" | "holder" | "author"
 ) {
   if (!array || !Array.isArray(array)) {
     array = [];
   }
-  const values = array.map((val: any) => val[field]);
+  const values = array.map((val: Record<string, unknown>) => val[field]);
   // must wrap this in a list for datatables display; not sure why
   return [values];
 }
@@ -426,23 +441,4 @@ function getValues(array: unknown, key: string) {
   return array.map((elem) => {
     return [elem[key] ? elem[key] : []];
   });
-}
-// getNestedValues(file.package_data, 'license_detections', 'license_expression'),
-function getNestedValues(array: unknown, key: string, nestedKey: string) {
-  if (!array || !(Array.isArray(array) && array.length)) return [];
-  return array
-    .map((elem) => {
-      if (Array.isArray(elem[key]))
-        return elem[key].map((elem2: any) => elem2[nestedKey]);
-      if (elem[key]) return elem[key][nestedKey];
-      return [];
-    })
-    .flat(2);
-}
-function hasValue(array: unknown, key: string, value: any) {
-  if (!array || !(Array.isArray(array) && array.length)) return false;
-  for (const elem of array) {
-    if (elem[key] === value) return true;
-  }
-  return false;
 }

@@ -22,9 +22,9 @@ export interface CopyrightAttributes {
   fileId: number;
   start_line: number;
   end_line: number;
-  holders: string;
-  authors: string;
-  statements: string;
+  holders: string[];
+  authors: string[];
+  statements: string[];
 }
 
 export default function copyrightModel(sequelize: Sequelize) {
@@ -40,9 +40,9 @@ export default function copyrightModel(sequelize: Sequelize) {
       fileId: DataTypes.INTEGER,
       start_line: DataTypes.INTEGER,
       end_line: DataTypes.INTEGER,
-      holders: jsonDataType("holders"),
-      authors: jsonDataType("authors"),
-      statements: jsonDataType("statements"),
+      holders: jsonDataType("holders", []),
+      authors: jsonDataType("authors", []),
+      statements: jsonDataType("statements", []),
     },
     {
       timestamps: false,

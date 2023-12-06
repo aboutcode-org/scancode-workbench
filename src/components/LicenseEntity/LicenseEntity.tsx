@@ -1,44 +1,29 @@
 import ReactJson from "@microlink/react-json-view";
 import { AgGridReact } from "ag-grid-react";
-import React, { useEffect, useState } from "react";
+import React from "react";
 
 import { ActiveLicenseEntity } from "../../pages/Licenses/licenseDefinitions";
 import {
   DEFAULT_FILE_REGION_COL_DEF,
   DetectionFileRegionCols,
 } from "./FileRegionTableCols";
-import {
-  DEFAULT_MATCHES_COL_DEF,
-  LicenseDetectionMatchCols,
-  LicenseClueMatchCols,
-  MATCH_COLS,
-} from "./MatchesTableCols";
-import { MatchedTextProvider } from "./MatchedTextContext";
-import { useWorkbenchDB } from "../../contexts/dbContext";
 import { ScanOptionKeys } from "../../utils/parsers";
-import { ColumnApi } from "ag-grid-community";
+import LicenseMatchesTable from "./LicenseMatchesTable";
+import { LicenseTypes } from "../../services/workbenchDB.types";
+import { useWorkbenchDB } from "../../contexts/dbContext";
+import { TodoAttributes } from "../../services/models/todo";
 
 import "./licenseEntity.css";
 import "../../styles/entityCommonStyles.css";
 
 interface LicenseDetectionEntityProps {
   activeLicenseEntity: ActiveLicenseEntity | null;
+  activeLicenseTodo: TodoAttributes | null;
 }
 const LicenseEntity = (props: LicenseDetectionEntityProps) => {
-  const { activeLicenseEntity } = props;
-  const { scanInfo } = useWorkbenchDB();
-  const [matchesTableColumnApi, setMatchesTableColumnApi] =
-    useState<ColumnApi | null>(null);
+  const { activeLicenseEntity, activeLicenseTodo } = props;
 
-  useEffect(() => {
-    if (!scanInfo || !matchesTableColumnApi) return;
-    matchesTableColumnApi.setColumnVisible(
-      MATCH_COLS.matched_text.colId,
-      Boolean(scanInfo.optionsMap.get(ScanOptionKeys.LICENSE_TEXT)) ||
-        matches[0]?.matched_text?.length > 0 ||
-        false
-    );
-  }, [scanInfo, matchesTableColumnApi]);
+  const { scanInfo } = useWorkbenchDB();
 
   const license = activeLicenseEntity?.license;
   const matches = activeLicenseEntity?.license?.matches;
@@ -100,28 +85,41 @@ const LicenseEntity = (props: LicenseDetectionEntityProps) => {
             <br />
           </React.Fragment>
         ))}
+        <br />
+        {activeLicenseTodo && (
+          <div>
+            <b>Issues</b>
+            <br />
+            <ul>
+              {Object.entries(activeLicenseTodo.issues).map(
+                ([issue_type, issue_description]) => (
+                  <li key={issue_type}>
+                    <div className="property">{issue_type}</div>
+                    <div>{issue_description}</div>
+                  </li>
+                )
+              )}
+            </ul>
+          </div>
+        )}
       </div>
-      <br />
-      <MatchedTextProvider>
-        Matches
-        <AgGridReact
-          rowData={matches}
-          columnDefs={
+      <b>Matches</b>
+      <LicenseMatchesTable
+        matchesInfo={{
+          licenseType:
             activeLicenseEntity.type === "detection"
-              ? LicenseDetectionMatchCols
-              : LicenseClueMatchCols
-          }
-          onGridReady={(params) => setMatchesTableColumnApi(params.columnApi)}
-          className="ag-theme-alpine ag-grid-customClass entity-table"
-          ensureDomOrder
-          enableCellTextSelection
-          pagination={false}
-          defaultColDef={DEFAULT_MATCHES_COL_DEF}
-        />
-      </MatchedTextProvider>
+              ? LicenseTypes.DETECTION
+              : LicenseTypes.CLUE,
+          matches: matches,
+        }}
+        showLIcenseText={
+          Boolean(scanInfo.optionsMap.get(ScanOptionKeys.LICENSE_TEXT)) ||
+          matches[0]?.matched_text?.length > 0 ||
+          false
+        }
+      />
       <br />
-      <br />
-      File regions
+      <b>File regions</b>
       <AgGridReact
         rowData={file_regions}
         columnDefs={DetectionFileRegionCols}
@@ -134,7 +132,6 @@ const LicenseEntity = (props: LicenseDetectionEntityProps) => {
         pagination={false}
         defaultColDef={DEFAULT_FILE_REGION_COL_DEF}
       />
-      <br />
       <div className="raw-info-section">
         Raw license {activeLicenseEntity.type}
         <ReactJson

@@ -17,9 +17,14 @@ a:not([href]):not([class]):hover {
   color: #0a58ca;
 }
 
+input[type="checkbox"] {
+  cursor: pointer;
+}
+
 input[type="text"] {
   font-size: 14px;
 }
+
 input[type="search"]::-webkit-search-results-button {
   display: block;
 }
@@ -43,12 +48,15 @@ img {
 /* Revive scrollbar being hidden on macos */
 ::-webkit-scrollbar {
   -webkit-appearance: none;
-  width: 5.5px; /* Width ignored by horizontal scrllbars */
-  height: 5.5px; /* Height ignored by vertical scrllbars */
+  width: 5.5px;
+  /* Width ignored by horizontal scrllbars */
+  height: 5.5px;
+  /* Height ignored by vertical scrllbars */
 }
+
 ::-webkit-scrollbar-thumb {
   border-radius: 3px;
-  background-color: rgba(0,0,0,.4);
+  background-color: rgba(0, 0, 0, .4);
   box-shadow: 0 0 0.1px rgb(255 255 255 / 30%);
 }
 

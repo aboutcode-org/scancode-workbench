@@ -34,6 +34,7 @@ import {
   PackageDetails,
   PackageTypeGroupDetails,
 } from "./packageDefinitions";
+import { throttledScroller } from "../../utils/throttledScroll";
 
 import "./packages.css";
 
@@ -44,7 +45,6 @@ const Packages = () => {
   const {
     db,
     initialized,
-    currentPath,
     goToFileInTableView,
     startProcessing,
     endProcessing,
@@ -115,6 +115,7 @@ const Packages = () => {
       e.preventDefault();
     }
   }
+
   const activatePackage = (packageInfo: PackageDetails) => {
     setActiveDependency(null);
     setActivePackage(packageInfo);
@@ -129,13 +130,6 @@ const Packages = () => {
       activatePackage(targetPackage);
     }
   };
-  useEffect(() => {
-    const queriedPackageUid = searchParams.get(QUERY_KEYS.PACKAGE);
-    if (!queriedPackageUid) return;
-    if (packagesWithDeps && packagesWithDeps.length)
-      activatePackageByUID(queriedPackageUid);
-  }, [searchParams]);
-
   const activateDependency = (dependency: DependencyDetails) => {
     setActivePackage(null);
     setActiveDependency(dependency);
@@ -146,8 +140,31 @@ const Packages = () => {
     );
     expandPackage(parentPackage.package_uid);
   };
+
   useEffect(() => {
-    if (!initialized || !db || !currentPath) return;
+    if (!activePackage && !activeDependency) return;
+
+    const clearThrottledScroll = throttledScroller(
+      activePackage
+        ? `[data-package-uid="${activePackage.package_uid}"]`
+        : `[data-dependency-uid="${activeDependency.dependency_uid}"]`
+    );
+
+    return () => {
+      // Clear any pending scroll timeout
+      clearThrottledScroll();
+    };
+  }, [activePackage, activeDependency]);
+
+  useEffect(() => {
+    const queriedPackageUid = searchParams.get(QUERY_KEYS.PACKAGE);
+    if (!queriedPackageUid) return;
+    if (packagesWithDeps && packagesWithDeps.length)
+      activatePackageByUID(queriedPackageUid);
+  }, [searchParams]);
+
+  useEffect(() => {
+    if (!initialized || !db) return;
 
     startProcessing();
     db.sync
@@ -165,7 +182,7 @@ const Packages = () => {
         packageMapping.set(MISC_DEPS, getMiscPackage());
 
         const uniqueDataSourceIDs = new Set(
-          deps.map((dep) => dep.getDataValue("datasource_id"))
+          deps.map((dep) => dep.datasource_id)
         );
         setDataSourceIDs(
           Array.from(uniqueDataSourceIDs.values()).map((dataSourceID) => ({
@@ -177,24 +194,20 @@ const Packages = () => {
         // Group dependencies in their respective packages
         deps.forEach((dependencyInfo) => {
           const targetPackageUid: string | null =
-            dependencyInfo.getDataValue("for_package_uid");
+            dependencyInfo.for_package_uid || null;
           packageMapping.get(targetPackageUid || MISC_DEPS).dependencies.push({
             // ...dependencyInfo,     // For debugging
-            purl: dependencyInfo.getDataValue("purl"),
-            extracted_requirement:
-              dependencyInfo.getDataValue("extracted_requirement") || "",
-            scope: dependencyInfo.getDataValue("scope") as DEPENDENCY_SCOPES,
-            is_runtime: dependencyInfo.getDataValue("is_runtime"),
-            is_optional: dependencyInfo.getDataValue("is_optional"),
-            is_resolved: dependencyInfo.getDataValue("is_resolved"),
-            resolved_package: JSON.parse(
-              dependencyInfo.getDataValue("resolved_package") || "{}"
-            ),
-            dependency_uid: dependencyInfo.getDataValue("dependency_uid"),
-            for_package_uid:
-              dependencyInfo.getDataValue("for_package_uid") || null,
-            datafile_path: dependencyInfo.getDataValue("datafile_path"),
-            datasource_id: dependencyInfo.getDataValue("datasource_id"),
+            purl: dependencyInfo.purl,
+            extracted_requirement: dependencyInfo.extracted_requirement || "",
+            scope: dependencyInfo.scope as DEPENDENCY_SCOPES,
+            is_runtime: dependencyInfo.is_runtime,
+            is_optional: dependencyInfo.is_optional,
+            is_resolved: dependencyInfo.is_resolved,
+            resolved_package: dependencyInfo.resolved_package || {},
+            dependency_uid: dependencyInfo.dependency_uid,
+            for_package_uid: dependencyInfo.for_package_uid,
+            datafile_path: dependencyInfo.datafile_path,
+            datasource_id: dependencyInfo.datasource_id,
           });
         });
 
@@ -248,7 +261,7 @@ const Packages = () => {
         }
       })
       .then(endProcessing);
-  }, [currentPath]);
+  }, []);
 
   const [filteredPackageGroups, setFilteredPackageGroups] =
     useState<PackageTypeGroupDetails[]>(null);
@@ -329,261 +342,269 @@ const Packages = () => {
 
   return (
     <div>
-      <h4 className="packages-title">Package explorer</h4>
       <Allotment className="packages-container">
         <Allotment.Pane snap minSize={200} preferredSize="35%">
-          <MultiSelect
-            closeMenuOnSelect={false}
-            components={animatedComponents}
-            isMulti
-            placeholder="Filter data sources"
-            value={selectedDataSourceIDs}
-            onChange={setSelectedDataSourceIDs}
-            options={dataSourceIDs}
-            className="packages-filter-bar"
-          />
-          <br />
-          <MultiSelect
-            closeMenuOnSelect={false}
-            components={animatedComponents}
-            isMulti
-            placeholder="Filter dependency flag"
-            value={selectedDepFilters}
-            onChange={setSelectedDepFilters}
-            options={DepFilterTagsList}
-            className="packages-filter-bar"
-          />
-          <br />
-          <ListGroup className="packages-list-container">
-            {filteredPackageGroups.map((packageGroup) => {
-              const isPackageTypeExpanded = expandedPackageTypes.includes(
-                packageGroup.type
-              );
+          <div className="h-100 d-flex flex-column">
+            <MultiSelect
+              closeMenuOnSelect={false}
+              components={animatedComponents}
+              isMulti
+              placeholder="Filter data sources"
+              value={selectedDataSourceIDs}
+              onChange={setSelectedDataSourceIDs}
+              options={dataSourceIDs}
+              className="packages-filter-bar mb-2"
+            />
+            <MultiSelect
+              closeMenuOnSelect={false}
+              components={animatedComponents}
+              isMulti
+              placeholder="Filter dependency flag"
+              value={selectedDepFilters}
+              onChange={setSelectedDepFilters}
+              options={DepFilterTagsList}
+              className="packages-filter-bar mb-2"
+            />
+            <ListGroup className="packages-list-container">
+              {filteredPackageGroups.map((packageGroup) => {
+                const isPackageTypeExpanded = expandedPackageTypes.includes(
+                  packageGroup.type
+                );
 
-              return (
-                <ListGroupItem
-                  key={packageGroup.type}
-                  className="package-group-list"
-                >
-                  <div
-                    className="package-type"
-                    onDoubleClick={() => {
-                      if (isPackageTypeExpanded)
-                        collapsePackageType(packageGroup.type);
-                      else expandPackageType(packageGroup.type);
-                      window.getSelection().empty();
-                    }}
-                    onClick={() =>
-                      isPackageTypeExpanded
-                        ? collapsePackageType(packageGroup.type)
-                        : expandPackageType(packageGroup.type)
-                    }
+                return (
+                  <ListGroupItem
+                    key={packageGroup.type}
+                    className="package-group-list"
                   >
                     <div
-                      className="expand-indicator"
-                      style={{
-                        display: packageGroup.packages.length
-                          ? "inline-block"
-                          : "none",
+                      className="package-type"
+                      onDoubleClick={() => {
+                        if (isPackageTypeExpanded)
+                          collapsePackageType(packageGroup.type);
+                        else expandPackageType(packageGroup.type);
+                        window.getSelection().empty();
                       }}
+                      onClick={() =>
+                        isPackageTypeExpanded
+                          ? collapsePackageType(packageGroup.type)
+                          : expandPackageType(packageGroup.type)
+                      }
                     >
-                      <FontAwesomeIcon
-                        icon={"chevron-right"}
-                        className={isPackageTypeExpanded ? "fa-rotate-90" : ""}
-                      />
+                      <div
+                        className="expand-indicator"
+                        style={{
+                          display: packageGroup.packages.length
+                            ? "inline-block"
+                            : "none",
+                        }}
+                      >
+                        <FontAwesomeIcon
+                          icon={"chevron-right"}
+                          className={
+                            isPackageTypeExpanded ? "fa-rotate-90" : ""
+                          }
+                        />
+                      </div>
+                      <span className="label">
+                        {packageGroup.type} ({packageGroup.packages.length}{" "}
+                        packages)
+                      </span>
                     </div>
-                    <span className="label">
-                      {packageGroup.type} ({packageGroup.packages.length}{" "}
-                      packages)
-                    </span>
-                  </div>
-                  <Collapse
-                    in={isPackageTypeExpanded}
-                    className="collapsed-body"
-                  >
-                    <ListGroup className="package-list">
-                      {packageGroup.packages.map((packageWithDep) => {
-                        const isPackageActive =
-                          activePackage &&
-                          activeEntityType === "package" &&
-                          activePackage.package_uid ===
-                            packageWithDep.package_uid;
-                        const isPackageExpanded = expandedPackages.includes(
-                          packageWithDep.package_uid
-                        );
+                    <Collapse
+                      in={isPackageTypeExpanded}
+                      className="collapsed-body"
+                    >
+                      <ListGroup className="package-list">
+                        {packageGroup.packages.map((packageWithDep) => {
+                          const isPackageActive =
+                            activePackage &&
+                            activeEntityType === "package" &&
+                            activePackage.package_uid ===
+                              packageWithDep.package_uid;
+                          const isPackageExpanded = expandedPackages.includes(
+                            packageWithDep.package_uid
+                          );
 
-                        return (
-                          <ListGroupItem
-                            key={packageWithDep.package_uid}
-                            className={
-                              (isPackageActive ? "selected-entity " : "") +
-                              "entity package-entry"
-                            }
-                          >
-                            <div
-                              onClick={() => activatePackage(packageWithDep)}
-                              onDoubleClick={(e) => {
-                                activatePackage(packageWithDep);
-                                (isPackageExpanded
-                                  ? collapsePackage
-                                  : expandPackage)(
-                                  packageWithDep.package_uid,
-                                  e
-                                );
-                                // @TODO - Better way to achieve this ?
-                                // Handle text selecion occuring as a side-effect of doubleClick
-                                window.getSelection().empty();
-                              }}
-                              className="entity-info"
+                          return (
+                            <ListGroupItem
+                              key={packageWithDep.package_uid}
+                              data-package-uid={packageWithDep.package_uid}
+                              className={
+                                (isPackageActive ? "selected-entity " : "") +
+                                "entity package-entry"
+                              }
                             >
-                              <div>
-                                <div
-                                  className="expand-indicator"
-                                  style={{
-                                    display: packageWithDep.dependencies.length
-                                      ? "block"
-                                      : "none",
-                                  }}
-                                  onClick={(e) =>
-                                    (isPackageExpanded
-                                      ? collapsePackage
-                                      : expandPackage)(
-                                      packageWithDep.package_uid,
-                                      e
-                                    )
-                                  }
-                                >
-                                  <FontAwesomeIcon
-                                    icon={"chevron-right"}
-                                    className={
-                                      isPackageExpanded ? "fa-rotate-90" : ""
+                              <div
+                                onClick={() => activatePackage(packageWithDep)}
+                                onDoubleClick={(e) => {
+                                  activatePackage(packageWithDep);
+                                  (isPackageExpanded
+                                    ? collapsePackage
+                                    : expandPackage)(
+                                    packageWithDep.package_uid,
+                                    e
+                                  );
+                                  // @TODO - Better way to achieve this ?
+                                  // Handle text selecion occuring as a side-effect of doubleClick
+                                  window.getSelection().empty();
+                                }}
+                                className="entity-info"
+                              >
+                                <div>
+                                  <div
+                                    className="expand-indicator"
+                                    style={{
+                                      display: packageWithDep.dependencies
+                                        .length
+                                        ? "block"
+                                        : "none",
+                                    }}
+                                    onClick={(e) =>
+                                      (isPackageExpanded
+                                        ? collapsePackage
+                                        : expandPackage)(
+                                        packageWithDep.package_uid,
+                                        e
+                                      )
                                     }
-                                  />
+                                  >
+                                    <FontAwesomeIcon
+                                      icon={"chevron-right"}
+                                      className={
+                                        isPackageExpanded ? "fa-rotate-90" : ""
+                                      }
+                                    />
+                                  </div>
+                                  <div className="entity-name">
+                                    {packageWithDep.purl}
+                                  </div>
                                 </div>
-                                <div className="entity-name">
-                                  {packageWithDep.purl}
+                                <div className="total-deps">
+                                  <OverlayTrigger
+                                    placement="right"
+                                    delay={{ show: 250, hide: 400 }}
+                                    overlay={
+                                      <Tooltip>
+                                        {packageWithDep.dependencies.length}{" "}
+                                        dependencies
+                                      </Tooltip>
+                                    }
+                                  >
+                                    <Badge pill bg="light" text="dark">
+                                      {packageWithDep.dependencies.length}
+                                    </Badge>
+                                  </OverlayTrigger>
                                 </div>
                               </div>
-                              <div className="total-deps">
-                                <OverlayTrigger
-                                  placement="right"
-                                  delay={{ show: 250, hide: 400 }}
-                                  overlay={
-                                    <Tooltip>
-                                      {packageWithDep.dependencies.length}{" "}
-                                      dependencies
-                                    </Tooltip>
-                                  }
-                                >
-                                  <Badge pill bg="light" text="dark">
-                                    {packageWithDep.dependencies.length}
-                                  </Badge>
-                                </OverlayTrigger>
-                              </div>
-                            </div>
-                            <Collapse
-                              in={isPackageExpanded}
-                              className="collapsed-body"
-                            >
-                              <ListGroup>
-                                {packageWithDep.dependencies.map(
-                                  (dependency) => {
-                                    const isDependencyActive =
-                                      activeDependency &&
-                                      activeEntityType === "dependency" &&
-                                      activeDependency.dependency_uid ===
-                                        dependency.dependency_uid;
-                                    return (
-                                      <ListGroupItem
-                                        key={dependency.dependency_uid}
-                                        className={
-                                          (isDependencyActive
-                                            ? "selected-entity "
-                                            : "") + "entity"
-                                        }
-                                        onClick={() =>
-                                          activateDependency(dependency)
-                                        }
-                                      >
-                                        <div className="entity-info">
-                                          <div>
+                              <Collapse
+                                in={isPackageExpanded}
+                                className="collapsed-body"
+                              >
+                                <ListGroup>
+                                  {packageWithDep.dependencies.map(
+                                    (dependency) => {
+                                      const isDependencyActive =
+                                        activeDependency &&
+                                        activeEntityType === "dependency" &&
+                                        activeDependency.dependency_uid ===
+                                          dependency.dependency_uid;
+                                      return (
+                                        <ListGroupItem
+                                          key={dependency.dependency_uid}
+                                          data-dependency-uid={
+                                            dependency.dependency_uid
+                                          }
+                                          className={
+                                            (isDependencyActive
+                                              ? "selected-entity "
+                                              : "") + "entity"
+                                          }
+                                          onClick={() =>
+                                            activateDependency(dependency)
+                                          }
+                                        >
+                                          <div className="entity-info">
                                             <div>
-                                              {dependency.purl.replace(
-                                                "pkg:",
-                                                ""
-                                              )}
+                                              <div>
+                                                {dependency.purl.replace(
+                                                  "pkg:",
+                                                  ""
+                                                )}
+                                              </div>
                                             </div>
-                                          </div>
 
-                                          <OverlayTrigger
-                                            placement="right"
-                                            delay={{ show: 300, hide: 200 }}
-                                            overlay={
-                                              <Tooltip>Click to filter</Tooltip>
-                                            }
-                                          >
-                                            <div className="entity-type-badges">
-                                              {dependency.is_runtime && (
-                                                <Badge
-                                                  pill
-                                                  bg="primary"
-                                                  onClick={(e) =>
-                                                    toggleDepTagFilter(
-                                                      DepFilterTags.RUNTIME,
-                                                      e
-                                                    )
-                                                  }
-                                                >
-                                                  Runtime
-                                                </Badge>
-                                              )}
-                                              {dependency.is_optional && (
-                                                <Badge
-                                                  pill
-                                                  bg="warning"
-                                                  text="dark"
-                                                  onClick={(e) =>
-                                                    toggleDepTagFilter(
-                                                      DepFilterTags.OPTIONAL,
-                                                      e
-                                                    )
-                                                  }
-                                                >
-                                                  Optional
-                                                </Badge>
-                                              )}
-                                              {dependency.is_resolved && (
-                                                <Badge
-                                                  pill
-                                                  bg="success"
-                                                  onClick={(e) =>
-                                                    toggleDepTagFilter(
-                                                      DepFilterTags.RESOLVED,
-                                                      e
-                                                    )
-                                                  }
-                                                >
-                                                  Resolved
-                                                </Badge>
-                                              )}
-                                            </div>
-                                          </OverlayTrigger>
-                                        </div>
-                                      </ListGroupItem>
-                                    );
-                                  }
-                                )}
-                              </ListGroup>
-                            </Collapse>
-                          </ListGroupItem>
-                        );
-                      })}
-                    </ListGroup>
-                  </Collapse>
-                </ListGroupItem>
-              );
-            })}
-          </ListGroup>
+                                            <OverlayTrigger
+                                              placement="right"
+                                              delay={{ show: 300, hide: 200 }}
+                                              overlay={
+                                                <Tooltip>
+                                                  Click to filter
+                                                </Tooltip>
+                                              }
+                                            >
+                                              <div className="entity-type-badges">
+                                                {dependency.is_runtime && (
+                                                  <Badge
+                                                    pill
+                                                    bg="primary"
+                                                    onClick={(e) =>
+                                                      toggleDepTagFilter(
+                                                        DepFilterTags.RUNTIME,
+                                                        e
+                                                      )
+                                                    }
+                                                  >
+                                                    Runtime
+                                                  </Badge>
+                                                )}
+                                                {dependency.is_optional && (
+                                                  <Badge
+                                                    pill
+                                                    bg="warning"
+                                                    text="dark"
+                                                    onClick={(e) =>
+                                                      toggleDepTagFilter(
+                                                        DepFilterTags.OPTIONAL,
+                                                        e
+                                                      )
+                                                    }
+                                                  >
+                                                    Optional
+                                                  </Badge>
+                                                )}
+                                                {dependency.is_resolved && (
+                                                  <Badge
+                                                    pill
+                                                    bg="success"
+                                                    onClick={(e) =>
+                                                      toggleDepTagFilter(
+                                                        DepFilterTags.RESOLVED,
+                                                        e
+                                                      )
+                                                    }
+                                                  >
+                                                    Resolved
+                                                  </Badge>
+                                                )}
+                                              </div>
+                                            </OverlayTrigger>
+                                          </div>
+                                        </ListGroupItem>
+                                      );
+                                    }
+                                  )}
+                                </ListGroup>
+                              </Collapse>
+                            </ListGroupItem>
+                          );
+                        })}
+                      </ListGroup>
+                    </Collapse>
+                  </ListGroupItem>
+                );
+              })}
+            </ListGroup>
+          </div>
         </Allotment.Pane>
         <Allotment.Pane snap minSize={200} className="details-pane">
           {activeEntityType ? (

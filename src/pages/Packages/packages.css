@@ -14,7 +14,7 @@
 }
 
 .packages-container {
-  height: calc(100vh - 60px);
+  height: calc(100vh - 15px);
 }
 
 .packages-filter-bar {
@@ -24,7 +24,6 @@
 .packages-list-container {
   overflow: auto;
   width: 99%;
-  height: calc(100% - 50px);
 }
 
 .package-type {

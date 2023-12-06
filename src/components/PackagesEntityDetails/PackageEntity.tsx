@@ -1,12 +1,12 @@
 import React from "react";
 import ReactJson from "@microlink/react-json-view";
 
+import CoreLink from "../CoreLink/CoreLink";
 import { useWorkbenchDB } from "../../contexts/dbContext";
 import {
   DependencyDetails,
   PackageDetails,
 } from "../../pages/Packages/packageDefinitions";
-import CoreLink from "../CoreLink/CoreLink";
 
 import { AgGridReact } from "ag-grid-react";
 import {
@@ -23,7 +23,7 @@ interface PackageEntityProps {
 }
 const PackageEntity = (props: PackageEntityProps) => {
   const { activePackage } = props;
-  const { goToFileInTableView } = useWorkbenchDB();
+  const { goToFileInTableView, goToLicenseDetection } = useWorkbenchDB();
 
   if (!activePackage) {
     return (
@@ -104,10 +104,11 @@ const PackageEntity = (props: PackageEntityProps) => {
           : `Data file paths:`}
       </b>
       <br />
-      <div className="deps-list">
+      <div>
         {activePackage.datafile_paths.map((datafile_path) => (
           <CoreLink
             key={datafile_path}
+            className="d-block"
             onClick={() => goToFileInTableView(datafile_path)}
           >
             <React.Fragment key={datafile_path}>{datafile_path}</React.Fragment>
@@ -115,6 +116,26 @@ const PackageEntity = (props: PackageEntityProps) => {
         ))}
       </div>
       <br />
+
+      <b>
+        {activePackage.license_detections.length === 0
+          ? "No License detections"
+          : `License Detections:`}
+      </b>
+      <br />
+      <div>
+        {activePackage.license_detections.map((license_detection) => (
+          <CoreLink
+            key={license_detection.identifier}
+            className="d-block"
+            onClick={() => goToLicenseDetection(license_detection.identifier)}
+          >
+            {license_detection.license_expression}
+          </CoreLink>
+        ))}
+      </div>
+      <br />
+
       <b>
         {activePackage.dependencies.length === 0
           ? "No Dependencies !"

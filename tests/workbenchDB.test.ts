@@ -10,6 +10,7 @@ import { LicenseSamples } from "./test-scans/licenses/expectedLicenses";
 import { SanitySamples } from "./test-scans/sanity/sanitySamples";
 import { ErrorSamples } from "./test-scans/scan-errors/expectedErrors";
 import { PackageDepsSamples } from "./test-scans/packages_dependencies/expectedPackagesDeps";
+import { TodoSamples } from "./test-scans/todos/todoSamples";
 
 // Avoid logging scan-parser checkpoints during tests
 beforeEach(() => {
@@ -81,9 +82,9 @@ describe("Parse Errors", () => {
         await db.FlatFile.findAll({
           attributes: ["fileId", "scan_errors"],
         })
-      ).map((flatFile) => flatFile.dataValues);
+      ).map((flatFile) => flatFile.toJSON());
       const scanErrors = (await newWorkbenchDB.db.ScanError.findAll()).map(
-        (error) => error.dataValues
+        (error) => error.toJSON()
       );
 
       assert.deepEqual(flatFiles, expectedFlatFiles);
@@ -120,9 +121,9 @@ describe("Parse Copyrights", () => {
             "copyright_end_line",
           ],
         })
-      ).map((flatFile) => flatFile.dataValues);
+      ).map((flatFile) => flatFile.toJSON());
       const copyrights = (await newWorkbenchDB.db.Copyright.findAll()).map(
-        (copyright) => copyright.dataValues
+        (copyright) => copyright.toJSON()
       );
 
       assert.deepEqual(flatFiles, expectedFlatFiles);
@@ -183,11 +184,9 @@ describe("Parse Email, URL & Info", () => {
             "url_end_line",
           ],
         })
-      ).map((flatFile) => flatFile.dataValues);
-      const emails = (await db.Email.findAll()).map(
-        (email) => email.dataValues
-      );
-      const urls = (await db.Url.findAll()).map((url) => url.dataValues);
+      ).map((flatFile) => flatFile.toJSON());
+      const emails = (await db.Email.findAll()).map((email) => email.toJSON());
+      const urls = (await db.Url.findAll()).map((url) => url.toJSON());
 
       assert.deepEqual(flatFiles, expectedFlatFiles);
       assert.deepEqual(emails, expectedEmails);
@@ -206,6 +205,7 @@ describe("Parse Licenses", () => {
       expectedLicenseDetections,
       expectedLicenseExpressions,
       expectedLicensePolicies,
+      expectedLicenseReferences,
       expectedLicenseRuleReferences,
     }) => {
       const jsonFilePath = path.join(
@@ -234,28 +234,32 @@ describe("Parse Licenses", () => {
             "license_detections",
           ],
         })
-      ).map((flatFile) => flatFile.dataValues);
+      ).map((flatFile) => flatFile.toJSON());
       const licenseDetections = (await db.LicenseDetections.findAll()).map(
-        (detection) => detection.dataValues
+        (detection) => detection.toJSON()
       );
-      const licenseClues = (await db.LicenseClues.findAll()).map(
-        (clue) => clue.dataValues
+      const licenseClues = (await db.LicenseClues.findAll()).map((clue) =>
+        clue.toJSON()
       );
       const licenseExpressions = (await db.LicenseExpression.findAll()).map(
-        (expression) => expression.dataValues
+        (expression) => expression.toJSON()
       );
-      const licensePolicies = (await db.LicensePolicy.findAll()).map(
-        (policy) => policy.dataValues
+      const licensePolicies = (await db.LicensePolicy.findAll()).map((policy) =>
+        policy.toJSON()
+      );
+      const licenseReferences = (await db.LicenseReferences.findAll()).map(
+        (reference) => reference.toJSON()
       );
       const licenseRuleReferences = (
         await db.LicenseRuleReferences.findAll()
-      ).map((ruleReference) => ruleReference.dataValues);
+      ).map((ruleReference) => ruleReference.toJSON());
 
       assert.deepEqual(flatFiles, expectedFlatFiles);
       assert.deepEqual(licenseDetections, expectedLicenseDetections);
       assert.deepEqual(licenseClues, expectedLicenseClues);
       assert.deepEqual(licenseExpressions, expectedLicenseExpressions);
       assert.deepEqual(licensePolicies, expectedLicensePolicies);
+      assert.deepEqual(licenseReferences, expectedLicenseReferences);
       assert.deepEqual(licenseRuleReferences, expectedLicenseRuleReferences);
     }
   );
@@ -286,55 +290,80 @@ describe("Parse Packages & Dependencies", () => {
 
       await newWorkbenchDB.addFromJson(jsonFilePath, () => null);
 
+      const flatFileAttributes = [
+        "for_packages",
+        "package_data_type",
+        "package_data_namespace",
+        "package_data_name",
+        "package_data_version",
+        "package_data_qualifiers",
+        "package_data_subpath",
+        "package_data_purl",
+        "package_data_primary_language",
+        "package_data_code_type",
+        "package_data_description",
+        "package_data_size",
+        "package_data_release_date",
+        "package_data_keywords",
+        "package_data_homepage_url",
+        "package_data_download_url",
+        "package_data_download_checksums",
+        "package_data_bug_tracking_url",
+        "package_data_code_view_url",
+        "package_data_vcs_tool",
+        "package_data_vcs_url",
+        "package_data_vcs_repository",
+        "package_data_vcs_revision",
+        "package_data_extracted_license_statement",
+        "package_data_declared_license_expression",
+        "package_data_declared_license_expression_spdx",
+        "package_data_notice_text",
+        "package_data_dependencies",
+        "package_data_related_packages",
+      ];
       const flatFiles = (
         await db.FlatFile.findAll({
-          attributes: [
-            "for_packages",
-            "package_data_type",
-            "package_data_namespace",
-            "package_data_name",
-            "package_data_version",
-            "package_data_qualifiers",
-            "package_data_subpath",
-            "package_data_purl",
-            "package_data_primary_language",
-            "package_data_code_type",
-            "package_data_description",
-            "package_data_size",
-            "package_data_release_date",
-            "package_data_keywords",
-            "package_data_homepage_url",
-            "package_data_download_url",
-            "package_data_download_checksums",
-            "package_data_bug_tracking_url",
-            "package_data_code_view_url",
-            "package_data_vcs_tool",
-            "package_data_vcs_url",
-            "package_data_vcs_repository",
-            "package_data_vcs_revision",
-            "package_data_extracted_license_statement",
-            "package_data_declared_license_expression",
-            "package_data_declared_license_expression_spdx",
-            "package_data_notice_text",
-            "package_data_dependencies",
-            "package_data_related_packages",
-          ],
+          attributes: flatFileAttributes,
         })
-      ).map((flatFile) => flatFile.dataValues);
-      const packages = (await db.Packages.findAll()).map(
-        (pkg) => pkg.dataValues
+      ).map((flatFile) => flatFile.toJSON());
+      const packages = (await db.Packages.findAll()).map((pkg) => pkg.toJSON());
+      const packageData = (await db.PackageData.findAll()).map((pkgData) =>
+        pkgData.toJSON()
       );
-      const packageData = (await db.PackageData.findAll()).map(
-        (pkgData) => pkgData.dataValues
-      );
-      const dependencies = (await db.Dependencies.findAll()).map(
-        (dependency) => dependency.dataValues
+      const dependencies = (await db.Dependencies.findAll()).map((dependency) =>
+        dependency.toJSON()
       );
 
       assert.deepEqual(flatFiles, expectedFlatFiles);
       assert.deepEqual(packages, expectedPackages);
       assert.deepEqual(packageData, expectedPackageData);
       assert.deepEqual(dependencies, expectedDependencies);
+    }
+  );
+});
+
+describe("Parse Todos", () => {
+  it.each(TodoSamples)(
+    "Parses $jsonFileName",
+    async ({ jsonFileName, expectedTodos }) => {
+      const jsonFilePath = path.join(
+        __dirname,
+        "test-scans/todos/",
+        jsonFileName
+      );
+
+      const newWorkbenchDB = new WorkbenchDB({
+        dbName: "workbench_db",
+        dbStoragePath: figureOutDefaultSqliteFilePath(jsonFilePath),
+        deleteExisting: true,
+      });
+      await newWorkbenchDB.addFromJson(jsonFilePath, () => null);
+
+      const todos = (await newWorkbenchDB.db.Todo.findAll()).map((todo) =>
+        todo.toJSON()
+      );
+
+      assert.deepEqual(todos, expectedTodos);
     }
   );
 });

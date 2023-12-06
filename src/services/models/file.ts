@@ -15,7 +15,7 @@
  */
 
 import { Sequelize, DataTypes, Model } from "sequelize";
-import { jsonDataType, JSON_Type } from "./databaseUtils";
+import { jsonDataType } from "./databaseUtils";
 
 export interface FileAttributes {
   id: number;
@@ -33,7 +33,7 @@ export interface FileAttributes {
   mime_type: string;
   file_type: string;
   programming_language: string;
-  for_packages: JSON_Type;
+  for_packages: string[];
   is_binary: boolean;
   is_text: boolean;
   is_archive: boolean;
@@ -74,7 +74,7 @@ export default function fileModel(sequelize: Sequelize) {
       mime_type: DataTypes.STRING,
       file_type: DataTypes.STRING,
       programming_language: DataTypes.STRING,
-      for_packages: jsonDataType("for_packages"),
+      for_packages: jsonDataType("for_packages", []),
       is_binary: DataTypes.BOOLEAN,
       is_text: DataTypes.BOOLEAN,
       is_archive: DataTypes.BOOLEAN,

@@ -1,60 +1,4 @@
-import { JSON_Type } from "./models/databaseUtils";
-
-export interface ParsedJsonHeader {
-  json_file_name: string;
-  tool_name: string;
-  tool_version: string;
-  notice: string;
-  duration: number;
-  options: JSON_Type;
-  input: JSON_Type;
-  files_count: number;
-  output_format_version: string;
-  spdx_license_list_version: string; // @QUERY - Justify need for this
-  operating_system: string;
-  cpu_architecture: string;
-  platform: string;
-  platform_version: string;
-  python_version: string;
-  workbench_version: string;
-  workbench_notice: string;
-  header_content: string;
-  errors: JSON_Type;
-}
-
-export interface LicenseReference {
-  key: string;
-  language: string;
-  short_name: string;
-  name: string;
-  category: string;
-  owner: string;
-  homepage_url: string;
-  notes: string;
-  is_builtin: boolean;
-  is_exception: boolean;
-  is_unknown: boolean;
-  is_generic: boolean;
-  spdx_license_key: string;
-  other_spdx_license_keys: string[];
-  osi_license_key: string | null;
-  text_urls: string[];
-  osi_url?: string;
-  faq_url?: string;
-  other_urls: string[];
-  key_aliases: string[];
-  minimum_coverage: number;
-  standard_notice: string | null;
-  ignorable_copyrights: string[];
-  ignorable_holders: string[];
-  ignorable_authors: string[];
-  ignorable_urls: string[];
-  ignorable_emails: string[];
-  text: string;
-  scancode_url: string | null;
-  licensedb_url: string | null;
-  spdx_url: string | null;
-}
+import { LicenseDetectionAttributes } from "./models/licenseDetections";
 
 export interface LicenseExpressionKey {
   key: string;
@@ -69,7 +13,7 @@ export interface LicenseMatch {
   score: number;
   start_line: number;
   end_line: number;
-  matched_text: string;
+  matched_text?: string;
   matched_length: number;
   match_coverage: number;
   matcher: string;
@@ -86,17 +30,19 @@ export interface LicenseDetectionMatch extends LicenseMatch {
   license_expression_spdx?: string;
   license_expression_spdx_keys?: LicenseExpressionSpdxKey[];
 }
+export type LicenseClueMatch = LicenseMatch;
+
 export interface LicenseFileRegion {
   path: string;
   start_line: number;
   end_line: number;
-  from_package?: boolean;
+  from_package?: string;
 }
 export interface LicenseClue {
   score: number;
   start_line: number;
   end_line: number;
-  matched_text: string;
+  matched_text?: string | null;
   matched_length: number;
   match_coverage: number;
   matcher: string;
@@ -109,7 +55,7 @@ export interface LicenseClue {
   fileId?: number;
   filePath?: string;
   fileClueIdx: number;
-  matches?: LicenseMatch[];
+  matches?: LicenseClueMatch[];
   file_regions?: LicenseFileRegion[];
 }
 export interface TopLevelLicenseDetection {
@@ -127,6 +73,22 @@ export interface ResourceLicenseDetection {
   license_expression: string;
   matches: LicenseDetectionMatch[];
   identifier: string;
+}
+
+export interface LicensePolicy {
+  license_key: string;
+  label: string;
+  color_code: string;
+  icon: string;
+
+  // Parser-added fields
+  fileId?: number;
+}
+
+export interface RawTopLevelTodo {
+  detection_id: string;
+  review_comments: Record<string, string>;
+  detection: LicenseDetectionAttributes;
 }
 
 export interface Resource {
@@ -152,7 +114,61 @@ export interface Resource {
   is_source?: boolean;
   is_script?: boolean;
   package_data?: {
+    type: string;
+    namespace: string;
+    name: string;
+    version: string;
+    qualifiers: unknown;
+    subpath: string;
+    primary_language: string | null;
+    description: string;
+    release_date: null;
+    parties: {
+      type: string;
+      role: string;
+      name: string;
+      email: string;
+      url: string;
+    }[];
+    keywords: string[];
+    homepage_url: string;
+    download_url: string;
+    size: number;
+    sha1: string;
+    md5: string;
+    sha256: string;
+    sha512: string;
+    bug_tracking_url: string;
+    code_view_url: string;
+    vcs_url: string;
+    copyright: string;
+    holder: string;
+    declared_license_expression: string;
+    declared_license_expression_spdx: string;
     license_detections?: ResourceLicenseDetection[];
+    other_license_expression: string;
+    other_license_expression_spdx: string;
+    other_license_detections?: ResourceLicenseDetection[];
+    extracted_license_statement: string;
+    notice_text: string;
+    source_packages: string[];
+    file_references: unknown[];
+    extra_data: unknown;
+    dependencies: {
+      purl: string;
+      extracted_requirement: null;
+      scope: string | null;
+      is_runtime: boolean;
+      is_optional: boolean;
+      is_resolved: boolean;
+      resolved_package: unknown;
+      extra_data: unknown;
+    }[];
+    repository_homepage_url: string;
+    repository_download_url: string;
+    api_data_url: string;
+    datasource_id: string;
+    purl: string;
   }[];
   for_packages?: string[];
   detected_license_expression?: string | null;
@@ -160,6 +176,8 @@ export interface Resource {
   for_license_detections?: string[];
   license_detections?: ResourceLicenseDetection[];
   license_clues?: LicenseClue[];
+  emails?: unknown[];
+  urls?: unknown[];
   copyrights?: {
     copyright: string;
     start_line: number;
@@ -176,14 +194,7 @@ export interface Resource {
     end_line: number;
   }[];
   percentage_of_license_text?: number;
-  license_policy?: {
-    license_key: string;
-    label: string;
-    color_code: string;
-    icon: string;
-    // Parser-added fields
-    fileId?: number;
-  }[];
+  license_policy?: LicensePolicy[];
   scan_errors?: string[];
 
   // Parser-added fields

@@ -52,6 +52,10 @@ export interface PackageDetails {
   datafile_paths: string[];
   datasource_ids: string[];
   purl: string;
+  license_detections: {
+    license_expression: string;
+    identifier: string;
+  }[];
 }
 export interface PackageTypeGroupDetails {
   packages: PackageDetails[];

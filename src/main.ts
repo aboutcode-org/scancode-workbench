@@ -79,14 +79,14 @@ export const createWindow = (): void => {
   // and load the index.html of the app.
   mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY);
 
-  // open all URLs in default browser window
-  // We do this only in production, to prevent hot reloads getting opened in browser
-  if (!isDev) {
-    mainWindow.webContents.on("will-navigate", (event, url) => {
+  mainWindow.webContents.on("will-navigate", (event, url) => {
+    // Open any external links in the user's browser
+    // In case of reloads due to code changes, we want to stay in the application itself
+    if (url !== mainWindow.webContents.getURL()) {
       event.preventDefault();
       shell.openExternal(url);
-    });
-  }
+    }
+  });
   setUpWindowListeners(mainWindow);
 };
 
