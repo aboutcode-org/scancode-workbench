@@ -6,7 +6,6 @@ import {
 import { Button, OverlayTrigger, Popover, Table } from "react-bootstrap";
 import MatchedTextRenderer from "./LicenseMatchCells/MatchedText";
 import MatchLicenseExpressionRenderer from "./LicenseMatchCells/MatchLicenseExpression";
-import { LicenseTypes } from "../../services/workbenchDB.types";
 import { MatchedTextProvider } from "./MatchedTextContext";
 import MatchRuleDetails from "./MatchRuleDetails";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -15,23 +14,15 @@ import CoreLink from "../CoreLink/CoreLink";
 
 interface LicenseMatchProps {
   showLIcenseText?: boolean;
-  matchesInfo:
-    | {
-        licenseType: LicenseTypes.DETECTION;
-        matches: LicenseDetectionMatch[];
-      }
-    | {
-        licenseType: LicenseTypes.CLUE;
-        matches: LicenseClueMatch[];
-      };
+  matches: LicenseClueMatch[] | LicenseDetectionMatch[];
 }
 const LicenseMatchesTable = (props: LicenseMatchProps) => {
-  const { matchesInfo, showLIcenseText } = props;
+  const { matches, showLIcenseText } = props;
 
   return (
     <MatchedTextProvider>
       <div>
-        {matchesInfo.matches.map((match, idx) => (
+        {matches.map((match, idx) => (
           <div
             className="matches-table-container"
             key={match.license_expression + "_" + idx}
@@ -49,20 +40,19 @@ const LicenseMatchesTable = (props: LicenseMatchProps) => {
                     />
                   </td>
                 </tr>
-                {matchesInfo.licenseType === LicenseTypes.DETECTION &&
-                  (match as LicenseDetectionMatch)?.license_expression_spdx && (
-                    <tr>
-                      <td colSpan={2}>License Expression SPDX</td>
-                      <td colSpan={7}>
-                        <MatchLicenseExpressionRenderer
-                          matchInfo={{
-                            match: match,
-                            spdxLicense: true,
-                          }}
-                        />
-                      </td>
-                    </tr>
-                  )}
+                {match.license_expression_spdx && (
+                  <tr>
+                    <td colSpan={2}>License Expression SPDX</td>
+                    <td colSpan={7}>
+                      <MatchLicenseExpressionRenderer
+                        matchInfo={{
+                          match: match,
+                          spdxLicense: true,
+                        }}
+                      />
+                    </td>
+                  </tr>
+                )}
                 {showLIcenseText && (
                   <tr className="matched-text-row">
                     <td colSpan={2}>Matched Text</td>

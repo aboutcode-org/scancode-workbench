@@ -3,7 +3,7 @@ import CoreLink from "../../CoreLink/CoreLink";
 import {
   LICENSE_EXPRESSIONS_CONJUNCTIONS,
   parseTokensFromExpression,
-} from "../../../services/models/databaseUtils";
+} from "../../../utils/expressions";
 import {
   LicenseClueMatch,
   LicenseDetectionMatch,

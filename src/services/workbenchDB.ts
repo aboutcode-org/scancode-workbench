@@ -32,17 +32,18 @@ import { UNKNOWN_EXPRESSION, UNKNOWN_EXPRESSION_SPDX } from "../constants/data";
 import { logDependenciesOnError } from "../utils/ensureRendererDeps";
 import { DebugLogger } from "../utils/logger";
 import { DatabaseStructure, newDatabase } from "./models/database";
+import { parentPath } from "./models/databaseUtils";
 import {
   filterSpdxKeys,
-  parentPath,
   parseSubExpressions,
   parseTokenKeysFromExpression,
-} from "./models/databaseUtils";
+} from "../utils/expressions";
 import { FileAttributes } from "./models/file";
 import { FlatFileAttributes, flattenFile } from "./models/flatFile";
 import {
   LicenseClue,
   LicenseExpressionKey,
+  LicenseExpressionSpdxKey,
   RawTopLevelTodo,
   Resource,
   ResourceLicenseDetection,
@@ -616,6 +617,74 @@ export class WorkbenchDB {
     return parsedHeader;
   }
 
+  _getLicenseExpressionKeys(
+    license_expression: string,
+    license_expression_spdx: string,
+    license_references_map: Map<string, LicenseReferenceAttributes>,
+    license_references_spdx_map: Map<string, LicenseReferenceAttributes>
+  ) {
+    const parsedLicenseKeys = parseSubExpressions(license_expression);
+    const parsedSpdxLicenseKeys = parseSubExpressions(license_expression_spdx);
+
+    const license_expression_keys: LicenseExpressionKey[] = [];
+    const license_expression_spdx_keys: LicenseExpressionSpdxKey[] = [];
+
+    parsedLicenseKeys.forEach((key) => {
+      const license_reference = license_references_map.get(key);
+
+      license_expression_keys.push({
+        key,
+        licensedb_url: license_reference?.licensedb_url || null,
+        scancode_url: license_reference?.scancode_url || null,
+      });
+    });
+    parsedSpdxLicenseKeys.forEach((key) => {
+      const license_reference = license_references_spdx_map.get(key);
+
+      license_expression_spdx_keys.push({
+        key,
+        spdx_url: license_reference?.spdx_url || null,
+      });
+    });
+    return {
+      license_expression_keys,
+      license_expression_spdx_keys,
+    };
+  }
+
+  _resolveSpdxLicenseExpression(
+    license_expression: string,
+    license_references_map: Map<string, LicenseReferenceAttributes>
+  ) {
+    const parsedLicenseKeys = parseSubExpressions(license_expression);
+
+    // Specifically useful for license clue matches, where SPDX expression is not available
+    // Find reference using license expression (if available)
+    // And set spdx expression available in reference
+    let license_expression_spdx = license_expression;
+    parsedLicenseKeys.forEach((key) => {
+      if (license_references_map.has(key)) {
+        const license_reference = license_references_map.get(key);
+        license_expression_spdx = license_expression_spdx.replace(
+          key,
+          license_reference.spdx_license_key
+        );
+      }
+    });
+
+    return license_expression_spdx;
+
+    // // Approach 2 - Tokenise & merge (Not tested for complex expressions)
+    // const licenseExpressionTokens =
+    //   parseTokensFromExpression(license_expression);
+    // const licenseExpressionSpdxTokens = licenseExpressionTokens.map((key) =>
+    //   license_references_map.has(key)
+    //     ? license_references_map.get(key).spdx_license_key
+    //     : key
+    // );
+    // return licenseExpressionSpdxTokens.join("");
+  }
+
   _parseLicenseDetections(file: Resource, TopLevelData: TopLevelDataFormat) {
     if (!file) return;
 
@@ -629,11 +698,11 @@ export class WorkbenchDB {
     // upto v32.0.0rc2
     const for_license_detections: string[] = file.for_license_detections || [];
 
-    function addLicenseDetection(
+    const addLicenseDetection = (
       detection: ResourceLicenseDetection,
       detectionIdx: number,
       from_package: string = null
-    ) {
+    ) => {
       const detectionIdentifier =
         detection.identifier || for_license_detections[detectionIdx];
 
@@ -695,14 +764,6 @@ export class WorkbenchDB {
           const { license_references_map, license_references_spdx_map } =
             TopLevelData;
 
-          if (!match.license_expression_keys?.length)
-            match.license_expression_keys = [];
-          if (
-            !match.license_expression_spdx_keys ||
-            !match.license_expression_spdx_keys.length
-          )
-            match.license_expression_spdx_keys = [];
-
           // SPDX not available in matches, so find corresponding spdx license expression
           match.license_expression_spdx =
             detectionSpdxLicenseExpressionComponents[
@@ -727,50 +788,32 @@ export class WorkbenchDB {
             match.license_expression_spdx = UNKNOWN_EXPRESSION_SPDX;
           }
 
-          // Specifically useful for license clue matches, where SPDX expression is not available
-          // Find reference using license expression (if available)
-          // And set spdx expression available in reference
-          if (
-            !match.license_expression_spdx &&
-            TopLevelData.license_references_map.has(match.license_expression)
-          ) {
-            match.license_expression_spdx =
-              TopLevelData.license_references_map.get(
-                match.license_expression
-              ).spdx_license_key;
+          // When SPDX expression is not available,
+          // construct it using keys in license expression
+          if (!match.license_expression_spdx) {
+            match.license_expression_spdx = this._resolveSpdxLicenseExpression(
+              match.license_expression,
+              license_references_map
+            );
           }
 
-          const parsedLicenseKeys = parseSubExpressions(
-            match.license_expression
-          );
-          const parsedSpdxLicenseKeys = parseSubExpressions(
-            match.license_expression_spdx
-          );
+          const { license_expression_keys, license_expression_spdx_keys } =
+            this._getLicenseExpressionKeys(
+              match.license_expression,
+              match.license_expression_spdx,
+              license_references_map,
+              license_references_spdx_map
+            );
 
-          parsedLicenseKeys.forEach((key) => {
-            const license_reference = license_references_map.get(key);
-
-            match.license_expression_keys.push({
-              key,
-              licensedb_url: license_reference?.licensedb_url || null,
-              scancode_url: license_reference?.scancode_url || null,
-            });
-          });
-          parsedSpdxLicenseKeys.forEach((key) => {
-            const license_reference = license_references_spdx_map.get(key);
-
-            match.license_expression_spdx_keys.push({
-              key,
-              spdx_url: license_reference?.spdx_url || null,
-            });
-          });
+          match.license_expression_keys = license_expression_keys;
+          match.license_expression_spdx_keys = license_expression_spdx_keys;
           match.path = file.path;
           targetLicenseDetection.matches.push(match);
         });
       }
 
       delete detection.matches; // Not required further, hence removing to reduce sqlite size
-    }
+    };
 
     (file?.license_detections || []).forEach((detection, idx) =>
       addLicenseDetection(detection, idx)
@@ -785,21 +828,24 @@ export class WorkbenchDB {
 
   _parseLicenseClues(file: Resource, TopLevelData: TopLevelDataFormat) {
     file.license_clues?.forEach((license_clue, clue_idx) => {
-      const parsedLicenseKeys = parseSubExpressions(
-        license_clue.license_expression
-      );
+      const { license_references_map, license_references_spdx_map } =
+        TopLevelData;
 
-      const license_expression_keys: LicenseExpressionKey[] = [];
-      parsedLicenseKeys.forEach((key) => {
-        const license_reference = TopLevelData.license_references_map.get(key);
-        if (!license_reference) return [];
+      if (!license_clue.license_expression_spdx) {
+        license_clue.license_expression_spdx =
+          this._resolveSpdxLicenseExpression(
+            license_clue.license_expression,
+            license_references_map
+          );
+      }
 
-        license_expression_keys.push({
-          key,
-          licensedb_url: license_reference.licensedb_url || null,
-          scancode_url: license_reference.scancode_url || null,
-        });
-      });
+      const { license_expression_keys, license_expression_spdx_keys } =
+        this._getLicenseExpressionKeys(
+          license_clue.license_expression,
+          license_clue.license_expression_spdx,
+          license_references_map,
+          license_references_spdx_map
+        );
 
       license_clue.fileId = file.id;
       license_clue.filePath = file.path;
@@ -815,11 +861,13 @@ export class WorkbenchDB {
           match_coverage: license_clue.match_coverage,
           matcher: license_clue.matcher,
           license_expression: license_clue.license_expression,
+          license_expression_keys,
+          license_expression_spdx: license_clue.license_expression_spdx,
+          license_expression_spdx_keys,
           rule_identifier: license_clue.rule_identifier,
           rule_relevance: license_clue.rule_relevance,
           rule_url: license_clue.rule_url,
           path: file.path,
-          license_expression_keys,
         },
       ];
       license_clue.file_regions = [
