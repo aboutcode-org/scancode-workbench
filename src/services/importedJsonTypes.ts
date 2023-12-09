@@ -18,6 +18,7 @@ export interface LicenseMatch {
   match_coverage: number;
   matcher: string;
   license_expression: string;
+  license_expression_spdx?: string;
   rule_identifier: string;
   rule_relevance: number;
   rule_url: string;
@@ -25,11 +26,9 @@ export interface LicenseMatch {
   // Parser-added fields
   path?: string;
   license_expression_keys?: LicenseExpressionKey[];
-}
-export interface LicenseDetectionMatch extends LicenseMatch {
-  license_expression_spdx?: string;
   license_expression_spdx_keys?: LicenseExpressionSpdxKey[];
 }
+export type LicenseDetectionMatch = LicenseMatch;
 export type LicenseClueMatch = LicenseMatch;
 
 export interface LicenseFileRegion {
@@ -57,6 +56,7 @@ export interface LicenseClue {
   fileClueIdx: number;
   matches?: LicenseClueMatch[];
   file_regions?: LicenseFileRegion[];
+  license_expression_spdx?: string;
 }
 export interface TopLevelLicenseDetection {
   identifier: string;

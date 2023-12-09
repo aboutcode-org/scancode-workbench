@@ -9,7 +9,6 @@ import {
 } from "./FileRegionTableCols";
 import { ScanOptionKeys } from "../../utils/parsers";
 import LicenseMatchesTable from "./LicenseMatchesTable";
-import { LicenseTypes } from "../../services/workbenchDB.types";
 import { useWorkbenchDB } from "../../contexts/dbContext";
 import { TodoAttributes } from "../../services/models/todo";
 
@@ -105,13 +104,7 @@ const LicenseEntity = (props: LicenseDetectionEntityProps) => {
       </div>
       <b>Matches</b>
       <LicenseMatchesTable
-        matchesInfo={{
-          licenseType:
-            activeLicenseEntity.type === "detection"
-              ? LicenseTypes.DETECTION
-              : LicenseTypes.CLUE,
-          matches: matches,
-        }}
+        matches={matches}
         showLIcenseText={
           Boolean(scanInfo.optionsMap.get(ScanOptionKeys.LICENSE_TEXT)) ||
           matches[0]?.matched_text?.length > 0 ||

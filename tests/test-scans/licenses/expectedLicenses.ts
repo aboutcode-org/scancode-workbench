@@ -20,14 +20,6 @@ export const LicenseSamples: {
     jsonFileName: "withLicenses.json",
     expectedLicenseClues: [
       {
-        id: 1,
-        fileId: 5,
-        filePath: "rx-lite/package.json",
-        fileClueIdx: 0,
-        score: 52,
-        license_expression: "apache-2.0 OR gpl-2.0",
-        rule_identifier: "apache-2.0_or_gpl-2.0_24.RULE",
-        reviewed: false,
         matches: [
           {
             score: 52,
@@ -37,11 +29,7 @@ export const LicenseSamples: {
             match_coverage: 52,
             matcher: "3-seq",
             license_expression: "apache-2.0 OR gpl-2.0",
-            rule_identifier: "apache-2.0_or_gpl-2.0_24.RULE",
-            rule_relevance: 100,
-            rule_url:
-              "https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/rules/apache-2.0_or_gpl-2.0_24.RULE",
-            path: "rx-lite/package.json",
+            license_expression_spdx: "Apache-2.0 OR GPL-2.0-only",
             license_expression_keys: [
               {
                 key: "apache-2.0",
@@ -58,11 +46,38 @@ export const LicenseSamples: {
                   "https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/licenses/gpl-2.0.LICENSE",
               },
             ],
+            license_expression_spdx_keys: [
+              {
+                key: "Apache-2.0",
+                spdx_url: "https://spdx.org/licenses/Apache-2.0",
+              },
+              {
+                key: "GPL-2.0-only",
+                spdx_url: "https://spdx.org/licenses/GPL-2.0-only",
+              },
+            ],
+            rule_identifier: "apache-2.0_or_gpl-2.0_24.RULE",
+            rule_relevance: 100,
+            rule_url:
+              "https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/rules/apache-2.0_or_gpl-2.0_24.RULE",
+            path: "rx-lite/package.json",
           },
         ],
         file_regions: [
-          { path: "rx-lite/package.json", start_line: 56, end_line: 59 },
+          {
+            path: "rx-lite/package.json",
+            start_line: 56,
+            end_line: 59,
+          },
         ],
+        id: 1,
+        fileId: 5,
+        filePath: "rx-lite/package.json",
+        fileClueIdx: 0,
+        score: 52,
+        license_expression: "apache-2.0 OR gpl-2.0",
+        rule_identifier: "apache-2.0_or_gpl-2.0_24.RULE",
+        reviewed: false,
       },
     ],
     expectedLicenseDetections: [
@@ -81,6 +96,7 @@ export const LicenseSamples: {
             rule_relevance: 100,
             rule_url:
               "https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/rules/apache-2.0_65.RULE",
+            license_expression_spdx: "Apache-2.0",
             license_expression_keys: [
               {
                 key: "apache-2.0",
@@ -96,7 +112,6 @@ export const LicenseSamples: {
                 spdx_url: "https://spdx.org/licenses/Apache-2.0",
               },
             ],
-            license_expression_spdx: "Apache-2.0",
             path: "anglesharp.css.0.16.4/file_with_multiple_licenses.txt",
           },
           {
@@ -111,6 +126,7 @@ export const LicenseSamples: {
             rule_relevance: 100,
             rule_url:
               "https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/rules/gpl-3.0_173.RULE",
+            license_expression_spdx: "GPL-3.0-only",
             license_expression_keys: [
               {
                 key: "gpl-3.0",
@@ -124,7 +140,6 @@ export const LicenseSamples: {
                 spdx_url: null,
               },
             ],
-            license_expression_spdx: "GPL-3.0-only",
             path: "anglesharp.css.0.16.4/file_with_multiple_licenses.txt",
           },
         ],
@@ -160,6 +175,7 @@ export const LicenseSamples: {
             rule_url:
               "https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/rules/mit_14.RULE",
             matched_text: "MIT</license>",
+            license_expression_spdx: "MIT",
             license_expression_keys: [
               {
                 key: "mit",
@@ -174,7 +190,6 @@ export const LicenseSamples: {
                 spdx_url: "https://spdx.org/licenses/MIT",
               },
             ],
-            license_expression_spdx: "MIT",
             path: "anglesharp.css.0.16.4/AngleSharp.Css.nuspec",
           },
           {
@@ -190,6 +205,7 @@ export const LicenseSamples: {
             rule_relevance: 100,
             rule_url: null,
             matched_text: "licenses.nuget.org/MIT</licenseUrl>",
+            license_expression_spdx: "MIT",
             license_expression_keys: [
               {
                 key: "mit",
@@ -204,7 +220,6 @@ export const LicenseSamples: {
                 spdx_url: "https://spdx.org/licenses/MIT",
               },
             ],
-            license_expression_spdx: "MIT",
             path: "anglesharp.css.0.16.4/AngleSharp.Css.nuspec",
           },
         ],
@@ -239,6 +254,7 @@ export const LicenseSamples: {
             rule_relevance: 100,
             rule_url: null,
             matched_text: "MIT",
+            license_expression_spdx: "MIT",
             license_expression_keys: [
               {
                 key: "mit",
@@ -253,7 +269,6 @@ export const LicenseSamples: {
                 spdx_url: "https://spdx.org/licenses/MIT",
               },
             ],
-            license_expression_spdx: "MIT",
             path: "anglesharp.css.0.16.4/AngleSharp.Css.nuspec",
           },
         ],
@@ -290,6 +305,7 @@ export const LicenseSamples: {
               "https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/rules/package-manifest-unknown-16117ed57856733eaaf6d91ea575b186a9dab3df",
             matched_text:
               "license {'LegalCopyright': 'Copyright © AngleSharp, 2013-2019', 'LegalTrademarks': '', 'License': None}",
+            license_expression_spdx: "LicenseRef-scancode-unknown",
             license_expression_keys: [
               {
                 key: "unknown",
@@ -306,7 +322,6 @@ export const LicenseSamples: {
                   "https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/licenses/unknown.LICENSE",
               },
             ],
-            license_expression_spdx: "LicenseRef-scancode-unknown",
             path: "anglesharp.css.0.16.4/AngleSharp.Css.dll",
           },
         ],
@@ -349,6 +364,7 @@ export const LicenseSamples: {
             rule_url:
               "https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/rules/apache-2.0_48.RULE",
             matched_text: "Apache License, Version 2.0",
+            license_expression_spdx: "Apache-2.0",
             license_expression_keys: [
               {
                 key: "apache-2.0",
@@ -364,7 +380,6 @@ export const LicenseSamples: {
                 spdx_url: "https://spdx.org/licenses/Apache-2.0",
               },
             ],
-            license_expression_spdx: "Apache-2.0",
             path: "rx-lite/package.json",
           },
         ],
@@ -399,6 +414,7 @@ export const LicenseSamples: {
             rule_url:
               "https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/rules/apache-2.0_20.RULE",
             matched_text: "http://www.apache.org/licenses/LICENSE-2.0.html",
+            license_expression_spdx: "Apache-2.0",
             license_expression_keys: [
               {
                 key: "apache-2.0",
@@ -414,7 +430,6 @@ export const LicenseSamples: {
                 spdx_url: "https://spdx.org/licenses/Apache-2.0",
               },
             ],
-            license_expression_spdx: "Apache-2.0",
             path: "rx-lite/package.json",
           },
         ],
@@ -707,22 +722,19 @@ export const LicenseSamples: {
     ],
     expectedFlatFiles: [
       {
+        license_clues: [],
+        license_policy: [],
+        license_detections: [],
         detected_license_expression: null,
         detected_license_expression_spdx: null,
         percentage_of_license_text: 0,
-        license_policy: [],
-        license_clues: [],
-        license_detections: [],
       },
       {
-        detected_license_expression: "apache-2.0 AND gpl-3.0",
-        detected_license_expression_spdx: "Apache-2.0 AND GPL-3.0-only",
-        percentage_of_license_text: 100,
+        license_clues: [],
         license_policy: [
           "apache-2.0 - Approved License",
           "gpl-3.0 - Restricted License",
         ],
-        license_clues: [],
         license_detections: [
           {
             license_expression: "apache-2.0 AND gpl-3.0",
@@ -730,21 +742,21 @@ export const LicenseSamples: {
               "apache_2_0_and_gpl_3_0-494ca0ae-1282-09a2-139f-a52c04fde6dc",
           },
         ],
+        detected_license_expression: "apache-2.0 AND gpl-3.0",
+        detected_license_expression_spdx: "Apache-2.0 AND GPL-3.0-only",
+        percentage_of_license_text: 100,
       },
       {
+        license_clues: [],
+        license_policy: [],
+        license_detections: [],
         detected_license_expression: null,
         detected_license_expression_spdx: null,
         percentage_of_license_text: 0,
-        license_policy: [],
-        license_clues: [],
-        license_detections: [],
       },
       {
-        detected_license_expression: "mit",
-        detected_license_expression_spdx: "MIT",
-        percentage_of_license_text: 6.36,
-        license_policy: [],
         license_clues: [],
+        license_policy: [],
         license_detections: [
           {
             license_expression: "mit",
@@ -752,20 +764,19 @@ export const LicenseSamples: {
             identifier: "mit-b941df29-6c4b-fe7e-752f-a5fc7f9a28b5",
           },
         ],
+        detected_license_expression: "mit",
+        detected_license_expression_spdx: "MIT",
+        percentage_of_license_text: 6.36,
       },
       {
+        license_clues: [],
+        license_policy: [],
+        license_detections: [],
         detected_license_expression: null,
         detected_license_expression_spdx: null,
         percentage_of_license_text: 0,
-        license_policy: [],
-        license_clues: [],
-        license_detections: [],
       },
       {
-        detected_license_expression: null,
-        detected_license_expression_spdx: null,
-        percentage_of_license_text: 6.37,
-        license_policy: [],
         license_clues: [
           {
             score: 52,
@@ -779,6 +790,7 @@ export const LicenseSamples: {
             rule_relevance: 100,
             rule_url:
               "https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/rules/apache-2.0_or_gpl-2.0_24.RULE",
+            license_expression_spdx: "Apache-2.0 OR GPL-2.0-only",
             fileId: 5,
             filePath: "rx-lite/package.json",
             fileClueIdx: 0,
@@ -791,11 +803,7 @@ export const LicenseSamples: {
                 match_coverage: 52,
                 matcher: "3-seq",
                 license_expression: "apache-2.0 OR gpl-2.0",
-                rule_identifier: "apache-2.0_or_gpl-2.0_24.RULE",
-                rule_relevance: 100,
-                rule_url:
-                  "https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/rules/apache-2.0_or_gpl-2.0_24.RULE",
-                path: "rx-lite/package.json",
+                license_expression_spdx: "Apache-2.0 OR GPL-2.0-only",
                 license_expression_keys: [
                   {
                     key: "apache-2.0",
@@ -812,14 +820,37 @@ export const LicenseSamples: {
                       "https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/licenses/gpl-2.0.LICENSE",
                   },
                 ],
+                license_expression_spdx_keys: [
+                  {
+                    key: "Apache-2.0",
+                    spdx_url: "https://spdx.org/licenses/Apache-2.0",
+                  },
+                  {
+                    key: "GPL-2.0-only",
+                    spdx_url: "https://spdx.org/licenses/GPL-2.0-only",
+                  },
+                ],
+                rule_identifier: "apache-2.0_or_gpl-2.0_24.RULE",
+                rule_relevance: 100,
+                rule_url:
+                  "https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/rules/apache-2.0_or_gpl-2.0_24.RULE",
+                path: "rx-lite/package.json",
               },
             ],
             file_regions: [
-              { path: "rx-lite/package.json", start_line: 56, end_line: 59 },
+              {
+                path: "rx-lite/package.json",
+                start_line: 56,
+                end_line: 59,
+              },
             ],
           },
         ],
+        license_policy: [],
         license_detections: [],
+        detected_license_expression: null,
+        detected_license_expression_spdx: null,
+        percentage_of_license_text: 6.37,
       },
     ],
   },
