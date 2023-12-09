@@ -34,7 +34,7 @@ packager({
   overwrite: true,
   icon: "src/assets/app-icon/icon",
   prune: true,
-  name: "ScanCode Workbench",
+  name: "ScanCode-Workbench",
   ignore: new RegExp(`(${ignoreDir}^.*.(${ignoreFilesOrExtensions})$)`),
   // osxSign: true,
   // osxSign: {
