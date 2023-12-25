@@ -66,29 +66,34 @@ Windows
 Release Instructions
 ====================
 
-You can build a ``dist`` directory and a ``tar/zip`` file containing executable for your platform
-by running:
+ScanCode Workbench is built using `electron-forge <https://www.electronforge.io/>`__ and
+`electron-packager <https://www.npmjs.com/package/electron-packager>`__
+
+You can build the application for your platform using following command:
 
 .. code-block:: bash
 
    npm run publish
 
-After building is done, you can find ScanCode-Workbench under
-``dist/ScanCode-Workbench-<os>-<arch>-<version>``.
+You can find the executible ``ScanCode-Workbench-<version>`` inside
+``out/ScanCode-Workbench-<version>-<os>-<arch>`` and
+a distributable archive in ``dist/`` directory.
 
-Archives are also built as:
+Archives are built as:
    - ``tar.gz`` - Linux / MacOS
    - ``.zip`` - Windows
 
-.. Note:: A build for any of the three target platforms must be executed on the targeted platform.
+.. Note::
+   Due to usage of native modules, a build must be done on target platform only.
+   For example, a linux build must be done on linux machine only.
+
 
 Building Documentation
 ======================
 
 Create python environment, make docs
 
-
-.. code-block:: none
+.. code-block:: bash
 
    # Clone this repository
    git clone https://github.com/nexB/scancode-workbench.git

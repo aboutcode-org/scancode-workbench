@@ -72,9 +72,7 @@ Note: Due to usage of native modules, a build must be done on target platform on
 $ npm run publish
 ```
 
-After building is done, you can find `ScanCode-Workbench` under
-`dist/ScanCode-Workbench-<os>-x64-<version>`. Archives (tar.gz and .zip) are
-also built.
+You can find the executible `ScanCode-Workbench-<version>` inside `out/ScanCode-Workbench-<version>-<os>-<arch>` and distributable archive (.tar.gz or .zip) in `dist/`
 
 ## Testing
 
