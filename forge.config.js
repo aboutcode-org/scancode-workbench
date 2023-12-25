@@ -1,12 +1,34 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 const { version } = require("./package.json");
+const {
+  addMetaDataFilesToPackage,
+  buildPackageArchive,
+} = require("./package-utils");
 
 const APP_NAME_WITH_VERSION = `ScanCode-Workbench-${version}`;
+const ARCHIVE_DIR = "dist";
+
+const MetaDataFiles = [
+  "apache-2.0.LICENSE",
+  "AUTHORS.rst",
+  "CHANGELOG.rst",
+  "CODE_OF_CONDUCT.rst",
+  "CONTRIBUTING.rst",
+  "NOTICE",
+  "package-lock.json",
+  "README.md",
+  "SCANCODE_WORKBENCH_VERSION",
+  "workbench.ABOUT",
+];
 
 module.exports = {
   packagerConfig: {
     name: APP_NAME_WITH_VERSION,
     icon: "src/assets/app-icon/icon",
+    dir: ".",
+    out: "out",
+    overwrite: true,
+    prune: true,
   },
   plugins: [
     {
@@ -25,5 +47,21 @@ module.exports = {
         },
       },
     },
+    {
+      name: "@timfish/forge-externals-plugin",
+      config: {
+        externals: ["sqlite3"],
+        includeDeps: true,
+      },
+    },
   ],
+  hooks: {
+    postPackage: async (_, options) => {
+      // Add metadata files like Readme, License, etc to the packaged app
+      addMetaDataFilesToPackage(options.outputPaths[0], MetaDataFiles);
+
+      // Build zip/tar.gz archive of the packaged app
+      buildPackageArchive(options.outputPaths[0], ARCHIVE_DIR);
+    },
+  },
 };

@@ -66,9 +66,7 @@ Windows
 Release Instructions
 ====================
 
-ScanCode Workbench is built using `electron-forge <https://www.electronforge.io/>`__ and
-`electron-packager <https://www.npmjs.com/package/electron-packager>`__
-
+ScanCode Workbench release is built using `electron-forge <https://www.electronforge.io/>`__.
 You can build the application for your platform using following command:
 
 .. code-block:: bash
