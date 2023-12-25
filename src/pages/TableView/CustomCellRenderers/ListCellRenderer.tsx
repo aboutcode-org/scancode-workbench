@@ -32,7 +32,7 @@ const ListCellRenderer = (props: ListCellRendererProps) => {
               {Array.isArray(subValues)
                 ? subValues.map((value, j) => (
                     <span key={j}>
-                      {value} <br />
+                      {value}
                     </span>
                   ))
                 : subValues}

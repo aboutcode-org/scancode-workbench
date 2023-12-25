@@ -41,3 +41,8 @@ This v4.0.0 of ScanCode Workbench is compatible with scans from any [ScanCode To
 - Automatic height for tables https://github.com/nexB/scancode-workbench/pull/606
 - Fixed Empty directory being shown with file icon https://github.com/nexB/scancode-workbench/pull/604
 - Fix irregular scroll behavior for files in deeply nested FileTree https://github.com/nexB/scancode-workbench/pull/599
+
+## Framework
+
+- Electorn [v28.1.0](https://releases.electronjs.org/release/v28.1.0)
+- Chromium [v120.0.6099.109](https://source.chromium.org/chromium/chromium/src/+/refs/tags/120.0.6099.109:)

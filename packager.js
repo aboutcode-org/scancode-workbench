@@ -1,5 +1,20 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
+const fs = require("fs");
 const packager = require("electron-packager");
+const { packagerConfig } = require("./forge.config.js");
+
+const MetaDataFiles = [
+  "apache-2.0.LICENSE",
+  "AUTHORS.rst",
+  "CHANGELOG.rst",
+  "CODE_OF_CONDUCT.rst",
+  "CONTRIBUTING.rst",
+  "NOTICE",
+  "package-lock.json",
+  "README.md",
+  "SCANCODE_WORKBENCH_VERSION",
+  "workbench.ABOUT",
+];
 
 const ignoreDir = [
   "src",
@@ -9,8 +24,12 @@ const ignoreDir = [
   ".github",
   "docs",
   "test-db",
+  ".husky",
+  "coverage",
+  "tests",
   "", // Required as the last element !!
 ].join("*|");
+
 const ignoreFilesOrExtensions = [
   "rst",
   "py",
@@ -18,14 +37,19 @@ const ignoreFilesOrExtensions = [
   "txt",
   "enc",
   ".test.ts",
-  "ABOUT",
+  ".config.js",
+  ".plugins.js",
+  ".rules.js",
+  ".toml",
+  "workbench.ABOUT",
   "LICENSE",
   "NOTICE",
   ".gitignore",
   ".eslintrc.json",
-  "package-lock.json",
+  "packager.js",
   "electron-builder.json",
   "tsconfig.json",
+  ...MetaDataFiles,
 ].join("|");
 
 packager({
@@ -34,7 +58,7 @@ packager({
   overwrite: true,
   icon: "src/assets/app-icon/icon",
   prune: true,
-  name: "ScanCode-Workbench",
+  name: packagerConfig.name,
   ignore: new RegExp(`(${ignoreDir}^.*.(${ignoreFilesOrExtensions})$)`),
   // osxSign: true,
   // osxSign: {
@@ -48,4 +72,10 @@ packager({
   //   appleId: 'felix@felix.fun',
   //   appleIdPassword: 'my-apple-id-password'
   // },
+}).then((packagePath) => {
+  // Copy the metadata files to package directory
+  MetaDataFiles.forEach((file) =>
+    fs.copyFileSync(file, `${packagePath}/${file}`)
+  );
+  console.log(`Packaged app at ${packagePath}`);
 });

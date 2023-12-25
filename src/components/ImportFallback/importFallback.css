@@ -1,24 +1,17 @@
 .import-fallback {
   text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
 }
 
 .import-fallback a {
   text-decoration: none;
 }
 
-.import-fallback img {
-  width: 90%;
-  max-width: 700px;
-  user-select: none;
-  -moz-user-select: none;
-  -webkit-user-drag: none;
-  -webkit-user-select: none;
-  -ms-user-select: none;
-}
-
-.import-fallback .credits {
-  position: absolute;
-  right: 0;
-  bottom: 0;
-  margin: 15px;
+.import-fallback .fallback-icon {
+  font-size: 250px;
+  line-height: normal;
+  margin: 0;
 }

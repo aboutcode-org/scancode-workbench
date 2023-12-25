@@ -20,7 +20,7 @@ import platform
 APP_NAME = 'ScanCode-Workbench'
 APP_BUNDLE_ID = 'com.nexb.scancode-workbench'
 ARCHIVE_DIR = 'dist'
-PACKAGE_DIR = 'out'   # @NOTE - PACKAGE_DIR must be same as 'out' property in packager.js
+OUT_DIR = 'out' # @NOTE - OUT_DIR must be same as 'out' property in packager.js
 
 # Get scancode workbench version from package.json
 with open('package.json') as json_file:
@@ -51,24 +51,25 @@ else:
     raise Exception('Unsupported OS/platform %r' % SYSTEM_PLATFORM)
 
 # Prepare file name for archive using platform, architecture & app version
-archive_file_name = '-'.join([APP_NAME, PLATFORM_NAME, ARCH, APP_VERSION])
+archive_file_name = '-'.join([APP_NAME, APP_VERSION, PLATFORM_NAME, ARCH])
+PACKAGE_DIR_NAME = '-'.join([APP_NAME, APP_VERSION, PLATFORM, ARCH])
 print(f"Composed Archive file name: '{archive_file_name}'")
 
 # Ensure archive directory dist/ is created, before attempting to store archive inside it
 ensure_archive_directory = f"mkdir -p {ARCHIVE_DIR}"
-print("Executing mkdir command:", ensure_archive_directory)
+print("Ensure `dist/` directory exists using:", ensure_archive_directory)
 os.system(ensure_archive_directory)
 
 # Prepare .zip file for windows
 if on_windows:
-    zip_command = f"powershell Compress-Archive {PACKAGE_DIR}/* {ARCHIVE_DIR}/{archive_file_name}.zip"
+    zip_command = f"powershell Compress-Archive {OUT_DIR}/{PACKAGE_DIR_NAME} {ARCHIVE_DIR}/{archive_file_name}.zip"
     print("Executing zip command on powershell:", zip_command)
     os.system(zip_command)
     print(f"Zip file ready: {ARCHIVE_DIR}/{archive_file_name}.zip")
 
 # Prepare .tar.gz file for mac & linux
 else:
-    tar_command = f"tar -czf {ARCHIVE_DIR}/{archive_file_name}.tar.gz -C {PACKAGE_DIR} ."
+    tar_command = f"tar -czf {ARCHIVE_DIR}/{archive_file_name}.tar.gz -C {OUT_DIR} {PACKAGE_DIR_NAME}"
     print("Executing tar command:", tar_command)
     os.system(tar_command)
     print(f"Tar file ready: {ARCHIVE_DIR}/{archive_file_name}.tar.gz")
