@@ -73,6 +73,7 @@ const TableView = () => {
               ],
             },
           },
+          order: ["level", "id"],
         })
       )
       .then((fileModels) => fileModels.map((fileModel) => fileModel.toJSON()))
