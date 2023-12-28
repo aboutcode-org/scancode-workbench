@@ -1,22 +1,29 @@
-# Description
-<!-- Please include a summary of the change and relevant motivation and context. -->
-Fixes # (issue)
+<!-- Delete Template sections if unneccesary -->
+<!-- Add issue number here (We encourage you to create the Issue First) -->
+<!-- You can also link the issue in Commit Messages -->
 
-# Type of change
-<!-- Please delete options that are not relevant. -->
-[ ] Bug fix (non-breaking change which fixes an issue)
-[ ] New feature (non-breaking change which adds functionality)
-[ ] Breaking change (fix or feature that would cause existing functionality to not work as expected)
+Fixes #0000
 
-# Checklist
-[ ] My code follows the style guidelines of this project
-[ ] I have performed a self-review of my own code
-[ ] I have commented my code, particularly in hard-to-understand areas
-[ ] I have made corresponding changes to the documentation
-[ ] My changes generate no new warnings
-[ ] Any dependent changes have been merged and published in downstream modules
+<!--
+Make sure these boxes are checked before your pull request (PR) is ready to be reviewed and merged. Thanks!
+* [x] - Checked Box
+* [ ] - Unchecked Box
+-->
 
-# Screenshots (if appropriate)
+### Tasks
 
-# Other information
-<!-- Please add any other relevant information or screenshots about the change here. -->
+* [ ] Reviewed [contribution guidelines](https://github.com/nexB/scancode-toolkit/blob/develop/CONTRIBUTING.rst)
+* [ ] PR is descriptively titled and links the original issue above.
+* [ ] Tests pass -- look for a green checkbox ✔️ a few minutes after opening your PR
+  Run [tests](https://github.com/nexB/scancode-workbench?tab=readme-ov-file#testing) locally to check for errors. 
+* [ ] Commits are in uniquely-named feature branch and has no merge conflicts
+* [ ] Looked for possible updates in documentation and added updates if applicable
+* [ ] Updated CHANGELOG.rst
+<!--
+We're happy to help you get this ready -- don't be afraid to ask for help, and **don't be discouraged**
+if your tests fail at first!
+If tests do fail, click on the red `X` to learn why by reading the logs.
+Thanks!
+-->
+
+<!-- Don't forget to Signoff -->
