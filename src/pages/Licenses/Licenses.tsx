@@ -171,7 +171,13 @@ const LicenseDetections = () => {
           activateLicenseClue(newLicenseClues[0]);
         }
       }
-    })().then(endProcessing);
+    })()
+      .then(endProcessing)
+      .catch((err) => {
+        endProcessing();
+        console.error("Error getting license contents", err);
+        toast.error("Error loading license data.");
+      });
   }, []);
 
   const handleItemToggle = (

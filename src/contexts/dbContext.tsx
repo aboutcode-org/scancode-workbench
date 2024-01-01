@@ -183,12 +183,8 @@ export const WorkbenchDBProvider = (
         // Check that the database has the correct header information.
         if (!infoHeader) {
           const errTitle = "Invalid SQLite file";
-          const errMessage =
-            "Invalid SQLite file: " +
-            sqliteFilePath +
-            "\n" +
-            "The SQLite file is invalid. Try re-importing the ScanCode JSON " +
-            "file and creating a new SQLite file.";
+          const errMessage = `Invalid SQLite file: ${sqliteFilePath}
+The SQLite file is invalid. Try re-importing the ScanCode JSON file and creating a new SQLite file.`;
 
           console.error("Handled invalid sqlite import", {
             title: errTitle,
@@ -239,8 +235,7 @@ export const WorkbenchDBProvider = (
           .then((db) => db.File.findOne({ where: { parent: "#" } }))
           .then(async (root) => {
             if (!root) {
-              console.error("Root path not found !!!!", root);
-              return;
+              throw new Error("Root path not found !!");
             }
 
             const defaultPath = root.getDataValue("path");
@@ -271,35 +266,20 @@ export const WorkbenchDBProvider = (
             );
 
             if (!preventNavigation) changeRouteOnImport();
-          })
-          .catch((err) => {
-            const foundInvalidHistoryItem = GetHistory().find(
-              (historyItem) => historyItem.sqlite_path === sqliteFilePath
-            );
-            if (foundInvalidHistoryItem) {
-              RemoveEntry(foundInvalidHistoryItem);
-            }
-            console.error("Err trying to import sqlite:");
-            console.error(err);
-            toast.error(
-              `Unexpected error while importing json \nPlease check console for more info`
-            );
-            abortImport();
           });
       })
-      .catch((err) => {
+      .catch((err: Error) => {
+        abortImport();
         const foundInvalidHistoryItem = GetHistory().find(
           (historyItem) => historyItem.sqlite_path === sqliteFilePath
         );
         if (foundInvalidHistoryItem) {
           RemoveEntry(foundInvalidHistoryItem);
         }
-        console.error("Err trying to import sqlite:");
-        console.error(err);
+        console.error("Err trying to import sqlite:", err);
         toast.error(
-          `Unexpected error while finalising json import \nPlease check console for more info`
+          `Sqlite file is outdated or corrupt\nPlease try importing json file again`
         );
-        abortImport();
       });
   }
 
@@ -341,11 +321,10 @@ export const WorkbenchDBProvider = (
           .then((db) => db.File.findOne({ where: { parent: "#" } }))
           .then(async (root) => {
             if (!root) {
-              console.error("Root path not found !!!!");
               console.error("Root:", root);
-              abortImport();
-              return;
+              throw new Error("Root path not found !!!!");
             }
+
             const defaultPath = root.getDataValue("path");
 
             await updateWorkbenchDB(newWorkbenchDB, sqliteFilePath);
@@ -369,16 +348,29 @@ export const WorkbenchDBProvider = (
             );
 
             if (!preventNavigation) changeRouteOnImport();
+          })
+          .catch((err) => {
+            abortImport();
+            const foundInvalidHistoryItem = GetHistory().find(
+              (historyItem) => historyItem.sqlite_path === sqliteFilePath
+            );
+            if (foundInvalidHistoryItem) {
+              RemoveEntry(foundInvalidHistoryItem);
+            }
+            console.error(err);
+            toast.error(
+              `Can't resolve root directory \nPlease check console for more info`
+            );
           });
       })
       .catch((err) => {
         abortImport();
         console.error(
-          "Some error parsing data (caught in workbenchContext) !!",
+          "Some error parsing json data (caught in dbContext)",
           err
         );
         toast.error(
-          "Some error parsing data !! \nPlease check console for more info"
+          "Some error parsing json data !! \nPlease check console for more info"
         );
       });
   }

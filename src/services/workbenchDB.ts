@@ -282,12 +282,12 @@ export class WorkbenchDB {
     fileList.forEach((file) => {
       const fileParentPath = file.getDataValue("parent");
       const fileNode = pathToNodeMap.get(file.getDataValue("path"));
-      if (Number(file.getDataValue("id")) !== 0) {
+      if (file.getDataValue("parent") === "#") {
+        roots.push(fileNode);
+      } else {
         if (pathToNodeMap.has(fileParentPath)) {
           pathToNodeMap.get(fileParentPath).children?.push(fileNode);
         }
-      } else {
-        roots.push(fileNode);
       }
     });
 
@@ -401,6 +401,7 @@ export class WorkbenchDB {
                 this.pause();
 
                 promiseChain = promiseChain
+                  .then(() => this._imputeMissingIntermediateDirectories(files))
                   .then(() => primaryPromise._batchCreateFiles(files))
                   .then(() => {
                     const currentProgress = Math.round(
@@ -427,7 +428,8 @@ export class WorkbenchDB {
               // See https://github.com/nexB/scancode-toolkit/issues/543
               promiseChain
                 .then(() => {
-                  if (rootPath && !hasRootPath) {
+                  if (!hasRootPath) {
+                    rootPath = rootPath || "no-files";
                     files.push({
                       path: rootPath,
                       name: rootPath,
@@ -436,6 +438,7 @@ export class WorkbenchDB {
                     });
                   }
                 })
+                .then(() => this._imputeIntermediateDirectories(files))
                 .then(() => this._batchCreateFiles(files))
                 .then(() => this.db.Header.create(TopLevelData.parsedHeader))
                 .then(() => {
@@ -600,7 +603,7 @@ export class WorkbenchDB {
       duration: header.duration,
       options: header?.options || {},
       input,
-      files_count: header.extra_data?.files_count,
+      files_count: header.extra_data?.files_count || 0,
       output_format_version: header.output_format_version,
       spdx_license_list_version: header.extra_data?.spdx_license_list_version,
       operating_system: header.extra_data?.system_environment?.operating_system,
@@ -878,6 +881,37 @@ export class WorkbenchDB {
         },
       ];
     });
+  }
+
+  // Adds & modifies files array in place, adding missing intermediate directories
+  _imputeIntermediateDirectories(files: Resource[]) {
+    const availableFiles = new Set(files.map((file) => file.path));
+    const intermediateDirectories: Resource[] = [];
+
+    files.forEach((file) => {
+      file.parent = parentPath(file.path);
+
+      // Add intermediate directories if parent not available in files
+      if (!availableFiles.has(file.parent)) {
+        for (
+          let currentDir = file.parent;
+          currentDir !== parentPath(currentDir) &&
+          !availableFiles.has(currentDir);
+          currentDir = parentPath(currentDir)
+        ) {
+          availableFiles.add(currentDir);
+          intermediateDirectories.push({
+            path: currentDir,
+            parent: parentPath(currentDir),
+            name: path.basename(currentDir),
+            type: "directory",
+            files_count: 0,
+          });
+        }
+        availableFiles.add(file.parent);
+      }
+    });
+    files.push(...intermediateDirectories);
   }
 
   _batchCreateFiles(files: Resource[]) {

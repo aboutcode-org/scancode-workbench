@@ -1,4 +1,5 @@
 import { Op } from "sequelize";
+import { toast } from "react-toastify";
 import React, { useEffect, useState } from "react";
 import { ColDef, ColumnApi, GridApi, GridReadyEvent } from "ag-grid-community";
 
@@ -101,6 +102,11 @@ const TableView = () => {
           if (prevColDefs.length > 0) return prevColDefs; // Don't mutate cols, if already set
           return [...COLUMN_GROUPS.DEFAULT];
         });
+      })
+      .catch((err) => {
+        endProcessing();
+        console.error("Error getting tableview contents", err);
+        toast.error("Error loading table data.");
       });
 
     // Update set filters whenever new db is loaded or path is changed

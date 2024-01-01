@@ -53,15 +53,33 @@ export default function headerModel(sequelize: Sequelize) {
         primaryKey: true,
         type: DataTypes.INTEGER,
       },
-      json_file_name: DataTypes.STRING,
-      tool_name: DataTypes.STRING,
-      tool_version: DataTypes.STRING,
-      notice: DataTypes.STRING,
-      duration: DataTypes.DOUBLE,
+      json_file_name: {
+        type: DataTypes.STRING,
+        defaultValue: null,
+      },
+      tool_name: {
+        type: DataTypes.STRING,
+        defaultValue: null,
+      },
+      tool_version: {
+        type: DataTypes.STRING,
+        defaultValue: null,
+      },
+      notice: {
+        type: DataTypes.STRING,
+        defaultValue: null,
+      },
+      duration: {
+        type: DataTypes.DOUBLE,
+        defaultValue: null,
+      },
       options: jsonDataType("options", {}),
       input: jsonDataType("input", []),
       header_content: DataTypes.STRING,
-      files_count: DataTypes.INTEGER,
+      files_count: {
+        type: DataTypes.INTEGER,
+        defaultValue: 0,
+      },
       output_format_version: {
         type: DataTypes.STRING,
         defaultValue: null,

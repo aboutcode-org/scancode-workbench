@@ -1,0 +1,10 @@
+.Toastify__toast-body {
+  white-space: pre;
+  width: fit-content;
+  padding-right: 10px;
+}
+
+.Toastify__toast-container,
+.Toastify__toast-body>div:last-child {
+  width: max-content;
+}

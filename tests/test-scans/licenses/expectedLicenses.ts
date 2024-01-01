@@ -852,6 +852,14 @@ export const LicenseSamples: {
         detected_license_expression_spdx: null,
         percentage_of_license_text: 6.37,
       },
+      {
+        detected_license_expression: null,
+        detected_license_expression_spdx: null,
+        license_clues: [],
+        license_detections: [],
+        license_policy: [],
+        percentage_of_license_text: null,
+      },
     ],
   },
 ];
