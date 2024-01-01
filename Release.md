@@ -1,27 +1,7 @@
 ## Major changes
 
-- Ported to React + Typescript variant !!
-  Under GSoC by @OmkarPh
-- Support for scancode-toolkit v32.x output format v3.0.0
-- Updated Tableview library & columns
-- New sections: License Detections explorer, Packages explorer, ScanInfo, About
-- Support for multiple windows
-- Maintain history of imports
-- Updated dependencies
-- Created UI to support top level packages-deps obtained in latest scans
-- Support for Drag & drop JSON/SQLite files
-- Github actions to create automated releases
-  Exception: macos arm64 is not yet support by Github actions yet, needs manual build & upload
-- Retain column order & states https://github.com/nexB/scancode-workbench/pull/568
-- License clues section in Licenses explorer https://github.com/nexB/scancode-workbench/pull/570
-- Go to specific file from licenses & packages explorer https://github.com/nexB/scancode-workbench/pull/572
-- Diff modal for Matched text & Rule text in Matches table https://github.com/nexB/scancode-workbench/pull/577
-- Working indicator for queries https://github.com/nexB/scancode-workbench/pull/583
-- Dashboard updates https://github.com/nexB/scancode-workbench/pull/585
-- Close file & cleanup https://github.com/nexB/scancode-workbench/pull/600
-- Unit tests https://github.com/nexB/scancode-workbench/pull/591
-- Dependency Info dashboard updates https://github.com/nexB/scancode-workbench/pull/594
-- Updated documentation https://github.com/nexB/scancode-workbench/pull/602
+- Support for To-do items by @OmkarPh in #593
+- Track & filter reviewed licenses by @OmkarPh in #571
 
 ## ScanCode Toolkit Compatibility
 
@@ -29,20 +9,17 @@ This v4.0.0 of ScanCode Workbench is compatible with scans from any [ScanCode To
 
 ## Bug fixes
 
-- Prevent crashes on unsupported scans
-- Provision for header-less scans (Test scans)
-- Table column fixes
-- Fixed UI anomalies
-- Invalid path query fix (Data for files with similar prefix were colliding)
-- window title update & occasional sqlite error for packages https://github.com/nexB/scancode-workbench/pull/560
-- license detection parser issues, trimmed filter options, hide empty 'other dependencies' https://github.com/nexB/scancode-workbench/pull/569
-- Refined UX including consistent scrollbars, tooltips, Search in licenses, filters for dependencies https://github.com/nexB/scancode-workbench/pull/587
-- Updated piechart tooltip https://github.com/nexB/scancode-workbench/pull/582
-- Automatic height for tables https://github.com/nexB/scancode-workbench/pull/606
-- Fixed Empty directory being shown with file icon https://github.com/nexB/scancode-workbench/pull/604
-- Fix irregular scroll behavior for files in deeply nested FileTree https://github.com/nexB/scancode-workbench/pull/599
+- Fixed Irregular auto-scroll to target path by @OmkarPh in #610
+- Fixed all vulnerabilities & updated packages by @OmkarPh in #611
+- Restore old app name by @dotarjun in #615
+- Fixed compund SPDX expression resolution in detection & clue matches by @OmkarPh in #619
+- Reduce release build size by removing redundant `node_modules` dependencies by @OmkarPh in #623
 
 ## Framework
 
 - Electorn [v28.1.0](https://releases.electronjs.org/release/v28.1.0)
 - Chromium [v120.0.6099.109](https://source.chromium.org/chromium/chromium/src/+/refs/tags/120.0.6099.109:)
+
+# New Contributors
+
+- @dotarjun made his first contribution in #615

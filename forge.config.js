@@ -21,14 +21,29 @@ const MetaDataFiles = [
   "workbench.ABOUT",
 ];
 
-module.exports = {
+/** @type {import('@electron-forge/shared-types').ForgeConfig} */
+const forgeConfig = {
+  /** @type {import('@electron/packager').Options} */
   packagerConfig: {
     name: APP_NAME_WITH_VERSION,
+    appBundleId: "com.nexb.scancode-workbench",
     icon: "src/assets/app-icon/icon",
     dir: ".",
     out: "out",
     overwrite: true,
     prune: true,
+    protocols: [
+      {
+        name: "JSON File",
+        schemes: ["file"],
+        extensions: ["json"],
+      },
+      {
+        name: "SQLite Database",
+        schemes: ["file"],
+        extensions: ["sqlite", "db"],
+      },
+    ],
   },
   plugins: [
     {
@@ -65,3 +80,5 @@ module.exports = {
     },
   },
 };
+
+module.exports = forgeConfig;
