@@ -22,6 +22,7 @@
     "start": "electron-forge start",
     "postinstall": "electron-builder install-app-deps",
     "publish": "electron-forge package",
+    "srcarchive": "node buildSourceArchive.js",
     "lint": "eslint --ext .ts,.tsx .",
     "test": "jest",
     "test:watch": "jest --watch",

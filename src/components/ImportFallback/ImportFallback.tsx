@@ -16,8 +16,7 @@ const ImportFallback = () => {
         </Link>
         <h2>
           Please {"  "}
-          <Link to={ROUTES.HOME}>import a scan</Link> {"  "}
-          to view this page
+          <Link to={ROUTES.HOME}>import a scan</Link>
         </h2>
       </div>
     </div>

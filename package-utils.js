@@ -6,18 +6,20 @@ const archiver = require("archiver");
 /**
  * @param {string[]} metaDataFiles
  * @param {string} packagePath
-*/
+ */
 function addMetaDataFilesToPackage(packagePath, metaDataFiles) {
   metaDataFiles.forEach((file) =>
     fs.copyFileSync(file, `${packagePath}/${file}`)
   );
-  console.log(`Added ${metaDataFiles.length} metadata files to Packaged app at ${packagePath}`);
+  console.log(
+    `Added ${metaDataFiles.length} metadata files to Packaged app at ${packagePath}`
+  );
 }
 
-/** 
+/**
  * @param {string} packagePath
  * @param {string} archiveDirectory
-*/
+ */
 function buildPackageArchive(packagePath, archiveDirectory) {
   // Get the base name of the package directory
   const packageName = path.basename(packagePath);
@@ -48,6 +50,7 @@ function buildPackageArchive(packagePath, archiveDirectory) {
   archive.directory(packagePath, false);
   archive.finalize();
 }
+
 
 module.exports = {
   addMetaDataFilesToPackage,
