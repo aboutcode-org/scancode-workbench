@@ -309,11 +309,12 @@ export class WorkbenchDB {
     const stream = fs.createReadStream(jsonFilePath, { encoding: "utf8" });
     let files_count = 0;
     let dirs_count = 0;
-    let index = 0;
     let rootPath: string | null = null;
     let hasRootPath = false;
     const batchSize = 1000;
     let files: Resource[] = [];
+    const parsedFilePaths = new Set<string>();
+
     let progress = 0;
     let promiseChain: Promise<unknown> = this.sync;
 
@@ -387,31 +388,38 @@ export class WorkbenchDB {
               }
               // @TODO: When/if scancode reports directories in its header, this needs
               //       to be replaced.
-              if (index === 0) {
+              if (parsedFilePaths.size === 0) {
                 dirs_count = file.dirs_count;
               }
-              file.id = index++;
+              file.id = parsedFilePaths.size;
 
               primaryPromise._parseLicenseDetections(file, TopLevelData);
               primaryPromise._parseLicenseClues(file, TopLevelData);
 
               files.push(file);
+              parsedFilePaths.add(file.path);
+
               if (files.length >= batchSize) {
                 // Need to set a new variable before handing to promise
                 this.pause();
 
                 promiseChain = promiseChain
-                  .then(() => this._imputeMissingIntermediateDirectories(files))
+                  .then(() =>
+                    primaryPromise._imputeIntermediateDirectories(
+                      files,
+                      parsedFilePaths
+                    )
+                  )
                   .then(() => primaryPromise._batchCreateFiles(files))
                   .then(() => {
                     const currentProgress = Math.round(
-                      (index / (files_count + dirs_count)) * 100
+                      (parsedFilePaths.size / (files_count + dirs_count)) * 100
                     );
                     if (currentProgress > progress) {
                       progress = currentProgress;
                       console.info(
                         `Batch-${++batchCount} completed, \n`,
-                        `JSON Import progress @ ${progress} % -- ${index}/${files_count}+${dirs_count}`
+                        `JSON Import progress @ ${progress} % -- ${parsedFilePaths.size}/${files_count}+${dirs_count}`
                       );
                       onProgressUpdate(progress);
                     }
@@ -436,15 +444,18 @@ export class WorkbenchDB {
                       type: "directory",
                       files_count: files_count,
                     });
+                    parsedFilePaths.add(rootPath);
                   }
                 })
-                .then(() => this._imputeIntermediateDirectories(files))
+                .then(() =>
+                  this._imputeIntermediateDirectories(files, parsedFilePaths)
+                )
                 .then(() => this._batchCreateFiles(files))
                 .then(() => this.db.Header.create(TopLevelData.parsedHeader))
                 .then(() => {
                   console.info(
                     `Batch-${++batchCount} completed, \n`,
-                    `JSON Import progress @ ${progress} % -- ${index}/${files_count}+${dirs_count}`
+                    `JSON Import progress @ ${progress} % -- ${parsedFilePaths.size}/${files_count}+${dirs_count}`
                   );
                   onProgressUpdate(90);
                 })
@@ -884,31 +895,33 @@ export class WorkbenchDB {
   }
 
   // Adds & modifies files array in place, adding missing intermediate directories
-  _imputeIntermediateDirectories(files: Resource[]) {
-    const availableFiles = new Set(files.map((file) => file.path));
+  _imputeIntermediateDirectories(
+    files: Resource[],
+    parsedFilePaths: Set<string>
+  ) {
     const intermediateDirectories: Resource[] = [];
 
     files.forEach((file) => {
       file.parent = parentPath(file.path);
 
       // Add intermediate directories if parent not available in files
-      if (!availableFiles.has(file.parent)) {
+      if (!parsedFilePaths.has(file.parent)) {
         for (
           let currentDir = file.parent;
           currentDir !== parentPath(currentDir) &&
-          !availableFiles.has(currentDir);
+          !parsedFilePaths.has(currentDir);
           currentDir = parentPath(currentDir)
         ) {
-          availableFiles.add(currentDir);
           intermediateDirectories.push({
+            id: parsedFilePaths.size,
             path: currentDir,
             parent: parentPath(currentDir),
             name: path.basename(currentDir),
             type: "directory",
             files_count: 0,
           });
+          parsedFilePaths.add(currentDir);
         }
-        availableFiles.add(file.parent);
       }
     });
     files.push(...intermediateDirectories);
