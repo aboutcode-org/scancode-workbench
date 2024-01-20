@@ -1,29 +1,23 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faFileCirclePlus } from "@fortawesome/free-solid-svg-icons";
 
-import CoreLink from "../CoreLink/CoreLink";
 import { ROUTES } from "../../constants/routes";
-import AddFileImage from "../../assets/images/AddFiles.png";
 
 import "./importFallback.css";
 
 const ImportFallback = () => {
   return (
     <div className="import-fallback">
-      <Link to={ROUTES.HOME}>
-        <img src={AddFileImage} draggable={false} onDragStart={() => false} />
-      </Link>
-      <br />
-      <h2>
-        Please {"  "}
-        <Link to={ROUTES.HOME}>import a file</Link> {"  "}
-        to view this page
-      </h2>
-
-      <div className="credits">
-        <CoreLink href="https://storyset.com/work" external>
-          Work illustrations by Storyset
-        </CoreLink>
+      <div className="position-absolute">
+        <Link to={ROUTES.HOME} className="fallback-icon">
+          <FontAwesomeIcon icon={faFileCirclePlus} />
+        </Link>
+        <h2>
+          Please {"  "}
+          <Link to={ROUTES.HOME}>import a scan</Link>
+        </h2>
       </div>
     </div>
   );

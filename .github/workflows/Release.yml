@@ -26,7 +26,7 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           tag_name: ${{steps.tag.outputs.tag}}
-          name: Release ${{steps.tag.outputs.tag}}
+          name: ${{steps.tag.outputs.tag}}
           body_path: ./Release.md
           draft: false
           prerelease: false
@@ -50,9 +50,13 @@ jobs:
           node-version: 16.13.0
       - name: Install dependencies
         run: npm install
-      - name: Build Workbench & create archive for ${{ matrix.os }}
+      - name: Create release assets directory
+        run: mkdir -p dist
+      - name: Build Workbench & create release archive for ${{ matrix.os }}
         run: npm run publish
-      - name: Verify Generated archive in dist/
+      - name: Create source code archive (including node_modules)
+        run: npm run srcarchive
+      - name: Verify Generated archives in dist/
         run: ls ./dist
       - name: Upload release assets
         uses: softprops/action-gh-release@v1

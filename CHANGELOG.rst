@@ -5,6 +5,29 @@ All notable changes to this project will be documented in this file.
 The format is based on `Keep a                                                               
 Changelog <https://keepachangelog.com/en/1.0.0/>`__
 
+[Unreleased (v4.0.1)]
+--------------------------
+
+**This ScanCode-Workbench release contains schema changes: scans will have to be re-imported**
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+--------------------
+New Features
+~~~~~~~~~~~~
+
+- Support for To-do items by @OmkarPh in #593
+- Track & filter reviewed licenses by @OmkarPh in #571
+
+Bug Fixes
+~~~~~~~~~
+
+- Fixed Irregular auto-scroll to target path by @OmkarPh in #610
+- Fixed all vulnerabilities & updated packages by @OmkarPh in #611
+- Restore old app name by @dotarjun in #615
+- Fixed compund SPDX expression resolution in detection & clue matches by @OmkarPh in #619
+- Reduce release build size by removing redundant `node_modules` dependencies by @OmkarPh in #623
+
+
 [v4.0.0] - 2023-10-26
 --------------------------
 
@@ -51,7 +74,6 @@ New Features
 - Dependency Info dashboard - Dependency Scope summary by Package Type
 - Working indicator for queries
 - Diff modal for Matched text & Rule text in Matches table
-
 
 Bug Fixes
 ~~~~~~~~~

@@ -129,7 +129,7 @@ export const ALL_COLUMNS: COLUMNS_LIST = {
   size: {
     field: "size",
     colId: "size",
-    headerName: "File Size",
+    headerName: "Size",
     initialWidth: 110,
   },
   mime_type: {
@@ -210,9 +210,7 @@ export const ALL_COLUMNS: COLUMNS_LIST = {
     initialWidth: 320,
     cellRenderer: CustomComponentKeys.ListCellRenderer,
     filterParams: {
-      filterOptions: {
-        ...FILTER_OPTIONS.LIST_FILTERS,
-      },
+      filterOptions: FILTER_OPTIONS.LIST_FILTERS,
     },
   },
   copyright_authors: {
