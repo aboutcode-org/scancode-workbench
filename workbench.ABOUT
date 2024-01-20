@@ -8,4 +8,3 @@ owner: nexB Inc.
 notice_file: NOTICE
 vcs_url: git+https://github.com/nexB/scancode-workbench
 bug_tracking_url: https://github.com/nexB/scancode-workbench/issues
-notes: ScanCode Workbench is licensed under Apache 2.0. Some example code from electron-quickstart is used and is licensed under CC0-1.0.

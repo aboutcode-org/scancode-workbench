@@ -42,13 +42,11 @@ If you are proposing a feature:
 Chat with other developers
 ==========================
 
-For other questions, discussions, and chats, we have:
+For other questions, discussions, and chats, we have official Matrix rooms:
 
-- an official Gitter channel at https://gitter.im/aboutcode-org/discuss
-  Gitter also has an IRC bridge at https://irc.gitter.im/
-  This is the main place where we chat and meet.
+- `discuss room <https://matrix.to/#/#aboutcode-org_discuss:gitter.im>`_ (for all projects)
+- `scancode-workbench room <https://matrix.to/#/#aboutcode-org_scancode-workbench:gitter.im>`_
 
-- a Gitter channel to discuss Documentation at https://gitter.im/aboutcode-org/gsod-season-of-docs
 
 Bug reports
 ===========
