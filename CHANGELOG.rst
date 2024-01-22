@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 The format is based on `Keep a                                                               
 Changelog <https://keepachangelog.com/en/1.0.0/>`__
 
-[Unreleased (v4.0.1)]
+[v4.0.1] - 2024-01-22
 --------------------------
 
 **This ScanCode-Workbench release contains schema changes: scans will have to be re-imported**
@@ -17,6 +17,8 @@ New Features
 
 - Support for To-do items by @OmkarPh in #593
 - Track & filter reviewed licenses by @OmkarPh in #571
+- Build filetree with missing directories to support `--only-findings` scans by @OmkarPh #624
+- Sort the files in tableview by their depth in directory tree by @OmkarPh in #625
 
 Bug Fixes
 ~~~~~~~~~
@@ -25,7 +27,8 @@ Bug Fixes
 - Fixed all vulnerabilities & updated packages by @OmkarPh in #611
 - Restore old app name by @dotarjun in #615
 - Fixed compund SPDX expression resolution in detection & clue matches by @OmkarPh in #619
-- Reduce release build size by removing redundant `node_modules` dependencies by @OmkarPh in #623
+- Reduce release build size by removing redundant `node_modules` dependencies & include metadata in release archive by @OmkarPh in #623
+- Fixed Boolean cell renderer, refactored renderers, hidden license text for directories by @OmkarPh in #627
 
 
 [v4.0.0] - 2023-10-26
