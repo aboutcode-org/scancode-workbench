@@ -55,6 +55,7 @@ import { TodoAttributes } from "./models/todo";
 import { HeaderAttributes } from "./models/header";
 import { LicenseReferenceAttributes } from "./models/licenseReference";
 import { LicenseRuleReferenceAttributes } from "./models/licenseRuleReference";
+import { NO_RESOURCES_ERROR } from "../constants/errors";
 
 const { version: workbenchVersion } = packageJson;
 
@@ -309,8 +310,6 @@ export class WorkbenchDB {
     const stream = fs.createReadStream(jsonFilePath, { encoding: "utf8" });
     let files_count = 0;
     let dirs_count = 0;
-    let rootPath: string | null = null;
-    let hasRootPath = false;
     const batchSize = 1000;
     let files: Resource[] = [];
     const parsedFilePaths = new Set<string>();
@@ -380,12 +379,6 @@ export class WorkbenchDB {
             .on("data", function (file?: Resource) {
               if (!file) return;
 
-              if (!rootPath) {
-                rootPath = file.path.split("/")[0];
-              }
-              if (rootPath === file.path) {
-                hasRootPath = true;
-              }
               // @TODO: When/if scancode reports directories in its header, this needs
               //       to be replaced.
               if (parsedFilePaths.size === 0) {
@@ -435,21 +428,14 @@ export class WorkbenchDB {
               // Add root directory into data
               // See https://github.com/nexB/scancode-toolkit/issues/543
               promiseChain
-                .then(() => {
-                  if (!hasRootPath) {
-                    rootPath = rootPath || "no-files";
-                    files.push({
-                      path: rootPath,
-                      name: rootPath,
-                      type: "directory",
-                      files_count: files_count,
-                    });
-                    parsedFilePaths.add(rootPath);
-                  }
-                })
                 .then(() =>
                   this._imputeIntermediateDirectories(files, parsedFilePaths)
                 )
+                .then(() => {
+                  if (files.length === 0) {
+                    throw new Error(NO_RESOURCES_ERROR);
+                  }
+                })
                 .then(() => this._batchCreateFiles(files))
                 .then(() => this.db.Header.create(TopLevelData.parsedHeader))
                 .then(() => {
@@ -470,10 +456,12 @@ export class WorkbenchDB {
                 .then(() => {
                   onProgressUpdate(100);
                   console.info("JSON parse completed (final step)");
-                  console.timeEnd("json-parse-time");
                   resolve();
                 })
-                .catch((e: unknown) => reject(e));
+                .catch((e: unknown) => reject(e))
+                .finally(() => {
+                  console.timeEnd("json-parse-time");
+                });
             })
             .on("error", (err: unknown) => {
               console.error(

@@ -20,6 +20,7 @@ import {
   UTIL_CHANNEL,
 } from "../constants/IpcConnection";
 import { DEFAULT_ROUTE_ON_IMPORT, ROUTES } from "../constants/routes";
+import { NO_RESOURCES_ERROR } from "../constants/errors";
 import { AddEntry, GetHistory, RemoveEntry } from "../services/historyStore";
 import { WorkbenchDB } from "../services/workbenchDB";
 import { isSqliteSchemaOutdated } from "../utils/checks";
@@ -363,15 +364,19 @@ The SQLite file is invalid. Try re-importing the ScanCode JSON file and creating
             );
           });
       })
-      .catch((err) => {
+      .catch((err: Error) => {
         abortImport();
-        console.error(
-          "Some error parsing json data (caught in dbContext)",
-          err
-        );
-        toast.error(
-          "Some error parsing json data !! \nPlease check console for more info"
-        );
+        if (err.message === NO_RESOURCES_ERROR) {
+          toast.error("No resources found in scan\nAborting import");
+        } else {
+          console.error(
+            "Some error parsing json data (caught in dbContext)",
+            err
+          );
+          toast.error(
+            "Some error parsing json data !! \nPlease check console for more info"
+          );
+        }
       });
   }
 

@@ -32,5 +32,10 @@
         "files_count": 39
       }
     }
+  ],
+  "files": [
+    {
+      "path": "postgresml-2.8.1"
+    }
   ]
 }
