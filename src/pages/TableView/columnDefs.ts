@@ -3,6 +3,7 @@ import { ColDef, IFilterOptionDef } from "ag-grid-community";
 import { ROUTES } from "../../constants/routes";
 import { QUERY_KEYS } from "./../../constants/params";
 import {
+  BooleanCellRenderer,
   FileLicenseDetectionsRenderer,
   FileLicenseCluesRenderer,
   ListCellRenderer,
@@ -10,19 +11,20 @@ import {
 } from "./CustomCellRenderers";
 
 enum CustomComponentKeys {
-  ListCellRenderer = "ListCellRenderer",
-  UrlListCellRenderer = "UrlListCellRenderer",
-  LicenseExpressionRenderer = "LicenseExpressionRenderer",
+  BooleanCellRenderer = "BooleanCellRenderer",
   FileLicenseDetectionsRenderer = "FileLicenseDetectionsRenderer",
   FileLicenseCluesRenderer = "FileLicenseCluesRenderer",
+  ListCellRenderer = "ListCellRenderer",
+  UrlListCellRenderer = "UrlListCellRenderer",
 }
 
-export const frameworkComponents = {
-  [CustomComponentKeys.ListCellRenderer]: ListCellRenderer,
-  [CustomComponentKeys.UrlListCellRenderer]: UrlListCellRenderer,
+export const frameworkComponents: Record<CustomComponentKeys, React.FunctionComponent> = {
+  [CustomComponentKeys.BooleanCellRenderer]: BooleanCellRenderer,
   [CustomComponentKeys.FileLicenseDetectionsRenderer]:
     FileLicenseDetectionsRenderer,
   [CustomComponentKeys.FileLicenseCluesRenderer]: FileLicenseCluesRenderer,
+  [CustomComponentKeys.ListCellRenderer]: ListCellRenderer,
+  [CustomComponentKeys.UrlListCellRenderer]: UrlListCellRenderer,
 };
 
 export type ISimpleFilterModelType =
@@ -47,8 +49,6 @@ export interface FilterOptionsMap {
 export const FILTER_OPTIONS: FilterOptionsMap = {
   LIST_FILTERS: ["contains", "notContains"],
 };
-
-const BooleanValueRenderer = (value: boolean) => (value ? "Yes" : "No");
 
 interface COLUMNS_LIST {
   // Required to update select options by field string
@@ -154,42 +154,42 @@ export const ALL_COLUMNS: COLUMNS_LIST = {
     field: "is_binary",
     colId: "is_binary",
     headerName: "Binary File",
-    cellRenderer: BooleanValueRenderer,
+    cellRenderer: CustomComponentKeys.BooleanCellRenderer,
     initialWidth: 100,
   },
   is_text: {
     field: "is_text",
     colId: "is_text",
     headerName: "Text File",
-    cellRenderer: BooleanValueRenderer,
+    cellRenderer: CustomComponentKeys.BooleanCellRenderer,
     initialWidth: 100,
   },
   is_archive: {
     field: "is_archive",
     colId: "is_archive",
     headerName: "Archive File",
-    cellRenderer: BooleanValueRenderer,
+    cellRenderer: CustomComponentKeys.BooleanCellRenderer,
     initialWidth: 100,
   },
   is_media: {
     field: "is_media",
     colId: "is_media",
     headerName: "Media File",
-    cellRenderer: BooleanValueRenderer,
+    cellRenderer: CustomComponentKeys.BooleanCellRenderer,
     initialWidth: 100,
   },
   is_source: {
     field: "is_source",
     colId: "is_source",
     headerName: "Source File",
-    cellRenderer: BooleanValueRenderer,
+    cellRenderer: CustomComponentKeys.BooleanCellRenderer,
     initialWidth: 100,
   },
   is_script: {
     field: "is_script",
     colId: "is_script",
     headerName: "Script File",
-    cellRenderer: BooleanValueRenderer,
+    cellRenderer: CustomComponentKeys.BooleanCellRenderer,
     initialWidth: 100,
   },
 

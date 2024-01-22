@@ -138,7 +138,10 @@ export default function flatFileModel(sequelize: Sequelize) {
 
       detected_license_expression: DataTypes.STRING,
       detected_license_expression_spdx: DataTypes.STRING,
-      percentage_of_license_text: DataTypes.NUMBER,
+      percentage_of_license_text: {
+        type: DataTypes.NUMBER,
+        allowNull: true,
+      },
       license_clues: jsonDataType("license_clues", []),
       license_policy: jsonDataType("license_policy", []),
       license_detections: jsonDataType("license_detections", []),
@@ -325,7 +328,8 @@ export function flattenFile(file: Resource): FlattenedFile {
 
     detected_license_expression: file.detected_license_expression,
     detected_license_expression_spdx: file.detected_license_expression_spdx,
-    percentage_of_license_text: file.percentage_of_license_text,
+    percentage_of_license_text:
+      file?.type === "file" ? file?.percentage_of_license_text : null,
     license_clues: file.license_clues,
     license_policy: getLicensePolicyLabel(file.license_policy),
     license_detections: file.license_detections,

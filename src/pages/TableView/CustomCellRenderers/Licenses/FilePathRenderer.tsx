@@ -7,7 +7,9 @@ interface FilePathRendererProps {
   iconComponent?: React.ReactNode;
 }
 
-const FilePathRenderer = (props: FilePathRendererProps) => {
+const FilePathRenderer: React.FunctionComponent<FilePathRendererProps> = (
+  props
+) => {
   const { value, iconComponent } = props;
   const { goToFileInTableView } = useWorkbenchDB();
 

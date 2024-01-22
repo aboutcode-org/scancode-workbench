@@ -1,19 +1,21 @@
+import BooleanCellRenderer from "./BooleanCellRenderer";
+import DetectionOriginRenderer from "./Licenses/DetectionOriginRenderer";
 import FileLicenseDetectionsRenderer from "./Licenses/FileLicenseDetectionsRenderer";
 import FileLicenseCluesRenderer from "./Licenses/FileLicenseCluesRenderer";
 import FilePathRenderer from "./Licenses/FilePathRenderer";
-import DetectionOriginRenderer from "./Licenses/DetectionOriginRenderer";
-import RegionLinesRenderer from "./Licenses/RegionLinesRenderer";
 import ListCellRenderer from "./ListCellRenderer";
-import UrlListCellRenderer from "./UrlListCellRenderer";
+import RegionLinesRenderer from "./Licenses/RegionLinesRenderer";
 import TickRenderer from "./TickRenderer";
+import UrlListCellRenderer from "./UrlListCellRenderer";
 
 export {
-  TickRenderer,
-  ListCellRenderer,
-  RegionLinesRenderer,
+  BooleanCellRenderer,
   DetectionOriginRenderer,
-  UrlListCellRenderer,
   FilePathRenderer,
   FileLicenseDetectionsRenderer,
   FileLicenseCluesRenderer,
+  ListCellRenderer,
+  RegionLinesRenderer,
+  TickRenderer,
+  UrlListCellRenderer,
 };
