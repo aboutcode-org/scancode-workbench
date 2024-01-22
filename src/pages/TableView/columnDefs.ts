@@ -55,7 +55,6 @@ interface COLUMNS_LIST {
   [key: string]: ColDef;
 
   // Rest for IDE intellisense in column groups
-
   path: ColDef;
   type: ColDef;
   name: ColDef;
@@ -112,7 +111,7 @@ export const ALL_COLUMNS: COLUMNS_LIST = {
     field: "type",
     colId: "type",
     headerName: "Type",
-    initialWidth: 120,
+    initialWidth: 85,
   },
   name: {
     field: "name",

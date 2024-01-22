@@ -18,6 +18,7 @@ import path from "path";
 import { Sequelize, DataTypes, Model } from "sequelize";
 import { jsonDataType, parentPath } from "./databaseUtils";
 import { LicensePolicy, Resource } from "../importedJsonTypes";
+import { getPathDepth } from "../../utils/paths";
 
 export interface InfoFlatFileAttributes {
   type: string;
@@ -110,6 +111,7 @@ export interface FlatFileAttributes
   id: number;
   fileId: number;
   path: string;
+  level: number;
   parent: string;
 }
 
@@ -129,6 +131,7 @@ export default function flatFileModel(sequelize: Sequelize) {
         unique: true,
         allowNull: false,
       },
+      level: DataTypes.INTEGER,
       parent: { type: DataTypes.STRING, defaultValue: "" },
       copyright_statements: jsonDataType("copyright_statements", []),
       copyright_holders: jsonDataType("copyright_holders", []),
@@ -245,6 +248,7 @@ interface FlattenedFile {
   fileId: number;
   path: string;
   parent: string;
+  level: number;
   copyright_statements: unknown[];
   copyright_holders: unknown[];
   copyright_authors: unknown[];
@@ -314,11 +318,13 @@ interface FlattenedFile {
   package_data_dependencies: unknown[];
   package_data_related_packages: unknown[];
 }
+
 export function flattenFile(file: Resource): FlattenedFile {
   return {
     id: file.id,
     fileId: file.id,
     path: file.path,
+    level: getPathDepth(file.path),
     parent: parentPath(file.path),
     copyright_statements: getCopyrightValues(file.copyrights, "copyright"),
     copyright_holders: getCopyrightValues(file.holders, "holder"),
