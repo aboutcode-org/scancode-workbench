@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useMemo } from "react";
+import React, { useMemo } from "react";
 import { Link } from "react-router-dom";
 import CoreLink from "../../../components/CoreLink/CoreLink";
 
@@ -12,7 +12,7 @@ interface UrlListCellRendererProps {
   customDisplayTextFieldFallback?: string;
   data: any;
 }
-const UrlListCellRenderer: FunctionComponent<UrlListCellRendererProps> = (
+const UrlListCellRenderer: React.FunctionComponent<UrlListCellRendererProps> = (
   props
 ) => {
   const {
@@ -123,7 +123,7 @@ interface ListComponentProps {
   urlSuffix?: string;
   customDisplayText?: string;
 }
-const LinkComponent: FunctionComponent<ListComponentProps> = (props) => {
+const LinkComponent: React.FunctionComponent<ListComponentProps> = (props) => {
   const { value, routerLink, urlPrefix, urlSuffix, customDisplayText } = props;
   const URL = (urlPrefix || "") + value + (urlSuffix || "");
 

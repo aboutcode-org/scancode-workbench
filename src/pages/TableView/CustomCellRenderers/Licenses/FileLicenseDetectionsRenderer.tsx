@@ -7,9 +7,9 @@ interface FileLicenseDetectionsRendererProps {
   value: LicenseDetectionAttributes[];
 }
 
-const FileLicenseDetectionsRenderer = (
-  props: FileLicenseDetectionsRendererProps
-) => {
+const FileLicenseDetectionsRenderer: React.FunctionComponent<
+  FileLicenseDetectionsRendererProps
+> = (props) => {
   const { value } = props;
 
   const parsedValue: LicenseDetectionAttributes[] = useMemo(() => {
@@ -26,7 +26,7 @@ const FileLicenseDetectionsRenderer = (
 
   if (!parsedValue) return <></>;
 
-  if (!Array.isArray(parsedValue)) return value;
+  if (!Array.isArray(parsedValue)) return <>{value}</>;
 
   return (
     <>

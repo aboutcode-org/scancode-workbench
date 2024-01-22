@@ -4,7 +4,9 @@ interface ListCellRendererProps {
   value: string;
 }
 
-const ListCellRenderer = (props: ListCellRendererProps) => {
+const ListCellRenderer: React.FunctionComponent<ListCellRendererProps> = (
+  props
+) => {
   const parsedValue: string[][] | string[] | string = useMemo(() => {
     if (Array.isArray(props.value)) return props.value;
 
@@ -30,11 +32,7 @@ const ListCellRenderer = (props: ListCellRendererProps) => {
         ? parsedValue.map((subValues, i) => (
             <span key={i}>
               {Array.isArray(subValues)
-                ? subValues.map((value, j) => (
-                    <span key={j}>
-                      {value}
-                    </span>
-                  ))
+                ? subValues.map((value, j) => <span key={j}>{value}</span>)
                 : subValues}
               <br />
             </span>

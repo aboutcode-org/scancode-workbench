@@ -7,7 +7,9 @@ interface FileLicenseCluesRendererProps {
   value: LicenseClueDetails[];
 }
 
-const FileLicenseCluesRenderer = (props: FileLicenseCluesRendererProps) => {
+const FileLicenseCluesRenderer: React.FunctionComponent<
+  FileLicenseCluesRendererProps
+> = (props) => {
   const { value } = props;
 
   const parsedValue: LicenseClueDetails[] = useMemo(() => {
@@ -24,7 +26,7 @@ const FileLicenseCluesRenderer = (props: FileLicenseCluesRendererProps) => {
 
   if (!parsedValue) return <></>;
 
-  if (!Array.isArray(parsedValue)) return value;
+  if (!Array.isArray(parsedValue)) return <>{value}</>;
 
   return (
     <>

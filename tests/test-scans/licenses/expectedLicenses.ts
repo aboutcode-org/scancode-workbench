@@ -727,7 +727,7 @@ export const LicenseSamples: {
         license_detections: [],
         detected_license_expression: null,
         detected_license_expression_spdx: null,
-        percentage_of_license_text: 0,
+        percentage_of_license_text: null,
       },
       {
         license_clues: [],

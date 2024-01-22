@@ -7,7 +7,7 @@ interface TickRendererProps {
   data: unknown;
 }
 
-const TickRenderer = (props: TickRendererProps) => {
+const TickRenderer: React.FunctionComponent<TickRendererProps> = (props) => {
   const { value } = props;
 
   const icon = value ? faCheck : faX;

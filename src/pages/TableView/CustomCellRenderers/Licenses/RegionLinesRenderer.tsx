@@ -7,7 +7,9 @@ interface RegionLinesRendererProps {
   };
 }
 
-const RegionLinesRenderer = (props: RegionLinesRendererProps) => {
+const RegionLinesRenderer: React.FunctionComponent<RegionLinesRendererProps> = (
+  props
+) => {
   const { data } = props;
   return (
     <span>

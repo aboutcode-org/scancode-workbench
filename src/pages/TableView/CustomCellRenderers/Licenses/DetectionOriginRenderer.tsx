@@ -16,7 +16,9 @@ enum ORIGIN {
   PACKAGE_DATA = "package_data",
 }
 
-const DetectionOriginRenderer = (props: DetectionOriginRendererProps) => {
+const DetectionOriginRenderer: React.FunctionComponent<
+  DetectionOriginRendererProps
+> = (props) => {
   const { value, data } = props;
   const { goToFileInTableView, goToPackage } = useWorkbenchDB();
 
