@@ -55,6 +55,7 @@ import { TodoAttributes } from "./models/todo";
 import { HeaderAttributes } from "./models/header";
 import { LicenseReferenceAttributes } from "./models/licenseReference";
 import { LicenseRuleReferenceAttributes } from "./models/licenseRuleReference";
+import { NO_RESOURCES_ERROR } from "../constants/errors";
 
 const { version: workbenchVersion } = packageJson;
 
@@ -282,12 +283,12 @@ export class WorkbenchDB {
     fileList.forEach((file) => {
       const fileParentPath = file.getDataValue("parent");
       const fileNode = pathToNodeMap.get(file.getDataValue("path"));
-      if (Number(file.getDataValue("id")) !== 0) {
+      if (file.getDataValue("parent") === "#") {
+        roots.push(fileNode);
+      } else {
         if (pathToNodeMap.has(fileParentPath)) {
           pathToNodeMap.get(fileParentPath).children?.push(fileNode);
         }
-      } else {
-        roots.push(fileNode);
       }
     });
 
@@ -309,11 +310,10 @@ export class WorkbenchDB {
     const stream = fs.createReadStream(jsonFilePath, { encoding: "utf8" });
     let files_count = 0;
     let dirs_count = 0;
-    let index = 0;
-    let rootPath: string | null = null;
-    let hasRootPath = false;
     const batchSize = 1000;
     let files: Resource[] = [];
+    const parsedFilePaths = new Set<string>();
+
     let progress = 0;
     let promiseChain: Promise<unknown> = this.sync;
 
@@ -379,38 +379,40 @@ export class WorkbenchDB {
             .on("data", function (file?: Resource) {
               if (!file) return;
 
-              if (!rootPath) {
-                rootPath = file.path.split("/")[0];
-              }
-              if (rootPath === file.path) {
-                hasRootPath = true;
-              }
               // @TODO: When/if scancode reports directories in its header, this needs
               //       to be replaced.
-              if (index === 0) {
+              if (parsedFilePaths.size === 0) {
                 dirs_count = file.dirs_count;
               }
-              file.id = index++;
+              file.id = parsedFilePaths.size;
 
               primaryPromise._parseLicenseDetections(file, TopLevelData);
               primaryPromise._parseLicenseClues(file, TopLevelData);
 
               files.push(file);
+              parsedFilePaths.add(file.path);
+
               if (files.length >= batchSize) {
                 // Need to set a new variable before handing to promise
                 this.pause();
 
                 promiseChain = promiseChain
+                  .then(() =>
+                    primaryPromise._imputeIntermediateDirectories(
+                      files,
+                      parsedFilePaths
+                    )
+                  )
                   .then(() => primaryPromise._batchCreateFiles(files))
                   .then(() => {
                     const currentProgress = Math.round(
-                      (index / (files_count + dirs_count)) * 100
+                      (parsedFilePaths.size / (files_count + dirs_count)) * 100
                     );
                     if (currentProgress > progress) {
                       progress = currentProgress;
                       console.info(
                         `Batch-${++batchCount} completed, \n`,
-                        `JSON Import progress @ ${progress} % -- ${index}/${files_count}+${dirs_count}`
+                        `JSON Import progress @ ${progress} % -- ${parsedFilePaths.size}/${files_count}+${dirs_count}`
                       );
                       onProgressUpdate(progress);
                     }
@@ -426,14 +428,12 @@ export class WorkbenchDB {
               // Add root directory into data
               // See https://github.com/nexB/scancode-toolkit/issues/543
               promiseChain
+                .then(() =>
+                  this._imputeIntermediateDirectories(files, parsedFilePaths)
+                )
                 .then(() => {
-                  if (rootPath && !hasRootPath) {
-                    files.push({
-                      path: rootPath,
-                      name: rootPath,
-                      type: "directory",
-                      files_count: files_count,
-                    });
+                  if (files.length === 0) {
+                    throw new Error(NO_RESOURCES_ERROR);
                   }
                 })
                 .then(() => this._batchCreateFiles(files))
@@ -441,7 +441,7 @@ export class WorkbenchDB {
                 .then(() => {
                   console.info(
                     `Batch-${++batchCount} completed, \n`,
-                    `JSON Import progress @ ${progress} % -- ${index}/${files_count}+${dirs_count}`
+                    `JSON Import progress @ ${progress} % -- ${parsedFilePaths.size}/${files_count}+${dirs_count}`
                   );
                   onProgressUpdate(90);
                 })
@@ -456,10 +456,12 @@ export class WorkbenchDB {
                 .then(() => {
                   onProgressUpdate(100);
                   console.info("JSON parse completed (final step)");
-                  console.timeEnd("json-parse-time");
                   resolve();
                 })
-                .catch((e: unknown) => reject(e));
+                .catch((e: unknown) => reject(e))
+                .finally(() => {
+                  console.timeEnd("json-parse-time");
+                });
             })
             .on("error", (err: unknown) => {
               console.error(
@@ -600,7 +602,7 @@ export class WorkbenchDB {
       duration: header.duration,
       options: header?.options || {},
       input,
-      files_count: header.extra_data?.files_count,
+      files_count: header.extra_data?.files_count || 0,
       output_format_version: header.output_format_version,
       spdx_license_list_version: header.extra_data?.spdx_license_list_version,
       operating_system: header.extra_data?.system_environment?.operating_system,
@@ -878,6 +880,39 @@ export class WorkbenchDB {
         },
       ];
     });
+  }
+
+  // Adds & modifies files array in place, adding missing intermediate directories
+  _imputeIntermediateDirectories(
+    files: Resource[],
+    parsedFilePaths: Set<string>
+  ) {
+    const intermediateDirectories: Resource[] = [];
+
+    files.forEach((file) => {
+      file.parent = parentPath(file.path);
+
+      // Add intermediate directories if parent not available in files
+      if (!parsedFilePaths.has(file.parent)) {
+        for (
+          let currentDir = file.parent;
+          currentDir !== parentPath(currentDir) &&
+          !parsedFilePaths.has(currentDir);
+          currentDir = parentPath(currentDir)
+        ) {
+          intermediateDirectories.push({
+            id: parsedFilePaths.size,
+            path: currentDir,
+            parent: parentPath(currentDir),
+            name: path.basename(currentDir),
+            type: "directory",
+            files_count: 0,
+          });
+          parsedFilePaths.add(currentDir);
+        }
+      }
+    });
+    files.push(...intermediateDirectories);
   }
 
   _batchCreateFiles(files: Resource[]) {

@@ -1,3 +1,7 @@
 {
-  "NOTE": "Test for headerless scans"
+  "files": [
+    {
+      "path": "postgresml-2.8.1"
+    }
+  ]
 }

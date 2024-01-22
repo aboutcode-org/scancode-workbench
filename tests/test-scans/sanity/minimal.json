@@ -1,13 +1,16 @@
 {
   "files": [
     {
-      "path": "manifests"
+      "path": "manifests",
+      "type": "directory"
     },
     {
-      "path": "manifests/copyright"
+      "path": "manifests/copyright",
+      "type": "file"
     },
     {
-      "path": "manifests/FirebaseAnalytics.podspec.json"
+      "path": "manifests/FirebaseAnalytics.podspec.json",
+      "type": "file"
     }
   ]
 }

@@ -29,6 +29,7 @@ import "react-toastify/dist/ReactToastify.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "react-tooltip/dist/react-tooltip.css";
 import "./styles/app.css";
+import "./styles/toastify.css";
 import "./styles/dashStyles.css";
 import "./styles/customFaColors.css";
 

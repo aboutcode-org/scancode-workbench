@@ -19,5 +19,10 @@
         "spdx_license_list_version": "3.20"
       }
     }
+  ],
+  "files": [
+    {
+      "path": "postgresml-2.8.1"
+    }
   ]
 }

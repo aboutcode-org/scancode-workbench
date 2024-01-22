@@ -1,0 +1,32 @@
+{
+  "headers": [
+    {
+      "tool_name": "scancode-toolkit",
+      "tool_version": "32.0.8",
+      "options": {
+        "input": [
+          "/Users/omkar/projects/aboutcode/sct-ref-scans/scan-data/samples"
+        ],
+        "--only-findings": true
+      }
+    }
+  ],
+  "files": [
+    {
+      "path": "samples/JGroups/licenses/apache-1.1.txt",
+      "type": "file"
+    },
+    {
+      "path": "samples/JGroups/src/FixedMembershipToken.java",
+      "type": "file"
+    },
+    {
+      "path": "samples/JGroups/src/S3_PING.java",
+      "type": "file"
+    },
+    {
+      "path": "samples/zlib/zlib.h",
+      "type": "file"
+    }
+  ]
+}

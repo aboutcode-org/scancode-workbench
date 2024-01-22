@@ -7,10 +7,11 @@ import { HeaderSamples } from "./test-scans/headers/expectedHeaders";
 import { CopyrightSamples } from "./test-scans/copyrights/expectedCopyrights";
 import { EmailUrlInfoSamples } from "./test-scans/email_url_info/expectedEmailUrlInfo";
 import { LicenseSamples } from "./test-scans/licenses/expectedLicenses";
-import { SanitySamples } from "./test-scans/sanity/sanitySamples";
+import { NoResourceSamples, SanitySamples } from "./test-scans/sanity/sanitySamples";
 import { ErrorSamples } from "./test-scans/scan-errors/expectedErrors";
 import { PackageDepsSamples } from "./test-scans/packages_dependencies/expectedPackagesDeps";
 import { TodoSamples } from "./test-scans/todos/todoSamples";
+import { NO_RESOURCES_ERROR } from "../src/constants/errors";
 
 // Avoid logging scan-parser checkpoints during tests
 beforeEach(() => {
@@ -33,6 +34,21 @@ describe("Process special cases", () => {
     });
     await newWorkbenchDB.sync;
     await newWorkbenchDB.addFromJson(jsonFilePath, () => null);
+  });
+
+  it.each(NoResourceSamples)("Must abort parsing $jsonFileName", async ({ jsonFileName }) => {
+    const jsonFilePath = path.join(
+      __dirname,
+      "test-scans/sanity/",
+      jsonFileName
+    );
+
+    const newWorkbenchDB = new WorkbenchDB({
+      dbName: "workbench_db",
+      dbStoragePath: figureOutDefaultSqliteFilePath(jsonFilePath),
+      deleteExisting: true,
+    });
+    await expect(newWorkbenchDB.addFromJson(jsonFilePath, () => null)).rejects.toThrow(NO_RESOURCES_ERROR);
   });
 });
 
