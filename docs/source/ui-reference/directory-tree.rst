@@ -13,10 +13,10 @@ Similarly, if a single file is selected, only information for that selected file
 Demo of filetree on different views:
 ------------------------------------------------
 
-.. image:: data/directory-tree/directory-tree-navigate.gif
+.. figure:: data/directory-tree/directory-tree-navigate.gif
 
-.. image:: data/directory-tree/directory-tree-copyright.gif
+.. figure:: data/directory-tree/directory-tree-copyright.gif
 
-.. image:: data/directory-tree/directory-tree-chartview.gif
+.. figure:: data/directory-tree/directory-tree-chartview.gif
 
 .. include:: ../rst_snippets/scans-used.rst

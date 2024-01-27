@@ -14,7 +14,7 @@ Download and Install
    Once downloaded, you'll find the ScanCode Workbench executable inside the
    ``ScanCode Workbench-<os>-<arch>`` folder.
 
-   On Windows 10, for example, the executable will be named `ScanCode-Workbench.exe`.
+   On Windows 10, for example, the executable will be named `ScanCode-Workbench-4.0.1.exe`.
 
 .. include:: ../rst_snippets/centos-note.rst
 

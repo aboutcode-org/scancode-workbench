@@ -80,7 +80,7 @@ Misc
 
 - ``scan_error``
 
-.. image:: data/tableview/tableview-intro.gif
+.. figure:: data/tableview/tableview-intro.gif
 
 Preset Column Groups
 ------------------------------
@@ -89,20 +89,20 @@ The columns are grouped based on their nature such as
 User can select one of these groups using the corresponding buttons available
 in the quick actions row.
 
-.. image:: data/tableview/tableview-column-groups.gif
+.. figure:: data/tableview/tableview-column-groups.gif
 
 View Custom set of columns
 ----------------------------------------
 In addition to the preset groups, Users can select a custom set of columns by
 using the ``Custom Columns`` button found in the quick actions row.
 
-.. image:: data/tableview/tableview-custom-columns.gif
+.. figure:: data/tableview/tableview-custom-columns.gif
 
 Pin columns
 -------------------------------
 Users can pin any column(s) to the left by dragging them through the column-header towards the left
 
-.. image:: data/tableview/tableview-pin-columns.gif
+.. figure:: data/tableview/tableview-pin-columns.gif
 
 Column wise filter & search
 -------------------------------------------
@@ -110,14 +110,14 @@ User can easily filter rows based on specific column values or use advanced sear
 using ``and``, ``or`` in combination with different search patterns like
 ``Contains``, ``Starts with``, etc.
 
-.. image:: data/tableview/tableview-column-filter-search.gif
+.. figure:: data/tableview/tableview-column-filter-search.gif
 
 Search
 ------------------------
 Use the ``Search`` bar in the top-right corner to perform searches within the
 specified directory scope and selected column fields (hidden columns are excluded from the search)
 
-.. image:: data/tableview/tableview-search.gif
+.. figure:: data/tableview/tableview-search.gif
 
 Go to License Explorer
 ------------------------
@@ -127,7 +127,7 @@ This will open the license explorer with the target license selected.
 Similarly, ``Path`` column in the File regions table in license details pane also
 provide links which navigate back to the Table view with that File path selected
 
-.. image:: data/tableview/tableview-to-license.gif
+.. figure:: data/tableview/tableview-to-license.gif
 
 Go to Package Explorer
 ------------------------
@@ -138,12 +138,12 @@ Similarly, Datafile paths in package/dependency details pane as well as
 dependency table also provide links which navigate back to the Table view
 with that File path selected
 
-.. image:: data/tableview/tableview-to-package.gif
+.. figure:: data/tableview/tableview-to-package.gif
 
 Pagination
 ------------------------
 Users can easily navigate through rows split into pages, with the flexibility to select a
 custom number of rows per page, tailoring the display to their convenience and preferences
 
-.. image:: data/tableview/tableview-pagination.gif
+.. figure:: data/tableview/tableview-pagination.gif
 

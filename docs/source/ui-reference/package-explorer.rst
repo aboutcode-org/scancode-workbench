@@ -30,7 +30,7 @@ User can select different filters:
 
 The navigation pane's width can also be adjusted as per convenience.
 
-.. image:: data/package-explorer/package-explorer-nav.gif
+.. figure:: data/package-explorer/package-explorer-nav.gif
 
 
 Package Details
@@ -78,7 +78,7 @@ User can see all the dependencies of the selected package in the table, with fol
 - ``Data file``
 - ``Extracted requirement``
 
-.. image:: data/package-explorer/package-details.gif
+.. figure:: data/package-explorer/package-details.gif
 
 Dependency Details
 --------------------

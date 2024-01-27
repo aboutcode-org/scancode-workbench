@@ -23,6 +23,7 @@ author = 'nexB Inc. and others'
 github_user = "nexB"
 github_repo = "scancode-workbench"
 github_branch = "update/docs"
+html_favicon = '_static/favicon.ico'
 
 # -- General configuration ---------------------------------------------------
 
@@ -36,6 +37,7 @@ extensions = [
     "sphinx_reredirects",
     "sphinx.ext.extlinks",
     "sphinx_copybutton",
+    "sphinx.ext.autosectionlabel",
 ]
 
 
