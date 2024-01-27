@@ -101,7 +101,8 @@ Similarly, detection origin is a clickable icon. It determines the source of det
 - Package icon indicates that the detection belongs to a package manifest,
   you can click on it to view the source package manifest in :ref:`package-explorer`.
 
-- File icon indicates that the detection belongs to a plain file, you can click on it to view the file in :ref:`table-view`.
+- File icon indicates that the detection belongs to a plain file,
+  you can click on it to view the file in :ref:`table-view`.
 
 .. figure:: data/license-explorer/license-explorer-fileregion.gif
 

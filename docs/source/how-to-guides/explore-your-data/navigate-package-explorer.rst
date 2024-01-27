@@ -37,7 +37,7 @@ dependency flags by selecting filter values in the top-left
 
 .. figure:: data/package-explorer-filter.gif
 
-Dependencies table
+Dependencies
 ========================
 
 When a package is selected, the dependencies for that package are shown

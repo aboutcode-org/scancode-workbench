@@ -112,8 +112,8 @@ using ``and``, ``or`` in combination with different search patterns like
 
 .. figure:: data/tableview/tableview-column-filter-search.gif
 
-Search
-------------------------
+Search in tableview
+----------------------------
 Use the ``Search`` bar in the top-right corner to perform searches within the
 specified directory scope and selected column fields (hidden columns are excluded from the search)
 

@@ -22,7 +22,7 @@ copyright = 'nexB Inc. and others'
 author = 'nexB Inc. and others'
 github_user = "nexB"
 github_repo = "scancode-workbench"
-github_branch = "update/docs"
+github_branch = "develop"
 html_favicon = '_static/favicon.ico'
 
 # -- General configuration ---------------------------------------------------
@@ -87,7 +87,7 @@ html_context = {
     "conf_py_path": "/docs/source/",  # path in the checkout to the docs root
 }
 
-html_css_files = ["_static/theme_overrides.css"]
+html_css_files = ["theme_overrides.css"]
 
 
 # If true, "Created using Sphinx" is shown in the HTML footer. Default is True.
@@ -116,6 +116,11 @@ extlinks = {
     'github_repo': (f"https://github.com/{github_user}/{github_repo}/%s", '%s'),
     'scan_samples': (f"https://github.com/{github_user}/{github_repo}/blob/{github_branch}/samples/%s", '%s'),
 }
+
+# Ignore following links in linkcheck
+linkcheck_ignore = [
+    'https://matrix.to/#/#aboutcode-org_discuss:gitter.im'
+]
 
 # -- Options for LaTeX output -------------------------------------------------
 

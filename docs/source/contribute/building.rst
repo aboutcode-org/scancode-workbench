@@ -100,7 +100,7 @@ Create python environment, make docs
    cd docs/
 
    # Setup virtual environment for python dependencies
-   python3 -m venv venv
+   python -m venv venv
    source venv/bin/activate
 
    # Install dependencies

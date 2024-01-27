@@ -39,7 +39,7 @@ You can click on the legend items to toggle the visibility of corresponding pie 
 .. figure:: data/pie-charts/pie-charts-legend-toggle.gif
    :align: center
    :width: 100%
-   
+
    Click legend item to toggle segment visibility in Pie chart
 
 .. include:: ../rst_snippets/scans-used.rst

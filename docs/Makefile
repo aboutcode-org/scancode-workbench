@@ -20,6 +20,7 @@ docs:
 	@echo
 	@echo "Starting up the docs server..."
 	@echo
+	make clean
 	$(SPHINXAUTOBUILD) --port 8000 --watch ${SOURCEDIR} $(SOURCEDIR) "$(BUILDDIR)/html" $(SPHINXOPTS) $(O)
 
 # Catch-all target: route all unknown targets to Sphinx using the new
