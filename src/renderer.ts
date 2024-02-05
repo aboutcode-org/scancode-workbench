@@ -34,7 +34,7 @@ import { GENERAL_ACTIONS } from "./constants/IpcConnection";
 import "./styles/index.css";
 import "./styles/colors.css";
 
-// Setup general actions
+// Setup general action event listeners
 ipcRenderer.on(GENERAL_ACTIONS.ZOOM_IN, () => {
   webFrame.setZoomLevel(webFrame.getZoomLevel() + 0.5);
 });

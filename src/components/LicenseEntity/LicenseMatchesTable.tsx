@@ -1,16 +1,17 @@
 import React from "react";
+import { Button, OverlayTrigger, Popover, Table } from "react-bootstrap";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import {
   LicenseClueMatch,
   LicenseDetectionMatch,
 } from "../../services/importedJsonTypes";
-import { Button, OverlayTrigger, Popover, Table } from "react-bootstrap";
 import MatchedTextRenderer from "./LicenseMatchCells/MatchedText";
 import MatchLicenseExpressionRenderer from "./LicenseMatchCells/MatchLicenseExpression";
 import { MatchedTextProvider } from "./MatchedTextContext";
 import MatchRuleDetails from "./MatchRuleDetails";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import CoreLink from "../CoreLink/CoreLink";
+import { useWorkbenchDB } from "../../contexts/dbContext";
 
 interface LicenseMatchProps {
   showLIcenseText?: boolean;
@@ -18,6 +19,7 @@ interface LicenseMatchProps {
 }
 const LicenseMatchesTable = (props: LicenseMatchProps) => {
   const { matches, showLIcenseText } = props;
+  const { goToFileInTableView } = useWorkbenchDB();
 
   return (
     <MatchedTextProvider>
@@ -40,7 +42,7 @@ const LicenseMatchesTable = (props: LicenseMatchProps) => {
                     />
                   </td>
                 </tr>
-                {match.license_expression_spdx && (
+                {match.spdx_license_expression && (
                   <tr>
                     <td colSpan={2}>License Expression SPDX</td>
                     <td colSpan={7}>
@@ -50,6 +52,18 @@ const LicenseMatchesTable = (props: LicenseMatchProps) => {
                           spdxLicense: true,
                         }}
                       />
+                    </td>
+                  </tr>
+                )}
+                {match.from_file && (
+                  <tr>
+                    <td colSpan={2}>Matched file</td>
+                    <td colSpan={7}>
+                      <CoreLink
+                        onClick={() => goToFileInTableView(match.from_file)}
+                      >
+                        {match.from_file}
+                      </CoreLink>
                     </td>
                   </tr>
                 )}
@@ -66,6 +80,12 @@ const LicenseMatchesTable = (props: LicenseMatchProps) => {
                     </td>
                   </tr>
                 )}
+                <tr>
+                  <td colSpan={2}>Start Line</td>
+                  <td colSpan={3}>{match.start_line}</td>
+                  <td colSpan={2}>End Line</td>
+                  <td colSpan={2}>{match.end_line}</td>
+                </tr>
                 <tr>
                   <td colSpan={2}>Matched length</td>
                   <td colSpan={3}>{match.matched_length}</td>
