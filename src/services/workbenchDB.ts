@@ -596,8 +596,9 @@ export class WorkbenchDB {
     // @TODO - ToDo in scans have a field review_comments, which is ideally an issue
     // It will be changed in the schema in future
     const todo: TodoAttributes[] = (rawTopLevelData.todo || []).map(
-      (todo: RawTopLevelTodo) => {
+      (todo: RawTopLevelTodo, idx) => {
         return {
+          id: idx + 1,
           detection_id: todo.detection_id,
           issues: todo.review_comments,
         };

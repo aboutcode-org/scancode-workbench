@@ -18,7 +18,7 @@ import { Sequelize, DataTypes, Model } from "sequelize";
 import { jsonDataType } from "./databaseUtils";
 
 export interface TodoAttributes {
-  id?: number;
+  id: number;
   detection_id: string;
   issues: Record<string, string>;
 }
