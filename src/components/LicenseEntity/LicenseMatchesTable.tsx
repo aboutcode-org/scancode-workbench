@@ -57,7 +57,7 @@ const LicenseMatchesTable = (props: LicenseMatchProps) => {
                 )}
                 {match.from_file && (
                   <tr>
-                    <td colSpan={2}>Matched file</td>
+                    <td colSpan={2}>From file</td>
                     <td colSpan={7}>
                       <CoreLink
                         onClick={() => goToFileInTableView(match.from_file)}
