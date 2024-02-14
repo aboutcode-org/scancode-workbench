@@ -7,3 +7,4 @@ doc8>=0.11.2
 jinja2
 markupSafe
 sphinx-copybutton
+sphinx_rtd_dark_mode

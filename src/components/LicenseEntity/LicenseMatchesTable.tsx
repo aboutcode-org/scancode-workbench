@@ -75,7 +75,7 @@ const LicenseMatchesTable = (props: LicenseMatchProps) => {
                 <tr>
                   <td colSpan={2}>Score</td>
                   <td colSpan={3}>{match.score}</td>
-                  <td colSpan={2}>Rule Rele ance</td>
+                  <td colSpan={2}>Rule Relevance</td>
                   <td colSpan={2}>{match.rule_relevance}</td>
                 </tr>
                 <tr>

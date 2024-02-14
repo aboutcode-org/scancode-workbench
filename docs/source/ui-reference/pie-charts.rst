@@ -36,8 +36,10 @@ You can hover over the legend items to highlight the corresponding pie chart seg
 
 You can click on the legend items to toggle the visibility of corresponding pie chart segments.
 
-.. image:: data/pie-charts/pie-charts-legend-toggle.gif
+.. figure:: data/pie-charts/pie-charts-legend-toggle.gif
+   :align: center
    :width: 100%
-   :alt: Click legend item to toggle segment visibility in Pie chart
+
+   Click legend item to toggle segment visibility in Pie chart
 
 .. include:: ../rst_snippets/scans-used.rst

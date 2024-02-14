@@ -2,3 +2,4 @@
 . "$(dirname -- "$0")/_/husky.sh"
 
 npm test
+cd docs && ./scripts/doc8_style_check.sh && ./scripts/sphinx_build_link_check.sh

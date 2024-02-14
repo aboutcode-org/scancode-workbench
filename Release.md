@@ -5,9 +5,11 @@
 - Build filetree with missing directories to support `--only-findings` scans by @OmkarPh #624
 - Sort the files in tableview by their depth in directory tree by @OmkarPh in #625
 
+### Note - Due to new features & schema changes, you'll have to re-import scans in workbench, previously generated sqlite files aren't compatible with this and further releases
+
 ## ScanCode Toolkit Compatibility
 
-This v4.0.0 of ScanCode Workbench is compatible with scans from any [ScanCode Toolkit](https://github.com/nexB/scancode-toolkit/) releases at or after [`v32.0.0`](https://github.com/nexB/scancode-toolkit/releases/tag/v32.0.0rc4) and also from the latest develop, but using the latest `v32.x` stable releases is recommended: [latest SCTK release](https://github.com/nexB/scancode-toolkit/releases/latest).
+This v4.0.1 of ScanCode Workbench is compatible with scans from any [ScanCode Toolkit](https://github.com/nexB/scancode-toolkit/) releases at or after [`v32.0.0`](https://github.com/nexB/scancode-toolkit/releases/tag/v32.0.0rc4) and also from the latest develop, but using the latest `v32.x` stable releases is recommended: [latest SCTK release](https://github.com/nexB/scancode-toolkit/releases/latest).
 
 ## Bug fixes
 
