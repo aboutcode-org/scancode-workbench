@@ -29,18 +29,18 @@ Building Requirements
 Linux
 -----
 
-- `Python <https://www.python.org/>`__ v3.7 or later
-- `Node.js <https://nodejs.org/en//>`__ 14.x or later
-- `npm <https://www.npmjs.com/>`__ v6.14.4 or later
+- `Python <https://www.python.org/>`__ v3.9 or later
+- `Node.js <https://nodejs.org/en//>`__ 16.x or later
+- `npm <https://www.npmjs.com/>`__ v8.x or later
 
 .. include:: ../rst_snippets/centos-note.rst
 
 MacOS
 -----
 
-- `Python <https://www.python.org/>`__ v3.7 or later
-- `Node.js <https://nodejs.org/en/>`__ 14.x or later
-- `npm <https://www.npmjs.com/>`__ v6.14.4 or later
+- `Python <https://www.python.org/>`__ v3.9 or later
+- `Node.js <https://nodejs.org/en/>`__ 16.x or later
+- `npm <https://www.npmjs.com/>`__ v8.x or later
 - Command Line Tools for `Xcode <https://developer.apple.com/xcode/resources/>`_
    Install using:
 
@@ -51,7 +51,7 @@ MacOS
 Windows
 -------
 
-- `Python <https://www.python.org/>`__ v3.7 or later
+- `Python <https://www.python.org/>`__ v3.9 or later
 
   * Make sure your Python path is set. To verify, open a command prompt and see the python version:
 
@@ -59,8 +59,8 @@ Windows
 
       python --version
 
-- `Node.js <https://nodejs.org/en/>`__ v14.x or later
-- `npm <https://www.npmjs.com/>`__ v6.14.4 or later
+- `Node.js <https://nodejs.org/en/>`__ v16.x or later
+- `npm <https://www.npmjs.com/>`__ v8.x or later
 
 
 Release Instructions
