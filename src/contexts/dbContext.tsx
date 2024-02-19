@@ -386,10 +386,11 @@ The SQLite file is invalid. Try re-importing the ScanCode JSON file and creating
   }
 
   function removeIpcListeners() {
+    ipcRenderer.removeAllListeners(NAVIGATION_CHANNEL);
     ipcRenderer.removeAllListeners(IMPORT_REPLY_CHANNEL.JSON);
     ipcRenderer.removeAllListeners(IMPORT_REPLY_CHANNEL.SQLITE);
     ipcRenderer.removeAllListeners(SAVE_REPLY_CHANNEL.SQLITE);
-    ipcRenderer.removeAllListeners(NAVIGATION_CHANNEL);
+    ipcRenderer.removeAllListeners(UTIL_CHANNEL.CLOSE_FILE);
   }
 
   useEffect(() => {

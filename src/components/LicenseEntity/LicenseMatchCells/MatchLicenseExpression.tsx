@@ -48,7 +48,7 @@ const MatchLicenseExpressionRenderer = (
         ])
       );
       newParsedComponents = parseTokensFromExpression(
-        matchInfo.match.license_expression_spdx
+        matchInfo.match.spdx_license_expression
       ).map((token) => {
         const tokenInfo = licenseExpressionSpdxKeysMap.get(token);
         if (tokenInfo) {

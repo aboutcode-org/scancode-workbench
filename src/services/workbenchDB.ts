@@ -44,6 +44,7 @@ import {
   LicenseClue,
   LicenseExpressionKey,
   LicenseExpressionSpdxKey,
+  RawTopLevelData,
   RawTopLevelTodo,
   Resource,
   ResourceLicenseDetection,
@@ -344,7 +345,7 @@ export class WorkbenchDB {
 
           stream
             .pipe(JSONStream.parse("files.*")) // files field is piped to 'data' & rest to 'header' (Includes other top level fields)
-            .on("header", (rawTopLevelData: any) => {
+            .on("header", (rawTopLevelData: RawTopLevelData) => {
               TopLevelData = this._parseTopLevelFields(
                 jsonFilePath,
                 rawTopLevelData
@@ -509,7 +510,7 @@ export class WorkbenchDB {
   // Helper function for parsing Toplevel data
   _parseTopLevelFields(
     jsonFilePath: string,
-    rawTopLevelData: any
+    rawTopLevelData: RawTopLevelData
   ): TopLevelDataFormat {
     const header = rawTopLevelData.headers
       ? rawTopLevelData.headers[0] || {}
@@ -535,23 +536,7 @@ export class WorkbenchDB {
       }
     );
     const dependencies = rawTopLevelData.dependencies || [];
-    const license_detections: TopLevelLicenseDetection[] = (
-      rawTopLevelData.license_detections || []
-    ).map((detection: TopLevelLicenseDetection) => {
-      // Handle duplicated match_data present at top level in prev toolkit versions
-      // upto v32.0.0rc2
-      return {
-        identifier: detection.identifier,
-        license_expression: detection.license_expression,
-        detection_count:
-          detection.detection_count !== undefined
-            ? detection.detection_count
-            : detection.count || 0,
-      };
-    });
-    const license_detections_map = new Map<string, TopLevelLicenseDetection>(
-      license_detections.map((detection) => [detection.identifier, detection])
-    );
+
     const license_references: LicenseReferenceAttributes[] =
       rawTopLevelData.license_references || [];
     const license_references_mapping = new Map(
@@ -563,11 +548,57 @@ export class WorkbenchDB {
     const license_rule_references: LicenseRuleReferenceAttributes[] =
       rawTopLevelData.license_rule_references || [];
 
+    const license_detections: TopLevelLicenseDetection[] = (
+      rawTopLevelData.license_detections || []
+    ).map((detection: TopLevelLicenseDetection) => {
+      const parsedMatches = (
+        detection.reference_matches ||
+        detection.sample_matches ||
+        detection.matches ||
+        []
+      ).map((match) => {
+        const spdx_license_expression =
+          match.spdx_license_expression ||
+          match.license_expression_spdx ||
+          null;
+        delete match.license_expression_spdx; // Remove legacy output field (if exists)
+        const { license_expression_keys, license_expression_spdx_keys } =
+          this._getLicenseExpressionKeys(
+            match.license_expression,
+            spdx_license_expression,
+            license_references_mapping,
+            license_references_mapping_spdx
+          );
+        return {
+          ...match,
+          license_expression_spdx_keys: license_expression_spdx_keys,
+          license_expression_keys: license_expression_keys,
+          spdx_license_expression,
+        };
+      });
+
+      // Handle duplicated match_data present at top level in prev toolkit versions
+      // upto v32.0.0rc2
+      return {
+        identifier: detection.identifier,
+        license_expression: detection.license_expression,
+        detection_count:
+          detection.detection_count !== undefined
+            ? detection.detection_count
+            : detection.count || 0,
+        matches: parsedMatches,
+      };
+    });
+    const license_detections_map = new Map<string, TopLevelLicenseDetection>(
+      license_detections.map((detection) => [detection.identifier, detection])
+    );
+
     // @TODO - ToDo in scans have a field review_comments, which is ideally an issue
     // It will be changed in the schema in future
     const todo: TodoAttributes[] = (rawTopLevelData.todo || []).map(
-      (todo: RawTopLevelTodo) => {
+      (todo: RawTopLevelTodo, idx) => {
         return {
+          id: idx + 1,
           detection_id: todo.detection_id,
           issues: todo.review_comments,
         };
@@ -590,6 +621,7 @@ export class WorkbenchDB {
     };
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   _parseHeader(jsonFilePath: string, workbenchVersion: string, header: any) {
     const input = header.options?.input || [];
     delete header.options?.input;
@@ -729,9 +761,13 @@ export class WorkbenchDB {
         from_package,
       });
 
+      // Legacy support
       // Ensure that matches is collected only once for each unique License detection
       // Ignore match encountered in other files as it would be the same repeated match
-      if (!targetLicenseDetection.matches && detection.matches.length) {
+      if (
+        targetLicenseDetection.matches.length == 0 &&
+        detection.matches.length > 0
+      ) {
         targetLicenseDetection.matches = [];
         const detectionLicenseExpressionComponents = parseSubExpressions(
           detection.license_expression
@@ -766,43 +802,50 @@ export class WorkbenchDB {
           const { license_references_map, license_references_spdx_map } =
             TopLevelData;
 
-          // SPDX not available in matches, so find corresponding spdx license expression
-          match.license_expression_spdx =
-            detectionSpdxLicenseExpressionComponents[
-              detectionLicenseExpressionComponents.findIndex(
-                (exp) => exp === match.license_expression
-              )
-            ];
-
-          // Cases when,
-          // match.license_expression = license_detection.license_expression &
-          // match.license_expression_spdx = license_detection.license_expression_spdx
-          if (match.license_expression === detection.license_expression) {
-            match.license_expression_spdx =
-              file_license_expressions_spdx_components[
-                file_license_expressions_components.findIndex(
-                  (val) => val === detection.license_expression
+          // Construct SPDX license expression using available license expression if not already available
+          if (
+            !match.spdx_license_expression ||
+            match.spdx_license_expression.length === 0
+          ) {
+            match.spdx_license_expression =
+              detectionSpdxLicenseExpressionComponents[
+                detectionLicenseExpressionComponents.findIndex(
+                  (exp) => exp === match.license_expression
                 )
               ];
-          }
-          // Unknown reference
-          if (match.license_expression == UNKNOWN_EXPRESSION) {
-            match.license_expression_spdx = UNKNOWN_EXPRESSION_SPDX;
-          }
 
-          // When SPDX expression is not available,
-          // construct it using keys in license expression
-          if (!match.license_expression_spdx) {
-            match.license_expression_spdx = this._resolveSpdxLicenseExpression(
-              match.license_expression,
-              license_references_map
-            );
+            // Cases when,
+            // match.license_expression = license_detection.license_expression &
+            // match.license_expression_spdx = license_detection.license_expression_spdx
+            if (match.license_expression === detection.license_expression) {
+              match.spdx_license_expression =
+                file_license_expressions_spdx_components[
+                  file_license_expressions_components.findIndex(
+                    (val) => val === detection.license_expression
+                  )
+                ];
+            }
+
+            // Unknown reference
+            if (match.license_expression == UNKNOWN_EXPRESSION) {
+              match.spdx_license_expression = UNKNOWN_EXPRESSION_SPDX;
+            }
+
+            // When SPDX expression is not available,
+            // construct it using keys in license expression
+            if (!match.spdx_license_expression) {
+              match.spdx_license_expression =
+                this._resolveSpdxLicenseExpression(
+                  match.license_expression,
+                  license_references_map
+                );
+            }
           }
 
           const { license_expression_keys, license_expression_spdx_keys } =
             this._getLicenseExpressionKeys(
               match.license_expression,
-              match.license_expression_spdx,
+              match.spdx_license_expression,
               license_references_map,
               license_references_spdx_map
             );
@@ -814,12 +857,13 @@ export class WorkbenchDB {
         });
       }
 
-      delete detection.matches; // Not required further, hence removing to reduce sqlite size
+      delete detection.matches; // Not required further, hence removing to reduce sqlite DB size
     };
 
     (file?.license_detections || []).forEach((detection, idx) =>
       addLicenseDetection(detection, idx)
     );
+
     // @TODO - We need pkg.identifier instead of PURL here !!
     file?.package_data?.forEach((pkg) =>
       pkg.license_detections?.forEach((detection, idx) =>
@@ -864,7 +908,7 @@ export class WorkbenchDB {
           matcher: license_clue.matcher,
           license_expression: license_clue.license_expression,
           license_expression_keys,
-          license_expression_spdx: license_clue.license_expression_spdx,
+          spdx_license_expression: license_clue.license_expression_spdx,
           license_expression_spdx_keys,
           rule_identifier: license_clue.rule_identifier,
           rule_relevance: license_clue.rule_relevance,
@@ -1053,9 +1097,10 @@ export class WorkbenchDB {
         return this._getLicensePolicy(file);
       }
 
-      const fileAttr = (file as any)[attribute] || [];
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const fileAttr: any[] = (file as any)[attribute] || [];
 
-      return fileAttr.map((value: any) => {
+      return fileAttr.map((value) => {
         if (attribute === "license_expressions") {
           return {
             license_expression: value,

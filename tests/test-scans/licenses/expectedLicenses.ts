@@ -17,7 +17,7 @@ export const LicenseSamples: {
   expectedLicenseRuleReferences: LicenseRuleReferenceAttributes[];
 }[] = [
   {
-    jsonFileName: "withLicenses.json",
+    jsonFileName: "withLicenses_legacy.json",
     expectedLicenseClues: [
       {
         matches: [
@@ -29,7 +29,7 @@ export const LicenseSamples: {
             match_coverage: 52,
             matcher: "3-seq",
             license_expression: "apache-2.0 OR gpl-2.0",
-            license_expression_spdx: "Apache-2.0 OR GPL-2.0-only",
+            spdx_license_expression: "Apache-2.0 OR GPL-2.0-only",
             license_expression_keys: [
               {
                 key: "apache-2.0",
@@ -96,7 +96,7 @@ export const LicenseSamples: {
             rule_relevance: 100,
             rule_url:
               "https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/rules/apache-2.0_65.RULE",
-            license_expression_spdx: "Apache-2.0",
+            spdx_license_expression: "Apache-2.0",
             license_expression_keys: [
               {
                 key: "apache-2.0",
@@ -126,7 +126,7 @@ export const LicenseSamples: {
             rule_relevance: 100,
             rule_url:
               "https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/rules/gpl-3.0_173.RULE",
-            license_expression_spdx: "GPL-3.0-only",
+            spdx_license_expression: "GPL-3.0-only",
             license_expression_keys: [
               {
                 key: "gpl-3.0",
@@ -175,7 +175,7 @@ export const LicenseSamples: {
             rule_url:
               "https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/rules/mit_14.RULE",
             matched_text: "MIT</license>",
-            license_expression_spdx: "MIT",
+            spdx_license_expression: "MIT",
             license_expression_keys: [
               {
                 key: "mit",
@@ -205,7 +205,7 @@ export const LicenseSamples: {
             rule_relevance: 100,
             rule_url: null,
             matched_text: "licenses.nuget.org/MIT</licenseUrl>",
-            license_expression_spdx: "MIT",
+            spdx_license_expression: "MIT",
             license_expression_keys: [
               {
                 key: "mit",
@@ -254,7 +254,7 @@ export const LicenseSamples: {
             rule_relevance: 100,
             rule_url: null,
             matched_text: "MIT",
-            license_expression_spdx: "MIT",
+            spdx_license_expression: "MIT",
             license_expression_keys: [
               {
                 key: "mit",
@@ -305,7 +305,7 @@ export const LicenseSamples: {
               "https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/rules/package-manifest-unknown-16117ed57856733eaaf6d91ea575b186a9dab3df",
             matched_text:
               "license {'LegalCopyright': 'Copyright © AngleSharp, 2013-2019', 'LegalTrademarks': '', 'License': None}",
-            license_expression_spdx: "LicenseRef-scancode-unknown",
+            spdx_license_expression: "LicenseRef-scancode-unknown",
             license_expression_keys: [
               {
                 key: "unknown",
@@ -364,7 +364,7 @@ export const LicenseSamples: {
             rule_url:
               "https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/rules/apache-2.0_48.RULE",
             matched_text: "Apache License, Version 2.0",
-            license_expression_spdx: "Apache-2.0",
+            spdx_license_expression: "Apache-2.0",
             license_expression_keys: [
               {
                 key: "apache-2.0",
@@ -414,7 +414,7 @@ export const LicenseSamples: {
             rule_url:
               "https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/rules/apache-2.0_20.RULE",
             matched_text: "http://www.apache.org/licenses/LICENSE-2.0.html",
-            license_expression_spdx: "Apache-2.0",
+            spdx_license_expression: "Apache-2.0",
             license_expression_keys: [
               {
                 key: "apache-2.0",
@@ -803,7 +803,7 @@ export const LicenseSamples: {
                 match_coverage: 52,
                 matcher: "3-seq",
                 license_expression: "apache-2.0 OR gpl-2.0",
-                license_expression_spdx: "Apache-2.0 OR GPL-2.0-only",
+                spdx_license_expression: "Apache-2.0 OR GPL-2.0-only",
                 license_expression_keys: [
                   {
                     key: "apache-2.0",
@@ -859,6 +859,319 @@ export const LicenseSamples: {
         license_detections: [],
         license_policy: [],
         percentage_of_license_text: null,
+      },
+    ],
+  },
+  {
+    jsonFileName: "withLicenses.json",
+    expectedLicenseClues: [],
+    expectedLicenseDetections: [
+      {
+        detection_log: [],
+        matches: [
+          {
+            license_expression: "apache-2.0",
+            from_file: "manifests_for_licenses/activemq-camel-pom.xml",
+            start_line: 3,
+            end_line: 16,
+            matcher: "2-aho",
+            score: 100,
+            matched_length: 119,
+            match_coverage: 100,
+            rule_relevance: 100,
+            rule_identifier: "apache-2.0_2.RULE",
+            rule_url:
+              "https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/rules/apache-2.0_2.RULE",
+            license_expression_spdx_keys: [
+              {
+                key: "Apache-2.0",
+                spdx_url: "https://spdx.org/licenses/Apache-2.0",
+              },
+            ],
+            license_expression_keys: [
+              {
+                key: "apache-2.0",
+                licensedb_url:
+                  "https://scancode-licensedb.aboutcode.org/apache-2.0",
+                scancode_url:
+                  "https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/licenses/apache-2.0.LICENSE",
+              },
+            ],
+            spdx_license_expression: "Apache-2.0",
+          },
+        ],
+        file_regions: [
+          {
+            path: "manifests_for_licenses/activemq-camel-pom.xml",
+            start_line: 3,
+            end_line: 16,
+            from_package: null,
+          },
+        ],
+        id: 1,
+        identifier: "apache_2_0-4bde3f57-78aa-4201-96bf-531cba09e7de",
+        license_expression: "apache-2.0",
+        detection_count: 1,
+        reviewed: false,
+        count: null,
+      },
+      {
+        detection_log: [],
+        matches: [
+          {
+            license_expression: "gpl-2.0-plus",
+            from_file: "manifests_for_licenses/copyright",
+            start_line: 4,
+            end_line: 4,
+            matcher: "2-aho",
+            score: 100,
+            matched_length: 2,
+            match_coverage: 100,
+            rule_relevance: 100,
+            rule_identifier: "gpl-2.0-plus_374.RULE",
+            rule_url:
+              "https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/rules/gpl-2.0-plus_374.RULE",
+            license_expression_spdx_keys: [
+              {
+                key: "GPL-2.0-or-later",
+                spdx_url: "https://spdx.org/licenses/GPL-2.0-or-later",
+              },
+            ],
+            license_expression_keys: [
+              {
+                key: "gpl-2.0-plus",
+                licensedb_url:
+                  "https://scancode-licensedb.aboutcode.org/gpl-2.0-plus",
+                scancode_url:
+                  "https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/licenses/gpl-2.0-plus.LICENSE",
+              },
+            ],
+            spdx_license_expression: "GPL-2.0-or-later",
+          },
+          {
+            license_expression: "gpl-2.0-plus",
+            from_file: "manifests_for_licenses/copyright",
+            start_line: 6,
+            end_line: 22,
+            matcher: "2-aho",
+            score: 100,
+            matched_length: 141,
+            match_coverage: 100,
+            rule_relevance: 100,
+            rule_identifier: "gpl-2.0-plus_736.RULE",
+            rule_url:
+              "https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/rules/gpl-2.0-plus_736.RULE",
+            license_expression_spdx_keys: [
+              {
+                key: "GPL-2.0-or-later",
+                spdx_url: "https://spdx.org/licenses/GPL-2.0-or-later",
+              },
+            ],
+            license_expression_keys: [
+              {
+                key: "gpl-2.0-plus",
+                licensedb_url:
+                  "https://scancode-licensedb.aboutcode.org/gpl-2.0-plus",
+                scancode_url:
+                  "https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/licenses/gpl-2.0-plus.LICENSE",
+              },
+            ],
+            spdx_license_expression: "GPL-2.0-or-later",
+          },
+        ],
+        file_regions: [
+          {
+            path: "manifests_for_licenses/copyright",
+            start_line: 4,
+            end_line: 22,
+            from_package: null,
+          },
+        ],
+        id: 2,
+        identifier: "gpl_2_0_plus-74a334f0-c991-de85-1854-94aa27b9207b",
+        license_expression: "gpl-2.0-plus",
+        detection_count: 1,
+        reviewed: false,
+        count: null,
+      },
+    ],
+    expectedLicenseExpressions: [
+      {
+        license_keys: ["apache-2.0"],
+        license_keys_spdx: ["Apache-2.0"],
+        id: 1,
+        fileId: 1,
+        license_expression: "apache-2.0",
+        license_expression_spdx: "Apache-2.0",
+      },
+      {
+        license_keys: ["gpl-2.0-plus"],
+        license_keys_spdx: ["GPL-2.0-or-later"],
+        id: 2,
+        fileId: 2,
+        license_expression: "gpl-2.0-plus",
+        license_expression_spdx: "GPL-2.0-or-later",
+      },
+    ],
+    expectedLicensePolicies: [],
+    expectedLicenseReferences: [
+      {
+        other_spdx_license_keys: ["LicenseRef-Apache", "LicenseRef-Apache-2.0"],
+        id: 1,
+        key: "apache-2.0",
+        language: "en",
+        short_name: "Apache 2.0",
+        name: "Apache License 2.0",
+        category: "Permissive",
+        owner: "Apache Software Foundation",
+        homepage_url: "http://www.apache.org/licenses/",
+        is_builtin: true,
+        is_exception: false,
+        is_unknown: false,
+        is_generic: false,
+        spdx_license_key: "Apache-2.0",
+        osi_license_key: "Apache-2.0",
+        osi_url: "http://opensource.org/licenses/apache2.0.php",
+        text: "Apache License Version 2.0",
+        scancode_url:
+          "https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/licenses/apache-2.0.LICENSE",
+        licensedb_url: "https://scancode-licensedb.aboutcode.org/apache-2.0",
+        spdx_url: "https://spdx.org/licenses/Apache-2.0",
+      },
+      {
+        other_spdx_license_keys: ["GPL-2.0+", "GPL 2.0+"],
+        id: 2,
+        key: "gpl-2.0-plus",
+        language: "en",
+        short_name: "GPL 2.0 or later",
+        name: "GNU General Public License 2.0 or later",
+        category: "Copyleft",
+        owner: "Free Software Foundation (FSF)",
+        homepage_url:
+          "http://www.gnu.org/licenses/old-licenses/gpl-2.0-standalone.html",
+        is_builtin: true,
+        is_exception: false,
+        is_unknown: false,
+        is_generic: false,
+        spdx_license_key: "GPL-2.0-or-later",
+        osi_license_key: null,
+        osi_url: null,
+        text: "Terms of the GNU General Public License as published by the Free Software Foundation",
+        scancode_url:
+          "https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/licenses/gpl-2.0-plus.LICENSE",
+        licensedb_url: "https://scancode-licensedb.aboutcode.org/gpl-2.0-plus",
+        spdx_url: "https://spdx.org/licenses/GPL-2.0-or-later",
+      },
+    ],
+    expectedLicenseRuleReferences: [
+      {
+        referenced_filenames: ["NOTICE"],
+        id: 1,
+        license_expression: "apache-2.0",
+        identifier: "apache-2.0_2.RULE",
+        language: "en",
+        rule_url:
+          "https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/rules/apache-2.0_2.RULE",
+        is_license_text: false,
+        is_license_notice: true,
+        is_license_reference: false,
+        is_license_tag: false,
+        is_license_intro: false,
+        is_license_clue: false,
+        is_continuous: false,
+        is_builtin: true,
+        is_from_license: false,
+        is_synthetic: false,
+        length: 119,
+        relevance: 100,
+        minimum_coverage: 80,
+        text: "Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.",
+      },
+      {
+        referenced_filenames: [],
+        id: 2,
+        license_expression: "gpl-2.0-plus",
+        identifier: "gpl-2.0-plus_374.RULE",
+        language: "en",
+        rule_url:
+          "https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/rules/gpl-2.0-plus_374.RULE",
+        is_license_text: false,
+        is_license_notice: false,
+        is_license_reference: false,
+        is_license_tag: true,
+        is_license_intro: false,
+        is_license_clue: false,
+        is_continuous: false,
+        is_builtin: true,
+        is_from_license: false,
+        is_synthetic: false,
+        length: 2,
+        relevance: 100,
+        minimum_coverage: 100,
+        text: "License: GPLv2+",
+      },
+      {
+        referenced_filenames: ["/usr/share/common-licenses/GPL-2"],
+        id: 3,
+        license_expression: "gpl-2.0-plus",
+        identifier: "gpl-2.0-plus_736.RULE",
+        language: "en",
+        rule_url:
+          "https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/rules/gpl-2.0-plus_736.RULE",
+        is_license_text: false,
+        is_license_notice: true,
+        is_license_reference: false,
+        is_license_tag: false,
+        is_license_intro: false,
+        is_license_clue: false,
+        is_continuous: false,
+        is_builtin: true,
+        is_from_license: false,
+        is_synthetic: false,
+        length: 141,
+        relevance: 100,
+        minimum_coverage: 0,
+        text: "This program is free software; you can redistribute it and/or modify\n    it under the terms of the GNU General Public License as published by\n    the Free Software Foundation; either version 2 of the License, or\n    (at your option) any later version.\n\n    This program is distributed in the hope that it will be useful,\n    but WITHOUT ANY WARRANTY; without even the implied warranty of\n    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n    GNU General Public License for more details.\n\n    You should have received a copy of the GNU General Public License\n    along with this program; if not, write to the Free Software\n    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.\n\nSee /usr/share/common-licenses/GPL-2, or\n<http://www.gnu.org/copyleft/gpl.txt> for the terms of the latest version\nof the GNU General Public License.",
+      },
+    ],
+    expectedFlatFiles: [
+      {
+        license_clues: [],
+        license_policy: [],
+        license_detections: [],
+        detected_license_expression: null,
+        detected_license_expression_spdx: null,
+        percentage_of_license_text: null,
+      },
+      {
+        license_clues: [],
+        license_policy: [],
+        license_detections: [
+          {
+            license_expression: "apache-2.0",
+            license_expression_spdx: "Apache-2.0",
+            detection_log: [],
+            identifier: "apache_2_0-4bde3f57-78aa-4201-96bf-531cba09e7de",
+          },
+        ],
+        detected_license_expression: "apache-2.0",
+        detected_license_expression_spdx: "Apache-2.0",
+        percentage_of_license_text: 22.37,
+      },
+      {
+        license_clues: [],
+        license_policy: [],
+        license_detections: [
+          {
+            license_expression: "gpl-2.0-plus",
+            license_expression_spdx: "GPL-2.0-or-later",
+            detection_log: [],
+            identifier: "gpl_2_0_plus-74a334f0-c991-de85-1854-94aa27b9207b",
+          },
+        ],
+        detected_license_expression: "gpl-2.0-plus",
+        detected_license_expression_spdx: "GPL-2.0-or-later",
+        percentage_of_license_text: 87.2,
       },
     ],
   },

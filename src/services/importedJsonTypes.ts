@@ -1,4 +1,6 @@
 import { LicenseDetectionAttributes } from "./models/licenseDetections";
+import { LicenseReferenceAttributes } from "./models/licenseReference";
+import { LicenseRuleReferenceAttributes } from "./models/licenseRuleReference";
 
 export interface LicenseExpressionKey {
   key: string;
@@ -18,7 +20,8 @@ export interface LicenseMatch {
   match_coverage: number;
   matcher: string;
   license_expression: string;
-  license_expression_spdx?: string;
+  spdx_license_expression?: string;
+  from_file?: string;
   rule_identifier: string;
   rule_relevance: number;
   rule_url: string;
@@ -27,6 +30,9 @@ export interface LicenseMatch {
   path?: string;
   license_expression_keys?: LicenseExpressionKey[];
   license_expression_spdx_keys?: LicenseExpressionSpdxKey[];
+
+  // Legacy output version fields
+  license_expression_spdx?: string;
 }
 export type LicenseDetectionMatch = LicenseMatch;
 export type LicenseClueMatch = LicenseMatch;
@@ -64,10 +70,14 @@ export interface TopLevelLicenseDetection {
   detection_count: number;
   detection_log?: string[] | null;
   file_regions?: LicenseFileRegion[];
-  matches?: LicenseDetectionMatch[];
+  reference_matches?: LicenseDetectionMatch[];
+
+  // Parser-added fields
+  matches?: LicenseDetectionMatch[]; // Also part of legacy output
 
   // Legacy output version fields
   count?: number;
+  sample_matches?: LicenseDetectionMatch[];
 }
 export interface ResourceLicenseDetection {
   license_expression: string;
@@ -89,6 +99,17 @@ export interface RawTopLevelTodo {
   detection_id: string;
   review_comments: Record<string, string>;
   detection: LicenseDetectionAttributes;
+}
+
+export interface RawTopLevelData {
+  headers: unknown[];
+  packages: unknown[];
+  dependencies: unknown[];
+  license_detections: unknown[];
+  license_references: LicenseReferenceAttributes[];
+  license_rule_references: LicenseRuleReferenceAttributes[];
+  license_policy: LicensePolicy[];
+  todo: RawTopLevelTodo[];
 }
 
 export interface Resource {
