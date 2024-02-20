@@ -12,7 +12,7 @@ Make sure these boxes are checked before your pull request (PR) is ready to be r
 
 ### Tasks
 
-* [ ] Reviewed [contribution guidelines](https://github.com/nexB/scancode-toolkit/blob/develop/CONTRIBUTING.rst)
+* [ ] Reviewed [contribution guidelines](https://github.com/nexB/scancode-workbench/blob/develop/CONTRIBUTING.rst)
 * [ ] PR is descriptively titled and links the original issue above.
 * [ ] Tests pass -- look for a green checkbox ✔️ a few minutes after opening your PR
   Run [tests](https://github.com/nexB/scancode-workbench?tab=readme-ov-file#testing) locally to check for errors. 
