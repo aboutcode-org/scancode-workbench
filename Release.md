@@ -1,24 +1,16 @@
 ## Major changes
 
-- Support for To-do items by @OmkarPh in #593
-- Track & filter reviewed licenses by @OmkarPh in #571
-- Build filetree with missing directories to support `--only-findings` scans by @OmkarPh #624
-- Sort the files in tableview by their depth in directory tree by @OmkarPh in #625
+- New PR template by @dotarjun in #617
+- Fixed Boolean cell renderer, refactored renderers, hidden license text for directories by @OmkarPh in #627
+- Updated docs - illustrations corresponding to new UI for to-do, reviews, matches table by @OmkarPh in #628
+- Support for new License detection format by @OmkarPh in #629
+- MacOS arm64 build in github actions by @OmkarPh in #630
 
 ### Note - Due to new features & schema changes, you'll have to re-import scans in workbench, previously generated sqlite files aren't compatible with this and further releases
 
 ## ScanCode Toolkit Compatibility
 
-This v4.0.1 of ScanCode Workbench is compatible with scans from any [ScanCode Toolkit](https://github.com/nexB/scancode-toolkit/) releases at or after [`v32.0.0`](https://github.com/nexB/scancode-toolkit/releases/tag/v32.0.0rc4) and also from the latest develop, but using the latest `v32.x` stable releases is recommended: [latest SCTK release](https://github.com/nexB/scancode-toolkit/releases/latest).
-
-## Bug fixes
-
-- Fixed Irregular auto-scroll to target path by @OmkarPh in #610
-- Fixed all vulnerabilities & updated packages by @OmkarPh in #611
-- Restore old app name by @dotarjun in #615
-- Fixed compund SPDX expression resolution in detection & clue matches by @OmkarPh in #619
-- Reduce release build size by removing redundant `node_modules` dependencies & include metadata in release archive by @OmkarPh in #623
-- Fixed Boolean cell renderer, refactored renderers, hidden license text for directories by @OmkarPh in #627
+This v4.0.2 of ScanCode Workbench is compatible with scans from any [ScanCode Toolkit](https://github.com/nexB/scancode-toolkit/) releases at or after [`v32.0.0`](https://github.com/nexB/scancode-toolkit/releases/tag/v32.0.0rc4) and also from the latest develop, but using the latest `v32.x` stable releases is recommended: [latest SCTK release](https://github.com/nexB/scancode-toolkit/releases/latest).
 
 ## Framework
 

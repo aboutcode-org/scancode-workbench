@@ -5,6 +5,26 @@ All notable changes to this project will be documented in this file.
 The format is based on `Keep a                                                               
 Changelog <https://keepachangelog.com/en/1.0.0/>`__
 
+[v4.0.3] - Unreleased
+--------------------------
+
+
+[v4.0.2] - 2024-02-27
+--------------------------
+
+**This ScanCode-Workbench release contains schema changes: scans will have to be re-imported**
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+--------------------
+New Features
+~~~~~~~~~~~~
+
+- New PR template by @dotarjun in #617
+- Fixed Boolean cell renderer, refactored renderers, hidden license text for directories by @OmkarPh in #627
+- Updated docs - illustrations corresponding to new UI for to-do, reviews, matches table by @OmkarPh in #628
+- Support for new License detection format by @OmkarPh in #629
+- MacOS arm64 build in github actions by @OmkarPh in #630
+
 [v4.0.1] - 2024-01-22
 --------------------------
 
