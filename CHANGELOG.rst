@@ -9,7 +9,7 @@ Changelog <https://keepachangelog.com/en/1.0.0/>`__
 --------------------------
 
 
-[v4.0.2] - 2024-02-27
+[v4.0.2] - 2024-02-28
 --------------------------
 
 **This ScanCode-Workbench release contains schema changes: scans will have to be re-imported**
