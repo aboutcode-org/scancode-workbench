@@ -8,6 +8,11 @@ Changelog <https://keepachangelog.com/en/1.0.0/>`__
 [v4.0.3] - Unreleased
 --------------------------
 
+Docs
+~~~~~~~~~
+
+- Update macOS installation steps by @OmkarPh in #631
+
 
 [v4.0.2] - 2024-02-28
 --------------------------

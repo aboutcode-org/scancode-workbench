@@ -37,7 +37,7 @@ Underlying Technology
 -  ScanCode Workbench is a cross-platform application built using the `Electron <https://www.electronjs.org/>`__  framework that works on Windows, macOS and Linux operating systems.
 - It uses
    - `TypeScript <https://www.typescriptlang.org/>`__ as the primary language.
-   - `React <https://reactjs.org/>`__  for user interface.
+   - `React <https://react.dev/>`__  for user interface.
    - `Sequelize <https://sequelize.org/>`__  ORM for database access.
    - `Sqlite3 <https://www.sqlite.org/index.html>`__  for managing sqlite database.
 
