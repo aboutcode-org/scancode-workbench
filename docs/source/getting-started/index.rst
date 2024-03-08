@@ -16,6 +16,16 @@ Download and Install
 
    On Windows 10, for example, the executable will be named `ScanCode-Workbench-4.0.1.exe`.
 
+.. Note::
+   Browsers on MacOS add a ``com.apple.quarantine`` extended attribute to downloaded apps.
+   which prevents you from running the app & shows error dialog: `Application Is Damaged and Can’t Be Opened. You Should Move It To The Trash <https://discussions.apple.com/thread/253714860>`__
+
+   Delete the attribute using ``xattr`` utility before running the app for first time:
+
+   .. code-block:: bash
+
+      xattr -d com.apple.quarantine ~/Downloads/ScanCode-Workbench-4.0.2-darwin-arm64/ScanCode-Workbench-4.0.2.app
+
 .. include:: ../rst_snippets/centos-note.rst
 
 -  If you're interested in digging into the code, you can also use ScanCode Workbench by cloning

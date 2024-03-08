@@ -14,7 +14,7 @@ This v4.0.2 of ScanCode Workbench is compatible with scans from any [ScanCode To
 
 ## Framework
 
-- Electorn [v28.1.0](https://releases.electronjs.org/release/v28.1.0)
+- Electron [v28.1.0](https://releases.electronjs.org/release/v28.1.0)
 - Chromium [v120.0.6099.109](https://source.chromium.org/chromium/chromium/src/+/refs/tags/120.0.6099.109:)
 
 <!-- # New Contributors -->
