@@ -6,7 +6,7 @@ To import a ScanCode JSON file:
 
 We've provided a set of sample scans that you can quickly review in ScanCode Workbench in order
 to get a sense of its functionality and the types of information captured by a scan.  The samples
-are located at `https://github.com/nexB/scancode-workbench/tree/develop/samples <https://github.com/nexB/scancode-workbench/tree/develop/samples>`_.
+are located at `https://github.com/aboutcode-org/scancode-workbench/tree/develop/samples <https://github.com/aboutcode-org/scancode-workbench/tree/develop/samples>`_.
 
 
 * Open the :kbd:`File` menu and select :kbd:`Import JSON File` (keyboard shortcut:

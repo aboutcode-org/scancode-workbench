@@ -4,7 +4,7 @@
 :index:`Table View`
 ===================
 
-In the table view, the available clues detected by `ScanCode Toolkit <https://github.com/nexB/scancode-toolkit/>`_
+In the table view, the available clues detected by `ScanCode Toolkit <https://github.com/aboutcode-org/scancode-toolkit/>`_
 are shown in a tabular format. A user can see provenance clues such as license and copyright
 information detected by ScanCode. A user can also see the file information (e.g., file type,
 file size, etc) and package information (package type, primary language of package) that was

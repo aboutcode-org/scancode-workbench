@@ -23,7 +23,7 @@ export function getValidatedAttributeValues(
   for (let i = 0; i < values.length; i++) {
     attributeValue = values[i].dataValues[attribute];
 
-    // dedupe entries to prevent overcounting files. See https://github.com/nexB/scancode-workbench/issues/285
+    // dedupe entries to prevent overcounting files. See https://github.com/aboutcode-org/scancode-workbench/issues/285
     try {
       const parsed = JSON.parse(attributeValue);
       if (Array.isArray(parsed)) attributeValue = parsed;

@@ -1,11 +1,11 @@
-Changelog                                                                                 
-=========                                                                                 
-All notable changes to this project will be documented in this file.    
+Changelog
+=========
+All notable changes to this project will be documented in this file.
 
-The format is based on `Keep a                                                               
+The format is based on `Keep a
 Changelog <https://keepachangelog.com/en/1.0.0/>`__
 
-[v4.0.3] - Unreleased
+[v4.0.4] - Unreleased
 --------------------------
 
 Docs
@@ -13,6 +13,13 @@ Docs
 
 - Update macOS installation steps by @OmkarPh in #631
 
+[v4.0.3] - 2024-08-07
+--------------------------
+
+Updates
+-------
+
+ - Update link references of ownership from nexB to aboutcode-org
 
 [v4.0.2] - 2024-02-28
 --------------------------
@@ -138,7 +145,7 @@ ScanCode Toolkit Compatibility
 ------------------------------
 
 This beta version of ScanCode Workbench is compatible with scans from
-any `ScanCode Toolkit <https://github.com/nexB/scancode-toolkit/>`__
+any `ScanCode Toolkit <https://github.com/aboutcode-org/scancode-toolkit/>`__
 develop version/branch at or after ``v3.1.1``.
 
 Using
@@ -149,7 +156,7 @@ Using
    application from the extracted directory.
 
 -  For more information on how to use the app see the
-   `wiki <https://github.com/nexB/scancode-workbench/wiki>`__.
+   `wiki <https://github.com/aboutcode-org/scancode-workbench/wiki>`__.
 
 [v3.1.0] - 2019-4-26
 --------------------
@@ -176,7 +183,7 @@ ScanCode Toolkit Compatibility
 ------------------------------
 
 This beta version of ScanCode Workbench is compatible with scans from
-any `ScanCode Toolkit <https://github.com/nexB/scancode-toolkit/>`__
+any `ScanCode Toolkit <https://github.com/aboutcode-org/scancode-toolkit/>`__
 develop version/branch at or after ``v3.0.2``. Scans imported into the
 app need to contain the file information data. Therefore, the ``-i``
 option needs to be used in your ScanCode command. For example:
@@ -193,7 +200,7 @@ Using
    application from the extracted directory.
 
 -  For more information on how to use the app see the
-   `wiki <https://github.com/nexB/scancode-workbench/wiki>`__.
+   `wiki <https://github.com/aboutcode-org/scancode-workbench/wiki>`__.
 
 [v3.0.0b3] - 2019-3-15
 ----------------------
@@ -219,7 +226,7 @@ ScanCode Toolkit Compatibility
 ------------------------------
 
 This beta version of ScanCode Workbench is compatible with scans from
-any `ScanCode Toolkit <https://github.com/nexB/scancode-toolkit/>`__
+any `ScanCode Toolkit <https://github.com/aboutcode-org/scancode-toolkit/>`__
 develop version/branch at or after ``v3.0.2``. Scans imported into the
 app need to contain the file information data. Therefore, the ``-i``
 option needs to be used in your ScanCode command. For example:
@@ -236,7 +243,7 @@ Using
    application from the extracted directory.
 
 -  For more information on how to use the app see the
-   `wiki <https://github.com/nexB/scancode-workbench/wiki>`__.
+   `wiki <https://github.com/aboutcode-org/scancode-workbench/wiki>`__.
 
 [v3.0.0b2] - 2019-3-15
 ----------------------
@@ -296,7 +303,7 @@ ScanCode Toolkit Compatibility
 ------------------------------
 
 This beta version of ScanCode Workbench is compatible with scans from
-any `ScanCode Toolkit <https://github.com/nexB/scancode-toolkit/>`__
+any `ScanCode Toolkit <https://github.com/aboutcode-org/scancode-toolkit/>`__
 develop version/branch at or after ``v2.9.9``. Scans imported into the
 app need to contain the file information data. Therefore, the ``-i``
 option needs to be used in your ScanCode command. For example:
@@ -313,7 +320,7 @@ Using
    application from the extracted directory.
 
 -  For more information on how to use the app see the
-   `wiki <https://github.com/nexB/scancode-workbench/wiki>`__.
+   `wiki <https://github.com/aboutcode-org/scancode-workbench/wiki>`__.
 
 [v2.6.1] - 2018-12-19
 ---------------------
@@ -340,7 +347,7 @@ ScanCode Compatibility
 ----------------------
 
 This version of AboutCode Manager is compatible with scans from any
-`ScanCode Toolkit <https://github.com/nexB/scancode-toolkit/>`__ develop
+`ScanCode Toolkit <https://github.com/aboutcode-org/scancode-toolkit/>`__ develop
 version/branch at or after ``v2.9.8``. Scans imported into the app need
 to contain the file information data. Therefore, the ``-i`` option needs
 to be used in your ScanCode command. For example:
@@ -395,7 +402,7 @@ ScanCode Compatibility
 ----------------------
 
 This version of AboutCode Manager is compatible with scans from any
-`ScanCode Toolkit <https://github.com/nexB/scancode-toolkit/>`__ develop
+`ScanCode Toolkit <https://github.com/aboutcode-org/scancode-toolkit/>`__ develop
 version/branch after ``v2.9.2``. Version 2.9.2 scans will still import,
 but Copyright data may not display correctly. Scans imported into the
 app need to contain the file information data. Therefore, the ``-i``
@@ -451,7 +458,7 @@ ScanCode Compatibility
 
 This version of AboutCode Manager is compatible with scans from
 `ScanCode Toolkit
-v2.9.2 <https://github.com/nexB/scancode-toolkit/releases/>`__. Scans
+v2.9.2 <https://github.com/aboutcode-org/scancode-toolkit/releases/>`__. Scans
 imported into the app need to contain the file information data.
 Therefore, the ``-i`` option needs to be used in your ScanCode command.
 For example:
@@ -504,7 +511,7 @@ ScanCode Compatibility
 
 This version of AboutCode Manager is compatible with scans from
 `ScanCode Toolkit
-v2.2.1 <https://github.com/nexB/scancode-toolkit/releases/>`__ and
+v2.2.1 <https://github.com/aboutcode-org/scancode-toolkit/releases/>`__ and
 later. Scans imported into the app need to contain the file information
 data. Therefore, the ``-i`` option needs to be used in your ScanCode
 command. For example:
@@ -563,7 +570,7 @@ ScanCode Compatibility
 
 This version of AboutCode Manager is compatible with scans from
 `ScanCode Toolkit
-v2.2.1 <https://github.com/nexB/scancode-toolkit/releases/>`__. Scans
+v2.2.1 <https://github.com/aboutcode-org/scancode-toolkit/releases/>`__. Scans
 imported into the app need to contain the file information data.
 Therefore, the ``-i`` option needs to be used in your ScanCode command.
 For example:
@@ -619,7 +626,7 @@ ScanCode Compatibility
 
 This version of AboutCode Manager is compatible with scans from
 `ScanCode Toolkit
-v2.2.1 <https://github.com/nexB/scancode-toolkit/releases/>`__. Scans
+v2.2.1 <https://github.com/aboutcode-org/scancode-toolkit/releases/>`__. Scans
 imported into the app need to contain the file information data.
 Therefore, the ``-i`` option needs to be used in your ScanCode command.
 For example:
@@ -666,7 +673,7 @@ ScanCode Compatibility
 
 This version of AboutCode Manager is compatible with scans from
 `ScanCode Toolkit
-v2.2.1 <https://github.com/nexB/scancode-toolkit/releases/>`__ and
+v2.2.1 <https://github.com/aboutcode-org/scancode-toolkit/releases/>`__ and
 above. Scans imported into the app need to contain the file information
 data. Therefore, the ``-i`` option needs to be used in your ScanCode
 command. For example:
@@ -721,7 +728,7 @@ ScanCode Compatibility
 
 This version of AboutCode Manager is compatible with scans from
 `ScanCode Toolkit
-v2.2.1 <https://github.com/nexB/scancode-toolkit/releases/>`__ and
+v2.2.1 <https://github.com/aboutcode-org/scancode-toolkit/releases/>`__ and
 above. Scans imported into the app need to contain the file information
 data. Therefore, the ``-i`` option needs to be used in your ScanCode
 command. For example:
@@ -763,7 +770,7 @@ ScanCode Compatibility
 
 This version of AboutCode Manager is compatible with scans from
 `ScanCode Toolkit
-v2.2.1 <https://github.com/nexB/scancode-toolkit/releases/>`__ and
+v2.2.1 <https://github.com/aboutcode-org/scancode-toolkit/releases/>`__ and
 above. Scans imported into the app need to contain the file information
 data. Therefore, the ``-i`` option needs to be used in your ScanCode
 command. For example:
@@ -792,7 +799,7 @@ ScanCode Compatibility
 
 This version of AboutCode Manager is compatible with scans from
 `ScanCode Toolkit
-v2.2.1 <https://github.com/nexB/scancode-toolkit/releases/>`__ and
+v2.2.1 <https://github.com/aboutcode-org/scancode-toolkit/releases/>`__ and
 above. Scans imported into the app need to contain the file information
 data. Therefore, the ``-i`` option needs to be used in your ScanCode
 command. For example:
@@ -870,7 +877,7 @@ This is a significant new feature release that includes significant
 improvements in performance and adds a data storage mechanism.
 
 This version is only compatible with scans from `ScanCode Toolkit
-v2.0.0.rc1 <https://github.com/nexB/scancode-toolkit/releases/>`__.
+v2.0.0.rc1 <https://github.com/aboutcode-org/scancode-toolkit/releases/>`__.
 Scans imported into the app need to contain the file information data.
 Therefore, the ``-i`` option needs to be used in your ScanCode command.
 For example:
@@ -951,7 +958,7 @@ This is a significant new feature release that includes significant
 improvements in performance and adds a data storage mechanism.
 
 AboutCode Manager is only compatible with scans from `ScanCode Toolkit
-v2.0.0.rc1 <https://github.com/nexB/scancode-toolkit/releases/>`__ and
+v2.0.0.rc1 <https://github.com/aboutcode-org/scancode-toolkit/releases/>`__ and
 above. Scans imported into the app need to contain the file information
 data. Therefore, the ``-i`` option needs to be used in your ScanCode
 command. For example:
@@ -1023,7 +1030,7 @@ improvements in performance and adds a data storage mechanism. Changelog
 is in preparation.
 
 AboutCode Manager is only compatible with scans from `ScanCode Toolkit
-v2.0.0.rc1 <https://github.com/nexB/scancode-toolkit/releases/>`__ and
+v2.0.0.rc1 <https://github.com/aboutcode-org/scancode-toolkit/releases/>`__ and
 above. Scans imported into the app need to contain the file information
 data. Therefore, the ``-i`` option needs to be used in your ScanCode
 command. For example:
@@ -1052,7 +1059,7 @@ improvements in performance and adds a data storage mechanism. Changelog
 is in preparation.
 
 AboutCode Manager is only compatible with scans from `ScanCode Toolkit
-v2.0.0.rc1 <https://github.com/nexB/scancode-toolkit/releases/tag/v2.0.0.rc1>`__
+v2.0.0.rc1 <https://github.com/aboutcode-org/scancode-toolkit/releases/tag/v2.0.0.rc1>`__
 and above. Scans imported into the app need to contain the file
 information data. Therefore, the ``-i`` option needs to be used in your
 ScanCode command. For example:
@@ -1078,7 +1085,7 @@ improvements in performance and adds a data storage mechanism. Changelog
 is in preparation.
 
 AboutCode Manager is only compatible with scans from `ScanCode Toolkit
-v2.0.0.rc1 <https://github.com/nexB/scancode-toolkit/releases/tag/v2.0.0.rc1>`__
+v2.0.0.rc1 <https://github.com/aboutcode-org/scancode-toolkit/releases/tag/v2.0.0.rc1>`__
 and above. Scans imported into the app need to contain the file
 information data. Therefore, the ``-i`` option needs to be used in your
 ScanCode command. For example:
@@ -1104,7 +1111,7 @@ improvements in performance and adds a data storage mechanism. Changelog
 is in preparation.
 
 AboutCode Manager is only compatible with scans from `ScanCode Toolkit
-v2.0.0.rc1 <https://github.com/nexB/scancode-toolkit/releases/tag/v2.0.0.rc1>`__
+v2.0.0.rc1 <https://github.com/aboutcode-org/scancode-toolkit/releases/tag/v2.0.0.rc1>`__
 and above. Scans imported into the app need to contain the file
 information data. Therefore, the ``-i`` option needs to be used in your
 ScanCode command. For example:
@@ -1154,7 +1161,7 @@ For more information on how to use the app see the
 :rocket: Initial beta release.
 
 AboutCode Manager is only compatible with scans from `ScanCode Toolkit
-v2.0.0.rc1 <https://github.com/nexB/scancode-toolkit/releases/tag/v2.0.0.rc1>`__
+v2.0.0.rc1 <https://github.com/aboutcode-org/scancode-toolkit/releases/tag/v2.0.0.rc1>`__
 and above.
 
 Scans imported into the app need to contain the file information data.

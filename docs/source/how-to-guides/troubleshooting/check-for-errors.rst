@@ -13,6 +13,6 @@ the Developer Tools by clicking ```View`` -> ``Toggle Developer Tools``. From th
 ``Console`` tab. Include the error that is logged in the issue in a code block or a
 file attachment.
 
-You can `Create an issue here <https://github.com/nexB/scancode-workbench/issues>`__.
+You can `Create an issue here <https://github.com/aboutcode-org/scancode-workbench/issues>`__.
 
 .. image:: data/developer-tools-error.png

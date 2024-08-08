@@ -8,7 +8,7 @@ What Is ScanCode Workbench?
 ScanCode Workbench is a desktop application designed to view and work with ScanCode Toolkit
 scans.  With ScanCode Workbench, you can:
 
--  Load a `ScanCode Toolkit <https://github.com/nexB/scancode-toolkit>`__ ``.json`` scan of
+-  Load a `ScanCode Toolkit <https://github.com/aboutcode-org/scancode-toolkit>`__ ``.json`` scan of
    your codebase.
 -  Use an advanced visual UI to analyze license and other notices identified by ScanCode Toolkit.
 
@@ -51,6 +51,6 @@ Platform Support
 Important Links
 ===============
 
--  Repository: https://github.com/nexB/scancode-workbench
+-  Repository: https://github.com/aboutcode-org/scancode-workbench
 
--  Issues: https://github.com/nexB/scancode-workbench/issues
+-  Issues: https://github.com/aboutcode-org/scancode-workbench/issues

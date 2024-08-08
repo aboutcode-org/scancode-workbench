@@ -48,7 +48,7 @@
               "license_expression": "apache-2.0",
               "rule_identifier": "spdx_license_id_apache-2.0_for_apache-2.0.RULE",
               "rule_relevance": 100,
-              "rule_url": "https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/rules/spdx_license_id_apache-2.0_for_apache-2.0.RULE",
+              "rule_url": "https://github.com/aboutcode-org/scancode-toolkit/tree/develop/src/licensedcode/data/rules/spdx_license_id_apache-2.0_for_apache-2.0.RULE",
               "matched_text": "apache-2.0 AND cc-by-4.0 AND other-permissive AND other-copyleft"
             },
             {
@@ -61,7 +61,7 @@
               "license_expression": "cc-by-4.0",
               "rule_identifier": "spdx_license_id_cc-by-4.0_for_cc-by-4.0.RULE",
               "rule_relevance": 50,
-              "rule_url": "https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/rules/spdx_license_id_cc-by-4.0_for_cc-by-4.0.RULE",
+              "rule_url": "https://github.com/aboutcode-org/scancode-toolkit/tree/develop/src/licensedcode/data/rules/spdx_license_id_cc-by-4.0_for_cc-by-4.0.RULE",
               "matched_text": "apache-2.0 AND cc-by-4.0 AND other-permissive AND other-copyleft"
             }
           ],
@@ -404,7 +404,7 @@
                   "license_expression": "apache-2.0",
                   "rule_identifier": "spdx_license_id_apache-2.0_for_apache-2.0.RULE",
                   "rule_relevance": 100,
-                  "rule_url": "https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/rules/spdx_license_id_apache-2.0_for_apache-2.0.RULE",
+                  "rule_url": "https://github.com/aboutcode-org/scancode-toolkit/tree/develop/src/licensedcode/data/rules/spdx_license_id_apache-2.0_for_apache-2.0.RULE",
                   "matched_text": "apache-2.0 AND cc-by-4.0 AND other-permissive AND other-copyleft"
                 },
                 {
@@ -417,7 +417,7 @@
                   "license_expression": "cc-by-4.0",
                   "rule_identifier": "spdx_license_id_cc-by-4.0_for_cc-by-4.0.RULE",
                   "rule_relevance": 50,
-                  "rule_url": "https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/rules/spdx_license_id_cc-by-4.0_for_cc-by-4.0.RULE",
+                  "rule_url": "https://github.com/aboutcode-org/scancode-toolkit/tree/develop/src/licensedcode/data/rules/spdx_license_id_cc-by-4.0_for_cc-by-4.0.RULE",
                   "matched_text": "apache-2.0 AND cc-by-4.0 AND other-permissive AND other-copyleft"
                 }
               ],

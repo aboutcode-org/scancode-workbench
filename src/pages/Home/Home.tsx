@@ -198,7 +198,7 @@ const Home = () => {
               <div className="btn-group-horizontal" role="group">
                 <CoreButton
                   large
-                  href="https://github.com/nexB/scancode-workbench/"
+                  href="https://github.com/aboutcode-org/scancode-workbench/"
                 >
                   GitHub Repository
                 </CoreButton>
@@ -210,7 +210,7 @@ const Home = () => {
                 </CoreButton>
                 <CoreButton
                   large
-                  href="https://github.com/nexB/scancode-workbench/issues"
+                  href="https://github.com/aboutcode-org/scancode-workbench/issues"
                 >
                   Report a Bug or Request a Feature
                 </CoreButton>

@@ -6,5 +6,5 @@ homepage_url: https://www.aboutcode.org/
 license: apache-2.0
 owner: nexB Inc.
 notice_file: NOTICE
-vcs_url: git+https://github.com/nexB/scancode-workbench
-bug_tracking_url: https://github.com/nexB/scancode-workbench/issues
+vcs_url: git+https://github.com/aboutcode-org/scancode-workbench
+bug_tracking_url: https://github.com/aboutcode-org/scancode-workbench/issues

@@ -18,7 +18,10 @@ const About = () => {
         and evaluate it using charts
         <br />
         For more details, see our
-        <CoreLink href="https://github.com/nexB/scancode-workbench/" external>
+        <CoreLink
+          href="https://github.com/aboutcode-org/scancode-workbench/"
+          external
+        >
           GitHub Repository
         </CoreLink>
         .
@@ -45,8 +48,11 @@ const About = () => {
         ScanCode Workbench is a free software analysis application from nexB
         Inc. and others. <br />
         Visit
-        <CoreLink href="https://github.com/nexB/scancode-workbench" external>
-          https://github.com/nexB/scancode-workbench
+        <CoreLink
+          href="https://github.com/aboutcode-org/scancode-workbench"
+          external
+        >
+          https://github.com/aboutcode-org/scancode-workbench
         </CoreLink>{" "}
         for support and download.
       </p>
@@ -55,7 +61,7 @@ const About = () => {
       <p>
         Report a bug or request a feature on the ScanCode-Workbench.
         <CoreLink
-          href="https://github.com/nexB/scancode-workbench/issues/new"
+          href="https://github.com/aboutcode-org/scancode-workbench/issues/new"
           external
         >
           Report an issue

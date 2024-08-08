@@ -48,7 +48,7 @@
               "license_expression": "elastic-license-v2",
               "rule_identifier": "elastic-license-v2_3.RULE",
               "rule_relevance": 100,
-              "rule_url": "https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/rules/elastic-license-v2_3.RULE",
+              "rule_url": "https://github.com/aboutcode-org/scancode-toolkit/tree/develop/src/licensedcode/data/rules/elastic-license-v2_3.RULE",
               "matched_text": "Elastic License 2.0"
             }
           ],
@@ -67,7 +67,7 @@
               "license_expression": "elastic-license-v2",
               "rule_identifier": "elastic-license-v2_2.RULE",
               "rule_relevance": 100,
-              "rule_url": "https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/rules/elastic-license-v2_2.RULE",
+              "rule_url": "https://github.com/aboutcode-org/scancode-toolkit/tree/develop/src/licensedcode/data/rules/elastic-license-v2_2.RULE",
               "matched_text": "https://raw.githubusercontent.com/elastic/elasticsearch/v7.16.3/licenses/ELASTIC-LICENSE-2.0.txt"
             }
           ],
@@ -86,7 +86,7 @@
               "license_expression": "mongodb-sspl-1.0",
               "rule_identifier": "mongodb-sspl-1.0_12.RULE",
               "rule_relevance": 100,
-              "rule_url": "https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/rules/mongodb-sspl-1.0_12.RULE",
+              "rule_url": "https://github.com/aboutcode-org/scancode-toolkit/tree/develop/src/licensedcode/data/rules/mongodb-sspl-1.0_12.RULE",
               "matched_text": "Server Side Public License, v 1"
             }
           ],
@@ -105,7 +105,7 @@
               "license_expression": "mongodb-sspl-1.0",
               "rule_identifier": "mongodb-sspl-1.0_7.RULE",
               "rule_relevance": 100,
-              "rule_url": "https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/rules/mongodb-sspl-1.0_7.RULE",
+              "rule_url": "https://github.com/aboutcode-org/scancode-toolkit/tree/develop/src/licensedcode/data/rules/mongodb-sspl-1.0_7.RULE",
               "matched_text": "https://www.mongodb.com/licensing/server-side-public-license"
             }
           ],

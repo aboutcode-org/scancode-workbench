@@ -1,7 +1,7 @@
 /*
  #
  # Copyright (c) nexB Inc. and others. All rights reserved.
- # https://nexb.com and https://github.com/nexB/scancode-workbench/
+ # https://nexb.com and https://github.com/aboutcode-org/scancode-workbench/
  # The ScanCode Workbench software is licensed under the Apache License version 2.0.
  # ScanCode is a trademark of nexB Inc.
  #
@@ -276,7 +276,7 @@ export class WorkbenchDB {
         type: fileType,
         isLeaf: fileType == "file",
         ...(fileType == "directory" && { children: [] }),
-        // @TODO - Trial to fix rc-tree showing file icon instead of empty directory https://github.com/nexB/scancode-workbench/issues/542
+        // @TODO - Trial to fix rc-tree showing file icon instead of empty directory https://github.com/aboutcode-org/scancode-workbench/issues/542
         // isLeaf: fileType == "file",
       });
     });
@@ -427,7 +427,7 @@ export class WorkbenchDB {
             })
             .on("end", () => {
               // Add root directory into data
-              // See https://github.com/nexB/scancode-toolkit/issues/543
+              // See https://github.com/aboutcode-org/scancode-toolkit/issues/543
               promiseChain
                 .then(() =>
                   this._imputeIntermediateDirectories(files, parsedFilePaths)
@@ -644,7 +644,7 @@ export class WorkbenchDB {
       python_version: header.extra_data?.system_environment?.python_version,
       workbench_version: workbenchVersion,
       workbench_notice:
-        'Exported from ScanCode Workbench and provided on an "AS IS" BASIS, WITHOUT WARRANTIES\\nOR CONDITIONS OF ANY KIND, either express or implied. No content created from\\nScanCode Workbench should be considered or used as legal advice. Consult an Attorney\\nfor any legal advice.\\nScanCode Workbench is a free software analysis application from nexB Inc. and others.\\nVisit https://github.com/nexB/scancode-workbench/ for support and download.',
+        'Exported from ScanCode Workbench and provided on an "AS IS" BASIS, WITHOUT WARRANTIES\\nOR CONDITIONS OF ANY KIND, either express or implied. No content created from\\nScanCode Workbench should be considered or used as legal advice. Consult an Attorney\\nfor any legal advice.\\nScanCode Workbench is a free software analysis application from nexB Inc. and others.\\nVisit https://github.com/aboutcode-org/scancode-workbench/ for support and download.',
       header_content: JSON.stringify(header, undefined, 2),
       errors: header.errors,
     };

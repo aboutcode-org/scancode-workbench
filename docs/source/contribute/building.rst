@@ -12,7 +12,7 @@ You'll need `Node.js <https://nodejs.org/en>`__ (which comes with `npm <https://
 .. code-block:: bash
 
    # Clone this repository
-   git clone https://github.com/nexB/scancode-workbench.git
+   git clone https://github.com/aboutcode-org/scancode-workbench.git
 
    # Go into the repository
    cd scancode-workbench
@@ -94,7 +94,7 @@ Create python environment, make docs
 .. code-block:: bash
 
    # Clone this repository
-   git clone https://github.com/nexB/scancode-workbench.git
+   git clone https://github.com/aboutcode-org/scancode-workbench.git
 
    # Go into the docs directory
    cd docs/

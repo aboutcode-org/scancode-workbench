@@ -8,7 +8,7 @@ Download and Install
 =======================
 
 - ScanCode Workbench is available for Windows, macOS and Linux -
-   `ScanCode Workbench releases <https://github.com/nexB/scancode-workbench/releases>`__.
+   `ScanCode Workbench releases <https://github.com/aboutcode-org/scancode-workbench/releases>`__.
 
 -
    Once downloaded, you'll find the ScanCode Workbench executable inside the
@@ -24,7 +24,7 @@ Download and Install
 
    .. code-block:: bash
 
-      xattr -d com.apple.quarantine ~/Downloads/ScanCode-Workbench-4.0.2-darwin-arm64/ScanCode-Workbench-4.0.2.app
+      xattr -d com.apple.quarantine ~/Downloads/ScanCode-Workbench-4.0.3-darwin-arm64/ScanCode-Workbench-4.0.3.app
 
 .. include:: ../rst_snippets/centos-note.rst
 
@@ -81,6 +81,6 @@ You can find additional details in the :ref:`how-to-guides` section below.
 Try a Sample Scan
 ====================
 
-We've also provided a set of `sample scans <https://github.com/nexB/scancode-workbench/tree/develop/samples>`__
+We've also provided a set of `sample scans <https://github.com/aboutcode-org/scancode-workbench/tree/develop/samples>`__
 that you can  review in ScanCode Workbench in order to get a sense of its functionality and the
 types of information captured by a scan.

@@ -243,7 +243,9 @@ function getTemplate() {
         {
           label: "GitHub Repository",
           click: () =>
-            shell.openExternal("https://github.com/nexB/scancode-workbench/"),
+            shell.openExternal(
+              "https://github.com/aboutcode-org/scancode-workbench/"
+            ),
         },
         {
           label: "Licensing Information",
@@ -268,7 +270,7 @@ function getTemplate() {
           label: "Issue Tracker",
           click: () =>
             shell.openExternal(
-              "https://github.com/nexB/scancode-workbench/issues"
+              "https://github.com/aboutcode-org/scancode-workbench/issues"
             ),
         },
       ],

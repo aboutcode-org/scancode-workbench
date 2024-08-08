@@ -5,15 +5,15 @@ Contributing
 Contributions are welcome and appreciated!
 Every little bit helps, and a credit will always be given.
 
-.. _issues : https://github.com/nexB/scancode-workbench/issues
+.. _issues : https://github.com/aboutcode-org/scancode-workbench/issues
 __ issues_
 
 If you are new to ScanCode Workbench and want to find easy tickets to work on,
-check `easy issues <https://github.com/nexB/scancode-workbench/labels/easy>`_
+check `easy issues <https://github.com/aboutcode-org/scancode-workbench/labels/easy>`_
 
 When contributing to ScanCode Workbench (such as code, bugs, documentation, etc.) you
 agree to the Developer `Certificate of Origin <http://developercertificate.org/>`_
-and the ScanCode license (see the `NOTICE <https://github.com/nexB/scancode-workbench/blob/develop/NOTICE>`_ file).
+and the ScanCode license (see the `NOTICE <https://github.com/aboutcode-org/scancode-workbench/blob/develop/NOTICE>`_ file).
 The same approach is used by Linux Kernel developers and several other projects.
 
 For commits, it is best to simply add a line like this to your commit message,
@@ -67,7 +67,7 @@ Documentation improvements
 ==========================
 
 Documentation can come in the form of new documentation pages/sections, tutorials/how-to documents,
-any other general upgrades, etc. Even a minor typo fix is welcomed. 
+any other general upgrades, etc. Even a minor typo fix is welcomed.
 
 If something is missing in the documentation or if you found some part confusing,
 please file an issue with your suggestions for improvement. Your help and contribution make ScanCode Workbench docs better, we love hearing from you!

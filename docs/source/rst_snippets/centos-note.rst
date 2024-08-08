@@ -17,4 +17,4 @@
 
       .. code-block:: bash
 
-         ./ScanCode-Workbench-4.0.2-linux-x64/ScanCode-Workbench-4.0.2 --no-sandbox
+         ./ScanCode-Workbench-4.0.3-linux-x64/ScanCode-Workbench-4.0.3 --no-sandbox
