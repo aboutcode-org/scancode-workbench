@@ -351,3 +351,9 @@ img {
 .red {
     color: red;
 }
+
+/* Change background for all code blocks */
+div.highlight pre {
+    background-color: #f8f9fa ;
+    color: #212529 ;
+}
