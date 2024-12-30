@@ -12,6 +12,7 @@ Docs
 ~~~~~~~~~
 
 - Update macOS installation steps by @OmkarPh in #631
+- Renamed the dependency attribute ``is_resolved`` to ``is_pinned``. See #634
 
 [v4.0.3] - 2024-08-07
 --------------------------

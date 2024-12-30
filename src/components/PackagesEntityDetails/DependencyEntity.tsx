@@ -37,7 +37,7 @@ const DependencyEntity = (props: DependencyEntityProps) => {
           Optional
         </Badge>
       )}
-      {dependency.is_resolved && (
+      {dependency.is_pinned && (
         <Badge pill bg="success">
           <FontAwesomeIcon icon={faCheck} /> Resolved
         </Badge>
@@ -86,7 +86,7 @@ const DependencyEntity = (props: DependencyEntityProps) => {
         ))}
       </div>
       <br />
-      {dependency.is_resolved && dependency.resolved_package && (
+      {dependency.is_pinned && dependency.resolved_package && (
         <div>
           Resolved package:
           <ReactJson

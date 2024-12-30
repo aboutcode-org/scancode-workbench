@@ -80,7 +80,7 @@ const DependencyInfoDash = () => {
 
       packageTypeSummary.packageTypeDetails.total += deps.length;
       packageTypeSummary.resolved += deps.reduce((counter, curr) => {
-        return counter + (curr.is_resolved ? 1 : 0);
+        return counter + (curr.is_pinned ? 1 : 0);
       }, 0);
       packageTypeSummary.runtime += deps.reduce((counter, curr) => {
         return counter + (curr.is_runtime ? 1 : 0);
@@ -125,7 +125,7 @@ const DependencyInfoDash = () => {
             "id",
             "for_package_uid",
             "is_runtime",
-            "is_resolved",
+            "is_pinned",
             "is_optional",
             "datasource_id",
             "scope",
@@ -145,7 +145,7 @@ const DependencyInfoDash = () => {
 
         // Prepare chart for resolved dependencies
         const resolvedDependencies = dependencies.map((dependency) =>
-          dependency.getDataValue("is_resolved") ? "Resolved" : "Unresolved"
+          dependency.getDataValue("is_pinned") ? "Resolved" : "Unresolved"
         );
         const { chartData: resolvedDependenciesChartData } =
           formatPieChartData(resolvedDependencies);

@@ -150,7 +150,7 @@ export const PackageDepsSamples: {
                 scope: DEPENDENCY_SCOPES.DEVELOPMENT,
                 is_runtime: false,
                 is_optional: true,
-                is_resolved: true,
+                is_pinned: true,
                 resolved_package: {},
                 extra_data: {
                   is_editable: false,
@@ -171,7 +171,7 @@ export const PackageDepsSamples: {
                 scope: DEPENDENCY_SCOPES.DEVELOPMENT,
                 is_runtime: false,
                 is_optional: true,
-                is_resolved: true,
+                is_pinned: true,
                 resolved_package: {},
                 extra_data: {
                   is_editable: false,
@@ -192,7 +192,7 @@ export const PackageDepsSamples: {
                 scope: DEPENDENCY_SCOPES.DEVELOPMENT,
                 is_runtime: false,
                 is_optional: true,
-                is_resolved: true,
+                is_pinned: true,
                 resolved_package: {},
                 extra_data: {
                   is_editable: false,
@@ -332,7 +332,7 @@ export const PackageDepsSamples: {
         scope: DEPENDENCY_SCOPES.DEVELOPMENT,
         is_runtime: false,
         is_optional: true,
-        is_resolved: true,
+        is_pinned: true,
         resolved_package: {},
         dependency_uid:
           "pkg:pypi/aboutcode-toolkit@6.0.0?uuid=faa3b45c-2e04-4891-b854-52ed459a6b0a",
@@ -347,7 +347,7 @@ export const PackageDepsSamples: {
         scope: DEPENDENCY_SCOPES.DEVELOPMENT,
         is_runtime: false,
         is_optional: true,
-        is_resolved: true,
+        is_pinned: true,
         resolved_package: {},
         dependency_uid:
           "pkg:pypi/py@1.10.0?uuid=b2cf6831-b0eb-4a30-98c3-3dac9202d639",
@@ -362,7 +362,7 @@ export const PackageDepsSamples: {
         scope: DEPENDENCY_SCOPES.DEVELOPMENT,
         is_runtime: false,
         is_optional: true,
-        is_resolved: true,
+        is_pinned: true,
         resolved_package: {},
         dependency_uid:
           "pkg:pypi/pytest@6.2.4?uuid=1c719652-292f-419c-a7a4-164c39296661",
@@ -442,7 +442,7 @@ export const PackageDepsSamples: {
             scope: DEPENDENCY_SCOPES.DEVELOPMENT,
             is_runtime: false,
             is_optional: true,
-            is_resolved: true,
+            is_pinned: true,
             resolved_package: {},
             extra_data: {
               is_editable: false,
@@ -463,7 +463,7 @@ export const PackageDepsSamples: {
             scope: DEPENDENCY_SCOPES.DEVELOPMENT,
             is_runtime: false,
             is_optional: true,
-            is_resolved: true,
+            is_pinned: true,
             resolved_package: {},
             extra_data: {
               is_editable: false,
@@ -484,7 +484,7 @@ export const PackageDepsSamples: {
             scope: DEPENDENCY_SCOPES.DEVELOPMENT,
             is_runtime: false,
             is_optional: true,
-            is_resolved: true,
+            is_pinned: true,
             resolved_package: {},
             extra_data: {
               is_editable: false,

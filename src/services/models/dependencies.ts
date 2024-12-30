@@ -24,7 +24,7 @@ export interface DependenciesAttributes {
   scope: string;
   is_runtime: boolean;
   is_optional: boolean;
-  is_resolved: boolean;
+  is_pinned: boolean;
   resolved_package: unknown;
   dependency_uid: string;
   for_package_uid: string;
@@ -60,7 +60,7 @@ export default function dependenciesModel(sequelize: Sequelize) {
       scope: DataTypes.STRING,
       is_runtime: DataTypes.BOOLEAN,
       is_optional: DataTypes.BOOLEAN,
-      is_resolved: DataTypes.BOOLEAN,
+      is_pinned: DataTypes.BOOLEAN,
       resolved_package: jsonDataType("resolved_package", {}),
       dependency_uid: DataTypes.STRING,
       for_package_uid: {
