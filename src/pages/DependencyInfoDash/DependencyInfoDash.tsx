@@ -38,7 +38,7 @@ const DependencyInfoDash = () => {
   const [runtimeDependenciesData, setRuntimeDependenciesData] = useState<
     FormattedEntry[] | null
   >(null);
-  const [resolvedDependenciesData, setResolvedDependenciesData] = useState<
+  const [PinnedDependenciesData, setPinnedDependenciesData] = useState<
     FormattedEntry[] | null
   >(null);
   const [optionalDependenciesData, setOptionalDependenciesData] = useState<
@@ -70,7 +70,7 @@ const DependencyInfoDash = () => {
             title: packageDataType,
             total: 0,
           },
-          resolved: 0,
+          pinned: 0,
           runtime: 0,
           optional: 0,
         });
@@ -79,7 +79,7 @@ const DependencyInfoDash = () => {
         packageTypeToSummaryMapping.get(packageDataType);
 
       packageTypeSummary.packageTypeDetails.total += deps.length;
-      packageTypeSummary.resolved += deps.reduce((counter, curr) => {
+      packageTypeSummary.pinned += deps.reduce((counter, curr) => {
         return counter + (curr.is_pinned ? 1 : 0);
       }, 0);
       packageTypeSummary.runtime += deps.reduce((counter, curr) => {
@@ -145,11 +145,11 @@ const DependencyInfoDash = () => {
 
         // Prepare chart for resolved dependencies
         const resolvedDependencies = dependencies.map((dependency) =>
-          dependency.getDataValue("is_pinned") ? "Resolved" : "Unresolved"
+          dependency.getDataValue("is_pinned") ? "Pinned" : "Unpinned"
         );
-        const { chartData: resolvedDependenciesChartData } =
+        const { chartData: pinnedDependenciesChartData } =
           formatPieChartData(resolvedDependencies);
-        setResolvedDependenciesData(resolvedDependenciesChartData);
+        setPinnedDependenciesData(pinnedDependenciesChartData);
 
         // Prepare chart for optional dependencies
         const optionalDependencies = dependencies.map((dependency) =>
@@ -277,7 +277,7 @@ const DependencyInfoDash = () => {
           <Card className="chart-card">
             <h5 className="title">Resolved dependencies</h5>
             <PieChart
-              chartData={resolvedDependenciesData}
+              chartData={PinnedDependenciesData}
               notOpted={!scanInfo.optionsMap.get(ScanOptionKeys.PACKAGE)}
               notOptedText="Use --package CLI option for dependencies"
               notOptedLink="https://scancode-toolkit.readthedocs.io/en/latest/cli-reference/basic-options.html#package-option"

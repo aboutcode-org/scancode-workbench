@@ -14,7 +14,7 @@ export interface PackageTypeSummaryRow {
     title: string;
     total: number;
   };
-  resolved: number;
+  pinned: number;
   runtime: number;
   optional: number;
 }
@@ -47,7 +47,7 @@ export const DependencySummaryTableCols: DepsSummaryCOlDef[] = [
     field: "optional",
   },
   {
-    headerName: "Resolved",
-    field: "resolved",
+    headerName: "Pinned",
+    field: "pinned",
   },
 ];

@@ -32,7 +32,7 @@ export const DependenciesTableCols: DepsColDef[] = [
     width: 160,
   },
   {
-    headerName: "Resolved",
+    headerName: "Pinned",
     field: "is_pinned",
     cellRenderer: TickRenderer,
     maxWidth: 92,

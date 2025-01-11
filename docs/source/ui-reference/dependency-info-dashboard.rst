@@ -13,7 +13,7 @@ Summary of Dependencys:
 - Total number of Dependencies detected
 
 - Summary table
-    - Dependencies per Scope (Runtime, Optional, Resolved) for each Package Type
+    - Dependencies per Scope (Runtime, Optional, Pinned) for each Package Type
 
 - Pie charts
     - Dependencies for each Package type

@@ -17,7 +17,7 @@
       "notice": "Generated with ScanCode and provided on an \"AS IS\" BASIS, WITHOUT WARRANTIES\nOR CONDITIONS OF ANY KIND, either express or implied. No content created from\nScanCode should be considered or used as legal advice. Consult an Attorney\nfor any legal advice.\nScanCode is a free software code scanning tool from nexB Inc. and others.\nVisit https://github.com/aboutcode-org/scancode-toolkit/ for support and download.",
       "start_timestamp": "2023-06-15T124439.682008",
       "end_timestamp": "2023-06-15T124447.640208",
-      "output_format_version": "3.0.0",
+      "output_format_version": "4.0.0",
       "duration": 7.958212375640869,
       "message": null,
       "errors": [],
@@ -152,7 +152,7 @@
       "scope": "dependency",
       "is_runtime": true,
       "is_optional": false,
-      "is_resolved": false,
+      "is_pinned": false,
       "resolved_package": {},
       "extra_data": {},
       "dependency_uid": "pkg:nuget/AngleSharp?uuid=76c0ce8f-168b-4c20-bede-8cb1c7ad0832",
@@ -429,7 +429,7 @@
               "scope": "dependency",
               "is_runtime": true,
               "is_optional": false,
-              "is_resolved": false,
+              "is_pinned": false,
               "resolved_package": {},
               "extra_data": {}
             }

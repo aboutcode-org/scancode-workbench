@@ -578,12 +578,12 @@ const Packages = () => {
                                                     bg="success"
                                                     onClick={(e) =>
                                                       toggleDepTagFilter(
-                                                        DepFilterTags.RESOLVED,
+                                                        DepFilterTags.PINNED,
                                                         e
                                                       )
                                                     }
                                                   >
-                                                    Resolved
+                                                    PINNED
                                                   </Badge>
                                                 )}
                                               </div>

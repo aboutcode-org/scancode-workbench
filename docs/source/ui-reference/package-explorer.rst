@@ -24,7 +24,7 @@ Packages and dependencies are organised in a hierarchical structure as shown bel
 User can select different filters:
 
 - Data sources - ``maven_pom``, ``go_mod``, ``npm_package_lock_json``, etc
-- Dependency flags - ``Runtime``, ``Resolved``, ``Optional``
+- Dependency flags - ``Runtime``, ``Pinned``, ``Optional``
 
   Tip - You can click on the tag on the right side of the dependency to toggle that flag.
 

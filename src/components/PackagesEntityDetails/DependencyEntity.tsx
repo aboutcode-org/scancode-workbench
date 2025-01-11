@@ -39,7 +39,7 @@ const DependencyEntity = (props: DependencyEntityProps) => {
       )}
       {dependency.is_pinned && (
         <Badge pill bg="success">
-          <FontAwesomeIcon icon={faCheck} /> Resolved
+          <FontAwesomeIcon icon={faCheck} /> Pinned
         </Badge>
       )}
       <br />
