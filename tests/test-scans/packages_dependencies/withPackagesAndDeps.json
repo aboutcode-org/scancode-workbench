@@ -103,7 +103,7 @@
       "scope": "development",
       "is_runtime": false,
       "is_optional": true,
-      "is_resolved": true,
+      "is_pinned": true,
       "resolved_package": {},
       "extra_data": {
         "is_editable": false,
@@ -128,7 +128,7 @@
       "scope": "development",
       "is_runtime": false,
       "is_optional": true,
-      "is_resolved": true,
+      "is_pinned": true,
       "resolved_package": {},
       "extra_data": {
         "is_editable": false,
@@ -153,7 +153,7 @@
       "scope": "development",
       "is_runtime": false,
       "is_optional": true,
-      "is_resolved": true,
+      "is_pinned": true,
       "resolved_package": {},
       "extra_data": {
         "is_editable": false,
@@ -284,7 +284,7 @@
               "scope": "development",
               "is_runtime": false,
               "is_optional": true,
-              "is_resolved": true,
+              "is_pinned": true,
               "resolved_package": {},
               "extra_data": {
                 "is_editable": false,
@@ -305,7 +305,7 @@
               "scope": "development",
               "is_runtime": false,
               "is_optional": true,
-              "is_resolved": true,
+              "is_pinned": true,
               "resolved_package": {},
               "extra_data": {
                 "is_editable": false,
@@ -326,7 +326,7 @@
               "scope": "development",
               "is_runtime": false,
               "is_optional": true,
-              "is_resolved": true,
+              "is_pinned": true,
               "resolved_package": {},
               "extra_data": {
                 "is_editable": false,

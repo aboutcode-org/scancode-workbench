@@ -181,7 +181,7 @@ export interface Resource {
       scope: string | null;
       is_runtime: boolean;
       is_optional: boolean;
-      is_resolved: boolean;
+      is_pinned: boolean;
       resolved_package: unknown;
       extra_data: unknown;
     }[];

@@ -202,7 +202,7 @@ const Packages = () => {
             scope: dependencyInfo.scope as DEPENDENCY_SCOPES,
             is_runtime: dependencyInfo.is_runtime,
             is_optional: dependencyInfo.is_optional,
-            is_resolved: dependencyInfo.is_resolved,
+            is_pinned: dependencyInfo.is_pinned,
             resolved_package: dependencyInfo.resolved_package || {},
             dependency_uid: dependencyInfo.dependency_uid,
             for_package_uid: dependencyInfo.for_package_uid,
@@ -572,18 +572,18 @@ const Packages = () => {
                                                     Optional
                                                   </Badge>
                                                 )}
-                                                {dependency.is_resolved && (
+                                                {dependency.is_pinned && (
                                                   <Badge
                                                     pill
                                                     bg="success"
                                                     onClick={(e) =>
                                                       toggleDepTagFilter(
-                                                        DepFilterTags.RESOLVED,
+                                                        DepFilterTags.PINNED,
                                                         e
                                                       )
                                                     }
                                                   >
-                                                    Resolved
+                                                    PINNED
                                                   </Badge>
                                                 )}
                                               </div>

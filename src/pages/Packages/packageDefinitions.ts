@@ -6,7 +6,7 @@ export interface DependencyDetails {
   scope: DEPENDENCY_SCOPES;
   is_runtime: boolean;
   is_optional: boolean;
-  is_resolved: boolean;
+  is_pinned: boolean;
   resolved_package: unknown;
   dependency_uid: string;
   for_package_uid: string | null;
