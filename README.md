@@ -105,3 +105,29 @@ If you have a question, a suggestion or find a bug, enter an issue.
 
 For questions and chats, you can join the Gitter channel at
 https://matrix.to/#/#aboutcode-org_scancode-workbench:gitter.im
+
+<p align="center"><img src="src/assets/images/scancode-workbench-logo.png" align="center" alt="ScanCode Workbench">
+</p>
+
+[![Test CI](https://github.com/aboutcode-org/scancode-workbench/actions/workflows/Test.yml/badge.svg)](https://github.com/aboutcode-org/scancode-workbench/actions/workflows/Test.yml)
+[![Release](https://github.com/aboutcode-org/scancode-workbench/actions/workflows/Release.yml/badge.svg)](https://github.com/aboutcode-org/scancode-workbench/actions/workflows/Release.yml)
+
+---
+
+## 🌐 Looking for a Hosted Web Version?
+
+If you want an **online, hosted, web-based interface** to visualize ScanCode results,  
+check out **ScanCode.io**, the official ScanCode web application:
+
+👉 **https://github.com/aboutcode-org/scancode.io**
+
+ScanCode.io can:
+
+- Load existing ScanCode Toolkit results using the `load_inventory` pipeline  
+- Provide a full web UI for viewing, filtering, and exploring scan data  
+- Serve as a hosted alternative for users looking for a browser-based experience  
+
+---
+
+ScanCode Workbench provides an advanced visual UI to help you quickly evaluate
+license and other notices identified by...
