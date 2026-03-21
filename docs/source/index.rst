@@ -1,4 +1,6 @@
 ScanCode Workbench Documentation
+===============================
+
 Welcome to the documentation for ScanCode Workbench!
 
 .. toctree::
@@ -11,5 +13,11 @@ Welcome to the documentation for ScanCode Workbench!
    ui-reference/index
    contribute/index
    license
+   compliance/dependency_compliance
 
 Indices and tables
+==================
+
+* :ref:`genindex`
+* :ref:`modindex`
+* :ref:`search`
