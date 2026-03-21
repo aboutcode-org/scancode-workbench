@@ -1,7 +1,4 @@
-================================
 ScanCode Workbench Documentation
-================================
-
 Welcome to the documentation for ScanCode Workbench!
 
 .. toctree::
@@ -16,7 +13,3 @@ Welcome to the documentation for ScanCode Workbench!
    license
 
 Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`search`
