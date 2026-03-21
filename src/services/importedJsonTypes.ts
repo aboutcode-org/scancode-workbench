@@ -201,9 +201,16 @@ export interface Resource {
       is_runtime: boolean;
       is_optional: boolean;
 
-      // ✅ FIX: Support both old and new ScanCode fields
-      is_resolved?: boolean;
+      /**
+       * Indicates whether the dependency is pinned (new field)
+       */
       is_pinned?: boolean;
+
+      /**
+       * @deprecated Use `is_pinned` instead.
+       * Kept for backward compatibility with older ScanCode outputs.
+       */
+      is_resolved?: boolean;
 
       resolved_package: unknown;
       extra_data: unknown;
