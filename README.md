@@ -10,7 +10,7 @@ license, copyright and other important information from a
 
 The Workbench is a single-user desktop application that works on Windows,
 macOS, and Linux operating systems. There is no current or planned future 
-functionality to edit or update scan results - the Scan data is read-only.
+functionality to edit or update scan results - the scan data is read-only.
 
 If you need a multi-user application for running or reviewing ScanCode scans,
 you should use [ScanCode.io](https://github.com/aboutcode-org/scancode.io) 
