@@ -9,7 +9,7 @@
 Details of all the Packages & dependencies as well as files in which
 they were detected can be viewed using the Package Explorer.
 
-Refer - :doc:`scancode-toolkit:reference/available_package_parsers`.
+Refer - :doc:`scancode-toolkit:reference/scancode-supported-packages`.
 
 Package Navigation Pane
 --------------------------------
