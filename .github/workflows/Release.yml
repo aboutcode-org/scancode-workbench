@@ -12,18 +12,19 @@ jobs:
     name: Create Release
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
       # - name: Exit if tag not is not pointing to a commit in master branch
       #   if: endsWith(github.ref, 'master') == false
       #   run: exit -1
       - name: Get release tag
         id: tag
-        uses: dawidd6/action-get-tag@v1
+        # TODO: replace this as this is archived now? 
+        uses: dawidd6/action-get-tag@727a6f0a561be04e09013531e73a3983a65e3479
         with:
           strip_v: false
       - name: Create Release
         id: create_release
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@b4309332981a82ec1c5618f44dd2e27cc8bfbfda
         with:
           tag_name: ${{steps.tag.outputs.tag}}
           name: ${{steps.tag.outputs.tag}}
@@ -41,13 +42,13 @@ jobs:
         os: [ubuntu-latest, macos-latest, windows-latest, macos-14]
     runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
         with:
-          python-version: 3.12.0
-      - uses: actions/setup-node@master
+          python-version: 3.14.0
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
         with:
-          node-version: 20
+          node-version: 22
       - name: Install dependencies
         run: npm install
       - name: Create release assets directory
@@ -59,7 +60,7 @@ jobs:
       - name: Verify Generated archives in dist/
         run: ls ./dist
       - name: Upload release assets
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@b4309332981a82ec1c5618f44dd2e27cc8bfbfda
         with:
           tag_name: ${{ github.ref_name }}
           files: dist/*

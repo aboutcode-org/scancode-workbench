@@ -4,18 +4,31 @@
 [![Test CI](https://github.com/aboutcode-org/scancode-workbench/actions/workflows/Test.yml/badge.svg)](https://github.com/aboutcode-org/scancode-workbench/actions/workflows/Test.yml)
 [![Release](https://github.com/aboutcode-org/scancode-workbench/actions/workflows/Release.yml/badge.svg)](https://github.com/aboutcode-org/scancode-workbench/actions/workflows/Release.yml)
 
-ScanCode Workbench provides an advanced visual UI to help you quickly evaluate
-license and other notices identified by
-[ScanCode](https://github.com/aboutcode-org/scancode-toolkit/).
-[ScanCode](https://github.com/aboutcode-org/scancode-toolkit/) detects licenses,
-copyrights and other interesting information in your code.
+ScanCode Workbench provides a visual UI (GUI) to help you quickly evaluate
+license, copyright and other important information from a
+[ScanCode Toolkit](https://github.com/aboutcode-org/scancode-toolkit/) scan.
 
-ScanCode Workbench is based on [Electron](https://www.electronjs.org/) and will
-be the primary desktop/GUI tool for using nexB’s
-[AboutCode tools](https://github.com/nexB/aboutcode). This app works on Windows,
-macOS and Linux operating systems.
+The Workbench is a single-user desktop application that works on Windows,
+macOS, and Linux operating systems. There is no current or planned future 
+functionality to edit or update scan results - the scan data is read-only.
+
+If you need a multi-user application for running or reviewing ScanCode scans,
+you should use [ScanCode.io](https://github.com/aboutcode-org/scancode.io) 
+instead of ScanCode Workbench. You cannot edit scan data in ScanCode.io, but 
+you can export the scan data in SBOM, XLSX and other formats for further 
+analysis and processing. You can also import a ScanCode Toolkit scan into
+ScanCode.io using the `load_inventory` pipeline.
+
+If you need an application to review and edit ScanCode scan data or to convert
+that data into an SBOM or a software inventory, you should use [DejaCode](https://github.com/aboutcode-org/dejacode). You can import scan data from ScanCode Toolkit or ScanCode.io into DejaCode or you can import an SBOM. The DejaCode
+Dashboard provides immediate visibility into license or vulnerability issues
+related to your products, components and packages. You can use the [DejaCode demo system](https://public.dejacode.com/account/register/) for quick access to its
+features and functions.
 
 ![ScanCode Workbench](/src/assets/images/workbench_intro.gif)
+
+ScanCode Workbench is based on [Electron](https://www.electronjs.org/).
+
 
 ## Using
 
@@ -28,7 +41,7 @@ macOS and Linux operating systems.
   [ScanCode v32.0.0](https://github.com/aboutcode-org/scancode-toolkit/releases)
   and above which are run with the ScanCode `-i` option. For a list of available
   ScanCode options see
-  [How To: Set what will be detected in a scan](https://scancode-toolkit.readthedocs.io/en/latest/tutorials/how_to_set_what_will_be_detected_in_a_scan.html)
+  [How To: Set what will be detected in a scan](https://scancode-toolkit.readthedocs.io/en/latest/tutorials/configuring-scan-detection.html)
 
 ```bash
 scancode -clipeu <input> <output_file>

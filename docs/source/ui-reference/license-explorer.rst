@@ -8,7 +8,7 @@ Details of all the License detections and clues including Matches as well as fil
 were detected can be viewed using the License Explorer.
 
 Refer -
-:doc:`scancode-toolkit:reference/license-detection-reference`
+:doc:`scancode-toolkit:explanation/scancode-license-detection`
 
 License Navigation Pane
 -------------------------------

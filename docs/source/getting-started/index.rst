@@ -45,8 +45,8 @@ ScanCode Workbench-ScanCode Toolkit Compatibility
 .. Note::
    A list of available ScanCode Toolkit options is available in the ScanCode Toolkit
    documentation:
-   :doc:`scancode-toolkit:tutorials/how_to_set_what_will_be_detected_in_a_scan`.
-   Also see :doc:`scancode-toolkit:tutorials/how_to_run_a_scan` for more details
+   :doc:`scancode-toolkit:tutorials/configuring-scan-detection`.
+   Also see :doc:`scancode-toolkit:tutorials/running-a-scan` for more details
    on running a ScanCode Toolkit scan.
 
 Open ScanCode Workbench and Load a ScanCode Toolkit Scan

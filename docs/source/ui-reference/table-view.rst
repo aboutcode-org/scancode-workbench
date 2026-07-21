@@ -16,7 +16,7 @@ is also available in this view.
 
 .. Note::
   The data in tableview is only available if corresponding options were enabled when performing the scan.
-  Refer - :doc:`scancode-toolkit:cli-reference/list-options`.
+  Refer - :doc:`scancode-toolkit:reference/scancode-cli/cli-basic-options`.
 
 ----------------
 Column groups

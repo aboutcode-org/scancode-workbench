@@ -13,7 +13,7 @@ Fields:
 - ``Tool`` - Name of the tool which generated this scan
 - ``Tool version`` - Version of the tool which generated this scan
 - ``Input`` - Input path on which scan was run
-- ``Scan Options`` - :doc:`scancode-toolkit:cli-reference/basic-options`.
+- ``Scan Options`` - :doc:`scancode-toolkit:reference/scancode-cli/cli-basic-options`.
 - ``Files count`` - Total number of files scanned
 - ``Output format version`` - Used to track compatibility with current workbench application
 - ``SPDX license list version`` - Version of SPDX license list used
