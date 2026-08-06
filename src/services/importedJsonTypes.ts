@@ -7,10 +7,12 @@ export interface LicenseExpressionKey {
   licensedb_url: string | null;
   scancode_url: string | null;
 }
+
 export interface LicenseExpressionSpdxKey {
   key: string;
   spdx_url: string | null;
 }
+
 export interface LicenseMatch {
   score: number;
   start_line: number;
@@ -20,7 +22,10 @@ export interface LicenseMatch {
   match_coverage: number;
   matcher: string;
   license_expression: string;
+
+  // Support both old and new ScanCode license fields
   spdx_license_expression?: string;
+
   from_file?: string;
   rule_identifier: string;
   rule_relevance: number;
@@ -34,6 +39,7 @@ export interface LicenseMatch {
   // Legacy output version fields
   license_expression_spdx?: string;
 }
+
 export type LicenseDetectionMatch = LicenseMatch;
 export type LicenseClueMatch = LicenseMatch;
 
@@ -43,6 +49,7 @@ export interface LicenseFileRegion {
   end_line: number;
   from_package?: string;
 }
+
 export interface LicenseClue {
   score: number;
   start_line: number;
@@ -62,8 +69,11 @@ export interface LicenseClue {
   fileClueIdx: number;
   matches?: LicenseClueMatch[];
   file_regions?: LicenseFileRegion[];
+
+  // Support both old and new fields
   license_expression_spdx?: string;
 }
+
 export interface TopLevelLicenseDetection {
   identifier: string;
   license_expression: string;
@@ -73,12 +83,13 @@ export interface TopLevelLicenseDetection {
   reference_matches?: LicenseDetectionMatch[];
 
   // Parser-added fields
-  matches?: LicenseDetectionMatch[]; // Also part of legacy output
+  matches?: LicenseDetectionMatch[];
 
   // Legacy output version fields
   count?: number;
   sample_matches?: LicenseDetectionMatch[];
 }
+
 export interface ResourceLicenseDetection {
   license_expression: string;
   matches: LicenseDetectionMatch[];
@@ -134,6 +145,7 @@ export interface Resource {
   is_media?: boolean;
   is_source?: boolean;
   is_script?: boolean;
+
   package_data?: {
     type: string;
     namespace: string;
@@ -144,6 +156,7 @@ export interface Resource {
     primary_language: string | null;
     description: string;
     release_date: null;
+
     parties: {
       type: string;
       role: string;
@@ -151,6 +164,7 @@ export interface Resource {
       email: string;
       url: string;
     }[];
+
     keywords: string[];
     homepage_url: string;
     download_url: string;
@@ -164,56 +178,80 @@ export interface Resource {
     vcs_url: string;
     copyright: string;
     holder: string;
+
     declared_license_expression: string;
     declared_license_expression_spdx: string;
+
     license_detections?: ResourceLicenseDetection[];
+
     other_license_expression: string;
     other_license_expression_spdx: string;
     other_license_detections?: ResourceLicenseDetection[];
+
     extracted_license_statement: string;
     notice_text: string;
     source_packages: string[];
     file_references: unknown[];
     extra_data: unknown;
+
     dependencies: {
       purl: string;
       extracted_requirement: null;
       scope: string | null;
       is_runtime: boolean;
       is_optional: boolean;
-      is_pinned: boolean;
+
+      /**
+       * Indicates whether the dependency is pinned (new field)
+       */
+      is_pinned?: boolean;
+
+      /**
+       * @deprecated Use `is_pinned` instead.
+       * Kept for backward compatibility with older ScanCode outputs.
+       */
+      is_resolved?: boolean;
+
       resolved_package: unknown;
       extra_data: unknown;
     }[];
+
     repository_homepage_url: string;
     repository_download_url: string;
     api_data_url: string;
     datasource_id: string;
     purl: string;
   }[];
+
   for_packages?: string[];
   detected_license_expression?: string | null;
   detected_license_expression_spdx?: string | null;
   for_license_detections?: string[];
+
   license_detections?: ResourceLicenseDetection[];
   license_clues?: LicenseClue[];
+
   emails?: unknown[];
   urls?: unknown[];
+
   copyrights?: {
     copyright: string;
     start_line: number;
     end_line: number;
   }[];
+
   holders?: {
     holder: string;
     start_line: number;
     end_line: number;
   }[];
+
   authors?: {
     author: string;
     start_line: number;
     end_line: number;
   }[];
+
   percentage_of_license_text?: number;
   license_policy?: LicensePolicy[];
   scan_errors?: string[];
